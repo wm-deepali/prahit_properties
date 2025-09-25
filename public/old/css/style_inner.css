@@ -1,0 +1,74 @@
+/**Shop**/
+.label.label-success {
+    background: none repeat scroll 0 0 #22baa0;
+}
+
+.label.label-success {
+    background: none repeat scroll 0 0 #22baa0;
+    color: #fff;
+    padding: 7px;
+}
+.actions, .actions > li {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    padding: 0px;
+    margin: 0 auto;
+    list-style: none;
+    text-align: center;
+}
+.actions > li > a {
+    border: 1px solid #ddd;
+    border-radius: 100%;
+    width: 38px;
+    height: 38px;
+    background: #fff;
+}
+.actions > li > a {
+    /* background: #fff; */
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 100%;
+}
+
+/**Smart Recommendation**/
+
+span.searin i {
+    font-size: 18px;
+}
+span.searin input {
+    height: 27px;
+}
+span.searin {
+    font-size: 14px;
+}
+.text-center {
+	text-align: center;
+}
+
+span.add, span.add_quote  {
+    display: inline-block;
+    padding: 10px;
+    color: white;
+    text-align: center;
+    margin-top: 20px;
+    border-radius: 7px;
+	cursor: pointer;
+    background: #00b5b8;
+}
+span.remove, span.remove_quote {
+	display: inline-block;
+	padding: 10px;
+	cursor: pointer;
+	background: #00b5b8;
+	margin-top: 23px;
+	color: white;
+	border-radius: 7px;
+}
+.optionBox .block, .optionBox_quote .block_quote {
+	margin-bottom: 10px;
+}

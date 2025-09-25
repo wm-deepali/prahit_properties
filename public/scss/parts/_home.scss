@@ -1,0 +1,6 @@
+@include breadcrumb();
+.property-home-list {
+	padding: 3em 0;
+	@include section-title();
+	@include property-style01();
+}

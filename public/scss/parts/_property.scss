@@ -1,0 +1,413 @@
+.property-section {
+	padding: 3em 0;
+	@include property-style02();
+	@include sidebar-style-1();
+	.sorting-div {
+    	padding: 10px 0;
+		.label-con {
+			font-family: $Nunito;
+    		display: block;
+    		margin: 3px 0;
+		}
+	}
+	.pagination-box {
+    	margin:25px 0;
+		.pagination {
+    		padding-left: 0;
+    		border-radius: 4px;
+    		display: inline-block;
+			li {
+				display: inline-block;
+				a {
+					color: $dark;
+    				font-size: 18px;
+    				background: $white;
+					margin: 0 5px 5px;
+					font-family: $OpenSans;
+    				width: 40px;
+    				height: 40px;
+    				text-align: center;
+    				padding: 0;
+    				line-height: 40px;
+    				border: none;
+    				border-radius: 50px !important;
+    				box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
+					&.active,&:hover {
+						background: $primary;
+						color: $white;
+					}
+				}
+			}
+		}
+	}
+}
+
+.postproperty-section {
+	background: $whitish;
+	position: relative;
+	padding: 3em 0;
+	.property-left-widgets {
+		box-shadow: 6px 3px 12px 0 rgba(0, 0, 0, 0.05);
+    	-webkit-box-shadow: 6px 3px 12px 0 rgba(0, 0, 0, 0.05);
+    	-moz-box-shadow: 6px 3px 12px 0 rgba(0, 0, 0, 0.05);
+    	-ms-box-shadow: 6px 3px 12px 0 rgba(0, 0, 0, 0.05);
+		padding: 1em;
+		.form-sep {
+			h3 {
+				font-family: $Poppins;
+    			font-size: 1.2em;
+				display: inline-block;
+				border-bottom: 2px solid $primary;
+				margin-bottom: 1em;
+			}
+			.label-control {
+                font-size: 12px;
+                text-transform: uppercase;
+                font-weight: 400;
+                font-family: $Roboto;
+				margin: 0;
+                color: $dark-m;
+				display: block;
+            }
+			.text-control {
+               display: block;
+               width: 100%;
+               padding: .5rem .75rem;
+               font-size: 14px;
+               font-weight: 400;
+               line-height: 1.5;
+               color: $dark;
+               background-color: $white;
+               background-clip: padding-box;
+               border: 1px solid #cacaca;
+               border-radius: .25rem;
+               box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+               transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+           }
+			.text-control-s {
+				width: 50%;
+                    display: block;
+                    padding: .5rem .75rem;
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 1.5;
+                    color: $dark;
+                    background-color: $white;
+                    background-clip: padding-box;
+                    border: 1px solid #cacaca;
+                    border-radius: .25rem;
+                    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+                    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+                }
+			.input-group-append {
+				width: 45%;
+				margin-left: 10px;
+			}
+			.price_inc {
+    			padding: 0;
+    			list-style: none;
+    			margin: 6px 0px;
+				li {
+					display: inline-block;
+					padding-right: 10px;
+				}
+			}
+		}
+	}
+	.property-right-widgets {
+		box-shadow: 6px 3px 12px 0 rgba(0, 0, 0, 0.05);
+    	-webkit-box-shadow: 6px 3px 12px 0 rgba(0, 0, 0, 0.05);
+    	-moz-box-shadow: 6px 3px 12px 0 rgba(0, 0, 0, 0.05);
+    	-ms-box-shadow: 6px 3px 12px 0 rgba(0, 0, 0, 0.05);
+		padding: 1em;
+		position: sticky;
+    	top: 20px;
+    	right: 0;
+		.form-sep {
+			h3 {
+				font-family: $Poppins;
+    			font-size: 1.2em;
+				display: inline-block;
+				border-bottom: 2px solid $primary;
+				margin-bottom: 1em;
+			}
+			.label-control {
+                font-size: 12px;
+                text-transform: uppercase;
+                font-weight: 400;
+                font-family: $Roboto;
+				margin: 0;
+                color: $dark-m;
+				display: block;
+            }
+			.text-control {
+               display: block;
+               width: 100%;
+               padding: .5rem .75rem;
+               font-size: 14px;
+               font-weight: 400;
+               line-height: 1.5;
+               color: $dark;
+               background-color: $white;
+               background-clip: padding-box;
+               border: 1px solid #cacaca;
+               border-radius: .25rem;
+               box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+               transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+           }
+			.ownertype {
+    			padding: 0;
+    			list-style: none;
+    			margin: 6px 0px;
+				li {
+					display: inline-block;
+					padding-right: 20px;
+					&:last-child {
+						padding-right: 0;
+					}
+				}
+			}
+		}
+	}
+	.btn-postproperty {
+		background: $primary;
+    	color: $white;
+    	font-size: 16px;
+    	border: 1px solid $whitish;
+    	font-weight: 600;
+    	padding: 6px 20px;
+    	display: inline-block;
+    	border-radius: 3px;
+    	font-family: $Quicksand;
+		i {
+			padding-left: 5px;
+		}
+		&:hover, &:focus {
+			outline: none;
+			box-shadow: none;
+		}
+	}
+}
+
+.property-detail-section {
+	background: $whitish;
+	position: relative;
+	padding: 3em 0;
+	.property-widgets {
+		box-shadow: 6px 3px 12px 0 rgba(0, 0, 0, 0.05);
+    	-webkit-box-shadow: 6px 3px 12px 0 rgba(0, 0, 0, 0.05);
+    	-moz-box-shadow: 6px 3px 12px 0 rgba(0, 0, 0, 0.05);
+    	-ms-box-shadow: 6px 3px 12px 0 rgba(0, 0, 0, 0.05);
+		margin-bottom: 1.5em;
+		padding: 1em;
+		.property-main-top {
+			.property-top {
+				padding: 1em;
+				h3 {
+					font-family: $Lato;
+    				font-size: 1.6em;
+				}
+				.loc-id-detail {
+					ul {
+						padding: 0;
+						margin: 0;
+						list-style: none;
+						li {
+							display: inline-block;
+							padding-right: 1em;
+							i {
+								color: $primary;
+							}
+						}
+					}
+				}
+				.price-detail {
+    				float: right;
+    				border-left: 1px solid #3333;
+    				padding: 0px 1em;
+					h3 {
+						margin: 0;
+						font-size: 1.6em;
+						font-family: $Lato;
+						i {
+							font-size: 75%;
+						}
+					}
+					a {
+						i {
+							color: $primary;
+						}
+						color: $black;
+						font-size: 14px;
+					}
+				}
+			}
+			hr {
+				margin: 0.5em 0;
+			}
+			.property-featured-details {
+				.property-featured-det {
+					.detail-field-label {
+    					font-size: 13px;
+    					color: $dark-l;
+    					font-weight: 400;
+    					margin-bottom: 0;
+    					display: block;
+					}
+					.detail-field-value {
+    					color: $black;
+    					font-size: 16px;
+						border-bottom: 1px solid #f7f7f7;
+						    margin-bottom: 4px;
+    					padding-bottom: 3px;
+					}
+				}
+				.property-featured-btn {
+					margin-top: 1em;
+					ul {
+						padding: 0;
+						list-style: none;
+						margin: 0;
+						li {
+							display: inline-block;
+							.btn-fill {
+								color: $white;
+    							background:$primary;
+    							border: 1px solid $primary;
+    							cursor: pointer;
+    							font-weight: 600;
+    							padding: 7px 20px;
+    							font-family: $Lato;
+    							margin-right: 10px;
+    							line-height: 15px;
+    							border-radius: 3px;
+    							float: left;
+							}
+							.btn-outline {
+								color: $primary;
+    							background:$white;
+    							border: 1px solid $primary;
+    							cursor: pointer;
+    							font-weight: 600;
+    							padding: 7px 20px;
+    							font-family: $Lato;
+    							margin-right: 10px;
+    							line-height: 15px;
+    							border-radius: 3px;
+    							float: left;
+							}
+							.btn {
+								&:hover, &:focus {
+									background: $primary-l;
+									color: $white;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		.property-title {
+			h3 {
+				margin-bottom: 1em;
+    			font-size: 16px;
+    			color:$black;
+    			border-bottom: 1px solid #33333329;
+    			padding: 0 0 10px 0;
+			}
+		}
+		.property-gallery {
+			img {
+				border-radius: 7px;
+			}
+		}
+		.property-description {
+			p {
+				margin: 0;
+    			font-family: $Roboto;
+    			font-size: 14px;
+			}
+		}
+		.property-additional-det {
+			.detail-field-label {
+    					font-size: 13px;
+    					color: $dark-l;
+    					font-weight: 400;
+    					margin-bottom: 0;
+    					display: block;
+					}
+					.detail-field-value {
+    					color: $black;
+    					font-size: 16px;
+						border-bottom: 1px solid #f7f7f7;
+						    margin-bottom: 4px;
+    					padding-bottom: 3px;
+					}
+		}
+		.property-amenities {
+			.amenities-main {
+				margin-bottom: 0.5em;
+				text-align: center;
+				img {
+					height: 23px;
+				}
+				h3 {
+					font-size: 13px;
+    				margin-top: 10px;
+    				margin-bottom: 0;
+    				font-family: $Lato;
+    				font-weight: 600;
+				}
+			}
+		}
+		.property-contact {
+			.label-control {
+    			font-size: 12px;
+    			text-transform: uppercase;
+    			font-weight: 400;
+    			font-family: $Roboto;
+    			margin: 0;
+    			color: $dark-m;
+    			display: block;
+			}
+			.text-control {
+				border: none;
+    			border-bottom: 1px solid $whity;
+    			width: 100%;
+    			padding: 5px 7px;
+    			color: $dark;
+    			font-weight: 400;
+    			font-family: $Quicksand;
+				&:focus, &:hover {
+					outline: none;
+					box-shadow: none;
+				}
+			}
+			p {
+				margin-top: 6px;
+    			display: block;
+    			margin-bottom: 0;
+    			font-family: 'Roboto';
+    			font-size: 14px;
+			}
+			.btn-submit {
+				color: $white;
+    			background:$primary;
+    			border: 1px solid $primary;
+    			cursor: pointer;
+    			font-weight: 600;
+    			padding: 10px 20px;
+    			font-family: $Lato;
+    			margin-right: 10px;
+    			line-height: 15px;
+    			border-radius: 3px;
+				width: 100%;
+				&:hover, &:focus {
+					outline: none;
+					box-shadow: none;
+					background: $primary-l;
+				}
+			}
+		}
+	}
+}

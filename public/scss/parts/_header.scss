@@ -1,0 +1,70 @@
+header {
+	.top-bar {
+		background: $primary;
+		margin:0;
+		.navbar {
+			.navbar-brand {
+				img {
+					height: 26px;
+				}
+			}
+			.navbar-nav {
+				li {
+					margin: 0 5px;
+					a {
+						padding: 6px 12px;
+						font-family: $Quicksand;
+    					font-weight: 700;
+    					color: $white;
+						text-transform: uppercase;
+						&:hover {
+							color: $white;
+						}
+					}
+				}
+				.active {
+					a {
+						color: $white;
+					}
+				}
+			}
+		}
+		.side-btn {
+    		padding: 0;
+    		margin: 0;
+    		list-style: none;
+			li {
+				display: inline-block;
+				&:first-child {
+					a {
+						border:1px solid $primary;
+						background: $white;
+						color: $primary;
+					}
+				}
+				a {
+					background: $primary;
+    				color: $white;
+					font-size: 15px;
+					border:1px solid $whitish;
+					font-weight: 600;
+    				padding: 6px 15px;
+    				display: inline-block;
+    				border-radius: 3px;
+    				font-family: $Quicksand;
+					&:hover{
+						text-decoration: none;
+					}
+					span {
+						background: $yellow;
+    					padding: 1px 7px;
+    					display: inline-block;
+    					border-radius: 3px;
+    					color: $dark;
+    					font-size: 11px;
+					}
+				}
+			}
+		}
+	}
+}

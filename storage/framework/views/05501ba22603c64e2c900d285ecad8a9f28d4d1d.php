@@ -1,0 +1,41 @@
+
+
+<?php $__env->startSection('title'); ?>
+<title>Privecy Policy</title>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+ 
+<section class="breadcrumb-section">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<h3><?php echo e($policy->heading); ?></h3>
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="index.php">Home</a>
+						</li>
+						<li class="breadcrumb-item active" aria-current="page">Privacy Policy</li>
+					</ol>
+				</nav>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="policy-page">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<h1><?php echo e($policy->heading); ?></h1>
+				<?php echo $policy->description; ?>
+
+			</div>
+		</div>
+	</div>
+</section>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('js'); ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.front.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /home/parhitproperties/public_html/parhit-2021/resources/views/front/policy.blade.php ENDPATH**/ ?>

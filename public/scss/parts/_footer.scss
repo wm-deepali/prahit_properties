@@ -1,0 +1,269 @@
+.custom-modal {
+    -webkit-backdrop-filter: blur(1px);
+    backdrop-filter: blur(1px);
+    background-color: #01223770;
+	.w-450 {
+    	max-width: 450px;
+	}
+	.modal-content {
+		.close-btn {
+    		background: $primary;
+    		color: $white;
+    		border: none;
+    		position: absolute;
+    		top: -12px;
+    		left: -13px;
+    		font-size: 24px;
+    		border-radius: 100%;
+    		height: 34px;
+    		z-index: 99999;
+    		width: 34px;
+    		line-height: 14px;
+		}
+		.top-design {
+    		position: absolute;
+    		right: -1px;
+    		top: 0;
+			img {
+    			height: 118px;
+			}
+		}
+		.modal-body {
+    		padding: 10px 40px;
+			.modal-main {
+    			position: relative;
+				.login-heads {
+    				padding: 30px 0 25px 0;
+					.heads-login {
+    					font-family: $Nunito;
+    					margin-bottom: 0px;
+    					color: $primary;
+    					font-size: 2em;
+    					font-weight: 600;
+					}
+					.allrequired {
+    					font-family: $Roboto;
+    					color: $dark;
+    					font-size: 14px;
+    					margin-bottom: 20px;
+					}
+				}
+				.modal-form {
+					.label-control {
+            	font-size: 12px;
+                text-transform: uppercase;
+                font-weight: 400;
+                font-family: $Roboto;
+                color: $dark-l;
+				margin: 0;
+            }
+ 					.text-control {
+                		border: none;
+    					border-bottom: 1px solid #bcbcbc;
+    					width: 100%;
+    					padding: 5px 7px;
+    					color: $dark;
+    					font-weight: 400;
+    					font-family: $Quicksand;
+						&:focus {
+                			outline: none;
+                			box-shadow: none;
+               		 	}
+						&::placeholder {
+							color: #3333336e;
+						}
+            		}
+					.forgotpass {
+    					display: block;
+    					float: right;
+    					padding: 3px;
+    					color: $dark;
+						&:hover {
+							text-decoration: none;
+						}
+					}
+					span {font-size: 0.8em;}
+					.btn-send  {
+						background: $primary;
+    					color: $white;
+    					font-size: 16px;
+    					border: 1px solid $whitish;
+    					font-weight: 600;
+    					padding: 6px 20px;
+    					display: inline-block;
+    					border-radius: 3px;
+    					font-family: $Quicksand;
+						i {
+							padding-left: 5px;
+						}
+						&:hover, &:focus {
+							background: $primary-l;
+							outline: none;
+							box-shadow: none;
+						}
+					}
+					.ownertype {
+    					padding: 0;
+    					list-style: none;
+    					margin: 0px;
+						li {
+							display: inline-block;
+    						padding-right: 10px;
+							label {
+								margin: 0;
+							}
+							&:last-child {
+								padding: 0;
+							}
+						}
+					}
+					.claim-listin-tab {
+						.nav-tabs {
+							li {
+								a {
+									padding: 7px 13px;
+    								font-family: $Poppins;
+    								font-size: 15px;
+									color: $dark;
+									&.active {
+										color: $primary;
+									}
+								}
+							}
+						}
+					}
+				}
+				.no_listfeed {
+    				padding: 0;
+    				margin: 0;
+    				list-style: none;
+				}
+			}
+		}
+		.modal-foo {
+			background: $whitish;
+			p  {
+				margin: 0;
+				padding: 6px;
+				a {
+					color: $primary;
+					&:hover {
+						text-decoration: none;
+					}
+				}
+			}
+		}
+	}
+}
+
+footer {
+	.footer-top {
+		background: $primary;
+		ul {
+			padding: 0;
+			list-style: none;
+			margin: 0;
+			li {
+				display: inline-block;
+				a {
+					display: inline-block;
+    				padding: 7px 10px;
+    				color: $white;
+					&:hover {
+						text-decoration: none;
+					}
+				}
+			}
+		}
+	}
+	.footer-middle {
+		width: 100%;
+    	background: $whitish;
+    	z-index: 1;
+		padding: 3em 0;
+		.foo-right {
+			.foo-left-inner {
+				margin-bottom: 1em;
+				h3 {
+					font-size: 1em;
+    				font-family: $Poppins;
+					margin: 0;
+				}
+				ul {
+					padding: 0;
+    				margin: 0;
+    				list-style: none;
+					li {
+						line-height: 16px;
+						display: inline-block;
+						padding: 0 10px 0 0;
+    					border-right: 1px solid $dark-l;
+						&:last-child {
+							border: none;
+						}
+						a {
+							color: $dark-l;
+							font-size: 12px;
+						}
+					}
+				}
+			}
+		}
+		.foo-left {
+			.foo-logo {
+				img {
+					margin-bottom: 0.5em;
+					height: 30px;
+				}
+				p {
+					font-size: 0.8em;
+					color: $dark-l;
+				}
+			}
+			.foo-social-app {
+				ul {
+					margin: 0;
+					padding: 0;
+					list-style: none;
+					li {
+						margin-right: 5px;
+						display: inline-block;
+						a {
+							background: $dark-m;
+    						display: inline-block;
+    						border-radius: 50%;
+    						color: $white;
+    						height: 35px;
+    						width: 35px;
+    						line-height: 35px;
+    						text-align: center;
+							&:hover {
+								text-decoration: none;
+								background: $dark;
+								color: $white;
+							}
+						}
+					}
+				}
+			}
+		}
+		.disclaimer-p {
+			color: $dark-l;
+			font-size: 0.7em;
+			margin: 0;
+		}
+	}
+	.footer-bottom {
+		background: $dark;
+		p {
+			margin: 0;
+			color: $white;
+			padding: 6px 0;
+			font-family: $Nunito;
+			text-align: center;
+			a {
+				color: $white;
+			}
+		}
+	}
+}
