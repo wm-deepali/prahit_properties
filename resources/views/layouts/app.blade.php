@@ -84,6 +84,10 @@
                                     <a class="dropdown-item" href="{{route('admin.manageAmenities')}}">Manage Amenities</a>
                                     <a class="dropdown-item" href="{{route('admin.email-template.index')}}">Email Template Settings</a>
                                     <a class="dropdown-item" href="{{route('admin.manageClaims')}}">Manage Claims</a>
+                                    <a class="dropdown-item" href="{{route('admin.price-labels.index')}}">Manage Price Labels</a>
+                                    <a class="dropdown-item" href="{{route('admin.property-statuses.index')}}">Manage Property Status</a>
+                                    <a class="dropdown-item" href="{{route('admin.registration-statuses.index')}}">Manage Registration Status</a>
+                                    <a class="dropdown-item" href="{{route('admin.furnishing-statuses.index')}}">Manage Furnishing Status</a>
                                 </div>
                             </li>
 							

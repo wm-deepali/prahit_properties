@@ -52,8 +52,8 @@ return [
     |
     */
 
-    'url' => 'https://parhitproperties.com/parhit-new/',
-    'api_url' => 'https://parhitproperties.com/parhit-new/api',
+    'url' => 'http://127.0.0.1:8000',
+    'api_url' => 'http://127.0.0.1:8000/api',
 
     // 'url' => 'http://localhost/parhit-2021',
     // 'api_url' => 'http://localhost/parhit-2021/api',

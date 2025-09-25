@@ -25,7 +25,7 @@ Edit Properties
                     <label class="label-control">Title </label>
                     <input type="text" class="text-control" name="title" placeholder="Enter Property Name" value="{{$property->title}}" required />
                   </div>
-                  <div class="col-sm-4">
+                  <!-- <div class="col-sm-4">
                     <label class="label-control">Type </label>
                     <select class="text-control" name="type_id" required />
                     <option value="">Select Type</option>
@@ -34,35 +34,150 @@ Edit Properties
                     <option value="3" {{$property->type_id == "3" ? "selected" : ""}}>Industrial</option>
                     <option value="4" {{$property->type_id == "4" ? "selected" : ""}}>Free Hold</option>
                   </select>
-                </div>
-              </div>
-
-              <div class="form-group-f row">
+                </div> -->
                 <div class="col-sm-4">
                   <label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
                   <input type="number" class="text-control" name="price" min="0" placeholder="Enter Price" value="{{$property->price}}" required />
                 </div>
-                <div class="col-md-8">
-                  <label class="label-control">Price Label</label>
-                  <ul class="price_inc">
-                    @php
-                    $db_price_labels = explode(',', $property->price_label)
-                    @endphp 
-
-                    @foreach(config('app.price_labels') as $k=>$v)
-                    @if(in_array($k, $db_price_labels))
-                    <li><label><input type="checkbox" id="" name="price_label[]" value="{{$k}}" checked> {{$v}}</label></li>
-                    @endif
-                    @if(!in_array($k, $db_price_labels))
-                    <li><label><input type="checkbox" id="" name="price_label[]" value="{{$k}}"> {{$v}}</label></li>
-                    @endif
-                    @endforeach
-                  </ul>
-                </div>
               </div>
 
+              <div class="form-row">
+
+									{{-- Price Label --}}
+									<div class="form-group col-md-3">
+										<label class="label-control">Price Label</label>
+										@if($price_labels->first()->input_format == 'checkbox')
+											@foreach($price_labels as $label)
+												<label>
+													<input type="checkbox" name="price_label[]" value="{{ $label->id }}" {{ in_array($label->id, explode(',', $property->price_label ?? '')) ? 'checked' : '' }}>
+													{{ $label->name }}
+												</label>
+											@endforeach
+										@else
+											<select name="price_label" class="form-control">
+												<option value="">Select</option>
+												@foreach($price_labels as $label)
+													<option value="{{ $label->id }}" {{ $property->price_label == $label->id ? 'selected' : '' }}>
+														{{ $label->name }}
+													</option>
+												@endforeach
+											</select>
+										@endif
+
+										@if(!empty($property->price_label_second))
+											<div class="mt-2">
+												<label>
+													{{ optional($price_labels->firstWhere('id', $property->price_label))->second_input_label ?? 'Date' }}
+												</label>
+												<input type="date" class="form-control" name="price_label_second"
+													value="{{ $property->price_label_second }}">
+											</div>
+										@endif
+									</div>
+
+
+									{{-- Property Status --}}
+									<div class="form-group col-md-3">
+										<label class="label-control">Property Status</label>
+										@if($property_statuses->first()->input_format == 'checkbox')
+											@foreach($property_statuses as $status)
+												<label>
+													<input type="checkbox" name="property_status[]" value="{{ $status->id }}" {{ in_array($status->id, explode(',', $property->property_status ?? '')) ? 'checked' : '' }}>
+													{{ $status->name }}
+												</label>
+											@endforeach
+										@else
+											<select name="property_status" class="form-control">
+												<option value="">Select</option>
+												@foreach($property_statuses as $status)
+													<option value="{{ $status->id }}" {{ $property->property_status == $status->id ? 'selected' : '' }}>
+														{{ $status->name }}
+													</option>
+												@endforeach
+											</select>
+										@endif
+
+										@if(!empty($property->property_status_second))
+											<div class="mt-2">
+												<label>
+													{{ optional($property_statuses->firstWhere('id', $property->property_status))->second_input_label ?? 'Date' }}
+												</label>
+												<input type="date" class="form-control" name="property_status_second"
+													value="{{ $property->property_status_second }}">
+											</div>
+										@endif
+									</div>
+
+
+									{{-- Registration Status --}}
+									<div class="form-group col-md-3">
+										<label class="label-control">Registration Status</label>
+										@if($registration_statuses->first()->input_format == 'checkbox')
+											@foreach($registration_statuses as $status)
+												<label>
+													<input type="checkbox" name="registration_status[]" value="{{ $status->id }}" {{ in_array($status->id, explode(',', $property->registration_status ?? '')) ? 'checked' : '' }}>
+													{{ $status->name }}
+												</label>
+											@endforeach
+										@else
+											<select name="registration_status" class="form-control">
+												<option value="">Select</option>
+												@foreach($registration_statuses as $status)
+													<option value="{{ $status->id }}" {{ $property->registration_status == $status->id ? 'selected' : '' }}>
+														{{ $status->name }}
+													</option>
+												@endforeach
+											</select>
+										@endif
+
+										@if(!empty($property->registration_status_second))
+											<div class="mt-2">
+												<label>
+													{{ optional($registration_statuses->firstWhere('id', $property->registration_status))->second_input_label ?? 'Date' }}
+												</label>
+												<input type="date" class="form-control" name="registration_status_second"
+													value="{{ $property->registration_status_second }}">
+											</div>
+										@endif
+									</div>
+
+
+									{{-- Furnishing Status --}}
+									<div class="form-group col-md-3">
+										<label class="label-control">Furnishing Status</label>
+										@if($furnishing_statuses->first()->input_format == 'checkbox')
+											@foreach($furnishing_statuses as $status)
+												<label>
+													<input type="checkbox" name="furnishing_status[]" value="{{ $status->id }}" {{ in_array($status->id, explode(',', $property->furnishing_status ?? '')) ? 'checked' : '' }}>
+													{{ $status->name }}
+												</label>
+											@endforeach
+										@else
+											<select name="furnishing_status" class="form-control">
+												<option value="">Select</option>
+												@foreach($furnishing_statuses as $status)
+													<option value="{{ $status->id }}" {{ $property->furnishing_status == $status->id ? 'selected' : '' }}>
+														{{ $status->name }}
+													</option>
+												@endforeach
+											</select>
+										@endif
+
+										@if(!empty($property->furnishing_status_second))
+											<div class="mt-2">
+												<label>
+													{{ optional($furnishing_statuses->firstWhere('id', $property->furnishing_status))->second_input_label ?? 'Date' }}
+												</label>
+												<input type="date" class="form-control" name="furnishing_status_second"
+													value="{{ $property->furnishing_status_second }}">
+											</div>
+										@endif
+									</div>
+
+								</div>
+
               <div class="form-group-f row"> 
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                   <label class="label-control">Category</label>
                   <select class="text-control populate_categories" name="category_id" onchange="fetch_subcategories(this.value, fetch_form_type);">
                     @foreach($category as $k=>$v)
@@ -70,25 +185,19 @@ Edit Properties
                     @endforeach
                   </select>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                   <label class="label-control">Sub Category</label>
                   <select class="text-control populate_subcategories" name="sub_category_id" onchange="fetch_subsubcategories(this.value, fetch_form_type);" required>
                     <option value="">Select Sub Category</option>
                   </select>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                   <label class="label-control">Sub Sub Category</label>
                   <select class="text-control populate_subsubcategories" name="sub_sub_category_id" onchange="fetch_form_type();">
                     <option value="">Select Sub Sub Category</option>
                   </select>
                 </div>
-                <div class="col-sm-3">
-                  <label class="label-control">Status</label>
-                  <select class="text-control" name="construction_age" >
-                    <option value="0" {{$property->construction_age == "0" ? "selected" : ""}}>Ready to Move</option>
-                    <option value="1" {{$property->construction_age == "1" ? "selected" : ""}}>Under Construction</option>
-                  </select>
-                </div>
+               
               </div>
 
               <div class="form-group-f row">
@@ -434,8 +543,7 @@ $("#update_property_form").validate({
 
 function fetch_subcategories(id, callback) {
   // var route = "{{route('admin.sub_category.fetch_subcategories_by_cat_id', ['id' => ':id'])}}";
-  var route = "{{config('app.api_url')}}/fetch_subcategories_by_cat_id/"+id
-  // var route = route.replace(':id', id);
+var route = "{{ url('get/sub-categories') }}/" + id  // var route = route.replace(':id', id);
   $.ajax({
     url:route,
     method: 'get',
@@ -445,9 +553,9 @@ function fetch_subcategories(id, callback) {
     },
     success:function(response) {
       // var response = JSON.parse(response);
-      if(response.responseCode === 200) {
+      if(response.status === 200) {
         $(".populate_subcategories").empty();
-        var subcategories = response.data.SubCategory;
+        var subcategories = response.subcategories;
         if(subcategories.length > 0) {
           $.each(subcategories, function(x,y) {
             $(".populate_subcategories").append(

@@ -379,6 +379,14 @@ Route::group(['middleware' => ['auth', 'admin.check']], function () {
 	Route::get('master/manage/claims/datatable', 'Admin\PropertiesController@manageClaimsDatatable')->name('admin.manageClaimsDatatable');
 	Route::post('master/assign/claim', 'Admin\PropertiesController@assignPropertyClaim')->name('admin.assignPropertyClaim');
 
+	Route::prefix('admin')->name('admin.')->group(function () {
+		Route::resource('/price-labels', Admin\PriceLabelController::class);
+		Route::resource('/property-statuses', Admin\PropertyStatusController::class);
+		Route::resource('/registration-statuses', Admin\RegistrationStatusController::class);
+		Route::resource('/furnishing-statuses', Admin\FurnishingStatusController::class);
+	});
+
+
 	// Verify Email And Mobile Number
 	Route::post('verify/email/and/mobile', 'Admin\OwnersController@verifyEmailMobile')->name('admin.verifyEmailMobile');
 
@@ -467,7 +475,7 @@ Auth::routes();
 // Social Login Routes
 
 Route::get('login/{provider}', 'SocialController@redirect');
-Route::get('login/{provider}/callback','SocialController@Callback');
+Route::get('login/{provider}/callback', 'SocialController@Callback');
 
 Route::get('signup/{provider}', 'SocialController@redirectSignup');
 Route::get('login/google/callback','SocialController@googleCallback');

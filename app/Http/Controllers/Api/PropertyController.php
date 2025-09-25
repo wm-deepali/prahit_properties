@@ -16,14 +16,17 @@ use App\Visitor;
 use App\Otp;
 use App\User;
 
-class PropertyController extends BaseApiController {
+class PropertyController extends BaseApiController
+{
 	use GlobalTrait;
 
-	public function __construct() {
-		$this->middleware('api.auth', ['only' => 'my_properties','store']);
+	public function __construct()
+	{
+		$this->middleware('api.auth', ['only' => 'my_properties', 'store']);
 	}
 
-	public function index(Request $request) {
+	public function index(Request $request)
+	{
 		try {
 			$user = $request->get('users');
 			// GET Parameters
@@ -44,36 +47,36 @@ class PropertyController extends BaseApiController {
 				'Location'
 			]);
 
-			if(!empty($category_id)) {
+			if (!empty($category_id)) {
 				$category_id = explode(',', $category_id);
 				foreach ($category_id as $key => $value) {
 					$property = $property->orWhere('category_id', $value);
 				}
 			}
-			if(!empty($location_id)) {
+			if (!empty($location_id)) {
 				$property = $property->whereIn('location_id', [$location_id]);
 			}
-			if(!empty($title)) {
+			if (!empty($title)) {
 				$property = $property->where('title', "LIKE", "%$title%");
 			}
-			if(!empty($min_price) && !empty($max_price)) {
+			if (!empty($min_price) && !empty($max_price)) {
 				$property = $property->where('price', '>', $min_price);
 			}
-			if(!empty($property_type)) {
+			if (!empty($property_type)) {
 				$property = $property->where('type_id', $property_type);
 			}
-			if($category) {
+			if ($category) {
 				$property = $property->where('category_id', decrypt($category));
 			}
 
-			if($sort_by == 1) {
-				$property = $property->orderBy('id','asc');
-			} elseif($sort_by == "2") {
-				$property = $property->orderBy('id','desc');
-			} elseif($sort_by == "3") {
-				$property = $property->orderBy('price','asc');
-			} elseif($sort_by == "4") {
-				$property = $property->orderBy('price','desc');
+			if ($sort_by == 1) {
+				$property = $property->orderBy('id', 'asc');
+			} elseif ($sort_by == "2") {
+				$property = $property->orderBy('id', 'desc');
+			} elseif ($sort_by == "3") {
+				$property = $property->orderBy('price', 'asc');
+			} elseif ($sort_by == "4") {
+				$property = $property->orderBy('price', 'desc');
 			}
 
 			$property = $property->where('approval', 'Approved')->get();
@@ -83,7 +86,8 @@ class PropertyController extends BaseApiController {
 		}
 	}
 
-	public function my_properties(Request $request) {
+	public function my_properties(Request $request)
+	{
 		try {
 
 			$user = $request->get('users');
@@ -97,7 +101,7 @@ class PropertyController extends BaseApiController {
 				// 	$q->skip(0)->take(3);
 				// },
 				// 'PropertyFeatures.SubFeatures'
-			])->where('user_id',$user->id)->latest()->get();
+			])->where('user_id', $user->id)->latest()->get();
 			// return $properties;
 
 			$this->_sendResponse(['Property' => $property], 'Properties found successfully');
@@ -107,7 +111,8 @@ class PropertyController extends BaseApiController {
 	}
 
 
-	public function store(Request $request) {
+	public function store(Request $request)
+	{
 		$token = isset($_SERVER['HTTP_AUTH_TOKEN']) ? $_SERVER['HTTP_AUTH_TOKEN'] : '';
 		$user = $request->get('users');
 
@@ -122,66 +127,104 @@ class PropertyController extends BaseApiController {
 
 		try {
 			$user = User::where('auth_token', $token)->first();
-			if(isset($user) && $user->role == 'admin')  { // IF Admin
+			if (isset($user) && $user->role == 'admin') { // IF Admin
 
 			} else {
-				if((empty($token) && !empty($request->mobile_number))) {
+				if ((empty($token) && !empty($request->mobile_number))) {
 					$user = User::where('mobile_number', $request->mobile_number)->first();
-					if(isset($user) && $user->otp == $request->otp) {
+					if (isset($user) && $user->otp == $request->otp) {
 						$request['user_id'] = $user->id;
 					} else {
-						$this->_sendErrorResponse(400, 'OTP doesn\'t match');					
+						$this->_sendErrorResponse(400, 'OTP doesn\'t match');
 					}
 				} else {
-					if(isset($user) && $user->otp == $request->otp) {
+					if (isset($user) && $user->otp == $request->otp) {
 						$request['user_id'] = $user->id;
 					} else {
 						$this->_sendErrorResponse(400, 'OTP doesn\'t match');
 					}
 				}
 			}
-			if($request->has('feature_image_file')) {
+			if ($request->has('feature_image_file')) {
 				$feature_image = $this->multipleFileUpload($request, ['uploads/properties/feature_image/' => 'feature_image_file']);
-			}else {
+			} else {
 				$feature_image = [];
 			}
 
 			$request['featured_image'] = count($feature_image) > 0 ? $feature_image[0] : '';
-
-			if($request->has('price_label')) {
-				$request['price_label'] = implode(',', $request->price_label);
+			if ($request->has('price_label')) {
+				$request['price_label'] = is_array($request->price_label)
+					? implode(',', $request->price_label)
+					: $request->price_label;
 			}
+
+			if ($request->has('price_label_second')) {
+				$request['price_label_second'] = $request->price_label_second ?? null;
+			}
+
+			if ($request->has('property_status')) {
+				$request['property_status'] = is_array($request->property_status)
+					? implode(',', $request->property_status)
+					: $request->property_status;
+			}
+
+			if ($request->has('property_status_second')) {
+				$request['property_status_second'] = $request->property_status_second ?? null;
+			}
+
+			if ($request->has('registration_status')) {
+				$request['registration_status'] = is_array($request->registration_status)
+					? implode(',', $request->registration_status)
+					: $request->registration_status;
+			}
+
+			if ($request->has('registration_status_second')) {
+				$request['registration_status_second'] = $request->registration_status_second ?? null;
+			}
+
+			if ($request->has('furnishing_status')) {
+				$request['furnishing_status'] = is_array($request->furnishing_status)
+					? implode(',', $request->furnishing_status)
+					: $request->furnishing_status;
+			}
+
+			if ($request->has('furnishing_status_second')) {
+				$request['furnishing_status_second'] = $request->furnishing_status_second ?? null;
+			}
+
+
 			// user data save into database ----
-	        $count        = Properties::count();
-	        $final_digits = str_pad($count, 4, '0', STR_PAD_LEFT);
-	        $unique_id    = 'PP-'.$final_digits;
-	        $request['listing_id'] = $unique_id;
+			$count = Properties::count();
+			$final_digits = str_pad($count, 4, '0', STR_PAD_LEFT);
+			$unique_id = 'PP-' . $final_digits;
+			$request['listing_id'] = $unique_id;
 			$new_slug = str_replace(' ', '-', $request->title);
 			$new_slug = str_replace('/', '-', $new_slug);
 			$request['slug'] = $new_slug;
-			$request['state_id']       = $request->state;
-			$request['city_id']        = $request->city;
-			$request['construction_age']= $request->construction_age;
-			$request['location_id']    = implode(',', $request->location_id);
-			$request['sub_location_id']= $request->has('sub_location_id') ? implode(',', $request->sub_location_id) : null;
-			$request['amenities']      = $request->has('amenity') ? implode(',', $request->amenity) : null;
- 			$listing = Properties::create($request->all());
-			if($listing->exists()) {
+			$request['state_id'] = $request->state;
+			$request['city_id'] = $request->city;
+			$request['construction_age'] = $request->construction_age;
+			$request['location_id'] = implode(',', $request->location_id);
+			$request['sub_location_id'] = $request->has('sub_location_id') ? implode(',', $request->sub_location_id) : null;
+			$request['amenities'] = $request->has('amenity') ? implode(',', $request->amenity) : null;
+
+			$listing = Properties::create($request->all());
+			if ($listing->exists()) {
 				// $listing_features = json_decode($request->listing_features, true);
 				// $propertiesFields;
 				// foreach ($listing_features as $key => $value) {
 				// 	if(strlen($value) > 1) {
-	 		// 			$propertiesFields = PropertiesFields::create(['property_id' => $listing->id, 'formtype_id' => $request->formtype_id, 'sub_feature_id' => $key, 'feature_value' => $value]);
+				// 			$propertiesFields = PropertiesFields::create(['property_id' => $listing->id, 'formtype_id' => $request->formtype_id, 'sub_feature_id' => $key, 'feature_value' => $value]);
 				// 	}
 				// }
 
-				if($request->has('gallery_images_file')) {
+				if ($request->has('gallery_images_file')) {
 					$gallery_images = $this->multipleFileUpload($request, ['uploads/properties/gallery_images/' => 'gallery_images_file']);
 					foreach ($gallery_images as $key => $value) {
-						PropertyGallery::create(['property_id' => $listing->id, 'image_path' => $value]);					
+						PropertyGallery::create(['property_id' => $listing->id, 'image_path' => $value]);
 					}
 				}
-				$this->_sendResponse(['listing' => $listing],'Listing created successfully');
+				$this->_sendResponse(['listing' => $listing], 'Listing created successfully');
 				// if($propertiesFields) {
 				// 	$this->_sendResponse([],'Listing created successfully');
 				// }
@@ -189,13 +232,14 @@ class PropertyController extends BaseApiController {
 			} else {
 
 			}
-		} catch(\Exception $e) {
-			$this->_sendErrorResponse(500,$e->getMessage() . " ". $e->getLine());
+		} catch (\Exception $e) {
+			$this->_sendErrorResponse(500, $e->getMessage() . " " . $e->getLine());
 		}
 	}
 
 
-	public function show($slug) {
+	public function show($slug)
+	{
 		try {
 			$property = Properties::with([
 				'Location',
@@ -213,16 +257,18 @@ class PropertyController extends BaseApiController {
 		}
 	}
 
-	public function show_by_category($category_id) {
+	public function show_by_category($category_id)
+	{
 		try {
-			$property = Properties::has('Category')->has('Location')->has('Location.SubLocations')->has('PropertyTypes')->with('Category','Location','PropertyTypes','Location.SubLocations')->where('category_id', $category_id)->get();
+			$property = Properties::has('Category')->has('Location')->has('Location.SubLocations')->has('PropertyTypes')->with('Category', 'Location', 'PropertyTypes', 'Location.SubLocations')->where('category_id', $category_id)->get();
 			$this->_sendResponse(['Properties' => $property], 'Properties found successfully');
 		} catch (\Exception $e) {
 			$this->_sendErrorResponse(500, $e->getMessage());
 		}
 	}
 
-	public function agent_enquiry(Request $request) {
+	public function agent_enquiry(Request $request)
+	{
 		$rules = [
 			"property_id" => "required",
 			"name" => "required",
@@ -234,26 +280,27 @@ class PropertyController extends BaseApiController {
 
 		try {
 			$claim = AgentEnquiry::create($request->all());
-			if($claim->exists()) {
+			if ($claim->exists()) {
 				$this->_sendResponse(['AgentEnquiry' => $claim]);
 			} else {
 				$this->_sendErrorResponse(400, 'An error occured');
 			}
-		} catch(\Exception $e) {
+		} catch (\Exception $e) {
 			$this->_sendErrorResponse(500, $e->getMessage());
 		}
 	}
 
-	public function claim_listing(Request $request, $id) {
+	public function claim_listing(Request $request, $id)
+	{
 		$check_property = Properties::find($id);
-		if(empty($check_property)) {
+		if (empty($check_property)) {
 			$this->_sendErrorResponse(400, 'Listing not found!');
 		}
 
 		try {
-			if($request->email && !$request->otp) {
+			if ($request->email && !$request->otp) {
 				$user = User::where('email', $request->email)->first();
-				if(isset($user)) {
+				if (isset($user)) {
 					$user->otp = rand(1000, 4999);
 					$user->save();
 					$this->_sendResponse([], 'Email sent successfully');
@@ -261,13 +308,13 @@ class PropertyController extends BaseApiController {
 					$this->_sendErrorResponse(400, 'No account exists with this email id.');
 				}
 
-			} elseif($request->mobile_number && !$request->otp) {
+			} elseif ($request->mobile_number && !$request->otp) {
 				$user = User::where('mobile_number', $request->mobile_number)->first();
-				if(isset($user)) {
+				if (isset($user)) {
 					$user->otp = rand(1000, 4999);
 					$user->save();
-					$sendOtp = ['success' =>1];
-					if($sendOtp['success']) {
+					$sendOtp = ['success' => 1];
+					if ($sendOtp['success']) {
 						$this->_sendResponse([], 'OTP sent successfully');
 					} else {
 						$this->_sendErrorResponse(400, 'OTP could not be sent');
@@ -278,20 +325,20 @@ class PropertyController extends BaseApiController {
 
 			}
 
-			if($request->otp) {
-				$user = User::where('mobile_number',$request->mobile_number)->orWhere('email',$request->email)->first();
-				if($user->otp == $request->otp) {
+			if ($request->otp) {
+				$user = User::where('mobile_number', $request->mobile_number)->orWhere('email', $request->email)->first();
+				if ($user->otp == $request->otp) {
 					$request['property_id'] = $id;
 					$request['user_id'] = $user->id;
 					$claim_listing = ClaimListing::create($request->all());
-					if($claim_listing->exists()) {
+					if ($claim_listing->exists()) {
 						$user->otp = rand(1000, 4999);
 						$user->save();
 
 						$property = Properties::find($id);
 						$property->user_id = $user->id;
 						$property->save();
-						$this->_sendResponse([],'Listing claimed successfully');
+						$this->_sendResponse([], 'Listing claimed successfully');
 					} else {
 						$this->_sendErrorResponse(400, 'Listing could not be claimed');
 					}
@@ -300,17 +347,18 @@ class PropertyController extends BaseApiController {
 				}
 			}
 
-			if(!$request->email || !$request->mobile_number) {
+			if (!$request->email || !$request->mobile_number) {
 				$this->_sendErrorResponse(400, 'Please provide email or mobile number to continue');
 			}
 
 
-		} catch(\Exception $e) {
+		} catch (\Exception $e) {
 			$this->_sendErrorResponse(500, $e->getMessage());
 		}
 	}
 
-	public function feedback(Request $request) {
+	public function feedback(Request $request)
+	{
 
 		// echo json_encode($request->all());
 		// exit;
@@ -326,11 +374,11 @@ class PropertyController extends BaseApiController {
 
 		try {
 
-			if($request->is_detail_correct == 1) { 
+			if ($request->is_detail_correct == 1) {
 				$request['is_feedback'] = "1";
 				$request['is_complaint'] = "0";
 				$request['is_agent_not_reachable'] = "0";
-			} else if($request->is_detail_correct == 2) {
+			} else if ($request->is_detail_correct == 2) {
 				// $request['is_detail_correct'] = "0";
 				$request['is_feedback'] = "0";
 				$request['is_complaint'] = "1";
@@ -348,49 +396,58 @@ class PropertyController extends BaseApiController {
 
 
 			$feedback = Feedback::create($request->all());
-			if($feedback->exists()) {
+			if ($feedback->exists()) {
 				$this->_sendResponse(['Feedback' => $feedback]);
 			} else {
 				$this->_sendErrorResponse(400, 'An error occured');
 			}
-		} catch(\Exception $e) {
+		} catch (\Exception $e) {
 			$this->_sendErrorResponse(500, $e->getMessage());
 		}
 	}
 
-	public function create_visitor_otp(Request $request) {
-        $rules = [
-            // "email" => "required",
-            "mobile_number" => "required|numeric"
-        ];
-        $this->checkValidate($request, $rules);
-        try {
-        	$otp = rand(1000, 4000);
-        	$sms = 'Your OTP Is'.$otp;
-	        $this->sendSMSInformtaion($request->mobile_number, $sms);
-        	Otp::create(
-        		[
-        			'otp' => $otp
-        		]
-        	);
-	        $this->_sendResponse([], 'OTP sent successfully');
-        } catch (\Exception $e) {
-        	$this->_sendErrorResponse(500, $e->getMessage());
-        }
+	public function create_visitor_otp(Request $request)
+	{
+		$rules = [
+			// "email" => "required",
+			"mobile_number" => "required|numeric"
+		];
+		$this->checkValidate($request, $rules);
+		// try {
+		$otp = rand(1000, 4000);
+		$message = "{$otp} is the One Time Password(OTP) to verify your MOB number at Web Mingo, This OTP is Usable only once and is valid for 10 min,PLS DO NOT SHARE THE OTP WITH ANYONE";
+		$response = $this->sendOtp($request->mobile_number, $message);
+		if (!$response) {
+			return response()->json(['success' => false, 'message' => 'SMS sending failed!'], 500);
+		}
+		Otp::create(
+			[
+				'otp' => $otp
+			]
+		);
+		return response()->json([
+			'success' => true,
+			'message' => "OTP sent successfully!"
+		]);
+		// $this->_sendResponse([], 'OTP sent successfully');
+		// } catch (\Exception $e) {
+		// 	$this->_sendErrorResponse(500, $e->getMessage());
+		// }
 	}
 
-	public function search_property() {
-        try {
-        	$query = $_GET['query'];
-        	$property = Properties::with('PropertyGallery')->where('title', 'LIKE', "%$query%")->get();
-        	if(count($property) > 0) {
-			    $this->_sendResponse(['Property' => $property], count($property) . " Properties found");
-        	} else {
-			    $this->_sendResponse(['Property' => []], 'No Property found');
-        	}
-        } catch (\Exception $e) {
-        	$this->_sendErrorResponse(500);
-        }
+	public function search_property()
+	{
+		try {
+			$query = $_GET['query'];
+			$property = Properties::with('PropertyGallery')->where('title', 'LIKE', "%$query%")->get();
+			if (count($property) > 0) {
+				$this->_sendResponse(['Property' => $property], count($property) . " Properties found");
+			} else {
+				$this->_sendResponse(['Property' => []], 'No Property found');
+			}
+		} catch (\Exception $e) {
+			$this->_sendErrorResponse(500);
+		}
 
 	}
 
