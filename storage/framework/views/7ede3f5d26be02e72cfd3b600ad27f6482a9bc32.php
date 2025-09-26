@@ -80,7 +80,7 @@
 
 									
 									<?php $col = ($price_labels->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-									<div class="form-group <?php echo e($col); ?>">
+									<div id="priceLabelField" class="form-group <?php echo e($col); ?>">
 										<label class="label-control">Price Label</label>
 
 										<?php if($price_labels->first()->input_format == 'checkbox'): ?>
@@ -115,7 +115,7 @@
 
 									
 									<?php $col = ($property_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-									<div class="form-group <?php echo e($col); ?>">
+									<div id="propertyStatusField" class="form-group <?php echo e($col); ?>">
 										<label class="label-control">Property Status</label>
 
 										<?php if($property_statuses->first()->input_format == 'checkbox'): ?>
@@ -151,7 +151,7 @@
 
 									
 									<?php $col = ($registration_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-									<div class="form-group <?php echo e($col); ?>">
+									<div id="registrationStatusField" class="form-group <?php echo e($col); ?>">
 										<label class="label-control">Registration Status</label>
 
 										<?php if($registration_statuses->first()->input_format == 'checkbox'): ?>
@@ -187,7 +187,7 @@
 
 									
 									<?php $col = ($furnishing_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-									<div class="form-group <?php echo e($col); ?>">
+									<div id="furnishingStatusField" class="form-group <?php echo e($col); ?>">
 										<label class="label-control">Furnishing Status</label>
 
 										<?php if($furnishing_statuses->first()->input_format == 'checkbox'): ?>
@@ -224,10 +224,8 @@
 								</div>
 
 
-
-
 								<div class="form-group row">
-									<div class="col-sm-6">
+									<div class="col-sm-4">
 										<label class="label-control">Category</label>
 										<select class="text-control populate_categories" name="category_id" id="category_id"
 											onchange="fetch_subcategories(this.value, fetch_form_type)" required="">
@@ -241,13 +239,21 @@
 										</select>
 
 									</div>
-									<div class="col-sm-6">
+									<div class="col-sm-4">
 										<label class="label-control">Sub Category</label>
 										<select class="text-control populate_subcategories" name="sub_category_id"
 											id="sub_category_id" onchange="fetch_form_type()" required>
 											<option value="">Select Sub Category</option>
 										</select>
 
+									</div>
+
+									<div class="col-sm-4">
+										<label class="label-control">Sub Sub Category</label>
+										<select class="text-control populate_subsubcategories" name="sub_sub_category_id"
+											id="sub_sub_category_id" onchange="fetch_form_type();">
+											<option value="">Select Sub Sub Category</option>
+										</select>
 									</div>
 
 								</div>
@@ -668,6 +674,106 @@
 			})
 		}
 
+		var cachedSubSubCategories = {}; // Object to store sub sub categories keyed by subcategory ID
+
+		$('#sub_category_id').on('change', function () {
+			var subcategoryId = $(this).val();
+			$('#sub_sub_category_id').html('<option value="">Loading...</option>');
+			var route = "<?php echo e(url('get/sub-sub-categories')); ?>/" + subcategoryId
+			$.ajax({
+				url: route, // Change this to your route
+				method: 'GET',
+				success: function (response) {
+					$('#sub_sub_category_id').empty().append('<option value="">Select Sub Sub Category</option>');
+					console.log(response, 'response');
+
+					if (response.subsubcategories && response.subsubcategories.length) {
+						cachedSubSubCategories = response.subsubcategories || [];
+
+						$.each(response.subsubcategories, function (i, subsub) {
+							$('#sub_sub_category_id').append('<option value="' + subsub.id + '">' + subsub.sub_sub_category_name + '</option>');
+						});
+					} else {
+						$('#sub_sub_category_id').append('<option value="">No Sub Sub Categories found</option>');
+					}
+				},
+				error: function () {
+					$('#sub_sub_category_id').html('<option value="">Error loading</option>');
+				}
+			});
+		});
+
+
+		$('#sub_sub_category_id').on('change', function () {
+			var selectedId = $(this).val();
+
+			if (!selectedId) {
+				// Optionally hide those toggle fields if no sub sub category selected
+				toggleSubSubCategoryFields({
+					price_label_toggle: false,
+					property_status_toggle: false,
+					registration_status_toggle: false,
+					furnishing_status_toggle: false
+				});
+				return;
+			}
+
+var selectedData = cachedSubSubCategories.find(function(subsub) {
+    return subsub.id == selectedId;
+});
+
+
+
+if (selectedData) {
+    toggleSubSubCategoryFields({
+        price_label_toggle: selectedData.price_label_toggle,
+        property_status_toggle: selectedData.property_status_toggle,
+        registration_status_toggle: selectedData.registration_status_toggle,
+        furnishing_status_toggle: selectedData.furnishing_status_toggle
+    });
+} else {
+    // No matching sub sub category found, hide fields
+    toggleSubSubCategoryFields({
+        price_label_toggle: false,
+        property_status_toggle: false,
+        registration_status_toggle: false,
+        furnishing_status_toggle: false
+    });
+}
+
+	
+		});
+
+
+		// This function is called when subsubcategory changes or after loading toggles
+		function toggleSubSubCategoryFields(toggles) {
+			
+			if (toggles.price_label_toggle == 'yes') {
+				$('#priceLabelField').show();
+			} else {
+				$('#priceLabelField').hide();
+			}
+
+			if (toggles.property_status_toggle == 'yes') {
+				$('#propertyStatusField').show();
+			} else {
+				$('#propertyStatusField').hide();
+			}
+
+			if (toggles.registration_status_toggle == 'yes') {
+				$('#registrationStatusField').show();
+			} else {
+				$('#registrationStatusField').hide();
+			}
+
+			if (toggles.furnishing_status_toggle == 'yes') {
+				$('#furnishingStatusField').show();
+			} else {
+				$('#furnishingStatusField').hide();
+			}
+		}
+
+
 		function fetch_form_type() {
 			var cat = $(".populate_categories option:selected").val();
 			var subcat = $(".populate_subcategories option:selected").val();
@@ -694,7 +800,6 @@
 				success: function (response) {
 					if (response != 0) {
 						document.getElementById('fb-render').innerHTML = '';
-						console.log(response);
 						var formData = response.form_data;
 						var formRenderOptions = { formData };
 						frInstance = $('#fb-render').formRender(formRenderOptions);
@@ -729,7 +834,6 @@
 					if (response.responseCode === 200) {
 						$(".populate_sublocations").empty();
 						var sublocations = response.data.SubLocation;
-						console.log(sublocations);
 						if (!jQuery.isEmptyObject(sublocations)) {
 							$.each(sublocations, function (x, y) {
 								$(".populate_sublocations").append(
@@ -799,14 +903,12 @@
 						if (input_type == "1") {
 							if ($(this).is(':checked')) {
 								obj[objKey] = objVal;
-								console.log(objKey);
 								isValid = true;
 							}
 						} else if (input_type == "3") {
 							if ($(this).is(':checked')) {
 								if (objVal != "") {
 									obj[objKey] = objVal;
-									console.log(objKey);
 									isValid = true;
 								}
 							}
@@ -814,7 +916,6 @@
 							if (objVal != "") {
 								// console.log(objVal)
 								obj[objKey] = objVal;
-								console.log(objKey);
 								isValid = true;
 							}
 						} else {
@@ -860,7 +961,7 @@
 									// window.location.href = "<?php echo e(route('admin.properties.index')); ?>";
 									//          	}, 1000);
 								<?php endif; ?>
-																} else if (response.responseCode === 400) {
+																	} else if (response.responseCode === 400) {
 								toastr.error(response.message)
 							} else {
 								toastr.error('An error occured')
@@ -913,7 +1014,6 @@
 				return false;
 			}
 			var label = $("input[name=price_label]").val();
-			console.log(label);
 			// if(!label) {
 			// 	$('#price_label').focus();
 			// 	toastr.warning('Price label field must be required.')
@@ -1062,14 +1162,14 @@
 	}
 	}
 
-	// Price Label
-	handleSecondInput('price_label', 'price_label_second_container', '.price_checkbox');
-	// Property Status
-	handleSecondInput('property_status', 'property_status_second_container', '.property_checkbox');
-	// Registration Status
-	handleSecondInput('registration_status', 'registration_status_second_container', '.registration_checkbox');
-	// Furnishing Status
-	handleSecondInput('furnishing_status', 'furnishing_status_second_container', '.furnishing_checkbox');
+		// Price Label
+		handleSecondInput('price_label', 'price_label_second_container', '.price_checkbox');
+		// Property Status
+		handleSecondInput('property_status', 'property_status_second_container', '.property_checkbox');
+		// Registration Status
+		handleSecondInput('registration_status', 'registration_status_second_container', '.registration_checkbox');
+		// Furnishing Status
+		handleSecondInput('furnishing_status', 'furnishing_status_second_container', '.furnishing_checkbox');
 	</script>
 
 <?php $__env->stopSection(); ?>

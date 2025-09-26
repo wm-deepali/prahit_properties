@@ -50,6 +50,7 @@ use App\Models\PriceLabel;
 use App\Models\PropertyStatus;
 use App\Models\FurnishingStatus;
 use App\Models\RegistrationStatus;
+use App\SubSubCategory;
 
 class HomeController extends AppController
 {
@@ -842,6 +843,12 @@ class HomeController extends AppController
 			$data['subcategories'] = $e->getMessage();
 			return $data;
 		}
+	}
+
+	public function getSubSubcategories($id)
+	{
+		$subSubCategories = SubSubCategory::where('sub_category_id', $id)->get();
+		return response()->json(['subsubcategories' => $subSubCategories]);
 	}
 
 	public function sendLoginOtp(Request $request)

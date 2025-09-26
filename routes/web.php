@@ -456,6 +456,7 @@ Route::post('get/property/types', 'Admin\CategoryController@getAllPropertyTypes'
 Route::post('property/data/filter', 'Admin\PropertiesController@propertyDataFilter')->name('propertyDataFilter');
 Route::post('get/all/amenities', 'Admin\PropertiesController@getAllAmenities')->name('getAllAmenities');
 Route::get('get/sub-categories/{category_id}', 'HomeController@getSubCategories')->name('getSubCategories');
+Route::get('get/sub-sub-categories/{sub_category_id}', 'HomeController@getSubSubcategories')->name('subsubcategories.by.subcategory');
 
 // Without Login Common Routes
 Route::post('category/related-form', 'Admin\CustomFormController@categoryRelatedForm')->name('category.related-form');
