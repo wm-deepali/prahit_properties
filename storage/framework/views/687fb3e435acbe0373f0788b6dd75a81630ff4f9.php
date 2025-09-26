@@ -73,9 +73,9 @@
                                    <i class="fas fa-bars"></i> Master
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="<?php echo e(route('admin.category.index')); ?>">Manage Category</a>
-                                    <a class="dropdown-item" href="<?php echo e(route('admin.sub-category.index')); ?>">Manage Sub Category</a>
-                                    <a class="dropdown-item" href="<?php echo e(route('admin.sub-sub-category.index')); ?>">Manage Sub Sub Category</a>
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.category.index')); ?>">Manage Property Available For</a>
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.sub-category.index')); ?>">Manage Category</a>
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.sub-sub-category.index')); ?>">Manage Property Type</a>
                                     <!--<a class="dropdown-item" href="<?php echo e(route('admin.features.index')); ?>">Manage Features</a>-->
                                     <a class="dropdown-item" href="<?php echo e(route('admin.manageStates')); ?>">Manage States</a>
                                     <a class="dropdown-item" href="<?php echo e(route('admin.manageCities', 'all')); ?>">Manage City</a>
@@ -144,7 +144,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="<?php echo e(route('admin.web-directory-category.index')); ?>">Manage Category</a>
-                                    <a class="dropdown-item" href="<?php echo e(route('admin.web-directory-sub-category.index')); ?>">Manage Sub Category</a>
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.web-directory-sub-category.index')); ?>">Manage Category</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">

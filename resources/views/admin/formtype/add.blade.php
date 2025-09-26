@@ -53,7 +53,7 @@ Add Form
                     <input type="text" class="text-control" placeholder="Enter Form Name" name="form_name" id="form_name" required />
                   </div>
                   <div class="col-sm-4">
-                    <label class="label-control">Assign to category:</label>
+                    <label class="label-control">Assign to Property Available For:</label>
                     <div class="d-block">
                       <select class="form-control" name="assigned_to[]" id="category_data" onchange="loadSubcategories();">
                         <option value="">Select Category</option>
@@ -66,7 +66,7 @@ Add Form
                   </div>
 
                   <div class="col-sm-4">
-                    <label class="label-control">Sub Cateogry:</label>
+                    <label class="label-control">Cateogry:</label>
                     <div class="d-block">
                       <select class="text-control populate_subcategories" onchange="check_availability()" multiple name="sub_category_id[]" id="sub_category_ids">
                         <option value="">Select</option>

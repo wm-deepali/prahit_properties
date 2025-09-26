@@ -185,7 +185,7 @@
 
                   <div class="form-group-f row">
                     <div class="col-sm-4">
-                      <label class="label-control">Category</label>
+                      <label class="label-control">Property Available For</label>
                       <select class="text-control populate_categories" name="category_id"
                         onchange="fetch_subcategories(this.value, fetch_subsubcategories)">
                         <?php if(count($category) < 1): ?>
@@ -198,18 +198,18 @@
                       </select>
                     </div>
                     <div class="col-sm-4">
-                      <label class="label-control">Sub Category</label>
+                      <label class="label-control">Category</label>
                       <select class="text-control populate_subcategories" name="sub_category_id"
                         onchange="fetch_subsubcategories(this.value, fetch_form_type)" required>
-                        <option value="">Select Sub Category</option>
+                        <option value="">Select Category</option>
                       </select>
                     </div>
 
                     <div class="col-sm-4">
-                      <label class="label-control">Sub Sub Category</label>
+                      <label class="label-control">Property Type</label>
                       <select class="text-control populate_subsubcategories" name="sub_sub_category_id"
                         onchange="fetch_form_type();">
-                        <option value="">Select Sub Sub Category</option>
+                        <option value="">Select Property Type</option>
                       </select>
                     </div>
 

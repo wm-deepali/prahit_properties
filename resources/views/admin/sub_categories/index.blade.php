@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-Manage Sub Category
+Manage Category
 @endsection
 
 @section('content')
@@ -15,11 +15,11 @@ Manage Sub Category
             <img src="{{url('/images/loading.gif')}}" alt="Loading.." class="loading" />
           </div>
           <h3 class="content-header-title">Master</h3>
-          <button class="btn btn-primary btn-save" data-target="#add-sub-category" data-toggle="modal"><i class="fas fa-plus"></i> Add Sub Category</button>
+          <button class="btn btn-primary btn-save" data-target="#add-sub-category" data-toggle="modal"><i class="fas fa-plus"></i> Add Category</button>
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Dashboard</a></li>
             <li class="breadcrumb-item">Master</li>
-            <li class="breadcrumb-item active">Manage Sub Category</li>
+            <li class="breadcrumb-item active">Manage Category</li>
           </ol>
         </div>
       </div>
@@ -39,8 +39,8 @@ Manage Sub Category
                   <thead>
                     <tr>
                       <th>Sr. No.</th>
+                      <th>Property Available For</th>
                       <th>Category</th>
-                      <th>Sub Category</th>
                       <th>URL Slug</th>
                       <th>Status</th>
                       <th>Action</th>
@@ -94,7 +94,7 @@ Manage Sub Category
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Add Sub Category</h4>
+        <h4 class="modal-title">Add Category</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       
@@ -103,7 +103,7 @@ Manage Sub Category
         <form id="create_sub_category" name="create_sub_category">
           <div class="form-group row">
             <div class="col-sm-6">
-              <label class="label-control">Category</label>
+              <label class="label-control">Property Available For</label>
               <select class="text-control" name="category_id">
                 @foreach($categories as $k => $v)
                   <option value="{{$v->id}}"> {{$v->category_name}}</option>
@@ -112,8 +112,8 @@ Manage Sub Category
 
             </div>
           <div class="col-sm-6">
-              <label class="label-control">Sub Category</label>
-              <input type="text" class="text-control" placeholder="Enter Sub Category Name" name="sub_category_name" onchange="populate_slug('sub_category_slug', this);" required />
+              <label class="label-control">Category</label>
+              <input type="text" class="text-control" placeholder="Enter Category Name" name="sub_category_name" onchange="populate_slug('sub_category_slug', this);" required />
             </div>
           </div>
       
@@ -141,7 +141,7 @@ Manage Sub Category
       
           <div class="form-action row">
             <div class="col-sm-12 text-center">
-              <button class="btn btn-primary btn-add" type="submit">Add Sub Category</button>
+              <button class="btn btn-primary btn-add" type="submit">Add Category</button>
             </div>
           </div>
 
@@ -162,7 +162,7 @@ Manage Sub Category
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Update Sub Category</h4>
+        <h4 class="modal-title">Update Category</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       
@@ -171,7 +171,7 @@ Manage Sub Category
         <form id="update_sub_category" name="update_sub_category">
           <div class="form-group row">
             <div class="col-sm-6">
-              <label class="label-control">Category</label>
+              <label class="label-control">Property Available For</label>
               <select class="text-control" id="category_id" name="category_id">
                 @foreach($categories as $k => $v)
                   <option value="{{$v->id}}"> {{$v->category_name}}</option>
@@ -179,8 +179,8 @@ Manage Sub Category
               </select>
             </div>
          <div class="col-sm-6">
-              <label class="label-control">Sub Category</label>
-              <input type="text" class="text-control" placeholder="Enter Sub Category Name" id="sub_category_name" name="sub_category_name" onchange="populate_slug('edit_sub_category_slug', this);" required />
+              <label class="label-control">Category</label>
+              <input type="text" class="text-control" placeholder="Enter Category Name" id="sub_category_name" name="sub_category_name" onchange="populate_slug('edit_sub_category_slug', this);" required />
             </div>
           </div>
       
@@ -208,7 +208,7 @@ Manage Sub Category
       
           <div class="form-action row">
             <div class="col-sm-12 text-center">
-              <button class="btn btn-primary btn-update" type="submit">Update Sub Category</button>
+              <button class="btn btn-primary btn-update" type="submit">Update Category</button>
             </div>
           </div>
 
@@ -231,7 +231,7 @@ Manage Sub Category
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Delete Sub Category</h4>
+        <h4 class="modal-title">Delete Category</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       

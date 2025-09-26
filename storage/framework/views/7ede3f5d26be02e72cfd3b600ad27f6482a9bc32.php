@@ -226,7 +226,7 @@
 
 								<div class="form-group row">
 									<div class="col-sm-4">
-										<label class="label-control">Category</label>
+										<label class="label-control">Property Available For</label>
 										<select class="text-control populate_categories" name="category_id" id="category_id"
 											onchange="fetch_subcategories(this.value, fetch_form_type)" required="">
 											<?php if(count($category) < 1): ?>
@@ -240,19 +240,19 @@
 
 									</div>
 									<div class="col-sm-4">
-										<label class="label-control">Sub Category</label>
+										<label class="label-control">Category</label>
 										<select class="text-control populate_subcategories" name="sub_category_id"
 											id="sub_category_id" onchange="fetch_form_type()" required>
-											<option value="">Select Sub Category</option>
+											<option value="">Select Category</option>
 										</select>
 
 									</div>
 
 									<div class="col-sm-4">
-										<label class="label-control">Sub Sub Category</label>
+										<label class="label-control">Property Type</label>
 										<select class="text-control populate_subsubcategories" name="sub_sub_category_id"
 											id="sub_sub_category_id" onchange="fetch_form_type();">
-											<option value="">Select Sub Sub Category</option>
+											<option value="">Select Property Type</option>
 										</select>
 									</div>
 
@@ -526,7 +526,7 @@
 			$(".populate_categories,  .populate_locations").change();
 
 			$(".add_formtype").empty().append(
-				`<center class='m0-auto'> Please select sub category </center>`
+				`<center class='m0-auto'> Please select category </center>`
 			);
 
 			// Dropzone.autoDiscover = false;
@@ -646,7 +646,7 @@
 				success: function (response) {
 					// var response = JSON.parse(response);
 					if (response.status === 200) {
-						$(".populate_subcategories").empty().append(`<option value=''>Select sub category </option>`);
+						$(".populate_subcategories").empty().append(`<option value=''>Select category </option>`);
 						var subcategories = response.subcategories;
 						if (subcategories.length > 0) {
 							$.each(subcategories, function (x, y) {
@@ -656,7 +656,7 @@
 							});
 						} else {
 							$(".populate_subcategories").append(
-								`<option value=''> Please add a sub category </option>`
+								`<option value=''> Please add a category </option>`
 							);
 						}
 						if (callback) {
@@ -684,7 +684,7 @@
 				url: route, // Change this to your route
 				method: 'GET',
 				success: function (response) {
-					$('#sub_sub_category_id').empty().append('<option value="">Select Sub Sub Category</option>');
+					$('#sub_sub_category_id').empty().append('<option value="">Select Property Type</option>');
 					console.log(response, 'response');
 
 					if (response.subsubcategories && response.subsubcategories.length) {
@@ -694,7 +694,7 @@
 							$('#sub_sub_category_id').append('<option value="' + subsub.id + '">' + subsub.sub_sub_category_name + '</option>');
 						});
 					} else {
-						$('#sub_sub_category_id').append('<option value="">No Sub Sub Categories found</option>');
+						$('#sub_sub_category_id').append('<option value="">No property type found</option>');
 					}
 				},
 				error: function () {
@@ -1024,12 +1024,12 @@ if (selectedData) {
 			var status = $('#status').val();
 			if (category == '') {
 				$('#category_id').focus();
-				toastr.warning('Category field must be required.')
+				toastr.warning('Property Available For field must be required.')
 				return false;
 			}
 			if (sub_category == '') {
 				$('#sub_category_id').focus();
-				toastr.warning('Sub Category field must be required.')
+				toastr.warning('Category field must be required.')
 				return false;
 			}
 			if (status == '') {

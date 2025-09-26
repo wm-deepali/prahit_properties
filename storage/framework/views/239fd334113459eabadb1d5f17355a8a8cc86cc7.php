@@ -21,16 +21,40 @@
             <h5><?php echo e($banner ? $banner->title : ''); ?></h5>
           </div>
           <div class="search-filters">
+            <?php
+              use Illuminate\Support\Facades\Crypt;
+
+              $activeCategory = null;
+              if (request()->has('category')) {
+                try {
+                  $activeCategory = Crypt::decrypt(request()->query('category'));
+                } catch (\Exception $e) {
+                  $activeCategory = null; // invalid value
+                }
+              }
+            ?>
+
             <ul class="nav nav-tabs" id="myTab" role="tablist">
-
-              <?php if(isset($category)): ?>
-                <?php $__currentLoopData = $category; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $a => $b): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  <li class="nav-item"> <a class="nav-link <?php echo e($a == 0 ? 'active' : ''); ?>" href="#"
-                      aria-selected="false"><?php echo e($b->category_name); ?></a> </li>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-              <?php endif; ?>
-
+              <li class="nav-item">
+                <a class="nav-link <?php echo e($activeCategory == 22 ? 'active' : ''); ?>"
+                  href="<?php echo e(url('/')); ?>/<?php echo e(Cache::get('location-name') ?? ''); ?>?category=<?php echo e(encrypt(22)); ?>">
+                  Buy
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link <?php echo e($activeCategory == 21 ? 'active' : ''); ?>"
+                  href="<?php echo e(url('/')); ?>/<?php echo e(Cache::get('location-name') ?? ''); ?>?category=<?php echo e(encrypt(21)); ?>">
+                  Rent
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link <?php echo e($activeCategory == 20 ? 'active' : ''); ?>"
+                  href="<?php echo e(url('/')); ?>/<?php echo e(Cache::get('location-name') ?? ''); ?>?category=<?php echo e(encrypt(20)); ?>">
+                  PG / Hostel
+                </a>
+              </li>
             </ul>
+
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade show active" id="rent" role="tabpanel" aria-labelledby="rent-tab">
                 <div class="search-content-fil">
@@ -44,7 +68,7 @@
                       </div>
                       <div class="col-sm-3">
                         <div class="form-group">
-                          <select class="text-control" name="type" required>
+                          <select class="text-control" name="type">
                             <option value="">Property Type</option>
                             <?php if(isset($property_types)): ?>
                               <?php $__currentLoopData = $property_types; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p => $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -195,10 +219,10 @@
                       <a href="#" class="property-address"> <i class="fas fa-map-marker"></i> <?php echo e($value->address); ?> </a>
                     </div>
                     <!-- <ul class="property-features">
-                            <li>Area <span>440 sq ft</span></li>
-                            <li>Bedrooms <span>2</span></li>
-                            <li>Bathrooms <span>1</span></li>
-                          </ul> -->
+                                                    <li>Area <span>440 sq ft</span></li>
+                                                    <li>Bedrooms <span>2</span></li>
+                                                    <li>Bathrooms <span>1</span></li>
+                                                  </ul> -->
                   </div>
                 </div>
               </div>

@@ -38,16 +38,16 @@ Manage Properties
               <div class="card-block">
                 <div class="form-group row">
                   <div class="col-sm-4">
-                    <label class="label label-control">Category</label>
+                    <label class="label label-control">Property Available For</label>
                     <select class="text-control populate_categories" name="properties.category_id">
-                      <option value="">Select Category</option>
+                      <option value="">Select Property Available For</option>
                     </select>
                   </div>
 
                   <div class="col-sm-4">
-                    <label class="label label-control">Sub Category</label>
+                    <label class="label label-control">Category</label>
                     <select class="text-control populate_sub_categories" name="properties.sub_category_id">
-                      <option value="">Select Sub Cat</option>
+                      <option value="">Select Category</option>
                     </select>
                   </div>
 
@@ -212,8 +212,8 @@ Manage Properties
                   <thead>
                     <tr>
                       <th>Date & Time</th>
+                      <th>Property Available For</th>
                       <th>Category</th>
-                      <th>Sub Category</th>
                       <th>Property ID</th>
                       <th>Property Price</th> 
                       <th>Owner Type</th>
@@ -387,12 +387,12 @@ Manage Properties
           
           <div class="row">
             <div class="col-sm-6">
-              <label class="content-label">Category</label>
+              <label class="content-label">Property Available For</label>
               <h3 class="content-head category">Rent</h3>
             </div>
             
             <div class="col-sm-6">
-              <label class="content-label">Sub Category</label>
+              <label class="content-label">Category</label>
               <h3 class="content-head subcategory">Commercial</h3>
             </div>
           </div>

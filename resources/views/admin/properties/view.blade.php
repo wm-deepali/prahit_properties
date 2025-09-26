@@ -33,15 +33,15 @@
             <h4 class="form-section-h">Property Description & Price</h4>
             <div class="row mb-3">
               <div class="col-sm-4">
-                <label class="content-label">Property Category</label>
+                <label class="content-label">Property Available For</label>
                 <h5 class="content-h">{{ $data->Category ? $data->Category->category_name : 'N/A' }}</h5>
               </div>
               <div class="col-sm-4">
-                <label class="content-label">Property Sub Category</label>
+                <label class="content-label">Property Category</label>
                 <h5 class="content-h">{{ $data->SubCategory ? $data->SubCategory->sub_category_name : 'N/A' }}</h5>
               </div>
               <div class="col-sm-4">
-                <label class="content-label">Property Sub Sub Category</label>
+                <label class="content-label">Property Type</label>
                 <h5 class="content-h">{{ $data->SubSubCategory ? $data->SubSubCategory->sub_sub_category_name : 'N/A' }}
                 </h5>
               </div>

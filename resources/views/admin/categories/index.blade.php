@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-Manage Category
+Manage Property Available For
 @endsection
 
 @section('content')
@@ -15,11 +15,11 @@ Manage Category
             <img src="{{url('/images/loading.gif')}}" alt="Loading.." class="loading" />
           </div>
           <h3 class="content-header-title">Master</h3>
-          <button class="btn btn-primary btn-save" data-target="#add-category" data-toggle="modal"><i class="fas fa-plus"></i> Add Category</button>
+          <!-- <button class="btn btn-primary btn-save" data-target="#add-category" data-toggle="modal"><i class="fas fa-plus"></i> Add Category</button> -->
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Dashboard</a></li>
             <li class="breadcrumb-item">Master</li>
-            <li class="breadcrumb-item active">Manage Property Category</li>
+            <li class="breadcrumb-item active">Manage Property Available For</li>
           </ol>
         </div>
       </div>
@@ -39,10 +39,10 @@ Manage Category
                   <thead>
                     <tr>
                       <th>Sr. No.</th>
-                      <th>Category</th>
+                      <th>Property Available For</th>
                       <th>URL Slug</th>
                       <th>Status</th>
-                      <th>Action</th>
+                      <!-- <th>Action</th> -->
                     </tr>
                   </thead>
                   <tbody>
@@ -59,13 +59,10 @@ Manage Category
                               Inactive
                             @endif
                           </td>
-                          <td><ul class="action">
-<!--                               <li><a href="#" data-target="#update-category" data-toggle="modal"><i class="fas fa-pencil-alt"></i></a></li> -->
-
+                          <!-- <td><ul class="action">
                               <li><a href="#" onclick="fetchData({{$v->id}});"><i class="fas fa-pencil-alt"></i></a></li>
-                              <!-- <li><a href="#"><i class="fas fa-times"></i></a></li> -->
                               <li><a href="#" data-toggle="modal" data-target="#delete-category" onclick="$('#delete_category #id').val({{$v->id}})"><i class="fas fa-trash"></i></a></li>
-                            </ul></td>
+                            </ul></td> -->
                         </tr>
                       @endforeach
                     @else 
@@ -94,7 +91,7 @@ Manage Category
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Add Category</h4>
+        <h4 class="modal-title">Add Property Available For</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       
@@ -103,8 +100,8 @@ Manage Category
         <form id="create_category" name="create_category">
           <div class="form-group row">
             <div class="col-sm-6">
-              <label class="label-control">Category</label>
-              <input type="text" class="text-control" name="category_name" placeholder="Enter Category Name" onchange="populate_slug('add_category_slug', this);" required />
+              <label class="label-control">Property Available For</label>
+              <input type="text" class="text-control" name="category_name" placeholder="Enter Property Available For Name" onchange="populate_slug('add_category_slug', this);" required />
             </div>
             <div class="col-sm-6">
               <label class="label-control">Slug</label>
@@ -130,7 +127,7 @@ Manage Category
         
           <div class="form-action row">
             <div class="col-sm-12 text-center">
-              <button class="btn btn-primary btn-add" type="submit">Add Category</button>
+              <button class="btn btn-primary btn-add" type="submit">Add Property Available For</button>
             </div>
           </div>
 
@@ -151,7 +148,7 @@ Manage Category
       
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Update Category</h4>
+        <h4 class="modal-title">Update Property Available For</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       
@@ -160,8 +157,8 @@ Manage Category
         <form id="update_category" name="update_category">
           <div class="form-group row">
             <div class="col-sm-6">
-              <label class="label-control">Category</label>
-              <input type="text" class="text-control" placeholder="Enter Category Name" id="category_name" onchange="populate_slug('edit_category_slug', this);" name="category_name" required />
+              <label class="label-control">Property Available For</label>
+              <input type="text" class="text-control" placeholder="Enter Property Available For Name" id="category_name" onchange="populate_slug('edit_category_slug', this);" name="category_name" required />
             </div>
       <div class="col-sm-6">
               <label class="label-control">Slug</label>
@@ -187,7 +184,7 @@ Manage Category
         
           <div class="form-action row">
             <div class="col-sm-12 text-center">
-              <button class="btn btn-primary btn-update" type="submit">Update Category</button>
+              <button class="btn btn-primary btn-update" type="submit">Update Property Available For</button>
             </div>
           </div>
 
@@ -211,7 +208,7 @@ Manage Category
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Delete Category</h4>
+        <h4 class="modal-title">Delete Property Available For</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       

@@ -37,8 +37,8 @@ Manage Formtypes
                     <tr>
                       <th>Sr. No.</th>
                       <th>Form Name</th>
+                      <th>Property Available For</th>
                       <th>Categories</th>
-                      <th>Sub Categories</th>
                       <th>Status</th>
                       <th>Action</th>
                     </tr>
@@ -98,7 +98,7 @@ Manage Formtypes
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Delete Category</h4>
+        <h4 class="modal-title">Delete Property Available For</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       

@@ -1,7 +1,7 @@
 
 
 <?php $__env->startSection('title'); ?>
-  Manage Sub Sub Category
+  Manage Property Type
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
@@ -16,11 +16,11 @@
             </div>
             <h3 class="content-header-title">Master</h3>
             <button class="btn btn-primary btn-save" data-target="#add-sub-sub-category" data-toggle="modal"><i
-                class="fas fa-plus"></i> Add Sub Sub Category</button>
+                class="fas fa-plus"></i> Add Property Type</button>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="<?php echo e(route('admin.dashboard')); ?>">Dashboard</a></li>
               <li class="breadcrumb-item">Master</li>
-              <li class="breadcrumb-item active">Manage Sub Sub Category</li>
+              <li class="breadcrumb-item active">Manage Property Type</li>
             </ol>
           </div>
         </div>
@@ -40,9 +40,9 @@
                     <thead>
                       <tr>
                         <th>#</th>
+                        <th>Property Available For</th>
                         <th>Category</th>
-                        <th>Sub Category</th>
-                        <th>Sub Sub Category</th>
+                        <th>Property Type</th>
                         <th>URL Slug</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -101,7 +101,7 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Add Sub Sub Category</h4>
+          <h4 class="modal-title">Add Property Type</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 
@@ -110,7 +110,7 @@
           <form id="create_sub_sub_category" name="create_sub_sub_category">
             <div class="form-group row">
               <div class="col-sm-6">
-                <label class="label-control">Category</label>
+                <label class="label-control">Property Available For</label>
                 <select class="text-control populate_categories"
                   onchange="remove_invalid_option();load_subcategories(this.value);" name="category_id">
                   <option value="">Select</option>
@@ -120,17 +120,17 @@
                 </select>
               </div>
               <div class="col-sm-6">
-                <label class="label-control">Sub Category</label>
+                <label class="label-control">Category</label>
                 <select class="text-control populate_subcategories" id="sub_category" name="sub_category_id" required />
-                <option value="">Select Sub Category</option>
+                <option value="">Select Category</option>
                 </select>
               </div>
             </div>
 
             <div class="form-group row">
               <div class="col-sm-6">
-                <label class="label-control">Sub Sub Category</label>
-                <input type="text" class="text-control" placeholder="Enter Sub Sub Category" required
+                <label class="label-control">Property Type</label>
+                <input type="text" class="text-control" placeholder="Enter Property Type" required
                   id="sub_sub_category_name" name="sub_sub_category_name"
                   onchange="populate_slug('sub_sub_category_slug', this);" />
               </div>
@@ -198,7 +198,7 @@
 
             <div class="form-action row">
               <div class="col-sm-12 text-center">
-                <button class="btn btn-primary btn-add" type="submit">Add Sub Sub Category</button>
+                <button class="btn btn-primary btn-add" type="submit">Add Property Type</button>
               </div>
             </div>
 
@@ -219,7 +219,7 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Update Sub Sub Category</h4>
+          <h4 class="modal-title">Update Property Type</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 
@@ -228,7 +228,7 @@
           <form id="update_sub_sub_category" name="update_sub_sub_category">
             <div class="form-group row">
               <div class="col-sm-6">
-                <label class="label-control">Category</label>
+                <label class="label-control">Property Available For</label>
                 <select class="text-control populate_categories" onchange="remove_invalid_option()" name="category_id"
                   id="category_id">
                   <option value="">Select</option>
@@ -239,17 +239,17 @@
 
               </div>
               <div class="col-sm-6">
-                <label class="label-control">Sub Category</label>
+                <label class="label-control">Category</label>
                 <select class="text-control populate_subcategories" id="sub_category_id" name="sub_category_id">
-                  <option value="">Select Sub Category</option>
+                  <option value="">Select Category</option>
                 </select>
               </div>
             </div>
 
             <div class="form-group row">
               <div class="col-sm-6">
-                <label class="label-control">Sub Sub Category</label>
-                <input type="text" class="text-control" placeholder="Enter Sub Sub Category" name="sub_sub_category_name"
+                <label class="label-control">Property Type</label>
+                <input type="text" class="text-control" placeholder="Enter Property Type" name="sub_sub_category_name"
                   id="sub_sub_category_name" onchange="populate_slug('edit_sub_sub_category_slug', this);" required />
               </div>
             </div>
@@ -317,7 +317,7 @@
 
             <div class="form-action row">
               <div class="col-sm-12 text-center">
-                <button class="btn btn-primary btn-update" type="submit">Update Sub Sub Category</button>
+                <button class="btn btn-primary btn-update" type="submit">Update Property Type</button>
               </div>
             </div>
 
@@ -342,7 +342,7 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Delete Sub Sub Category</h4>
+          <h4 class="modal-title">Delete Property Type</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 

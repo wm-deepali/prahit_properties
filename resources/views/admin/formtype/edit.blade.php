@@ -51,7 +51,7 @@ Edit Formtype
                     <input type="text" class="text-control" placeholder="Enter Form Name" name="form_name" value="{{$formtype->form_name}}" required />
                   </div>
                   <div class="col-sm-4">
-                    <label class="label-control">Assign to category:</label>
+                    <label class="label-control">Assign to Property Available For:</label>
                     <div class="d-block">
                       @foreach($categories as $k=>$v)
                         <label>
@@ -67,7 +67,7 @@ Edit Formtype
 
 
                   <div class="col-sm-4">
-                    <label class="label-control">Sub Cateogry:</label>
+                    <label class="label-control">Cateogry:</label>
                     <div class="d-block">
                       <select class="text-control populate_subcategories" multiple="" name="sub_category_id[]" required>
                         <option value="">Select</option>

@@ -83,7 +83,7 @@
 								<div class="form-row">
 
 									
-									<div class="form-group col-md-3">
+									<div id="priceLabelField" class="form-group col-md-3">
 										<label class="label-control">Price Label</label>
 										<?php if($price_labels->first()->input_format == 'checkbox'): ?>
 											<?php $__currentLoopData = $price_labels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -111,7 +111,7 @@
 									</div>
 
 									
-									<div class="form-group col-md-3">
+									<div id="propertyStatusField" class="form-group col-md-3">
 										<label class="label-control">Property Status</label>
 										<?php if($property_statuses->first()->input_format == 'checkbox'): ?>
 											<?php $__currentLoopData = $property_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -139,7 +139,7 @@
 									</div>
 
 									
-									<div class="form-group col-md-3">
+									<div id="registrationStatusField" class="form-group col-md-3">
 										<label class="label-control">Registration Status</label>
 										<?php if($registration_statuses->first()->input_format == 'checkbox'): ?>
 											<?php $__currentLoopData = $registration_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -167,7 +167,7 @@
 									</div>
 
 									
-									<div class="form-group col-md-3">
+									<div id="furnishingStatusField" class="form-group col-md-3">
 										<label class="label-control">Furnishing Status</label>
 										<?php if($furnishing_statuses->first()->input_format == 'checkbox'): ?>
 											<?php $__currentLoopData = $furnishing_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -198,8 +198,8 @@
 
 
 								<div class="form-group row">
-									<div class="col-sm-6">
-										<label class="label-control">Category</label>
+									<div class="col-sm-4">
+										<label class="label-control">Property Available For</label>
 										<select class="text-control populate_categories" name="category_id" id="category_id"
 											onchange="fetch_subcategories(this.value, fetch_form_type)" required=""
 											disabled="">
@@ -217,13 +217,21 @@
 										</select>
 
 									</div>
-									<div class="col-sm-6">
-										<label class="label-control">Sub Category</label>
+									<div class="col-sm-4">
+										<label class="label-control">Category</label>
 										<select class="text-control populate_subcategories" name="sub_category_id"
 											id="sub_category_id" required disabled="">
-											<option value="">Select Sub Category</option>
+											<option value="">Select Category</option>
 										</select>
 
+									</div>
+
+									<div class="col-sm-4">
+										<label class="label-control">Property Type</label>
+										<select class="text-control populate_subsubcategories" name="sub_sub_category_id"
+											id="sub_sub_category_id" onchange="fetch_form_type();" disabled="">
+											<option value="">Select Property Type</option>
+										</select>
 									</div>
 
 								</div>
@@ -532,7 +540,7 @@
 
 		var frInstance;
 		function fetch_subcategories(id, callback) {
-			var route = "<?php echo e(config('app.api_url')); ?>/fetch_subcategories_by_cat_id/" + id
+		var route = "<?php echo e(url('get/sub-categories')); ?>/" + id
 			$.ajax({
 				url: route,
 				method: 'get',
@@ -543,9 +551,9 @@
 				},
 				success: function (response) {
 					// var response = JSON.parse(response);
-					if (response.responseCode === 200) {
+					if (response.status === 200) {
 						$(".populate_subcategories").empty();
-						var subcategories = response.data.SubCategory;
+						var subcategories = response.subcategories;
 						if (subcategories.length > 0) {
 							$.each(subcategories, function (x, y) {
 								if ('<?php echo e($property->sub_category_id); ?>' == y.id)
@@ -629,6 +637,82 @@
 			})
 		}
 
+
+	var cachedSubSubCategories = {}; // Object to store sub sub categories keyed by subcategory ID
+
+function loadSubSubCategories(subcategoryId, selectedId = null) {
+    $('#sub_sub_category_id').html('<option value="">Loading...</option>');
+    var route = "<?php echo e(url('get/sub-sub-categories')); ?>/" + subcategoryId;
+
+    $.ajax({
+        url: route,
+        method: 'GET',
+        success: function (response) {
+            $('#sub_sub_category_id').empty().append('<option value="">Select Property Type</option>');
+            if (response.subsubcategories && response.subsubcategories.length) {
+                cachedSubSubCategories[subcategoryId] = response.subsubcategories;
+                $.each(response.subsubcategories, function (i, subsub) {
+                    let selected = (selectedId == subsub.id) ? "selected" : "";
+                    $('#sub_sub_category_id').append(
+                        '<option value="' + subsub.id + '" ' + selected + '>' + subsub.sub_sub_category_name + '</option>'
+                    );
+                });
+				toggleSubSubCategoryFields(selectedId)
+            } else {
+                $('#sub_sub_category_id').append('<option value="">No property type found</option>');
+            }
+        },
+        error: function () {
+            $('#sub_sub_category_id').html('<option value="">Error loading</option>');
+        }
+    });
+}
+
+// 🔹 Auto-load on page load if editing
+$(document).ready(function () {
+    let preselectedSubCategory = "<?php echo e($property->sub_category_id); ?>";
+    let preselectedSubSubCategory = "<?php echo e($property->sub_sub_category_id); ?>";
+
+    if (preselectedSubCategory) {
+        loadSubSubCategories(preselectedSubCategory, preselectedSubSubCategory);
+    }
+
+
+});
+
+
+
+		// This function is called when subsubcategory changes or after loading toggles
+		function toggleSubSubCategoryFields(selectedId) {
+			
+var selectedData = cachedSubSubCategories.find(function(subsub) {
+    return subsub.id == selectedId;
+});
+
+			if (selectedData.price_label_toggle == 'yes') {
+				$('#priceLabelField').show();
+			} else {
+				$('#priceLabelField').hide();
+			}
+
+			if (selectedData.property_status_toggle == 'yes') {
+				$('#propertyStatusField').show();
+			} else {
+				$('#propertyStatusField').hide();
+			}
+
+			if (selectedData.registration_status_toggle == 'yes') {
+				$('#registrationStatusField').show();
+			} else {
+				$('#registrationStatusField').hide();
+			}
+
+			if (selectedData.furnishing_status_toggle == 'yes') {
+				$('#furnishingStatusField').show();
+			} else {
+				$('#furnishingStatusField').hide();
+			}
+		}
 
 
 

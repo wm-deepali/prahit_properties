@@ -230,7 +230,7 @@
 
 								<div class="form-group row">
 									<div class="col-sm-4">
-										<label class="label-control">Category</label>
+										<label class="label-control">Property Available For</label>
 										<select class="text-control populate_categories" name="category_id" id="category_id"
 											onchange="fetch_subcategories(this.value, fetch_form_type)" required="">
 											<?php if(count($category) < 1): ?>
@@ -248,19 +248,19 @@
 
 									</div>
 									<div class="col-sm-4">
-										<label class="label-control">Sub Category</label>
+										<label class="label-control">Category</label>
 										<select class="text-control populate_subcategories" name="sub_category_id"
 											id="sub_category_id" required>
-											<option value="">Select Sub Category</option>
+											<option value="">Select Category</option>
 										</select>
 
 									</div>
 
 									<div class="col-sm-4">
-										<label class="label-control">Sub Sub Category</label>
+										<label class="label-control">Property Type</label>
 										<select class="text-control populate_subsubcategories" name="sub_sub_category_id"
 											id="sub_sub_category_id" onchange="fetch_form_type();">
-											<option value="">Select Sub Sub Category</option>
+											<option value="">Select Property Type</option>
 										</select>
 									</div>
 
@@ -515,7 +515,7 @@
 			$(".populate_categories,  .populate_locations").change();
 
 			$(".add_formtype").empty().append(
-				`<center class='m0-auto'> Please select sub category </center>`
+				`<center class='m0-auto'> Please select category </center>`
 			);
 
 			// Dropzone.autoDiscover = false;
@@ -687,7 +687,7 @@
 							});
 						} else {
 							$(".populate_subcategories").append(
-								`<option value=''> Please add a sub category </option>`
+								`<option value=''> Please add a category </option>`
 							);
 						}
 						if (callback) {
@@ -706,39 +706,55 @@
 		}
 
 
-		var cachedSubSubCategories = {}; // Object to store sub sub categories keyed by subcategory ID
+	var cachedSubSubCategories = {}; // Object to store sub sub categories keyed by subcategory ID
 
-		$('#sub_category_id').on('change', function () {
-			var subcategoryId = $(this).val();
-			$('#sub_sub_category_id').html('<option value="">Loading...</option>');
-			var route = "<?php echo e(url('get/sub-sub-categories')); ?>/" + subcategoryId
-			$.ajax({
-				url: route, // Change this to your route
-				method: 'GET',
-				success: function (response) {
-					$('#sub_sub_category_id').empty().append('<option value="">Select Sub Sub Category</option>');
-					console.log(response, 'response');
+function loadSubSubCategories(subcategoryId, selectedId = null) {
+    $('#sub_sub_category_id').html('<option value="">Loading...</option>');
+    var route = "<?php echo e(url('get/sub-sub-categories')); ?>/" + subcategoryId;
 
-					if (response.subsubcategories && response.subsubcategories.length) {
-						cachedSubSubCategories = response.subsubcategories || [];
+    $.ajax({
+        url: route,
+        method: 'GET',
+        success: function (response) {
+            $('#sub_sub_category_id').empty().append('<option value="">Select Property Type</option>');
+            if (response.subsubcategories && response.subsubcategories.length) {
+                cachedSubSubCategories[subcategoryId] = response.subsubcategories;
 
-						$.each(response.subsubcategories, function (i, subsub) {
-							if ('<?php echo e($property->sub_sub_category_id); ?>' == subsub.id)
-									$('#sub_sub_category_id').append('<option selected value="' + subsub.id + '">' + subsub.sub_sub_category_name + '</option>');
-								else
-									
-							       $('#sub_sub_category_id').append('<option value="' + subsub.id + '">' + subsub.sub_sub_category_name + '</option>');
-									
-						});
-					} else {
-						$('#sub_sub_category_id').append('<option value="">No Sub Sub Categories found</option>');
-					}
-				},
-				error: function () {
-					$('#sub_sub_category_id').html('<option value="">Error loading</option>');
-				}
-			});
-		});
+                $.each(response.subsubcategories, function (i, subsub) {
+                    let selected = (selectedId == subsub.id) ? "selected" : "";
+                    $('#sub_sub_category_id').append(
+                        '<option value="' + subsub.id + '" ' + selected + '>' + subsub.sub_sub_category_name + '</option>'
+                    );
+                });
+            } else {
+                $('#sub_sub_category_id').append('<option value="">No property type found</option>');
+            }
+        },
+        error: function () {
+            $('#sub_sub_category_id').html('<option value="">Error loading</option>');
+        }
+    });
+}
+
+// On subcategory change
+$('#sub_category_id').on('change', function () {
+    let subcategoryId = $(this).val();
+    if (subcategoryId) {
+        loadSubSubCategories(subcategoryId);
+    } else {
+        $('#sub_sub_category_id').html('<option value="">Select Property Type</option>');
+    }
+});
+
+// 🔹 Auto-load on page load if editing
+$(document).ready(function () {
+    let preselectedSubCategory = "<?php echo e($property->sub_category_id); ?>";
+    let preselectedSubSubCategory = "<?php echo e($property->sub_sub_category_id); ?>";
+
+    if (preselectedSubCategory) {
+        loadSubSubCategories(preselectedSubCategory, preselectedSubSubCategory);
+    }
+});
 
 
 		$('#sub_sub_category_id').on('change', function () {
@@ -1039,12 +1055,12 @@ if (selectedData) {
 			var status = $('#status').val();
 			if (category == '') {
 				$('#category_id').focus();
-				toastr.warning('Category field must be required.')
+				toastr.warning('Property Available For field must be required.')
 				return false;
 			}
 			if (sub_category == '') {
 				$('#sub_category_id').focus();
-				toastr.warning('Sub Category field must be required.')
+				toastr.warning('Category field must be required.')
 				return false;
 			}
 			if (status == '') {

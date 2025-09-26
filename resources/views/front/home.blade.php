@@ -21,16 +21,40 @@
             <h5>{{ $banner ? $banner->title : '' }}</h5>
           </div>
           <div class="search-filters">
+            @php
+              use Illuminate\Support\Facades\Crypt;
+
+              $activeCategory = null;
+              if (request()->has('category')) {
+                try {
+                  $activeCategory = Crypt::decrypt(request()->query('category'));
+                } catch (\Exception $e) {
+                  $activeCategory = null; // invalid value
+                }
+              }
+            @endphp
+
             <ul class="nav nav-tabs" id="myTab" role="tablist">
-
-              @if(isset($category))
-                @foreach($category as $a => $b)
-                  <li class="nav-item"> <a class="nav-link {{$a == 0 ? 'active' : ''}}" href="#"
-                      aria-selected="false">{{$b->category_name}}</a> </li>
-                @endforeach
-              @endif
-
+              <li class="nav-item">
+                <a class="nav-link {{ $activeCategory == 22 ? 'active' : '' }}"
+                  href="{{ url('/') }}/{{ Cache::get('location-name') ?? '' }}?category={{ encrypt(22) }}">
+                  Buy
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {{ $activeCategory == 21 ? 'active' : '' }}"
+                  href="{{ url('/') }}/{{ Cache::get('location-name') ?? '' }}?category={{ encrypt(21) }}">
+                  Rent
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {{ $activeCategory == 20 ? 'active' : '' }}"
+                  href="{{ url('/') }}/{{ Cache::get('location-name') ?? '' }}?category={{ encrypt(20) }}">
+                  PG / Hostel
+                </a>
+              </li>
             </ul>
+
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade show active" id="rent" role="tabpanel" aria-labelledby="rent-tab">
                 <div class="search-content-fil">
@@ -44,7 +68,7 @@
                       </div>
                       <div class="col-sm-3">
                         <div class="form-group">
-                          <select class="text-control" name="type" required>
+                          <select class="text-control" name="type">
                             <option value="">Property Type</option>
                             @if(isset($property_types))
                               @foreach($property_types as $p => $t)
@@ -195,10 +219,10 @@
                       <a href="#" class="property-address"> <i class="fas fa-map-marker"></i> {{$value->address}} </a>
                     </div>
                     <!-- <ul class="property-features">
-                            <li>Area <span>440 sq ft</span></li>
-                            <li>Bedrooms <span>2</span></li>
-                            <li>Bathrooms <span>1</span></li>
-                          </ul> -->
+                                                    <li>Area <span>440 sq ft</span></li>
+                                                    <li>Bedrooms <span>2</span></li>
+                                                    <li>Bathrooms <span>1</span></li>
+                                                  </ul> -->
                   </div>
                 </div>
               </div>
