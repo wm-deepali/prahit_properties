@@ -670,6 +670,7 @@
 
       var cat = $(".populate_categories option:selected").val();
       var subcat = $(".populate_subcategories option:selected").val();
+      var subsubcat = $(".populate_subsubcategories option:selected").val();
       var route = "<?php echo e(url('category/related-form')); ?>";
       $.ajax({
         url: route,
@@ -677,7 +678,8 @@
         data: {
           "_token": "<?php echo e(csrf_token()); ?>",
           'category': cat,
-          'sub_category': subcat
+          'sub_category': subcat,
+          'sub_sub_category': subsubcat,
         },
         beforeSend: function () {
           $(".addproperty").attr('disabled', true);

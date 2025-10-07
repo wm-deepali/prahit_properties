@@ -15,9 +15,11 @@ use App\Properties;
 use App\FormTypeCats;
 use App\Form;
 
-class FormTypeController extends AppController {
+class FormTypeController extends AppController
+{
 
-	public function index() {
+	public function index()
+	{
 		// $formtypes = FormTypes::has('FormTypeCats.Category')->with('FormTypeCats.Category')->latest()->get();
 		// // return $formtypes;
 		// $cats = [];
@@ -33,27 +35,29 @@ class FormTypeController extends AppController {
 		// }
 		// return $formtypes;
 		$category = Category::all();
-		$formtypes = Form::get(); 
+		$formtypes = Form::paginate(10);
 		return view('admin.formtype.index', compact('formtypes'));
 	}
 
 
-	public function create() {
+	public function create()
+	{
 		$categories = Category::all();
 		$features = Features::with('SubFeatures')->get();
-		return view('admin.formtype.add', compact('features','categories'));
+		return view('admin.formtype.add', compact('features', 'categories'));
 	}
 
-	public function store(Request $request) {
+	public function store(Request $request)
+	{
 		$rules = [
-			'form_name' => 'required|unique:formtypes,form_name,'.$request->form_name,
+			'form_name' => 'required|unique:formtypes,form_name,' . $request->form_name,
 			'assigned_to' => 'required', // category
-			'sub_category_id' => "required",		
+			'sub_category_id' => "required",
 			'sub_feature_position' => 'required',
 			'sub_feature_enabled' => 'required'
 		];
 		$isValid = $this->checkValidate($request, $rules);
-		if($isValid) { 
+		if ($isValid) {
 			$this->JsonResponse(400, $isValid);
 		}
 
@@ -63,7 +67,7 @@ class FormTypeController extends AppController {
 
 			$formtype = FormTypes::create($request->all());
 
-			if($request->assigned_to) {
+			if ($request->assigned_to) {
 				foreach ($request->assigned_to as $key => $value) {
 					$cats = FormTypeCats::create(['form_type_id' => $formtype->id, 'category_id' => $value]);
 				}
@@ -86,8 +90,9 @@ class FormTypeController extends AppController {
 	}
 
 
-	public function edit($id) {
-		$formtype = FormTypes::with(['FormTypesFields','FormTypeCats:id,form_type_id,category_id,sub_category_id'])->find(base64_decode($id));
+	public function edit($id)
+	{
+		$formtype = FormTypes::with(['FormTypesFields', 'FormTypeCats:id,form_type_id,category_id,sub_category_id'])->find(base64_decode($id));
 		$selected_categories = [];
 		$selected_sub_categories = [];
 		foreach ($formtype->FormTypeCats as $key => $value) {
@@ -102,7 +107,7 @@ class FormTypeController extends AppController {
 		$selected_subfeatures_position = [];
 		foreach ($formtype->formtypesfields as $key => $value) {
 			array_push($selected_subfeatures, $value->sub_feature_enabled);
-			$selected_subfeatures_position['sub_feature_id_'.$value->sub_feature_enabled] = $value->sub_feature_position;
+			$selected_subfeatures_position['sub_feature_id_' . $value->sub_feature_enabled] = $value->sub_feature_position;
 		}
 		// // echo json_encode($selected_subfeatures_position);
 		// exit;
@@ -110,23 +115,24 @@ class FormTypeController extends AppController {
 
 		$categories = Category::all();
 		$features = Features::with('SubFeatures')->get();
-		return view('admin.formtype.edit', compact('formtype','categories','features','selected_categories','selected_subfeatures','selected_subfeatures_position','selected_sub_categories'));
+		return view('admin.formtype.edit', compact('formtype', 'categories', 'features', 'selected_categories', 'selected_subfeatures', 'selected_subfeatures_position', 'selected_sub_categories'));
 	}
 
-	public function update(Request $request, $id) {
+	public function update(Request $request, $id)
+	{
 		$request->form_name = str_replace(' ', '', $request->form_name);
 		$request->form_name = rtrim($request->form_name);
 		$request->form_name = ltrim($request->form_name);
 
 		$rules = [
-			'form_name' => 'required|unique:formtypes,form_name,'.$request->id,
+			'form_name' => 'required|unique:formtypes,form_name,' . $request->id,
 			'assigned_to' => 'required', // category
-			'sub_category_id' => "required",		
+			'sub_category_id' => "required",
 			'sub_feature_position' => 'required',
 			'sub_feature_enabled' => 'required'
 		];
 		$isValid = $this->checkValidate($request, $rules);
-		if($isValid) {
+		if ($isValid) {
 			$this->JsonResponse(400, $isValid);
 		}
 
@@ -140,15 +146,15 @@ class FormTypeController extends AppController {
 
 			$formtype = FormTypes::find($request->id)->update($request->all());
 
-			if($request->assigned_to) {
+			if ($request->assigned_to) {
 
-				FormTypeCats::where('form_type_id',$request->id)->delete();
-				FormTypesFields::where('formtype_id',$request->id)->delete();
+				FormTypeCats::where('form_type_id', $request->id)->delete();
+				FormTypesFields::where('formtype_id', $request->id)->delete();
 
 				foreach ($request->assigned_to as $key => $value) {
 					$cats = FormTypeCats::updateOrCreate(
 						['form_type_id' => $request->id, 'category_id' => $value],
-						['form_type_id' => $request->id, 'category_id' => $value]						
+						['form_type_id' => $request->id, 'category_id' => $value]
 					);
 				}
 
@@ -171,17 +177,18 @@ class FormTypeController extends AppController {
 				$this->JsonResponse(400, 'An error occured');
 			}
 		} catch (\Exception $e) {
-				$this->JsonResponse(500, $e->getMessage());
+			$this->JsonResponse(500, $e->getMessage());
 		}
 
 	}
 
-	public function destroy($id) {
+	public function destroy($id)
+	{
 		try {
 			$picked = FormTypes::find($id);
 			FormTypesFields::where('formtype_id', $picked->id)->delete();
 			FormTypeCats::where('form_type_id', $picked->id)->delete();
-			if($picked) {
+			if ($picked) {
 				$picked->delete();
 				$this->JsonResponse(200, 'FormType deleted successfully');
 			} else {
@@ -192,16 +199,34 @@ class FormTypeController extends AppController {
 		}
 	}
 
-	public function category_to_formtype_availablity($cats, $subcats) {
+	public function category_to_formtype_availablity(Request $request, $cat_id, $subcat_id, $subsubcats = null)
+	{
 		try {
-			$is_available = FormTypes::whereIn('category_id', [$cats])->where('sub_category_id', $subcats)->count();
-			if($is_available === 0) {
-				$this->JsonResponse(200,'is available');
+			$formId = $request->input('form_id'); // Get current form ID if sent
+
+			$query = Form::where('category_id', $cat_id)
+				->where('sub_category_id', $subcat_id);
+
+			// Only check sub_sub_category if provided
+			if ($subsubcats) {
+				$subsubcatsArray = explode(',', $subsubcats);
+				$query->whereIn('sub_sub_category_id', $subsubcatsArray);
+			}
+
+			// Exclude current form from the check
+			if ($formId) {
+				$query->where('id', '<>', $formId);
+			}
+
+			$exists = $query->count();
+
+			if ($exists === 0) {
+				return $this->JsonResponse(200, 'Available');
 			} else {
-				$this->JsonResponse(400,'FormType is already created for selected category and sub category.');
+				return $this->JsonResponse(400, 'Form already exists for one or more selected property types.');
 			}
 		} catch (\Exception $e) {
-			$this->JsonResponse(500, $e->getMessage());
+			return $this->JsonResponse(500, $e->getMessage());
 		}
 	}
 

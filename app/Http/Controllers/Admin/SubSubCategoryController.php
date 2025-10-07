@@ -18,7 +18,7 @@ class SubSubCategoryController extends AppController
 	public function index()
 	{
 		$categories = Category::latest()->get();
-		$subsubcategories = SubSubCategory::has('Subcategory')->has('Subcategory.Category')->with(['Subcategory', 'Subcategory.Category'])->latest()->get();
+		$subsubcategories = SubSubCategory::has('Subcategory')->has('Subcategory.Category')->with(['Subcategory', 'Subcategory.Category'])->latest()->paginate(10);
 		return view('admin.sub_sub_categories.index', compact('categories', 'subsubcategories'));
 	}
 

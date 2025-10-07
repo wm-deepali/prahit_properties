@@ -1063,7 +1063,6 @@ class PropertiesController extends AppController
 
 			$request['featured_image'] = isset($feature_image) ? $feature_image[0] : '';
 
-			$request['sub_sub_category_id'] = 3;
 
 			if ($request->has('price_label')) {
 				$request['price_label'] = implode(',', $request->price_label);
@@ -1124,7 +1123,7 @@ class PropertiesController extends AppController
 		$property_statuses = PropertyStatus::where('status', 'active')->get();
 		$registration_statuses = RegistrationStatus::where('status', 'active')->get();
 		$furnishing_statuses = FurnishingStatus::where('status', 'active')->get();
-
+		// dd('here');
 		return view('admin.properties.edit', compact(
 			'property',
 			'category',
@@ -1237,13 +1236,14 @@ class PropertiesController extends AppController
 				'description' => $request->description,
 				'category_id' => $request->category_id,
 				'sub_category_id' => $request->sub_category_id,
+				'sub_sub_category_id' => $request->sub_sub_category_id,
 				'address' => $request->address,
 				'state_id' => $request->state,
 				'city_id' => $request->city,
 				'location_id' => implode(',', (array) $request->location_id),
 				'sub_location_name' => $request->sub_location_name ?? null,
 				'amenities' => $amenities,
-				'additional_info' => $request->form_json,
+				'additional_info' => $request->additional_info,
 				'construction_age' => $request->construction_age,
 				'featured_image' => $featured_image,
 			]);

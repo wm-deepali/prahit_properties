@@ -318,7 +318,12 @@
                       <h5 style="color: brown;">No Any Images Found.</h5>
                     @endif
                   </div>
-                  <div id="fb-render"></div>
+               <h4 class="form-section-h">Property Additional Information</h4>
+
+								<center class="loading">
+									<img src="{{ asset('images/loading.gif')}}" alt="Loading.." class="loading" />
+								</center>
+								<div id="fb-render"></div>
 
                   <div class="form-group-f row">
                     <div class="col-sm-12 text-center">
@@ -359,14 +364,6 @@
       });
 
       $(".property_use_for").hide();
-
-
-      setTimeout(function () {
-        document.getElementById('fb-render').innerHTML = '';
-        var formData = $('#save_json').val();
-        var formRenderOptions = { formData };
-        frInstance = $('#fb-render').formRender(formRenderOptions);
-      }, 1000);
     });
 
 
@@ -713,154 +710,66 @@
     }
 
 
+	function fetch_form_type() {
+			var cat = $(".populate_categories option:selected").val();
+			var subcat = $(".populate_subcategories option:selected").val();
+			var subsubcat = $(".populate_subsubcategories option:selected").val();
 
-    function fetch_form_type() {
+			// if(subcat=="") {
+			// 	clearFormType(true);
+			// 	return true;
+			// }
 
-      var cat = $(".populate_categories option:selected").val();
-      var subcat = $(".populate_subcategories option:selected").val();
-      var listing_id = $("#id").val();
+			var route = "{{ url('category/related-form') }}";
+			$.ajax({
+				url: route,
+				method: 'post',
+				data: {
+					"_token": "{{ csrf_token() }}",
+					'category': cat,
+					'sub_category': subcat,
+					'sub_sub_category': subsubcat,
+				},
+				beforeSend: function () {
+					$(".addproperty").attr('disabled', true);
+					$(".add_formtype").empty();
+					$(".loading").css('display', 'block');
+				},
+				success: function (response) {
+					if (response != 0) {
+            
+            if (
+							'{{ $property->category_id }}' == response.category_id &&
+							'{{ $property->sub_category_id }}' == response.sub_category_id &&
+							'{{ $property->sub_sub_category_id }}' == response.sub_sub_category_id
+						) {
+              console.log(response.category_id, 'here');
+							document.getElementById('fb-render').innerHTML = '';
+							var formData = $('#save_json').val();
+							var formRenderOptions = { formData };
+							frInstance = $('#fb-render').formRender(formRenderOptions);
+						} else {
+							document.getElementById('fb-render').innerHTML = '';
+							console.log(response, 'here');
+							var formData = response.form_data;
+							var formRenderOptions = { formData };
+							frInstance = $('#fb-render').formRender(formRenderOptions);
+						}
 
-      if (subcat == "") {
-        clearFormType(true);
-        return true;
-      }
-
-
-      // var route = "{{route('admin.fetch_form_type')}}/?cat="+cat+"&subcat="+subcat+"&edit=0&listing_id="+listing_id;
-      var route = "{{config('app.api_url')}}/fetch_form_type/?cat=" + cat + "&subcat=" + subcat + "&edit=0&listing_id=" + listing_id;
-      $.ajax({
-        url: route,
-        method: 'get',
-        beforeSend: function () {
-          // $(".updateproperty").attr('disabled', true);
-          $(".loading").css('display', 'block');
-        },
-        success: function (response) {
-          // var response = JSON.parse(response);
-          $("#formtype_id").val('')
-          if (response.responseCode === 200) {
-            var responseData = response.data.FormType;
-            var listing = response.data.Property;
-            var property_subfeatures = [];
-            if (responseData.length > 0) {
-              clearFormType();
-              // form type
-              $.each(responseData, function (x, y) {
-                // console.log(y)
-                // console.log('formtype_id=>',y.formtype_id)
-                $("#formtype_id").val(y.formtype_id)
-
-
-                switch (y.input_type) {
-                  case "1":
-                    // console.log('sub_feature_enabled =>', b.sub_feature_enabled, 'sub_features =>', sub_features.id)
-                    // console.log('sub_f_id =>',y.sub_f_id);
-                    $(".add_formtype").append(
-                      `
-                <div class='col-sm-4'>
-                <label> 
-                <input type='checkbox' class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} value="checked"  name=${y.sub_feature_slug}  />
-                ${y.sub_feature_name} 
-                </label>
-                </div>
-                `
-                    );
-                    break;
-
-                  case "2":
-                    $(".add_formtype").append(
-                      `
-                <div class='col-sm-4'>
-                <label> 
-                <input type='text'  class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} name=${y.sub_feature_slug}   />
-                ${y.sub_feature_name} 
-                </label>
-                </div>
-                `
-                    );
-                    break;
-
-                  case "3":
-                    $(".add_formtype").append(
-                      `
-                <div class='col-sm-4'>
-                <label> 
-                <input type='radio'  class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} value='on' name='radio[]'  />
-                ${y.sub_feature_name} 
-                </label>
-                </div>
-                `
-                    );
-                    break;
-
-                  case "4":
-                    $(".add_formtype").append(
-                      `
-                <div class='col-sm-4'>
-                <label> 
-                <textarea class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} name=${y.sub_feature_slug}></textarea>
-                ${y.sub_feature_name} 
-                </label>
-                </div>
-                `
-                    );
-                    break;
-
-                  case "5":
-                    $(".add_formtype").append(
-                      `
-                <div class='col-sm-4'>
-                <label> 
-                ${y.sub_feature_name} 
-                <select>
-                <option value='' class='text-control dynamic_forms' data-sub-feature-id=${y.sub_f_id} name=${y.sub_feature_slug} data-input-type=${y.input_type}>
-                Select
-                </option>
-                </select>
-                </label>
-                </div>
-                `
-                    );
-                    break;
-
-
-                }
-
-              }); // end $.each
-
-              $.each(listing, function (c, d) {
-                // property_subfeatures.push(y.sub_feature_id);
-
-                console.log(d);
-                $(".dynamic_forms").each(function (a, b) {
-                  var input_val = Number($(this).attr('data-sub-feature-id'));
-                  if (input_val == d.sub_feature_id) {
-                    $(this).attr('checked', true);
-                    $(this).val(d.feature_value)
-                  }
-                  // if(property_subfeatures.includes(input_val)) {
-                  //  $(this).attr('checked', true);
-                  // }
-                });
-
-              });
-
-
-
-            } else {
-              clearFormType(true);
-            }
-          }
-        },
-        error: function (response) {
-          toastr.error('An error occured');
-        },
-        complete: function () {
-          $(".loading").css('display', 'none');
-          $(".updateproperty").attr('disabled', false);
-        }
-      })
-    }
+					} else {
+						document.getElementById('fb-render').innerHTML = '';
+						toastr.error('No Any Form Found');
+					}
+				},
+				error: function (response) {
+					toastr.error('An error occured');
+				},
+				complete: function () {
+					$(".loading").css('display', 'none');
+					$(".addproperty").attr('disabled', false);
+				}
+			})
+		}
 
     function fetch_sublocations(id, callback) {
       var route = "{{route('admin.fetch_sublocations', ['id' => ':id'])}}";

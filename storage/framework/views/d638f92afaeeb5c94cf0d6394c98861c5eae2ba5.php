@@ -52,7 +52,7 @@
                       <?php if(isset($subsubcategories) && count($subsubcategories) > 0): ?>
                         <?php $__currentLoopData = $subsubcategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                           <tr id="<?php echo e($v->id); ?>">
-                            <td><?php echo e($k + 1); ?></td>
+                            <td><?php echo e($subsubcategories->firstItem() + $k); ?></td>
                             <td><?php echo e($v->subcategory->category->category_name); ?></td>
                             <td><?php echo e($v->subcategory->sub_category_name); ?></td>
                             <td><?php echo e($v->sub_sub_category_name); ?></td>
@@ -87,6 +87,10 @@
             </div>
           </div>
         </div>
+      </div>
+        <div class="d-flex justify-content-center mt-3">
+        <?php echo e($subsubcategories->links('pagination::bootstrap-4')); ?>
+
       </div>
     </div>
   </section>

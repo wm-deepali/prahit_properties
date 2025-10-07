@@ -82,7 +82,7 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin.check'], '
 			Route::get('fetch_multiple_subcategories_by_cat_id', 'SubCategoryController@fetch_multiple_subcategories_by_cat_id')->name('fetch_multiple_subcategories_by_cat_id');
 		});
 
-		Route::get('category_to_formtype_availablity/{cat_id}/{sub_cat_id}','FormTypeController@category_to_formtype_availablity')->name('category_to_formtype_availablity');
+		Route::get('category_to_formtype_availablity/{cats}/{subcats}/{subsubcats}','FormTypeController@category_to_formtype_availablity')->name('category_to_formtype_availablity');
 
 
 		Route::group(['prefix' => 'properties', 'as' => 'properties.'], function() {

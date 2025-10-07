@@ -52,7 +52,7 @@
                       @if(isset($subsubcategories) && count($subsubcategories) > 0)
                         @foreach($subsubcategories as $k => $v)
                           <tr id="{{$v->id}}">
-                            <td>{{$k + 1}}</td>
+                            <td>{{ $subsubcategories->firstItem() + $k}}</td>
                             <td>{{$v->subcategory->category->category_name}}</td>
                             <td>{{$v->subcategory->sub_category_name}}</td>
                             <td>{{$v->sub_sub_category_name}}</td>
@@ -87,6 +87,9 @@
             </div>
           </div>
         </div>
+      </div>
+        <div class="d-flex justify-content-center mt-3">
+        {{ $subsubcategories->links('pagination::bootstrap-4') }}
       </div>
     </div>
   </section>

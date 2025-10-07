@@ -48,7 +48,7 @@ Manage Category
                     <?php if(isset($subcategories) && count($subcategories) > 0): ?>
                       <?php $__currentLoopData = $subcategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $c=>$t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr id="<?php echo e($t->id); ?>">
-                          <td><?php echo e($c+1); ?></td>
+                          <td><?php echo e($subcategories->firstItem() + $c); ?></td>
                           <td> <?php echo e($t->category->category_name); ?> </td>
                           <td> <?php echo e($t->sub_category_name); ?> </td>
                           <td> <?php echo e($t->sub_category_slug); ?> </td>
@@ -79,6 +79,11 @@ Manage Category
         </div>
       </div>
     </div>
+    <div class="d-flex justify-content-center mt-3">
+    <?php echo e($subcategories->links('pagination::bootstrap-4')); ?>
+
+</div>
+
   </div>
 </section>
 

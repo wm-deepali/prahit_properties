@@ -50,7 +50,7 @@
                       <?php if(isset($locations) && count($locations) > 0): ?>
                         <?php $__currentLoopData = $locations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                           <tr id="<?php echo e($v->id); ?>">
-                            <td><?php echo e($k + 1); ?></td>
+                            <td><?php echo e($locations->firstItem() + $k); ?></td>
                             <td><?php echo e($v->getState->name); ?></td>
                             <td><?php echo e($v->Cities->name); ?></td>
                             <td><?php echo e($v->location); ?></td>
@@ -89,6 +89,10 @@
             </div>
           </div>
         </div>
+      </div>
+       <div class="d-flex justify-content-center mt-3">
+        <?php echo e($locations->links('pagination::bootstrap-4')); ?>
+
       </div>
     </div>
   </section>

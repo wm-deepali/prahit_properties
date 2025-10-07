@@ -52,7 +52,7 @@
                       @if(isset($locations) && count($locations) > 0)
                         @foreach($locations as $k => $v)
                           <tr id="{{$v->id}}">
-                            <td>{{$k + 1}}</td>
+                            <td>{{$locations->firstItem() + $k}}</td>
                             <td>{{$v->getState->name}}</td>
                             <td>{{$v->Cities->name}}</td>
                             <td>{{$v->location}}</td>
@@ -91,6 +91,9 @@
             </div>
           </div>
         </div>
+      </div>
+       <div class="d-flex justify-content-center mt-3">
+        {{ $locations->links('pagination::bootstrap-4') }}
       </div>
     </div>
   </section>

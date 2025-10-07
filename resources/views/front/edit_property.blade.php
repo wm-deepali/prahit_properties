@@ -42,37 +42,37 @@
 											value="{{ $property->title }}" required />
 									</div>
 									<!-- <div class="col-sm-4">
-																			<label class="label-control">Type</label>
-																			<select class="text-control" name="type_id" id="type_id" required>
-																				<option value="">Select Type</option>
-																				@if($property->type_id == 1)
-																					<option value="1" selected="">Commercial</option>
-																					<option value="2">Agricultural</option>
-																					<option value="3">Industrial</option>
-																					<option value="4">Free Hold</option>
-																				@elseif($property->type_id == 2)
-																					<option value="1">Commercial</option>
-																					<option value="2" selected="">Agricultural</option>
-																					<option value="3">Industrial</option>
-																					<option value="4">Free Hold</option>
-																				@elseif($property->type_id == 3)
-																					<option value="1">Commercial</option>
-																					<option value="2">Agricultural</option>
-																					<option value="3" selected="">Industrial</option>
-																					<option value="4">Free Hold</option>
-																				@elseif($property->type_id == 4)
-																					<option value="1">Commercial</option>
-																					<option value="2">Agricultural</option>
-																					<option value="3">Industrial</option>
-																					<option value="4" selected="">Free Hold</option>
-																				@else
-																					<option value="1">Commercial</option>
-																					<option value="2">Agricultural</option>
-																					<option value="3">Industrial</option>
-																					<option value="4">Free Hold</option>
-																				@endif
-																			</select>
-																		</div> -->
+																					<label class="label-control">Type</label>
+																					<select class="text-control" name="type_id" id="type_id" required>
+																						<option value="">Select Type</option>
+																						@if($property->type_id == 1)
+																							<option value="1" selected="">Commercial</option>
+																							<option value="2">Agricultural</option>
+																							<option value="3">Industrial</option>
+																							<option value="4">Free Hold</option>
+																						@elseif($property->type_id == 2)
+																							<option value="1">Commercial</option>
+																							<option value="2" selected="">Agricultural</option>
+																							<option value="3">Industrial</option>
+																							<option value="4">Free Hold</option>
+																						@elseif($property->type_id == 3)
+																							<option value="1">Commercial</option>
+																							<option value="2">Agricultural</option>
+																							<option value="3" selected="">Industrial</option>
+																							<option value="4">Free Hold</option>
+																						@elseif($property->type_id == 4)
+																							<option value="1">Commercial</option>
+																							<option value="2">Agricultural</option>
+																							<option value="3">Industrial</option>
+																							<option value="4" selected="">Free Hold</option>
+																						@else
+																							<option value="1">Commercial</option>
+																							<option value="2">Agricultural</option>
+																							<option value="3">Industrial</option>
+																							<option value="4">Free Hold</option>
+																						@endif
+																					</select>
+																				</div> -->
 									<div class="col-sm-4">
 										<label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
 										<input type="number" class="text-control" placeholder="Enter Price" name="price"
@@ -393,29 +393,29 @@
 								</center>
 								<h3>Contact Information</h3>
 								<!-- 								<div class="form-group mb-0 row">
-																		<div class="col-sm-12">
-																			<label class="label-control">Ownership Type</label>
-																			<ul class="ownertype">
-																				@if(\Auth::user()->role == 'owner' || old('owner_type') == 1)
-																					<li><label><input type="radio" name="owner_type" value="1" checked="" readonly="" /> Owner</label></li>
-																					<li><label><input type="radio" name="owner_type" value="2"  readonly=""/> Builder</label></li>
-																					<li><label><input type="radio" name="owner_type" value="3"  readonly=""/> Agent</label></li>
-																				@elseif(\Auth::user()->role == 'builder' || old('owner_type') == 2)
-																					<li><label><input type="radio" name="owner_type" value="1" readonly=""/> Owner</label></li>
-																					<li><label><input type="radio" name="owner_type" value="2"  checked="" readonly=""/> Builder</label></li>
-																					<li><label><input type="radio" name="owner_type" value="3" readonly="" /> Agent</label></li>
-																				@elseif(\Auth::user()->role == 'agent' || old('owner_type') == 3)
-																					<li><label><input type="radio" name="owner_type" value="1" readonly=""/> Owner</label></li>
-																					<li><label><input type="radio" name="owner_type" value="2"  readonly=""/> Builder</label></li>
-																					<li><label><input type="radio" name="owner_type" value="3"  checked="" readonly=""/> Agent</label></li>
-																				@else
-																					<li><label><input type="radio" name="owner_type" value="1" checked="" readonly=""/> Owner</label></li>
-																					<li><label><input type="radio" name="owner_type" value="2"  readonly=""/> Builder</label></li>
-																					<li><label><input type="radio" name="owner_type" value="3"  readonly=""/> Agent</label></li>
-																				@endif
-																			</ul>
-																		</div>
-																	</div> -->
+																				<div class="col-sm-12">
+																					<label class="label-control">Ownership Type</label>
+																					<ul class="ownertype">
+																						@if(\Auth::user()->role == 'owner' || old('owner_type') == 1)
+																							<li><label><input type="radio" name="owner_type" value="1" checked="" readonly="" /> Owner</label></li>
+																							<li><label><input type="radio" name="owner_type" value="2"  readonly=""/> Builder</label></li>
+																							<li><label><input type="radio" name="owner_type" value="3"  readonly=""/> Agent</label></li>
+																						@elseif(\Auth::user()->role == 'builder' || old('owner_type') == 2)
+																							<li><label><input type="radio" name="owner_type" value="1" readonly=""/> Owner</label></li>
+																							<li><label><input type="radio" name="owner_type" value="2"  checked="" readonly=""/> Builder</label></li>
+																							<li><label><input type="radio" name="owner_type" value="3" readonly="" /> Agent</label></li>
+																						@elseif(\Auth::user()->role == 'agent' || old('owner_type') == 3)
+																							<li><label><input type="radio" name="owner_type" value="1" readonly=""/> Owner</label></li>
+																							<li><label><input type="radio" name="owner_type" value="2"  readonly=""/> Builder</label></li>
+																							<li><label><input type="radio" name="owner_type" value="3"  checked="" readonly=""/> Agent</label></li>
+																						@else
+																							<li><label><input type="radio" name="owner_type" value="1" checked="" readonly=""/> Owner</label></li>
+																							<li><label><input type="radio" name="owner_type" value="2"  readonly=""/> Builder</label></li>
+																							<li><label><input type="radio" name="owner_type" value="3"  readonly=""/> Agent</label></li>
+																						@endif
+																					</ul>
+																				</div>
+																			</div> -->
 								<div class="form-group row">
 									<div class="col-sm-6">
 										<label class="label-control">First Name</label>
@@ -706,6 +706,7 @@
 					} else {
 						$('#sub_sub_category_id').append('<option value="">No property type found</option>');
 					}
+					fetch_form_type();
 				},
 				error: function () {
 					$('#sub_sub_category_id').html('<option value="">Error loading</option>');
@@ -817,6 +818,7 @@
 		function fetch_form_type() {
 			var cat = $(".populate_categories option:selected").val();
 			var subcat = $(".populate_subcategories option:selected").val();
+			var subsubcat = $(".populate_subsubcategories option:selected").val();
 
 			// if(subcat=="") {
 			// 	clearFormType(true);
@@ -830,7 +832,8 @@
 				data: {
 					"_token": "{{ csrf_token() }}",
 					'category': cat,
-					'sub_category': subcat
+					'sub_category': subcat,
+					'sub_sub_category': subsubcat,
 				},
 				beforeSend: function () {
 					$(".addproperty").attr('disabled', true);
@@ -839,7 +842,13 @@
 				},
 				success: function (response) {
 					if (response != 0) {
-						if ('{{ $property->category_id }}' == response.category_id) {
+						console.log('{{ $property->category_id }}' == response.category_id, 'condition');
+
+						if (
+							'{{ $property->category_id }}' == response.category_id &&
+							'{{ $property->sub_category_id }}' == response.sub_category_id &&
+							'{{ $property->sub_sub_category_id }}' == response.sub_sub_category_id
+						) {
 							document.getElementById('fb-render').innerHTML = '';
 							var formData = $('#save_json').val();
 							var formRenderOptions = { formData };
@@ -945,8 +954,8 @@
 					formData.append('is_visitor', true);
 				@endguest
 
-												// console.log(obj)
-												if (jQuery.isEmptyObject(obj)) {
+														// console.log(obj)
+														if (jQuery.isEmptyObject(obj)) {
 					returnIfInvalid();
 				}
 
@@ -966,7 +975,7 @@
 							@auth
 								request.setRequestHeader('auth-token', '{{Auth::user()->auth_token}}');
 							@endauth
-															},
+																	},
 						success: function (response) {
 							// var response = JSON.parse(response);
 							if (response.responseCode === 200) {
@@ -977,7 +986,7 @@
 									// window.location.href = "{{route('admin.properties.index')}}";
 									//          	}, 1000);
 								@endguest
-																} else if (response.responseCode === 400) {
+																		} else if (response.responseCode === 400) {
 								toastr.error(response.message)
 							} else {
 								toastr.error('An error occured')

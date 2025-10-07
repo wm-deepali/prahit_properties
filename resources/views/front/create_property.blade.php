@@ -43,37 +43,37 @@
 											id="price" value="{{ old('price') }}" required />
 									</div>
 									<!-- <div class="col-sm-4">
-																					<label class="label-control">Type</label>
-																					<select class="text-control" name="type_id" id="type_id" required>
-																						<option value="">Select Type</option>
-																						@if(old('type_id') == 1)
-																							<option value="1" selected="">Commercial</option>
-																							<option value="2">Agricultural</option>
-																							<option value="3">Industrial</option>
-																							<option value="4">Free Hold</option>
-																						@elseif(old('type_id') == 2)
-																							<option value="1">Commercial</option>
-																							<option value="2" selected="">Agricultural</option>
-																							<option value="3">Industrial</option>
-																							<option value="4">Free Hold</option>
-																						@elseif(old('type_id') == 3)
-																							<option value="1">Commercial</option>
-																							<option value="2">Agricultural</option>
-																							<option value="3" selected="">Industrial</option>
-																							<option value="4">Free Hold</option>
-																						@elseif(old('type_id') == 4)
-																							<option value="1">Commercial</option>
-																							<option value="2">Agricultural</option>
-																							<option value="3">Industrial</option>
-																							<option value="4" selected="">Free Hold</option>
-																						@else
-																							<option value="1">Commercial</option>
-																							<option value="2">Agricultural</option>
-																							<option value="3">Industrial</option>
-																							<option value="4">Free Hold</option>
-																						@endif
-																					</select>
-																				</div> -->
+																						<label class="label-control">Type</label>
+																						<select class="text-control" name="type_id" id="type_id" required>
+																							<option value="">Select Type</option>
+																							@if(old('type_id') == 1)
+																								<option value="1" selected="">Commercial</option>
+																								<option value="2">Agricultural</option>
+																								<option value="3">Industrial</option>
+																								<option value="4">Free Hold</option>
+																							@elseif(old('type_id') == 2)
+																								<option value="1">Commercial</option>
+																								<option value="2" selected="">Agricultural</option>
+																								<option value="3">Industrial</option>
+																								<option value="4">Free Hold</option>
+																							@elseif(old('type_id') == 3)
+																								<option value="1">Commercial</option>
+																								<option value="2">Agricultural</option>
+																								<option value="3" selected="">Industrial</option>
+																								<option value="4">Free Hold</option>
+																							@elseif(old('type_id') == 4)
+																								<option value="1">Commercial</option>
+																								<option value="2">Agricultural</option>
+																								<option value="3">Industrial</option>
+																								<option value="4" selected="">Free Hold</option>
+																							@else
+																								<option value="1">Commercial</option>
+																								<option value="2">Agricultural</option>
+																								<option value="3">Industrial</option>
+																								<option value="4">Free Hold</option>
+																							@endif
+																						</select>
+																					</div> -->
 								</div>
 
 
@@ -774,14 +774,14 @@
 			} else {
 				$('#amenitiesField').hide();
 			}
-			
+
 		}
 
 
 		function fetch_form_type() {
 			var cat = $(".populate_categories option:selected").val();
 			var subcat = $(".populate_subcategories option:selected").val();
-
+			var subsubcat = $(".populate_subsubcategories option:selected").val();
 			// if(subcat=="") {
 			// 	clearFormType(true);
 			// 	return true;
@@ -795,6 +795,7 @@
 					"_token": "{{ csrf_token() }}",
 					'category': cat,
 					'sub_category': subcat,
+					'sub_sub_category': subsubcat,
 				},
 				beforeSend: function () {
 					$(".addproperty").attr('disabled', true);
@@ -933,8 +934,8 @@
 					formData.append('is_visitor', true);
 				@endguest
 
-														// console.log(obj)
-														if (jQuery.isEmptyObject(obj)) {
+															// console.log(obj)
+															if (jQuery.isEmptyObject(obj)) {
 					returnIfInvalid();
 				}
 
@@ -954,7 +955,7 @@
 							@auth
 								request.setRequestHeader('auth-token', '{{Auth::user()->auth_token}}');
 							@endauth
-																	},
+																		},
 						success: function (response) {
 							// var response = JSON.parse(response);
 							if (response.responseCode === 200) {
@@ -965,7 +966,7 @@
 									// window.location.href = "{{route('admin.properties.index')}}";
 									//          	}, 1000);
 								@endguest
-																			} else if (response.responseCode === 400) {
+																				} else if (response.responseCode === 400) {
 								toastr.error(response.message)
 							} else {
 								toastr.error('An error occured')

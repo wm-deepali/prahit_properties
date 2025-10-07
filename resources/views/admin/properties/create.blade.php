@@ -487,7 +487,7 @@
                 var id = response.data.listing.id;
                 setTimeout(function () {
                   window.location.href = "{{url('master/preview/property')}}/" + id;
-                }, 1000);
+                }, 100);
               } else if (response.responseCode === 400) {
                 toastr.error(response.message)
               } else {
@@ -661,6 +661,7 @@
 
       var cat = $(".populate_categories option:selected").val();
       var subcat = $(".populate_subcategories option:selected").val();
+      var subsubcat = $(".populate_subsubcategories option:selected").val();
       var route = "{{ url('category/related-form') }}";
       $.ajax({
         url: route,
@@ -668,7 +669,8 @@
         data: {
           "_token": "{{ csrf_token() }}",
           'category': cat,
-          'sub_category': subcat
+          'sub_category': subcat,
+          'sub_sub_category': subsubcat,
         },
         beforeSend: function () {
           $(".addproperty").attr('disabled', true);

@@ -285,6 +285,7 @@ class HomeController extends AppController
 
 	public function createProperty(Request $request)
 	{
+		// dd($request->all());
 		$request->validate([
 			'title' => 'required|max:200',
 			'type_id' => 'nullable',
@@ -403,6 +404,7 @@ class HomeController extends AppController
 			'description' => $request->description,
 			'category_id' => $request->category_id,
 			'sub_category_id' => $request->sub_category_id,
+			'sub_sub_category_id' => $request->sub_sub_category_id,
 			'address' => $request->address,
 			'state_id' => $request->state,
 			'city_id' => $request->city,
@@ -544,6 +546,7 @@ class HomeController extends AppController
 			'description' => $request->description,
 			'category_id' => $request->category_id,
 			'sub_category_id' => $request->sub_category_id,
+			'sub_sub_category_id' => $request->sub_sub_category_id,
 			'address' => $request->address,
 			'state_id' => $request->state,
 			'city_id' => $request->city,

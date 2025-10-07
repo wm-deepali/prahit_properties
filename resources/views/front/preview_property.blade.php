@@ -383,7 +383,6 @@
 			setTimeout(function () {
 				var formData = $('#save_json').val();
 				var json_data = JSON.parse(formData);
-				console.log(json_data);
 				var formRenderOptions = { formData };
 				frInstance = $('#fb-render').formRender(formRenderOptions);
 				$("#fb-render :input").prop("disabled", true);
@@ -570,6 +569,7 @@
 		function fetch_form_type() {
 			var cat = $(".populate_categories option:selected").val();
 			var subcat = $(".populate_subcategories option:selected").val();
+			var subsubcat = $(".populate_subsubcategories option:selected").val();
 			// if(subcat=="") {
 			// 	clearFormType(true);
 			// 	return true;
@@ -582,7 +582,8 @@
 				data: {
 					"_token": "{{ csrf_token() }}",
 					'category': cat,
-					'sub_category': subcat
+					'sub_category': subcat,
+					'sub_sub_category': subsubcat,
 				},
 				beforeSend: function () {
 					$(".addproperty").attr('disabled', true);
@@ -640,6 +641,7 @@
 							);
 						});
 						toggleSubSubCategoryFields(selectedId)
+						fetch_form_type();
 					} else {
 						$('#sub_sub_category_id').append('<option value="">No property type found</option>');
 					}
@@ -739,7 +741,6 @@
 				// console.log(this.form);
 				var formData = new FormData(document.getElementById("create_property_form"));
 				var obj = {};
-				// console.log('aa');
 				var isValid = false;
 				$(".input").each(function (x, y) {
 					// console.log(y);
@@ -750,14 +751,12 @@
 						if (input_type == "1") {
 							if ($(this).is(':checked')) {
 								obj[objKey] = objVal;
-								console.log(objKey);
 								isValid = true;
 							}
 						} else if (input_type == "3") {
 							if ($(this).is(':checked')) {
 								if (objVal != "") {
 									obj[objKey] = objVal;
-									console.log(objKey);
 									isValid = true;
 								}
 							}
@@ -765,7 +764,6 @@
 							if (objVal != "") {
 								// console.log(objVal)
 								obj[objKey] = objVal;
-								console.log(objKey);
 								isValid = true;
 							}
 						} else {

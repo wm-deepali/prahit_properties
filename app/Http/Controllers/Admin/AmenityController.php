@@ -10,7 +10,7 @@ use App\Amenity;
 class AmenityController extends Controller
 {
     public function manageAmenities() {
-    	$amenities = Amenity::orderBy('id', 'DESC')->get();
+    	$amenities = Amenity::orderBy('id', 'DESC')->paginate(10);
     	return view('admin.amenities.index', compact('amenities'));
     }
 

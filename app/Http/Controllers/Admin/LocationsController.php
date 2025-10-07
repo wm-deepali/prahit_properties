@@ -18,9 +18,9 @@ class LocationsController extends AppController
 	public function index(Request $request)
 	{
 		if ($request->input('city_id')) {
-			$locations = Locations::with('Cities')->where('city_id', $request->input('city_id'))->withCount('SubLocations')->latest()->get();
+			$locations = Locations::with('Cities')->where('city_id', $request->input('city_id'))->withCount('SubLocations')->latest()->paginate(10);
 		} else {
-			$locations = Locations::with('Cities')->withCount('SubLocations')->latest()->get();
+			$locations = Locations::with('Cities')->withCount('SubLocations')->latest()->paginate(10);
 		}
 		$states = State::where('country_id', 101)->get();
 		return view('admin.locations.index', compact('locations', 'states'));
