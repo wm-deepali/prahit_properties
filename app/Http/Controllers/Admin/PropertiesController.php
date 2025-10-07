@@ -1078,7 +1078,7 @@ class PropertiesController extends AppController
 			$request['city_id'] = $request->city;
 			$request['construction_age'] = $request->construction_age;
 			$request['location_id'] = implode(',', $request->location_id);
-			$request['sub_location_id'] = $request->has('sub_location_id') ? implode(',', $request->sub_location_id) : null;
+			$request['sub_location_name'] = $request->sub_location_name ?? null;
 			$request['amenities'] = $request->has('amenity') ? implode(',', $request->amenity) : null;
 			$listing = Properties::create($request->all());
 			if ($listing->exists()) {
@@ -1150,7 +1150,28 @@ class PropertiesController extends AppController
 		$locations = Locations::where('city_id', $property->city_id)->get();
 		$sub_locations = SubLocations::whereIn('location_id', explode(',', $property->location_id))->get();
 		$amenities = Amenity::where('status', 'Yes')->get();
-		return view('admin.properties.preview', compact('property', 'category', 'locations', 'states', 'cities', 'sub_locations', 'amenities', 'id'));
+
+		// Get all active Price Labels and Statuses
+		$price_labels = PriceLabel::where('status', 'active')->get();
+		$property_statuses = PropertyStatus::where('status', 'active')->get();
+		$registration_statuses = RegistrationStatus::where('status', 'active')->get();
+		$furnishing_statuses = FurnishingStatus::where('status', 'active')->get();
+
+
+		return view('admin.properties.preview', compact(
+			'property',
+			'category',
+			'locations',
+			'states',
+			'cities',
+			'sub_locations',
+			'amenities',
+			'id',
+			'price_labels',
+			'property_statuses',
+			'registration_statuses',
+			'furnishing_statuses'
+		));
 	}
 
 	public function show($id)
@@ -1176,7 +1197,7 @@ class PropertiesController extends AppController
 				'description' => 'required',
 				'address' => 'required',
 				'location_id' => 'required',
-				'sub_location_id' => 'nullable',
+				'sub_location_name' => 'nullable|string|max:255',
 				"gallery_images_file.*" => 'nullable|mimes:jpg,png,jpeg',
 				"feature_image_file" => 'nullable|mimes:jpg,png,jpeg'
 			]);
@@ -1220,7 +1241,7 @@ class PropertiesController extends AppController
 				'state_id' => $request->state,
 				'city_id' => $request->city,
 				'location_id' => implode(',', (array) $request->location_id),
-				'sub_location_id' => $request->has('sub_location_id') ? implode(',', (array) $request->sub_location_id) : null,
+				'sub_location_name' => $request->sub_location_name ?? null,
 				'amenities' => $amenities,
 				'additional_info' => $request->form_json,
 				'construction_age' => $request->construction_age,

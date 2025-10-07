@@ -26,19 +26,58 @@
                       <input type="text" class="text-control" name="title" placeholder="Enter Property Name" required />
                     </div>
                     <!-- <div class="col-sm-4">
-                      <label class="label-control">Type </label>
-                      <select class="text-control" name="type_id" required />
-                      <option value="">Select Type</option>
-                      <option value="1">Commercial</option>
-                      <option value="2">Agricultural</option>
-                      <option value="3">Industrial</option>
-                      <option value="4">Free Hold</option>
-                    </select>
-                  </div> -->
+                              <label class="label-control">Type </label>
+                              <select class="text-control" name="type_id" required />
+                              <option value="">Select Type</option>
+                              <option value="1">Commercial</option>
+                              <option value="2">Agricultural</option>
+                              <option value="3">Industrial</option>
+                              <option value="4">Free Hold</option>
+                            </select>
+                          </div> -->
                     <div class="col-sm-4">
                       <label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
                       <input type="number" class="text-control" name="price" min="0" placeholder="Enter Price" required />
                     </div>
+                  </div>
+
+                  <div class="form-group-f row">
+                    <div class="col-sm-4">
+                      <label class="label-control">Property Available For</label>
+                      <select class="text-control populate_categories" name="category_id"
+                        onchange="fetch_subcategories(this.value, fetch_subsubcategories)">
+                        @if(count($category) < 1)
+                          <option value="">No records found</option>
+                        @else
+                          @foreach($category as $k => $v)
+                            <option value="{{$v->id}}">{{$v->category_name}}</option>
+                          @endforeach
+                        @endif
+                      </select>
+                    </div>
+                    <div class="col-sm-4">
+                      <label class="label-control">Category</label>
+                      <select class="text-control populate_subcategories" name="sub_category_id"
+                        onchange="fetch_subsubcategories(this.value, fetch_form_type)" required>
+                        <option value="">Select Category</option>
+                      </select>
+                    </div>
+
+                    <div class="col-sm-4">
+                      <label class="label-control">Property Type</label>
+                      <select class="text-control populate_subsubcategories" name="sub_sub_category_id"
+                        id="sub_sub_category_id" onchange="fetch_form_type();">
+                        <option value="">Select Property Type</option>
+                      </select>
+                    </div>
+
+                    <!-- <div class="col-sm-3">
+                            <label class="label-control">Status</label>
+                            <select class="text-control" name="construction_age" >
+                              <option value="0">Ready to Move</option>
+                              <option value="1">Under Construction</option>
+                            </select>
+                          </div> -->
                   </div>
 
 
@@ -46,8 +85,8 @@
 
                     {{-- Price Label --}}
                     @php $col = ($price_labels->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-                    <div class="form-group {{ $col }}">
-                      <label class="label-control">Price Label</label>
+                    <div id="priceLabelField" class="form-group {{ $col }}">
+                      <label class="label-control d-flex">Price Label</label>
 
                       @if($price_labels->first()->input_format == 'checkbox')
                         @foreach($price_labels as $label)
@@ -79,7 +118,7 @@
 
                     {{-- Property Status --}}
                     @php $col = ($property_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-                    <div class="form-group {{ $col }}">
+                    <div id="propertyStatusField" class="form-group {{ $col }}">
                       <label class="label-control">Property Status</label>
 
                       @if($property_statuses->first()->input_format == 'checkbox')
@@ -111,7 +150,7 @@
 
                     {{-- Registration Status --}}
                     @php $col = ($registration_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-                    <div class="form-group {{ $col }}">
+                    <div id="registrationStatusField" class="form-group {{ $col }}">
                       <label class="label-control">Registration Status</label>
 
                       @if($registration_statuses->first()->input_format == 'checkbox')
@@ -143,7 +182,7 @@
 
                     {{-- Furnishing Status --}}
                     @php $col = ($furnishing_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-                    <div class="form-group {{ $col }}">
+                    <div id="furnishingStatusField" class="form-group {{ $col }}">
                       <label class="label-control">Furnishing Status</label>
 
                       @if($furnishing_statuses->first()->input_format == 'checkbox')
@@ -175,44 +214,7 @@
 
                   </div>
 
-                  <div class="form-group-f row">
-                    <div class="col-sm-4">
-                      <label class="label-control">Property Available For</label>
-                      <select class="text-control populate_categories" name="category_id"
-                        onchange="fetch_subcategories(this.value, fetch_subsubcategories)">
-                        @if(count($category) < 1)
-                          <option value="">No records found</option>
-                        @else
-                          @foreach($category as $k => $v)
-                            <option value="{{$v->id}}">{{$v->category_name}}</option>
-                          @endforeach
-                        @endif
-                      </select>
-                    </div>
-                    <div class="col-sm-4">
-                      <label class="label-control">Category</label>
-                      <select class="text-control populate_subcategories" name="sub_category_id"
-                        onchange="fetch_subsubcategories(this.value, fetch_form_type)" required>
-                        <option value="">Select Category</option>
-                      </select>
-                    </div>
 
-                    <div class="col-sm-4">
-                      <label class="label-control">Property Type</label>
-                      <select class="text-control populate_subsubcategories" name="sub_sub_category_id"
-                        onchange="fetch_form_type();">
-                        <option value="">Select Property Type</option>
-                      </select>
-                    </div>
-
-                    <!-- <div class="col-sm-3">
-                    <label class="label-control">Status</label>
-                    <select class="text-control" name="construction_age" >
-                      <option value="0">Ready to Move</option>
-                      <option value="1">Under Construction</option>
-                    </select>
-                  </div> -->
-                  </div>
 
                   <div class="form-group-f row">
                     <div class="col-sm-12">
@@ -221,16 +223,18 @@
                     </div>
                   </div>
 
-                  <h4 class="form-section-h">Amenities</h4>
-                  <div class="form-group-f row">
-                    @foreach($amenities as $amenity)
-                      <div class="col-sm-3">
-                        <img src="{{ asset('storage') }}/{{ $amenity->icon }}" style="height: 30px;">
-                        <p><input type="checkbox" name="amenity[]" value="{{ $amenity->id }}"> {{ $amenity->name }}</p>
-                      </div>
-                    @endforeach
-                  </div>
+                  <div id="amenitiesField">
 
+                    <h4 class="form-section-h">Amenities</h4>
+                    <div class="form-group-f row">
+                      @foreach($amenities as $amenity)
+                        <div class="col-sm-3">
+                          <img src="{{ asset('storage') }}/{{ $amenity->icon }}" style="height: 30px;">
+                          <p><input type="checkbox" name="amenity[]" value="{{ $amenity->id }}"> {{ $amenity->name }}</p>
+                        </div>
+                      @endforeach
+                    </div>
+                  </div>
 
                   <h4 class="form-section-h">Property Location</h4>
                   <div class="form-group-f row">
@@ -260,10 +264,10 @@
                     </div>
                     <div class="col-sm-6">
                       <label class="label-control">Sub Location </label>
-                      <select class="text-control" name="sub_location_id[]" id="sub_location_id" multiple="">
-
-                      </select>
+                      <input type="text" class="text-control" name="sub_location_name" id="sub_location_name"
+                        placeholder="Enter Sub Location" />
                     </div>
+
                   </div>
                   <div class="form-group-f row">
                     <div class="col-sm-12">
@@ -291,33 +295,33 @@
                   <input type="hidden" name="additional_info" id="form_json">
                   <div class="form-group-f row add_formtype">
                     <?php /*
-                   @foreach($form_type as $f=>$v)
-                     @foreach($v->formtypesfields as $a=>$b)
-                       @foreach($b->subfeatures as $s=>$f)
-                         <div class="col-sm-4">
+                       @foreach($form_type as $f=>$v)
+                         @foreach($v->formtypesfields as $a=>$b)
+                           @foreach($b->subfeatures as $s=>$f)
+                             <div class="col-sm-4">
 
-                           <div class="input-group1">
-                             @if($f->features->input_type === "1")
-                               <label class="label-control">{{$f->sub_feature_name}}<input class="text-control-s dynamic_forms" type="checkbox" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" value="{{$f->id}}" /> </label>
-                             @elseif ($f->features->input_type === "2")
-                               <input class="text-control-s dynamic_forms" type="number" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" />
-                             @elseif ($f->features->input_type === "3")
-                               <input class="text-control-s dynamic_forms" type="radio" name="feature[]" placeholder="{{$f->sub_feature_name}}"data-sub-feature-id="{{$f->id}}" />
-                             @elseif ($f->features->input_type === "4")
-                               <textarea class="text-control" name="feature[]" data-sub-feature-id="{{$f->id}}" />
-                               </textarea>
-                             @elseif ($f->features->input_type === "5")
-  <!--                              <select class="text-control">
-                               </select> -->
-                             @endif
-                           </div>
+                               <div class="input-group1">
+                                 @if($f->features->input_type === "1")
+                                   <label class="label-control">{{$f->sub_feature_name}}<input class="text-control-s dynamic_forms" type="checkbox" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" value="{{$f->id}}" /> </label>
+                                 @elseif ($f->features->input_type === "2")
+                                   <input class="text-control-s dynamic_forms" type="number" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" />
+                                 @elseif ($f->features->input_type === "3")
+                                   <input class="text-control-s dynamic_forms" type="radio" name="feature[]" placeholder="{{$f->sub_feature_name}}"data-sub-feature-id="{{$f->id}}" />
+                                 @elseif ($f->features->input_type === "4")
+                                   <textarea class="text-control" name="feature[]" data-sub-feature-id="{{$f->id}}" />
+                                   </textarea>
+                                 @elseif ($f->features->input_type === "5")
+      <!--                              <select class="text-control">
+                                   </select> -->
+                                 @endif
+                               </div>
 
-                         </div>
+                             </div>
+                           @endforeach
+                         @endforeach
                        @endforeach
-                     @endforeach
-                   @endforeach
-                   */
-                    ?>
+                       */
+                            ?>
                   </div>
 
                   <div class="form-group-f row">
@@ -503,7 +507,7 @@
 
 
     function fetch_subcategories(id, callback) {
-     var route = "{{ url('get/sub-categories') }}/" + id
+      var route = "{{ url('get/sub-categories') }}/" + id
       $.ajax({
         url: route,
         method: 'get',
@@ -546,49 +550,110 @@
       })
     }
 
-
+    var cachedSubSubCategories = {};
     function fetch_subsubcategories(id, callback) {
-      var route = "{{config('app.api_url')}}/fetch_subsubcategories_by_subcat_id/" + id
+      $('#sub_sub_category_id').html('<option value="">Loading...</option>');
+      var route = "{{ url('get/sub-sub-categories') }}/" + id
       $.ajax({
-        url: route,
-        method: 'get',
-        beforeSend: function () {
-          $(".addproperty").attr('disabled', true);
-          $(".add_formtype").empty();
-          $(".loading").css('display', 'block');
-        },
+        url: route, // Change this to your route
+        method: 'GET',
         success: function (response) {
-          // var response = JSON.parse(response);
-          if (response.responseCode === 200) {
-            $(".populate_subsubcategories").empty();
-            var subcategories = response.data.SubSubCategory;
-            if (subcategories.length > 0) {
-              $(".populate_subsubcategories").append(
-                `<option> Select </option>`
-              );
-              $.each(subcategories, function (x, y) {
-                $(".populate_subsubcategories").append(
-                  `<option value=${y.id}> ${y.sub_sub_category_name} </option>`
-                );
-              });
-            } else {
-              $(".populate_subsubcategories").append(
-                `<option value=''> Please add a sub sub category </option>`
-              );
-            }
-            if (callback) {
-              callback();
-            }
+          $('#sub_sub_category_id').empty().append('<option value="">Select Property Type</option>');
+
+          if (response.subsubcategories && response.subsubcategories.length) {
+            cachedSubSubCategories = response.subsubcategories || [];
+
+            $.each(response.subsubcategories, function (i, subsub) {
+              $('#sub_sub_category_id').append('<option value="' + subsub.id + '">' + subsub.sub_sub_category_name + '</option>');
+            });
+          } else {
+            $('#sub_sub_category_id').append('<option value="">No property type found</option>');
           }
         },
-        error: function (response) {
-          toastr.error('An error occured while fetching subsubcategories');
-        },
-        complete: function () {
-          $(".loading").css('display', 'none');
-          // $(".addproperty").attr('disabled', false);
+        error: function () {
+          $('#sub_sub_category_id').html('<option value="">Error loading</option>');
         }
-      })
+      });
+    }
+
+
+    $('#sub_sub_category_id').on('change', function () {
+      var selectedId = $(this).val();
+
+      if (!selectedId) {
+        // Optionally hide those toggle fields if no sub sub category selected
+        toggleSubSubCategoryFields({
+          price_label_toggle: false,
+          property_status_toggle: false,
+          registration_status_toggle: false,
+          furnishing_status_toggle: false,
+          amenities_toggle: false,
+        });
+        return;
+      }
+
+      var selectedData = cachedSubSubCategories.find(function (subsub) {
+        return subsub.id == selectedId;
+      });
+
+
+
+      if (selectedData) {
+        toggleSubSubCategoryFields({
+          price_label_toggle: selectedData.price_label_toggle,
+          property_status_toggle: selectedData.property_status_toggle,
+          registration_status_toggle: selectedData.registration_status_toggle,
+          furnishing_status_toggle: selectedData.furnishing_status_toggle,
+          amenities_toggle: selectedData.amenities_toggle
+        });
+      } else {
+        // No matching sub sub category found, hide fields
+        toggleSubSubCategoryFields({
+          price_label_toggle: false,
+          property_status_toggle: false,
+          registration_status_toggle: false,
+          furnishing_status_toggle: false,
+          amenities_toggle: false
+        });
+      }
+
+
+    });
+
+
+    // This function is called when subsubcategory changes or after loading toggles
+    function toggleSubSubCategoryFields(toggles) {
+
+      if (toggles.price_label_toggle == 'yes') {
+        $('#priceLabelField').show();
+      } else {
+        $('#priceLabelField').hide();
+      }
+
+      if (toggles.property_status_toggle == 'yes') {
+        $('#propertyStatusField').show();
+      } else {
+        $('#propertyStatusField').hide();
+      }
+
+      if (toggles.registration_status_toggle == 'yes') {
+        $('#registrationStatusField').show();
+      } else {
+        $('#registrationStatusField').hide();
+      }
+
+      if (toggles.furnishing_status_toggle == 'yes') {
+        $('#furnishingStatusField').show();
+      } else {
+        $('#furnishingStatusField').hide();
+      }
+
+      if (toggles.amenities_toggle == 'yes') {
+        $('#amenitiesField').show();
+      } else {
+        $('#amenitiesField').hide();
+      }
+
     }
 
 

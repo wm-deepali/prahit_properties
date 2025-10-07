@@ -31,6 +31,7 @@ class Properties extends Model
         'city_id',
         'location_id',
         'sub_location_id',
+        'sub_location_name',
         'featured_image',
         'gallery_images',
         'status',
@@ -124,6 +125,7 @@ class Properties extends Model
         }
         return implode(', ', $data);
     }
+
 
     public function getUser()
     {

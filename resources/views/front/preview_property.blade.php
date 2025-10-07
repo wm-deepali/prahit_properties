@@ -46,37 +46,78 @@
 											id="price" value="{{ $property->price }}" required readonly="" />
 									</div>
 									<!-- <div class="col-sm-4">
-												<label class="label-control">Type</label>
-												<select class="text-control" name="type_id" id="type_id" required disabled="">
-													<option value="">Select Type</option>
-													@if($property->type_id == 1)
-														<option value="1" selected="">Commercial</option>
-														<option value="2">Agricultural</option>
-														<option value="3">Industrial</option>
-														<option value="4">Free Hold</option>
-													@elseif($property->type_id == 2)
-														<option value="1">Commercial</option>
-														<option value="2" selected="">Agricultural</option>
-														<option value="3">Industrial</option>
-														<option value="4">Free Hold</option>
-													@elseif($property->type_id == 3)
-														<option value="1">Commercial</option>
-														<option value="2">Agricultural</option>
-														<option value="3" selected="">Industrial</option>
-														<option value="4">Free Hold</option>
-													@elseif($property->type_id == 4)
-														<option value="1">Commercial</option>
-														<option value="2">Agricultural</option>
-														<option value="3">Industrial</option>
-														<option value="4" selected="">Free Hold</option>
+															<label class="label-control">Type</label>
+															<select class="text-control" name="type_id" id="type_id" required disabled="">
+																<option value="">Select Type</option>
+																@if($property->type_id == 1)
+																	<option value="1" selected="">Commercial</option>
+																	<option value="2">Agricultural</option>
+																	<option value="3">Industrial</option>
+																	<option value="4">Free Hold</option>
+																@elseif($property->type_id == 2)
+																	<option value="1">Commercial</option>
+																	<option value="2" selected="">Agricultural</option>
+																	<option value="3">Industrial</option>
+																	<option value="4">Free Hold</option>
+																@elseif($property->type_id == 3)
+																	<option value="1">Commercial</option>
+																	<option value="2">Agricultural</option>
+																	<option value="3" selected="">Industrial</option>
+																	<option value="4">Free Hold</option>
+																@elseif($property->type_id == 4)
+																	<option value="1">Commercial</option>
+																	<option value="2">Agricultural</option>
+																	<option value="3">Industrial</option>
+																	<option value="4" selected="">Free Hold</option>
+																@else
+																	<option value="1">Commercial</option>
+																	<option value="2">Agricultural</option>
+																	<option value="3">Industrial</option>
+																	<option value="4">Free Hold</option>
+																@endif
+															</select>
+														</div> -->
+								</div>
+
+
+
+								<div class="form-group row">
+									<div class="col-sm-4">
+										<label class="label-control">Property Available For</label>
+										<select class="text-control populate_categories" name="category_id" id="category_id"
+											onchange="fetch_subcategories(this.value, fetch_form_type)" required=""
+											disabled="">
+											@if(count($category) < 1)
+												<option value="">No records found</option>
+											@else
+												@foreach($category as $k => $v)
+													@if($property->category_id == $v->id)
+														<option value="{{$v->id}}" selected="">{{$v->category_name}}</option>
 													@else
-														<option value="1">Commercial</option>
-														<option value="2">Agricultural</option>
-														<option value="3">Industrial</option>
-														<option value="4">Free Hold</option>
+														<option value="{{$v->id}}">{{$v->category_name}}</option>
 													@endif
-												</select>
-											</div> -->
+												@endforeach
+											@endif
+										</select>
+
+									</div>
+									<div class="col-sm-4">
+										<label class="label-control">Category</label>
+										<select class="text-control populate_subcategories" name="sub_category_id"
+											id="sub_category_id" required disabled="">
+											<option value="">Select Category</option>
+										</select>
+
+									</div>
+
+									<div class="col-sm-4">
+										<label class="label-control">Property Type</label>
+										<select class="text-control populate_subsubcategories" name="sub_sub_category_id"
+											id="sub_sub_category_id" onchange="fetch_form_type();" disabled="">
+											<option value="">Select Property Type</option>
+										</select>
+									</div>
+
 								</div>
 
 
@@ -190,45 +231,6 @@
 
 
 								<div class="form-group row">
-									<div class="col-sm-4">
-										<label class="label-control">Property Available For</label>
-										<select class="text-control populate_categories" name="category_id" id="category_id"
-											onchange="fetch_subcategories(this.value, fetch_form_type)" required=""
-											disabled="">
-											@if(count($category) < 1)
-												<option value="">No records found</option>
-											@else
-												@foreach($category as $k => $v)
-													@if($property->category_id == $v->id)
-														<option value="{{$v->id}}" selected="">{{$v->category_name}}</option>
-													@else
-														<option value="{{$v->id}}">{{$v->category_name}}</option>
-													@endif
-												@endforeach
-											@endif
-										</select>
-
-									</div>
-									<div class="col-sm-4">
-										<label class="label-control">Category</label>
-										<select class="text-control populate_subcategories" name="sub_category_id"
-											id="sub_category_id" required disabled="">
-											<option value="">Select Category</option>
-										</select>
-
-									</div>
-
-									<div class="col-sm-4">
-										<label class="label-control">Property Type</label>
-										<select class="text-control populate_subsubcategories" name="sub_sub_category_id"
-											id="sub_sub_category_id" onchange="fetch_form_type();" disabled="">
-											<option value="">Select Property Type</option>
-										</select>
-									</div>
-
-								</div>
-
-								<div class="form-group row">
 									<div class="col-sm-12">
 										<label class="label-control">Description</label>
 										<textarea class="text-control" rows="2" cols="4" name="description" id="description"
@@ -236,16 +238,17 @@
 									</div>
 								</div>
 
-								<h3>Amenities</h3>
-								<div class="form-group row">
-									@foreach($amenities as $amenity)
-										<div class="col-sm-3">
-											<img src="{{ asset('storage') }}/{{ $amenity->icon }}" style="height: 30px;">
-											<p><input type="checkbox" name="amenity[]" value="{{ $amenity->id }}" disabled=""
-													@if(in_array($amenity->id, explode(',', $property->amenities))) checked
-													@endif> {{ $amenity->name }}</p>
-										</div>
-									@endforeach
+								<div id="amenitiesField">
+									<h3>Amenities</h3>
+									<div class="form-group row">
+										@foreach($amenities as $amenity)
+											<div class="col-sm-3">
+												<img src="{{ asset('storage') }}/{{ $amenity->icon }}" style="height: 30px;">
+												<p><input type="checkbox" name="amenity[]" value="{{ $amenity->id }}"
+														disabled="" @if(in_array($amenity->id, explode(',', $property->amenities))) checked @endif> {{ $amenity->name }}</p>
+											</div>
+										@endforeach
+									</div>
 								</div>
 
 								<h3>Property Location</h3>
@@ -294,20 +297,10 @@
 									</div>
 									<div class="col-sm-6">
 										<label class="label-control">Sub Location </label>
-										<select class="text-control" name="sub_location_id[]" id="sub_location_id"
-											multiple="" required disabled="">
-											@foreach($sub_locations as $sub_location)
-												@if(in_array($sub_location->id, explode(',', $property->sub_location_id)))
-													<option value="{{ $sub_location->id }}" selected="">
-														{{ $sub_location->sub_location_name }}
-													</option>
-												@else
-													<option value="{{ $sub_location->id }}">{{ $sub_location->sub_location_name }}
-													</option>
-												@endif
-											@endforeach
-										</select>
+										<input type="text" class="text-control" name="sub_location_name"
+											id="sub_location_name" value="{{ $property->sub_location_name }}" disabled />
 									</div>
+
 								</div>
 								<div class="form-group row">
 									<div class="col-sm-12">
@@ -529,7 +522,7 @@
 
 		var frInstance;
 		function fetch_subcategories(id, callback) {
-		var route = "{{ url('get/sub-categories') }}/" + id
+			var route = "{{ url('get/sub-categories') }}/" + id
 			$.ajax({
 				url: route,
 				method: 'get',
@@ -627,56 +620,56 @@
 		}
 
 
-	var cachedSubSubCategories = {}; // Object to store sub sub categories keyed by subcategory ID
+		var cachedSubSubCategories = {}; // Object to store sub sub categories keyed by subcategory ID
 
-function loadSubSubCategories(subcategoryId, selectedId = null) {
-    $('#sub_sub_category_id').html('<option value="">Loading...</option>');
-    var route = "{{ url('get/sub-sub-categories') }}/" + subcategoryId;
+		function loadSubSubCategories(subcategoryId, selectedId = null) {
+			$('#sub_sub_category_id').html('<option value="">Loading...</option>');
+			var route = "{{ url('get/sub-sub-categories') }}/" + subcategoryId;
 
-    $.ajax({
-        url: route,
-        method: 'GET',
-        success: function (response) {
-            $('#sub_sub_category_id').empty().append('<option value="">Select Property Type</option>');
-            if (response.subsubcategories && response.subsubcategories.length) {
-                cachedSubSubCategories[subcategoryId] = response.subsubcategories;
-                $.each(response.subsubcategories, function (i, subsub) {
-                    let selected = (selectedId == subsub.id) ? "selected" : "";
-                    $('#sub_sub_category_id').append(
-                        '<option value="' + subsub.id + '" ' + selected + '>' + subsub.sub_sub_category_name + '</option>'
-                    );
-                });
-				toggleSubSubCategoryFields(selectedId)
-            } else {
-                $('#sub_sub_category_id').append('<option value="">No property type found</option>');
-            }
-        },
-        error: function () {
-            $('#sub_sub_category_id').html('<option value="">Error loading</option>');
-        }
-    });
-}
+			$.ajax({
+				url: route,
+				method: 'GET',
+				success: function (response) {
+					$('#sub_sub_category_id').empty().append('<option value="">Select Property Type</option>');
+					if (response.subsubcategories && response.subsubcategories.length) {
+						cachedSubSubCategories = response.subsubcategories || [];
+						$.each(response.subsubcategories, function (i, subsub) {
+							let selected = (selectedId == subsub.id) ? "selected" : "";
+							$('#sub_sub_category_id').append(
+								'<option value="' + subsub.id + '" ' + selected + '>' + subsub.sub_sub_category_name + '</option>'
+							);
+						});
+						toggleSubSubCategoryFields(selectedId)
+					} else {
+						$('#sub_sub_category_id').append('<option value="">No property type found</option>');
+					}
+				},
+				error: function () {
+					$('#sub_sub_category_id').html('<option value="">Error loading</option>');
+				}
+			});
+		}
 
-// 🔹 Auto-load on page load if editing
-$(document).ready(function () {
-    let preselectedSubCategory = "{{ $property->sub_category_id }}";
-    let preselectedSubSubCategory = "{{ $property->sub_sub_category_id }}";
+		// 🔹 Auto-load on page load if editing
+		$(document).ready(function () {
+			let preselectedSubCategory = "{{ $property->sub_category_id }}";
+			let preselectedSubSubCategory = "{{ $property->sub_sub_category_id }}";
 
-    if (preselectedSubCategory) {
-        loadSubSubCategories(preselectedSubCategory, preselectedSubSubCategory);
-    }
+			if (preselectedSubCategory) {
+				loadSubSubCategories(preselectedSubCategory, preselectedSubSubCategory);
+			}
 
 
-});
+		});
 
 
 
 		// This function is called when subsubcategory changes or after loading toggles
 		function toggleSubSubCategoryFields(selectedId) {
-			
-var selectedData = cachedSubSubCategories.find(function(subsub) {
-    return subsub.id == selectedId;
-});
+
+			var selectedData = cachedSubSubCategories.find(function (subsub) {
+				return subsub.id == selectedId;
+			});
 
 			if (selectedData.price_label_toggle == 'yes') {
 				$('#priceLabelField').show();
@@ -700,6 +693,12 @@ var selectedData = cachedSubSubCategories.find(function(subsub) {
 				$('#furnishingStatusField').show();
 			} else {
 				$('#furnishingStatusField').hide();
+			}
+
+			if (selectedData.amenities_toggle == 'yes') {
+				$('#amenitiesField').show();
+			} else {
+				$('#amenitiesField').hide();
 			}
 		}
 
@@ -780,8 +779,8 @@ var selectedData = cachedSubSubCategories.find(function(subsub) {
 					formData.append('is_visitor', true);
 				@endguest
 
-					// console.log(obj)
-					if (jQuery.isEmptyObject(obj)) {
+								// console.log(obj)
+								if (jQuery.isEmptyObject(obj)) {
 					returnIfInvalid();
 				}
 
@@ -801,7 +800,7 @@ var selectedData = cachedSubSubCategories.find(function(subsub) {
 							@auth
 								request.setRequestHeader('auth-token', '{{Auth::user()->auth_token}}');
 							@endauth
-								},
+											},
 						success: function (response) {
 							// var response = JSON.parse(response);
 							if (response.responseCode === 200) {
@@ -812,7 +811,7 @@ var selectedData = cachedSubSubCategories.find(function(subsub) {
 									// window.location.href = "{{route('admin.properties.index')}}";
 									//          	}, 1000);
 								@endguest
-									} else if (response.responseCode === 400) {
+												} else if (response.responseCode === 400) {
 								toastr.error(response.message)
 							} else {
 								toastr.error('An error occured')

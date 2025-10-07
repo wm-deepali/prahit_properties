@@ -296,7 +296,6 @@ class HomeController extends AppController
 			'description' => 'required',
 			'address' => 'required',
 			'location_id' => 'required',
-			'sub_location_id' => 'nullable',
 			'owner_type' => 'required',
 			'firstname' => 'required',
 			'lastname' => 'required',
@@ -304,6 +303,7 @@ class HomeController extends AppController
 			'mobile_number' => 'required|numeric|digits:10',
 			'otp' => 'required',
 			"gallery_images_file.*" => 'required|mimes:jpg,png,jpeg',
+			'sub_location_name' => 'nullable|string|max:255',
 		]);
 
 		// Check OTP first
@@ -407,7 +407,7 @@ class HomeController extends AppController
 			'state_id' => $request->state,
 			'city_id' => $request->city,
 			'location_id' => implode(',', $request->location_id),
-			'sub_location_id' => $request->sub_location_id ? implode(',', $request->sub_location_id) : null,
+			'sub_location_name' => $request->sub_location_name ?? null,
 			'amenities' => $request->amenity ? implode(',', $request->amenity) : null,
 			'additional_info' => $request->form_json,
 			'construction_age' => $request->construction_age
@@ -517,7 +517,7 @@ class HomeController extends AppController
 			'description' => 'required',
 			'address' => 'required',
 			'location_id' => 'required',
-			'sub_location_id' => 'nullable',
+			'sub_location_name' => 'nullable|string|max:255',
 			"gallery_images_file.*" => 'nullable|mimes:jpg,png,jpeg',
 		]);
 
@@ -548,7 +548,7 @@ class HomeController extends AppController
 			'state_id' => $request->state,
 			'city_id' => $request->city,
 			'location_id' => implode(',', (array) $request->location_id),
-			'sub_location_id' => $request->has('sub_location_id') ? implode(',', (array) $request->sub_location_id) : null,
+			'sub_location_name' => $request->sub_location_name ?? null,
 			'amenities' => $request->has('amenity') ? implode(',', (array) $request->amenity) : null,
 			'additional_info' => $request->form_json,
 			'construction_age' => $request->construction_age,
@@ -929,7 +929,7 @@ class HomeController extends AppController
 		if ($otp->user_id != \Auth::id()) {
 			return redirect()->back()->with('error', 'Invalid User.');
 		}
-		$msg;
+		$msg = '';
 		if ($request->input('type') == 'email') {
 			$status = '1';
 			$msg = 'Email Verified Successfully.';

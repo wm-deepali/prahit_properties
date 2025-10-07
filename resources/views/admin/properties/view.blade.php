@@ -167,7 +167,7 @@
               <div class="col-sm-4">
                 <label class="content-label">Sub Location</label>
                 <h5 class="content-h">
-                  {{ $data->getSubLocations($data->sub_location_id) ? $data->getSubLocations($data->sub_location_id) : 'N/A' }}
+                  {{ $data->sub_location_name  ?? 'N/A' }}
                 </h5>
               </div>
             </div>
@@ -225,10 +225,12 @@
   <script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
   <script type="text/javascript">
     $(function () {
-      document.getElementById('fb-render').innerHTML = '';
-      var formData = $('#save_json').val();
-      var formRenderOptions = { formData };
-      frInstance = $('#fb-render').formRender(formRenderOptions);
+     setTimeout(function () {
+        document.getElementById('fb-render').innerHTML = '';
+        var formData = $('#save_json').val();
+        var formRenderOptions = { formData };
+        frInstance = $('#fb-render').formRender(formRenderOptions);
+      }, 1000);
     });
   </script>
 @endsection

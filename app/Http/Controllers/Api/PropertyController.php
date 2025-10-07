@@ -205,7 +205,7 @@ class PropertyController extends BaseApiController
 			$request['city_id'] = $request->city;
 			$request['construction_age'] = $request->construction_age;
 			$request['location_id'] = implode(',', $request->location_id);
-			$request['sub_location_id'] = $request->has('sub_location_id') ? implode(',', $request->sub_location_id) : null;
+			$request['sub_location_name'] = $request->sub_location_name ?? null;
 			$request['amenities'] = $request->has('amenity') ? implode(',', $request->amenity) : null;
 
 			$listing = Properties::create($request->all());
@@ -224,16 +224,22 @@ class PropertyController extends BaseApiController
 						PropertyGallery::create(['property_id' => $listing->id, 'image_path' => $value]);
 					}
 				}
-				$this->_sendResponse(['listing' => $listing], 'Listing created successfully');
-				// if($propertiesFields) {
-				// 	$this->_sendResponse([],'Listing created successfully');
-				// }
+				return response()->json([
+					'status' => 'success',
+					'message' => 'Listing created successfully',
+					'data' => ['listing' => $listing]
+				], 200);
+
 
 			} else {
 
 			}
 		} catch (\Exception $e) {
-			$this->_sendErrorResponse(500, $e->getMessage() . " " . $e->getLine());
+			return response()->json([
+				'status' => 'error',
+				'message' => $e->getMessage() . " " . $e->getLine()
+			], 500);
+
 		}
 	}
 

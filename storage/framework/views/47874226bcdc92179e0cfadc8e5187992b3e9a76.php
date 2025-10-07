@@ -42,37 +42,37 @@
 											value="<?php echo e($property->title); ?>" required />
 									</div>
 									<!-- <div class="col-sm-4">
-														<label class="label-control">Type</label>
-														<select class="text-control" name="type_id" id="type_id" required>
-															<option value="">Select Type</option>
-															<?php if($property->type_id == 1): ?>
-																<option value="1" selected="">Commercial</option>
-																<option value="2">Agricultural</option>
-																<option value="3">Industrial</option>
-																<option value="4">Free Hold</option>
-															<?php elseif($property->type_id == 2): ?>
-																<option value="1">Commercial</option>
-																<option value="2" selected="">Agricultural</option>
-																<option value="3">Industrial</option>
-																<option value="4">Free Hold</option>
-															<?php elseif($property->type_id == 3): ?>
-																<option value="1">Commercial</option>
-																<option value="2">Agricultural</option>
-																<option value="3" selected="">Industrial</option>
-																<option value="4">Free Hold</option>
-															<?php elseif($property->type_id == 4): ?>
-																<option value="1">Commercial</option>
-																<option value="2">Agricultural</option>
-																<option value="3">Industrial</option>
-																<option value="4" selected="">Free Hold</option>
-															<?php else: ?>
-																<option value="1">Commercial</option>
-																<option value="2">Agricultural</option>
-																<option value="3">Industrial</option>
-																<option value="4">Free Hold</option>
-															<?php endif; ?>
-														</select>
-													</div> -->
+																			<label class="label-control">Type</label>
+																			<select class="text-control" name="type_id" id="type_id" required>
+																				<option value="">Select Type</option>
+																				<?php if($property->type_id == 1): ?>
+																					<option value="1" selected="">Commercial</option>
+																					<option value="2">Agricultural</option>
+																					<option value="3">Industrial</option>
+																					<option value="4">Free Hold</option>
+																				<?php elseif($property->type_id == 2): ?>
+																					<option value="1">Commercial</option>
+																					<option value="2" selected="">Agricultural</option>
+																					<option value="3">Industrial</option>
+																					<option value="4">Free Hold</option>
+																				<?php elseif($property->type_id == 3): ?>
+																					<option value="1">Commercial</option>
+																					<option value="2">Agricultural</option>
+																					<option value="3" selected="">Industrial</option>
+																					<option value="4">Free Hold</option>
+																				<?php elseif($property->type_id == 4): ?>
+																					<option value="1">Commercial</option>
+																					<option value="2">Agricultural</option>
+																					<option value="3">Industrial</option>
+																					<option value="4" selected="">Free Hold</option>
+																				<?php else: ?>
+																					<option value="1">Commercial</option>
+																					<option value="2">Agricultural</option>
+																					<option value="3">Industrial</option>
+																					<option value="4">Free Hold</option>
+																				<?php endif; ?>
+																			</select>
+																		</div> -->
 									<div class="col-sm-4">
 										<label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
 										<input type="number" class="text-control" placeholder="Enter Price" name="price"
@@ -80,153 +80,6 @@
 									</div>
 								</div>
 
-
-								<div class="form-row">
-
-									
-									<div id="priceLabelField" class="form-group col-md-3">
-										<label class="label-control">Price Label</label>
-										<?php if($price_labels->first()->input_format == 'checkbox'): ?>
-											<?php $__currentLoopData = $price_labels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-												<label>
-													<input type="checkbox" name="price_label[]" value="<?php echo e($label->id); ?>" <?php echo e(in_array($label->id, explode(',', $property->price_label ?? '')) ? 'checked' : ''); ?>>
-													<?php echo e($label->name); ?>
-
-												</label>
-											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-										<?php else: ?>
-											<select name="price_label" class="form-control">
-												<option value="">Select</option>
-												<?php $__currentLoopData = $price_labels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-													<option value="<?php echo e($label->id); ?>" <?php echo e($property->price_label == $label->id ? 'selected' : ''); ?>>
-														<?php echo e($label->name); ?>
-
-													</option>
-												<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-											</select>
-										<?php endif; ?>
-
-										<?php if(!empty($property->price_label_second)): ?>
-											<div class="mt-2">
-												<label>
-													<?php echo e(optional($price_labels->firstWhere('id', $property->price_label))->second_input_label ?? 'Date'); ?>
-
-												</label>
-												<input type="date" class="form-control" name="price_label_second"
-													value="<?php echo e($property->price_label_second); ?>">
-											</div>
-										<?php endif; ?>
-									</div>
-
-
-									
-									<div id="propertyStatusField" class="form-group col-md-3">
-										<label class="label-control">Property Status</label>
-										<?php if($property_statuses->first()->input_format == 'checkbox'): ?>
-											<?php $__currentLoopData = $property_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-												<label>
-													<input type="checkbox" name="property_status[]" value="<?php echo e($status->id); ?>" <?php echo e(in_array($status->id, explode(',', $property->property_status ?? '')) ? 'checked' : ''); ?>>
-													<?php echo e($status->name); ?>
-
-												</label>
-											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-										<?php else: ?>
-											<select name="property_status" class="form-control">
-												<option value="">Select</option>
-												<?php $__currentLoopData = $property_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-													<option value="<?php echo e($status->id); ?>" <?php echo e($property->property_status == $status->id ? 'selected' : ''); ?>>
-														<?php echo e($status->name); ?>
-
-													</option>
-												<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-											</select>
-										<?php endif; ?>
-
-										<?php if(!empty($property->property_status_second)): ?>
-											<div class="mt-2">
-												<label>
-													<?php echo e(optional($property_statuses->firstWhere('id', $property->property_status))->second_input_label ?? 'Date'); ?>
-
-												</label>
-												<input type="date" class="form-control" name="property_status_second"
-													value="<?php echo e($property->property_status_second); ?>">
-											</div>
-										<?php endif; ?>
-									</div>
-
-
-									
-									<div id="registrationStatusField" class="form-group col-md-3">
-										<label class="label-control">Registration Status</label>
-										<?php if($registration_statuses->first()->input_format == 'checkbox'): ?>
-											<?php $__currentLoopData = $registration_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-												<label>
-													<input type="checkbox" name="registration_status[]" value="<?php echo e($status->id); ?>" <?php echo e(in_array($status->id, explode(',', $property->registration_status ?? '')) ? 'checked' : ''); ?>>
-													<?php echo e($status->name); ?>
-
-												</label>
-											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-										<?php else: ?>
-											<select name="registration_status" class="form-control">
-												<option value="">Select</option>
-												<?php $__currentLoopData = $registration_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-													<option value="<?php echo e($status->id); ?>" <?php echo e($property->registration_status == $status->id ? 'selected' : ''); ?>>
-														<?php echo e($status->name); ?>
-
-													</option>
-												<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-											</select>
-										<?php endif; ?>
-
-										<?php if(!empty($property->registration_status_second)): ?>
-											<div class="mt-2">
-												<label>
-													<?php echo e(optional($registration_statuses->firstWhere('id', $property->registration_status))->second_input_label ?? 'Date'); ?>
-
-												</label>
-												<input type="date" class="form-control" name="registration_status_second"
-													value="<?php echo e($property->registration_status_second); ?>">
-											</div>
-										<?php endif; ?>
-									</div>
-
-
-									
-									<div id="furnishingStatusField" class="form-group col-md-3">
-										<label class="label-control">Furnishing Status</label>
-										<?php if($furnishing_statuses->first()->input_format == 'checkbox'): ?>
-											<?php $__currentLoopData = $furnishing_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-												<label>
-													<input type="checkbox" name="furnishing_status[]" value="<?php echo e($status->id); ?>" <?php echo e(in_array($status->id, explode(',', $property->furnishing_status ?? '')) ? 'checked' : ''); ?>>
-													<?php echo e($status->name); ?>
-
-												</label>
-											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-										<?php else: ?>
-											<select name="furnishing_status" class="form-control">
-												<option value="">Select</option>
-												<?php $__currentLoopData = $furnishing_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-													<option value="<?php echo e($status->id); ?>" <?php echo e($property->furnishing_status == $status->id ? 'selected' : ''); ?>>
-														<?php echo e($status->name); ?>
-
-													</option>
-												<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-											</select>
-										<?php endif; ?>
-
-										<?php if(!empty($property->furnishing_status_second)): ?>
-											<div class="mt-2">
-												<label>
-													<?php echo e(optional($furnishing_statuses->firstWhere('id', $property->furnishing_status))->second_input_label ?? 'Date'); ?>
-
-												</label>
-												<input type="date" class="form-control" name="furnishing_status_second"
-													value="<?php echo e($property->furnishing_status_second); ?>">
-											</div>
-										<?php endif; ?>
-									</div>
-
-								</div>
 
 								<div class="form-group row">
 									<div class="col-sm-4">
@@ -266,6 +119,159 @@
 
 								</div>
 
+								<div class="form-row">
+
+									
+									<?php $col = ($price_labels->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
+									<div id="priceLabelField" class="form-group <?php echo e($col); ?>">
+										<label class="label-control">Price Label</label>
+										<?php if($price_labels->first()->input_format == 'checkbox'): ?>
+											<?php $__currentLoopData = $price_labels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+												<label>
+													<input type="checkbox" name="price_label[]" value="<?php echo e($label->id); ?>" <?php echo e(in_array($label->id, explode(',', $property->price_label ?? '')) ? 'checked' : ''); ?>>
+													<?php echo e($label->name); ?>
+
+												</label>
+											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+										<?php else: ?>
+											<select name="price_label" class="form-control">
+												<option value="">Select</option>
+												<?php $__currentLoopData = $price_labels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+													<option value="<?php echo e($label->id); ?>" <?php echo e($property->price_label == $label->id ? 'selected' : ''); ?>>
+														<?php echo e($label->name); ?>
+
+													</option>
+												<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+											</select>
+										<?php endif; ?>
+
+										<?php if(!empty($property->price_label_second)): ?>
+											<div class="mt-2">
+												<label>
+													<?php echo e(optional($price_labels->firstWhere('id', $property->price_label))->second_input_label ?? 'Date'); ?>
+
+												</label>
+												<input type="date" class="form-control" name="price_label_second"
+													value="<?php echo e($property->price_label_second); ?>">
+											</div>
+										<?php endif; ?>
+									</div>
+
+
+									
+									<?php $col = ($property_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
+									<div id="propertyStatusField" class="form-group <?php echo e($col); ?>">
+										<label class="label-control">Property Status</label>
+										<?php if($property_statuses->first()->input_format == 'checkbox'): ?>
+											<?php $__currentLoopData = $property_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+												<label>
+													<input type="checkbox" name="property_status[]" value="<?php echo e($status->id); ?>" <?php echo e(in_array($status->id, explode(',', $property->property_status ?? '')) ? 'checked' : ''); ?>>
+													<?php echo e($status->name); ?>
+
+												</label>
+											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+										<?php else: ?>
+											<select name="property_status" class="form-control">
+												<option value="">Select</option>
+												<?php $__currentLoopData = $property_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+													<option value="<?php echo e($status->id); ?>" <?php echo e($property->property_status == $status->id ? 'selected' : ''); ?>>
+														<?php echo e($status->name); ?>
+
+													</option>
+												<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+											</select>
+										<?php endif; ?>
+
+										<?php if(!empty($property->property_status_second)): ?>
+											<div class="mt-2">
+												<label>
+													<?php echo e(optional($property_statuses->firstWhere('id', $property->property_status))->second_input_label ?? 'Date'); ?>
+
+												</label>
+												<input type="date" class="form-control" name="property_status_second"
+													value="<?php echo e($property->property_status_second); ?>">
+											</div>
+										<?php endif; ?>
+									</div>
+
+
+									
+									<?php $col = ($registration_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
+									<div id="registrationStatusField" class="form-group <?php echo e($col); ?>">
+										<label class="label-control">Registration Status</label>
+										<?php if($registration_statuses->first()->input_format == 'checkbox'): ?>
+											<?php $__currentLoopData = $registration_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+												<label>
+													<input type="checkbox" name="registration_status[]" value="<?php echo e($status->id); ?>" <?php echo e(in_array($status->id, explode(',', $property->registration_status ?? '')) ? 'checked' : ''); ?>>
+													<?php echo e($status->name); ?>
+
+												</label>
+											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+										<?php else: ?>
+											<select name="registration_status" class="form-control">
+												<option value="">Select</option>
+												<?php $__currentLoopData = $registration_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+													<option value="<?php echo e($status->id); ?>" <?php echo e($property->registration_status == $status->id ? 'selected' : ''); ?>>
+														<?php echo e($status->name); ?>
+
+													</option>
+												<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+											</select>
+										<?php endif; ?>
+
+										<?php if(!empty($property->registration_status_second)): ?>
+											<div class="mt-2">
+												<label>
+													<?php echo e(optional($registration_statuses->firstWhere('id', $property->registration_status))->second_input_label ?? 'Date'); ?>
+
+												</label>
+												<input type="date" class="form-control" name="registration_status_second"
+													value="<?php echo e($property->registration_status_second); ?>">
+											</div>
+										<?php endif; ?>
+									</div>
+
+
+									
+									<?php $col = ($furnishing_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
+									<div id="furnishingStatusField" class="form-group <?php echo e($col); ?>">
+										<label class="label-control">Furnishing Status</label>
+										<?php if($furnishing_statuses->first()->input_format == 'checkbox'): ?>
+											<?php $__currentLoopData = $furnishing_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+												<label>
+													<input type="checkbox" name="furnishing_status[]" value="<?php echo e($status->id); ?>" <?php echo e(in_array($status->id, explode(',', $property->furnishing_status ?? '')) ? 'checked' : ''); ?>>
+													<?php echo e($status->name); ?>
+
+												</label>
+											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+										<?php else: ?>
+											<select name="furnishing_status" class="form-control">
+												<option value="">Select</option>
+												<?php $__currentLoopData = $furnishing_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+													<option value="<?php echo e($status->id); ?>" <?php echo e($property->furnishing_status == $status->id ? 'selected' : ''); ?>>
+														<?php echo e($status->name); ?>
+
+													</option>
+												<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+											</select>
+										<?php endif; ?>
+
+										<?php if(!empty($property->furnishing_status_second)): ?>
+											<div class="mt-2">
+												<label>
+													<?php echo e(optional($furnishing_statuses->firstWhere('id', $property->furnishing_status))->second_input_label ?? 'Date'); ?>
+
+												</label>
+												<input type="date" class="form-control" name="furnishing_status_second"
+													value="<?php echo e($property->furnishing_status_second); ?>">
+											</div>
+										<?php endif; ?>
+									</div>
+
+								</div>
+
+
+
 								<div class="form-group row">
 									<div class="col-sm-12">
 										<label class="label-control">Description</label>
@@ -274,16 +280,18 @@
 									</div>
 								</div>
 
-								<h3>Amenities</h3>
-								<div class="form-group row">
-									<?php $__currentLoopData = $amenities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $amenity): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-										<div class="col-sm-3">
-											<img src="<?php echo e(asset('storage')); ?>/<?php echo e($amenity->icon); ?>" style="height: 30px;">
-											<p><input type="checkbox" name="amenity[]" value="<?php echo e($amenity->id); ?>"
-													<?php if(in_array($amenity->id, explode(',', $property->amenities))): ?> checked
-													<?php endif; ?>> <?php echo e($amenity->name); ?></p>
-										</div>
-									<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+								<div id="amenitiesField">
+									<h3>Amenities</h3>
+									<div class="form-group row">
+										<?php $__currentLoopData = $amenities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $amenity): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+											<div class="col-sm-3">
+												<img src="<?php echo e(asset('storage')); ?>/<?php echo e($amenity->icon); ?>" style="height: 30px;">
+												<p><input type="checkbox" name="amenity[]" value="<?php echo e($amenity->id); ?>"
+														<?php if(in_array($amenity->id, explode(',', $property->amenities))): ?> checked
+														<?php endif; ?>> <?php echo e($amenity->name); ?></p>
+											</div>
+										<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+									</div>
 								</div>
 
 								<h3>Property Location</h3>
@@ -332,22 +340,9 @@
 
 									</div>
 									<div class="col-sm-6">
-										<label class="label-control">Sub Location </label>
-										<select class="text-control" name="sub_location_id[]" id="sub_location_id"
-											multiple="" required>
-											<?php $__currentLoopData = $sub_locations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub_location): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-												<?php if(in_array($sub_location->id, explode(',', $property->sub_location_id))): ?>
-													<option value="<?php echo e($sub_location->id); ?>" selected="">
-														<?php echo e($sub_location->sub_location_name); ?>
-
-													</option>
-												<?php else: ?>
-													<option value="<?php echo e($sub_location->id); ?>"><?php echo e($sub_location->sub_location_name); ?>
-
-													</option>
-												<?php endif; ?>
-											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-										</select>
+										<label class="label-control">Sub Location</label>
+										<input type="text" name="sub_location_name" id="sub_location_name"
+											class="text-control" value="<?php echo e($property->sub_location_name ?? ''); ?>" />
 									</div>
 								</div>
 								<div class="form-group row">
@@ -357,10 +352,6 @@
 											name="address" value="<?php echo e($property->address); ?>" required />
 									</div>
 								</div>
-
-
-
-
 
 								<div class="form-group row">
 									<div class="col-sm-12">
@@ -415,29 +406,29 @@
 								</center>
 								<h3>Contact Information</h3>
 								<!-- 								<div class="form-group mb-0 row">
-													<div class="col-sm-12">
-														<label class="label-control">Ownership Type</label>
-														<ul class="ownertype">
-															<?php if(\Auth::user()->role == 'owner' || old('owner_type') == 1): ?>
-																<li><label><input type="radio" name="owner_type" value="1" checked="" readonly="" /> Owner</label></li>
-																<li><label><input type="radio" name="owner_type" value="2"  readonly=""/> Builder</label></li>
-																<li><label><input type="radio" name="owner_type" value="3"  readonly=""/> Agent</label></li>
-															<?php elseif(\Auth::user()->role == 'builder' || old('owner_type') == 2): ?>
-																<li><label><input type="radio" name="owner_type" value="1" readonly=""/> Owner</label></li>
-																<li><label><input type="radio" name="owner_type" value="2"  checked="" readonly=""/> Builder</label></li>
-																<li><label><input type="radio" name="owner_type" value="3" readonly="" /> Agent</label></li>
-															<?php elseif(\Auth::user()->role == 'agent' || old('owner_type') == 3): ?>
-																<li><label><input type="radio" name="owner_type" value="1" readonly=""/> Owner</label></li>
-																<li><label><input type="radio" name="owner_type" value="2"  readonly=""/> Builder</label></li>
-																<li><label><input type="radio" name="owner_type" value="3"  checked="" readonly=""/> Agent</label></li>
-															<?php else: ?>
-																<li><label><input type="radio" name="owner_type" value="1" checked="" readonly=""/> Owner</label></li>
-																<li><label><input type="radio" name="owner_type" value="2"  readonly=""/> Builder</label></li>
-																<li><label><input type="radio" name="owner_type" value="3"  readonly=""/> Agent</label></li>
-															<?php endif; ?>
-														</ul>
-													</div>
-												</div> -->
+																		<div class="col-sm-12">
+																			<label class="label-control">Ownership Type</label>
+																			<ul class="ownertype">
+																				<?php if(\Auth::user()->role == 'owner' || old('owner_type') == 1): ?>
+																					<li><label><input type="radio" name="owner_type" value="1" checked="" readonly="" /> Owner</label></li>
+																					<li><label><input type="radio" name="owner_type" value="2"  readonly=""/> Builder</label></li>
+																					<li><label><input type="radio" name="owner_type" value="3"  readonly=""/> Agent</label></li>
+																				<?php elseif(\Auth::user()->role == 'builder' || old('owner_type') == 2): ?>
+																					<li><label><input type="radio" name="owner_type" value="1" readonly=""/> Owner</label></li>
+																					<li><label><input type="radio" name="owner_type" value="2"  checked="" readonly=""/> Builder</label></li>
+																					<li><label><input type="radio" name="owner_type" value="3" readonly="" /> Agent</label></li>
+																				<?php elseif(\Auth::user()->role == 'agent' || old('owner_type') == 3): ?>
+																					<li><label><input type="radio" name="owner_type" value="1" readonly=""/> Owner</label></li>
+																					<li><label><input type="radio" name="owner_type" value="2"  readonly=""/> Builder</label></li>
+																					<li><label><input type="radio" name="owner_type" value="3"  checked="" readonly=""/> Agent</label></li>
+																				<?php else: ?>
+																					<li><label><input type="radio" name="owner_type" value="1" checked="" readonly=""/> Owner</label></li>
+																					<li><label><input type="radio" name="owner_type" value="2"  readonly=""/> Builder</label></li>
+																					<li><label><input type="radio" name="owner_type" value="3"  readonly=""/> Agent</label></li>
+																				<?php endif; ?>
+																			</ul>
+																		</div>
+																	</div> -->
 								<div class="form-group row">
 									<div class="col-sm-6">
 										<label class="label-control">First Name</label>
@@ -706,55 +697,54 @@
 		}
 
 
-	var cachedSubSubCategories = {}; // Object to store sub sub categories keyed by subcategory ID
+		var cachedSubSubCategories = {}; // Object to store sub sub categories keyed by subcategory ID
 
-function loadSubSubCategories(subcategoryId, selectedId = null) {
-    $('#sub_sub_category_id').html('<option value="">Loading...</option>');
-    var route = "<?php echo e(url('get/sub-sub-categories')); ?>/" + subcategoryId;
+		function loadSubSubCategories(subcategoryId, selectedId = null) {
+			$('#sub_sub_category_id').html('<option value="">Loading...</option>');
+			var route = "<?php echo e(url('get/sub-sub-categories')); ?>/" + subcategoryId;
 
-    $.ajax({
-        url: route,
-        method: 'GET',
-        success: function (response) {
-            $('#sub_sub_category_id').empty().append('<option value="">Select Property Type</option>');
-            if (response.subsubcategories && response.subsubcategories.length) {
-                cachedSubSubCategories[subcategoryId] = response.subsubcategories;
+			$.ajax({
+				url: route,
+				method: 'GET',
+				success: function (response) {
+					$('#sub_sub_category_id').empty().append('<option value="">Select Property Type</option>');
+					if (response.subsubcategories && response.subsubcategories.length) {
+						cachedSubSubCategories = response.subsubcategories || [];
+						$.each(response.subsubcategories, function (i, subsub) {
+							let selected = (selectedId == subsub.id) ? "selected" : "";
+							$('#sub_sub_category_id').append(
+								'<option value="' + subsub.id + '" ' + selected + '>' + subsub.sub_sub_category_name + '</option>'
+							);
+						});
+					} else {
+						$('#sub_sub_category_id').append('<option value="">No property type found</option>');
+					}
+				},
+				error: function () {
+					$('#sub_sub_category_id').html('<option value="">Error loading</option>');
+				}
+			});
+		}
 
-                $.each(response.subsubcategories, function (i, subsub) {
-                    let selected = (selectedId == subsub.id) ? "selected" : "";
-                    $('#sub_sub_category_id').append(
-                        '<option value="' + subsub.id + '" ' + selected + '>' + subsub.sub_sub_category_name + '</option>'
-                    );
-                });
-            } else {
-                $('#sub_sub_category_id').append('<option value="">No property type found</option>');
-            }
-        },
-        error: function () {
-            $('#sub_sub_category_id').html('<option value="">Error loading</option>');
-        }
-    });
-}
+		// On subcategory change
+		$('#sub_category_id').on('change', function () {
+			let subcategoryId = $(this).val();
+			if (subcategoryId) {
+				loadSubSubCategories(subcategoryId);
+			} else {
+				$('#sub_sub_category_id').html('<option value="">Select Property Type</option>');
+			}
+		});
 
-// On subcategory change
-$('#sub_category_id').on('change', function () {
-    let subcategoryId = $(this).val();
-    if (subcategoryId) {
-        loadSubSubCategories(subcategoryId);
-    } else {
-        $('#sub_sub_category_id').html('<option value="">Select Property Type</option>');
-    }
-});
+		// 🔹 Auto-load on page load if editing
+		$(document).ready(function () {
+			let preselectedSubCategory = "<?php echo e($property->sub_category_id); ?>";
+			let preselectedSubSubCategory = "<?php echo e($property->sub_sub_category_id); ?>";
 
-// 🔹 Auto-load on page load if editing
-$(document).ready(function () {
-    let preselectedSubCategory = "<?php echo e($property->sub_category_id); ?>";
-    let preselectedSubSubCategory = "<?php echo e($property->sub_sub_category_id); ?>";
-
-    if (preselectedSubCategory) {
-        loadSubSubCategories(preselectedSubCategory, preselectedSubSubCategory);
-    }
-});
+			if (preselectedSubCategory) {
+				loadSubSubCategories(preselectedSubCategory, preselectedSubSubCategory);
+			}
+		});
 
 
 		$('#sub_sub_category_id').on('change', function () {
@@ -766,41 +756,43 @@ $(document).ready(function () {
 					price_label_toggle: false,
 					property_status_toggle: false,
 					registration_status_toggle: false,
-					furnishing_status_toggle: false
+					furnishing_status_toggle: false,
+					amenities_toggle: false,
 				});
 				return;
 			}
 
-var selectedData = cachedSubSubCategories.find(function(subsub) {
-    return subsub.id == selectedId;
-});
+			var selectedData = cachedSubSubCategories.find(function (subsub) {
+				return subsub.id == selectedId;
+			});
 
 
 
-if (selectedData) {
-    toggleSubSubCategoryFields({
-        price_label_toggle: selectedData.price_label_toggle,
-        property_status_toggle: selectedData.property_status_toggle,
-        registration_status_toggle: selectedData.registration_status_toggle,
-        furnishing_status_toggle: selectedData.furnishing_status_toggle
-    });
-} else {
-    // No matching sub sub category found, hide fields
-    toggleSubSubCategoryFields({
-        price_label_toggle: false,
-        property_status_toggle: false,
-        registration_status_toggle: false,
-        furnishing_status_toggle: false
-    });
-}
+			if (selectedData) {
+				toggleSubSubCategoryFields({
+					price_label_toggle: selectedData.price_label_toggle,
+					property_status_toggle: selectedData.property_status_toggle,
+					registration_status_toggle: selectedData.registration_status_toggle,
+					furnishing_status_toggle: selectedData.furnishing_status_toggle,
+					amenities_toggle: selectedData.amenities_toggle
+				});
+			} else {
+				// No matching sub sub category found, hide fields
+				toggleSubSubCategoryFields({
+					price_label_toggle: false,
+					property_status_toggle: false,
+					registration_status_toggle: false,
+					furnishing_status_toggle: false,
+					amenities_toggle: false
+				});
+			}
 
-	
 		});
 
 
 		// This function is called when subsubcategory changes or after loading toggles
 		function toggleSubSubCategoryFields(toggles) {
-			
+
 			if (toggles.price_label_toggle == 'yes') {
 				$('#priceLabelField').show();
 			} else {
@@ -824,6 +816,13 @@ if (selectedData) {
 			} else {
 				$('#furnishingStatusField').hide();
 			}
+
+			if (toggles.amenities_toggle == 'yes') {
+				$('#amenitiesField').show();
+			} else {
+				$('#amenitiesField').hide();
+			}
+
 		}
 
 
@@ -959,8 +958,8 @@ if (selectedData) {
 					formData.append('is_visitor', true);
 				<?php endif; ?>
 
-							// console.log(obj)
-							if (jQuery.isEmptyObject(obj)) {
+												// console.log(obj)
+												if (jQuery.isEmptyObject(obj)) {
 					returnIfInvalid();
 				}
 
@@ -980,7 +979,7 @@ if (selectedData) {
 							<?php if(auth()->guard()->check()): ?>
 								request.setRequestHeader('auth-token', '<?php echo e(Auth::user()->auth_token); ?>');
 							<?php endif; ?>
-										},
+															},
 						success: function (response) {
 							// var response = JSON.parse(response);
 							if (response.responseCode === 200) {
@@ -991,7 +990,7 @@ if (selectedData) {
 									// window.location.href = "<?php echo e(route('admin.properties.index')); ?>";
 									//          	}, 1000);
 								<?php endif; ?>
-											} else if (response.responseCode === 400) {
+																} else if (response.responseCode === 400) {
 								toastr.error(response.message)
 							} else {
 								toastr.error('An error occured')

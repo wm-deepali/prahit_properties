@@ -14,10 +14,11 @@ class SubSubCategory extends Model
         'sub_sub_category_meta_title', 
         'sub_sub_category_meta_description', 
         'sub_sub_category_keywords',
-        'price_label_toggle',       // new
-        'property_status_toggle',   // new
-        'registration_status_toggle', // new
-        'furnishing_status_toggle'  // new
+        'price_label_toggle',  
+        'property_status_toggle',  
+        'registration_status_toggle', 
+        'furnishing_status_toggle' ,
+        'amenities_toggle'
     ];
 
     protected $table = "sub_sub_categories";

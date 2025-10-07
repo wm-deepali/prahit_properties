@@ -109,7 +109,7 @@
         <div class="modal-body">
           <form id="create_sub_sub_category" name="create_sub_sub_category">
             <div class="form-group row">
-              <div class="col-sm-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Property Available For</label>
                 <select class="text-control populate_categories"
                   onchange="remove_invalid_option();load_subcategories(this.value);" name="category_id">
@@ -119,82 +119,83 @@
                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Category</label>
                 <select class="text-control populate_subcategories" id="sub_category" name="sub_category_id" required />
                 <option value="">Select Category</option>
                 </select>
               </div>
-            </div>
 
-            <div class="form-group row">
-              <div class="col-sm-6">
+
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Property Type</label>
                 <input type="text" class="text-control" placeholder="Enter Property Type" required
                   id="sub_sub_category_name" name="sub_sub_category_name"
                   onchange="populate_slug('sub_sub_category_slug', this);" />
               </div>
-            </div>
 
-            <div class="form-group row">
-              <div class="col-sm-6">
+
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Slug</label>
                 <input type="text" class="text-control" placeholder="Enter Slug" id="sub_sub_category_slug"
                   name="sub_sub_category_slug" />
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Meta Title</label>
                 <input type="text" class="text-control" placeholder="Enter Meta Title" required
                   name="sub_sub_category_meta_title" />
               </div>
-            </div>
 
-            <div class="form-group row">
-              <div class="col-sm-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Meta Description</label>
                 <textarea class="text-control" rows="2" cols="3" placeholder="Enter Meta Description" required
                   name="sub_sub_category_meta_description" /></textarea>
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Meta Keywords</label>
                 <textarea class="text-control" rows="2" cols="3" placeholder="Enter Meta Keywords" required
                   name="sub_sub_category_keywords" /></textarea>
               </div>
-            </div>
 
-            <div class="form-group row">
-              <div class="col-md-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Price Label</label>
                 <select class="form-control" name="price_label_toggle">
                   <option value="no">No</option>
                   <option value="yes">Yes</option>
                 </select>
               </div>
-              <div class="col-md-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Property Status</label>
                 <select class="form-control" name="property_status_toggle">
                   <option value="no">No</option>
                   <option value="yes">Yes</option>
                 </select>
               </div>
-            </div>
 
-            <div class="form-group row">
-              <div class="col-md-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Registration Status</label>
                 <select class="form-control" name="registration_status_toggle">
                   <option value="no">No</option>
                   <option value="yes">Yes</option>
                 </select>
               </div>
-              <div class="col-md-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Furnishing Status</label>
                 <select class="form-control" name="furnishing_status_toggle">
                   <option value="no">No</option>
                   <option value="yes">Yes</option>
                 </select>
               </div>
+
+              <div class="col-sm-6 form-group">
+                <label class="label-control">Amenities</label>
+                <select class="form-control" name="amenities_toggle">
+                  <option value="no">No</option>
+                  <option value="yes">Yes</option>
+                </select>
+              </div>
             </div>
+
 
             <div class="form-action row">
               <div class="col-sm-12 text-center">
@@ -227,7 +228,7 @@
         <div class="modal-body">
           <form id="update_sub_sub_category" name="update_sub_sub_category">
             <div class="form-group row">
-              <div class="col-sm-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Property Available For</label>
                 <select class="text-control populate_categories" onchange="remove_invalid_option()" name="category_id"
                   id="category_id">
@@ -236,86 +237,81 @@
                     <option value="<?php echo e($v->id); ?>"><?php echo e($v->category_name); ?></option>
                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
-
               </div>
-              <div class="col-sm-6">
+
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Category</label>
                 <select class="text-control populate_subcategories" id="sub_category_id" name="sub_category_id">
                   <option value="">Select Category</option>
                 </select>
               </div>
-            </div>
 
-            <div class="form-group row">
-              <div class="col-sm-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Property Type</label>
                 <input type="text" class="text-control" placeholder="Enter Property Type" name="sub_sub_category_name"
                   id="sub_sub_category_name" onchange="populate_slug('edit_sub_sub_category_slug', this);" required />
               </div>
-            </div>
 
-            <div class="form-group row">
-              <div class="col-sm-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Slug</label>
                 <input type="text" class="text-control" placeholder="Enter Slug" name="sub_sub_category_slug"
                   id="edit_sub_sub_category_slug" />
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Meta Title</label>
                 <input type="text" class="text-control" placeholder="Enter Meta Title" name="sub_sub_category_meta_title"
                   id="sub_sub_category_meta_title" required />
               </div>
-            </div>
 
-            <div class="form-group row">
-              <div class="col-sm-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Meta Description</label>
                 <textarea class="text-control" rows="2" cols="3" placeholder="Enter Meta Description"
                   name="sub_sub_category_meta_description" id="sub_sub_category_meta_description" required></textarea>
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Meta Keywords</label>
                 <textarea class="text-control" rows="2" cols="3" placeholder="Enter Meta Keywords"
                   name="sub_sub_category_keywords" id="sub_sub_category_keywords" required></textarea>
               </div>
-            </div>
 
-            <div class="form-group row">
-              <div class="col-md-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Price Label</label>
                 <select class="form-control" name="price_label_toggle" id="edit_price_label_toggle">
                   <option value="no">No</option>
                   <option value="yes">Yes</option>
                 </select>
               </div>
-              <div class="col-md-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Property Status</label>
                 <select class="form-control" name="property_status_toggle" id="edit_property_status_toggle">
                   <option value="no">No</option>
                   <option value="yes">Yes</option>
                 </select>
               </div>
-            </div>
 
-            <div class="form-group row">
-              <div class="col-md-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Registration Status</label>
                 <select class="form-control" name="registration_status_toggle" id="edit_registration_status_toggle">
                   <option value="no">No</option>
                   <option value="yes">Yes</option>
                 </select>
               </div>
-              <div class="col-md-6">
+              <div class="col-sm-6 form-group">
                 <label class="label-control">Furnishing Status</label>
                 <select class="form-control" name="furnishing_status_toggle" id="edit_furnishing_status_toggle">
                   <option value="no">No</option>
                   <option value="yes">Yes</option>
                 </select>
               </div>
-            </div>
 
+              <div class="col-sm-6 form-group">
+                <label class="label-control">Amenities</label>
+                <select class="form-control" name="amenities_toggle" id="edit_amenities_toggle">
+                  <option value="no">No</option>
+                  <option value="yes">Yes</option>
+                </select>
+              </div>
 
-            <div class="form-action row">
               <div class="col-sm-12 text-center">
                 <button class="btn btn-primary btn-update" type="submit">Update Property Type</button>
               </div>
@@ -499,7 +495,7 @@
     function openModal(type, id = null, cat_id = null) {
       if (type == "edit") {
         // load_subcategories(cat_id, function () {
-          fetchData(id)
+        fetchData(id)
         // })
       } else {
         $("#delete_sub_sub_category #id").val(id);
@@ -536,6 +532,7 @@
             $("#edit_property_status_toggle").val(response.data.SubCategory.property_status_toggle);
             $("#edit_registration_status_toggle").val(response.data.SubCategory.registration_status_toggle);
             $("#edit_furnishing_status_toggle").val(response.data.SubCategory.furnishing_status_toggle);
+            $("#edit_amenities_toggle").val(response.data.SubCategory.amenities_toggle)
 
             $(".populate_categories").change();
             $("#edit-sub-sub-category").modal('show');
@@ -559,7 +556,7 @@
       }
       // var route = "<?php echo e(route('admin.sub_category.fetch_subcategories_by_cat_id', ':id')); ?>";
       // var route = route.replace(':id', id);
-  var route = "<?php echo e(url('get/sub-categories')); ?>/" + id
+      var route = "<?php echo e(url('get/sub-categories')); ?>/" + id
 
       $.ajax({
         url: route,
@@ -579,15 +576,15 @@
               $.each(SubCategory, function (x, y) {
                 $(".populate_subcategories").append(
                   `
-                      <option value=${y.id}> ${y.sub_category_name} </option>
-                    `
+                          <option value=${y.id}> ${y.sub_category_name} </option>
+                        `
                 );
               });
             } else {
               $(".populate_subcategories").append(
                 `
-                      <option value=''> No records found </option>
-                    `
+                          <option value=''> No records found </option>
+                        `
               );
             }
 

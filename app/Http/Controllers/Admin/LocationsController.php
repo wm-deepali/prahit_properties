@@ -12,60 +12,85 @@ use App\Locations;
 use App\State;
 use App\City;
 
-class LocationsController extends AppController {
+class LocationsController extends AppController
+{
 
-	public function index(Request $request) {
-		if($request->input('city_id')) {
+	public function index(Request $request)
+	{
+		if ($request->input('city_id')) {
 			$locations = Locations::with('Cities')->where('city_id', $request->input('city_id'))->withCount('SubLocations')->latest()->get();
-		}else {
+		} else {
 			$locations = Locations::with('Cities')->withCount('SubLocations')->latest()->get();
 		}
 		$states = State::where('country_id', 101)->get();
-		return view('admin.locations.index', compact('locations','states'));
+		return view('admin.locations.index', compact('locations', 'states'));
 	}
 
-	public function store(Request $request) {
+	public function store(Request $request)
+	{
 		$rules = [
 			'state_id' => 'required',
 			'city_id' => 'required',
-			'location' => 'required'
+			'locations' => 'required|array',
+			'locations.*' => 'required|string|distinct'
 		];
 		$isValid = $this->checkValidate($request, $rules);
-		if($isValid) {
+		if ($isValid) {
 			$this->JsonResponse(400, $isValid);
 		}
 
 		try {
-			$checkDuplicate = Locations::where('location', $request->location)->first();
-			if($checkDuplicate) {
-				$this->JsonResponse(400, 'A location with this name already exists.');
+			$addedLocations = [];
+			foreach ($request->locations as $locationName) {
+				$locationName = trim($locationName);
+				// Skip empty or duplicate locations for this city
+				if (empty($locationName)) {
+					continue;
+				}
+				$checkDuplicate = Locations::where('city_id', $request->city_id)
+					->where('location', $locationName)
+					->first();
+				if ($checkDuplicate) {
+					continue; // Skip duplicates
+				}
+
+				$location = Locations::create([
+					'state_id' => $request->state_id,
+					'city_id' => $request->city_id,
+					'location' => $locationName,
+				]);
+				if ($location) {
+					$addedLocations[] = $location;
+				}
 			}
 
-			$location = Locations::create($request->all());
-			$city = City::find($location->city_id);
-			$count = Locations::where('city_id', $city->id)->count();
-			$city->update(
-				[
+			// Update city location count
+			$city = City::find($request->city_id);
+			if ($city) {
+				$count = Locations::where('city_id', $city->id)->count();
+				$city->update([
 					'location' => $count
-				]
-			);
-			if($location) {
-				$this->JsonResponse(200, 'Location added successfully', ['Location' => $location]);
+				]);
+			}
+
+			if (count($addedLocations) > 0) {
+				$this->JsonResponse(200, 'Locations added successfully', ['Locations' => $addedLocations]);
 			} else {
-				$this->JsonResponse(400, 'An error occured');
+				$this->JsonResponse(400, 'No new locations were added.');
 			}
 		} catch (\Exception $e) {
 			$this->JsonResponse(500, 'An error occured');
 		}
-
 	}
-
-	public function show($id) {
+	
+	public function show($id)
+	{
 		$locations = Locations::findOrFail($id);
 		$this->JsonResponse(200, 'Location found successfully', ['Location' => $locations]);
 	}
 
-	public function update(Request $request, $id) {
+	public function update(Request $request, $id)
+	{
 		$rules = [
 			'state_id' => 'required',
 			'city_id' => 'required',
@@ -73,13 +98,13 @@ class LocationsController extends AppController {
 			'status' => 'required'
 		];
 		$isValid = $this->checkValidate($request, $rules);
-		if($isValid) {
+		if ($isValid) {
 			$this->JsonResponse(400, $isValid);
 		}
 
 		try {
 			$location = Locations::find($request->id)->update($request->all());
-			if($location) {
+			if ($location) {
 				$picked = Locations::find($request->id);
 				$city = City::find($picked->city_id);
 				$count = Locations::where('city_id', $city->id)->count();
@@ -98,35 +123,37 @@ class LocationsController extends AppController {
 
 	}
 
-	public function edit_sublocation($id) {
-		$location = Locations::with(['Cities','SubLocations'])->findOrFail(base64_decode($id));
+	public function edit_sublocation($id)
+	{
+		$location = Locations::with(['Cities', 'SubLocations'])->findOrFail(base64_decode($id));
 		$states = State::where('country_id', 101)->get();
 		$saved_state = State::find($location->state_id);
-		$saved_city  = City::find($location->city_id);
+		$saved_city = City::find($location->city_id);
 		$locations = Locations::where('state_id', $location->state_id)->where('city_id', $location->city_id)->get();
 		return view('admin.locations.edit_sublocation', compact('location', 'states', 'saved_state', 'saved_city', 'locations'));
 	}
 
-	public function create_sublocation(Request $request) {
+	public function create_sublocation(Request $request)
+	{
 		$rules = [
-// 			'state_id' => 'required',
+			// 			'state_id' => 'required',
 // 			'city_id' => 'required',
 			'location_id' => 'required',
 			'sub_location_name' => 'required|unique:sub_locations,sub_location_name'
 		];
 		$isValid = $this->checkValidate($request, $rules);
-		if($isValid) {
+		if ($isValid) {
 			$this->JsonResponse(400, $isValid);
 		}
 
 		try {
 			$checkDuplicate = SubLocations::where(['location_id' => $request->location_id, 'sub_location_name' => $request->sub_location])->count();
-			if($checkDuplicate>0) {
+			if ($checkDuplicate > 0) {
 				$this->JsonResponse(400, 'A sub location already exists in this location');
 			}
 
 			$sublocation = SubLocations::create($request->all());
-			if($sublocation) {
+			if ($sublocation) {
 				$this->JsonResponse(200, 'Sublocation created successfully', ['Sublocation' => $sublocation]);
 			} else {
 				$this->JsonResponse(400, 'An error occured');
@@ -136,19 +163,20 @@ class LocationsController extends AppController {
 		}
 	}
 
-	public function update_sublocation(Request $request) {
+	public function update_sublocation(Request $request)
+	{
 		$rules = [
-			'sub_location_name' => 'required|unique:sub_locations,sub_location_name,'.$request->sub_location_id.',id,location_id,'.$request->location_id
+			'sub_location_name' => 'required|unique:sub_locations,sub_location_name,' . $request->sub_location_id . ',id,location_id,' . $request->location_id
 		];
-		
+
 		$isValid = $this->checkValidate($request, $rules);
-		if($isValid) {
+		if ($isValid) {
 			$this->JsonResponse(400, $isValid);
 		}
 
 		try {
 			$sublocation = SubLocations::find($request->sub_location_id)->update($request->all());
-			if($sublocation) {
+			if ($sublocation) {
 				$this->JsonResponse(200, 'Sublocation updated successfully', ['Sublocation' => $sublocation]);
 			} else {
 				$this->JsonResponse(400, 'An error occured');
@@ -158,7 +186,8 @@ class LocationsController extends AppController {
 		}
 	}
 
-	public function fetch_locations($city_id) {
+	public function fetch_locations($city_id)
+	{
 		try {
 			$cities = Locations::where('city_id', $city_id)->get();
 			$this->JsonResponse(200, 'Locations found successfully', ['Locations' => $cities]);
@@ -167,7 +196,8 @@ class LocationsController extends AppController {
 		}
 	}
 
-	public function fetch_sublocations($id) {
+	public function fetch_sublocations($id)
+	{
 		try {
 			$sublocation = SubLocations::where('location_id', $id)->get();
 			$this->JsonResponse(200, 'Sublocation found successfully', ['SubLocation' => $sublocation]);
@@ -176,10 +206,11 @@ class LocationsController extends AppController {
 		}
 	}
 
-	public function destroy($id) {
+	public function destroy($id)
+	{
 		try {
 			$picked = Locations::find($id);
-			$city   = City::find($picked->city_id);
+			$city = City::find($picked->city_id);
 			$picked->delete();
 			$count = Locations::where('city_id', $city->id)->count();
 			$city->update(
@@ -193,10 +224,11 @@ class LocationsController extends AppController {
 		}
 	}
 
-	public function delete_sublocation($id) {
+	public function delete_sublocation($id)
+	{
 		try {
 			$delete = SubLocations::find($id)->delete();
-			if($delete) {
+			if ($delete) {
 				$this->JsonResponse(200, 'Sub Location deleted successfully');
 			} else {
 				$this->JsonResponse(400, 'An error occured');
@@ -206,16 +238,18 @@ class LocationsController extends AppController {
 		}
 	}
 
-	public function fetch_cities_states($id) {
+	public function fetch_cities_states($id)
+	{
 		$cities_data = City::where('state_id', $id)->get();
 		return $cities_data;
 	}
 
-	public function manageSubLocations() {
+	public function manageSubLocations()
+	{
 		$locations = Locations::with('Cities')->withCount('SubLocations')->latest()->get();
 		$states = Cities::all()->unique('city_state');
 		$cities = Cities::all();
-		return view('admin.locations.manage_sub_location', compact('locations','states','cities'));
+		return view('admin.locations.manage_sub_location', compact('locations', 'states', 'cities'));
 	}
 }
 

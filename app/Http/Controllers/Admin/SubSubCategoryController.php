@@ -42,6 +42,7 @@ class SubSubCategoryController extends AppController
 			'property_status_toggle' => 'required|in:yes,no',
 			'registration_status_toggle' => 'required|in:yes,no',
 			'furnishing_status_toggle' => 'required|in:yes,no',
+			'amenities_toggle' => 'required|in:yes,no',
 		];
 
 		$isValid = $this->checkValidate($request, $rules);
@@ -128,6 +129,7 @@ class SubSubCategoryController extends AppController
 			'property_status_toggle' => 'required|in:yes,no',
 			'registration_status_toggle' => 'required|in:yes,no',
 			'furnishing_status_toggle' => 'required|in:yes,no',
+			'amenities_toggle' => 'required|in:yes,no',
 		];
 
 		$isValid = $this->checkValidate($request, $rules);

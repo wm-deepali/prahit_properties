@@ -43,37 +43,72 @@
 											id="price" value="{{ old('price') }}" required />
 									</div>
 									<!-- <div class="col-sm-4">
-																			<label class="label-control">Type</label>
-																			<select class="text-control" name="type_id" id="type_id" required>
-																				<option value="">Select Type</option>
-																				@if(old('type_id') == 1)
-																					<option value="1" selected="">Commercial</option>
-																					<option value="2">Agricultural</option>
-																					<option value="3">Industrial</option>
-																					<option value="4">Free Hold</option>
-																				@elseif(old('type_id') == 2)
-																					<option value="1">Commercial</option>
-																					<option value="2" selected="">Agricultural</option>
-																					<option value="3">Industrial</option>
-																					<option value="4">Free Hold</option>
-																				@elseif(old('type_id') == 3)
-																					<option value="1">Commercial</option>
-																					<option value="2">Agricultural</option>
-																					<option value="3" selected="">Industrial</option>
-																					<option value="4">Free Hold</option>
-																				@elseif(old('type_id') == 4)
-																					<option value="1">Commercial</option>
-																					<option value="2">Agricultural</option>
-																					<option value="3">Industrial</option>
-																					<option value="4" selected="">Free Hold</option>
-																				@else
-																					<option value="1">Commercial</option>
-																					<option value="2">Agricultural</option>
-																					<option value="3">Industrial</option>
-																					<option value="4">Free Hold</option>
-																				@endif
-																			</select>
-																		</div> -->
+																					<label class="label-control">Type</label>
+																					<select class="text-control" name="type_id" id="type_id" required>
+																						<option value="">Select Type</option>
+																						@if(old('type_id') == 1)
+																							<option value="1" selected="">Commercial</option>
+																							<option value="2">Agricultural</option>
+																							<option value="3">Industrial</option>
+																							<option value="4">Free Hold</option>
+																						@elseif(old('type_id') == 2)
+																							<option value="1">Commercial</option>
+																							<option value="2" selected="">Agricultural</option>
+																							<option value="3">Industrial</option>
+																							<option value="4">Free Hold</option>
+																						@elseif(old('type_id') == 3)
+																							<option value="1">Commercial</option>
+																							<option value="2">Agricultural</option>
+																							<option value="3" selected="">Industrial</option>
+																							<option value="4">Free Hold</option>
+																						@elseif(old('type_id') == 4)
+																							<option value="1">Commercial</option>
+																							<option value="2">Agricultural</option>
+																							<option value="3">Industrial</option>
+																							<option value="4" selected="">Free Hold</option>
+																						@else
+																							<option value="1">Commercial</option>
+																							<option value="2">Agricultural</option>
+																							<option value="3">Industrial</option>
+																							<option value="4">Free Hold</option>
+																						@endif
+																					</select>
+																				</div> -->
+								</div>
+
+
+								<div class="form-group row">
+									<div class="col-sm-4">
+										<label class="label-control">Property Available For</label>
+										<select class="text-control populate_categories" name="category_id" id="category_id"
+											onchange="fetch_subcategories(this.value, fetch_form_type)" required="">
+											@if(count($category) < 1)
+												<option value="">No records found</option>
+											@else
+												@foreach($category as $k => $v)
+													<option value="{{$v->id}}">{{$v->category_name}}</option>
+												@endforeach
+											@endif
+										</select>
+
+									</div>
+									<div class="col-sm-4">
+										<label class="label-control">Category</label>
+										<select class="text-control populate_subcategories" name="sub_category_id"
+											id="sub_category_id" onchange="fetch_form_type()" required>
+											<option value="">Select Category</option>
+										</select>
+
+									</div>
+
+									<div class="col-sm-4">
+										<label class="label-control">Property Type</label>
+										<select class="text-control populate_subsubcategories" name="sub_sub_category_id"
+											id="sub_sub_category_id" onchange="fetch_form_type();">
+											<option value="">Select Property Type</option>
+										</select>
+									</div>
+
 								</div>
 
 								<div class="form-row">
@@ -216,39 +251,6 @@
 								</div>
 
 
-								<div class="form-group row">
-									<div class="col-sm-4">
-										<label class="label-control">Property Available For</label>
-										<select class="text-control populate_categories" name="category_id" id="category_id"
-											onchange="fetch_subcategories(this.value, fetch_form_type)" required="">
-											@if(count($category) < 1)
-												<option value="">No records found</option>
-											@else
-												@foreach($category as $k => $v)
-													<option value="{{$v->id}}">{{$v->category_name}}</option>
-												@endforeach
-											@endif
-										</select>
-
-									</div>
-									<div class="col-sm-4">
-										<label class="label-control">Category</label>
-										<select class="text-control populate_subcategories" name="sub_category_id"
-											id="sub_category_id" onchange="fetch_form_type()" required>
-											<option value="">Select Category</option>
-										</select>
-
-									</div>
-
-									<div class="col-sm-4">
-										<label class="label-control">Property Type</label>
-										<select class="text-control populate_subsubcategories" name="sub_sub_category_id"
-											id="sub_sub_category_id" onchange="fetch_form_type();">
-											<option value="">Select Property Type</option>
-										</select>
-									</div>
-
-								</div>
 
 								<div class="form-group row">
 									<div class="col-sm-12">
@@ -257,16 +259,17 @@
 											required="">{{ old('description') }}</textarea>
 									</div>
 								</div>
-
-								<h3>Amenities</h3>
-								<div class="form-group row">
-									@foreach($amenities as $amenity)
-										<div class="col-sm-3">
-											<img src="{{ asset('storage') }}/{{ $amenity->icon }}" style="height: 30px;">
-											<p><input type="checkbox" name="amenity[]" value="{{ $amenity->id }}">
-												{{ $amenity->name }}</p>
-										</div>
-									@endforeach
+								<div id="amenitiesField">
+									<h3>Amenities</h3>
+									<div class="form-group row">
+										@foreach($amenities as $amenity)
+											<div class="col-sm-3">
+												<img src="{{ asset('storage') }}/{{ $amenity->icon }}" style="height: 30px;">
+												<p><input type="checkbox" name="amenity[]" value="{{ $amenity->id }}">
+													{{ $amenity->name }}</p>
+											</div>
+										@endforeach
+									</div>
 								</div>
 
 								<h3>Property Location</h3>
@@ -298,11 +301,10 @@
 									</div>
 									<div class="col-sm-6">
 										<label class="label-control">Sub Location </label>
-										<select class="text-control" name="sub_location_id[]" id="sub_location_id"
-											multiple="" required>
-											<option value="">Select Sub Location</option>
-										</select>
+										<input type="text" class="text-control" name="sub_location_name"
+											id="sub_location_name" placeholder="Enter Sub Location" />
 									</div>
+
 								</div>
 								<div class="form-group row">
 									<div class="col-sm-12">
@@ -705,41 +707,44 @@
 					price_label_toggle: false,
 					property_status_toggle: false,
 					registration_status_toggle: false,
-					furnishing_status_toggle: false
+					furnishing_status_toggle: false,
+					amenities_toggle: false,
 				});
 				return;
 			}
 
-var selectedData = cachedSubSubCategories.find(function(subsub) {
-    return subsub.id == selectedId;
-});
+			var selectedData = cachedSubSubCategories.find(function (subsub) {
+				return subsub.id == selectedId;
+			});
 
 
 
-if (selectedData) {
-    toggleSubSubCategoryFields({
-        price_label_toggle: selectedData.price_label_toggle,
-        property_status_toggle: selectedData.property_status_toggle,
-        registration_status_toggle: selectedData.registration_status_toggle,
-        furnishing_status_toggle: selectedData.furnishing_status_toggle
-    });
-} else {
-    // No matching sub sub category found, hide fields
-    toggleSubSubCategoryFields({
-        price_label_toggle: false,
-        property_status_toggle: false,
-        registration_status_toggle: false,
-        furnishing_status_toggle: false
-    });
-}
+			if (selectedData) {
+				toggleSubSubCategoryFields({
+					price_label_toggle: selectedData.price_label_toggle,
+					property_status_toggle: selectedData.property_status_toggle,
+					registration_status_toggle: selectedData.registration_status_toggle,
+					furnishing_status_toggle: selectedData.furnishing_status_toggle,
+					amenities_toggle: selectedData.amenities_toggle
+				});
+			} else {
+				// No matching sub sub category found, hide fields
+				toggleSubSubCategoryFields({
+					price_label_toggle: false,
+					property_status_toggle: false,
+					registration_status_toggle: false,
+					furnishing_status_toggle: false,
+					amenities_toggle: false
+				});
+			}
 
-	
+
 		});
 
 
 		// This function is called when subsubcategory changes or after loading toggles
 		function toggleSubSubCategoryFields(toggles) {
-			
+
 			if (toggles.price_label_toggle == 'yes') {
 				$('#priceLabelField').show();
 			} else {
@@ -763,6 +768,13 @@ if (selectedData) {
 			} else {
 				$('#furnishingStatusField').hide();
 			}
+
+			if (toggles.amenities_toggle == 'yes') {
+				$('#amenitiesField').show();
+			} else {
+				$('#amenitiesField').hide();
+			}
+			
 		}
 
 
@@ -921,8 +933,8 @@ if (selectedData) {
 					formData.append('is_visitor', true);
 				@endguest
 
-												// console.log(obj)
-												if (jQuery.isEmptyObject(obj)) {
+														// console.log(obj)
+														if (jQuery.isEmptyObject(obj)) {
 					returnIfInvalid();
 				}
 
@@ -942,7 +954,7 @@ if (selectedData) {
 							@auth
 								request.setRequestHeader('auth-token', '{{Auth::user()->auth_token}}');
 							@endauth
-															},
+																	},
 						success: function (response) {
 							// var response = JSON.parse(response);
 							if (response.responseCode === 200) {
@@ -953,7 +965,7 @@ if (selectedData) {
 									// window.location.href = "{{route('admin.properties.index')}}";
 									//          	}, 1000);
 								@endguest
-																	} else if (response.responseCode === 400) {
+																			} else if (response.responseCode === 400) {
 								toastr.error(response.message)
 							} else {
 								toastr.error('An error occured')
@@ -1116,43 +1128,43 @@ if (selectedData) {
 		}
 
 
-	
-	{{-- JavaScript to handle conditional date fields --}}
 
-	function handleSecondInput(selectId, containerId, checkboxClass) {
-	const select = document.getElementById(selectId);
-	const container = document.getElementById(containerId);
-	const label = container.querySelector('label');
+		// { { --JavaScript to handle conditional date fields-- } }
 
-	if(select) {
-	function toggle() {
-	const option = select.selectedOptions[0];
-	const show = option.dataset.secondInput === 'yes';
-	label.textContent = option.dataset.secondLabel || '';
-	container.style.display = show ? 'block' : 'none';
-	}
-	select.addEventListener('change', toggle);
-	toggle(); // initialize
-	}
+		function handleSecondInput(selectId, containerId, checkboxClass) {
+			const select = document.getElementById(selectId);
+			const container = document.getElementById(containerId);
+			const label = container.querySelector('label');
 
-	if(checkboxClass) {
-	const checkboxes = document.querySelectorAll(checkboxClass);
-	function toggleCheckbox() {
-	let show = false;
-	let lbl = '';
-	checkboxes.forEach(cb => {
-	if(cb.checked && cb.dataset.secondInput === 'yes') {
-	show = true;
-	lbl = cb.dataset.secondLabel;
-	}
-	});
-	label.textContent = lbl;
-	container.style.display = show ? 'block' : 'none';
-	}
-	checkboxes.forEach(cb => cb.addEventListener('change', toggleCheckbox));
-	toggleCheckbox(); // initialize
-	}
-	}
+			if (select) {
+				function toggle() {
+					const option = select.selectedOptions[0];
+					const show = option.dataset.secondInput === 'yes';
+					label.textContent = option.dataset.secondLabel || '';
+					container.style.display = show ? 'block' : 'none';
+				}
+				select.addEventListener('change', toggle);
+				toggle(); // initialize
+			}
+
+			if (checkboxClass) {
+				const checkboxes = document.querySelectorAll(checkboxClass);
+				function toggleCheckbox() {
+					let show = false;
+					let lbl = '';
+					checkboxes.forEach(cb => {
+						if (cb.checked && cb.dataset.secondInput === 'yes') {
+							show = true;
+							lbl = cb.dataset.secondLabel;
+						}
+					});
+					label.textContent = lbl;
+					container.style.display = show ? 'block' : 'none';
+				}
+				checkboxes.forEach(cb => cb.addEventListener('change', toggleCheckbox));
+				toggleCheckbox(); // initialize
+			}
+		}
 
 		// Price Label
 		handleSecondInput('price_label', 'price_label_second_container', '.price_checkbox');

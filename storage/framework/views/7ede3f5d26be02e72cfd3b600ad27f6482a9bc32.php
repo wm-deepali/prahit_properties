@@ -43,37 +43,72 @@
 											id="price" value="<?php echo e(old('price')); ?>" required />
 									</div>
 									<!-- <div class="col-sm-4">
-																			<label class="label-control">Type</label>
-																			<select class="text-control" name="type_id" id="type_id" required>
-																				<option value="">Select Type</option>
-																				<?php if(old('type_id') == 1): ?>
-																					<option value="1" selected="">Commercial</option>
-																					<option value="2">Agricultural</option>
-																					<option value="3">Industrial</option>
-																					<option value="4">Free Hold</option>
-																				<?php elseif(old('type_id') == 2): ?>
-																					<option value="1">Commercial</option>
-																					<option value="2" selected="">Agricultural</option>
-																					<option value="3">Industrial</option>
-																					<option value="4">Free Hold</option>
-																				<?php elseif(old('type_id') == 3): ?>
-																					<option value="1">Commercial</option>
-																					<option value="2">Agricultural</option>
-																					<option value="3" selected="">Industrial</option>
-																					<option value="4">Free Hold</option>
-																				<?php elseif(old('type_id') == 4): ?>
-																					<option value="1">Commercial</option>
-																					<option value="2">Agricultural</option>
-																					<option value="3">Industrial</option>
-																					<option value="4" selected="">Free Hold</option>
-																				<?php else: ?>
-																					<option value="1">Commercial</option>
-																					<option value="2">Agricultural</option>
-																					<option value="3">Industrial</option>
-																					<option value="4">Free Hold</option>
-																				<?php endif; ?>
-																			</select>
-																		</div> -->
+																					<label class="label-control">Type</label>
+																					<select class="text-control" name="type_id" id="type_id" required>
+																						<option value="">Select Type</option>
+																						<?php if(old('type_id') == 1): ?>
+																							<option value="1" selected="">Commercial</option>
+																							<option value="2">Agricultural</option>
+																							<option value="3">Industrial</option>
+																							<option value="4">Free Hold</option>
+																						<?php elseif(old('type_id') == 2): ?>
+																							<option value="1">Commercial</option>
+																							<option value="2" selected="">Agricultural</option>
+																							<option value="3">Industrial</option>
+																							<option value="4">Free Hold</option>
+																						<?php elseif(old('type_id') == 3): ?>
+																							<option value="1">Commercial</option>
+																							<option value="2">Agricultural</option>
+																							<option value="3" selected="">Industrial</option>
+																							<option value="4">Free Hold</option>
+																						<?php elseif(old('type_id') == 4): ?>
+																							<option value="1">Commercial</option>
+																							<option value="2">Agricultural</option>
+																							<option value="3">Industrial</option>
+																							<option value="4" selected="">Free Hold</option>
+																						<?php else: ?>
+																							<option value="1">Commercial</option>
+																							<option value="2">Agricultural</option>
+																							<option value="3">Industrial</option>
+																							<option value="4">Free Hold</option>
+																						<?php endif; ?>
+																					</select>
+																				</div> -->
+								</div>
+
+
+								<div class="form-group row">
+									<div class="col-sm-4">
+										<label class="label-control">Property Available For</label>
+										<select class="text-control populate_categories" name="category_id" id="category_id"
+											onchange="fetch_subcategories(this.value, fetch_form_type)" required="">
+											<?php if(count($category) < 1): ?>
+												<option value="">No records found</option>
+											<?php else: ?>
+												<?php $__currentLoopData = $category; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+													<option value="<?php echo e($v->id); ?>"><?php echo e($v->category_name); ?></option>
+												<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+											<?php endif; ?>
+										</select>
+
+									</div>
+									<div class="col-sm-4">
+										<label class="label-control">Category</label>
+										<select class="text-control populate_subcategories" name="sub_category_id"
+											id="sub_category_id" onchange="fetch_form_type()" required>
+											<option value="">Select Category</option>
+										</select>
+
+									</div>
+
+									<div class="col-sm-4">
+										<label class="label-control">Property Type</label>
+										<select class="text-control populate_subsubcategories" name="sub_sub_category_id"
+											id="sub_sub_category_id" onchange="fetch_form_type();">
+											<option value="">Select Property Type</option>
+										</select>
+									</div>
+
 								</div>
 
 								<div class="form-row">
@@ -224,39 +259,6 @@
 								</div>
 
 
-								<div class="form-group row">
-									<div class="col-sm-4">
-										<label class="label-control">Property Available For</label>
-										<select class="text-control populate_categories" name="category_id" id="category_id"
-											onchange="fetch_subcategories(this.value, fetch_form_type)" required="">
-											<?php if(count($category) < 1): ?>
-												<option value="">No records found</option>
-											<?php else: ?>
-												<?php $__currentLoopData = $category; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-													<option value="<?php echo e($v->id); ?>"><?php echo e($v->category_name); ?></option>
-												<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-											<?php endif; ?>
-										</select>
-
-									</div>
-									<div class="col-sm-4">
-										<label class="label-control">Category</label>
-										<select class="text-control populate_subcategories" name="sub_category_id"
-											id="sub_category_id" onchange="fetch_form_type()" required>
-											<option value="">Select Category</option>
-										</select>
-
-									</div>
-
-									<div class="col-sm-4">
-										<label class="label-control">Property Type</label>
-										<select class="text-control populate_subsubcategories" name="sub_sub_category_id"
-											id="sub_sub_category_id" onchange="fetch_form_type();">
-											<option value="">Select Property Type</option>
-										</select>
-									</div>
-
-								</div>
 
 								<div class="form-group row">
 									<div class="col-sm-12">
@@ -265,16 +267,17 @@
 											required=""><?php echo e(old('description')); ?></textarea>
 									</div>
 								</div>
-
-								<h3>Amenities</h3>
-								<div class="form-group row">
-									<?php $__currentLoopData = $amenities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $amenity): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-										<div class="col-sm-3">
-											<img src="<?php echo e(asset('storage')); ?>/<?php echo e($amenity->icon); ?>" style="height: 30px;">
-											<p><input type="checkbox" name="amenity[]" value="<?php echo e($amenity->id); ?>">
-												<?php echo e($amenity->name); ?></p>
-										</div>
-									<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+								<div id="amenitiesField">
+									<h3>Amenities</h3>
+									<div class="form-group row">
+										<?php $__currentLoopData = $amenities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $amenity): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+											<div class="col-sm-3">
+												<img src="<?php echo e(asset('storage')); ?>/<?php echo e($amenity->icon); ?>" style="height: 30px;">
+												<p><input type="checkbox" name="amenity[]" value="<?php echo e($amenity->id); ?>">
+													<?php echo e($amenity->name); ?></p>
+											</div>
+										<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+									</div>
 								</div>
 
 								<h3>Property Location</h3>
@@ -306,11 +309,10 @@
 									</div>
 									<div class="col-sm-6">
 										<label class="label-control">Sub Location </label>
-										<select class="text-control" name="sub_location_id[]" id="sub_location_id"
-											multiple="" required>
-											<option value="">Select Sub Location</option>
-										</select>
+										<input type="text" class="text-control" name="sub_location_name"
+											id="sub_location_name" placeholder="Enter Sub Location" />
 									</div>
+
 								</div>
 								<div class="form-group row">
 									<div class="col-sm-12">
@@ -713,41 +715,44 @@
 					price_label_toggle: false,
 					property_status_toggle: false,
 					registration_status_toggle: false,
-					furnishing_status_toggle: false
+					furnishing_status_toggle: false,
+					amenities_toggle: false,
 				});
 				return;
 			}
 
-var selectedData = cachedSubSubCategories.find(function(subsub) {
-    return subsub.id == selectedId;
-});
+			var selectedData = cachedSubSubCategories.find(function (subsub) {
+				return subsub.id == selectedId;
+			});
 
 
 
-if (selectedData) {
-    toggleSubSubCategoryFields({
-        price_label_toggle: selectedData.price_label_toggle,
-        property_status_toggle: selectedData.property_status_toggle,
-        registration_status_toggle: selectedData.registration_status_toggle,
-        furnishing_status_toggle: selectedData.furnishing_status_toggle
-    });
-} else {
-    // No matching sub sub category found, hide fields
-    toggleSubSubCategoryFields({
-        price_label_toggle: false,
-        property_status_toggle: false,
-        registration_status_toggle: false,
-        furnishing_status_toggle: false
-    });
-}
+			if (selectedData) {
+				toggleSubSubCategoryFields({
+					price_label_toggle: selectedData.price_label_toggle,
+					property_status_toggle: selectedData.property_status_toggle,
+					registration_status_toggle: selectedData.registration_status_toggle,
+					furnishing_status_toggle: selectedData.furnishing_status_toggle,
+					amenities_toggle: selectedData.amenities_toggle
+				});
+			} else {
+				// No matching sub sub category found, hide fields
+				toggleSubSubCategoryFields({
+					price_label_toggle: false,
+					property_status_toggle: false,
+					registration_status_toggle: false,
+					furnishing_status_toggle: false,
+					amenities_toggle: false
+				});
+			}
 
-	
+
 		});
 
 
 		// This function is called when subsubcategory changes or after loading toggles
 		function toggleSubSubCategoryFields(toggles) {
-			
+
 			if (toggles.price_label_toggle == 'yes') {
 				$('#priceLabelField').show();
 			} else {
@@ -771,6 +776,13 @@ if (selectedData) {
 			} else {
 				$('#furnishingStatusField').hide();
 			}
+
+			if (toggles.amenities_toggle == 'yes') {
+				$('#amenitiesField').show();
+			} else {
+				$('#amenitiesField').hide();
+			}
+			
 		}
 
 
@@ -929,8 +941,8 @@ if (selectedData) {
 					formData.append('is_visitor', true);
 				<?php endif; ?>
 
-												// console.log(obj)
-												if (jQuery.isEmptyObject(obj)) {
+														// console.log(obj)
+														if (jQuery.isEmptyObject(obj)) {
 					returnIfInvalid();
 				}
 
@@ -950,7 +962,7 @@ if (selectedData) {
 							<?php if(auth()->guard()->check()): ?>
 								request.setRequestHeader('auth-token', '<?php echo e(Auth::user()->auth_token); ?>');
 							<?php endif; ?>
-															},
+																	},
 						success: function (response) {
 							// var response = JSON.parse(response);
 							if (response.responseCode === 200) {
@@ -961,7 +973,7 @@ if (selectedData) {
 									// window.location.href = "<?php echo e(route('admin.properties.index')); ?>";
 									//          	}, 1000);
 								<?php endif; ?>
-																	} else if (response.responseCode === 400) {
+																			} else if (response.responseCode === 400) {
 								toastr.error(response.message)
 							} else {
 								toastr.error('An error occured')
@@ -1124,43 +1136,43 @@ if (selectedData) {
 		}
 
 
-	
-	
 
-	function handleSecondInput(selectId, containerId, checkboxClass) {
-	const select = document.getElementById(selectId);
-	const container = document.getElementById(containerId);
-	const label = container.querySelector('label');
+		// { { --JavaScript to handle conditional date fields-- } }
 
-	if(select) {
-	function toggle() {
-	const option = select.selectedOptions[0];
-	const show = option.dataset.secondInput === 'yes';
-	label.textContent = option.dataset.secondLabel || '';
-	container.style.display = show ? 'block' : 'none';
-	}
-	select.addEventListener('change', toggle);
-	toggle(); // initialize
-	}
+		function handleSecondInput(selectId, containerId, checkboxClass) {
+			const select = document.getElementById(selectId);
+			const container = document.getElementById(containerId);
+			const label = container.querySelector('label');
 
-	if(checkboxClass) {
-	const checkboxes = document.querySelectorAll(checkboxClass);
-	function toggleCheckbox() {
-	let show = false;
-	let lbl = '';
-	checkboxes.forEach(cb => {
-	if(cb.checked && cb.dataset.secondInput === 'yes') {
-	show = true;
-	lbl = cb.dataset.secondLabel;
-	}
-	});
-	label.textContent = lbl;
-	container.style.display = show ? 'block' : 'none';
-	}
-	checkboxes.forEach(cb => cb.addEventListener('change', toggleCheckbox));
-	toggleCheckbox(); // initialize
-	}
-	}
+			if (select) {
+				function toggle() {
+					const option = select.selectedOptions[0];
+					const show = option.dataset.secondInput === 'yes';
+					label.textContent = option.dataset.secondLabel || '';
+					container.style.display = show ? 'block' : 'none';
+				}
+				select.addEventListener('change', toggle);
+				toggle(); // initialize
+			}
+
+			if (checkboxClass) {
+				const checkboxes = document.querySelectorAll(checkboxClass);
+				function toggleCheckbox() {
+					let show = false;
+					let lbl = '';
+					checkboxes.forEach(cb => {
+						if (cb.checked && cb.dataset.secondInput === 'yes') {
+							show = true;
+							lbl = cb.dataset.secondLabel;
+						}
+					});
+					label.textContent = lbl;
+					container.style.display = show ? 'block' : 'none';
+				}
+				checkboxes.forEach(cb => cb.addEventListener('change', toggleCheckbox));
+				toggleCheckbox(); // initialize
+			}
+		}
 
 		// Price Label
 		handleSecondInput('price_label', 'price_label_second_container', '.price_checkbox');
