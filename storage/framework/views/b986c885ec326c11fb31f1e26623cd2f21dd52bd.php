@@ -7,8 +7,8 @@
 <?php $__env->startSection('css'); ?>
   <style type="text/css">
     /*.table-fitems tbody tr td:nth-child(2) {
-            width: 60%;
-        }*/
+              width: 60%;
+          }*/
     .checkbox {
       pointer-events: none !important;
     }
@@ -137,69 +137,69 @@
 
 
       document.getElementById("getData").addEventListener("click", function () {
-    var form_name = $('#form_name').val();
-    var category_data = $('#category_data').val();
-    var sub_category_id = $('#sub_category_id').val();
-    var sub_sub_category_id = $('#sub_sub_category_id').val(); // array
+        var form_name = $('#form_name').val();
+        var category_data = $('#category_data').val();
+        var sub_category_id = $('#sub_category_id').val();
+        var sub_sub_category_id = $('#sub_sub_category_id').val(); // array
 
-    if (form_name == '') {
-        swal('', 'Form name field must be required', 'warning');
-        return false;
-    }
-    if (!category_data) {
-        swal('', 'Category field must be required', 'warning');
-        return false;
-    }
-    if (!sub_category_id) {
-        swal('', 'Subcategory field must be required', 'warning');
-        return false;
-    }
-    if (!sub_sub_category_id || sub_sub_category_id.length === 0) {
-        swal('', 'Property Type must be selected', 'warning');
-        return false;
-    }
+        if (form_name == '') {
+          swal('', 'Form name field must be required', 'warning');
+          return false;
+        }
+        if (!category_data) {
+          swal('', 'Category field must be required', 'warning');
+          return false;
+        }
+        if (!sub_category_id) {
+          swal('', 'Subcategory field must be required', 'warning');
+          return false;
+        }
+        if (!sub_sub_category_id || sub_sub_category_id.length === 0) {
+          swal('', 'Property Type must be selected', 'warning');
+          return false;
+        }
 
-    var form_json = formBuilder.formData;
-    if (!form_json) {
-        swal('', 'Invalid Form Format, Please Refresh Page & Create Again.', 'error');
-        return false;
-    }
+        var form_json = formBuilder.formData;
+        if (!form_json) {
+          swal('', 'Invalid Form Format, Please Refresh Page & Create Again.', 'error');
+          return false;
+        }
 
-    document.getElementById('new_loader').style.display = 'block';
-    $(".btn-delete").attr('disabled', true);
+        document.getElementById('new_loader').style.display = 'block';
+        $(".btn-delete").attr('disabled', true);
 
-    $.ajax({
-        url: '<?php echo e(url('master/custom/form/create')); ?>',
-        method: "POST",
-        data: {
+        $.ajax({
+          url: '<?php echo e(url('master/custom/form/create')); ?>',
+          method: "POST",
+          data: {
             "_token": "<?php echo e(csrf_token()); ?>",
             'name': form_name,
             'categories': category_data,
             'subcategories': sub_category_id,
             'sub_sub_categories': sub_sub_category_id, // <--- send the array here
             'form_data': form_json
-        },
-        success: function (response) {
+          },
+          success: function (response) {
             var response = JSON.parse(response);
             if (response.status === 200) {
-                toastr.success(response.message)
-                setTimeout(function () {
-                    window.location = "<?php echo e(route('admin.formtype.index')); ?>"
-                }, 2000);
+              toastr.success(response.message)
+              setTimeout(function () {
+                window.location = "<?php echo e(route('admin.formtype.index')); ?>"
+              }, 2000);
             } else if (response.status === 500) {
-                toastr.error(response.message)
+              toastr.error(response.message)
             }
             document.getElementById('new_loader').style.display = 'none';
-        },
-        error: function (response) {
+          },
+          error: function (response) {
             toastr.error('An error occurred.')
-        },
-        complete: function () {
+          },
+          complete: function () {
             document.getElementById('new_loader').style.display = 'none';
             $(".btn-delete").attr('disabled', false);
-        }
-    })
-});
+          }
+        })
+      });
 
 
     });
@@ -237,7 +237,7 @@
 
             var subcategories = response.data.SubCategory;
             if (subcategories.length > 0) {
-              $(".populate_subcategories").empty();
+              $(".populate_subcategories").empty().append('<option value="">Select Category</option>');
               $.each(subcategories, function (x, y) {
                 $(".populate_subcategories").append(
                   `<option value=${y.id}> ${y.sub_category_name} </option>`
@@ -312,45 +312,45 @@
     }
 
 
-function check_availability() {
-    var sel_category_id = $('#category_data').val();
-    var sub_cats_id = $('#sub_category_id').val();
-    var sub_sub_cats_id = $('#sub_sub_category_id').val(); // array
+    function check_availability() {
+      var sel_category_id = $('#category_data').val();
+      var sub_cats_id = $('#sub_category_id').val();
+      var sub_sub_cats_id = $('#sub_sub_category_id').val(); // array
 
-    if (!sel_category_id || !sub_cats_id || !sub_sub_cats_id || sub_sub_cats_id.length === 0) {
+      if (!sel_category_id || !sub_cats_id || !sub_sub_cats_id || sub_sub_cats_id.length === 0) {
         toastr.warning('Please select category, subcategory, and property type.');
         $(".btn-add").attr('disabled', true);
         return;
-    }
+      }
 
-    // convert array to comma-separated string for GET route
-    var sub_sub_cats_str = sub_sub_cats_id.join(',');
+      // convert array to comma-separated string for GET route
+      var sub_sub_cats_str = sub_sub_cats_id.join(',');
 
-    var route = "<?php echo e(route('admin.category_to_formtype_availablity', ['cats' => ':cat_id', 'subcats' => ':sub_cat_id', 'subsubcats' => ':sub_sub_cat_id'])); ?>";
-    route = route.replace(':cat_id', sel_category_id);
-    route = route.replace(':sub_cat_id', sub_cats_id);
-    route = route.replace(':sub_sub_cat_id', sub_sub_cats_str);
+      var route = "<?php echo e(route('admin.category_to_formtype_availablity', ['cats' => ':cat_id', 'subcats' => ':sub_cat_id', 'subsubcats' => ':sub_sub_cat_id'])); ?>";
+      route = route.replace(':cat_id', sel_category_id);
+      route = route.replace(':sub_cat_id', sub_cats_id);
+      route = route.replace(':sub_sub_cat_id', sub_sub_cats_str);
 
-    $.ajax({
+      $.ajax({
         url: route,
         method: 'GET',
         success: function (response) {
-            try {
-                response = JSON.parse(response);
-            } catch (e) {}
+          try {
+            response = JSON.parse(response);
+          } catch (e) { }
 
-            if (response.status === 400) {
-                toastr.error(response.message);
-                $(".btn-add").attr('disabled', true);
-            } else {
-                $(".btn-add").attr('disabled', false);
-            }
+          if (response.status === 400) {
+            toastr.error(response.message);
+            $(".btn-add").attr('disabled', true);
+          } else {
+            $(".btn-add").attr('disabled', false);
+          }
         },
         error: function () {
-            toastr.error('Error checking availability.');
+          toastr.error('Error checking availability.');
         }
-    });
-}
+      });
+    }
 
 
   </script>
