@@ -115,20 +115,25 @@ class PropertyController extends BaseApiController
 	{
 		$token = isset($_SERVER['HTTP_AUTH_TOKEN']) ? $_SERVER['HTTP_AUTH_TOKEN'] : '';
 		$user = $request->get('users');
-
 		$rules = [
 			'title' => 'required|unique:properties,title',
-			'price' => "required|numeric",
-			// "email" => "sometimes|required|unique:users,email",
-			// "mobile_number" => "required|numeric",
-			// "otp"=>"required|numeric"
+			'price' => 'required|numeric',
+			'price_label.*' => 'nullable',
+			'category_id' => 'required',
+			'sub_category_id' => 'required',
+			'construction_age' => 'nullable',
+			'description' => 'required',
+			'address' => 'required',
+			'location_id' => 'required',
+			"gallery_images_file.*" => 'required|mimes:jpg,png,jpeg',
+			'sub_location_name' => 'nullable|string|max:255',
 		];
 		$this->checkValidate($request, $rules);
 
 		try {
 			$user = User::where('auth_token', $token)->first();
 			if (isset($user) && $user->role == 'admin') { // IF Admin
-
+				
 			} else {
 				if ((empty($token) && !empty($request->mobile_number))) {
 					$user = User::where('mobile_number', $request->mobile_number)->first();

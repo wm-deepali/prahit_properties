@@ -26,15 +26,15 @@
                       <input type="text" class="text-control" name="title" placeholder="Enter Property Name" required />
                     </div>
                     <!-- <div class="col-sm-4">
-                              <label class="label-control">Type </label>
-                              <select class="text-control" name="type_id" required />
-                              <option value="">Select Type</option>
-                              <option value="1">Commercial</option>
-                              <option value="2">Agricultural</option>
-                              <option value="3">Industrial</option>
-                              <option value="4">Free Hold</option>
-                            </select>
-                          </div> -->
+                                        <label class="label-control">Type </label>
+                                        <select class="text-control" name="type_id" required />
+                                        <option value="">Select Type</option>
+                                        <option value="1">Commercial</option>
+                                        <option value="2">Agricultural</option>
+                                        <option value="3">Industrial</option>
+                                        <option value="4">Free Hold</option>
+                                      </select>
+                                    </div> -->
                     <div class="col-sm-4">
                       <label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
                       <input type="number" class="text-control" name="price" min="0" placeholder="Enter Price" required />
@@ -72,12 +72,12 @@
                     </div>
 
                     <!-- <div class="col-sm-3">
-                            <label class="label-control">Status</label>
-                            <select class="text-control" name="construction_age" >
-                              <option value="0">Ready to Move</option>
-                              <option value="1">Under Construction</option>
-                            </select>
-                          </div> -->
+                                      <label class="label-control">Status</label>
+                                      <select class="text-control" name="construction_age" >
+                                        <option value="0">Ready to Move</option>
+                                        <option value="1">Under Construction</option>
+                                      </select>
+                                    </div> -->
                   </div>
 
 
@@ -219,7 +219,7 @@
                   <div class="form-group-f row">
                     <div class="col-sm-12">
                       <label class="label-control">Description</label>
-                      <textarea class="text-control" rows="2" cols="4" name="description"></textarea>
+                      <textarea class="text-control" rows="2" cols="4" name="description" required></textarea>
                     </div>
                   </div>
 
@@ -295,33 +295,33 @@
                   <input type="hidden" name="additional_info" id="form_json">
                   <div class="form-group-f row add_formtype">
                     <?php /*
-                       @foreach($form_type as $f=>$v)
-                         @foreach($v->formtypesfields as $a=>$b)
-                           @foreach($b->subfeatures as $s=>$f)
-                             <div class="col-sm-4">
+                            @foreach($form_type as $f=>$v)
+                              @foreach($v->formtypesfields as $a=>$b)
+                                @foreach($b->subfeatures as $s=>$f)
+                                  <div class="col-sm-4">
 
-                               <div class="input-group1">
-                                 @if($f->features->input_type === "1")
-                                   <label class="label-control">{{$f->sub_feature_name}}<input class="text-control-s dynamic_forms" type="checkbox" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" value="{{$f->id}}" /> </label>
-                                 @elseif ($f->features->input_type === "2")
-                                   <input class="text-control-s dynamic_forms" type="number" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" />
-                                 @elseif ($f->features->input_type === "3")
-                                   <input class="text-control-s dynamic_forms" type="radio" name="feature[]" placeholder="{{$f->sub_feature_name}}"data-sub-feature-id="{{$f->id}}" />
-                                 @elseif ($f->features->input_type === "4")
-                                   <textarea class="text-control" name="feature[]" data-sub-feature-id="{{$f->id}}" />
-                                   </textarea>
-                                 @elseif ($f->features->input_type === "5")
-      <!--                              <select class="text-control">
-                                   </select> -->
-                                 @endif
-                               </div>
+                                    <div class="input-group1">
+                                      @if($f->features->input_type === "1")
+                                        <label class="label-control">{{$f->sub_feature_name}}<input class="text-control-s dynamic_forms" type="checkbox" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" value="{{$f->id}}" /> </label>
+                                      @elseif ($f->features->input_type === "2")
+                                        <input class="text-control-s dynamic_forms" type="number" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" />
+                                      @elseif ($f->features->input_type === "3")
+                                        <input class="text-control-s dynamic_forms" type="radio" name="feature[]" placeholder="{{$f->sub_feature_name}}"data-sub-feature-id="{{$f->id}}" />
+                                      @elseif ($f->features->input_type === "4")
+                                        <textarea class="text-control" name="feature[]" data-sub-feature-id="{{$f->id}}" />
+                                        </textarea>
+                                      @elseif ($f->features->input_type === "5")
+           <!--                              <select class="text-control">
+                                        </select> -->
+                                      @endif
+                                    </div>
 
-                             </div>
-                           @endforeach
-                         @endforeach
-                       @endforeach
-                       */
-                            ?>
+                                  </div>
+                                @endforeach
+                              @endforeach
+                            @endforeach
+                            */
+                                      ?>
                   </div>
 
                   <div class="form-group-f row">
@@ -427,84 +427,63 @@
     }
 
     $("#create_property_form").submit(function (e) {
+      e.preventDefault();
+
       var data = $('#fb-render').formRender('userData');
       if (!data) {
         toastr.error('Additional details form must be required, please select another category or contact to admin.');
         return false;
       } else {
-        document.getElementById('form_json').value = JSON.stringify(data);
+        $('#form_json').val(JSON.stringify(data));
       }
+
+      // Generate FormData here, after any manual modifications
       var formData = new FormData(this);
-      // var obj = {};
-      // $(".dynamic_forms").each(function(x,y) {
-      //  // console.log(y);
-      //  var input_type = $(this).attr('data-input-type');
-      //  let objKey = $(this).attr('data-sub-feature-id').replace(/\ /g,'');
-      //  let objVal = $(this).val();
-      //  if(input_type == "1" ) {
-      //    if($(this).is(':checked')) {
-      //      obj[objKey] = objVal;       
-      //    }
-      //  } else if(input_type == "3" ) {
-      //    if(objVal != "") {
-      //      obj[objKey] = objVal;       
-      //    }
-      //  } else if(input_type == "5" ) {
-      //    if(objVal != "") {
-      //      console.log(objVal)
-      //      obj[objKey] = objVal;       
-      //    }
-      //  } else {
-      //    obj[objKey] = objVal;       
-      //  }
-      // });
-      // formData.append('listing_features', JSON.stringify(obj));
 
-      // if(jQuery.isEmptyObject(obj)) returnIfInvalid();
-
-      e.preventDefault();
       $(this).validate({
         submitHandler: function (form) {
           $.ajax({
-            // url: "{{route('admin.properties.store')}}",
             url: "{{config('app.api_url')}}/property",
             method: "POST",
-            data: formData,
+            data: formData, // fresh FormData
             datatype: 'json',
             cache: false,
             contentType: false,
             processData: false,
             beforeSend: function (request) {
-              $(".addproperty").attr('disabled', true);
               request.setRequestHeader('auth-token', "{{Auth::user()->auth_token}}");
+              $(".addproperty").attr('disabled', true);
             },
             success: function (response) {
-              // var response = JSON.parse(response);
               if (response.responseCode === 200) {
-                toastr.success(response.message)
-                $("#create_property_form").trigger('reset');
-                console.log(response);
-                var id = response.data.listing.id;
+                toastr.success(response.message);
+                $("#create_property_form")[0].reset();
                 setTimeout(function () {
-                  window.location.href = "{{url('master/preview/property')}}/" + id;
+                  window.location.href = "{{url('master/preview/property')}}/" + response.data.listing.id;
                 }, 100);
-              } else if (response.responseCode === 400) {
-                toastr.error(response.message)
               } else {
-                toastr.error('An error occured')
+                toastr.error(response.message || 'An error occurred.');
               }
             },
-            error: function (response) {
-              response.responseCode === 400 ? toastr.error(response.message) : toastr.error('An error occured');
+            error: function (xhr) {
+              if (xhr.status === 422) {
+                const errors = xhr.responseJSON.errors;
+                Object.keys(errors).forEach(function (key) {
+                  const input = $('[name="' + key + '"]');
+                  input.addClass('is-invalid');
+                  toastr.error(errors[key][0]);
+                });
+              } else {
+                toastr.error(xhr.responseJSON?.message || 'Unexpected error');
+              }
             },
             complete: function () {
-              // $(".addproperty").attr('disabled', false);
+              $(".addproperty").attr('disabled', false);
             }
-          })
+          });
         }
       });
-    })
-
+    });
 
     function fetch_subcategories(id, callback) {
       var route = "{{ url('get/sub-categories') }}/" + id

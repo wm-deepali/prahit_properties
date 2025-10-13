@@ -290,7 +290,7 @@ class HomeController extends AppController
 			'title' => 'required|max:200',
 			'type_id' => 'nullable',
 			'price' => 'required|numeric',
-			'price_label.*' => 'required',
+			'price_label.*' => 'nullable',
 			'category_id' => 'required',
 			'sub_category_id' => 'required',
 			'construction_age' => 'nullable',

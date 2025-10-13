@@ -6,7 +6,7 @@ use App\SmsConfig;
 use App\EmailIntegration;
 use Illuminate\Support\Facades\Validator;
 use App\Notifications\GlobalEmailNotification;
-
+use Illuminate\Validation\ValidationException;
 trait GlobalTrait
 {
     /**
@@ -138,13 +138,14 @@ trait GlobalTrait
         }
     }
 
+
+
     public function checkValidate($request, $validFields, $messages = [])
     {
         $validator = Validator::make($request->all(), $validFields, $messages);
+
         if ($validator->fails()) {
-            foreach ($validator->getMessageBag()->toArray() as $key => $messages) {
-                return $validator->getMessageBag()->first($key);
-            }
+            throw new ValidationException($validator);
         }
     }
 

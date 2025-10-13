@@ -78,7 +78,6 @@
       <div class="d-flex justify-content-center mt-3">
         <?php echo e($cities->links('pagination::bootstrap-4')); ?>
 
-
       </div>
 
     </div>
