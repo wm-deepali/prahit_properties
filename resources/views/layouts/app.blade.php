@@ -142,7 +142,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{route('admin.web-directory-category.index')}}">Manage Category</a>
-                                    <a class="dropdown-item" href="{{route('admin.web-directory-sub-category.index')}}">Manage Category</a>
+                                    <a class="dropdown-item" href="{{route('admin.web-directory-sub-category.index')}}">Manage Sub Category</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
