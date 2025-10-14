@@ -21,30 +21,6 @@
                   enctype="multipart/form-data">
                   <h4 class="form-section-h">Property Description &amp; Price</h4>
                   <input type="hidden" name="from" id="from" value="{{ app('request')->input('from') }}">
-                  <div class="form-group-f row">
-                    <div class="col-sm-8">
-                      <label class="label-control">Title </label>
-                      <input type="text" class="text-control" name="title" placeholder="Enter Property Name"
-                        value="{{$property->title}}" required />
-                    </div>
-                    <!-- <div class="col-sm-4">
-                      <label class="label-control">Type </label>
-                      <select class="text-control" name="type_id" required />
-                      <option value="">Select Type</option>
-                      <option value="1" {{$property->type_id == "1" ? "selected" : ""}}>Commercial</option>
-                      <option value="2" {{$property->type_id == "2" ? "selected" : ""}}>Agricultural</option>
-                      <option value="3" {{$property->type_id == "3" ? "selected" : ""}}>Industrial</option>
-                      <option value="4" {{$property->type_id == "4" ? "selected" : ""}}>Free Hold</option>
-                    </select>
-                  </div> -->
-                    <div class="col-sm-4">
-                      <label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
-                      <input type="number" class="text-control" name="price" min="0" placeholder="Enter Price"
-                        value="{{$property->price}}" required />
-                    </div>
-                  </div>
-
-
 
                   <div class="form-group-f row">
                     <div class="col-sm-4">
@@ -60,7 +36,7 @@
                     <div class="col-sm-4">
                       <label class="label-control">Category</label>
                       <select class="text-control populate_subcategories" name="sub_category_id"
-                        onchange="fetch_subsubcategories(this.value, fetch_form_type);" required>
+                        onchange="fetch_subsubcategories(this.value, fetch_form_type);" >
                         <option value="">Select Category</option>
                       </select>
                     </div>
@@ -71,14 +47,25 @@
                         <option value="">Select Property Type</option>
                       </select>
                     </div>
+                  </div>
 
+                  <div class="form-group-f row">
+                    <div class="col-sm-8">
+                      <label class="label-control">Title </label>
+                      <input type="text" class="text-control" name="title" placeholder="Enter Property Name"
+                        value="{{$property->title}}" required />
+                    </div>
+                    <div class="col-sm-4">
+                      <label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
+                      <input type="number" class="text-control" name="price" min="0" placeholder="Enter Price"
+                        value="{{$property->price}}" required />
+                    </div>
                   </div>
 
                   <div class="form-row">
-
                     {{-- Price Label --}}
                     @php $col = ($price_labels->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-                    <div id="priceLabelField" class="form-group {{ $col }}">
+                    <div id="priceLabelField" class="form-group {{ $col }}" style="display:none;">
                       <label class="label-control d-flex">Price Label</label>
                       @if($price_labels->first()->input_format == 'checkbox')
                         @foreach($price_labels as $label)
@@ -112,7 +99,7 @@
 
                     {{-- Property Status --}}
                     @php $col = ($property_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-                    <div id="propertyStatusField" class="form-group {{ $col }}">
+                    <div id="propertyStatusField" class="form-group {{ $col }}" style="display:none;">
                       <label class="label-control">Property Status</label>
                       @if($property_statuses->first()->input_format == 'checkbox')
                         @foreach($property_statuses as $status)
@@ -146,7 +133,7 @@
 
                     {{-- Registration Status --}}
                      @php $col = ($registration_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-                    <div id="registrationStatusField" class="form-group {{ $col }}">
+                    <div id="registrationStatusField" class="form-group {{ $col }}" style="display:none;">
                       <label class="label-control">Registration Status</label>
                       @if($registration_statuses->first()->input_format == 'checkbox')
                         @foreach($registration_statuses as $status)
@@ -180,7 +167,7 @@
 
                     {{-- Furnishing Status --}}
                       @php $col = ($furnishing_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-                    <div id="furnishingStatusField" class="form-group {{ $col }}">
+                    <div id="furnishingStatusField" class="form-group {{ $col }}" style="display:none;">
                       <label class="label-control">Furnishing Status</label>
                       @if($furnishing_statuses->first()->input_format == 'checkbox')
                         @foreach($furnishing_statuses as $status)
@@ -221,7 +208,7 @@
                     </div>
                   </div>
 
-                  <div id="amenitiesField">
+                  <div id="amenitiesField" style="display:none;">
                     <h4 class="form-section-h">Amenities</h4>
                     <div class="form-group-f row">
                       @foreach($amenities as $amenity)
@@ -354,6 +341,7 @@
 
       fetch_subcategories('{{$property->category_id}}', function () {
         $(".populate_subcategories").val('{{$property->sub_category_id}}');
+        fetch_form_type();
         fetch_subsubcategories('{{$property->sub_category_id}}', function () {
           $(".populate_subsubcategories").val('{{$property->sub_sub_category_id}}');
           fetch_form_type();
@@ -605,11 +593,11 @@
         method: 'GET',
         success: function (response) {
           $('#sub_sub_category_id').empty().append('<option value="">Select Property Type</option>');
-          if (response.subsubcategories && response.subsubcategories.length) {
+          if (response.subsubcategories && response.subsubcategories.length > 0) {
             cachedSubSubCategories = response.subsubcategories || [];
 
             $.each(response.subsubcategories, function (i, subsub) {
-              let selected = ({{$property->sub_category_id}} == subsub.id) ? "selected" : "";
+              let selected = ({{$property->sub_category_id ?? 0}} == subsub.id) ? "selected" : "";
               $('#sub_sub_category_id').append(
                 '<option value="' + subsub.id + '" ' + selected + '>' + subsub.sub_sub_category_name + '</option>'
               );
@@ -618,6 +606,7 @@
           } else {
             $('#sub_sub_category_id').append('<option value="">No property type found</option>');
           }
+         
 
           if (callback) {
             callback();

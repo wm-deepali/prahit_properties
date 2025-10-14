@@ -133,7 +133,7 @@
 
       formBuilder.promise.then(function (fb) {
         console.log(fb.formData);
-      });
+      })
 
 
       document.getElementById("getData").addEventListener("click", function () {
@@ -150,14 +150,14 @@
           swal('', 'Category field must be required', 'warning');
           return false;
         }
-        if (!sub_category_id) {
-          swal('', 'Subcategory field must be required', 'warning');
-          return false;
-        }
-        if (!sub_sub_category_id || sub_sub_category_id.length === 0) {
-          swal('', 'Property Type must be selected', 'warning');
-          return false;
-        }
+        // if (!sub_category_id) {
+        //   swal('', 'Subcategory field must be required', 'warning');
+        //   return false;
+        // }
+        // if (!sub_sub_category_id || sub_sub_category_id.length === 0) {
+        //   swal('', 'Property Type must be selected', 'warning');
+        //   return false;
+        // }
 
         var form_json = formBuilder.formData;
         if (!form_json) {

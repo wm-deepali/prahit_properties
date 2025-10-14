@@ -1191,7 +1191,7 @@ class PropertiesController extends AppController
 				'price' => 'required|numeric',
 				'price_label.*' => 'nullable',
 				'category_id' => 'required',
-				'sub_category_id' => 'required',
+				// 'sub_category_id' => 'required',
 				'construction_age' => 'nullable',
 				'description' => 'required',
 				'address' => 'required',

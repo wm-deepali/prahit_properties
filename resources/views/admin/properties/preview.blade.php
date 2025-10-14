@@ -69,7 +69,7 @@
 
                     {{-- Price Label --}}
                     @php $col = ($price_labels->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-                    <div id="priceLabelField" class="form-group {{ $col }}">
+                    <div id="priceLabelField" class="form-group {{ $col }}" style="display:none;">
                       <label class="label-control d-flex">Price Label</label>
                       @if($price_labels->first()->input_format == 'checkbox')
                         @foreach($price_labels as $label)
@@ -95,7 +95,7 @@
 
                     {{-- Property Status --}}
                     @php $col = ($property_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-                    <div id="propertyStatusField" class="form-group {{ $col }}">
+                    <div id="propertyStatusField" class="form-group {{ $col }}" style="display:none;">
                       <label class="label-control">Property Status</label>
                       @if($property_statuses->first()->input_format == 'checkbox')
                         @foreach($property_statuses as $status)
@@ -121,7 +121,7 @@
 
                     {{-- Registration Status --}}
                     @php $col = ($registration_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-                    <div id="registrationStatusField" class="form-group {{ $col }}">
+                    <div id="registrationStatusField" class="form-group {{ $col }}" style="display:none;">
                       <label class="label-control">Registration Status</label>
                       @if($registration_statuses->first()->input_format == 'checkbox')
                         @foreach($registration_statuses as $status)
@@ -148,7 +148,7 @@
 
                     {{-- Furnishing Status --}}
                     @php $col = ($furnishing_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-                    <div id="furnishingStatusField" class="form-group {{ $col }}">
+                    <div id="furnishingStatusField" class="form-group {{ $col }}" style="display:none;">
                       <label class="label-control">Furnishing Status</label>
                       @if($furnishing_statuses->first()->input_format == 'checkbox')
                         @foreach($furnishing_statuses as $status)
@@ -183,7 +183,7 @@
                     </div>
                   </div>
 
-                  <div id="amenitiesField">
+                  <div id="amenitiesField" style="display: none;">
                     <h4 class="form-section-h">Amenities</h4>
                     <div class="form-group-f row">
                       @foreach($amenities as $amenity)
@@ -280,48 +280,48 @@
 
                   <div class="form-group-f row">
                     <?php /*
-                      @foreach($form_type as $f=>$v)
-                        @foreach($v->formtypesfields as $a=>$b)
-                          @foreach($b->subfeatures as $s=>$f)
-                            <div class="col-sm-4">
-                              <label class="label-control">{{$f->sub_feature_name}}</label>
-                              <div class="input-group">
-                                @php
-                                  $db_values = [];
-                                @endphp
+                         @foreach($form_type as $f=>$v)
+                           @foreach($v->formtypesfields as $a=>$b)
+                             @foreach($b->subfeatures as $s=>$f)
+                               <div class="col-sm-4">
+                                 <label class="label-control">{{$f->sub_feature_name}}</label>
+                                 <div class="input-group">
+                                   @php
+                                     $db_values = [];
+                                   @endphp
 
-                                  @foreach($property->propertyfeatures as $a=>$b)
-                                    @php
-                                      array_push($db_values, $b->feature_value)
-                                    @endphp
-                                  @endforeach
+                                     @foreach($property->propertyfeatures as $a=>$b)
+                                       @php
+                                         array_push($db_values, $b->feature_value)
+                                       @endphp
+                                     @endforeach
 
-                                @if($f->features->input_type === "1")
-                                  @if(in_array($f->id, $db_values))
-                                    <input class="text-control-s dynamic_forms" type="checkbox" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" value="{{$f->id}}" checked />
-                                  @else 
-                                    <input class="text-control-s dynamic_forms" type="checkbox" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" value="{{$f->id}}" />
-                                  @endif
+                                   @if($f->features->input_type === "1")
+                                     @if(in_array($f->id, $db_values))
+                                       <input class="text-control-s dynamic_forms" type="checkbox" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" value="{{$f->id}}" checked />
+                                     @else 
+                                       <input class="text-control-s dynamic_forms" type="checkbox" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" value="{{$f->id}}" />
+                                     @endif
 
-                                @elseif ($f->features->input_type === "2")
-                                  <input class="text-control-s dynamic_forms" type="number" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" />
-                                @elseif ($f->features->input_type === "3")
-                                  <input class="text-control-s dynamic_forms" type="radio" name="feature[]" placeholder="{{$f->sub_feature_name}}"data-sub-feature-id="{{$f->id}}" />
-                                @elseif ($f->features->input_type === "4")
-                                  <textarea class="text-control" name="feature[]" data-sub-feature-id="{{$f->id}}" />
-                                  </textarea>
-                                @elseif ($f->features->input_type === "5")
-     <!--                              <select class="text-control">
-                                  </select> -->
-                                @endif
-                                <br/>
-                              </div>
+                                   @elseif ($f->features->input_type === "2")
+                                     <input class="text-control-s dynamic_forms" type="number" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" />
+                                   @elseif ($f->features->input_type === "3")
+                                     <input class="text-control-s dynamic_forms" type="radio" name="feature[]" placeholder="{{$f->sub_feature_name}}"data-sub-feature-id="{{$f->id}}" />
+                                   @elseif ($f->features->input_type === "4")
+                                     <textarea class="text-control" name="feature[]" data-sub-feature-id="{{$f->id}}" />
+                                     </textarea>
+                                   @elseif ($f->features->input_type === "5")
+        <!--                              <select class="text-control">
+                                     </select> -->
+                                   @endif
+                                   <br/>
+                                 </div>
 
-                            </div>
-                          @endforeach
-                        @endforeach
-                      @endforeach
-                      */ ?>
+                               </div>
+                             @endforeach
+                           @endforeach
+                         @endforeach
+                         */ ?>
                   </div>
 
                   <div class="form-group-f row">
@@ -354,6 +354,7 @@
 
       fetch_subcategories('{{$property->category_id}}', function () {
         $(".populate_subcategories").val('{{$property->sub_category_id}}');
+        fetch_form_type();
         fetch_subsubcategories('{{$property->sub_category_id}}', function () {
           $(".populate_subsubcategories").val('{{$property->sub_sub_category_id}}');
           fetch_form_type();
@@ -561,53 +562,53 @@
     // });
 
 
-		function fetch_subcategories(id, callback) {
-			var route = "{{ url('get/sub-categories') }}/" + id
-			$.ajax({
-				url: route,
-				method: 'get',
-				beforeSend: function () {
-					$(".addproperty").attr('disabled', true);
-					$(".add_formtype").empty();
-					$(".loading").css('display', 'block');
-				},
-				success: function (response) {
-					// var response = JSON.parse(response);
-					if (response.status === 200) {
-						$(".populate_subcategories").empty();
-						var subcategories = response.subcategories;
-						if (subcategories.length > 0) {
+    function fetch_subcategories(id, callback) {
+      var route = "{{ url('get/sub-categories') }}/" + id
+      $.ajax({
+        url: route,
+        method: 'get',
+        beforeSend: function () {
+          $(".addproperty").attr('disabled', true);
+          $(".add_formtype").empty();
+          $(".loading").css('display', 'block');
+        },
+        success: function (response) {
+          // var response = JSON.parse(response);
+          if (response.status === 200) {
+            $(".populate_subcategories").empty();
+            var subcategories = response.subcategories;
+            if (subcategories.length > 0) {
               console.log('here');
-              
-							$.each(subcategories, function (x, y) {
-								if ('{{ $property->sub_category_id }}' == y.id)
-									$(".populate_subcategories").append(
-										`<option value=${y.id} selected> ${y.sub_category_name} </option>`
-									);
-								else
-									$(".populate_subcategories").append(
-										`<option value=${y.id}> ${y.sub_category_name} </option>`
-									);
-							});
-						} else {
-							$(".populate_subcategories").append(
-								`<option value=''> Please add a sub category </option>`
-							);
-						}
-						if (callback) {
-							callback();
-						}
-					}
-				},
-				error: function (response) {
-					toastr.error('An error occured while fetching subcategories');
-				},
-				complete: function () {
-					$(".loading").css('display', 'none');
-					// $(".addproperty").attr('disabled', false);
-				}
-			})
-		}
+
+              $.each(subcategories, function (x, y) {
+                if ('{{ $property->sub_category_id  ?? 0}}' == y.id)
+                  $(".populate_subcategories").append(
+                    `<option value=${y.id} selected> ${y.sub_category_name} </option>`
+                  );
+                else
+                  $(".populate_subcategories").append(
+                    `<option value=${y.id}> ${y.sub_category_name} </option>`
+                  );
+              });
+            } else {
+              $(".populate_subcategories").append(
+                `<option value=''> Please add a sub category </option>`
+              );
+            }
+            if (callback) {
+              callback();
+            }
+          }
+        },
+        error: function (response) {
+          toastr.error('An error occured while fetching subcategories');
+        },
+        complete: function () {
+          $(".loading").css('display', 'none');
+          // $(".addproperty").attr('disabled', false);
+        }
+      })
+    }
 
     var cachedSubSubCategories = {}; // Object to store sub sub categories keyed by subcategory ID
 
@@ -624,7 +625,7 @@
             cachedSubSubCategories = response.subsubcategories;
 
             $.each(response.subsubcategories, function (i, subsub) {
-              let selected = ({{$property->sub_category_id}} == subsub.id) ? "selected" : "";
+              let selected = ({{$property->sub_category_id ?? 0}} == subsub.id) ? "selected" : "";
               $('#sub_sub_category_id').append(
                 '<option value="' + subsub.id + '" ' + selected + '>' + subsub.sub_sub_category_name + '</option>'
               );
@@ -655,36 +656,10 @@
         fetch_subsubcategories(preselectedSubCategory, preselectedSubSubCategory);
       }
 
-
     });
 
 
-    $('#sub_sub_category_id').html('<option value="">Loading...</option>');
-    var route = "{{ url('get/sub-sub-categories') }}/" + subcategoryId;
 
-    $.ajax({
-      url: route,
-      method: 'GET',
-      success: function (response) {
-        $('#sub_sub_category_id').empty().append('<option value="">Select Property Type</option>');
-        if (response.subsubcategories && response.subsubcategories.length) {
-          cachedSubSubCategories = response.subsubcategories || [];
-          $.each(response.subsubcategories, function (i, subsub) {
-            let selected = (selectedId == subsub.id) ? "selected" : "";
-            $('#sub_sub_category_id').append(
-              '<option value="' + subsub.id + '" ' + selected + '>' + subsub.sub_sub_category_name + '</option>'
-            );
-          });
-          toggleSubSubCategoryFields(selectedId)
-        } else {
-          $('#sub_sub_category_id').append('<option value="">No property type found</option>');
-        }
-      },
-      error: function () {
-        $('#sub_sub_category_id').html('<option value="">Error loading</option>');
-      }
-    });
-      
     // This function is called when subsubcategory changes or after loading toggles
     function toggleSubSubCategoryFields(selectedId) {
 
@@ -731,7 +706,7 @@
       var subcat = $(".populate_subcategories option:selected").val();
       var listing_id = $("#id").val();
 
-      if (subcat == "") {
+      if (cat == "") {
         clearFormType(true);
         return true;
       }
@@ -768,69 +743,69 @@
                     // console.log('sub_f_id =>',y.sub_f_id);
                     $(".add_formtype").append(
                       `
-                      <div class='col-sm-4'>
-                      <label> 
-                      <input type='checkbox' class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} value="checked"  name=${y.sub_feature_slug}  />
-                      ${y.sub_feature_name} 
-                      </label>
-                      </div>
-                      `
+                            <div class='col-sm-4'>
+                            <label> 
+                            <input type='checkbox' class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} value="checked"  name=${y.sub_feature_slug}  />
+                            ${y.sub_feature_name} 
+                            </label>
+                            </div>
+                            `
                     );
                     break;
 
                   case "2":
                     $(".add_formtype").append(
                       `
-                      <div class='col-sm-4'>
-                      <label> 
-                      <input type='text'  class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} name=${y.sub_feature_slug}   />
-                      ${y.sub_feature_name} 
-                      </label>
-                      </div>
-                      `
+                            <div class='col-sm-4'>
+                            <label> 
+                            <input type='text'  class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} name=${y.sub_feature_slug}   />
+                            ${y.sub_feature_name} 
+                            </label>
+                            </div>
+                            `
                     );
                     break;
 
                   case "3":
                     $(".add_formtype").append(
                       `
-                      <div class='col-sm-4'>
-                      <label> 
-                      <input type='radio'  class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} value='on' name='radio[]'  />
-                      ${y.sub_feature_name} 
-                      </label>
-                      </div>
-                      `
+                            <div class='col-sm-4'>
+                            <label> 
+                            <input type='radio'  class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} value='on' name='radio[]'  />
+                            ${y.sub_feature_name} 
+                            </label>
+                            </div>
+                            `
                     );
                     break;
 
                   case "4":
                     $(".add_formtype").append(
                       `
-                      <div class='col-sm-4'>
-                      <label> 
-                      <textarea class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} name=${y.sub_feature_slug}></textarea>
-                      ${y.sub_feature_name} 
-                      </label>
-                      </div>
-                      `
+                            <div class='col-sm-4'>
+                            <label> 
+                            <textarea class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} name=${y.sub_feature_slug}></textarea>
+                            ${y.sub_feature_name} 
+                            </label>
+                            </div>
+                            `
                     );
                     break;
 
                   case "5":
                     $(".add_formtype").append(
                       `
-                      <div class='col-sm-4'>
-                      <label> 
-                      ${y.sub_feature_name} 
-                      <select>
-                      <option value='' class='text-control dynamic_forms' data-sub-feature-id=${y.sub_f_id} name=${y.sub_feature_slug} data-input-type=${y.input_type}>
-                      Select
-                      </option>
-                      </select>
-                      </label>
-                      </div>
-                      `
+                            <div class='col-sm-4'>
+                            <label> 
+                            ${y.sub_feature_name} 
+                            <select>
+                            <option value='' class='text-control dynamic_forms' data-sub-feature-id=${y.sub_f_id} name=${y.sub_feature_slug} data-input-type=${y.input_type}>
+                            Select
+                            </option>
+                            </select>
+                            </label>
+                            </div>
+                            `
                     );
                     break;
 

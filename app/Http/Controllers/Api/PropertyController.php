@@ -120,7 +120,6 @@ class PropertyController extends BaseApiController
 			'price' => 'required|numeric',
 			'price_label.*' => 'nullable',
 			'category_id' => 'required',
-			'sub_category_id' => 'required',
 			'construction_age' => 'nullable',
 			'description' => 'required',
 			'address' => 'required',

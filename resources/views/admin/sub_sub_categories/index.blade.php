@@ -88,7 +88,7 @@
           </div>
         </div>
       </div>
-        <div class="d-flex justify-content-center mt-3">
+      <div class="d-flex justify-content-center mt-3">
         {{ $subsubcategories->links('pagination::bootstrap-4') }}
       </div>
     </div>
@@ -233,8 +233,8 @@
             <div class="form-group row">
               <div class="col-sm-6 form-group">
                 <label class="label-control">Property Available For</label>
-                <select class="text-control populate_categories" onchange="remove_invalid_option()" name="category_id"
-                  id="category_id">
+                <select class="text-control populate_categories"
+                  onchange="remove_invalid_option();load_subcategories(this.value);" name="category_id" id="category_id">
                   <option value="">Select</option>
                   @foreach($categories as $k => $v)
                     <option value="{{$v->id}}">{{$v->category_name}}</option>
@@ -495,9 +495,7 @@
 
     function openModal(type, id = null, cat_id = null) {
       if (type == "edit") {
-        // load_subcategories(cat_id, function () {
         fetchData(id)
-        // })
       } else {
         $("#delete_sub_sub_category #id").val(id);
         $("#delete-sub-sub-category").modal('show');
@@ -507,43 +505,42 @@
 
     function fetchData(id) {
       var route = "{{route('admin.sub-sub-category.show', ':id')}}";
-      var route = route.replace(':id', id);
-
+      route = route.replace(':id', id);
 
       $.ajax({
         url: route,
         method: "GET",
-        beforeSend: function function_name(argument) {
+        beforeSend: function () {
           document.getElementById('new_loader').style.display = 'block';
         },
         success: function (response) {
           var response = JSON.parse(response);
           if (response.status === 200) {
-            $("#edit-sub-sub-category #sub_sub_category_id").val(response.data.SubCategory.id)
-            $("#edit-sub-sub-category #category_id").val(response.data.SubCategory.category_id);
-            // $("#edit-sub-sub-category #category_id").change();
-            $("#edit-sub-sub-category #sub_category_id").val(response.data.SubCategory.sub_category_id);
-            $("#edit-sub-sub-category #sub_sub_category_name").val(response.data.SubCategory.sub_sub_category_name)
-            $("#edit-sub-sub-category #edit_sub_sub_category_slug").val(response.data.SubCategory.sub_sub_category_slug)
-            $("#edit-sub-sub-category #sub_sub_category_meta_title").val(response.data.SubCategory.sub_sub_category_meta_title)
-            $("#edit-sub-sub-category #sub_sub_category_meta_description").val(response.data.SubCategory.sub_sub_category_meta_description)
-            $("#edit-sub-sub-category #sub_sub_category_keywords").val(response.data.SubCategory.sub_sub_category_keywords)
-            $("#edit-sub-sub-category #sub_sub_category_keywords").val(response.data.SubCategory.sub_sub_category_keywords)
-            $("#edit_price_label_toggle").val(response.data.SubCategory.price_label_toggle);
-            $("#edit_property_status_toggle").val(response.data.SubCategory.property_status_toggle);
-            $("#edit_registration_status_toggle").val(response.data.SubCategory.registration_status_toggle);
-            $("#edit_furnishing_status_toggle").val(response.data.SubCategory.furnishing_status_toggle);
-            $("#edit_amenities_toggle").val(response.data.SubCategory.amenities_toggle)
+            const data = response.data.SubCategory;
+            $("#edit-sub-sub-category #sub_sub_category_id").val(data.id);
+            $("#edit-sub-sub-category #category_id").val(data.category_id);
+            $("#edit-sub-sub-category #sub_sub_category_name").val(data.sub_sub_category_name);
+            $("#edit-sub-sub-category #edit_sub_sub_category_slug").val(data.sub_sub_category_slug);
+            $("#edit-sub-sub-category #sub_sub_category_meta_title").val(data.sub_sub_category_meta_title);
+            $("#edit-sub-sub-category #sub_sub_category_meta_description").val(data.sub_sub_category_meta_description);
+            $("#edit-sub-sub-category #sub_sub_category_keywords").val(data.sub_sub_category_keywords);
+            $("#edit_price_label_toggle").val(data.price_label_toggle);
+            $("#edit_property_status_toggle").val(data.property_status_toggle);
+            $("#edit_registration_status_toggle").val(data.registration_status_toggle);
+            $("#edit_furnishing_status_toggle").val(data.furnishing_status_toggle);
+            $("#edit_amenities_toggle").val(data.amenities_toggle);
 
-            $(".populate_categories").change();
+            // ✅ Now load subcategories and pre-select
+            load_subcategories(data.category_id, data.sub_category_id);
+
             $("#edit-sub-sub-category").modal('show');
-          } else if (response.status === 400) {
-            toastr.error(response.message)
+          } else {
+            toastr.error(response.message);
           }
           document.getElementById('new_loader').style.display = 'none';
         },
-        error: function (response) {
-          toastr.error('An error occured');
+        error: function () {
+          toastr.error('An error occurred');
           document.getElementById('new_loader').style.display = 'none';
         }
       });
@@ -551,14 +548,10 @@
 
 
 
-    function load_subcategories(id, callback = null) {
-      if (!id) {
-        return false;
-      }
-      // var route = "{{route('admin.sub_category.fetch_subcategories_by_cat_id', ':id')}}";
-      // var route = route.replace(':id', id);
-      var route = "{{ url('get/sub-categories') }}/" + id
+    function load_subcategories(categoryId, selectedSubcategoryId = null) {
+      if (!categoryId) return;
 
+      var route = "{{ url('get/sub-categories') }}/" + categoryId;
       $.ajax({
         url: route,
         method: 'get',
@@ -567,36 +560,22 @@
           $(".loading_2").css('display', 'block');
         },
         success: function (response) {
-          // var response = JSON.parse(response);
           if (response.status === 200) {
             $(".populate_subcategories").empty();
             var SubCategory = response.subcategories;
             if (SubCategory.length > 0) {
               $(".populate_subcategories").removeClass('error');
               $("#sub_category-error").remove();
+              $(".populate_subcategories").append(`<option value="">Select Category</option>`);
               $.each(SubCategory, function (x, y) {
                 $(".populate_subcategories").append(
-                  `
-                          <option value=${y.id}> ${y.sub_category_name} </option>
-                        `
+                  `<option value="${y.id}" ${selectedSubcategoryId == y.id ? 'selected' : ''}>${y.sub_category_name}</option>`
                 );
               });
             } else {
-              $(".populate_subcategories").append(
-                `
-                          <option value=''> No records found </option>
-                        `
-              );
-            }
-
-            if (callback) {
-              callback();
+              $(".populate_subcategories").append(`<option value="">No records found</option>`);
             }
           }
-        },
-        error: function (response) {
-          // console.log(response);
-          response.responseCode === 400 ? toastr.error(response.message) : toastr.error('An error occured');
         },
         complete: function () {
           $(".btn-add, .btn-update").attr('disabled', false);

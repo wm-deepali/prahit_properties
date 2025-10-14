@@ -20,26 +20,7 @@
                 <form class="form-body" id="create_property_form" name="create_property_form"
                   enctype="multipart/form-data">
                   <h4 class="form-section-h">Property Description &amp; Price</h4>
-                  <div class="form-group-f row">
-                    <div class="col-sm-8">
-                      <label class="label-control">Title </label>
-                      <input type="text" class="text-control" name="title" placeholder="Enter Property Name" required />
-                    </div>
-                    <!-- <div class="col-sm-4">
-                                        <label class="label-control">Type </label>
-                                        <select class="text-control" name="type_id" required />
-                                        <option value="">Select Type</option>
-                                        <option value="1">Commercial</option>
-                                        <option value="2">Agricultural</option>
-                                        <option value="3">Industrial</option>
-                                        <option value="4">Free Hold</option>
-                                      </select>
-                                    </div> -->
-                    <div class="col-sm-4">
-                      <label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
-                      <input type="number" class="text-control" name="price" min="0" placeholder="Enter Price" required />
-                    </div>
-                  </div>
+
 
                   <div class="form-group-f row">
                     <div class="col-sm-4">
@@ -58,7 +39,7 @@
                     <div class="col-sm-4">
                       <label class="label-control">Category</label>
                       <select class="text-control populate_subcategories" name="sub_category_id"
-                        onchange="fetch_subsubcategories(this.value, fetch_form_type)" required>
+                        onchange="fetch_subsubcategories(this.value, fetch_form_type)">
                         <option value="">Select Category</option>
                       </select>
                     </div>
@@ -70,22 +51,27 @@
                         <option value="">Select Property Type</option>
                       </select>
                     </div>
-
-                    <!-- <div class="col-sm-3">
-                                      <label class="label-control">Status</label>
-                                      <select class="text-control" name="construction_age" >
-                                        <option value="0">Ready to Move</option>
-                                        <option value="1">Under Construction</option>
-                                      </select>
-                                    </div> -->
                   </div>
+
+
+                  <div class="form-group-f row">
+                    <div class="col-sm-8">
+                      <label class="label-control">Title </label>
+                      <input type="text" class="text-control" name="title" placeholder="Enter Property Name" required />
+                    </div>
+                    <div class="col-sm-4">
+                      <label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
+                      <input type="number" class="text-control" name="price" min="0" placeholder="Enter Price" required />
+                    </div>
+                  </div>
+
 
 
                   <div class="form-row">
 
                     
                     <?php $col = ($price_labels->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-                    <div id="priceLabelField" class="form-group <?php echo e($col); ?>">
+                    <div id="priceLabelField" class="form-group <?php echo e($col); ?>" style="display:none;">
                       <label class="label-control d-flex">Price Label</label>
 
                       <?php if($price_labels->first()->input_format == 'checkbox'): ?>
@@ -100,6 +86,7 @@
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                       <?php else: ?>
                         <select class="form-control" name="price_label" id="price_label">
+                          <option value="" selected> -- Select-- </option>
                           <?php $__currentLoopData = $price_labels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($label->id); ?>" data-second-input="<?php echo e($label->second_input); ?>"
                               data-second-label="<?php echo e($label->second_input_label); ?>" <?php echo e(old('price_label') == $label->id ? 'selected' : ''); ?>>
@@ -112,7 +99,7 @@
 
                       
                       <div class="mt-2" id="price_label_second_container" style="display:none;">
-                        <label id="price_label_second_label"></label>
+                        <label id="price_label_second_label" class="label-control"></label>
                         <input type="date" name="price_label_second" class="form-control"
                           value="<?php echo e(old('price_label_second')); ?>">
                       </div>
@@ -120,7 +107,7 @@
 
                     
                     <?php $col = ($property_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-                    <div id="propertyStatusField" class="form-group <?php echo e($col); ?>">
+                    <div id="propertyStatusField" class="form-group <?php echo e($col); ?>" style="display:none;">
                       <label class="label-control">Property Status</label>
 
                       <?php if($property_statuses->first()->input_format == 'checkbox'): ?>
@@ -135,6 +122,7 @@
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                       <?php else: ?>
                         <select class="form-control" name="property_status" id="property_status">
+                          <option value="" selected> -- Select-- </option>
                           <?php $__currentLoopData = $property_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($status->id); ?>" data-second-input="<?php echo e($status->second_input); ?>"
                               data-second-label="<?php echo e($status->second_input_label); ?>" <?php echo e(old('property_status') == $status->id ? 'selected' : ''); ?>>
@@ -146,7 +134,7 @@
                       <?php endif; ?>
 
                       <div class="mt-2" id="property_status_second_container" style="display:none;">
-                        <label id="property_status_second_label"></label>
+                        <label id="property_status_second_label" class="label-control"></label>
                         <input type="date" name="property_status_second" class="form-control"
                           value="<?php echo e(old('property_status_second')); ?>">
                       </div>
@@ -154,7 +142,7 @@
 
                     
                     <?php $col = ($registration_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-                    <div id="registrationStatusField" class="form-group <?php echo e($col); ?>">
+                    <div id="registrationStatusField" class="form-group <?php echo e($col); ?>" style="display:none;">
                       <label class="label-control">Registration Status</label>
 
                       <?php if($registration_statuses->first()->input_format == 'checkbox'): ?>
@@ -169,6 +157,7 @@
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                       <?php else: ?>
                         <select class="form-control" name="registration_status" id="registration_status">
+                          <option value="" selected> -- Select-- </option>
                           <?php $__currentLoopData = $registration_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($status->id); ?>" data-second-input="<?php echo e($status->second_input); ?>"
                               data-second-label="<?php echo e($status->second_input_label); ?>" <?php echo e(old('registration_status') == $status->id ? 'selected' : ''); ?>>
@@ -180,7 +169,7 @@
                       <?php endif; ?>
 
                       <div class="mt-2" id="registration_status_second_container" style="display:none;">
-                        <label id="registration_status_second_label"></label>
+                        <label id="registration_status_second_label" class="label-control"></label>
                         <input type="date" name="registration_status_second" class="form-control"
                           value="<?php echo e(old('registration_status_second')); ?>">
                       </div>
@@ -188,7 +177,7 @@
 
                     
                     <?php $col = ($furnishing_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-                    <div id="furnishingStatusField" class="form-group <?php echo e($col); ?>">
+                    <div id="furnishingStatusField" class="form-group <?php echo e($col); ?>" style="display:none;">
                       <label class="label-control">Furnishing Status</label>
 
                       <?php if($furnishing_statuses->first()->input_format == 'checkbox'): ?>
@@ -203,6 +192,7 @@
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                       <?php else: ?>
                         <select class="form-control" name="furnishing_status" id="furnishing_status">
+                          <option value="" selected> -- Select-- </option>
                           <?php $__currentLoopData = $furnishing_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($status->id); ?>" data-second-input="<?php echo e($status->second_input); ?>"
                               data-second-label="<?php echo e($status->second_input_label); ?>" <?php echo e(old('furnishing_status') == $status->id ? 'selected' : ''); ?>>
@@ -214,15 +204,12 @@
                       <?php endif; ?>
 
                       <div class="mt-2" id="furnishing_status_second_container" style="display:none;">
-                        <label id="furnishing_status_second_label"></label>
+                        <label id="furnishing_status_second_label" class="label-control"></label>
                         <input type="date" name="furnishing_status_second" class="form-control"
                           value="<?php echo e(old('furnishing_status_second')); ?>">
                       </div>
                     </div>
-
                   </div>
-
-
 
                   <div class="form-group-f row">
                     <div class="col-sm-12">
@@ -231,18 +218,35 @@
                     </div>
                   </div>
 
-                  <div id="amenitiesField">
-
+                  <div id="amenitiesField" style="display: none;">
                     <h4 class="form-section-h">Amenities</h4>
-                    <div class="form-group-f row">
-                      <?php $__currentLoopData = $amenities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $amenity): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <div class="col-sm-3">
+                    <div class="form-group-f row" id="amenitiesContainer">
+                      <?php $__currentLoopData = $amenities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $amenity): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="col-sm-3 amenity-item <?php echo e($index >= 8 ? 'd-none extra-amenity' : ''); ?>">
                           <img src="<?php echo e(asset('storage')); ?>/<?php echo e($amenity->icon); ?>" style="height: 30px;">
-                          <p><input type="checkbox" name="amenity[]" value="<?php echo e($amenity->id); ?>"> <?php echo e($amenity->name); ?></p>
+                          <p>
+                            <input type="checkbox" name="amenity[]" value="<?php echo e($amenity->id); ?>"> <?php echo e($amenity->name); ?>
+
+                          </p>
                         </div>
                       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
+                    <?php if(count($amenities) > 8): ?>
+                      <div class="text-center mt-2">
+                        <button type="button" class="btn btn-sm btn-outline-primary" id="toggleAmenities">Show More</button>
+                      </div>
+                    <?php endif; ?>
                   </div>
+
+                  <script>
+                    document.getElementById('toggleAmenities')?.addEventListener('click', function () {
+                      const extras = document.querySelectorAll('.extra-amenity');
+                      const isHidden = extras[0].classList.contains('d-none');
+                      extras.forEach(el => el.classList.toggle('d-none'));
+                      this.textContent = isHidden ? 'Show Less' : 'Show More';
+                    });
+                  </script>
+
 
                   <h4 class="form-section-h">Property Location</h4>
                   <div class="form-group-f row">
@@ -258,7 +262,6 @@
                     <div class="col-sm-6">
                       <label class="label-control">City </label>
                       <select class="form-control" name="city" id="city" required="">
-
                       </select>
                     </div>
                   </div>
@@ -266,7 +269,6 @@
                     <div class="col-sm-6">
                       <label class="label-control">Location </label>
                       <select class="text-control" name="location_id[]" id="location_id" multiple="" required="">
-
                       </select>
 
                     </div>
@@ -302,34 +304,7 @@
                   <div id="fb-render"></div>
                   <input type="hidden" name="additional_info" id="form_json">
                   <div class="form-group-f row add_formtype">
-                    <?php /*
-                            @foreach($form_type as $f=>$v)
-                              @foreach($v->formtypesfields as $a=>$b)
-                                @foreach($b->subfeatures as $s=>$f)
-                                  <div class="col-sm-4">
-
-                                    <div class="input-group1">
-                                      @if($f->features->input_type === "1")
-                                        <label class="label-control">{{$f->sub_feature_name}}<input class="text-control-s dynamic_forms" type="checkbox" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" value="{{$f->id}}" /> </label>
-                                      @elseif ($f->features->input_type === "2")
-                                        <input class="text-control-s dynamic_forms" type="number" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" />
-                                      @elseif ($f->features->input_type === "3")
-                                        <input class="text-control-s dynamic_forms" type="radio" name="feature[]" placeholder="{{$f->sub_feature_name}}"data-sub-feature-id="{{$f->id}}" />
-                                      @elseif ($f->features->input_type === "4")
-                                        <textarea class="text-control" name="feature[]" data-sub-feature-id="{{$f->id}}" />
-                                        </textarea>
-                                      @elseif ($f->features->input_type === "5")
-           <!--                              <select class="text-control">
-                                        </select> -->
-                                      @endif
-                                    </div>
-
-                                  </div>
-                                @endforeach
-                              @endforeach
-                            @endforeach
-                            */
-                                      ?>
+                   
                   </div>
 
                   <div class="form-group-f row">
@@ -363,13 +338,13 @@
       $(".populate_categories,  .populate_locations").change();
 
       $(".add_formtype").empty().append(
-        `<center class='m0-auto'> Please select sub category </center>`
+        `<center class='m0-auto'> Please select Property Available For or Category </center>`
       );
 
     });
 
     //-------------------- Get city By state --------------------//
-    $('#state').on('change', function () {
+    $('#state').on('change', function () {  
       var state_id = this.value;
       $("#city").html('');
       $.ajax({
@@ -464,7 +439,7 @@
               $(".addproperty").attr('disabled', true);
             },
             success: function (response) {
-              if (response.responseCode === 200) {
+              if (response.status == "success") {
                 toastr.success(response.message);
                 $("#create_property_form")[0].reset();
                 setTimeout(function () {
@@ -526,6 +501,7 @@
             if (callback) {
               callback();
             }
+            fetch_form_type()
           }
         },
         error: function (response) {
@@ -583,8 +559,6 @@
       var selectedData = cachedSubSubCategories.find(function (subsub) {
         return subsub.id == selectedId;
       });
-
-
 
       if (selectedData) {
         toggleSubSubCategoryFields({
@@ -668,7 +642,6 @@
         success: function (response) {
           if (response != 0) {
             document.getElementById('fb-render').innerHTML = '';
-            console.log(response);
             var formData = response.form_data;
             var formRenderOptions = { formData };
             frInstance = $('#fb-render').formRender(formRenderOptions);

@@ -56,11 +56,11 @@ Edit Property Status
                         <div class="col-md-6">
                             <label class="label-control">Requires Second Input?</label>
                             <select class="form-control" name="second_input" id="second_input">
-                                <option value="no" <?php echo e($status->second_input == 0 ? 'selected' : ''); ?>>No</option>
-                                <option value="yes" <?php echo e($status->second_input == 1 ? 'selected' : ''); ?>>Yes</option>
+                                <option value="no" <?php echo e($status->second_input == 'no' ? 'selected' : ''); ?>>No</option>
+                                <option value="yes" <?php echo e($status->second_input == 'yes' ? 'selected' : ''); ?>>Yes</option>
                             </select>
                         </div>
-                        <div class="col-md-6" id="second_input_label_div" style="display: <?php echo e($status->second_input == 1 ? 'block' : 'none'); ?>;">
+                        <div class="col-md-6" id="second_input_label_div" style="display: <?php echo e($status->second_input == 'yes' ? 'block' : 'none'); ?>;">
                             <label class="label-control">Second Input Label</label>
                             <input type="text" class="form-control" placeholder="Enter Second Input Label" name="second_input_label" value="<?php echo e($status->second_input_label); ?>">
                         </div>
@@ -87,7 +87,7 @@ Edit Property Status
     // Show/hide second input label based on selection
     document.getElementById('second_input').addEventListener('change', function() {
         let div = document.getElementById('second_input_label_div');
-        if(this.value == '1'){
+        if(this.value == 'yes'){
             div.style.display = 'block';
         } else {
             div.style.display = 'none';
