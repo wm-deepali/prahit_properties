@@ -49,5 +49,10 @@ class WebDirectorySubCategory extends Model
 		}
 	}
 
+	// 🔹 Relationship: Businesses (Many-to-Many)
+	public function businesses()
+	{
+		return $this->belongsToMany(BusinessListing::class, 'business_listing_sub_category');
+	}
 
 }

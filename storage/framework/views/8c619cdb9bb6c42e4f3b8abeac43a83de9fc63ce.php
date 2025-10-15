@@ -21,6 +21,7 @@
                 <form class="form-body" id="update_property_form" name="update_property_form"
                   enctype="multipart/form-data">
                   <h4 class="form-section-h">Preview Property Details</h4>
+
                   <div class="form-group-f row">
                     <div class="col-sm-8">
                       <label class="label-control">Title </label>
@@ -33,7 +34,6 @@
                       <input type="number" class="text-control" name="price" min="0" placeholder="Enter Price"
                         value="<?php echo e($property->price); ?>" required readonly="" />
                     </div>
-
                   </div>
 
                   <div class="form-group-f row">
@@ -94,6 +94,8 @@
                           <input type="date" class="form-control" readonly value="<?php echo e($property->price_label_second); ?>">
                         </div>
                       <?php endif; ?>
+
+
                     </div>
 
                     
@@ -288,49 +290,7 @@
                   </div>
 
                   <div class="form-group-f row">
-                    <?php /*
-                         @foreach($form_type as $f=>$v)
-                           @foreach($v->formtypesfields as $a=>$b)
-                             @foreach($b->subfeatures as $s=>$f)
-                               <div class="col-sm-4">
-                                 <label class="label-control">{{$f->sub_feature_name}}</label>
-                                 <div class="input-group">
-                                   <?php
-                                     $db_values = [];
-                                   ?>
 
-                                     @foreach($property->propertyfeatures as $a=>$b)
-                                       <?php
-                                         array_push($db_values, $b->feature_value)
-                                       ?>
-                                     @endforeach
-
-                                   @if($f->features->input_type === "1")
-                                     @if(in_array($f->id, $db_values))
-                                       <input class="text-control-s dynamic_forms" type="checkbox" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" value="{{$f->id}}" checked />
-                                     @else 
-                                       <input class="text-control-s dynamic_forms" type="checkbox" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" value="{{$f->id}}" />
-                                     @endif
-
-                                   @elseif ($f->features->input_type === "2")
-                                     <input class="text-control-s dynamic_forms" type="number" name="feature[]" placeholder="{{$f->sub_feature_name}}" data-sub-feature-id="{{$f->id}}" />
-                                   @elseif ($f->features->input_type === "3")
-                                     <input class="text-control-s dynamic_forms" type="radio" name="feature[]" placeholder="{{$f->sub_feature_name}}"data-sub-feature-id="{{$f->id}}" />
-                                   @elseif ($f->features->input_type === "4")
-                                     <textarea class="text-control" name="feature[]" data-sub-feature-id="{{$f->id}}" />
-                                     </textarea>
-                                   @elseif ($f->features->input_type === "5")
-        <!--                              <select class="text-control">
-                                     </select> -->
-                                   @endif
-                                   <br/>
-                                 </div>
-
-                               </div>
-                             @endforeach
-                           @endforeach
-                         @endforeach
-                         */ ?>
                   </div>
 
                   <div class="form-group-f row">
@@ -360,8 +320,8 @@
   <script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
   <script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
   <script type="text/javascript">
-    $(function () {
 
+    $(function () {
       fetch_subcategories('<?php echo e($property->category_id); ?>', function () {
         $(".populate_subcategories").val('<?php echo e($property->sub_category_id); ?>');
         fetch_form_type();
@@ -370,10 +330,7 @@
           fetch_form_type();
         });
       });
-      fetch_sublocations('<?php echo e($property->location_id); ?>', function () {
-        $(".populate_sublocations").val('<?php echo e($property->sub_location_id); ?>');
-      });
-
+     
       $(".property_use_for").hide();
 
       setTimeout(function () {
@@ -436,27 +393,6 @@
       });
     });
 
-    $('#location_id').on('change', function () {
-      var location_id = $('#location_id').val();
-      $("#sub_location_id").html('');
-      $.ajax({
-        url: "<?php echo e(route('front.getSubLocations')); ?>",
-        type: "POST",
-        data: {
-          location_id: location_id,
-          _token: '<?php echo e(csrf_token()); ?>',
-        },
-        dataType: 'json',
-        success: function (result) {
-          $('#sub_location_id').html('<option value="">Select Location</option>');
-          $.each(result, function (key, location) {
-            $("#sub_location_id").append('<option value="' + location.id + '" >' + location.sub_location_name + '</option>');
-          });
-        }
-      });
-    });
-
-
 
     $("#update_property_form").validate({
       submitHandler: function (form) {
@@ -468,38 +404,7 @@
           document.getElementById('form_json').value = JSON.stringify(data);
         }
         var formData = new FormData(form);
-        var obj = {};
-        // // console.log(formData.formtype_id);
-        // $(".dynamic_forms").each(function(x,y) {
-        //  // console.log(y);
-        //  var input_type = $(this).attr('data-input-type');
-        //  let objKey = $(this).attr('data-sub-feature-id').replace(/\ /g,'');
-        //  let objVal = $(this).val();
-        //  if(input_type == "1" ) {
-        //    if($(this).is(':checked')) {
-        //      obj[objKey] = objVal;       
-        //    }
-        //  } else if(input_type == "3" ) {
-        //    if(objVal != "") {
-        //      if($(this).is(':checked')) {
-        //        obj[objKey] = objVal;       
-        //      }
-        //    }
-        //  } else if(input_type == "5" ) {
-        //    if(objVal != "") {
-        //      obj[objKey] = objVal;       
-        //    }
-        //  } else {
-        //    obj[objKey] = objVal;       
-        //  }
-        // });
-        // formData.append('listing_features', JSON.stringify(obj));
 
-        // console.log(obj);
-        // if(jQuery.isEmptyObject(obj)) {
-        //  toastr.error('Atleast 1 feature must be selected.');
-        //  return true;
-        // }
         $.ajax({
           url: "<?php echo e(route('admin.properties.update_property')); ?>",
           method: "POST",
@@ -539,38 +444,6 @@
       }
     });
 
-    // $("#update_property_form").validate({
-    //  submitHandler:function(form) {
-    //    var formData = new FormData(form);
-    //    $.ajax({
-    //      url: "<?php echo e(route('admin.properties.update_property')); ?>",
-    //      method: "POST",
-    //      data: formData,
-    //          cache: false,
-    //          contentType: false,
-    //          processData: false,
-    //      beforeSend:function() {
-    //        $(".updateproperty").attr('disabled', true);
-    //      },
-    //      success: function(response) {
-    //        var response = JSON.parse(response);
-    //        if(response.status === 200) {
-    //          toastr.success(response.message)
-    //          // window.location.href = "<?php echo e(route('admin.properties.index')); ?>";
-    //        } else if (response.status === 400) {
-    //          toastr.error(response.message)
-    //        }
-    //      },
-    //      error: function(response) {
-    //        toastr.error('An error occured')
-    //      },
-    //      complete: function() {
-    //        $(".updateproperty").attr('disabled', false);
-    //      }
-    //    })
-    //  }
-    // });
-
 
     function fetch_subcategories(id, callback) {
       var route = "<?php echo e(url('get/sub-categories')); ?>/" + id
@@ -591,7 +464,7 @@
               console.log('here');
 
               $.each(subcategories, function (x, y) {
-                if ('<?php echo e($property->sub_category_id  ?? 0); ?>' == y.id)
+                if ('<?php echo e($property->sub_category_id ?? 0); ?>' == y.id)
                   $(".populate_subcategories").append(
                     `<option value=${y.id} selected> ${y.sub_category_name} </option>`
                   );
@@ -753,69 +626,69 @@
                     // console.log('sub_f_id =>',y.sub_f_id);
                     $(".add_formtype").append(
                       `
-                            <div class='col-sm-4'>
-                            <label> 
-                            <input type='checkbox' class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} value="checked"  name=${y.sub_feature_slug}  />
-                            ${y.sub_feature_name} 
-                            </label>
-                            </div>
-                            `
+                              <div class='col-sm-4'>
+                              <label> 
+                              <input type='checkbox' class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} value="checked"  name=${y.sub_feature_slug}  />
+                              ${y.sub_feature_name} 
+                              </label>
+                              </div>
+                              `
                     );
                     break;
 
                   case "2":
                     $(".add_formtype").append(
                       `
-                            <div class='col-sm-4'>
-                            <label> 
-                            <input type='text'  class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} name=${y.sub_feature_slug}   />
-                            ${y.sub_feature_name} 
-                            </label>
-                            </div>
-                            `
+                              <div class='col-sm-4'>
+                              <label> 
+                              <input type='text'  class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} name=${y.sub_feature_slug}   />
+                              ${y.sub_feature_name} 
+                              </label>
+                              </div>
+                              `
                     );
                     break;
 
                   case "3":
                     $(".add_formtype").append(
                       `
-                            <div class='col-sm-4'>
-                            <label> 
-                            <input type='radio'  class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} value='on' name='radio[]'  />
-                            ${y.sub_feature_name} 
-                            </label>
-                            </div>
-                            `
+                              <div class='col-sm-4'>
+                              <label> 
+                              <input type='radio'  class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} value='on' name='radio[]'  />
+                              ${y.sub_feature_name} 
+                              </label>
+                              </div>
+                              `
                     );
                     break;
 
                   case "4":
                     $(".add_formtype").append(
                       `
-                            <div class='col-sm-4'>
-                            <label> 
-                            <textarea class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} name=${y.sub_feature_slug}></textarea>
-                            ${y.sub_feature_name} 
-                            </label>
-                            </div>
-                            `
+                              <div class='col-sm-4'>
+                              <label> 
+                              <textarea class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} name=${y.sub_feature_slug}></textarea>
+                              ${y.sub_feature_name} 
+                              </label>
+                              </div>
+                              `
                     );
                     break;
 
                   case "5":
                     $(".add_formtype").append(
                       `
-                            <div class='col-sm-4'>
-                            <label> 
-                            ${y.sub_feature_name} 
-                            <select>
-                            <option value='' class='text-control dynamic_forms' data-sub-feature-id=${y.sub_f_id} name=${y.sub_feature_slug} data-input-type=${y.input_type}>
-                            Select
-                            </option>
-                            </select>
-                            </label>
-                            </div>
-                            `
+                              <div class='col-sm-4'>
+                              <label> 
+                              ${y.sub_feature_name} 
+                              <select>
+                              <option value='' class='text-control dynamic_forms' data-sub-feature-id=${y.sub_f_id} name=${y.sub_feature_slug} data-input-type=${y.input_type}>
+                              Select
+                              </option>
+                              </select>
+                              </label>
+                              </div>
+                              `
                     );
                     break;
 
@@ -857,50 +730,6 @@
         }
       })
     }
-
-    function fetch_sublocations(id, callback) {
-      var route = "<?php echo e(route('admin.fetch_sublocations', ['id' => ':id'])); ?>";
-      var route = route.replace(':id', id);
-      $.ajax({
-        url: route,
-        method: 'get',
-        beforeSend: function () {
-          $(".updateproperty").attr('disabled', true);
-          $(".location").css('display', 'block');
-        },
-        success: function (response) {
-          var response = JSON.parse(response);
-          if (response.status === 200) {
-            $(".populate_sublocations").empty();
-            var sublocations = response.data.SubLocation;
-            if (!jQuery.isEmptyObject(sublocations)) {
-              $.each(sublocations, function (x, y) {
-                $(".populate_sublocations").append(
-                  `<option value=${y.id}> ${y.sub_location_name} </option>`
-                );
-              });
-
-            } else {
-              $(".populate_sublocations").append(
-                `<option value=''> Please add a sub location </option>`
-              );
-            }
-
-            if (callback) {
-              callback();
-            }
-          }
-        },
-        error: function (response) {
-          toastr.error('An error occured while fetching sub locations');
-        },
-        complete: function () {
-          $(".location").css('display', 'none');
-          $(".updateproperty").attr('disabled', false);
-        }
-      })
-    }
-
   </script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/admin/properties/preview.blade.php ENDPATH**/ ?>

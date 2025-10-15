@@ -133,22 +133,33 @@
                       </select>
                     </div>
 
-                    <div class="col-sm-4">
-                  <label>Property Type</label>
-                  <div id="sub_sub_category_list" class="border rounded p-2" style="max-height:200px; overflow-y:auto;">
-                    <?php if(isset($p_sub_sub_categories) && count($p_sub_sub_categories) > 0): ?>
-                      <?php $__currentLoopData = $p_sub_sub_categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" name="sub_sub_category_ids[]" id="subsub_<?php echo e($v->id); ?>"
-                                 value="<?php echo e($v->id); ?>" <?php echo e(isset($picked) && in_array($v->id, $picked->sub_sub_category_id) ? 'checked' : ''); ?>>
-                          <label class="form-check-label" for="subsub_<?php echo e($v->id); ?>"><?php echo e($v->sub_sub_category_name); ?></label>
-                        </div>
-                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    <?php else: ?>
-                      <p class="text-muted m-0">Select a property subcategory first</p>
-                    <?php endif; ?>
-                  </div>
-                </div>
+                  <div class="col-sm-4">
+    <label>Property Type</label>
+    <div id="sub_sub_category_list" class="border rounded p-2" style="max-height:200px; overflow-y:auto;">
+        <!-- Select All checkbox -->
+        <div class="form-check mb-2">
+            <input type="checkbox" class="form-check-input" id="select_all_sub_sub">
+            <label class="form-check-label" for="select_all_sub_sub"><strong>Select All</strong></label>
+        </div>
+
+        <!-- Sub Sub Category items -->
+        <div id="sub_sub_category_items">
+            <?php if(isset($p_sub_sub_categories) && count($p_sub_sub_categories) > 0): ?>
+                <?php $__currentLoopData = $p_sub_sub_categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="sub_sub_category_ids[]" 
+                               id="subsub_<?php echo e($v->id); ?>" value="<?php echo e($v->id); ?>"
+                               <?php echo e(in_array($v->id, $picked->sub_sub_category_id ?? []) ? 'checked' : ''); ?>>
+                        <label class="form-check-label" for="subsub_<?php echo e($v->id); ?>"><?php echo e($v->sub_sub_category_name); ?></label>
+                    </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <?php else: ?>
+                <p class="text-muted m-0">Select a property subcategory first</p>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
 
                   </div>
 
@@ -172,6 +183,21 @@
 <?php $__env->startSection('js'); ?>
   <script type="text/javascript">
     $(function () {
+
+      // Select All toggle
+$(document).on('change', '#select_all_sub_sub', function () {
+    var isChecked = $(this).is(':checked');
+    $('#sub_sub_category_items input[type="checkbox"]').prop('checked', isChecked);
+});
+
+// Uncheck Select All if any individual is unchecked
+$(document).on('change', '#sub_sub_category_items input[type="checkbox"]', function () {
+    var total = $('#sub_sub_category_items input[type="checkbox"]').length;
+    var checked = $('#sub_sub_category_items input[type="checkbox"]:checked').length;
+    $('#select_all_sub_sub').prop('checked', total === checked);
+});
+
+
       $("#add_form_types").validate({
         submitHandler: function () {
           var sel_category_ids = [];
@@ -225,67 +251,6 @@
     });
 
 
-    function loadSubcategories() {
-
-      var sel_category_ids = [];
-      $('.categories:checkbox:checked').each(function (i) {
-        sel_category_ids[i] = $(this).val();
-      });
-
-      if (sel_category_ids.length < 1) {
-        $('.populate_subcategories').empty().append('<option value="">Select</option>');
-        return true;
-      }
-
-      var route = "<?php echo e(route('admin.sub_category.fetch_multiple_subcategories_by_cat_id')); ?>/?id=" + sel_category_ids.join(',');
-
-      $.ajax({
-        url: route,
-        method: "GET",
-        beforeSend: function () {
-          $(".loading").css('display', 'block');
-          $(".categories").attr('disabled', true);
-          // $(".populate_subcategories option").each(function(x,y) {
-          //   if(!y.value.includes(sel_category_ids)) {
-          //     $(this).remove();
-          //   }
-          // });
-        },
-        success: function (response) {
-          var response = JSON.parse(response);
-          if (response.status === 200) {
-            // $(".populate_subcategories option").empty();
-
-            var subcategories = response.data.SubCategory;
-            if (subcategories.length > 0) {
-              $(".populate_subcategories").empty().append("<option value=''> Select </option>");
-              $.each(subcategories, function (x, y) {
-                $(".populate_subcategories").append(
-                  `<option value=${y.id}> ${y.sub_category_name} </option>`
-                );
-              });
-              // $(".populate_subcategories option[value='']").remove();
-            } else {
-              $(".populate_subcategories").empty();
-              $(".populate_subcategories").append(
-                `<option value=''> No record found </option>`
-              );
-            }
-          } else {
-            toastr.error('An error occured');
-          }
-        },
-        error: function (response) {
-          toastr.error('An error occured');
-        },
-        complete: function () {
-          $(".loading").css('display', 'none');
-          $(".categories").attr('disabled', false);
-        }
-      })
-    }
-
-
 
     function fetch_subcategories(id, callback) {
       var route = "<?php echo e(config('app.api_url')); ?>/fetch_subcategories_by_cat_id/" + id
@@ -333,12 +298,12 @@
 
 function fetch_subsubcategories(subCategoryId, preSelected = []) {
     var route = "<?php echo e(config('app.api_url')); ?>/fetch_subsubcategories_by_subcat_id/" + subCategoryId;
-    
+
     $.ajax({
         url: route,
         method: 'get',
         beforeSend: function () {
-            $("#sub_sub_category_list").html('<p>Loading...</p>');
+            $("#sub_sub_category_items").html('<p class="text-muted m-0">Loading...</p>');
         },
         success: function (response) {
             if (response.responseCode === 200) {
@@ -350,7 +315,7 @@ function fetch_subsubcategories(subCategoryId, preSelected = []) {
                         var checked = preSelected.includes(v.id) ? 'checked' : '';
                         html += `<div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="sub_sub_category_ids[]" 
-                                        id="subsub_${v.id}" value="${v.id}" ${checked}>
+                                           id="subsub_${v.id}" value="${v.id}" ${checked}>
                                     <label class="form-check-label" for="subsub_${v.id}">${v.sub_sub_category_name}</label>
                                  </div>`;
                     });
@@ -358,13 +323,18 @@ function fetch_subsubcategories(subCategoryId, preSelected = []) {
                     html = '<p class="text-muted m-0">No Property Types found</p>';
                 }
 
-                $("#sub_sub_category_list").html(html);
+                $("#sub_sub_category_items").html(html);
+
+                // Update Select All checkbox state
+                var total = $("#sub_sub_category_items input[type='checkbox']").length;
+                var checkedCount = $("#sub_sub_category_items input[type='checkbox']:checked").length;
+                $('#select_all_sub_sub').prop('checked', total === checkedCount);
             } else {
-                $("#sub_sub_category_list").html('<p class="text-muted m-0">Error fetching property types</p>');
+                $("#sub_sub_category_items").html('<p class="text-muted m-0">Error fetching property types</p>');
             }
         },
         error: function () {
-            $("#sub_sub_category_list").html('<p class="text-muted m-0">Error fetching property types</p>');
+            $("#sub_sub_category_items").html('<p class="text-muted m-0">Error fetching property types</p>');
         }
     });
 }

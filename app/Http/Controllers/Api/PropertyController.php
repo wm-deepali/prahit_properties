@@ -120,19 +120,28 @@ class PropertyController extends BaseApiController
 			'price' => 'required|numeric',
 			'price_label.*' => 'nullable',
 			'category_id' => 'required',
-			'construction_age' => 'nullable',
 			'description' => 'required',
 			'address' => 'required',
-			'location_id' => 'required',
+			'location_id' => 'required|array|min:1',
 			"gallery_images_file.*" => 'required|mimes:jpg,png,jpeg',
 			'sub_location_name' => 'nullable|string|max:255',
 		];
-		$this->checkValidate($request, $rules);
+
+		$validator = \Validator::make($request->all(), $rules);
+
+		if ($validator->fails()) {
+			// Return all errors as JSON
+			return response()->json([
+				'status' => 'error',
+				'message' => 'Validation failed',
+				'errors' => $validator->errors()
+			], 422);
+		}
 
 		try {
 			$user = User::where('auth_token', $token)->first();
 			if (isset($user) && $user->role == 'admin') { // IF Admin
-				
+
 			} else {
 				if ((empty($token) && !empty($request->mobile_number))) {
 					$user = User::where('mobile_number', $request->mobile_number)->first();
@@ -243,7 +252,6 @@ class PropertyController extends BaseApiController
 				'status' => 'error',
 				'message' => $e->getMessage() . " " . $e->getLine()
 			], 500);
-
 		}
 	}
 

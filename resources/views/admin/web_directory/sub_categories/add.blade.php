@@ -7,8 +7,8 @@
 @section('css')
   <style type="text/css">
     /*.table-fitems tbody tr td:nth-child(2) {
-            width: 60%;
-        }*/
+                    width: 60%;
+                }*/
     .checkbox {
       pointer-events: none !important;
     }
@@ -113,10 +113,22 @@
                     </div>
                     <div class="col-sm-4">
                       <label class="label-control">Property Type</label>
+
                       <div id="sub_sub_category_list" class="border rounded p-2"
                         style="max-height: 200px; overflow-y: auto;">
-                        <p class="text-muted m-0">Select a property subcategory first</p>
+
+                        <!-- Select All checkbox -->
+                        <div class="form-check mb-2">
+                          <input type="checkbox" class="form-check-input" id="select_all_sub_sub">
+                          <label class="form-check-label" for="select_all_sub_sub"><strong>Select All</strong></label>
+                        </div>
+
+                        <div id="sub_sub_category_items">
+                          <p class="text-muted m-0">Select a property subcategory first</p>
+                        </div>
+
                       </div>
+
                     </div>
                   </div>
 
@@ -141,6 +153,22 @@
 @section('js')
   <script type="text/javascript">
     $(function () {
+
+      // Select/Deselect all dynamically loaded checkboxes
+      $(document).on('change', '#select_all_sub_sub', function () {
+        var isChecked = $(this).is(':checked');
+        $('#sub_sub_category_items input[type="checkbox"]').prop('checked', isChecked);
+      });
+
+      // Uncheck "Select All" if any individual checkbox is unchecked
+      $(document).on('change', '#sub_sub_category_items input[type="checkbox"]', function () {
+        var total = $('#sub_sub_category_items input[type="checkbox"]').length;
+        var checked = $('#sub_sub_category_items input[type="checkbox"]:checked').length;
+        $('#select_all_sub_sub').prop('checked', total === checked);
+      });
+
+
+
       $("#add_form_types").validate({
         submitHandler: function () {
           var sel_category_ids = [];
@@ -194,65 +222,6 @@
     });
 
 
-    function loadSubcategories() {
-
-      var sel_category_ids = [];
-      $('.categories:checkbox:checked').each(function (i) {
-        sel_category_ids[i] = $(this).val();
-      });
-
-      if (sel_category_ids.length < 1) {
-        $('.populate_subcategories').empty().append('<option value="">Select</option>');
-        return true;
-      }
-
-      var route = "{{route('admin.sub_category.fetch_multiple_subcategories_by_cat_id')}}/?id=" + sel_category_ids.join(',');
-
-      $.ajax({
-        url: route,
-        method: "GET",
-        beforeSend: function () {
-          $(".loading").css('display', 'block');
-          $(".categories").attr('disabled', true);
-          // $(".populate_subcategories option").each(function(x,y) {
-          //   if(!y.value.includes(sel_category_ids)) {
-          //     $(this).remove();
-          //   }
-          // });
-        },
-        success: function (response) {
-          var response = JSON.parse(response);
-          if (response.status === 200) {
-            // $(".populate_subcategories option").empty();
-
-            var subcategories = response.data.SubCategory;
-            if (subcategories.length > 0) {
-              $(".populate_subcategories").empty().append("<option value=''> Select </option>");
-              $.each(subcategories, function (x, y) {
-                $(".populate_subcategories").append(
-                  `<option value=${y.id}> ${y.sub_category_name} </option>`
-                );
-              });
-              // $(".populate_subcategories option[value='']").remove();
-            } else {
-              $(".populate_subcategories").empty();
-              $(".populate_subcategories").append(
-                `<option value=''> No record found </option>`
-              );
-            }
-          } else {
-            toastr.error('An error occured');
-          }
-        },
-        error: function (response) {
-          toastr.error('An error occured');
-        },
-        complete: function () {
-          $(".loading").css('display', 'none');
-          $(".categories").attr('disabled', false);
-        }
-      })
-    }
 
 
     function fetch_subcategories(id, callback) {
@@ -299,49 +268,6 @@
       })
     }
 
-    function fetch_subsubcategories(id, callback) {
-      var route = "{{config('app.api_url')}}/fetch_subsubcategories_by_subcat_id/" + id
-      $.ajax({
-        url: route,
-        method: 'get',
-        beforeSend: function () {
-          $(".addproperty").attr('disabled', true);
-          $(".add_formtype").empty();
-          $(".loading").css('display', 'block');
-        },
-        success: function (response) {
-          // var response = JSON.parse(response);
-          if (response.responseCode === 200) {
-            $(".populate_subsubcategories").empty();
-            var subcategories = response.data.SubSubCategory;
-            if (subcategories.length > 0) {
-              $(".populate_subsubcategories").append(
-                `<option value=""> Select </option>`
-              );
-              $.each(subcategories, function (x, y) {
-                $(".populate_subsubcategories").append(
-                  `<option value=${y.id}> ${y.sub_sub_category_name} </option>`
-                );
-              });
-            } else {
-              $(".populate_subsubcategories").append(
-                `<option value=''> Please add a sub sub category </option>`
-              );
-            }
-            if (callback) {
-              callback();
-            }
-          }
-        },
-        error: function (response) {
-          toastr.error('An error occured while fetching subsubcategories');
-        },
-        complete: function () {
-          $(".loading").css('display', 'none');
-          // $(".addproperty").attr('disabled', false);
-        }
-      })
-    }
 
     function fetch_subsubcategories(id, callback) {
       var route = "{{config('app.api_url')}}/fetch_subsubcategories_by_subcat_id/" + id;
@@ -351,35 +277,41 @@
         method: 'get',
         beforeSend: function () {
           $(".loading").css('display', 'block');
-          $("#sub_sub_category_list").html('<p class="text-muted m-0">Loading...</p>');
+          $("#sub_sub_category_items").html('<p class="text-muted m-0">Loading...</p>');
         },
+
         success: function (response) {
           if (response.responseCode === 200) {
-            var container = $("#sub_sub_category_list");
+            var container = $("#sub_sub_category_items");
             container.empty();
 
             var subcategories = response.data.SubSubCategory;
             if (subcategories.length > 0) {
               $.each(subcategories, function (index, item) {
                 container.append(`
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" 
-                           name="sub_sub_category_ids[]" 
-                           value="${item.id}" 
-                           id="subsub_${item.id}">
-                    <label class="form-check-label" for="subsub_${item.id}">
-                      ${item.sub_sub_category_name}
-                    </label>
-                  </div>
-                `);
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" 
+                                 name="sub_sub_category_ids[]" 
+                                 value="${item.id}" 
+                                 id="subsub_${item.id}">
+                          <label class="form-check-label" for="subsub_${item.id}">
+                            ${item.sub_sub_category_name}
+                          </label>
+                        </div>
+                    `);
               });
             } else {
               container.html('<p class="text-muted m-0">No Sub Sub Categories found</p>');
             }
 
+            // Automatically check "Select All" if all loaded checkboxes are pre-checked
+            var total = container.find('input[type="checkbox"]').length;
+            var checked = container.find('input[type="checkbox"]:checked').length;
+            $('#select_all_sub_sub').prop('checked', total === checked);
+
             if (callback) callback();
           } else {
-            $("#sub_sub_category_list").html('<p class="text-danger m-0">Error loading data</p>');
+            $("#sub_sub_category_items").html('<p class="text-danger m-0">Error loading data</p>');
           }
         },
         error: function () {

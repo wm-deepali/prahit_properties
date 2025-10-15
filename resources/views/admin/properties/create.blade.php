@@ -21,7 +21,6 @@
                   enctype="multipart/form-data">
                   <h4 class="form-section-h">Property Description &amp; Price</h4>
 
-
                   <div class="form-group-f row">
                     <div class="col-sm-4">
                       <label class="label-control">Property Available For</label>
@@ -53,7 +52,6 @@
                     </div>
                   </div>
 
-
                   <div class="form-group-f row">
                     <div class="col-sm-8">
                       <label class="label-control">Title </label>
@@ -64,8 +62,6 @@
                       <input type="number" class="text-control" name="price" min="0" placeholder="Enter Price" required />
                     </div>
                   </div>
-
-
 
                   <div class="form-row">
 
@@ -229,16 +225,6 @@
                     @endif
                   </div>
 
-                  <script>
-                    document.getElementById('toggleAmenities')?.addEventListener('click', function () {
-                      const extras = document.querySelectorAll('.extra-amenity');
-                      const isHidden = extras[0].classList.contains('d-none');
-                      extras.forEach(el => el.classList.toggle('d-none'));
-                      this.textContent = isHidden ? 'Show Less' : 'Show More';
-                    });
-                  </script>
-
-
                   <h4 class="form-section-h">Property Location</h4>
                   <div class="form-group-f row">
                     <div class="col-sm-6">
@@ -295,7 +281,6 @@
                   <div id="fb-render"></div>
                   <input type="hidden" name="additional_info" id="form_json">
                   <div class="form-group-f row add_formtype">
-                   
                   </div>
 
                   <div class="form-group-f row">
@@ -333,8 +318,16 @@
 
     });
 
+    document.getElementById('toggleAmenities')?.addEventListener('click', function () {
+      const extras = document.querySelectorAll('.extra-amenity');
+      const isHidden = extras[0].classList.contains('d-none');
+      extras.forEach(el => el.classList.toggle('d-none'));
+      this.textContent = isHidden ? 'Show Less' : 'Show More';
+    });
+
+
     //-------------------- Get city By state --------------------//
-    $('#state').on('change', function () {  
+    $('#state').on('change', function () {
       var state_id = this.value;
       $("#city").html('');
       $.ajax({
@@ -348,7 +341,7 @@
         success: function (result) {
           $('#city').html('<option value="">Select City</option>');
           $.each(result, function (key, city) {
-            $("#city").append('<option value="' + city.id + '" >' + city.name + '</option>');
+            $("#city").append('<option value="' + city.id + '">' + city.name + '</option>');
           });
         }
       });
@@ -369,96 +362,69 @@
         success: function (result) {
           $('#location_id').html('<option value="">Select Location</option>');
           $.each(result, function (key, location) {
-            $("#location_id").append('<option value="' + location.id + '" >' + location.location + '</option>');
+            $("#location_id").append('<option value="' + location.id + '">' + location.location + '</option>');
           });
         }
       });
     });
 
-    $('#location_id').on('change', function () {
-      var location_id = $('#location_id').val();
-      $("#sub_location_id").html('');
-      $.ajax({
-        url: "{{route('front.getSubLocations')}}",
-        type: "POST",
-        data: {
-          location_id: location_id,
-          _token: '{{csrf_token()}}',
-        },
-        dataType: 'json',
-        success: function (result) {
-          $('#sub_location_id').html('<option value="">Select Location</option>');
-          $.each(result, function (key, location) {
-            $("#sub_location_id").append('<option value="' + location.id + '" >' + location.sub_location_name + '</option>');
-          });
+
+    $("#create_property_form").validate({
+      submitHandler: function (form) {
+
+        // Update the hidden formbuilder field
+        var data = $('#fb-render').formRender('userData');
+        if (!data) {
+          toastr.error('Additional details form must be required, please select another category or contact admin.');
+          return false;
         }
-      });
-    });
-
-    function returnIfInvalid() {
-      alert('Atleast one feature should be checked!');
-      return true;
-    }
-
-    $("#create_property_form").submit(function (e) {
-      e.preventDefault();
-
-      var data = $('#fb-render').formRender('userData');
-      if (!data) {
-        toastr.error('Additional details form must be required, please select another category or contact to admin.');
-        return false;
-      } else {
         $('#form_json').val(JSON.stringify(data));
-      }
 
-      // Generate FormData here, after any manual modifications
-      var formData = new FormData(this);
+        // Create FormData here
+        var formData = new FormData(form);
 
-      $(this).validate({
-        submitHandler: function (form) {
-          $.ajax({
-            url: "{{config('app.api_url')}}/property",
-            method: "POST",
-            data: formData, // fresh FormData
-            datatype: 'json',
-            cache: false,
-            contentType: false,
-            processData: false,
-            beforeSend: function (request) {
-              request.setRequestHeader('auth-token', "{{Auth::user()->auth_token}}");
-              $(".addproperty").attr('disabled', true);
-            },
-            success: function (response) {
-              if (response.status == "success") {
-                toastr.success(response.message);
-                $("#create_property_form")[0].reset();
-                setTimeout(function () {
-                  window.location.href = "{{url('master/preview/property')}}/" + response.data.listing.id;
-                }, 100);
-              } else {
-                toastr.error(response.message || 'An error occurred.');
-              }
-            },
-            error: function (xhr) {
-              if (xhr.status === 422) {
-                const errors = xhr.responseJSON.errors;
-                Object.keys(errors).forEach(function (key) {
-                  const input = $('[name="' + key + '"]');
-                  input.addClass('is-invalid');
-                  toastr.error(errors[key][0]);
-                });
-              } else {
-                toastr.error(xhr.responseJSON?.message || 'Unexpected error');
-              }
-            },
-            complete: function () {
-              $(".addproperty").attr('disabled', false);
+        $.ajax({
+          url: "{{config('app.api_url')}}/property",
+          method: "POST",
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false,
+          beforeSend: function (request) {
+            request.setRequestHeader('auth-token', "{{Auth::user()->auth_token}}");
+            $(".addproperty").attr('disabled', true);
+          },
+          success: function (response) {
+            if (response.status == "success") {
+              toastr.success(response.message);
+              $("#create_property_form")[0].reset();
+              setTimeout(function () {
+                window.location.href = "{{url('master/preview/property')}}/" + response.data.listing.id;
+              }, 100);
+            } else {
+              toastr.error(response.message || 'An error occurred.');
             }
-          });
-        }
-      });
-    });
+          },
+          error: function (xhr) {
+            if (xhr.status === 422) {
+              const errors = xhr.responseJSON.errors;
+              Object.keys(errors).forEach(function (key) {
+                const input = $('[name="' + key + '"]');
+                input.addClass('is-invalid');
+                toastr.error(errors[key][0]);
+              });
+            } else {
+              toastr.error(xhr.responseJSON?.message || 'Unexpected error');
+            }
+          },
+          complete: function () {
+            $(".addproperty").attr('disabled', false);
+          }
+        });
 
+      }
+    });
+    //-------------------- Get sub categories By category --------------------//
     function fetch_subcategories(id, callback) {
       var route = "{{ url('get/sub-categories') }}/" + id
       $.ajax({
@@ -504,6 +470,7 @@
       })
     }
 
+    //-------------------- Get sub sub categories By sub category --------------------//
     var cachedSubSubCategories = {};
     function fetch_subsubcategories(id, callback) {
       $('#sub_sub_category_id').html('<option value="">Loading...</option>');
@@ -523,11 +490,56 @@
           } else {
             $('#sub_sub_category_id').append('<option value="">No property type found</option>');
           }
+          if (callback) {
+            callback();
+          }
         },
         error: function () {
           $('#sub_sub_category_id').html('<option value="">Error loading</option>');
         }
       });
+    }
+
+
+    //-------------------- Get custom form --------------------//
+    function fetch_form_type() {
+      var cat = $(".populate_categories option:selected").val();
+      var subcat = $(".populate_subcategories option:selected").val();
+      var subsubcat = $(".populate_subsubcategories option:selected").val();
+      var route = "{{ url('category/related-form') }}";
+      $.ajax({
+        url: route,
+        method: 'post',
+        data: {
+          "_token": "{{ csrf_token() }}",
+          'category': cat,
+          'sub_category': subcat,
+          'sub_sub_category': subsubcat,
+        },
+        beforeSend: function () {
+          $(".addproperty").attr('disabled', true);
+          $(".add_formtype").empty();
+          $(".loading").css('display', 'block');
+        },
+        success: function (response) {
+          if (response != 0) {
+            document.getElementById('fb-render').innerHTML = '';
+            var formData = response.form_data;
+            var formRenderOptions = { formData };
+            frInstance = $('#fb-render').formRender(formRenderOptions);
+          } else {
+            document.getElementById('fb-render').innerHTML = '';
+            toastr.error('No Any Form Found');
+          }
+        },
+        error: function (response) {
+          toastr.error('An error occured');
+        },
+        complete: function () {
+          $(".loading").css('display', 'none');
+          $(".addproperty").attr('disabled', false);
+        }
+      })
     }
 
 
@@ -608,86 +620,6 @@
 
     }
 
-
-    function fetch_form_type() {
-
-      var cat = $(".populate_categories option:selected").val();
-      var subcat = $(".populate_subcategories option:selected").val();
-      var subsubcat = $(".populate_subsubcategories option:selected").val();
-      var route = "{{ url('category/related-form') }}";
-      $.ajax({
-        url: route,
-        method: 'post',
-        data: {
-          "_token": "{{ csrf_token() }}",
-          'category': cat,
-          'sub_category': subcat,
-          'sub_sub_category': subsubcat,
-        },
-        beforeSend: function () {
-          $(".addproperty").attr('disabled', true);
-          $(".add_formtype").empty();
-          $(".loading").css('display', 'block');
-        },
-        success: function (response) {
-          if (response != 0) {
-            document.getElementById('fb-render').innerHTML = '';
-            var formData = response.form_data;
-            var formRenderOptions = { formData };
-            frInstance = $('#fb-render').formRender(formRenderOptions);
-          } else {
-            document.getElementById('fb-render').innerHTML = '';
-            toastr.error('No Any Form Found');
-          }
-        },
-        error: function (response) {
-          toastr.error('An error occured');
-        },
-        complete: function () {
-          $(".loading").css('display', 'none');
-          $(".addproperty").attr('disabled', false);
-        }
-      })
-    }
-
-
-    function fetch_sublocations(id) {
-      var route = "{{route('admin.fetch_sublocations', ['id' => ':id'])}}";
-      var route = route.replace(':id', id);
-      $.ajax({
-        url: route,
-        method: 'get',
-        beforeSend: function () {
-          // $(".addproperty").attr('disabled', true);
-          $(".loading").css('display', 'block');
-        },
-        success: function (response) {
-          var response = JSON.parse(response);
-          if (response.status === 200) {
-            $(".populate_sublocations").empty();
-            var sublocations = response.data.SubLocation;
-            if (!jQuery.isEmptyObject(sublocations)) {
-              $.each(sublocations, function (x, y) {
-                $(".populate_sublocations").append(
-                  `<option value=${y.id}> ${y.sub_location_name} </option>`
-                );
-              })
-            } else {
-              $(".populate_sublocations").append(
-                `<option value=''> Please add a sub location </option>`
-              );
-            }
-          }
-        },
-        error: function (response) {
-          toastr.error('An error occured while fetching sub locations');
-        },
-        complete: function () {
-          $(".loading").css('display', 'none');
-          // $(".addproperty").attr('disabled', false);
-        }
-      })
-    }
 
     function handleSecondInput(selectId, containerId, checkboxClass) {
       const select = document.getElementById(selectId);

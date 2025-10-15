@@ -29,14 +29,15 @@
                         onchange="fetch_subcategories(this.value, fetch_form_type);">
                         @foreach($category as $k => $v)
                           <option value="{{$v->id}}" {{$property->category_id == $v->id ? "selected" : ""}}>
-                            {{$v->category_name}}</option>
+                            {{$v->category_name}}
+                          </option>
                         @endforeach
                       </select>
                     </div>
                     <div class="col-sm-4">
                       <label class="label-control">Category</label>
                       <select class="text-control populate_subcategories" name="sub_category_id"
-                        onchange="fetch_subsubcategories(this.value, fetch_form_type);" >
+                        onchange="fetch_subsubcategories(this.value, fetch_form_type);">
                         <option value="">Select Category</option>
                       </select>
                     </div>
@@ -94,6 +95,14 @@
                             value="{{ $property->price_label_second }}">
                         </div>
                       @endif
+
+                      {{-- Second Input (Date) --}}
+                      <div class="mt-2" id="price_label_second_container" style="display:none;">
+                        <label id="price_label_second_label" class="label-control"></label>
+                        <input type="date" name="price_label_second" class="form-control"
+                          value="{{ old('price_label_second') }}">
+                      </div>
+
                     </div>
 
 
@@ -128,11 +137,18 @@
                             value="{{ $property->property_status_second }}">
                         </div>
                       @endif
+
+                      <div class="mt-2" id="property_status_second_container" style="display:none;">
+                        <label id="property_status_second_label" class="label-control"></label>
+                        <input type="date" name="property_status_second" class="form-control"
+                          value="{{ old('property_status_second') }}">
+                      </div>
+
                     </div>
 
 
                     {{-- Registration Status --}}
-                     @php $col = ($registration_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
+                    @php $col = ($registration_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
                     <div id="registrationStatusField" class="form-group {{ $col }}" style="display:none;">
                       <label class="label-control">Registration Status</label>
                       @if($registration_statuses->first()->input_format == 'checkbox')
@@ -146,8 +162,7 @@
                         <select name="registration_status" class="form-control">
                           <option value="">Select</option>
                           @foreach($registration_statuses as $status)
-                            <option value="{{ $status->id }}" {{ $property->registration_status == $status->id ? 'selected' : '' }}>
-                              {{ $status->name }}
+                            <option value="{{ $status->id }}" {{ $property->registration_status == $status->id ? 'selected' : '' }}>{{ $status->name }}
                             </option>
                           @endforeach
                         </select>
@@ -162,11 +177,18 @@
                             value="{{ $property->registration_status_second }}">
                         </div>
                       @endif
+
+                      <div class="mt-2" id="registration_status_second_container" style="display:none;">
+                        <label id="registration_status_second_label" class="label-control"></label>
+                        <input type="date" name="registration_status_second" class="form-control"
+                          value="{{ old('registration_status_second') }}">
+                      </div>
+
                     </div>
 
 
                     {{-- Furnishing Status --}}
-                      @php $col = ($furnishing_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
+                    @php $col = ($furnishing_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
                     <div id="furnishingStatusField" class="form-group {{ $col }}" style="display:none;">
                       <label class="label-control">Furnishing Status</label>
                       @if($furnishing_statuses->first()->input_format == 'checkbox')
@@ -180,8 +202,7 @@
                         <select name="furnishing_status" class="form-control">
                           <option value="">Select</option>
                           @foreach($furnishing_statuses as $status)
-                            <option value="{{ $status->id }}" {{ $property->furnishing_status == $status->id ? 'selected' : '' }}>
-                              {{ $status->name }}
+                            <option value="{{ $status->id }}" {{ $property->furnishing_status == $status->id ? 'selected' : '' }}>{{ $status->name }}
                             </option>
                           @endforeach
                         </select>
@@ -196,6 +217,13 @@
                             value="{{ $property->furnishing_status_second }}">
                         </div>
                       @endif
+
+                      <div class="mt-2" id="furnishing_status_second_container" style="display:none;">
+                        <label id="furnishing_status_second_label" class="label-control"></label>
+                        <input type="date" name="furnishing_status_second" class="form-control"
+                          value="{{ old('furnishing_status_second') }}">
+                      </div>
+
                     </div>
 
                   </div>
@@ -277,8 +305,6 @@
                   </div>
 
                   <h4 class="form-section-h">Property Images</h4>
-                  <input type="hidden" name="additional_info" id="form_json">
-                  <input type="hidden" name="save_json" id="save_json" value="{{ $property->additional_info }}">
                   <div class="form-group-f row">
                     <div class="col-sm-6">
                       <label class="label-control">Featured Image </label>
@@ -305,13 +331,16 @@
                       <h5 style="color: brown;">No Any Images Found.</h5>
                     @endif
                   </div>
-               <h4 class="form-section-h">Property Additional Information</h4>
+                  <h4 class="form-section-h">Property Additional Information</h4>
 
-								<center class="loading">
-									<img src="{{ asset('images/loading.gif')}}" alt="Loading.." class="loading" />
-								</center>
-								<div id="fb-render"></div>
-
+                  <center class="loading">
+                    <img src="{{ asset('images/loading.gif')}}" alt="Loading.." class="loading" />
+                  </center>
+                  <div id="fb-render"></div>
+                  <div class="row">
+                    <input type="hidden" name="save_json" id="save_json" value="{{ $property->additional_info }}">
+                    <input type="hidden" name="additional_info" id="form_json">
+                  </div>
                   <div class="form-group-f row">
                     <div class="col-sm-12 text-center">
                       <button class="btn btn-primary updateproperty" type="submit">Update Property</button>
@@ -337,8 +366,8 @@
   <script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
   <script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
   <script type="text/javascript">
-    $(function () {
 
+    $(function () {
       fetch_subcategories('{{$property->category_id}}', function () {
         $(".populate_subcategories").val('{{$property->sub_category_id}}');
         fetch_form_type();
@@ -347,11 +376,11 @@
           fetch_form_type();
         });
       });
-      fetch_sublocations('{{$property->location_id}}', function () {
-        $(".populate_sublocations").val('{{$property->sub_location_id}}');
-      });
 
       $(".property_use_for").hide();
+
+
+
     });
 
 
@@ -397,29 +426,10 @@
       });
     });
 
-    $('#location_id').on('change', function () {
-      var location_id = $('#location_id').val();
-      $("#sub_location_id").html('');
-      $.ajax({
-        url: "{{route('front.getSubLocations')}}",
-        type: "POST",
-        data: {
-          location_id: location_id,
-          _token: '{{csrf_token()}}',
-        },
-        dataType: 'json',
-        success: function (result) {
-          $('#sub_location_id').html('<option value="">Select Location</option>');
-          $.each(result, function (key, location) {
-            $("#sub_location_id").append('<option value="' + location.id + '" >' + location.sub_location_name + '</option>');
-          });
-        }
-      });
-    });
-
 
 
     $("#update_property_form").validate({
+
       submitHandler: function (form) {
         var data = $('#fb-render').formRender('userData');
         if (!data) {
@@ -429,38 +439,7 @@
           document.getElementById('form_json').value = JSON.stringify(data);
         }
         var formData = new FormData(form);
-        var obj = {};
-        // // console.log(formData.formtype_id);
-        // $(".dynamic_forms").each(function(x,y) {
-        //  // console.log(y);
-        //  var input_type = $(this).attr('data-input-type');
-        //  let objKey = $(this).attr('data-sub-feature-id').replace(/\ /g,'');
-        //  let objVal = $(this).val();
-        //  if(input_type == "1" ) {
-        //    if($(this).is(':checked')) {
-        //      obj[objKey] = objVal;       
-        //    }
-        //  } else if(input_type == "3" ) {
-        //    if(objVal != "") {
-        //      if($(this).is(':checked')) {
-        //        obj[objKey] = objVal;       
-        //      }
-        //    }
-        //  } else if(input_type == "5" ) {
-        //    if(objVal != "") {
-        //      obj[objKey] = objVal;       
-        //    }
-        //  } else {
-        //    obj[objKey] = objVal;       
-        //  }
-        // });
-        // formData.append('listing_features', JSON.stringify(obj));
 
-        // console.log(obj);
-        // if(jQuery.isEmptyObject(obj)) {
-        //  toastr.error('Atleast 1 feature must be selected.');
-        //  return true;
-        // }
         $.ajax({
           url: "{{route('admin.properties.update_property')}}",
           method: "POST",
@@ -475,7 +454,6 @@
           success: function (response) {
             var response = JSON.parse(response);
             if (response.status === 200) {
-              console.log(response);
               toastr.success(response.message);
               var from = $('#from').val();
               if (from == 'preview') {
@@ -495,8 +473,6 @@
           },
           complete: function () {
             $(".updateproperty").attr('disabled', false);
-            console.log(typeof (formData));
-            console.log('formData=>', formData)
           }
         })
 
@@ -504,40 +480,7 @@
       }
     });
 
-    // $("#update_property_form").validate({
-    //  submitHandler:function(form) {
-    //    var formData = new FormData(form);
-    //    $.ajax({
-    //      url: "{{route('admin.properties.update_property')}}",
-    //      method: "POST",
-    //      data: formData,
-    //          cache: false,
-    //          contentType: false,
-    //          processData: false,
-    //      beforeSend:function() {
-    //        $(".updateproperty").attr('disabled', true);
-    //      },
-    //      success: function(response) {
-    //        var response = JSON.parse(response);
-    //        if(response.status === 200) {
-    //          toastr.success(response.message)
-    //          // window.location.href = "{{route('admin.properties.index')}}";
-    //        } else if (response.status === 400) {
-    //          toastr.error(response.message)
-    //        }
-    //      },
-    //      error: function(response) {
-    //        toastr.error('An error occured')
-    //      },
-    //      complete: function() {
-    //        $(".updateproperty").attr('disabled', false);
-    //      }
-    //    })
-    //  }
-    // });
-
-
-
+    //-------------------- Get sub categories By category --------------------//
     function fetch_subcategories(id, callback) {
       // var route = "{{route('admin.sub_category.fetch_subcategories_by_cat_id', ['id' => ':id'])}}";
       var route = "{{ url('get/sub-categories') }}/" + id  // var route = route.replace(':id', id);
@@ -582,8 +525,9 @@
       })
     }
 
-    var cachedSubSubCategories = {}; // Object to store sub sub categories keyed by subcategory ID
 
+    //-------------------- Get sub sub categories By sub category --------------------//
+    var cachedSubSubCategories = {};
     function fetch_subsubcategories(id, callback) {
       $('#sub_sub_category_id').html('<option value="">Loading...</option>');
       var route = "{{ url('get/sub-sub-categories') }}/" + id;
@@ -606,7 +550,7 @@
           } else {
             $('#sub_sub_category_id').append('<option value="">No property type found</option>');
           }
-         
+
 
           if (callback) {
             callback();
@@ -699,106 +643,57 @@
     }
 
 
-	function fetch_form_type() {
-			var cat = $(".populate_categories option:selected").val();
-			var subcat = $(".populate_subcategories option:selected").val();
-			var subsubcat = $(".populate_subsubcategories option:selected").val();
+    function fetch_form_type() {
+      var cat = $(".populate_categories option:selected").val();
+      var subcat = $(".populate_subcategories option:selected").val();
+      var subsubcat = $(".populate_subsubcategories option:selected").val();
 
-			// if(subcat=="") {
-			// 	clearFormType(true);
-			// 	return true;
-			// }
-
-			var route = "{{ url('category/related-form') }}";
-			$.ajax({
-				url: route,
-				method: 'post',
-				data: {
-					"_token": "{{ csrf_token() }}",
-					'category': cat,
-					'sub_category': subcat,
-					'sub_sub_category': subsubcat,
-				},
-				beforeSend: function () {
-					$(".addproperty").attr('disabled', true);
-					$(".add_formtype").empty();
-					$(".loading").css('display', 'block');
-				},
-				success: function (response) {
-					if (response != 0) {
-            
-            if (
-							'{{ $property->category_id }}' == response.category_id &&
-							'{{ $property->sub_category_id }}' == response.sub_category_id &&
-							'{{ $property->sub_sub_category_id }}' == response.sub_sub_category_id
-						) {
-              console.log(response.category_id, 'here');
-							document.getElementById('fb-render').innerHTML = '';
-							var formData = $('#save_json').val();
-							var formRenderOptions = { formData };
-							frInstance = $('#fb-render').formRender(formRenderOptions);
-						} else {
-							document.getElementById('fb-render').innerHTML = '';
-							console.log(response, 'here');
-							var formData = response.form_data;
-							var formRenderOptions = { formData };
-							frInstance = $('#fb-render').formRender(formRenderOptions);
-						}
-
-					} else {
-						document.getElementById('fb-render').innerHTML = '';
-						toastr.error('No Any Form Found');
-					}
-				},
-				error: function (response) {
-					toastr.error('An error occured');
-				},
-				complete: function () {
-					$(".loading").css('display', 'none');
-					$(".addproperty").attr('disabled', false);
-				}
-			})
-		}
-
-    function fetch_sublocations(id, callback) {
-      var route = "{{route('admin.fetch_sublocations', ['id' => ':id'])}}";
-      var route = route.replace(':id', id);
+      var route = "{{ url('category/related-form') }}";
       $.ajax({
         url: route,
-        method: 'get',
+        method: 'post',
+        data: {
+          "_token": "{{ csrf_token() }}",
+          'category': cat,
+          'sub_category': subcat,
+          'sub_sub_category': subsubcat,
+        },
         beforeSend: function () {
-          $(".updateproperty").attr('disabled', true);
-          $(".location").css('display', 'block');
+          $(".addproperty").attr('disabled', true);
+          $(".add_formtype").empty();
+          $(".loading").css('display', 'block');
         },
         success: function (response) {
-          var response = JSON.parse(response);
-          if (response.status === 200) {
-            $(".populate_sublocations").empty();
-            var sublocations = response.data.SubLocation;
-            if (!jQuery.isEmptyObject(sublocations)) {
-              $.each(sublocations, function (x, y) {
-                $(".populate_sublocations").append(
-                  `<option value=${y.id}> ${y.sub_location_name} </option>`
-                );
-              });
+          if (response != 0) {
+
+            if (
+              '{{ $property->category_id }}' == response.category_id ||
+              '{{ $property->sub_category_id }}' == response.sub_category_id ||
+              '{{ $property->sub_sub_category_id }}' == response.sub_sub_category_id
+            ) {
+              document.getElementById('fb-render').innerHTML = '';
+              var formData = $('#save_json').val();
+              var formRenderOptions = { formData };
+              frInstance = $('#fb-render').formRender(formRenderOptions);
 
             } else {
-              $(".populate_sublocations").append(
-                `<option value=''> Please add a sub location </option>`
-              );
+              document.getElementById('fb-render').innerHTML = '';
+              var formData = response.form_data;
+              var formRenderOptions = { formData };
+              frInstance = $('#fb-render').formRender(formRenderOptions);
             }
 
-            if (callback) {
-              callback();
-            }
+          } else {
+            document.getElementById('fb-render').innerHTML = '';
+            toastr.error('No Any Form Found');
           }
         },
         error: function (response) {
-          toastr.error('An error occured while fetching sub locations');
+          toastr.error('An error occured');
         },
         complete: function () {
-          $(".location").css('display', 'none');
-          $(".updateproperty").attr('disabled', false);
+          $(".loading").css('display', 'none');
+          $(".addproperty").attr('disabled', false);
         }
       })
     }
@@ -839,6 +734,51 @@
           }
         });
     }
+
+
+    function handleSecondInput(selectId, containerId, checkboxClass) {
+      const select = document.getElementById(selectId);
+      const container = document.getElementById(containerId);
+      const label = container.querySelector('label');
+
+      if (select) {
+        function toggle() {
+          const option = select.selectedOptions[0];
+          const show = option.dataset.secondInput === 'yes';
+          label.textContent = option.dataset.secondLabel || '';
+          container.style.display = show ? 'block' : 'none';
+        }
+        select.addEventListener('change', toggle);
+        toggle(); // initialize
+      }
+
+      if (checkboxClass) {
+        const checkboxes = document.querySelectorAll(checkboxClass);
+        function toggleCheckbox() {
+          let show = false;
+          let lbl = '';
+          checkboxes.forEach(cb => {
+            if (cb.checked && cb.dataset.secondInput === 'yes') {
+              show = true;
+              lbl = cb.dataset.secondLabel;
+            }
+          });
+          label.textContent = lbl;
+          container.style.display = show ? 'block' : 'none';
+        }
+        checkboxes.forEach(cb => cb.addEventListener('change', toggleCheckbox));
+        toggleCheckbox(); // initialize
+      }
+    }
+
+    // Price Label
+    handleSecondInput('price_label', 'price_label_second_container', '.price_checkbox');
+    // Property Status
+    handleSecondInput('property_status', 'property_status_second_container', '.property_checkbox');
+    // Registration Status
+    handleSecondInput('registration_status', 'registration_status_second_container', '.registration_checkbox');
+    // Furnishing Status
+    handleSecondInput('furnishing_status', 'furnishing_status_second_container', '.furnishing_checkbox');
 
   </script>
 @endsection

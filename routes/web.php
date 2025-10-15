@@ -121,6 +121,8 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin.check'], '
 
 		Route::resource('web-directory-category', 'WebDirectoryCategoryController');
 		Route::resource('web-directory-sub-category', 'WebDirectorySubCategoryController'); 
+		Route::resource('business-listing', 'BusinessListingController'); 
+		
 		Route::get('edit/sub-directory/{id}', 'WebDirectorySubCategoryController@editView');
 	
 		Route::resource('sub-sub-category', 'SubSubCategoryController');

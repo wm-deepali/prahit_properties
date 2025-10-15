@@ -1123,7 +1123,7 @@ class PropertiesController extends AppController
 		$property_statuses = PropertyStatus::where('status', 'active')->get();
 		$registration_statuses = RegistrationStatus::where('status', 'active')->get();
 		$furnishing_statuses = FurnishingStatus::where('status', 'active')->get();
-		// dd('here');
+	
 		return view('admin.properties.edit', compact(
 			'property',
 			'category',
@@ -1155,7 +1155,6 @@ class PropertiesController extends AppController
 		$property_statuses = PropertyStatus::where('status', 'active')->get();
 		$registration_statuses = RegistrationStatus::where('status', 'active')->get();
 		$furnishing_statuses = FurnishingStatus::where('status', 'active')->get();
-
 
 		return view('admin.properties.preview', compact(
 			'property',
