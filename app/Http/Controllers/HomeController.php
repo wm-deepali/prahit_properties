@@ -803,7 +803,7 @@ class HomeController extends AppController
 
 	public function getSubLocations(Request $request)
 	{
-		$sub_locations = SubLocations::whereIn('location_id', $request->location_id)->get();
+		$sub_locations = SubLocations::where('location_id', $request->location_id)->get();
 		return $sub_locations;
 	}
 

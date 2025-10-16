@@ -636,9 +636,8 @@ $(function() {
       $(".loading").css('display', 'block');
     },
     success:function(response) {
-      if(response.responseCode === 200) {
-        var response = response.data.Categories;
-        console.log(response)
+      if(response.success) {
+        var response = response.data;
         // $(".populate_categories, .populate_sub_categories, .populate_sub_sub_categories").empty()
         $.each(response, function(x,y) {
           if(response.length<1) return true;
@@ -668,12 +667,12 @@ $(function() {
         });
 
       } else {
-        toastr.error('An error occured while fetching categories');
+        // toastr.error('An error occured while fetching categories');
       }
       $(".loading").css('display', 'none');
     },
     error:function(response) {
-      toastr.error('An error occured');
+      // toastr.error('An error occured');
     }
   })
 });

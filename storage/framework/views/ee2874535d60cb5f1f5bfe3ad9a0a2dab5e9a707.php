@@ -29,6 +29,7 @@
                         <?php if(count($category) < 1): ?>
                           <option value="">No records found</option>
                         <?php else: ?>
+                          <option value="">-- Select --</option>
                           <?php $__currentLoopData = $category; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($v->id); ?>"><?php echo e($v->category_name); ?></option>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -254,14 +255,20 @@
                   <div class="form-group-f row">
                     <div class="col-sm-6">
                       <label class="label-control">Location </label>
-                      <select class="text-control" name="location_id[]" id="location_id" multiple="" required="">
+                      <select class="text-control" name="location_id" id="location_id" required>
+                        <!-- dynamic options loaded here -->
                       </select>
 
+                      <div id="custom-location-container" style="display:none; margin-top:10px;">
+                        <input type="text" class="text-control" name="custom_location_input" accept=""
+                          id="custom_location_input" placeholder="Enter new location" />
+                      </div>
                     </div>
                     <div class="col-sm-6">
                       <label class="label-control">Sub Location </label>
-                      <input type="text" class="text-control" name="sub_location_name" id="sub_location_name"
-                        placeholder="Enter Sub Location" />
+                      <select class="text-control" name="sub_location_id[]" id="sub_location_id" multiple required>
+                        <!-- dynamic options loaded here -->
+                      </select>
                     </div>
 
                   </div>
@@ -317,6 +324,8 @@
 <?php $__env->startSection('js'); ?>
   <script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
   <script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
   <script type="text/javascript">
 
     $(function () {
@@ -334,6 +343,7 @@
       extras.forEach(el => el.classList.toggle('d-none'));
       this.textContent = isHidden ? 'Show Less' : 'Show More';
     });
+
 
 
     //-------------------- Get city By state --------------------//
@@ -357,7 +367,7 @@
       });
     });
 
-    //-------------------- Get city By state --------------------//
+    //-------------------- Get locationa By city --------------------//
     $('#city').on('change', function () {
       var city_id = this.value;
       $("#location_id").html('');
@@ -372,12 +382,38 @@
         success: function (result) {
           $('#location_id').html('<option value="">Select Location</option>');
           $.each(result, function (key, location) {
-            $("#location_id").append('<option value="' + location.id + '">' + location.location + '</option>');
+            $('#location_id').append('<option value="' + location.id + '">' + location.location + '</option>');
           });
+
+          // Append the "Others" option at the end
+          $('#location_id').append('<option value="other">Others</option>');
         }
       });
     });
 
+
+    $('#location_id').on('change', function () {
+      var location_id = $('#location_id').val();
+      $("#sub_location_id").html('');
+      $.ajax({
+        url: "<?php echo e(route('front.getSubLocations')); ?>",
+        type: "POST",
+        data: {
+          location_id: location_id,
+          _token: '<?php echo e(csrf_token()); ?>',
+        },
+        dataType: 'json',
+        success: function (result) {
+          $('#sub_location_id').empty();
+          $.each(result, function (key, location) {
+            $("#sub_location_id").append('<option value="' + location.id + '">' + location.sub_location_name + '</option>');
+          });
+
+          // Refresh select2 options
+          $('#sub_location_id').trigger('change.select2');
+        }
+      });
+    });
 
     $("#create_property_form").validate({
       submitHandler: function (form) {
@@ -452,7 +488,7 @@
             var subcategories = response.subcategories;
             if (subcategories.length > 0) {
               $(".populate_subcategories").append(
-                `<option> Select </option>`
+                `<option value=''> Select </option>`
               );
               $.each(subcategories, function (x, y) {
                 $(".populate_subcategories").append(
@@ -471,7 +507,7 @@
           }
         },
         error: function (response) {
-          toastr.error('An error occured while fetching subcategories');
+          // toastr.error('An error occured while fetching subcategories');
         },
         complete: function () {
           $(".loading").css('display', 'none');
@@ -539,7 +575,7 @@
             frInstance = $('#fb-render').formRender(formRenderOptions);
           } else {
             document.getElementById('fb-render').innerHTML = '';
-            toastr.error('No Any Form Found');
+            // toastr.error('No Any Form Found');
           }
         },
         error: function (response) {
@@ -674,6 +710,38 @@
     handleSecondInput('registration_status', 'registration_status_second_container', '.registration_checkbox');
     // Furnishing Status
     handleSecondInput('furnishing_status', 'furnishing_status_second_container', '.furnishing_checkbox');
+
+    $('#location_id').on('change', function () {
+      if ($(this).val() && $(this).val() === 'other') {
+        $('#custom-location-container').show();
+      } else {
+        $('#custom-location-container').hide();
+      }
+    });
+
+    // Initialize Select2 for Sub Location with tagging (add new)
+    function initSubLocationSelect2() {
+      $('#sub_location_id').select2({
+        tags: true,
+        width: '100%',
+        placeholder: 'Select or add sub locations',
+        closeOnSelect: false,
+        createTag: function (params) {
+          var term = $.trim(params.term);
+          if (term === '') {
+            return null;
+          }
+          return {
+            id: term,
+            text: term,
+            isNew: true
+          };
+        }
+      });
+    }
+
+    // Initialize on ready
+    initSubLocationSelect2();
 
   </script>
 <?php $__env->stopSection(); ?>

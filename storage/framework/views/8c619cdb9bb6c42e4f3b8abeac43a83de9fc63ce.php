@@ -239,10 +239,10 @@
                   <div class="form-group-f row">
                     <div class="col-sm-6">
                       <label class="label-control">Location </label>
-                      <select class="text-control" name="location_id[]" id="location_id" multiple="" required=""
+                      <select class="text-control" name="location_id" id="location_id" required=""
                         disabled="">
                         <?php $__currentLoopData = $locations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $location): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <?php if(in_array($location->id, explode(',', $property->location_id))): ?>
+                          <?php if($property->location_id == $location->id): ?>
                             <option value="<?php echo e($location->id); ?>" selected=""><?php echo e($location->location); ?></option>
                           <?php else: ?>
                             <option value="<?php echo e($location->id); ?>"><?php echo e($location->location); ?></option>
@@ -253,8 +253,8 @@
                     </div>
                     <div class="col-sm-6">
                       <label class="label-control">Sub Location </label>
-                      <input type="text" class="text-control" name="sub_location_name" id="sub_location_name"
-                        value="<?php echo e($property->sub_location_name); ?>" disabled />
+                      <input type="text" class="text-control" name="sub_location_display" id="sub_location_display"
+                        value="<?php echo e($property->sub_location_id ? $property->getSubLocations($property->sub_location_id) : ''); ?>" disabled />
                     </div>
 
                   </div>

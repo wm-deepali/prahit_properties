@@ -22,8 +22,14 @@ class CategoryController extends BaseApiController
 	public function category_tree()
 	{
 		$categories = Category::with('Subcategory', 'Subcategory.Subsubcategory')->latest()->get();
-		$this->_sendResponse(['Categories' => $categories], 'Category tree found successfully');
+		return response()->json([
+			'success' => true,
+			'message' => 'Category tree found successfully',
+			'data' => $categories,
+			'timestamp' => time(),
+		], 200);
 	}
+
 
 	public function fetch_subcategories_by_cat_id($id)
 	{

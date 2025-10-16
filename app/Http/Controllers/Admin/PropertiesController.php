@@ -1123,7 +1123,7 @@ class PropertiesController extends AppController
 		$property_statuses = PropertyStatus::where('status', 'active')->get();
 		$registration_statuses = RegistrationStatus::where('status', 'active')->get();
 		$furnishing_statuses = FurnishingStatus::where('status', 'active')->get();
-	
+
 		return view('admin.properties.edit', compact(
 			'property',
 			'category',
@@ -1181,9 +1181,10 @@ class PropertiesController extends AppController
 
 	public function update(Request $request)
 	{
+		// dd($request->all());
 		try {
 			// ✅ Validation
-			$request->validate([
+            $request->validate([
 				'id' => 'required|exists:properties,id',
 				'title' => 'required|max:200',
 				'type_id' => 'nullable',
@@ -1194,8 +1195,9 @@ class PropertiesController extends AppController
 				'construction_age' => 'nullable',
 				'description' => 'required',
 				'address' => 'required',
-				'location_id' => 'required',
-				'sub_location_name' => 'nullable|string|max:255',
+                'location_id' => 'required',
+                'sub_location_id' => 'nullable|array',
+                'sub_location_id.*' => 'nullable|string',
 				"gallery_images_file.*" => 'nullable|mimes:jpg,png,jpeg',
 				"feature_image_file" => 'nullable|mimes:jpg,png,jpeg'
 			]);
@@ -1217,8 +1219,64 @@ class PropertiesController extends AppController
 				$featured_image = isset($feature_image) ? $feature_image[0] : $featured_image;
 			}
 
+            // Handle custom location if 'other' is selected (single location)
+            $locationId = $request->location_id;
+            if ($locationId === 'other') {
+                $customLocationName = trim($request->custom_location_input);
+                if (!empty($customLocationName)) {
+                    $customLocationName = ucwords(strtolower($customLocationName));
+                    $newLocation = \App\Locations::create([
+                        'state_id' => $request->state,
+                        'city_id' => $request->city,
+                        'location' => $customLocationName,
+                        'status' => 1,
+                    ]);
+                    $locationId = $newLocation->id;
+                } else {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Please enter the custom location name.',
+                    ], 422);
+                }
+            }
+
+            // Resolve sub locations: accept IDs or names; create new names under selected location
+            $submittedSubLocations = $request->input('sub_location_id', []);
+            $resolvedSubLocationIds = [];
+            if (!empty($submittedSubLocations)) {
+                $primaryLocationId = $locationId ? (int)$locationId : null;
+                foreach ($submittedSubLocations as $value) {
+                    $value = trim(($value ?? ''));
+                    if ($value === '') { continue; }
+                    if (ctype_digit($value)) {
+                        $existing = \App\SubLocations::find((int)$value);
+                        if ($existing) { $resolvedSubLocationIds[] = (int)$existing->id; }
+                        continue;
+                    }
+                    if ($primaryLocationId) {
+                        $name = ucwords(strtolower($value));
+                        $dup = \App\SubLocations::where([
+                            'location_id' => $primaryLocationId,
+                            'sub_location_name' => $name
+                        ])->first();
+                        if ($dup) {
+                            $resolvedSubLocationIds[] = (int)$dup->id;
+                        } else {
+                            $newSub = \App\SubLocations::create([
+                                'location_id' => $primaryLocationId,
+                                'sub_location_name' => $name,
+                            ]);
+                            if ($newSub) { $resolvedSubLocationIds[] = (int)$newSub->id; }
+                        }
+                    }
+                }
+            }
+
+            // Persist normalized fields back into request-like variables
+            $normalizedSubLocationId = !empty($resolvedSubLocationIds) ? implode(',', $resolvedSubLocationIds) : null;
+
 			// ✅ Update property
-			$properties->update([
+            $properties->update([
 				'title' => $request->title,
 				'type_id' => $request->type_id,
 				'price' => $request->price,
@@ -1239,8 +1297,8 @@ class PropertiesController extends AppController
 				'address' => $request->address,
 				'state_id' => $request->state,
 				'city_id' => $request->city,
-				'location_id' => implode(',', (array) $request->location_id),
-				'sub_location_name' => $request->sub_location_name ?? null,
+                'location_id' => $locationId,
+                'sub_location_id' => $normalizedSubLocationId,
 				'amenities' => $amenities,
 				'additional_info' => $request->additional_info,
 				'construction_age' => $request->construction_age,

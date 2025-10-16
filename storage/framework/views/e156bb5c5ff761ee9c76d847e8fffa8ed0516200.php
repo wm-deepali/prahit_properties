@@ -292,21 +292,27 @@
                   <div class="form-group-f row">
                     <div class="col-sm-6">
                       <label class="label-control">Location </label>
-                      <select class="text-control" name="location_id[]" id="location_id" multiple="" required="">
+                      <select class="text-control" name="location_id" id="location_id" required="">
                         <?php $__currentLoopData = $locations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $location): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <?php if(in_array($location->id, explode(',', $property->location_id))): ?>
+                          <?php if($property->location_id == $location->id): ?>
                             <option value="<?php echo e($location->id); ?>" selected=""><?php echo e($location->location); ?></option>
                           <?php else: ?>
                             <option value="<?php echo e($location->id); ?>"><?php echo e($location->location); ?></option>
                           <?php endif; ?>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <option value="other">Others</option>
                       </select>
+
+                      <div id="custom-location-container" style="display:none; margin-top:10px;">
+                        <input type="text" class="text-control" name="custom_location_input" accept=""
+                          id="custom_location_input" placeholder="Enter new location" />
+                      </div>
 
                     </div>
                     <div class="col-sm-6">
                       <label class="label-control">Sub Location</label>
-                      <input type="text" name="sub_location_name" id="sub_location_name" class="text-control"
-                        value="<?php echo e($property->sub_location_name ?? ''); ?>" />
+                      <select class="text-control" name="sub_location_id[]" id="sub_location_id" multiple>
+                      </select>
                     </div>
                   </div>
                   <div class="form-group-f row">
@@ -379,6 +385,8 @@
 <?php $__env->startSection('js'); ?>
   <script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
   <script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
   <script type="text/javascript">
 
     $(function () {
@@ -436,6 +444,9 @@
           $.each(result, function (key, location) {
             $("#location_id").append('<option value="' + location.id + '" >' + location.location + '</option>');
           });
+
+          // Append the "Others" option at the end
+          $('#location_id').append('<option value="other">Others</option>');
         }
       });
     });
@@ -446,7 +457,6 @@
 
       submitHandler: function (form) {
         var data = $('#fb-render').formRender('userData');
-        console.log('nkj');
         if (!data) {
           toastr.error('Additional details form must be required, please select another category or contact to admin.');
           return false;
@@ -469,7 +479,6 @@
           success: function (response) {
             var response = JSON.parse(response);
             if (response.status === 200) {
-              console.log(response);
               toastr.success(response.message);
               var from = $('#from').val();
               if (from == 'preview') {
@@ -489,8 +498,6 @@
           },
           complete: function () {
             $(".updateproperty").attr('disabled', false);
-            console.log(typeof (formData));
-            console.log('formData=>', formData)
           }
         })
 
@@ -689,7 +696,6 @@
               '<?php echo e($property->sub_category_id); ?>' == response.sub_category_id ||
               '<?php echo e($property->sub_sub_category_id); ?>' == response.sub_sub_category_id
             ) {
-              console.log(response.category_id, 'here');
               document.getElementById('fb-render').innerHTML = '';
               var formData = $('#save_json').val();
               var formRenderOptions = { formData };
@@ -697,7 +703,6 @@
 
             } else {
               document.getElementById('fb-render').innerHTML = '';
-              console.log(response, 'here');
               var formData = response.form_data;
               var formRenderOptions = { formData };
               frInstance = $('#fb-render').formRender(formRenderOptions);
@@ -799,6 +804,61 @@
     handleSecondInput('registration_status', 'registration_status_second_container', '.registration_checkbox');
     // Furnishing Status
     handleSecondInput('furnishing_status', 'furnishing_status_second_container', '.furnishing_checkbox');
+
+    $('#location_id').on('change', function () {
+      // toggle new location input
+      if ($(this).val() && $(this).val() === 'other') {
+        $('#custom-location-container').show();
+      } else {
+        $('#custom-location-container').hide();
+      }
+      // load sub locations for selected location
+      var location_id = $('#location_id').val();
+      if (!location_id || location_id === 'other') { $('#sub_location_id').empty().trigger('change'); return; }
+      $("#sub_location_id").html('');
+      $.ajax({
+        url: "<?php echo e(route('front.getSubLocations')); ?>",
+        type: "POST",
+        data: {
+          location_id: location_id,
+          _token: '<?php echo e(csrf_token()); ?>',
+        },
+        dataType: 'json',
+        success: function (result) {
+          $('#sub_location_id').empty();
+          $.each(result, function (key, location) {
+            $("#sub_location_id").append('<option value="' + location.id + '">' + location.sub_location_name + '</option>');
+          });
+          // reselect existing values from property
+          var selectedIds = "<?php echo e($property->sub_location_id ?? ''); ?>";
+          if (selectedIds) {
+            var arr = selectedIds.split(',');
+            $('#sub_location_id').val(arr).trigger('change');
+          }
+        }
+      });
+    });
+    // Initialize Sub Location select2 with tagging
+    function initEditSubLocationSelect2() {
+      $('#sub_location_id').select2({
+        tags: true,
+        width: '100%',
+        placeholder: 'Select or add sub locations',
+        closeOnSelect: false,
+        createTag: function (params) {
+          var term = $.trim(params.term);
+          if (term === '') { return null; }
+          return { id: term, text: term, isNew: true };
+        }
+      });
+    }
+    initEditSubLocationSelect2();
+
+    // On load: trigger city->locations and preload sublocations
+    $(document).ready(function () {
+      var locId = $('#location_id').val();
+      if (locId) { $('#location_id').trigger('change'); }
+    });
 
   </script>
 <?php $__env->stopSection(); ?>
