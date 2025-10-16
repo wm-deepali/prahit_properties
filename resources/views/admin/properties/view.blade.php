@@ -225,12 +225,10 @@
   <script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
   <script type="text/javascript">
     $(function () {
-     setTimeout(function () {
-        document.getElementById('fb-render').innerHTML = '';
-        var formData = $('#save_json').val();
-        var formRenderOptions = { formData };
-        frInstance = $('#fb-render').formRender(formRenderOptions);
-      }, 1000);
+      document.getElementById('fb-render').innerHTML = '';
+      var formData = $('#save_json').val();
+      var formRenderOptions = { formData };
+      frInstance = $('#fb-render').formRender(formRenderOptions);
     });
   </script>
 @endsection

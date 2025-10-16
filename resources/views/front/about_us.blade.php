@@ -57,7 +57,7 @@
 				<div class="col-md-6">
 					<div class="about-two-content">
 						<div class="section-title">
-							<span class="sp-span">Our Vision &amp; Mission</span>
+							<span class="sp-span">Bhawan Bhoomi - Your Property, Your Platform.</span>
 							<h2>{{ $vision->heading }}</h2>
 							<p>
 								{!! $vision->description !!}
