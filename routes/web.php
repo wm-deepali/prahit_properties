@@ -11,7 +11,9 @@
 |
 */
 
-
+Route::get('/listing-list', function () {
+    return view('front/listing-list'); 
+})->name('listing.list');
 Route::get('login', 'AuthController@login');
 Route::post('login', 'AuthController@login');  
 Route::post('login_ajax', 'User\UserController@login_ajax')->name('login_ajax');
