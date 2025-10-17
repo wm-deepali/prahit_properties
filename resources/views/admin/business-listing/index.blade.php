@@ -46,6 +46,9 @@
                         <th>Contact Detail</th>
                         <th>Membership Type</th>
                         <th>Category Info</th>
+                        <th>Property Category</th>
+                        <th>Property Subcategory</th>
+                        <th>Property Types</th>
                         <th>Total Views</th>
                         <th>Total Enquiries</th>
                         <th>Status</th>
@@ -69,6 +72,28 @@
                               @if($b->subCategories && count($b->subCategories) > 0)
                                 {{ implode(', ', $b->subCategories->pluck('sub_category_name')->toArray()) }}
                               @endif
+                            </td>
+                            <td>
+                              @php
+                                $pc = $b->propertyCategories ?? collect();
+                                $psc = $b->propertySubCategories ?? collect();
+                                $pssc = $b->propertySubSubCategories ?? collect();
+                              @endphp
+                              @if($pc->count() === ($pc instanceof \Illuminate\Support\Collection ? $pc : collect($pc))->count() && $pc->count() > 0 && $pc->count() === \App\Category::count())
+                                All
+                              @else
+                                {{ $pc->count() ? $pc->pluck('category_name')->implode(', ') : '-' }}
+                              @endif
+                            </td>
+                            <td>
+                              @if($psc->count() && $pc->count() === 1 && $psc->count() === \App\SubCategory::where('category_id', $pc->first()->id)->count())
+                                All
+                              @else
+                                {{ $psc->count() ? $psc->pluck('sub_category_name')->implode(', ') : '-' }}
+                              @endif
+                            </td>
+                            <td>
+                              {{ $pssc->count() ? $pssc->pluck('sub_sub_category_name')->implode(', ') : '-' }}
                             </td>
                             <td>{{ $b->total_views ?? 0 }}</td>
                             <td>{{ $b->total_enquiries ?? 0 }}</td>

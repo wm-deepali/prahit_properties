@@ -7,8 +7,8 @@
 @section('css')
   <style type="text/css">
     /*.table-fitems tbody tr td:nth-child(2) {
-      width: 60%;
-  }*/
+        width: 60%;
+    }*/
     .checkbox {
       pointer-events: none !important;
     }
@@ -71,7 +71,8 @@
                           @foreach($categories as $key => $value)
                             @if($picked->category_id == $value->id)
                               <option value="{{$value->id}}" cat-name="{{$value->category_name}}" selected="">
-                                {{$value->category_name}} </option>
+                                {{$value->category_name}}
+                              </option>
                             @else
                               <option value="{{$value->id}}" cat-name="{{$value->category_name}}"> {{$value->category_name}}
                               </option>
@@ -95,7 +96,7 @@
                     </div>
                   </div>
 
-                  <h4 class="form-section-h">Assigned To Property Category</h4>
+                  <!-- <h4 class="form-section-h">Assigned To Property Category</h4>
 
                   <div class="form-group row">
                     <div class="col-sm-4">
@@ -131,35 +132,33 @@
                       </select>
                     </div>
 
-                  <div class="col-sm-4">
-    <label>Property Type</label>
-    <div id="sub_sub_category_list" class="border rounded p-2" style="max-height:200px; overflow-y:auto;">
-        <!-- Select All checkbox -->
-        <div class="form-check mb-2">
-            <input type="checkbox" class="form-check-input" id="select_all_sub_sub">
-            <label class="form-check-label" for="select_all_sub_sub"><strong>Select All</strong></label>
-        </div>
-
-        <!-- Sub Sub Category items -->
-        <div id="sub_sub_category_items">
-            @if(isset($p_sub_sub_categories) && count($p_sub_sub_categories) > 0)
-                @foreach($p_sub_sub_categories as $v)
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="sub_sub_category_ids[]" 
-                               id="subsub_{{ $v->id }}" value="{{ $v->id }}"
-                               {{ in_array($v->id, $picked->sub_sub_category_id ?? []) ? 'checked' : '' }}>
-                        <label class="form-check-label" for="subsub_{{ $v->id }}">{{ $v->sub_sub_category_name }}</label>
+                    <div class="col-sm-4">
+                      <label>Property Type</label>
+                      <div id="sub_sub_category_list" class="border rounded p-2"
+                        style="max-height:200px; overflow-y:auto;">
+                        <div class="form-check mb-2">
+                          <input type="checkbox" class="form-check-input" id="select_all_sub_sub">
+                          <label class="form-check-label" for="select_all_sub_sub"><strong>Select All</strong></label>
+                        </div>
+                        <div id="sub_sub_category_items">
+                          @if(isset($p_sub_sub_categories) && count($p_sub_sub_categories) > 0)
+                            @foreach($p_sub_sub_categories as $v)
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="sub_sub_category_ids[]"
+                                  id="subsub_{{ $v->id }}" value="{{ $v->id }}" {{ in_array($v->id, $picked->sub_sub_category_id ?? []) ? 'checked' : '' }}>
+                                <label class="form-check-label"
+                                  for="subsub_{{ $v->id }}">{{ $v->sub_sub_category_name }}</label>
+                              </div>
+                            @endforeach
+                          @else
+                            <p class="text-muted m-0">Select a property subcategory first</p>
+                          @endif
+                        </div>
+                      </div>
                     </div>
-                @endforeach
-            @else
-                <p class="text-muted m-0">Select a property subcategory first</p>
-            @endif
-        </div>
-    </div>
-</div>
 
 
-                  </div>
+                  </div> -->
 
                   <div class="form-group row">
                     <div class="col-sm-12 text-center">
@@ -183,17 +182,17 @@
     $(function () {
 
       // Select All toggle
-$(document).on('change', '#select_all_sub_sub', function () {
-    var isChecked = $(this).is(':checked');
-    $('#sub_sub_category_items input[type="checkbox"]').prop('checked', isChecked);
-});
+      $(document).on('change', '#select_all_sub_sub', function () {
+        var isChecked = $(this).is(':checked');
+        $('#sub_sub_category_items input[type="checkbox"]').prop('checked', isChecked);
+      });
 
-// Uncheck Select All if any individual is unchecked
-$(document).on('change', '#sub_sub_category_items input[type="checkbox"]', function () {
-    var total = $('#sub_sub_category_items input[type="checkbox"]').length;
-    var checked = $('#sub_sub_category_items input[type="checkbox"]:checked').length;
-    $('#select_all_sub_sub').prop('checked', total === checked);
-});
+      // Uncheck Select All if any individual is unchecked
+      $(document).on('change', '#sub_sub_category_items input[type="checkbox"]', function () {
+        var total = $('#sub_sub_category_items input[type="checkbox"]').length;
+        var checked = $('#sub_sub_category_items input[type="checkbox"]:checked').length;
+        $('#select_all_sub_sub').prop('checked', total === checked);
+      });
 
 
       $("#add_form_types").validate({
@@ -294,48 +293,48 @@ $(document).on('change', '#sub_sub_category_items input[type="checkbox"]', funct
       })
     }
 
-function fetch_subsubcategories(subCategoryId, preSelected = []) {
-    var route = "{{ config('app.api_url') }}/fetch_subsubcategories_by_subcat_id/" + subCategoryId;
+    function fetch_subsubcategories(subCategoryId, preSelected = []) {
+      var route = "{{ config('app.api_url') }}/fetch_subsubcategories_by_subcat_id/" + subCategoryId;
 
-    $.ajax({
+      $.ajax({
         url: route,
         method: 'get',
         beforeSend: function () {
-            $("#sub_sub_category_items").html('<p class="text-muted m-0">Loading...</p>');
+          $("#sub_sub_category_items").html('<p class="text-muted m-0">Loading...</p>');
         },
         success: function (response) {
-            if (response.responseCode === 200) {
-                var subSubCategories = response.data.SubSubCategory;
-                var html = '';
+          if (response.responseCode === 200) {
+            var subSubCategories = response.data.SubSubCategory;
+            var html = '';
 
-                if (subSubCategories.length > 0) {
-                    $.each(subSubCategories, function (i, v) {
-                        var checked = preSelected.includes(v.id) ? 'checked' : '';
-                        html += `<div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="sub_sub_category_ids[]" 
-                                           id="subsub_${v.id}" value="${v.id}" ${checked}>
-                                    <label class="form-check-label" for="subsub_${v.id}">${v.sub_sub_category_name}</label>
-                                 </div>`;
-                    });
-                } else {
-                    html = '<p class="text-muted m-0">No Property Types found</p>';
-                }
-
-                $("#sub_sub_category_items").html(html);
-
-                // Update Select All checkbox state
-                var total = $("#sub_sub_category_items input[type='checkbox']").length;
-                var checkedCount = $("#sub_sub_category_items input[type='checkbox']:checked").length;
-                $('#select_all_sub_sub').prop('checked', total === checkedCount);
+            if (subSubCategories.length > 0) {
+              $.each(subSubCategories, function (i, v) {
+                var checked = preSelected.includes(v.id) ? 'checked' : '';
+                html += `<div class="form-check">
+                                      <input class="form-check-input" type="checkbox" name="sub_sub_category_ids[]" 
+                                             id="subsub_${v.id}" value="${v.id}" ${checked}>
+                                      <label class="form-check-label" for="subsub_${v.id}">${v.sub_sub_category_name}</label>
+                                   </div>`;
+              });
             } else {
-                $("#sub_sub_category_items").html('<p class="text-muted m-0">Error fetching property types</p>');
+              html = '<p class="text-muted m-0">No Property Types found</p>';
             }
+
+            $("#sub_sub_category_items").html(html);
+
+            // Update Select All checkbox state
+            var total = $("#sub_sub_category_items input[type='checkbox']").length;
+            var checkedCount = $("#sub_sub_category_items input[type='checkbox']:checked").length;
+            $('#select_all_sub_sub').prop('checked', total === checkedCount);
+          } else {
+            $("#sub_sub_category_items").html('<p class="text-muted m-0">Error fetching property types</p>');
+          }
         },
         error: function () {
-            $("#sub_sub_category_items").html('<p class="text-muted m-0">Error fetching property types</p>');
+          $("#sub_sub_category_items").html('<p class="text-muted m-0">Error fetching property types</p>');
         }
-    });
-}
+      });
+    }
 
 
     function autoFilledSlug() {

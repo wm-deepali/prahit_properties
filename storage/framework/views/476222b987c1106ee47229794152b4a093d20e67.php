@@ -88,7 +88,7 @@
                     </div>
                   </div>
 
-                  <h4 class="form-section-h">Assigned To Property Category</h4>
+                  <!-- <h4 class="form-section-h">Assigned To Property Category</h4>
 
                   <div class="form-group row">
                     <div class="col-sm-4">
@@ -118,7 +118,6 @@
                       <div id="sub_sub_category_list" class="border rounded p-2"
                         style="max-height: 200px; overflow-y: auto;">
 
-                        <!-- Select All checkbox -->
                         <div class="form-check mb-2">
                           <input type="checkbox" class="form-check-input" id="select_all_sub_sub">
                           <label class="form-check-label" for="select_all_sub_sub"><strong>Select All</strong></label>
@@ -131,7 +130,7 @@
                       </div>
 
                     </div>
-                  </div>
+                  </div> -->
 
 
                   <div class="form-group row">

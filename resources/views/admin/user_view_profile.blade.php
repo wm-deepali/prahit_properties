@@ -117,7 +117,7 @@ Manage Properties
                         <tr>
                           <th>Date & Time</th>
                           <th>Category</th>
-                          <th>Sub Category</th>
+                          <th>City</th>
                           <th>Property ID</th>
                           <th>Property Price</th> 
                           <th>Owner Type</th>
@@ -141,7 +141,7 @@ Manage Properties
                           <tr>
                             <th>Date & Time</th>
                             <th>Category</th>
-                            <th>Sub Category</th>
+                            <th>City</th>
                             <th>Property ID</th>
                             <th>Property Price</th> 
                             <th>Owner Type</th>
@@ -165,7 +165,7 @@ Manage Properties
                         <tr>
                           <th>Date & Time</th>
                           <th>Category</th>
-                          <th>Sub Category</th>
+                          <th>City</th>
                           <th>Property ID</th>
                           <th>Property Price</th> 
                           <th>Owner Type</th>
@@ -534,7 +534,7 @@ Manage Properties
       columns: [
       {data: 'date_time', name: 'date_time'},
       {data: 'category', name: 'category'},
-      {data: 'sub_category', name: 'sub_category'},
+      {data: 'city', name: 'city'},
       {data: 'listing_id', name: 'listing_id'},
       {data: 'price', name: 'price'},
       {data: 'owner_type', name: 'owner_type'},
@@ -555,7 +555,7 @@ Manage Properties
       columns: [
       {data: 'date_time', name: 'date_time'},
       {data: 'category', name: 'category'},
-      {data: 'sub_category', name: 'sub_category'},
+      {data: 'city', name: 'city'},
       {data: 'listing_id', name: 'listing_id'},
       {data: 'price', name: 'price'},
       {data: 'owner_type', name: 'owner_type'},
@@ -576,7 +576,7 @@ Manage Properties
       columns: [
       {data: 'date_time', name: 'date_time'},
       {data: 'category', name: 'category'},
-      {data: 'sub_category', name: 'sub_category'},
+      {data: 'city', name: 'city'},
       {data: 'listing_id', name: 'listing_id'},
       {data: 'price', name: 'price'},
       {data: 'owner_type', name: 'owner_type'},

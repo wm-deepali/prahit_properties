@@ -55,11 +55,11 @@
                     </div>
 
                     <!--                   <div class="col-sm-3">
-                      <label class="label label-control">Sub Sub Category</label>
-                      <select class="text-control populate_sub_sub_categories" name="sub_sub_category">
-                        <option value="">Select Sub Sub Cat</option>
-                      </select>
-                    </div> -->
+                        <label class="label label-control">Sub Sub Category</label>
+                        <select class="text-control populate_sub_sub_categories" name="sub_sub_category">
+                          <option value="">Select Sub Sub Cat</option>
+                        </select>
+                      </div> -->
 
                     <div class="col-sm-3">
                       <label class="label label-control">Package</label>
@@ -217,7 +217,7 @@
                       <tr>
                         <th>Date & Time</th>
                         <th>Property Available For</th>
-                        <th>Category</th>
+                        <th>City</th>
                         <th>Property ID</th>
                         <th>Property Price</th>
                         <th>Owner Type</th>
@@ -504,7 +504,7 @@
         columns: [
           { data: 'date_time', name: 'date_time' },
           { data: 'category', name: 'category' },
-          { data: 'sub_category', name: 'sub_category' },
+          { data: 'city', name: 'city' },
           { data: 'listing_id', name: 'listing_id' },
           { data: 'price', name: 'price' },
           { data: 'owner_type', name: 'owner_type' },
@@ -534,22 +534,22 @@
               if (response.length < 1) return true;
               $(".populate_categories").append(
                 `
-                <option value=${y.id}> ${y.category_name} </option>
-              `
+                  <option value=${y.id}> ${y.category_name} </option>
+                `
               );
               if (y.subcategory.length < 1) return true;
               $.each(y.subcategory, function (a, b) {
                 $(".populate_sub_categories").append(
                   `
-                  <option value=${b.id}> ${b.sub_category_name} </option>
-                `
+                    <option value=${b.id}> ${b.sub_category_name} </option>
+                  `
                 );
                 if (b.subsubcategory.length < 1) return true;
                 $.each(b.subsubcategory, function (c, d) {
                   $(".populate_sub_sub_categories").append(
                     `
-                    <option value=${d.id}> ${d.sub_sub_category_name} </option>
-                  `
+                      <option value=${d.id}> ${d.sub_sub_category_name} </option>
+                    `
                   );
                 })
 
@@ -686,39 +686,76 @@
 
     function fetchPropertyDetails(id) {
       var route = "<?php echo e(route('admin.properties.show', ':id')); ?>";
-      var route = route.replace(":id", id);
+      route = route.replace(":id", id);
 
       $.ajax({
         url: route,
         method: "GET",
-        beforeSend: function (argument) {
-          $(".loading").css('display', 'block');
+        beforeSend: function () {
+          $(".loading").css("display", "block");
         },
         success: function (response) {
           var response = JSON.parse(response);
+
           if (response.status === 200) {
-            console.log(response.data);
-            $(".listing_thumbnail").attr('src', "<?php echo e(config('app.url')); ?>/public/" + response.data.Property.property_gallery[0].image_path);
-            var publish = response.data.Property.publish_date ? response.data.Property.publish_date : 'Not Defined';
-            $(".title").text(response.data.Property.title);
-            $(".category").text(response.data.Property.category.category_name);
-            $(".subcategory").text(response.data.Property.sub_category.sub_category_name)
-            $(".location").text(response.data.Property.location.location)
-            $(".property_id").text(response.data.Property.listing_id)
-            $(".p-type").text(response.data.Property.property_types.type)
-            $(".price").text('₹' + response.data.Property.price)
-            $(".listing-type").text('₹' + response.data.Property.listing_type)
-            $(".published_date").text(publish)
-            $("#property_info").modal('show');
+            var property = response.data.Property || {};
+
+            // ✅ Handle image safely
+            if (
+              property.property_gallery &&
+              property.property_gallery.length > 0 &&
+              property.property_gallery[0].image_path
+            ) {
+              $(".listing_thumbnail").attr(
+                "src",
+                "<?php echo e(config('app.url')); ?>/public/" + property.property_gallery[0].image_path
+              );
+            } else {
+              // Optional fallback image
+              $(".listing_thumbnail").attr("src", "<?php echo e(asset('images/no-image.png')); ?>");
+            }
+
+            // ✅ Safely extract all values with fallback
+            var title = property.title || "N/A";
+            var publish = property.publish_date || "Not Defined";
+            var category =
+              property.category && property.category.category_name
+                ? property.category.category_name
+                : "N/A";
+            var subcategory =
+              property.sub_category && property.sub_category.sub_category_name
+                ? property.sub_category.sub_category_name
+                : "N/A";
+            var location =
+              property.location && property.location.location
+                ? property.location.location
+                : "N/A";
+            var propertyId = property.listing_id || "N/A";
+            var price = property.price ? "₹" + property.price : "N/A";
+            var listingType = property.listing_type || "N/A";
+
+            // ✅ Update DOM safely
+            $(".title").text(title);
+            $(".category").text(category);
+            $(".subcategory").text(subcategory);
+            $(".location").text(location);
+            $(".property_id").text(propertyId);
+            $(".price").text(price);
+            $(".listing-type").text(listingType);
+            $(".published_date").text(publish);
+
+            // ✅ Show modal
+            $("#property_info").modal("show");
           } else if (response.status === 400) {
-            toastr.error(response.message)
+            toastr.error(response.message);
           }
-          $(".loading").css('display', 'none');
+
+          $(".loading").css("display", "none");
         },
-        error: function (response) {
-          toastr.error('An error occured');
-          $(".loading").css('display', 'none');
-        }
+        error: function () {
+          toastr.error("An error occurred");
+          $(".loading").css("display", "none");
+        },
       });
     }
 

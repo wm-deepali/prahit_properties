@@ -396,7 +396,7 @@
       <h1>{{ $banner ? $banner->heading : 'Gateway to Verified Properties Across India'}}</h1>
       <p>
         {{ $banner ? $banner->title : 'Discover thousands of verified properties, exclusive builder projects, and trusted service providers all in one
-                                                                                place. Connect, explore, and make informed decisions with Bhawan Bhoomi – your reliable real estate partner.' }}
+                                                                                    place. Connect, explore, and make informed decisions with Bhawan Bhoomi – your reliable real estate partner.' }}
       </p>
     </div>
     <div class="newupdateSearchContainer">
@@ -738,7 +738,8 @@
                       </div>
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
-                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;">{{$value->title}}
+                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
+                              href="{{route('property_detail', ['title' => $value->slug])}}">{{$value->title}}</a>
                           </h5>
 
                         </div>
@@ -1122,7 +1123,8 @@
                       </div>
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
-                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;">{{$value->title}}
+                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
+                              href="{{route('property_detail', ['title' => $value->slug])}}">{{$value->title}}</a>
                           </h5>
 
                         </div>
@@ -1220,7 +1222,8 @@
                       </div>
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
-                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;">{{$value->title}}
+                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
+                              href="{{route('property_detail', ['title' => $value->slug])}}">{{$value->title}}</a>
                           </h5>
 
                         </div>
@@ -1316,7 +1319,8 @@
                       </div>
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
-                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;">{{$value->title}}
+                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
+                              href="{{route('property_detail', ['title' => $value->slug])}}">{{$value->title}}</a>
                           </h5>
 
                         </div>
@@ -1546,7 +1550,8 @@
                         </div>
                         <div class="newdesign-info-proj p-3">
                           <div class="d-flex justify-content-between align-items-start">
-                            <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;">{{$value->title}}
+                            <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
+                                href="{{route('property_detail', ['title' => $value->slug])}}">{{$value->title}}</a>
                             </h5>
 
                           </div>
@@ -1649,7 +1654,8 @@
                       </div>
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
-                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;">{{$value->title}}
+                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
+                              href="{{route('property_detail', ['title' => $value->slug])}}">{{$value->title}}</a>
                           </h5>
 
                         </div>
@@ -1738,7 +1744,8 @@
                         </div>
                         <div class="newdesign-info-proj p-3">
                           <div class="d-flex justify-content-between align-items-start">
-                            <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;">{{$value->title}}
+                            <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
+                                href="{{route('property_detail', ['title' => $value->slug])}}">{{$value->title}}</a>
                             </h5>
 
                           </div>

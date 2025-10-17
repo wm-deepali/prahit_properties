@@ -40,9 +40,9 @@
                     <thead>
                       <tr>
                         <th>Sr. No.</th>
+                        <!-- <th>Property Available For</th>
                         <th>Property Category</th>
-                        <th>Property Sub Category</th>
-                        <th>Property Sub Sub Category</th>
+                        <th>Property Type</th> -->
                         <th>Category</th>
                         <th>Name</th>
                         <th>Slug</th>
@@ -55,7 +55,7 @@
                         @foreach($datas as $c => $t)
                           <tr id="{{$t->id}}">
                             <td>{{$c + 1}}</td>
-                            <td> {{ $t->getPropertyCategory ? $t->getPropertyCategory->category_name : '' }} </td>
+                            <!-- <td> {{ $t->getPropertyCategory ? $t->getPropertyCategory->category_name : '' }} </td>
                             <td> {{ $t->getPropertySubCategory ? $t->getPropertySubCategory->sub_category_name : '' }} </td>
                             <td>
                               @if($t->sub_sub_category_id && count($t->sub_sub_category_id) > 0)
@@ -68,7 +68,7 @@
                               @else
                                 -
                               @endif
-                            </td>
+                            </td> -->
 
 
                             <td> {{ $t->WebDirectoryCategory->category_name }} </td>

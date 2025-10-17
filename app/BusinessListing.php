@@ -49,4 +49,20 @@ class BusinessListing extends Model
     {
         return $this->hasMany(BusinessService::class, 'business_listing_id');
     }
+
+    public function propertyCategories()
+    {
+        return $this->belongsToMany(Category::class, 'business_property_categories');
+    }
+
+    public function propertySubCategories()
+    {
+        return $this->belongsToMany(SubCategory::class, 'business_property_subcategories');
+    }
+
+    public function propertySubSubCategories()
+    {
+        return $this->belongsToMany(SubSubCategory::class, 'business_property_sub_subcategories');
+    }
+
 }

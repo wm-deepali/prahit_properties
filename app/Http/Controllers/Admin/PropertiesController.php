@@ -16,6 +16,7 @@ use App\ClaimListing;
 use App\SubLocations;
 use App\AgentEnquiry;
 use App\SubCategory;
+use App\SubSubCategory;
 use App\Properties;
 use App\Locations;
 use App\FormTypes;
@@ -227,11 +228,18 @@ class PropertiesController extends AppController
 				})
 				->addColumn('category', function ($datas) {
 					$category = Category::find($datas->category_id);
-					return $category ? $category->category_name : 'N/A';
-				})
-				->addColumn('sub_category', function ($datas) {
 					$subcategory = SubCategory::find($datas->sub_category_id);
-					return $subcategory ? $subcategory->sub_category_name : 'N/A';
+					$subsubcategory = SubSubCategory::find($datas->sub_sub_category_id); // adjust model & field name as needed
+	
+					$categoryName = $category ? $category->category_name : 'N/A';
+					$subcategoryName = $subcategory ? $subcategory->sub_category_name : '';
+					$subsubcategoryName = $subsubcategory ? $subsubcategory->sub_sub_category_name : '';
+
+					// Combine with <br> for line breaks
+					return $categoryName . '<br>' . $subcategoryName . '<br>' . $subsubcategoryName;
+				})
+				->addColumn('city', function ($datas) {
+					return $datas->getCity->name;
 				})
 				->addColumn('status', function ($datas) {
 					$status = $datas->status == 1 ? 'Active' : 'Inactive';
@@ -266,7 +274,7 @@ class PropertiesController extends AppController
 						return $button;
 					}
 				})
-				->rawColumns(['action', 'listing_id', 'owner_type'])
+				->rawColumns(['action', 'listing_id', 'owner_type', 'category'])
 				->make(true);
 		}
 
@@ -430,12 +438,20 @@ class PropertiesController extends AppController
 				})
 				->addColumn('category', function ($datas) {
 					$category = Category::find($datas->category_id);
-					return $category ? $category->category_name : 'N/A';
-				})
-				->addColumn('sub_category', function ($datas) {
 					$subcategory = SubCategory::find($datas->sub_category_id);
-					return $subcategory ? $subcategory->sub_category_name : 'N/A';
+					$subsubcategory = SubSubCategory::find($datas->sub_sub_category_id); // adjust model & field name as needed
+	
+					$categoryName = $category ? $category->category_name : 'N/A';
+					$subcategoryName = $subcategory ? $subcategory->sub_category_name : '';
+					$subsubcategoryName = $subsubcategory ? $subsubcategory->sub_sub_category_name : '';
+
+					// Combine with <br> for line breaks
+					return $categoryName . '<br>' . $subcategoryName . '<br>' . $subsubcategoryName;
 				})
+				->addColumn('city', function ($datas) {
+					return $datas->getCity->name;
+				})
+
 				->addColumn('status', function ($datas) {
 					$status = $datas->status == 1 ? 'Active' : 'Inactive';
 					return $status;
@@ -469,7 +485,7 @@ class PropertiesController extends AppController
 						return $button;
 					}
 				})
-				->rawColumns(['action', 'listing_id', 'owner_type'])
+				->rawColumns(['action', 'listing_id', 'owner_type', 'category'])
 				->make(true);
 		}
 
@@ -633,11 +649,18 @@ class PropertiesController extends AppController
 				})
 				->addColumn('category', function ($datas) {
 					$category = Category::find($datas->category_id);
-					return $category ? $category->category_name : 'N/A';
-				})
-				->addColumn('sub_category', function ($datas) {
 					$subcategory = SubCategory::find($datas->sub_category_id);
-					return $subcategory ? $subcategory->sub_category_name : 'N/A';
+					$subsubcategory = SubSubCategory::find($datas->sub_sub_category_id); // adjust model & field name as needed
+	
+					$categoryName = $category ? $category->category_name : 'N/A';
+					$subcategoryName = $subcategory ? $subcategory->sub_category_name : '';
+					$subsubcategoryName = $subsubcategory ? $subsubcategory->sub_sub_category_name : '';
+
+					// Combine with <br> for line breaks
+					return $categoryName . '<br>' . $subcategoryName . '<br>' . $subsubcategoryName;
+				})
+				->addColumn('city', function ($datas) {
+					return $datas->getCity->name;
 				})
 				->addColumn('status', function ($datas) {
 					$status = $datas->status == 1 ? 'Active' : 'Inactive';
@@ -698,7 +721,7 @@ class PropertiesController extends AppController
 						return $button;
 					}
 				})
-				->rawColumns(['action', 'listing_id', 'owner_type', 'trending', 'featured'])
+				->rawColumns(['action', 'listing_id', 'owner_type', 'trending', 'featured', 'category'])
 				->make(true);
 		}
 	}
@@ -722,11 +745,18 @@ class PropertiesController extends AppController
 				})
 				->addColumn('category', function ($datas) {
 					$category = Category::find($datas->category_id);
-					return $category ? $category->category_name : 'N/A';
-				})
-				->addColumn('sub_category', function ($datas) {
 					$subcategory = SubCategory::find($datas->sub_category_id);
-					return $subcategory ? $subcategory->sub_category_name : 'N/A';
+					$subsubcategory = SubSubCategory::find($datas->sub_sub_category_id); // adjust model & field name as needed
+	
+					$categoryName = $category ? $category->category_name : 'N/A';
+					$subcategoryName = $subcategory ? $subcategory->sub_category_name : '';
+					$subsubcategoryName = $subsubcategory ? $subsubcategory->sub_sub_category_name : '';
+
+					// Combine with <br> for line breaks
+					return $categoryName . '<br>' . $subcategoryName . '<br>' . $subsubcategoryName;
+				})
+				->addColumn('city', function ($datas) {
+					return $datas->getCity->name;
 				})
 				->addColumn('status', function ($datas) {
 					$status = $datas->status == 1 ? 'Active' : 'Inactive';
@@ -761,7 +791,7 @@ class PropertiesController extends AppController
 						return $button;
 					}
 				})
-				->rawColumns(['action', 'listing_id', 'owner_type'])
+				->rawColumns(['action', 'listing_id', 'owner_type', 'category'])
 				->make(true);
 		}
 	}
@@ -956,11 +986,18 @@ class PropertiesController extends AppController
 				})
 				->addColumn('category', function ($datas) {
 					$category = Category::find($datas->category_id);
-					return $category ? $category->category_name : 'N/A';
-				})
-				->addColumn('sub_category', function ($datas) {
 					$subcategory = SubCategory::find($datas->sub_category_id);
-					return $subcategory ? $subcategory->sub_category_name : 'N/A';
+					$subsubcategory = SubSubCategory::find($datas->sub_sub_category_id); // adjust model & field name as needed
+	
+					$categoryName = $category ? $category->category_name : 'N/A';
+					$subcategoryName = $subcategory ? $subcategory->sub_category_name : '';
+					$subsubcategoryName = $subsubcategory ? $subsubcategory->sub_sub_category_name : '';
+
+					// Combine with <br> for line breaks
+					return $categoryName . '<br>' . $subcategoryName . '<br>' . $subsubcategoryName;
+				})
+				->addColumn('city', function ($datas) {
+					return $datas->getCity->name;
 				})
 				->addColumn('status', function ($datas) {
 					$status = $datas->status == 1 ? 'Active' : 'Inactive';
@@ -995,7 +1032,7 @@ class PropertiesController extends AppController
 						return $button;
 					}
 				})
-				->rawColumns(['action', 'listing_id', 'owner_type'])
+				->rawColumns(['action', 'listing_id', 'owner_type', 'category'])
 				->make(true);
 		}
 	}
@@ -1184,7 +1221,7 @@ class PropertiesController extends AppController
 		// dd($request->all());
 		try {
 			// ✅ Validation
-            $request->validate([
+			$request->validate([
 				'id' => 'required|exists:properties,id',
 				'title' => 'required|max:200',
 				'type_id' => 'nullable',
@@ -1195,9 +1232,9 @@ class PropertiesController extends AppController
 				'construction_age' => 'nullable',
 				'description' => 'required',
 				'address' => 'required',
-                'location_id' => 'required',
-                'sub_location_id' => 'nullable|array',
-                'sub_location_id.*' => 'nullable|string',
+				'location_id' => 'required',
+				'sub_location_id' => 'nullable|array',
+				'sub_location_id.*' => 'nullable|string',
 				"gallery_images_file.*" => 'nullable|mimes:jpg,png,jpeg',
 				"feature_image_file" => 'nullable|mimes:jpg,png,jpeg'
 			]);
@@ -1219,64 +1256,70 @@ class PropertiesController extends AppController
 				$featured_image = isset($feature_image) ? $feature_image[0] : $featured_image;
 			}
 
-            // Handle custom location if 'other' is selected (single location)
-            $locationId = $request->location_id;
-            if ($locationId === 'other') {
-                $customLocationName = trim($request->custom_location_input);
-                if (!empty($customLocationName)) {
-                    $customLocationName = ucwords(strtolower($customLocationName));
-                    $newLocation = \App\Locations::create([
-                        'state_id' => $request->state,
-                        'city_id' => $request->city,
-                        'location' => $customLocationName,
-                        'status' => 1,
-                    ]);
-                    $locationId = $newLocation->id;
-                } else {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Please enter the custom location name.',
-                    ], 422);
-                }
-            }
+			// Handle custom location if 'other' is selected (single location)
+			$locationId = $request->location_id;
+			if ($locationId === 'other') {
+				$customLocationName = trim($request->custom_location_input);
+				if (!empty($customLocationName)) {
+					$customLocationName = ucwords(strtolower($customLocationName));
+					$newLocation = \App\Locations::create([
+						'state_id' => $request->state,
+						'city_id' => $request->city,
+						'location' => $customLocationName,
+						'status' => 1,
+					]);
+					$locationId = $newLocation->id;
+				} else {
+					return response()->json([
+						'status' => 'error',
+						'message' => 'Please enter the custom location name.',
+					], 422);
+				}
+			}
 
-            // Resolve sub locations: accept IDs or names; create new names under selected location
-            $submittedSubLocations = $request->input('sub_location_id', []);
-            $resolvedSubLocationIds = [];
-            if (!empty($submittedSubLocations)) {
-                $primaryLocationId = $locationId ? (int)$locationId : null;
-                foreach ($submittedSubLocations as $value) {
-                    $value = trim(($value ?? ''));
-                    if ($value === '') { continue; }
-                    if (ctype_digit($value)) {
-                        $existing = \App\SubLocations::find((int)$value);
-                        if ($existing) { $resolvedSubLocationIds[] = (int)$existing->id; }
-                        continue;
-                    }
-                    if ($primaryLocationId) {
-                        $name = ucwords(strtolower($value));
-                        $dup = \App\SubLocations::where([
-                            'location_id' => $primaryLocationId,
-                            'sub_location_name' => $name
-                        ])->first();
-                        if ($dup) {
-                            $resolvedSubLocationIds[] = (int)$dup->id;
-                        } else {
-                            $newSub = \App\SubLocations::create([
-                                'location_id' => $primaryLocationId,
-                                'sub_location_name' => $name,
-                            ]);
-                            if ($newSub) { $resolvedSubLocationIds[] = (int)$newSub->id; }
-                        }
-                    }
-                }
-            }
+			// Resolve sub locations: accept IDs or names; create new names under selected location
+			$submittedSubLocations = $request->input('sub_location_id', []);
+			$resolvedSubLocationIds = [];
+			if (!empty($submittedSubLocations)) {
+				$primaryLocationId = $locationId ? (int) $locationId : null;
+				foreach ($submittedSubLocations as $value) {
+					$value = trim(($value ?? ''));
+					if ($value === '') {
+						continue;
+					}
+					if (ctype_digit($value)) {
+						$existing = \App\SubLocations::find((int) $value);
+						if ($existing) {
+							$resolvedSubLocationIds[] = (int) $existing->id;
+						}
+						continue;
+					}
+					if ($primaryLocationId) {
+						$name = ucwords(strtolower($value));
+						$dup = \App\SubLocations::where([
+							'location_id' => $primaryLocationId,
+							'sub_location_name' => $name
+						])->first();
+						if ($dup) {
+							$resolvedSubLocationIds[] = (int) $dup->id;
+						} else {
+							$newSub = \App\SubLocations::create([
+								'location_id' => $primaryLocationId,
+								'sub_location_name' => $name,
+							]);
+							if ($newSub) {
+								$resolvedSubLocationIds[] = (int) $newSub->id;
+							}
+						}
+					}
+				}
+			}
 
-            // Persist normalized fields back into request-like variables
-            $normalizedSubLocationId = !empty($resolvedSubLocationIds) ? implode(',', $resolvedSubLocationIds) : null;
+			// Persist normalized fields back into request-like variables
+			$normalizedSubLocationId = !empty($resolvedSubLocationIds) ? implode(',', $resolvedSubLocationIds) : null;
 
 			// ✅ Update property
-            $properties->update([
+			$properties->update([
 				'title' => $request->title,
 				'type_id' => $request->type_id,
 				'price' => $request->price,
@@ -1297,8 +1340,8 @@ class PropertiesController extends AppController
 				'address' => $request->address,
 				'state_id' => $request->state,
 				'city_id' => $request->city,
-                'location_id' => $locationId,
-                'sub_location_id' => $normalizedSubLocationId,
+				'location_id' => $locationId,
+				'sub_location_id' => $normalizedSubLocationId,
 				'amenities' => $amenities,
 				'additional_info' => $request->additional_info,
 				'construction_age' => $request->construction_age,

@@ -46,6 +46,9 @@
                         <th>Contact Detail</th>
                         <th>Membership Type</th>
                         <th>Category Info</th>
+                        <th>Property Category</th>
+                        <th>Property Subcategory</th>
+                        <th>Property Types</th>
                         <th>Total Views</th>
                         <th>Total Enquiries</th>
                         <th>Status</th>
@@ -71,6 +74,31 @@
                                 <?php echo e(implode(', ', $b->subCategories->pluck('sub_category_name')->toArray())); ?>
 
                               <?php endif; ?>
+                            </td>
+                            <td>
+                              <?php
+                                $pc = $b->propertyCategories ?? collect();
+                                $psc = $b->propertySubCategories ?? collect();
+                                $pssc = $b->propertySubSubCategories ?? collect();
+                              ?>
+                              <?php if($pc->count() === ($pc instanceof \Illuminate\Support\Collection ? $pc : collect($pc))->count() && $pc->count() > 0 && $pc->count() === \App\Category::count()): ?>
+                                All
+                              <?php else: ?>
+                                <?php echo e($pc->count() ? $pc->pluck('category_name')->implode(', ') : '-'); ?>
+
+                              <?php endif; ?>
+                            </td>
+                            <td>
+                              <?php if($psc->count() && $pc->count() === 1 && $psc->count() === \App\SubCategory::where('category_id', $pc->first()->id)->count()): ?>
+                                All
+                              <?php else: ?>
+                                <?php echo e($psc->count() ? $psc->pluck('sub_category_name')->implode(', ') : '-'); ?>
+
+                              <?php endif; ?>
+                            </td>
+                            <td>
+                              <?php echo e($pssc->count() ? $pssc->pluck('sub_sub_category_name')->implode(', ') : '-'); ?>
+
                             </td>
                             <td><?php echo e($b->total_views ?? 0); ?></td>
                             <td><?php echo e($b->total_enquiries ?? 0); ?></td>

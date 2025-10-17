@@ -40,9 +40,9 @@
                     <thead>
                       <tr>
                         <th>Sr. No.</th>
+                        <!-- <th>Property Available For</th>
                         <th>Property Category</th>
-                        <th>Property Sub Category</th>
-                        <th>Property Sub Sub Category</th>
+                        <th>Property Type</th> -->
                         <th>Category</th>
                         <th>Name</th>
                         <th>Slug</th>
@@ -55,7 +55,7 @@
                         <?php $__currentLoopData = $datas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $c => $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                           <tr id="<?php echo e($t->id); ?>">
                             <td><?php echo e($c + 1); ?></td>
-                            <td> <?php echo e($t->getPropertyCategory ? $t->getPropertyCategory->category_name : ''); ?> </td>
+                            <!-- <td> <?php echo e($t->getPropertyCategory ? $t->getPropertyCategory->category_name : ''); ?> </td>
                             <td> <?php echo e($t->getPropertySubCategory ? $t->getPropertySubCategory->sub_category_name : ''); ?> </td>
                             <td>
                               <?php if($t->sub_sub_category_id && count($t->sub_sub_category_id) > 0): ?>
@@ -69,7 +69,7 @@
                               <?php else: ?>
                                 -
                               <?php endif; ?>
-                            </td>
+                            </td> -->
 
 
                             <td> <?php echo e($t->WebDirectoryCategory->category_name); ?> </td>

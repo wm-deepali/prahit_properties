@@ -43,9 +43,9 @@ class WebDirectorySubCategoryController extends AppController
 			"category_id" => "required",
 			"sub_category_name" => "required|max:200",
 			"sub_category_slug" => "required|unique:web_directory_sub_categories,sub_category_slug",
-			"property_category_id" => "required",
-			"sub_category_id" => "required",
-			"sub_sub_category_ids" => "nullable|array",
+			// "property_category_id" => "required",
+			// "sub_category_id" => "required",
+			// "sub_sub_category_ids" => "nullable|array",
 		];
 
 		$isValid = $this->checkValidate($request, $rules);
@@ -55,17 +55,17 @@ class WebDirectorySubCategoryController extends AppController
 
 		try {
 			// Convert checkbox array to comma-separated string
-			$subSubCatString = !empty($request->sub_sub_category_ids)
-				? implode(',', $request->sub_sub_category_ids)
-				: null;
+			// $subSubCatString = !empty($request->sub_sub_category_ids)
+			// 	? implode(',', $request->sub_sub_category_ids)
+			// 	: null;
 
 			WebDirectorySubCategory::create([
 				'category_id' => $request->category_id,
 				'sub_category_name' => $request->sub_category_name,
 				'sub_category_slug' => $request->sub_category_slug,
-				'property_category_id' => $request->property_category_id,
-				'sub_category_id' => $request->sub_category_id,
-				'sub_sub_category_id' => $subSubCatString, // ✅ stored as comma-separated IDs
+				// 'property_category_id' => $request->property_category_id,
+				// 'sub_category_id' => $request->sub_category_id,
+				// 'sub_sub_category_id' => $subSubCatString, // ✅ stored as comma-separated IDs
 				'status' => 'Yes',
 			]);
 
@@ -121,26 +121,26 @@ class WebDirectorySubCategoryController extends AppController
 			"category_id" => "required",
 			"sub_category_name" => "required|max:200",
 			"sub_category_slug" => "required|unique:web_directory_sub_categories,sub_category_slug," . $id,
-			"property_category_id" => "required",
-			"sub_category_id" => "required",
-			"sub_sub_category_ids" => "nullable|array", // Expect array from checkboxes
+			// "property_category_id" => "required",
+			// "sub_category_id" => "required",
+			// "sub_sub_category_ids" => "nullable|array", // Expect array from checkboxes
 		]);
 
 		$picked = WebDirectorySubCategory::findOrFail($id);
 
 		try {
 			// Convert checkbox array to comma-separated string
-			$subSubCatString = !empty($request->sub_sub_category_ids)
-				? implode(',', $request->sub_sub_category_ids)
-				: null;
+			// $subSubCatString = !empty($request->sub_sub_category_ids)
+			// 	? implode(',', $request->sub_sub_category_ids)
+			// 	: null;
 
 			$picked->update([
 				'category_id' => $request->category_id,
 				'sub_category_name' => $request->sub_category_name,
 				'sub_category_slug' => $request->sub_category_slug,
-				'property_category_id' => $request->property_category_id,
-				'sub_category_id' => $request->sub_category_id,
-				'sub_sub_category_id' => $subSubCatString, // ✅ store as CSV string
+				// 'property_category_id' => $request->property_category_id,
+				// 'sub_category_id' => $request->sub_category_id,
+				// 'sub_sub_category_id' => $subSubCatString, // ✅ store as CSV string
 			]);
 
 			return redirect('master/web-directory-sub-category')
