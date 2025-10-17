@@ -61,16 +61,20 @@ class HomeController extends AppController
 	{
 		try {
 			$listings = Properties::with(['Category', 'Category.Subcategory', 'Location', 'PropertyTypes', 'PropertyGallery'])
-				->where('approval', 'Approved')->where('publish_status', 'Publish');
+				->where('approval', 'Approved')
+				->where('publish_status', 'Publish');
+
 			if ($request->input('category')) {
 				$listings->where('category_id', decrypt($request->category));
 			}
+
 			if (is_null($city)) {
 				$ip = \Request::ip();
 				$location = Location::get($ip);
 				$city = isset($location->cityName) ? strtolower($location->cityName) : 'Lucknow';
 				$city_id = Cache::get('location-id');
-				$listings->where('city_id', $city_id);
+
+				// Default redirect to city URL
 				return redirect("/$city");
 			} else {
 				$picked_city = City::where('name', $city)->first();
@@ -84,19 +88,120 @@ class HomeController extends AppController
 					$listings->where('city_id', null);
 				}
 			}
+
+			// Fetch listings for the chosen city
 			$listings = $listings->latest()->get();
+
+
+			// If no listings found, show random approved and published properties
+			if ($listings->isEmpty()) {
+				$listings = Properties::with(['Category', 'Category.Subcategory', 'Location', 'PropertyTypes', 'PropertyGallery'])
+					->where('approval', 'Approved')
+					->where('publish_status', 'Publish')
+					->inRandomOrder()
+					->limit(10) // show any random 10 listings
+					->get();
+			}
+
+			// Static content loading remains same
 			$category = Category::all();
 			$property_types = PropertyTypes::all();
 			$feedback = Feedback::where('is_feedback', "1")->get();
-			$testimonials = Testimonial::where('status', 'Yes')->where('show_on_front', 'Yes')->get();
+			$testimonial = Testimonial::where('status', 'Yes')->where('show_on_front', 'Yes')->get();
 			$features = Feature::where('status', 'Yes')->get();
 			$help_content = HelpContent::first();
-			return view('front.home', compact('listings', 'feedback', 'category', 'property_types', 'testimonials', 'features', 'help_content'));
+
+			return view('front.home', compact('listings', 'feedback', 'category', 'property_types', 'testimonial', 'features', 'help_content'));
 		} catch (\Exception $e) {
 			abort(500, $e->getMessage());
 		}
-
 	}
+
+	public function list(Request $request)
+	{
+		$query = Properties::query();
+
+		// Fixed filters
+		$query->where('approval', 'Approved')
+			->where('publish_status', 'Publish');
+
+		// Filter by sub_sub_category_id
+		if ($request->filled('sub_sub_category_id')) {
+			$query->where('sub_sub_category_id', $request->sub_sub_category_id);
+		}
+
+		if ($request->filled('sub_sub_category_ids')) {
+			$ids = explode(',', $request->sub_sub_category_ids);
+			$query->whereIn('sub_sub_category_id', $ids);
+		}
+
+		// Filter by sub_category_id
+		if ($request->filled('sub_category_id')) {
+			$query->where('sub_category_id', $request->sub_category_id);
+		}
+
+		// Apply budget filter for Sell or Rent budgets
+		$sellBudgets = [
+			'under-50-lakh' => [0, 5000000],
+			'50-lakh-1-cr' => [5000001, 10000000],
+			'1-cr-3-cr' => [10000001, 30000000],
+			'3-cr-5-cr' => [30000001, 50000000],
+			'above-5-cr' => [50000001, PHP_INT_MAX],
+		];
+
+		$rentBudgets = [
+			'under-10k' => [0, 10000],
+			'10k-25k' => [10001, 25000],
+			'25k1-35k' => [25001, 35000],
+			'35k1-50k' => [35001, 50000],
+			'above-50k' => [50001, PHP_INT_MAX],
+		];
+
+		if ($request->filled('budget')) {
+			$budgetKey = $request->budget;
+			if (isset($sellBudgets[$budgetKey])) {
+				[$minPrice, $maxPrice] = $sellBudgets[$budgetKey];
+				$query->whereBetween('price', [$minPrice, $maxPrice]);
+			} elseif (isset($rentBudgets[$budgetKey])) {
+				[$minPrice, $maxPrice] = $rentBudgets[$budgetKey];
+				$query->whereBetween('price', [$minPrice, $maxPrice]);
+			}
+		}
+
+		// Filter by user_role (e.g., 'owner') if present
+		if ($request->filled('user_role')) {
+			$query->whereHas('getUser', function ($q) use ($request) {
+				$q->where('role', $request->user_role); // Assuming user model has 'role' field
+			});
+		}
+
+		// Filter by property_status if present
+		if ($request->filled('property_status')) {
+			$status = PropertyStatus::where('name', $request->property_status)->first();
+			if ($status) {
+				$query->where('property_status', $status->id);
+			} else {
+				// If no matching status found, optionally make query return no results
+				$query->whereRaw('1 = 0'); // No results
+			}
+		}
+
+		if ($request->filled('sort')) {
+			if ($request->sort === 'new-launch') {
+				// Sort by latest published_date descending
+				$query->orderBy('published_date', 'desc');
+			}
+			// You can add more sorting options here for other 'sort' values
+		}
+
+
+		// Pagination
+		$properties = $query->paginate(10);
+
+		return view('front.listing-list', compact('properties'));
+	}
+
+
 
 	public function create_property()
 	{

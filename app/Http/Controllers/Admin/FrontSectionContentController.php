@@ -19,15 +19,46 @@ class FrontSectionContentController extends Controller
      */
     public function index()
     {
-        $banner            = FrontContent::where('slug', 'Banner')->first();
-        $hand_picked       = FrontContent::where('slug', 'Hand-Picked')->first();
-        $trending          = FrontContent::where('slug', 'Trending-Projects')->first();
-        $latest_property   = FrontContent::where('slug', 'Latest-Properties')->first();
-        $featured_property = FrontContent::where('slug', 'Featured-Property')->first();
-        $states            = State::where('country_id', 101)->orderBy('name', 'ASC')->get();
-        $properties = Properties::select(['id', 'title', 'publish_status'])->where('publish_status', 'Publish')->orderBy('id', 'DESC')->get();
-        return view('admin.manage-front-content', compact('banner', 'properties', 'hand_picked', 'trending', 'latest_property', 'featured_property', 'states'));
+        $sections = [
+            'Banner',
+            'Hand-Picked',
+            'Trending-Projects',
+            'Latest-Properties',
+            'Featured-Property',
+            'Exclusive-Launch',
+            'Commercial-Property-for-Sale',
+            'Commercial-Property-for-Rent',
+            'Residential-Property-for-Sale',
+            'Residential-Property-for-Rent',
+            'Web-Directory',
+            'Property-by-Business-Type',
+            'Reels',
+            'Testimonials'
+        ];
+
+        $contents = [];
+
+        foreach ($sections as $slug) {
+            $content = FrontContent::firstOrCreate(
+                ['slug' => $slug],
+                ['heading' => '', 'title' => '', 'description' => '', 'ids' => '', 'image' => '']
+            );
+            // Convert slug to variable name style e.g. 'Exclusive-Launch' => 'exclusive_launch'
+            $varName = str_replace('-', '_', strtolower($slug));
+            $contents[$varName] = $content;
+        }
+
+        $states = State::where('country_id', 101)->orderBy('name', 'ASC')->get();
+        $properties = Properties::select(['id', 'title', 'publish_status'])
+            ->where('publish_status', 'Publish')
+            ->orderBy('id', 'DESC')
+            ->get();
+
+            // dd($contents);
+        return view('admin.manage-front-content', array_merge($contents, compact('properties', 'states')));
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -83,26 +114,26 @@ class FrontSectionContentController extends Controller
     {
         $request->validate(
             [
-                'heading'     => 'nullable|max:190',
-                'title'       => 'nullable|max:190',
-                'image'       => 'nullable|mimes:jpg,png,svg,gif,jpeg'
-        
+                'heading' => 'nullable|max:190',
+                'title' => 'nullable|max:255',
+                'image' => 'nullable|mimes:jpg,png,svg,gif,jpeg'
+
             ]
         );
         $picked = FrontContent::find($id);
-        if($request->has('image')) {
+        if ($request->has('image')) {
             $image_url = $request->image->store('home_images');
             Storage::delete($picked->image);
-        }else {
+        } else {
             $image_url = $picked->image;
         }
         $picked->update(
             [
-                'heading'      => $request->has('heading') ? $request->heading : $picked->heading,
-                'title'        => $request->has('title') ? $request->title : $picked->title,
-                'description'  => $request->has('description') ? $request->description : $picked->description,
-                'ids'          => $request->has('ids') ? implode(',', $request->ids) : $picked->ids,
-                'image'        => $image_url
+                'heading' => $request->has('heading') ? $request->heading : $picked->heading,
+                'title' => $request->has('title') ? $request->title : $picked->title,
+                'description' => $request->has('description') ? $request->description : $picked->description,
+                'ids' => $request->has('ids') ? implode(',', $request->ids) : $picked->ids,
+                'image' => $image_url
             ]
         );
         return redirect()->back()->with('success', 'Content Updated Successfully.');
@@ -120,7 +151,8 @@ class FrontSectionContentController extends Controller
         //
     }
 
-    public function getMultipleCities(Request $request) {
+    public function getMultipleCities(Request $request)
+    {
         $cities = City::whereIn('state_id', $request->states)->orderby('name', 'ASC')->get();
         return $cities;
     }

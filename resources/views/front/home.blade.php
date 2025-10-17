@@ -12,99 +12,104 @@
 <!-- Swiper CSS -->
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 <style>
-     .newupdateContainer {
-            text-align: center;
-            padding: 20px;
-            /*max-width: 900px;*/
-            width: 100%;
-            height:550px;
-            margin:auto;
-             background: linear-gradient(
-        135deg, /* Angle of the gradient */
-        #ffda9e, /* Soft Pastel Orange (e.g., Apricot) */
-        #a6e3e0, /* Soft Pastel Blue/Cyan (e.g., Pale Aqua) */
-        #b2f7b2  /* Soft Pastel Green (e.g., Mint Green) */
-    );
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            align-items:center;
-        }
-.banner-top-content h1{
-    font-size:46px;
-    font-weight:700;
-}
-       
+  .newupdateContainer {
+    text-align: center;
+    padding: 20px;
+    /*max-width: 900px;*/
+    width: 100%;
+    height: 550px;
+    margin: auto;
+    background: linear-gradient(135deg,
+        /* Angle of the gradient */
+        #ffda9e,
+        /* Soft Pastel Orange (e.g., Apricot) */
+        #a6e3e0,
+        /* Soft Pastel Blue/Cyan (e.g., Pale Aqua) */
+        #b2f7b2
+        /* Soft Pastel Green (e.g., Mint Green) */
+      );
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
-        .newupdateSearchContainer {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            color: #333;
-            width: 60%;
-           
-        }
+  .banner-top-content h1 {
+    font-size: 46px;
+    font-weight: 700;
+  }
 
-        .newupdateTabs {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
 
-        .newupdateTab {
-            background: none;
-            border: none;
-            color: #2d2d5c;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 14px;
-            border-bottom: 2px solid transparent;
-            transition: border-color 0.3s;
-        }
+  .newupdateSearchContainer {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #333;
+    width: 60%;
 
-        .newupdateTab.active {
-            border-bottom: 2px solid #00cc88;
-        }
+  }
 
-        .newupdateTab:hover {
-            border-bottom: 2px solid #3d3d7c;
-        }
+  .newupdateTabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
 
-        .newupdateSearchBar {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            background: #f9f9f9;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
+  .newupdateTab {
+    background: none;
+    border: none;
+    color: #2d2d5c;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s;
+  }
 
-        .newupdateDropdown {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-            width: 150px;
-            appearance: none;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="%23666" d="M7 10l5 5 5-5z"/></svg>') no-repeat right 10px center;
-            background-size: 12px;
-        }
+  .newupdateTab.active {
+    border-bottom: 2px solid #00cc88;
+  }
 
-        .newupdateSearchInput {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-            outline: none;
-        }
+  .newupdateTab:hover {
+    border-bottom: 2px solid #3d3d7c;
+  }
 
-        .newupdateSearchIcon, .newupdateMicIcon {
-               background: #00cc8817;
+  .newupdateSearchBar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+
+  .newupdateDropdown {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 150px;
+    appearance: none;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="%23666" d="M7 10l5 5 5-5z"/></svg>') no-repeat right 10px center;
+    background-size: 12px;
+  }
+
+  .newupdateSearchInput {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+  }
+
+  .newupdateSearchIcon,
+  .newupdateMicIcon {
+    background: #00cc8817;
     border: none;
     cursor: pointer;
     font-size: 18px;
@@ -112,104 +117,133 @@
     padding: 5px;
     border-radius: 50%;
     padding: 10px;
-        }
+  }
 
-        .newupdateFilters {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+  .newupdateFilters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
 
-        .newupdateSearchBtn {
-            background-color: #00cc88;
-            border: none;
-            color: #fff;
-            padding: 10px 60px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
+  .newupdateSearchBtn {
+    background-color: #00cc88;
+    border: none;
+    color: #fff;
+    padding: 10px 60px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
 
-        .newupdateSearchBtn:hover {
-            background-color: #00aa70;
-        }
+  .newupdateSearchBtn:hover {
+    background-color: #00aa70;
+  }
 
-        .newupdateSecondarySearch {
-            text-align: center;
-        }
+  .newupdateSecondarySearch {
+    text-align: center;
+  }
 
-        .newupdateSecondaryBtn {
-            background-color: #2d2d5c;
-            border: none;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
+  .newupdateSecondaryBtn {
+    background-color: #2d2d5c;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
 
-        .newupdateSecondaryBtn:hover {
-            background-color: #3d3d7c;
-        }
+  .newupdateSecondaryBtn:hover {
+    background-color: #3d3d7c;
+  }
 </style>
 <style>
-.property-tab {
-  border: 1px solid #e38e32;
-  background: #fff;
-  color: #e38e32;
-  padding: 8px 20px;
-  border-radius: 30px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-.property-tab:hover {
-  background: #e38e32;
-  color: #fff;
-  transform: translateY(-1px);
-}
-.property-tab.active {
-  background: #e38e32;
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(13, 110, 253, 0.3);
-}
-/*.newdesign-verified-seal {*/
-/*  position: absolute;*/
-/*  top: 10px;*/
-/*  left: 10px;*/
-/*  background: #198754;*/
-/*  color: #fff;*/
-/*  padding: 4px 8px;*/
-/*  font-size: 13px;*/
-/*  border-radius: 20px;*/
-/*}*/
-.property-card {
-  transition: all 0.3s ease;
-}
-.property-card.hide {
-  display: none !important;
-}
-.newdesign-project-main {
-  background: #fff;
-  border-radius: 10px;
-  overflow: hidden;
-  transition: 0.3s ease;
-}
-.newdesign-project-main:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
+  .property-tab {
+    border: 1px solid #e38e32;
+    background: #fff;
+    color: #e38e32;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .property-tab:hover {
+    background: #e38e32;
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  .property-tab.active {
+    background: #e38e32;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(13, 110, 253, 0.3);
+  }
+
+  /*.newdesign-verified-seal {*/
+  /*  position: absolute;*/
+  /*  top: 10px;*/
+  /*  left: 10px;*/
+  /*  background: #198754;*/
+  /*  color: #fff;*/
+  /*  padding: 4px 8px;*/
+  /*  font-size: 13px;*/
+  /*  border-radius: 20px;*/
+  /*}*/
+  .property-card {
+    transition: all 0.3s ease;
+  }
+
+  .property-card.hide {
+    display: none !important;
+  }
+
+  .newdesign-project-main {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: 0.3s ease;
+  }
+
+  .newdesign-project-main:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  }
 </style>
 
 @section('content')
   @php
-    $banner = App\Models\FrontContent::where('slug', 'Banner')->first();
-    $hand_picked = App\Models\FrontContent::where('slug', 'Hand-Picked')->first();
-    $trending = App\Models\FrontContent::where('slug', 'Trending-Projects')->first();
-    $latest_property = App\Models\FrontContent::where('slug', 'Latest-Properties')->first();
-    $featured_property = App\Models\FrontContent::where('slug', 'Featured-Property')->first();
+    // Get all front contents keyed by slug
+    $allContents = App\Models\FrontContent::all()->keyBy('slug');
+
+    // List of all required slugs
+    $slugs = [
+      'Banner',
+      'Hand-Picked',
+      'Trending-Projects',
+      'Latest-Properties',
+      'Featured-Property',
+      'Exclusive-Launch',
+      'Commercial-Property-for-Sale',
+      'Commercial-Property-for-Rent',
+      'Residential-Property-for-Sale',
+      'Residential-Property-for-Rent',
+      'Web-Directory',
+      'Property-by-Business-Type',
+      'Reels',
+      'Testimonials'
+    ];
+
+    // Dynamic variable assignment by converting slug to snake_case variable name
+    foreach ($slugs as $slug) {
+      // Convert slug to snake_case (e.g., 'Exclusive-Launch' → 'exclusive_launch')
+      $varName = strtolower(str_replace('-', '_', $slug));
+      // Assign variable dynamically with null fallback if not found
+      ${$varName} = $allContents->get($slug) ?? null;
+    }
   @endphp
   {{--
   <section class="property-search-filter">
@@ -222,16 +256,16 @@
           </div>
           <div class="search-filters">
             @php
-              use Illuminate\Support\Facades\Crypt;
+            use Illuminate\Support\Facades\Crypt;
 
-              $activeCategory = null;
-              if (request()->has('category')) {
-                try {
-                  $activeCategory = Crypt::decrypt(request()->query('category'));
-                } catch (\Exception $e) {
-                  $activeCategory = null; // invalid value
-                }
-              }
+            $activeCategory = null;
+            if (request()->has('category')) {
+            try {
+            $activeCategory = Crypt::decrypt(request()->query('category'));
+            } catch (\Exception $e) {
+            $activeCategory = null; // invalid value
+            }
+            }
             @endphp
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -271,9 +305,9 @@
                           <select class="text-control" name="type">
                             <option value="">Property Type</option>
                             @if(isset($property_types))
-                              @foreach($property_types as $p => $t)
-                                <option value="{{$t->id}}"> {{$t->type}} </option>
-                              @endforeach
+                            @foreach($property_types as $p => $t)
+                            <option value="{{$t->id}}"> {{$t->type}} </option>
+                            @endforeach
                             @endif
                           </select>
                         </div>
@@ -356,56 +390,59 @@
     $popular_cities_content = App\PopularCity::where('slug', 'heading')->first();
     $popular_cities = App\PopularCity::where('slug', 'city')->get();
   @endphp
-  
+
   <div class="newupdateContainer">
-        <div class="banner-top-content">
-            <h1>Gateway to Verified Properties Across India</h1>
-            <p>Discover thousands of verified properties, exclusive builder projects, and trusted service providers all in one place. </br>
-Connect, explore, and make informed decisions with Bhawan Bhoomi – your reliable real estate partner.</p>
-        </div>
-        <div class="newupdateSearchContainer">
-            <div class="newupdateTabs">
-                <button class="newupdateTab active" data-type="buy">Buy</button>
-                <button class="newupdateTab" data-type="rental">Rental</button>
-                <button class="newupdateTab" data-type="projects">Projects</button>
-                <button class="newupdateTab" data-type="pg-hostels">PG / Hostels</button>
-                <button class="newupdateTab" data-type="plot-land">Plot & Land</button>
-                <button class="newupdateTab" data-type="commercial">Commercial</button>
-                <button class="newupdateTab" data-type="agents">Agents</button>
-            </div>
-            <div class="newupdateSearchBar" data-type="buy">
-                <select class="newupdateDropdown">
-                    <option value="Chennai">Chennai</option>
-                    <option value="Mumbai">Mumbai</option>
-                    <option value="Delhi">Delhi</option>
-                </select>
-                <input type="text" placeholder="Search by Project, Locality, or Builder" class="newupdateSearchInput">
-                <button class="newupdateSearchIcon"><i class="fa-solid fa-location-crosshairs"></i></button>
-                <!--<button class="newupdateMicIcon">ðŸŽ¤</button>-->
-            </div>
-            <div class="newupdateFilters">
-                <div class="newupdateFilterOptions">
-                    <select class="newupdateDropdown">
-                        <option value="Budget">Budget</option>
-                        <option value="0-10L">0-10L</option>
-                        <option value="10-20L">10-20L</option>
-                    </select>
-                    <select class="newupdateDropdown">
-                        <option value="Property Type">Property Type</option>
-                        <option value="Apartment">Apartment</option>
-                        <option value="House">House</option>
-                    </select>
-                    <select class="newupdateDropdown">
-                        <option value="Furnishing Status">Furnishing Status</option>
-                        <option value="Furnished">Furnished</option>
-                        <option value="Unfurnished">Unfurnished</option>
-                    </select>
-                </div>
-                <button class="newupdateSearchBtn">Search</button>
-            </div>
-            
-        </div>
+    <div class="banner-top-content">
+      <h1>{{ $banner ? $banner->heading : 'Gateway to Verified Properties Across India'}}</h1>
+      <p>
+        {{ $banner ? $banner->title : 'Discover thousands of verified properties, exclusive builder projects, and trusted service providers all in one
+                                                                                place. Connect, explore, and make informed decisions with Bhawan Bhoomi – your reliable real estate partner.' }}
+      </p>
     </div>
+    <div class="newupdateSearchContainer">
+      <div class="newupdateTabs">
+        <button class="newupdateTab active" data-type="buy">Buy</button>
+        <button class="newupdateTab" data-type="rental">Rental</button>
+        <button class="newupdateTab" data-type="projects">Projects</button>
+        <button class="newupdateTab" data-type="pg-hostels">PG / Hostels</button>
+        <button class="newupdateTab" data-type="plot-land">Plot & Land</button>
+        <button class="newupdateTab" data-type="commercial">Commercial</button>
+        <button class="newupdateTab" data-type="agents">Agents</button>
+      </div>
+      <div class="newupdateSearchBar" data-type="buy">
+        <select class="newupdateDropdown">
+          <option value="Chennai">Chennai</option>
+          <option value="Mumbai">Mumbai</option>
+          <option value="Delhi">Delhi</option>
+        </select>
+        <input type="text" placeholder="Search by Project, Locality, or Builder" class="newupdateSearchInput">
+        <button class="newupdateSearchIcon"><i class="fa-solid fa-location-crosshairs"></i></button>
+        <!--<button class="newupdateMicIcon">ðŸŽ¤</button>-->
+      </div>
+      <div class="newupdateFilters">
+        <div class="newupdateFilterOptions">
+          <select class="newupdateDropdown">
+            <option value="Budget">Budget</option>
+            <option value="0-10L">0-10L</option>
+            <option value="10-20L">10-20L</option>
+          </select>
+          <select class="newupdateDropdown">
+            <option value="Property Type">Property Type</option>
+            <option value="Apartment">Apartment</option>
+            <option value="House">House</option>
+          </select>
+          <select class="newupdateDropdown">
+            <option value="Furnishing Status">Furnishing Status</option>
+            <option value="Furnished">Furnished</option>
+            <option value="Unfurnished">Unfurnished</option>
+          </select>
+        </div>
+        <button class="newupdateSearchBtn">Search</button>
+      </div>
+
+    </div>
+  </div>
+
   <section class="property-popular-cities">
     <div class="container">
       <div class="row">
@@ -440,6 +477,8 @@ Connect, explore, and make informed decisions with Bhawan Bhoomi – your reliab
       </div>
     </div>
   </section>
+
+  <!-- hand picked projects section -->
   <section class="property-home-list">
     <div class="container">
       <div class="row">
@@ -450,1898 +489,981 @@ Connect, explore, and make informed decisions with Bhawan Bhoomi – your reliab
         </div>
       </div>
       <div class="row">
-        @if(isset($listings))
-          @foreach($listings as $key => $value)
-            @if(in_array($value->id, explode(',', $hand_picked->ids)))
-              <div class="col-sm-3">
-                <div class="property-list-01">
-                  <div class="property-img">
-                    <a href="{{route('property_detail', ['title' => $value->slug])}}">
-                      <img
-                        src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : ''}}"
-                        class="img-fluid"> <span
-                        class="type-pro">{{isset($value->property_types->type) ? $value->property_types->type : ''}}</span><span
-                        class="price-pro">Rs. {{number_format($value->price, 2)}}</span>
-                    </a>
-                  </div>
-                  <div class="property-content">
-                    <div class="property-title">
-                      <h4><a href="{{route('property_detail', ['title' => $value->slug])}}">{{$value->title}}</a></h4>
-                      <a href="#" class="property-address"> <i class="fas fa-map-marker"></i> {{$value->address}} </a>
+
+        <div class="col-sm-12">
+          <div class="swiper directory-slider pt-3 pb-3">
+            <div class="swiper-wrapper">
+              <!-- Directory Card 1 -->
+              @if(isset($listings))
+                @foreach($listings as $key => $value)
+                  @if(in_array($value->id, explode(',', $hand_picked->ids)))
+                    <div class="swiper-slide">
+                      <div class=" property-card" data-type="office">
+                        <div class="newdesign-project-main shadow-sm">
+                          <div class="newdesign-image-proj position-relative">
+                            <a href="{{route('property_detail', ['title' => $value->slug])}}">
+                              <img
+                                src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
+                                alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
+                            </a>
+                            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                          </div>
+                          <div class="newdesign-info-proj p-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                              <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
+                                  href="{{route('property_detail', ['title' => $value->slug])}}">{{$value->title}}</a>
+                              </h5>
+
+                            </div>
+                            <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                            <div class="d-flex justify-content-between align-items-center">
+                              <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                                style=" height:30px;">Office Space</p>
+                              <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                              <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+
+                            </div>
+
+                            <div class="horizontal-line mt-2"></div>
+                            <div class="d-flex justify-content-between align-items-center">
+
+                              <p class="small text-secondary mb-2 mt-2">
+                                <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
+                                {{ $value->getState->name }}
+                              </p>
+                              <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                            </div>
+
+                            <div class="horizontal-line"></div>
+                            <p class="small text-muted mb-2 mt-2">
+                              {{ \Illuminate\Support\Str::limit($value->description, 50) }}
+                            </p>
+
+                            <div class="d-flex justify-content-between">
+                              <p class="m-0 small"><strong>Owner:</strong><br>{{ $value->getUser->firstname }}</p>
+                              <p class="m-0 small">
+                                <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
+                              </p>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                              <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
+                                {{number_format($value->price, 2)}}</h6>
+                              <button class="btn btn-sm btn-primary">Contact Now</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <!-- <ul class="property-features">
-                                                    <li>Area <span>440 sq ft</span></li>
-                                                    <li>Bedrooms <span>2</span></li>
-                                                    <li>Bathrooms <span>1</span></li>
-                                                  </ul> -->
-                  </div>
-                </div>
+
+                  @endif
+                @endforeach
+              @endif
+            </div>
+
+            <div class="swiper-pagination"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--static card-->
+  <section class="newdesign-property-topprojects">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="newdesign-section-title">
+            <h4>{{ $exclusive_launch->heading ?? 'Recently Launched'}}</h4>
+            <p>
+              {{ $exclusive_launch->title ?? 'Explore our latest properties fresh on the market.Find your dream home today!'}}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Property Card 1 -->
+        <div class="col-lg-4 mb-3">
+          <div class="newdesign-project-main">
+            <!--<a href="#">-->
+            <div class="newdesign-image-proj">
+              <img
+                src="https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;"
+                class="img-fluid" alt="Property 1">
+              <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+            </div>
+            <div class="newdesign-info-proj">
+              <div class="d-flex justify-content-between">
+                <h4 class="newdesign-proj-name"> West Center Meridian Courts</h4>
+                <span class="newdesign-proj-category">Villa</span>
               </div>
-            @endif
-          @endforeach
-        @endif
+              <span class="newdesign-apart-name">Presenting West Center Meridian Courts, a residential property located in
+                the heart of Kandivali....</span>
+              <hr>
+              <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, Bandra
+                West</span>
+
+
+
+              <div class="newdesign-proj-price">
+                <span><i class="fas fa-rupee-sign"></i>2.5 Cr - 4.8 Cr</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="newdesign-proj-owner"><strong>Builder:</strong><br> Green Homes Ltd.</span>
+                <span class="newdesign-proj-owner"><strong>Posted:</strong><br> 10 Oct 2027.</span>
+              </div>
+            </div>
+            <!--</a>-->
+          </div>
+        </div>
+        <!-- Property Card 2 -->
+        <div class="col-lg-4 mb-3">
+          <div class="newdesign-project-main">
+
+            <div class="newdesign-image-proj">
+              <img
+                src="https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;"
+                class="img-fluid" alt="Property 2">
+              <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+            </div>
+            <div class="newdesign-info-proj">
+              <div class="d-flex justify-content-between">
+                <h4 class="newdesign-proj-name"> Origin Rock Highland</h4>
+                <span class="newdesign-proj-category">Apartment</span>
+              </div>
+              <span class="newdesign-apart-name">Presenting West Center Meridian Courts, a residential property located in
+                the heart of Kandivali....</span>
+              <hr>
+              <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, Bandra
+                West</span>
+
+
+
+              <div class="newdesign-proj-price">
+                <span><i class="fas fa-rupee-sign"></i>2.5 Cr - 4.8 Cr</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="newdesign-proj-owner"><strong>Builder:</strong><br> Green Homes Ltd.</span>
+                <span class="newdesign-proj-owner"><strong>Publish:</strong><br> 10 Oct 2027.</span>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+        <!-- Property Card 3 -->
+        <div class="col-lg-4 mb-3">
+          <div class="newdesign-project-main">
+
+            <div class="newdesign-image-proj">
+              <img
+                src="https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;"
+                class="img-fluid" alt="Property 3">
+              <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+            </div>
+            <div class="newdesign-info-proj">
+              <div class="d-flex justify-content-between">
+                <h4 class="newdesign-proj-name">Greenfield Estate</h4>
+                <span class="newdesign-proj-category">Apartment</span>
+              </div>
+              <span class="newdesign-apart-name">Presenting West Center Meridian Courts, a residential property located in
+                the heart of Kandivali....</span>
+              <hr>
+              <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, Bandra
+                West</span>
+              <div class="newdesign-proj-price">
+                <span><i class="fas fa-rupee-sign"></i>2.5 Cr - 4.8 Cr</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="newdesign-proj-owner"><strong>Builder:</strong><br> Green Homes Ltd.</span>
+                <span class="newdesign-proj-owner"><strong>Publish:</strong><br> 10 Oct 2027.</span>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
 
       </div>
     </div>
   </section>
-  <!--static card-->
-  <section class="newdesign-property-topprojects">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="newdesign-section-title">
-                        <h4>Recently Launched</h4>
-                        <p>Explore our latest properties fresh on the market.Find your dream home today!</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <!-- Property Card 1 -->
-                <div class="col-lg-4 mb-3">
-                    <div class="newdesign-project-main">
-                        <!--<a href="#">-->
-                            <div class="newdesign-image-proj">
-                                <img src="https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;" class="img-fluid" alt="Property 1">
-                                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                            </div>
-                            <div class="newdesign-info-proj">
-                                <div class="d-flex justify-content-between">
-                                <h4 class="newdesign-proj-name"> West Center Meridian Courts</h4>
-                                                                <span class="newdesign-proj-category">Villa</span>
-                                                                </div>
-                                                                <span class="newdesign-apart-name">Presenting West Center Meridian Courts, a residential property located in the heart of Kandivali....</span>
-                                                                <hr>
-                                                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, Bandra West</span>
 
-                                
-                                
-                                <div class="newdesign-proj-price">
-                                    <span><i class="fas fa-rupee-sign"></i>2.5 Cr - 4.8 Cr</span>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                <span class="newdesign-proj-owner"><strong>Builder:</strong><br> Green Homes Ltd.</span>
-                                <span class="newdesign-proj-owner"><strong>Posted:</strong><br> 10 Oct 2027.</span>
-                                </div>
-                            </div>
-                        <!--</a>-->
-                    </div>
-                </div>
-                <!-- Property Card 2 -->
-                <div class="col-lg-4 mb-3">
-                    <div class="newdesign-project-main">
-                        
-                            <div class="newdesign-image-proj">
-                                <img src="https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;" class="img-fluid" alt="Property 2">
-                                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                            </div>
-                             <div class="newdesign-info-proj">
-                                <div class="d-flex justify-content-between">
-                                <h4 class="newdesign-proj-name"> Origin Rock Highland</h4>
-                                                                <span class="newdesign-proj-category">Apartment</span>
-                                                                </div>
-                                                                <span class="newdesign-apart-name">Presenting West Center Meridian Courts, a residential property located in the heart of Kandivali....</span>
-                                                                <hr>
-                                                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, Bandra West</span>
+  @php
+    use App\Helpers\Helper;
+    $propertiesSellCommercial = Helper::getPropertiesByCategoryAndSubcategory('Sell', 'ALL COMMERCIAL');
+    $propertiesSellResidential = Helper::getPropertiesByCategoryAndSubcategory('Sell', 'ALL RESIDENTIAL');
 
-                                
-                                
-                                <div class="newdesign-proj-price">
-                                    <span><i class="fas fa-rupee-sign"></i>2.5 Cr - 4.8 Cr</span>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                <span class="newdesign-proj-owner"><strong>Builder:</strong><br> Green Homes Ltd.</span>
-                                <span class="newdesign-proj-owner"><strong>Publish:</strong><br> 10 Oct 2027.</span>
-                                </div>
-                            </div>
-                           
-                        
-                    </div>
-                </div>
-                <!-- Property Card 3 -->
-                <div class="col-lg-4 mb-3">
-                    <div class="newdesign-project-main">
-                        
-                            <div class="newdesign-image-proj">
-                                <img src="https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;" class="img-fluid" alt="Property 3">
-                                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                            </div>
-                             <div class="newdesign-info-proj">
-                                <div class="d-flex justify-content-between">
-                                <h4 class="newdesign-proj-name">Greenfield Estate</h4>
-                                                                <span class="newdesign-proj-category">Apartment</span>
-                                                                </div>
-                                                                <span class="newdesign-apart-name">Presenting West Center Meridian Courts, a residential property located in the heart of Kandivali....</span>
-                                                                <hr>
-                                                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, Bandra West</span>
+    $propertiesRentCommercial = Helper::getPropertiesByCategoryAndSubcategory('Rent', 'ALL COMMERCIAL');
+    $propertiesRentResidential = Helper::getPropertiesByCategoryAndSubcategory('Rent', 'ALL RESIDENTIAL');
 
-                                
-                                
-                                <div class="newdesign-proj-price">
-                                    <span><i class="fas fa-rupee-sign"></i>2.5 Cr - 4.8 Cr</span>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                <span class="newdesign-proj-owner"><strong>Builder:</strong><br> Green Homes Ltd.</span>
-                                <span class="newdesign-proj-owner"><strong>Publish:</strong><br> 10 Oct 2027.</span>
-                                </div>
-                            </div>
-                           
-                       
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-    </section>
-    
+  @endphp
 
 
-<section class="newdesign-property-topprojects py-5" style="background:#fff;">
-  <div class="container">
-    <!-- Heading -->
-    <div class="text-center mb-4">
-      <h4 class="fw-bold mb-2">Commercial Properties for Sale</h4>
-      <p class="text-muted mb-0">
-        Explore properties by category — Office Space, Shops & Showrooms, Godowns & Warehouse, Lands & Plots.
-      </p>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tabs-wrap mb-4 text-center">
-      <div class="tabs-btns d-inline-flex flex-wrap justify-content-center gap-2">
-        <button type="button" class="property-tab active" data-filter="all">All</button>
-        <button type="button" class="property-tab" data-filter="office">Office Space</button>
-        <button type="button" class="property-tab" data-filter="shops">Shops & Showrooms</button>
-        <button type="button" class="property-tab" data-filter="godowns">Godowns & Warehouse</button>
-        <button type="button" class="property-tab" data-filter="lands">Lands & Plots</button>
-      </div>
-    </div>
- <div class="row">
-            <div class="col-sm-12">
-                <div class="swiper directory-slider pt-3 pb-3">
-                    <div class="swiper-wrapper">
-                        <!-- Directory Card 1 -->
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        
-                        <!-- Add more slides as needed -->
-                    </div>
-                    <!-- Add Pagination -->
-                    <div class="swiper-pagination"></div>
-                    <!-- Add Navigation -->
-                    <!--<div class="swiper-button-prev"></div>-->
-                    <!--<div class="swiper-button-next"></div>-->
-                </div>
-            </div>
-        </div>
-    <!-- Property Cards -->
-<!--    <div class="row g-4" id="properties-list">-->
-      <!-- Office -->
-<!--      <div class="col-lg-3 col-md-6 property-card" data-type="office">-->
-<!--        <div class="newdesign-project-main shadow-sm">-->
-<!--          <div class="newdesign-image-proj position-relative">-->
-<!--            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">-->
-<!--            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>-->
-<!--          </div>-->
-<!--          <div class="newdesign-info-proj p-3">-->
-<!--            <div class="d-flex justify-content-between align-items-start">-->
-<!--              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>-->
-                
-<!--            </div>-->
-<!--            <hr class="" style="margin-bottom:10px; margin-top:10px;">-->
-<!--            <div class="d-flex justify-content-between align-items-center">-->
-<!--                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>-->
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-<!--                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>-->
-
-<!--            </div>-->
-            
-<!--            <div class="horizontal-line mt-2"></div>-->
-<!--            <div class="d-flex justify-content-between align-items-center">-->
-                                        
-<!--                         <p class="small text-secondary mb-2 mt-2">-->
-<!--              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-<!--            </p>              -->
-<!--                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        -->
-<!--                                    </div>-->
-                                    
-<!--                                    <div class="horizontal-line"></div>-->
-<!--                                     <p class="small text-muted mb-2 mt-2">-->
-<!--              Ground-floor retail unit on busy commercial street.-->
-<!--            </p>-->
-                                    
-<!--            <div class="d-flex justify-content-between">-->
-<!--                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>-->
-<!--                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>-->
-<!--            </div>-->
-<!--<hr>-->
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-<!--            <div class="d-flex justify-content-between">-->
-<!--                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>-->
-<!--                            <button class="btn btn-sm btn-primary">Contact Now</button>-->
-<!--            </div>-->
-
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-
-<!--       <div class="col-lg-3 col-md-6 property-card" data-type="office">-->
-<!--        <div class="newdesign-project-main shadow-sm">-->
-<!--          <div class="newdesign-image-proj position-relative">-->
-<!--            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">-->
-<!--            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>-->
-<!--          </div>-->
-<!--          <div class="newdesign-info-proj p-3">-->
-<!--            <div class="d-flex justify-content-between align-items-start">-->
-<!--              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>-->
-                
-<!--            </div>-->
-<!--            <hr class="" style="margin-bottom:10px; margin-top:10px;">-->
-<!--            <div class="d-flex justify-content-between align-items-center">-->
-<!--                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>-->
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-<!--                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>-->
-
-<!--            </div>-->
-            
-<!--            <div class="horizontal-line mt-2"></div>-->
-<!--            <div class="d-flex justify-content-between align-items-center">-->
-                                        
-<!--                         <p class="small text-secondary mb-2 mt-2">-->
-<!--              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-<!--            </p>              -->
-<!--                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        -->
-<!--                                    </div>-->
-                                    
-<!--                                    <div class="horizontal-line"></div>-->
-<!--                                     <p class="small text-muted mb-2 mt-2">-->
-<!--              Ground-floor retail unit on busy commercial street.-->
-<!--            </p>-->
-                                    
-<!--            <div class="d-flex justify-content-between">-->
-<!--                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>-->
-<!--                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>-->
-<!--            </div>-->
-<!--<hr>-->
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-<!--            <div class="d-flex justify-content-between">-->
-<!--                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>-->
-<!--                            <button class="btn btn-sm btn-primary">Contact Now</button>-->
-<!--            </div>-->
-
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--       <div class="col-lg-3 col-md-6 property-card" data-type="office">-->
-<!--        <div class="newdesign-project-main shadow-sm">-->
-<!--          <div class="newdesign-image-proj position-relative">-->
-<!--            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">-->
-<!--            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>-->
-<!--          </div>-->
-<!--          <div class="newdesign-info-proj p-3">-->
-<!--            <div class="d-flex justify-content-between align-items-start">-->
-<!--              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>-->
-                
-<!--            </div>-->
-<!--            <hr class="" style="margin-bottom:10px; margin-top:10px;">-->
-<!--            <div class="d-flex justify-content-between align-items-center">-->
-<!--                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>-->
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-<!--                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>-->
-
-<!--            </div>-->
-            
-<!--            <div class="horizontal-line mt-2"></div>-->
-<!--            <div class="d-flex justify-content-between align-items-center">-->
-                                        
-<!--                         <p class="small text-secondary mb-2 mt-2">-->
-<!--              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-<!--            </p>              -->
-<!--                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        -->
-<!--                                    </div>-->
-                                    
-<!--                                    <div class="horizontal-line"></div>-->
-<!--                                     <p class="small text-muted mb-2 mt-2">-->
-<!--              Ground-floor retail unit on busy commercial street.-->
-<!--            </p>-->
-                                    
-<!--            <div class="d-flex justify-content-between">-->
-<!--                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>-->
-<!--                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>-->
-<!--            </div>-->
-<!--<hr>-->
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-<!--            <div class="d-flex justify-content-between">-->
-<!--                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>-->
-<!--                            <button class="btn btn-sm btn-primary">Contact Now</button>-->
-<!--            </div>-->
-
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--       <div class="col-lg-3 col-md-6 property-card" data-type="office">-->
-<!--        <div class="newdesign-project-main shadow-sm">-->
-<!--          <div class="newdesign-image-proj position-relative">-->
-<!--            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">-->
-<!--            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>-->
-<!--          </div>-->
-<!--          <div class="newdesign-info-proj p-3">-->
-<!--            <div class="d-flex justify-content-between align-items-start">-->
-<!--              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>-->
-                
-<!--            </div>-->
-<!--            <hr class="" style="margin-bottom:10px; margin-top:10px;">-->
-<!--            <div class="d-flex justify-content-between align-items-center">-->
-<!--                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>-->
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-<!--                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>-->
-
-<!--            </div>-->
-            
-<!--            <div class="horizontal-line mt-2"></div>-->
-<!--            <div class="d-flex justify-content-between align-items-center">-->
-                                        
-<!--                         <p class="small text-secondary mb-2 mt-2">-->
-<!--              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-<!--            </p>              -->
-<!--                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        -->
-<!--                                    </div>-->
-                                    
-<!--                                    <div class="horizontal-line"></div>-->
-<!--                                     <p class="small text-muted mb-2 mt-2">-->
-<!--              Ground-floor retail unit on busy commercial street.-->
-<!--            </p>-->
-                                    
-<!--            <div class="d-flex justify-content-between">-->
-<!--                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>-->
-<!--                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>-->
-<!--            </div>-->
-<!--<hr>-->
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-<!--            <div class="d-flex justify-content-between">-->
-<!--                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>-->
-<!--                            <button class="btn btn-sm btn-primary">Contact Now</button>-->
-<!--            </div>-->
-
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-      
-<!--    </div>-->
-  </div>
-</section>
-
-<!-- CSS -->
-<section class="newdesign-directory" style="background:#fff;">
+  <section class="newdesign-property-topprojects py-5" style="background:#fff;">
     <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="newdesign-section-title">
-                    <h4>Directory</h4>
-                    <p>Explore top companies and their services. Connect with the best in the industry!</p>
-                </div>
-            </div>
+      <!-- Heading -->
+      <div class="text-center mb-4">
+        <h4 class="fw-bold mb-2">{{ $commercial_property_for_sale->heading ?? 'Commercial Properties for Sale'}}</h4>
+        <p class="text-muted mb-0">
+          {{ $commercial_property_for_sale->title ?? 'Explore properties by category — Office Space, Shops & Showrooms, Godowns & Warehouse, Lands & Plots.'}}
+        </p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-wrap mb-4 text-center">
+        <div class="tabs-btns d-inline-flex flex-wrap justify-content-center gap-2">
+          <button type="button" class="property-tab active" data-filter="all">All</button>
+          <button type="button" class="property-tab" data-filter="office">Office Space</button>
+          <button type="button" class="property-tab" data-filter="shops">Shops & Showrooms</button>
+          <button type="button" class="property-tab" data-filter="godowns">Godowns & Warehouse</button>
+          <button type="button" class="property-tab" data-filter="lands">Lands & Plots</button>
         </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="swiper directory-slider pt-3 pb-3">
-                    <div class="swiper-wrapper">
-                        <!-- Directory Card 1 -->
-                        <div class="swiper-slide">
-                            <div class="directory-card-main d-flex flex-column">
-                                <div class="directory-logo">
-                                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg" class="img-fluid" alt="Company Logo 1">
-                                </div>
-                                <div class="verified-seal">
-                                    <div class="top-veri">
-                                        <img src="{{ asset('images') }}/verify.png" alt="verified" >
-                                     <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
-                                    </div>
-                                    
-                                    
-                                </div>
-                                <div class="directory-info">
-                                    <h4 class="directory-company-name">Tech Innovations Inc.</h4>
-                                    <hr>
-                                    
-                                    <div class="cat-btn">
-                                         <button class="category-name-btn">Category Name</button>
-                                         <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
-                                    </div>
-                                    <div class="horizontal-line"></div>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="dir-left">
-                                            <h5>Member Since</h5>
-                                            <p>2019</p>
-                                        </div>
-                                        <div class="ver-line"></div>
-                                        <div class="dir-left">
-                                            <h5>Location</h5>
-                                            <p>Aliganj, Lucknow</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                   
-                                    <p class="directory-description">Leading provider of cutting-edge software solutions and IT services for businesses worldwide.</p>
-                                    <div class="directory-buttons">
-                                        <div class="d-flex align-items-center">
-                                            <p class="m-0" style="font-size:14px;"><strong>Publish:</strong><br>26 Aug 2023</p>
-                                        </div>
-                                        <button class="btn btn-sm btn-primary">Contact Now</button>
-                                        <!--<button class="btn btn-sm btn-secondary">Views</button>-->
-                                        
-                                        <!--<button class="btn btn-sm btn-info">Share Now</button>-->
-                                    </div>
-                                </div>
-                            </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="swiper directory-slider pt-3 pb-3">
+            <div class="swiper-wrapper">
+              <!-- Directory Card 1 -->
+              @foreach($propertiesSellCommercial as $key => $value)
+                <div class="swiper-slide">
+                  <div class=" property-card" data-type="office">
+                    <div class="newdesign-project-main shadow-sm">
+                      <div class="newdesign-image-proj position-relative">
+                        <a href="{{route('property_detail', ['title' => $value->slug])}}">
+                          <img
+                            src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
+                            alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
+                        </a>
+                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                      </div>
+                      <div class="newdesign-info-proj p-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;">{{$value->title}}
+                          </h5>
+
                         </div>
-                        <!-- Directory Card 2 -->
-                        <div class="swiper-slide">
-                            <div class="directory-card-main d-flex flex-column">
-                                <div class="directory-logo">
-                                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg" class="img-fluid" alt="Company Logo 1">
-                                </div>
-                                <div class="verified-seal">
-                                    <div class="top-veri">
-                                        <img src="{{ asset('images') }}/verify.png" alt="verified" >
-                                     <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
-                                    </div>
-                                    
-                                    
-                                </div>
-                                <div class="directory-info">
-                                    <h4 class="directory-company-name">Tech Innovations Inc.</h4>
-                                    <hr>
-                                    
-                                    <div class="cat-btn">
-                                         <button class="category-name-btn">Category Name</button>
-                                         <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
-                                    </div>
-                                    <div class="horizontal-line"></div>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="dir-left">
-                                            <h5>Member Since</h5>
-                                            <p>2019</p>
-                                        </div>
-                                        <div class="ver-line"></div>
-                                        <div class="dir-left">
-                                            <h5>Location</h5>
-                                            <p>Aliganj, Lucknow</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                   
-                                    <p class="directory-description">Leading provider of cutting-edge software solutions and IT services for businesses worldwide.</p>
-                                    <div class="directory-buttons">
-                                        <div class="d-flex align-items-center">
-                                            <p class="m-0" style="font-size:14px;"><strong>Publish:</strong><br>26 Aug 2023</p>
-                                        </div>
-                                        <button class="btn btn-sm btn-primary">Contact Now</button>
-                                        <!--<button class="btn btn-sm btn-secondary">Views</button>-->
-                                        
-                                        <!--<button class="btn btn-sm btn-info">Share Now</button>-->
-                                    </div>
-                                </div>
-                            </div>
+                        <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                            style=" height:30px;">Office Space</p>
+                          <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+
                         </div>
-                        <!-- Directory Card 3 -->
-                        <div class="swiper-slide">
-                            <div class="directory-card-main d-flex flex-column">
-                                <div class="directory-logo">
-                                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg" class="img-fluid" alt="Company Logo 1">
-                                </div>
-                                <div class="verified-seal">
-                                    <div class="top-veri">
-                                        <img src="{{ asset('images') }}/verify.png" alt="verified" >
-                                     <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
-                                    </div>
-                                    
-                                    
-                                </div>
-                                <div class="directory-info">
-                                    <h4 class="directory-company-name">Tech Innovations Inc.</h4>
-                                    <hr>
-                                    
-                                    <div class="cat-btn">
-                                         <button class="category-name-btn">Category Name</button>
-                                         <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
-                                    </div>
-                                    <div class="horizontal-line"></div>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="dir-left">
-                                            <h5>Member Since</h5>
-                                            <p>2019</p>
-                                        </div>
-                                        <div class="ver-line"></div>
-                                        <div class="dir-left">
-                                            <h5>Location</h5>
-                                            <p>Aliganj, Lucknow</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                   
-                                    <p class="directory-description">Leading provider of cutting-edge software solutions and IT services for businesses worldwide.</p>
-                                    <div class="directory-buttons">
-                                        <div class="d-flex align-items-center">
-                                            <p class="m-0" style="font-size:14px;"><strong>Publish:</strong><br>26 Aug 2023</p>
-                                        </div>
-                                        <button class="btn btn-sm btn-primary">Contact Now</button>
-                                        <!--<button class="btn btn-sm btn-secondary">Views</button>-->
-                                        
-                                        <!--<button class="btn btn-sm btn-info">Share Now</button>-->
-                                    </div>
-                                </div>
-                            </div>
+
+                        <div class="horizontal-line mt-2"></div>
+                        <div class="d-flex justify-content-between align-items-center">
+
+                          <p class="small text-secondary mb-2 mt-2">
+                            <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
+                            {{ $value->getState->name }}
+                          </p>
+                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
                         </div>
-                        <div class="swiper-slide">
-                            <div class="directory-card-main d-flex flex-column">
-                                <div class="directory-logo">
-                                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg" class="img-fluid" alt="Company Logo 1">
-                                </div>
-                                <div class="verified-seal">
-                                    <div class="top-veri">
-                                        <img src="{{ asset('images') }}/verify.png" alt="verified" >
-                                     <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
-                                    </div>
-                                    
-                                    
-                                </div>
-                                <div class="directory-info">
-                                    <h4 class="directory-company-name">Tech Innovations Inc.</h4>
-                                    <hr>
-                                    
-                                    <div class="cat-btn">
-                                         <button class="category-name-btn">Category Name</button>
-                                         <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
-                                    </div>
-                                    <div class="horizontal-line"></div>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="dir-left">
-                                            <h5>Member Since</h5>
-                                            <p>2019</p>
-                                        </div>
-                                        <div class="ver-line"></div>
-                                        <div class="dir-left">
-                                            <h5>Location</h5>
-                                            <p>Aliganj, Lucknow</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                   
-                                    <p class="directory-description">Leading provider of cutting-edge software solutions and IT services for businesses worldwide.</p>
-                                    <div class="directory-buttons">
-                                        <div class="d-flex align-items-center">
-                                            <p class="m-0" style="font-size:14px;"><strong>Publish:</strong><br>26 Aug 2023</p>
-                                        </div>
-                                        <button class="btn btn-sm btn-primary">Contact Now</button>
-                                        <!--<button class="btn btn-sm btn-secondary">Views</button>-->
-                                        
-                                        <!--<button class="btn btn-sm btn-info">Share Now</button>-->
-                                    </div>
-                                </div>
-                            </div>
+
+                        <div class="horizontal-line"></div>
+                        <p class="small text-muted mb-2 mt-2">
+                          {{ \Illuminate\Support\Str::limit($value->description, 50) }}
+                        </p>
+
+                        <div class="d-flex justify-content-between">
+                          <p class="m-0 small"><strong>Owner:</strong><br>{{ $value->getUser->firstname }}</p>
+                          <p class="m-0 small">
+                            <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
+                          </p>
                         </div>
-                        <div class="swiper-slide">
-                            <div class="directory-card-main d-flex flex-column">
-                                <div class="directory-logo">
-                                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg" class="img-fluid" alt="Company Logo 1">
-                                </div>
-                                <div class="verified-seal">
-                                    <div class="top-veri">
-                                        <img src="{{ asset('images') }}/verify.png" alt="verified" >
-                                     <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
-                                    </div>
-                                    
-                                    
-                                </div>
-                                <div class="directory-info">
-                                    <h4 class="directory-company-name">Tech Innovations Inc.</h4>
-                                    <hr>
-                                    
-                                    <div class="cat-btn">
-                                         <button class="category-name-btn">Category Name</button>
-                                         <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
-                                    </div>
-                                    <div class="horizontal-line"></div>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="dir-left">
-                                            <h5>Member Since</h5>
-                                            <p>2019</p>
-                                        </div>
-                                        <div class="ver-line"></div>
-                                        <div class="dir-left">
-                                            <h5>Location</h5>
-                                            <p>Aliganj, Lucknow</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                   
-                                    <p class="directory-description">Leading provider of cutting-edge software solutions and IT services for businesses worldwide.</p>
-                                    <div class="directory-buttons">
-                                        <div class="d-flex align-items-center">
-                                            <p class="m-0" style="font-size:14px;"><strong>Publish:</strong><br>26 Aug 2023</p>
-                                        </div>
-                                        <button class="btn btn-sm btn-primary">Contact Now</button>
-                                        <!--<button class="btn btn-sm btn-secondary">Views</button>-->
-                                        
-                                        <!--<button class="btn btn-sm btn-info">Share Now</button>-->
-                                    </div>
-                                </div>
-                            </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                          <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
+                            {{number_format($value->price, 2)}}</h6>
+                          <button class="btn btn-sm btn-primary">Contact Now</button>
                         </div>
-                        <!-- Add more slides as needed -->
+                      </div>
                     </div>
-                    <!-- Add Pagination -->
-                    <div class="swiper-pagination"></div>
-                    <!-- Add Navigation -->
-                    <!--<div class="swiper-button-prev"></div>-->
-                    <!--<div class="swiper-button-next"></div>-->
+                  </div>
                 </div>
+              @endforeach
+
+              <!-- Add more slides as needed -->
             </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+          </div>
         </div>
+      </div>
+
     </div>
-</section>
+  </section>
 
-<section class="newdesign-property-topprojects py-5" style="background:#fff;">
-  <div class="container">
-    <!-- Heading -->
-    <div class="text-center mb-4">
-      <h4 class="fw-bold mb-2">Residential Properties for Sale</h4>
-      <p class="text-muted mb-0">
-        Explore properties by category — Office Space, Shops & Showrooms, Godowns & Warehouse, Lands & Plots.
-      </p>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tabs-wrap mb-4 text-center">
-      <div class="tabs-btns d-inline-flex flex-wrap justify-content-center gap-2">
-        <button type="button" class="property-tab active" data-filter="all">All</button>
-        <button type="button" class="property-tab" data-filter="office">Flats</button>
-        <button type="button" class="property-tab" data-filter="shops">House & Villa</button>
-        <button type="button" class="property-tab" data-filter="godowns">Lands & Plots</button>
-
-      </div>
-    </div>
- <div class="row">
-            <div class="col-sm-12">
-                <div class="swiper directory-slider pt-3 pb-3">
-                    <div class="swiper-wrapper">
-                        <!-- Directory Card 1 -->
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        
-                        <!-- Add more slides as needed -->
-                    </div>
-                    <!-- Add Pagination -->
-                    <div class="swiper-pagination"></div>
-                    
-                </div>
-            </div>
-        </div>
-   
-
-  </div>
-</section>
-<section class="newdesign-property-topprojects py-5" style="background:#fff;">
-  <div class="container">
-    <!-- Heading -->
-    <div class="text-center mb-4">
-      <h4 class="fw-bold mb-2">Commercial Properties for Rent</h4>
-      <p class="text-muted mb-0">
-        Explore properties by category — Office Space, Shops & Showrooms, Godowns & Warehouse, Lands & Plots.
-      </p>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tabs-wrap mb-4 text-center">
-      <div class="tabs-btns d-inline-flex flex-wrap justify-content-center gap-2">
-        <button type="button" class="property-tab active" data-filter="all">All</button>
-        <button type="button" class="property-tab" data-filter="office">Office Space</button>
-        <button type="button" class="property-tab" data-filter="shops">Shops & Showrooms</button>
-        <button type="button" class="property-tab" data-filter="godowns">Warehouse & Godowns</button>
-
-      </div>
-    </div>
- <div class="row">
-            <div class="col-sm-12">
-                <div class="swiper directory-slider pt-3 pb-3">
-                    <div class="swiper-wrapper">
-                        <!-- Directory Card 1 -->
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class=" property-card" data-type="office">
-        <div class="newdesign-project-main shadow-sm">
-          <div class="newdesign-image-proj position-relative">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80" alt="Office 1" class="img-fluid rounded-top">
-            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-          </div>
-          <div class="newdesign-info-proj p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <h5 class="fw-semibold mb-1" style="font-size:18px;">Premium Office space Available at prime plaza </h5>
-                
-            </div>
-            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center" style=" height:30px;">Office Space</p>
-                <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
-
-            </div>
-            
-            <div class="horizontal-line mt-2"></div>
-            <div class="d-flex justify-content-between align-items-center">
-                                        
-                         <p class="small text-secondary mb-2 mt-2">
-              <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra
-            </p>              
-                                               <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>        
-                                    </div>
-                                    
-                                    <div class="horizontal-line"></div>
-                                     <p class="small text-muted mb-2 mt-2">
-              Ground-floor retail unit on busy commercial street.
-            </p>
-                                    
-            <div class="d-flex justify-content-between">
-                            <p class="m-0 small" ><strong>Owner:</strong><br>Janmejay Kumar</p>
-                            <p class="m-0 small" ><strong>Posted:</strong><br>15 Oct 2025</p>
-            </div>
-<hr>
-            <!--<p class="small text-secondary mb-1">-->
-            <!--  <i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra-->
-            <!--</p>-->
-            <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i> 1.8 Cr - 3.2 Cr</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-                        </div>
-                        
-                        <!-- Add more slides as needed -->
-                    </div>
-                    <!-- Add Pagination -->
-                    <div class="swiper-pagination"></div>
-                    
-                </div>
-            </div>
-        </div>
-   
-
-  </div>
-</section>
-
-
-<section class="new-card-section">
-  <div class="new-main-card">
-    <!-- LEFT SIDE: Tabs -->
-    <div class="new-left-tabs">
-      <button class="new-tab-btn active" data-tab="tab1">Technology</button>
-      <hr />
-      <button class="new-tab-btn" data-tab="tab2">Healthcare</button>
-      <hr />
-      <button class="new-tab-btn" data-tab="tab3">Education</button>
-      <hr />
-      <button class="new-tab-btn" data-tab="tab4">Business</button>
-      <hr />
-      <button class="new-tab-btn" data-tab="tab5">Travel</button>
-    </div>
-
-    <!-- RIGHT SIDE: Image Sections -->
-    <div class="new-right-slider">
-      <div class="new-tab-content active" id="tab1">
-        <div class="new-slider-container">
-          <div class="new-slide">
-            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=870" alt="AI" />
-            <h3 class="new-image-title">Artificial Intelligence</h3>
-          </div>
-          <div class="new-slide">
-            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=870" alt="Coding" />
-            <h3 class="new-image-title">Web Development</h3>
-          </div>
-          <div class="new-slide">
-            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=870" alt="Cybersecurity" />
-            <h3 class="new-image-title">Cybersecurity</h3>
-          </div>
-          <div class="new-slide">
-            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=870" alt="Tech" />
-            <h3 class="new-image-title">Cloud Computing</h3>
-          </div>
-        </div>
-      </div>
-
-      <div class="new-tab-content" id="tab2">
-        <div class="new-slider-container">
-          <div class="new-slide">
-            <img src="https://images.unsplash.com/photo-1587502536263-9297b6d1a8ef?auto=format&fit=crop&q=80&w=870" alt="Healthcare" />
-            <h3 class="new-image-title">Medical Research</h3>
-          </div>
-          <div class="new-slide">
-            <img src="https://images.unsplash.com/photo-1580281657521-95868b0cbec3?auto=format&fit=crop&q=80&w=870" alt="Doctor" />
-            <h3 class="new-image-title">Healthcare Services</h3>
-          </div>
-          <div class="new-slide">
-            <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&q=80&w=870" alt="Hospital" />
-            <h3 class="new-image-title">Modern Hospitals</h3>
-          </div>
-        </div>
-      </div>
-
-      <div class="new-tab-content" id="tab3">
-        <div class="new-slider-container">
-          <div class="new-slide">
-            <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=870" alt="Education" />
-            <h3 class="new-image-title">E-Learning</h3>
-          </div>
-          <div class="new-slide">
-            <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&q=80&w=870" alt="School" />
-            <h3 class="new-image-title">Online Courses</h3>
-          </div>
-          <div class="new-slide">
-            <img src="https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&q=80&w=870" alt="Student" />
-            <h3 class="new-image-title">Skill Development</h3>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
- <section class="testimonial-reels-section py-5 bg-light">
+  <!-- CSS -->
+  <section class="newdesign-directory" style="background:#fff;">
     <div class="container">
-      <h2 class="sec__title mb-3 text-center">Reels</h2>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="newdesign-section-title">
+            <h4>{{ $web_directory->heading ?? 'Directory'}}</h4>
+            <p>
+              {{ $web_directory->title ?? 'Explore top companies and their services. Connect with the best in the industry!'}}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="swiper directory-slider pt-3 pb-3">
+            <div class="swiper-wrapper">
+              <!-- Directory Card 1 -->
+              <div class="swiper-slide">
+                <div class="directory-card-main d-flex flex-column">
+                  <div class="directory-logo">
+                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg"
+                      class="img-fluid" alt="Company Logo 1">
+                  </div>
+                  <div class="verified-seal">
+                    <div class="top-veri">
+                      <img src="{{ asset('images') }}/verify.png" alt="verified">
+                      <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
+                    </div>
+
+
+                  </div>
+                  <div class="directory-info">
+                    <h4 class="directory-company-name">Tech Innovations Inc.</h4>
+                    <hr>
+
+                    <div class="cat-btn">
+                      <button class="category-name-btn">Category Name</button>
+                      <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
+                    </div>
+                    <div class="horizontal-line"></div>
+                    <div class="d-flex justify-content-between">
+                      <div class="dir-left">
+                        <h5>Member Since</h5>
+                        <p>2019</p>
+                      </div>
+                      <div class="ver-line"></div>
+                      <div class="dir-left">
+                        <h5>Location</h5>
+                        <p>Aliganj, Lucknow</p>
+                      </div>
+                    </div>
+
+                    <div class="horizontal-line"></div>
+
+                    <p class="directory-description">Leading provider of cutting-edge software solutions and IT services
+                      for businesses worldwide.</p>
+                    <div class="directory-buttons">
+                      <div class="d-flex align-items-center">
+                        <p class="m-0" style="font-size:14px;"><strong>Publish:</strong><br>26 Aug 2023</p>
+                      </div>
+                      <button class="btn btn-sm btn-primary">Contact Now</button>
+                      <!--<button class="btn btn-sm btn-secondary">Views</button>-->
+
+                      <!--<button class="btn btn-sm btn-info">Share Now</button>-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Directory Card 2 -->
+              <div class="swiper-slide">
+                <div class="directory-card-main d-flex flex-column">
+                  <div class="directory-logo">
+                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg"
+                      class="img-fluid" alt="Company Logo 1">
+                  </div>
+                  <div class="verified-seal">
+                    <div class="top-veri">
+                      <img src="{{ asset('images') }}/verify.png" alt="verified">
+                      <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
+                    </div>
+
+
+                  </div>
+                  <div class="directory-info">
+                    <h4 class="directory-company-name">Tech Innovations Inc.</h4>
+                    <hr>
+
+                    <div class="cat-btn">
+                      <button class="category-name-btn">Category Name</button>
+                      <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
+                    </div>
+                    <div class="horizontal-line"></div>
+                    <div class="d-flex justify-content-between">
+                      <div class="dir-left">
+                        <h5>Member Since</h5>
+                        <p>2019</p>
+                      </div>
+                      <div class="ver-line"></div>
+                      <div class="dir-left">
+                        <h5>Location</h5>
+                        <p>Aliganj, Lucknow</p>
+                      </div>
+                    </div>
+
+                    <div class="horizontal-line"></div>
+
+                    <p class="directory-description">Leading provider of cutting-edge software solutions and IT services
+                      for businesses worldwide.</p>
+                    <div class="directory-buttons">
+                      <div class="d-flex align-items-center">
+                        <p class="m-0" style="font-size:14px;"><strong>Publish:</strong><br>26 Aug 2023</p>
+                      </div>
+                      <button class="btn btn-sm btn-primary">Contact Now</button>
+                      <!--<button class="btn btn-sm btn-secondary">Views</button>-->
+
+                      <!--<button class="btn btn-sm btn-info">Share Now</button>-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Directory Card 3 -->
+              <div class="swiper-slide">
+                <div class="directory-card-main d-flex flex-column">
+                  <div class="directory-logo">
+                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg"
+                      class="img-fluid" alt="Company Logo 1">
+                  </div>
+                  <div class="verified-seal">
+                    <div class="top-veri">
+                      <img src="{{ asset('images') }}/verify.png" alt="verified">
+                      <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
+                    </div>
+
+
+                  </div>
+                  <div class="directory-info">
+                    <h4 class="directory-company-name">Tech Innovations Inc.</h4>
+                    <hr>
+
+                    <div class="cat-btn">
+                      <button class="category-name-btn">Category Name</button>
+                      <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
+                    </div>
+                    <div class="horizontal-line"></div>
+                    <div class="d-flex justify-content-between">
+                      <div class="dir-left">
+                        <h5>Member Since</h5>
+                        <p>2019</p>
+                      </div>
+                      <div class="ver-line"></div>
+                      <div class="dir-left">
+                        <h5>Location</h5>
+                        <p>Aliganj, Lucknow</p>
+                      </div>
+                    </div>
+
+                    <div class="horizontal-line"></div>
+
+                    <p class="directory-description">Leading provider of cutting-edge software solutions and IT services
+                      for businesses worldwide.</p>
+                    <div class="directory-buttons">
+                      <div class="d-flex align-items-center">
+                        <p class="m-0" style="font-size:14px;"><strong>Publish:</strong><br>26 Aug 2023</p>
+                      </div>
+                      <button class="btn btn-sm btn-primary">Contact Now</button>
+                      <!--<button class="btn btn-sm btn-secondary">Views</button>-->
+
+                      <!--<button class="btn btn-sm btn-info">Share Now</button>-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div class="directory-card-main d-flex flex-column">
+                  <div class="directory-logo">
+                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg"
+                      class="img-fluid" alt="Company Logo 1">
+                  </div>
+                  <div class="verified-seal">
+                    <div class="top-veri">
+                      <img src="{{ asset('images') }}/verify.png" alt="verified">
+                      <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
+                    </div>
+
+
+                  </div>
+                  <div class="directory-info">
+                    <h4 class="directory-company-name">Tech Innovations Inc.</h4>
+                    <hr>
+
+                    <div class="cat-btn">
+                      <button class="category-name-btn">Category Name</button>
+                      <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
+                    </div>
+                    <div class="horizontal-line"></div>
+                    <div class="d-flex justify-content-between">
+                      <div class="dir-left">
+                        <h5>Member Since</h5>
+                        <p>2019</p>
+                      </div>
+                      <div class="ver-line"></div>
+                      <div class="dir-left">
+                        <h5>Location</h5>
+                        <p>Aliganj, Lucknow</p>
+                      </div>
+                    </div>
+
+                    <div class="horizontal-line"></div>
+
+                    <p class="directory-description">Leading provider of cutting-edge software solutions and IT services
+                      for businesses worldwide.</p>
+                    <div class="directory-buttons">
+                      <div class="d-flex align-items-center">
+                        <p class="m-0" style="font-size:14px;"><strong>Publish:</strong><br>26 Aug 2023</p>
+                      </div>
+                      <button class="btn btn-sm btn-primary">Contact Now</button>
+                      <!--<button class="btn btn-sm btn-secondary">Views</button>-->
+
+                      <!--<button class="btn btn-sm btn-info">Share Now</button>-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div class="directory-card-main d-flex flex-column">
+                  <div class="directory-logo">
+                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg"
+                      class="img-fluid" alt="Company Logo 1">
+                  </div>
+                  <div class="verified-seal">
+                    <div class="top-veri">
+                      <img src="{{ asset('images') }}/verify.png" alt="verified">
+                      <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
+                    </div>
+
+
+                  </div>
+                  <div class="directory-info">
+                    <h4 class="directory-company-name">Tech Innovations Inc.</h4>
+                    <hr>
+
+                    <div class="cat-btn">
+                      <button class="category-name-btn">Category Name</button>
+                      <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
+                    </div>
+                    <div class="horizontal-line"></div>
+                    <div class="d-flex justify-content-between">
+                      <div class="dir-left">
+                        <h5>Member Since</h5>
+                        <p>2019</p>
+                      </div>
+                      <div class="ver-line"></div>
+                      <div class="dir-left">
+                        <h5>Location</h5>
+                        <p>Aliganj, Lucknow</p>
+                      </div>
+                    </div>
+
+                    <div class="horizontal-line"></div>
+
+                    <p class="directory-description">Leading provider of cutting-edge software solutions and IT services
+                      for businesses worldwide.</p>
+                    <div class="directory-buttons">
+                      <div class="d-flex align-items-center">
+                        <p class="m-0" style="font-size:14px;"><strong>Publish:</strong><br>26 Aug 2023</p>
+                      </div>
+                      <button class="btn btn-sm btn-primary">Contact Now</button>
+                      <!--<button class="btn btn-sm btn-secondary">Views</button>-->
+
+                      <!--<button class="btn btn-sm btn-info">Share Now</button>-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Add more slides as needed -->
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+            <!-- Add Navigation -->
+            <!--<div class="swiper-button-prev"></div>-->
+            <!--<div class="swiper-button-next"></div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="newdesign-property-topprojects py-5" style="background:#fff;">
+    <div class="container">
+      <!-- Heading -->
+      <div class="text-center mb-4">
+        <h4 class="fw-bold mb-2">{{ $residential_property_for_sale->heading ?? 'Residential Properties for Sale'}}</h4>
+        <p class="text-muted mb-0">
+          {{ $residential_property_for_sale->title ?? 'Explore properties by category — Office Space, Shops & Showrooms, Godowns & Warehouse, Lands & Plots.'}}
+        </p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-wrap mb-4 text-center">
+        <div class="tabs-btns d-inline-flex flex-wrap justify-content-center gap-2">
+          <button type="button" class="property-tab active" data-filter="all">All</button>
+          <button type="button" class="property-tab" data-filter="office">Flats</button>
+          <button type="button" class="property-tab" data-filter="shops">House & Villa</button>
+          <button type="button" class="property-tab" data-filter="godowns">Lands & Plots</button>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="swiper directory-slider pt-3 pb-3">
+            <div class="swiper-wrapper">
+              <!-- Directory Card 1 -->
+              @foreach($propertiesSellResidential as $key => $value)
+                <div class="swiper-slide">
+                  <div class=" property-card" data-type="office">
+                    <div class="newdesign-project-main shadow-sm">
+                      <div class="newdesign-image-proj position-relative">
+                        <a href="{{route('property_detail', ['title' => $value->slug])}}">
+                          <img
+                            src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
+                            alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
+                        </a>
+                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                      </div>
+                      <div class="newdesign-info-proj p-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;">{{$value->title}}
+                          </h5>
+
+                        </div>
+                        <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                            style=" height:30px;">Office Space</p>
+                          <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+
+                        </div>
+
+                        <div class="horizontal-line mt-2"></div>
+                        <div class="d-flex justify-content-between align-items-center">
+
+                          <p class="small text-secondary mb-2 mt-2">
+                            <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
+                            {{ $value->getState->name }}
+                          </p>
+                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                        </div>
+
+                        <div class="horizontal-line"></div>
+                        <p class="small text-muted mb-2 mt-2">
+                          {{ \Illuminate\Support\Str::limit($value->description, 50) }}
+                        </p>
+
+                        <div class="d-flex justify-content-between">
+                          <p class="m-0 small"><strong>Owner:</strong><br>{{ $value->getUser->firstname }}</p>
+                          <p class="m-0 small">
+                            <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
+                          </p>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                          <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
+                            {{number_format($value->price, 2)}}</h6>
+                          <button class="btn btn-sm btn-primary">Contact Now</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              @endforeach
+
+              <!-- Add more slides as needed -->
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </section>
+
+  <section class="newdesign-property-topprojects py-5" style="background:#fff;">
+    <div class="container">
+      <!-- Heading -->
+      <div class="text-center mb-4">
+        <h4 class="fw-bold mb-2">{{ $commercial_property_for_rent->heading ?? 'Commercial Properties for Rent'}}</h4>
+        <p class="text-muted mb-0">
+          {{ $commercial_property_for_rent->title ?? 'Explore properties by category — Office Space, Shops & Showrooms, Godowns & Warehouse, Lands & Plots.'}}
+        </p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-wrap mb-4 text-center">
+        <div class="tabs-btns d-inline-flex flex-wrap justify-content-center gap-2">
+          <button type="button" class="property-tab active" data-filter="all">All</button>
+          <button type="button" class="property-tab" data-filter="office">Office Space</button>
+          <button type="button" class="property-tab" data-filter="shops">Shops & Showrooms</button>
+          <button type="button" class="property-tab" data-filter="godowns">Warehouse & Godowns</button>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="swiper directory-slider pt-3 pb-3">
+            <div class="swiper-wrapper">
+              <!-- Directory Card 1 -->
+              @foreach($propertiesRentCommercial as $key => $value)
+                <div class="swiper-slide">
+                  <div class=" property-card" data-type="office">
+                    <div class="newdesign-project-main shadow-sm">
+                      <div class="newdesign-image-proj position-relative">
+                        <a href="{{route('property_detail', ['title' => $value->slug])}}">
+                          <img
+                            src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
+                            alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
+                        </a>
+                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                      </div>
+                      <div class="newdesign-info-proj p-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;">{{$value->title}}
+                          </h5>
+
+                        </div>
+                        <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                            style=" height:30px;">Office Space</p>
+                          <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+
+                        </div>
+
+                        <div class="horizontal-line mt-2"></div>
+                        <div class="d-flex justify-content-between align-items-center">
+
+                          <p class="small text-secondary mb-2 mt-2">
+                            <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
+                            {{ $value->getState->name }}
+                          </p>
+                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                        </div>
+
+                        <div class="horizontal-line"></div>
+                        <p class="small text-muted mb-2 mt-2">
+                          {{ \Illuminate\Support\Str::limit($value->description, 50) }}
+                        </p>
+
+                        <div class="d-flex justify-content-between">
+                          <p class="m-0 small"><strong>Owner:</strong><br>{{ $value->getUser->firstname }}</p>
+                          <p class="m-0 small">
+                            <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
+                          </p>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                          <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
+                            {{number_format($value->price, 2)}}</h6>
+                          <button class="btn btn-sm btn-primary">Contact Now</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              @endforeach
+
+              <!-- Add more slides as needed -->
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="newdesign-property-topprojects py-5" style="background:#fff;">
+    <div class="container">
+      <!-- Heading -->
+      <div class="text-center mb-4">
+        <h4 class="fw-bold mb-2">{{ $residential_property_for_rent->heading ?? 'Residential Properties for Rent'}}</h4>
+        <p class="text-muted mb-0">
+          {{ $residential_property_for_rent->title ?? 'Explore properties by category — Office Space, Shops & Showrooms, Godowns & Warehouse, Lands & Plots.'}}
+        </p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-wrap mb-4 text-center">
+        <div class="tabs-btns d-inline-flex flex-wrap justify-content-center gap-2">
+          <button type="button" class="property-tab active" data-filter="all">All</button>
+          <button type="button" class="property-tab" data-filter="office">Office Space</button>
+          <button type="button" class="property-tab" data-filter="shops">Shops & Showrooms</button>
+          <button type="button" class="property-tab" data-filter="godowns">Warehouse & Godowns</button>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="swiper directory-slider pt-3 pb-3">
+            <div class="swiper-wrapper">
+              <!-- Directory Card 1 -->
+              @foreach($propertiesRentResidential as $key => $value)
+                <div class="swiper-slide">
+                  <div class=" property-card" data-type="office">
+                    <div class="newdesign-project-main shadow-sm">
+                      <div class="newdesign-image-proj position-relative">
+                        <a href="{{route('property_detail', ['title' => $value->slug])}}">
+                          <img
+                            src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
+                            alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
+                        </a>
+                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                      </div>
+                      <div class="newdesign-info-proj p-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;">{{$value->title}}
+                          </h5>
+
+                        </div>
+                        <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                            style=" height:30px;">Office Space</p>
+                          <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+
+                        </div>
+
+                        <div class="horizontal-line mt-2"></div>
+                        <div class="d-flex justify-content-between align-items-center">
+
+                          <p class="small text-secondary mb-2 mt-2">
+                            <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
+                            {{ $value->getState->name }}
+                          </p>
+                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                        </div>
+
+                        <div class="horizontal-line"></div>
+                        <p class="small text-muted mb-2 mt-2">
+                          {{ \Illuminate\Support\Str::limit($value->description, 50) }}
+                        </p>
+
+                        <div class="d-flex justify-content-between">
+                          <p class="m-0 small"><strong>Owner:</strong><br>{{ $value->getUser->firstname }}</p>
+                          <p class="m-0 small">
+                            <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
+                          </p>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                          <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
+                            {{number_format($value->price, 2)}}</h6>
+                          <button class="btn btn-sm btn-primary">Contact Now</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              @endforeach
+
+              <!-- Add more slides as needed -->
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="new-card-section">
+    <div class="new-main-card">
+      <!-- LEFT SIDE: Tabs -->
+      <div class="new-left-tabs">
+        <button class="new-tab-btn active" data-tab="tab1">Technology</button>
+        <hr />
+        <button class="new-tab-btn" data-tab="tab2">Healthcare</button>
+        <hr />
+        <button class="new-tab-btn" data-tab="tab3">Education</button>
+        <hr />
+        <button class="new-tab-btn" data-tab="tab4">Business</button>
+        <hr />
+        <button class="new-tab-btn" data-tab="tab5">Travel</button>
+      </div>
+
+      <!-- RIGHT SIDE: Image Sections -->
+      <div class="new-right-slider">
+        <div class="new-tab-content active" id="tab1">
+          <div class="new-slider-container">
+            <div class="new-slide">
+              <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=870"
+                alt="AI" />
+              <h3 class="new-image-title">Artificial Intelligence</h3>
+            </div>
+            <div class="new-slide">
+              <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=870"
+                alt="Coding" />
+              <h3 class="new-image-title">Web Development</h3>
+            </div>
+            <div class="new-slide">
+              <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=870"
+                alt="Cybersecurity" />
+              <h3 class="new-image-title">Cybersecurity</h3>
+            </div>
+            <div class="new-slide">
+              <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=870"
+                alt="Tech" />
+              <h3 class="new-image-title">Cloud Computing</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="new-tab-content" id="tab2">
+          <div class="new-slider-container">
+            <div class="new-slide">
+              <img src="https://images.unsplash.com/photo-1587502536263-9297b6d1a8ef?auto=format&fit=crop&q=80&w=870"
+                alt="Healthcare" />
+              <h3 class="new-image-title">Medical Research</h3>
+            </div>
+            <div class="new-slide">
+              <img src="https://images.unsplash.com/photo-1580281657521-95868b0cbec3?auto=format&fit=crop&q=80&w=870"
+                alt="Doctor" />
+              <h3 class="new-image-title">Healthcare Services</h3>
+            </div>
+            <div class="new-slide">
+              <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&q=80&w=870"
+                alt="Hospital" />
+              <h3 class="new-image-title">Modern Hospitals</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="new-tab-content" id="tab3">
+          <div class="new-slider-container">
+            <div class="new-slide">
+              <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=870"
+                alt="Education" />
+              <h3 class="new-image-title">E-Learning</h3>
+            </div>
+            <div class="new-slide">
+              <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&q=80&w=870"
+                alt="School" />
+              <h3 class="new-image-title">Online Courses</h3>
+            </div>
+            <div class="new-slide">
+              <img src="https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&q=80&w=870"
+                alt="Student" />
+              <h3 class="new-image-title">Skill Development</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- reels section -->
+  <section class="testimonial-reels-section py-5 bg-light">
+    <div class="container">
+      <h2 class="sec__title mb-3 text-center">{{ $reels->heading ?? 'Reels'}}</h2>
       <p class="sec__desc text-center">
-        Explore a range of digital assets ready to buy or sell
+        {{ $reels->title ?? 'Explore a range of digital assets ready to buy or sell'}}
       </p>
       <div class="row g-4 justify-content-center">
 
@@ -2389,52 +1511,97 @@ Connect, explore, and make informed decisions with Bhawan Bhoomi – your reliab
     </div>
   </section>
 
-  <!--end static card-->
+  <!-- trending property section -->
   @php
     $city_id = Cache::get('location-id');
-    $trending_projects = App\Properties::where('publish_status', 'Publish')->where('approval', '!=', 'Rejected')->where('trending', 'Yes')->where('status', '1')->where('city_id', $city_id)->orderBy('id', 'DESC')->get();
+    $projects = App\Properties::where('publish_status', 'Publish')->where('approval', '!=', 'Rejected')->where('trending', 'Yes')->where('status', '1')->where('city_id', $city_id)->orderBy('id', 'DESC')->get();
   @endphp
-  @if(count($trending_projects) > 0)
+  @if(count($projects) > 0)
     <section class="property-topprojects">
       <div class="container">
         <div class="row">
           <div class="col-sm-12">
             <div class="section-title section-left">
-              <h4>{{ $trending ? $trending->heading : '' }}</h4>
-              <p>{{ $trending ? $trending->title : '' }}</p>
+              <h4>{{ $trending_projects ? $trending_projects->heading : '' }}</h4>
+              <p>{{ $trending_projects ? $trending_projects->title : '' }}</p>
             </div>
           </div>
         </div>
         <div class="row">
-          @foreach($trending_projects as $trending)
-            <div class="col-lg-4 mb-3">
-              <div class="project-main">
-                <a href="{{route('property_detail', ['title' => $trending->slug])}}">
-                  <div class="image-proj">
-                    <img
-                      src="{{isset($trending->PropertyGallery[0]->image_path) ? asset('') . $trending->PropertyGallery[0]->image_path : ''}}"
-                      class="img-fluid">
-                  </div>
+          <div class="col-sm-12">
+            <div class="swiper directory-slider pt-3 pb-3">
+              <div class="swiper-wrapper">
+                <!-- Directory Card 1 -->
+                @foreach($projects as $key => $value)
+                  <div class="swiper-slide">
+                    <div class=" property-card" data-type="office">
+                      <div class="newdesign-project-main shadow-sm">
+                        <div class="newdesign-image-proj position-relative">
+                          <a href="{{route('property_detail', ['title' => $value->slug])}}">
+                            <img
+                              src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
+                              alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
+                          </a>
+                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                        </div>
+                        <div class="newdesign-info-proj p-3">
+                          <div class="d-flex justify-content-between align-items-start">
+                            <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;">{{$value->title}}
+                            </h5>
 
-                  <div class="info-proj">
-                    <h4 class="proj-name">{{ $trending->title }}</h4>
-                    <span
-                      class="apart-name">{{ \Illuminate\Support\Str::limit($trending->description, 100, $end = '...') }}</span>
-                    <span class="apart-adress">{{ $trending->getState ? $trending->getState->name : '' }},
-                      {{ $trending->getCity ? $trending->getCity->name : '' }},
-                      {{ $trending->Location ? $trending->Location->name : '' }}, {{ $trending->address }}</span>
-                    <div class="proj-price">
-                      <span><i class="fas fa-rupee-sign"></i> {{ $trending->price }}</span>
+                          </div>
+                          <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                          <div class="d-flex justify-content-between align-items-center">
+                            <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                              style=" height:30px;">Office Space</p>
+                            <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                            <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+
+                          </div>
+
+                          <div class="horizontal-line mt-2"></div>
+                          <div class="d-flex justify-content-between align-items-center">
+
+                            <p class="small text-secondary mb-2 mt-2">
+                              <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
+                              {{ $value->getState->name }}
+                            </p>
+                            <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                          </div>
+
+                          <div class="horizontal-line"></div>
+                          <p class="small text-muted mb-2 mt-2">
+                            {{ \Illuminate\Support\Str::limit($value->description, 50) }}
+                          </p>
+
+                          <div class="d-flex justify-content-between">
+                            <p class="m-0 small"><strong>Owner:</strong><br>{{ $value->getUser->firstname }}</p>
+                            <p class="m-0 small">
+                              <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
+                            </p>
+                          </div>
+                          <hr>
+                          <div class="d-flex justify-content-between">
+                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
+                              {{number_format($value->price, 2)}}</h6>
+                            <button class="btn btn-sm btn-primary">Contact Now</button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </a>
+                @endforeach
               </div>
+
+              <div class="swiper-pagination"></div>
             </div>
-          @endforeach
+          </div>
         </div>
       </div>
     </section>
   @endif
+
+  <!-- features section -->
   <section class="home-features">
     <div class="features-overlay">
       <div class="container">
@@ -2451,42 +1618,92 @@ Connect, explore, and make informed decisions with Bhawan Bhoomi – your reliab
       </div>
     </div>
   </section>
+
+  <!-- latest property section -->
   <section class="property-home-list">
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
           <div class="section-title section-center">
-            <h4>{{ $latest_property ? $latest_property->heading : '' }}</h4>
-            <p>{{ $latest_property ? $latest_property->title : '' }}</p>
+            <h4>{{ $latest_properties ? $latest_properties->heading : '' }}</h4>
+            <p>{{ $latest_properties ? $latest_properties->title : '' }}</p>
           </div>
         </div>
       </div>
       <div class="row">
-        @if(isset($listings))
-          @foreach($listings as $key => $value)
+        <div class="col-sm-12">
+          <div class="swiper directory-slider pt-3 pb-3">
+            <div class="swiper-wrapper">
+              <!-- Directory Card 1 -->
+              @foreach($listings as $key => $value)
+                <div class="swiper-slide">
+                  <div class=" property-card" data-type="office">
+                    <div class="newdesign-project-main shadow-sm">
+                      <div class="newdesign-image-proj position-relative">
+                        <a href="{{route('property_detail', ['title' => $value->slug])}}">
+                          <img
+                            src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
+                            alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
+                        </a>
+                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                      </div>
+                      <div class="newdesign-info-proj p-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;">{{$value->title}}
+                          </h5>
 
-            <div class="col-sm-2">
-              <div class="property-gridsm">
-                <div class="property-img"><a href="{{route('property_detail', ['title' => $value->slug])}}"> <img
-                      src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : ''}}"
-                      class="img-fluid"> <span
-                      class="type-pro">{{isset($value->property_types->type) ? $value->property_types->type : ''}}</span><span
-                      class="price-pro">RRs. {{number_format($value->price, 2)}}</span> </a>
-                </div>
-                <div class="property-content">
-                  <div class="property-title">
-                    <h4><a href="{{route('property_detail', ['title' => $value->slug])}}">{{$value->title}}</a></h4>
-                    <a href="#" class="property-address"> <i class="fas fa-map-marker"></i> {{$value->address}} </a>
+                        </div>
+                        <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                            style=" height:30px;">Office Space</p>
+                          <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+
+                        </div>
+
+                        <div class="horizontal-line mt-2"></div>
+                        <div class="d-flex justify-content-between align-items-center">
+
+                          <p class="small text-secondary mb-2 mt-2">
+                            <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
+                            {{ $value->getState->name }}
+                          </p>
+                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                        </div>
+
+                        <div class="horizontal-line"></div>
+                        <p class="small text-muted mb-2 mt-2">
+                          {{ \Illuminate\Support\Str::limit($value->description, 50) }}
+                        </p>
+
+                        <div class="d-flex justify-content-between">
+                          <p class="m-0 small"><strong>Owner:</strong><br>{{ $value->getUser->firstname }}</p>
+                          <p class="m-0 small">
+                            <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
+                          </p>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                          <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
+                            {{number_format($value->price, 2)}}</h6>
+                          <button class="btn btn-sm btn-primary">Contact Now</button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              @endforeach
             </div>
 
-          @endforeach
-        @endif
+            <div class="swiper-pagination"></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
+
+  <!-- featured property section -->
   @php
     $featured_projects = App\Properties::where('publish_status', 'Publish')->where('approval', '!=', 'Rejected')->where('featured', 'Yes')->where('status', '1')->where('city_id', $city_id)->orderBy('id', 'DESC')->get();
   @endphp
@@ -2503,252 +1720,116 @@ Connect, explore, and make informed decisions with Bhawan Bhoomi – your reliab
           </div>
         </div>
         <div class="row">
-          @foreach($featured_projects as $featured)
-            <div class="col-lg-6 col-md-12">
-              <div class="property-list-3">
-
-                <div class="listing-img-wrapper">
-                  <a href="{{route('property_detail', ['title' => $featured->slug])}}">
-                    <img
-                      src="{{isset($featured->PropertyGallery[0]->image_path) ? asset('') . $featured->PropertyGallery[0]->image_path : ''}}"
-                      class="img-fluid mx-auto" alt="">
-                  </a>
-
-                </div>
-
-                <div class="listing-content">
-                  <div class="listing-detail-wrapper-box">
-                    <div class="listing-detail-wrapper">
-                      <div class="listing-short-detail">
-                        <h4 class="listing-name"><a href="property-detail.php">{{ $featured->title }}</a></h4>
-                        <div class="fr-can-rating">
-                          <i class="fas fa-star filled"></i>
-                          <i class="fas fa-star filled"></i>
-                          <i class="fas fa-star filled"></i>
-                          <i class="fas fa-star filled"></i>
-                          <i class="fas fa-star"></i>
-                          <span class="reviews_text">(42 Reviews)</span>
+          <div class="col-sm-12">
+            <div class="swiper directory-slider pt-3 pb-3">
+              <div class="swiper-wrapper">
+                <!-- Directory Card 1 -->
+                @foreach($featured_projects as $key => $value)
+                  <div class="swiper-slide">
+                    <div class=" property-card" data-type="office">
+                      <div class="newdesign-project-main shadow-sm">
+                        <div class="newdesign-image-proj position-relative">
+                          <a href="{{route('property_detail', ['title' => $value->slug])}}">
+                            <img
+                              src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
+                              alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
+                          </a>
+                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
                         </div>
-                        <span
-                          class="prt-types sale">{{ \Illuminate\Support\Str::limit($featured->description, 100, $end = '...') }}</span>
-                      </div>
-                      <div class="list-price">
-                        <h6 class="listing-card-info-price"><i class="fas fa-rupee-sign"></i>{{ $featured->price }}</h6>
+                        <div class="newdesign-info-proj p-3">
+                          <div class="d-flex justify-content-between align-items-start">
+                            <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;">{{$value->title}}
+                            </h5>
+
+                          </div>
+                          <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                          <div class="d-flex justify-content-between align-items-center">
+                            <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                              style=" height:30px;">Office Space</p>
+                            <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                            <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+
+                          </div>
+
+                          <div class="horizontal-line mt-2"></div>
+                          <div class="d-flex justify-content-between align-items-center">
+
+                            <p class="small text-secondary mb-2 mt-2">
+                              <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
+                              {{ $value->getState->name }}
+                            </p>
+                            <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                          </div>
+
+                          <div class="horizontal-line"></div>
+                          <p class="small text-muted mb-2 mt-2">
+                            {{ \Illuminate\Support\Str::limit($value->description, 50) }}
+                          </p>
+
+                          <div class="d-flex justify-content-between">
+                            <p class="m-0 small"><strong>Owner:</strong><br>{{ $value->getUser->firstname }}</p>
+                            <p class="m-0 small">
+                              <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
+                            </p>
+                          </div>
+                          <hr>
+                          <div class="d-flex justify-content-between">
+                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
+                              {{number_format($value->price, 2)}}</h6>
+                            <button class="btn btn-sm btn-primary">Contact Now</button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-
-                  <div class="listing-footer-wrapper">
-                    <div class="listing-locate">
-                      <span class="listing-location"><i
-                          class="fas fa-map-marker-alt"></i>{{ $featured->getState ? $featured->getState->name : '' }},
-                        {{ $featured->getCity ? $featured->getCity->name : '' }},
-                        {{ $featured->Location ? $featured->Location->name : '' }}, {{ $featured->address }}</span>
-                    </div>
-                    <div class="listing-detail-btn">
-                      <a href="{{route('property_detail', ['title' => $featured->slug])}}" class="more-btn">View</a>
-                    </div>
-                  </div>
-
-                </div>
-
+                @endforeach
               </div>
+
+              <div class="swiper-pagination"></div>
             </div>
-          @endforeach
+          </div>
         </div>
       </div>
     </section>
   @endif
-  
+
+  <!-- testimonial section -->
   <section class="testimonial-section">
-  <h2 class="testimonial-heading">What Our Clients Say</h2>
+    <h2 class="testimonial-heading">{{ $testimonials->heading ?? 'What Our Clients Say'}}</h2>
+    <p>{{ $testimonials->title ?? ''}}</p>
+    <div class="testimonial-slider pt-4 pb-4">
+      <div class="testimonial-container">
+        <!-- Testimonial 1 -->
+        @if(isset($testimonial))
+          @foreach($testimonial as $k => $testimoniall)
 
-  <div class="testimonial-slider pt-4 pb-4">
-    <div class="testimonial-container">
-      <!-- Testimonial 1 -->
-      <div class="testimonial-card">
-        <div class="testimonial-profile">
-          <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Client 1">
-        </div>
-        <div class="testimonial-content">
-          <p class="testimonial-text">
-            "This service completely exceeded my expectations. The team was professional, efficient, and extremely friendly!"
-          </p>
-          <div class="testimonial-stars">
-            ★★★★★
-          </div>
-          <h4 class="testimonial-name">Sarah Johnson</h4>
-          <p class="testimonial-role">Marketing Manager</p>
-        </div>
-      </div>
-
-      <!-- Testimonial 2 -->
-      <div class="testimonial-card">
-        <div class="testimonial-profile">
-          <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Client 2">
-        </div>
-        <div class="testimonial-content">
-          <p class="testimonial-text">
-            "An amazing experience! The attention to detail and quick response made the whole process smooth and enjoyable."
-          </p>
-          <div class="testimonial-stars">
-            ★★★★★
-          </div>
-          <h4 class="testimonial-name">Michael Adams</h4>
-          <p class="testimonial-role">Software Engineer</p>
-        </div>
-      </div>
-
-      <!-- Testimonial 3 -->
-      <div class="testimonial-card">
-        <div class="testimonial-profile">
-          <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Client 3">
-        </div>
-        <div class="testimonial-content">
-          <p class="testimonial-text">
-            "Highly recommend! The support team was always available and the quality of work is simply top-notch."
-          </p>
-          <div class="testimonial-stars">
-            ★★★★★
-          </div>
-          <h4 class="testimonial-name">Priya Mehta</h4>
-          <p class="testimonial-role">Entrepreneur</p>
-        </div>
-      </div>
-
-      <!-- Testimonial 4 -->
-      <div class="testimonial-card">
-        <div class="testimonial-profile">
-          <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Client 4">
-        </div>
-        <div class="testimonial-content">
-          <p class="testimonial-text">
-            "From start to finish, everything was handled professionally. The final result was beyond my expectations!"
-          </p>
-          <div class="testimonial-stars">
-            ★★★★★
-          </div>
-          <h4 class="testimonial-name">Arjun Patel</h4>
-          <p class="testimonial-role">Creative Director</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-  <section class="client-reviews-section">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="section-title section-center">
-            <h4>What People Says</h4>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="people-says-owl-car owl-carousel" id="people-says-home">
-            @if(isset($testimonials))
-              @foreach($testimonials as $k => $testimonial)
-                <div class="item">
-                  <article class="quote-modern">
-                    <div class="quote-modern-inner">
-                      <time class="quote-modern-time"
-                        datetime="2020">{{date("jS F, Y", strtotime($testimonial->created_at))}}</time>
-                      <div class="quote-modern-main">
-                        <p>{{ $testimonial->description }}</p>
-                      </div>
-                      <div class="quote-modern-meta-outer">
-                        <img class="quote-modern-avatar" src="{{ asset('storage') }}/{{ $testimonial->image }}" alt=""
-                          width="57" height="57" />
-                        <div class="quote-modern-meta">
-                          <h4 class="quote-modern-cite">{{ $testimonial->name }}</h4>
-                          <p class="quote-modern-position">{{ $testimonial->designation }}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
+            <div class="testimonial-card">
+              <div class="testimonial-profile">
+                <img src="{{ asset('storage') }}/{{ $testimoniall->image }}" alt="Client 1">
+              </div>
+              <div class="testimonial-content">
+                <p class="testimonial-text">
+                  {{ $testimoniall->description }}
+                </p>
+                <div class="testimonial-stars">
+                  ★★★★★
                 </div>
-              @endforeach
-            @endif
-          </div>
-        </div>
+                <h4 class="testimonial-name">{{ $testimoniall->name }}</h4>
+                <p class="testimonial-role">{{ $testimoniall->designation }}</p>
+              </div>
+            </div>
+          @endforeach
+        @endif
 
-        <div class="col-sm-12 text-center mt-3">
-          <button class="btn btn-feedback" type="button" data-target="#send-feedback" data-toggle="modal">Send
-            Feedback</button>
-        </div>
       </div>
     </div>
-  </section>
-  <section class="need-help-section">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="section-title section-center">
-            <h4>{{ $help_content->heading }}</h4>
-          </div>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-md-4">
-          <div class="help-box box-1">
-            {!! $help_content->content_one !!}
-            <a class="btn btn-startweb" href="#"> Start Chat</a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="help-box box-2">
-            {!! $help_content->content_two !!}
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="help-box box-3">
-            {!! $help_content->content_three !!}
-          </div>
-        </div>
-      </div>
+    <div class="col-sm-12 text-center mt-3">
+      <button class="btn btn-feedback" type="button" data-target="#send-feedback" data-toggle="modal">Send
+        Feedback</button>
     </div>
   </section>
-  @php
-    $app_content = App\FooterContent::where('slug', 'app')->first();
-  @endphp
-  <!--<section class="app-section">-->
-  <!--  <div class="container">-->
-  <!--    <div class="row">-->
-  <!--      <div class="col-lg-7 align-self-center">-->
-  <!--        <div class="section-title">-->
-  <!--          <h2>{{ $app_content->heading }}</h2>-->
-  <!--          <p>{{ $app_content->title }}</p>-->
-  <!--        </div>-->
-  <!--        <div class="row">-->
-  <!--          <div class="col-md-4">-->
-  <!--            <div class="d-flex">-->
-  <!--              <div class="mr-3"><i class="fas fa-truck-loading app-xll"></i></div>-->
-  <!--              <h6 class="text-app-prim">{{ $app_content->key_one }}</h6>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--          <div class="col-md-4">-->
-  <!--            <div class="d-flex">-->
-  <!--              <div class="mr-3"><i class="fas fa-file-signature app-xll"></i></div>-->
-  <!--              <h6 class="text-app-prim">{{ $app_content->key_two }}</h6>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--          <div class="col-md-4">-->
-  <!--            <div class="d-flex">-->
-  <!--              <div class="mr-3"> <i class="far fa-comment-dots app-xll"></i></div>-->
-  <!--              <h6 class="text-app-prim">{{ $app_content->key_three }}</h6>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--      <div class="col-lg-5">-->
-  <!--        <div class="app-mobile"> <img src="{{ asset('storage') }}/{{ $app_content->image }}" class="img-fluid"> </div>-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--  </div>-->
-  <!--</section>-->
 
+  <!-- send feedback modal -->
   <div class="modal fade custom-modal" id="send-feedback" tabindex="-1" role="dialog" aria-labelledby="register"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -2824,6 +1905,76 @@ Connect, explore, and make informed decisions with Bhawan Bhoomi – your reliab
     </div>
   </div>
 
+  <!-- contact us section -->
+  <section class="need-help-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="section-title section-center">
+            <h4>{{ $help_content->heading }}</h4>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-md-4">
+          <div class="help-box box-1">
+            {!! $help_content->content_one !!}
+            <a class="btn btn-startweb" href="#"> Start Chat</a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="help-box box-2">
+            {!! $help_content->content_two !!}
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="help-box box-3">
+            {!! $help_content->content_three !!}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  @php
+    $app_content = App\FooterContent::where('slug', 'app')->first();
+  @endphp
+  <!--<section class="app-section">-->
+  <!--  <div class="container">-->
+  <!--    <div class="row">-->
+  <!--      <div class="col-lg-7 align-self-center">-->
+  <!--        <div class="section-title">-->
+  <!--          <h2>{{ $app_content->heading }}</h2>-->
+  <!--          <p>{{ $app_content->title }}</p>-->
+  <!--        </div>-->
+  <!--        <div class="row">-->
+  <!--          <div class="col-md-4">-->
+  <!--            <div class="d-flex">-->
+  <!--              <div class="mr-3"><i class="fas fa-truck-loading app-xll"></i></div>-->
+  <!--              <h6 class="text-app-prim">{{ $app_content->key_one }}</h6>-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--          <div class="col-md-4">-->
+  <!--            <div class="d-flex">-->
+  <!--              <div class="mr-3"><i class="fas fa-file-signature app-xll"></i></div>-->
+  <!--              <h6 class="text-app-prim">{{ $app_content->key_two }}</h6>-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--          <div class="col-md-4">-->
+  <!--            <div class="d-flex">-->
+  <!--              <div class="mr-3"> <i class="far fa-comment-dots app-xll"></i></div>-->
+  <!--              <h6 class="text-app-prim">{{ $app_content->key_three }}</h6>-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--      <div class="col-lg-5">-->
+  <!--        <div class="app-mobile"> <img src="{{ asset('storage') }}/{{ $app_content->image }}" class="img-fluid"> </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+  <!--</section>-->
+
 
 @endsection
 
@@ -2831,199 +1982,199 @@ Connect, explore, and make informed decisions with Bhawan Bhoomi – your reliab
 
 @section('js')
 
-<!-- JS -->
-<script>
-document.querySelectorAll('.property-tab').forEach(tab => {
-  tab.addEventListener('click', function() {
-    document.querySelectorAll('.property-tab').forEach(btn => btn.classList.remove('active'));
-    this.classList.add('active');
+  <!-- JS -->
+  <script>
+    document.querySelectorAll('.property-tab').forEach(tab => {
+      tab.addEventListener('click', function () {
+        document.querySelectorAll('.property-tab').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
 
-    const filter = this.getAttribute('data-filter');
-    document.querySelectorAll('.property-card').forEach(card => {
-      if (filter === 'all' || card.getAttribute('data-type') === filter) {
-        card.classList.remove('hide');
-      } else {
-        card.classList.add('hide');
+        const filter = this.getAttribute('data-filter');
+        document.querySelectorAll('.property-card').forEach(card => {
+          if (filter === 'all' || card.getAttribute('data-type') === filter) {
+            card.classList.remove('hide');
+          } else {
+            card.classList.add('hide');
+          }
+        });
+      });
+    });
+  </script>
+  <script>
+    (function () {
+      const buttons = document.querySelectorAll('.tabs-btns .btn');
+      const cards = document.querySelectorAll('.property-card');
+
+
+      function setActiveButton(activeBtn) {
+        buttons.forEach(b => b.classList.remove('active'));
+        activeBtn.classList.add('active');
       }
+
+
+      function filterCards(type) {
+        cards.forEach(card => {
+          const t = card.getAttribute('data-type');
+          if (type === 'all' || t === type) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+      }
+
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', function () {
+          const type = this.getAttribute('data-filter');
+          setActiveButton(this);
+          filterCards(type);
+        });
+      });
+
+
+      // initial state - show all
+      filterCards('all');
+
+
+    })();
+  </script>
+  <script>
+    const tabs = document.querySelectorAll('.newupdateTab');
+    const searchBar = document.querySelector('.newupdateSearchBar');
+    const filters = document.querySelector('.newupdateFilterOptions');
+    const searchInput = document.querySelector('.newupdateSearchInput');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        const type = tab.getAttribute('data-type');
+        searchBar.setAttribute('data-type', type);
+
+        let placeholder = '';
+        switch (type) {
+          case 'buy':
+            placeholder = 'Search by Project, Locality, or Builder';
+            break;
+          case 'rental':
+            placeholder = 'Search by Location, Apartment, or PG';
+            break;
+          case 'projects':
+            placeholder = 'Search by Project Name or Builder';
+            break;
+          case 'pg-hostels':
+            placeholder = 'Search by PG Name or Locality';
+            break;
+          case 'plot-land':
+            placeholder = 'Search by Area or Plot Type';
+            break;
+          case 'commercial':
+            placeholder = 'Search by Office or Shop';
+            break;
+          case 'agents':
+            placeholder = 'Search by Agent Name or Area';
+            break;
+        }
+        searchInput.placeholder = placeholder;
+
+        const dropdowns = filters.querySelectorAll('.newupdateDropdown');
+        dropdowns.forEach((dropdown, index) => {
+          dropdown.innerHTML = '';
+          let options = [];
+          switch (type) {
+            case 'buy':
+              options = index === 0 ? ['Budget', '0-10L', '10-20L'] :
+                index === 1 ? ['Property Type', 'Apartment', 'House'] :
+                  ['Furnishing Status', 'Furnished', 'Unfurnished'];
+              break;
+            case 'rental':
+              options = index === 0 ? ['Budget', '0-5L', '5-10L'] :
+                index === 1 ? ['Property Type', 'Apartment', 'Flat'] :
+                  ['Furnishing Status', 'Furnished', 'Semi-Furnished'];
+              break;
+            default:
+              options = ['Option 1', 'Option 2', 'Option 3'];
+          }
+          options.forEach(option => {
+            const opt = document.createElement('option')
+            opt.value = option;
+            opt.textContent = option;
+            dropdown.appendChild(opt);
+          });
+        });
+      });
     });
-  });
-});
-</script>
-<script>
-(function(){
-const buttons = document.querySelectorAll('.tabs-btns .btn');
-const cards = document.querySelectorAll('.property-card');
 
+    document.querySelector('.newupdateSearchBtn').addEventListener('click', function () {
+      const location = document.querySelector('.newupdateSearchBar select').value;
+      const query = document.querySelector('.newupdateSearchInput').value;
+      const budget = document.querySelectorAll('.newupdateFilters select')[0].value;
+      const propertyType = document.querySelectorAll('.newupdateFilters select')[1].value;
+      const furnishing = document.querySelectorAll('.newupdateFilters select')[2].value;
+      console.log(`Search: ${location}, ${query}, ${budget}, ${propertyType}, ${furnishing}`);
+      alert(`Searching for: ${location}, ${query}, ${budget}, ${propertyType}, ${furnishing}`);
+    });
+  </script>
+  <!-- Swiper JS -->
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
-function setActiveButton(activeBtn){
-buttons.forEach(b => b.classList.remove('active'));
-activeBtn.classList.add('active');
-}
-
-
-function filterCards(type){
-cards.forEach(card => {
-const t = card.getAttribute('data-type');
-if(type === 'all' || t === type) {
-card.classList.remove('hidden');
-} else {
-card.classList.add('hidden');
-}
-});
-}
-
-
-buttons.forEach(btn => {
-btn.addEventListener('click', function(){
-const type = this.getAttribute('data-filter');
-setActiveButton(this);
-filterCards(type);
-});
-});
-
-
-// initial state - show all
-filterCards('all');
-
-
-})();
-</script>
-        <script>
-        const tabs = document.querySelectorAll('.newupdateTab');
-        const searchBar = document.querySelector('.newupdateSearchBar');
-        const filters = document.querySelector('.newupdateFilterOptions');
-        const searchInput = document.querySelector('.newupdateSearchInput');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-
-                const type = tab.getAttribute('data-type');
-                searchBar.setAttribute('data-type', type);
-
-                let placeholder = '';
-                switch (type) {
-                    case 'buy':
-                        placeholder = 'Search by Project, Locality, or Builder';
-                        break;
-                    case 'rental':
-                        placeholder = 'Search by Location, Apartment, or PG';
-                        break;
-                    case 'projects':
-                        placeholder = 'Search by Project Name or Builder';
-                        break;
-                    case 'pg-hostels':
-                        placeholder = 'Search by PG Name or Locality';
-                        break;
-                    case 'plot-land':
-                        placeholder = 'Search by Area or Plot Type';
-                        break;
-                    case 'commercial':
-                        placeholder = 'Search by Office or Shop';
-                        break;
-                    case 'agents':
-                        placeholder = 'Search by Agent Name or Area';
-                        break;
-                }
-                searchInput.placeholder = placeholder;
-
-                const dropdowns = filters.querySelectorAll('.newupdateDropdown');
-                dropdowns.forEach((dropdown, index) => {
-                    dropdown.innerHTML = '';
-                    let options = [];
-                    switch (type) {
-                        case 'buy':
-                            options = index === 0 ? ['Budget', '0-10L', '10-20L'] :
-                                   index === 1 ? ['Property Type', 'Apartment', 'House'] :
-                                   ['Furnishing Status', 'Furnished', 'Unfurnished'];
-                            break;
-                        case 'rental':
-                            options = index === 0 ? ['Budget', '0-5L', '5-10L'] :
-                                   index === 1 ? ['Property Type', 'Apartment', 'Flat'] :
-                                   ['Furnishing Status', 'Furnished', 'Semi-Furnished'];
-                            break;
-                        default:
-                            options = ['Option 1', 'Option 2', 'Option 3'];
-                    }
-                    options.forEach(option => {
-                        const opt = document.createElement('option');
-                        opt.value = option;
-                        opt.textContent = option;
-                        dropdown.appendChild(opt);
-                    });
-                });
-            });
-        });
-
-        document.querySelector('.newupdateSearchBtn').addEventListener('click', function() {
-            const location = document.querySelector('.newupdateSearchBar select').value;
-            const query = document.querySelector('.newupdateSearchInput').value;
-            const budget = document.querySelectorAll('.newupdateFilters select')[0].value;
-            const propertyType = document.querySelectorAll('.newupdateFilters select')[1].value;
-            const furnishing = document.querySelectorAll('.newupdateFilters select')[2].value;
-            console.log(`Search: ${location}, ${query}, ${budget}, ${propertyType}, ${furnishing}`);
-            alert(`Searching for: ${location}, ${query}, ${budget}, ${propertyType}, ${furnishing}`);
-        });
-    </script>
-    <!-- Swiper JS -->
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
-<script>
+  <script>
     var swiper = new Swiper('.directory-slider', {
-        slidesPerView: 3,
-        spaceBetween: 30,
-        slidesPerGroup: 1, // Slide one card at a time
-        loop: true, // Disable loop for now, enable if you want infinite sliding
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
+      slidesPerView: 3,
+      spaceBetween: 30,
+      slidesPerGroup: 1, // Slide one card at a time
+      loop: true, // Disable loop for now, enable if you want infinite sliding
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        992: {
+          slidesPerView: 4,
         },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+        768: {
+          slidesPerView: 1,
         },
-        breakpoints: {
-            992: {
-                slidesPerView: 4,
-            },
-            768: {
-                slidesPerView: 1,
-            },
-        },
+      },
     });
-</script>
-<script>
-  // Tab switching
-const newTabButtons = document.querySelectorAll(".new-tab-btn");
-const newTabContents = document.querySelectorAll(".new-tab-content");
+  </script>
+  <script>
+    // Tab switching
+    const newTabButtons = document.querySelectorAll(".new-tab-btn");
+    const newTabContents = document.querySelectorAll(".new-tab-content");
 
-newTabButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    newTabButtons.forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
+    newTabButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        newTabButtons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
 
-    const target = btn.getAttribute("data-tab");
-    newTabContents.forEach((content) => {
-      content.classList.toggle("active", content.id === target);
+        const target = btn.getAttribute("data-tab");
+        newTabContents.forEach((content) => {
+          content.classList.toggle("active", content.id === target);
+        });
+      });
     });
-  });
-});
 
-// Infinite Auto Slide
-setInterval(() => {
-  document.querySelectorAll(".new-slider-container").forEach((container) => {
-    container.appendChild(container.firstElementChild);
-  });
-}, 2500);
+    // Infinite Auto Slide
+    setInterval(() => {
+      document.querySelectorAll(".new-slider-container").forEach((container) => {
+        container.appendChild(container.firstElementChild);
+      });
+    }, 2500);
 
-// Infinite Auto Slide for Testimonials
-setInterval(() => {
-  const container = document.querySelector(".testimonial-container");
-  container.appendChild(container.firstElementChild);
-}, 3500);
+    // Infinite Auto Slide for Testimonials
+    setInterval(() => {
+      const container = document.querySelector(".testimonial-container");
+      container.appendChild(container.firstElementChild);
+    }, 3500);
 
-</script>
+  </script>
 
 
 

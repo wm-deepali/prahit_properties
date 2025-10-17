@@ -422,13 +422,12 @@
     </ul>
 </div>
 
-<!-- 👤 Login / Profile -->
-@auth
-    @php $user = Auth::user(); @endphp
+
+<!--{{-- -->
     <div class="dropdown custom-dropdown user-dropdown">
         <a href="#" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="far fa-user-circle fs-4 me-1" style="font-size:18px;"></i>
-            {{ $user->firstname }}
+            Janmejay
         </a>
         <ul class="dropdown-menu" style="left:-100px;">
             <li><a class="dropdown-item" href="#">Recently Searched</a></li>
@@ -443,22 +442,53 @@
             </li>
             <li><hr class="dropdown-divider"></li>
             <li>
-                @if($user->role == 'owner')
+               
                     <a class="dropdown-item text-danger" href="{{ route('logout') }}">Logout</a>
-                @elseif($user->role == 'builder')
-                    <a class="dropdown-item text-danger" href="{{ route('logout') }}">Logout</a>
-                @elseif($user->role == 'agent')
-                    <a class="dropdown-item text-danger" href="{{ route('logout') }}">Logout</a>
-                @endif
+               
+                
+                
             </li>
         </ul>
     </div>
-@endauth
-@guest
+
                 <a href="#" class="btn btn-outline-dark fw-semibold" data-bs-toggle="modal" data-bs-target="#signin">
                     <i class="far fa-user me-1"></i> Login / Signup
                 </a>
-            @endguest
+             <!----}}-->
+            
+                                      @auth
+                                            @if(\Auth::user()->role == 'owner')
+                                                <li>
+                                                    <a href="{{url('user/dashboard')}}" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="far fa-user-circle fs-4 me-1" style="font-size:18px;"></i>
+             {{Auth::user()->firstname}} {{Auth::user()->lastname}}
+        </a>
+                                                    </li>
+                                            @elseif(\Auth::user()->role == 'builder')
+                                            
+                                            <li>
+                                                    <a href="{{url('builder/dashboard')}}" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="far fa-user-circle fs-4 me-1" style="font-size:18px;"></i>
+             {{Auth::user()->firstname}} {{Auth::user()->lastname}}
+        </a>
+                                                    </li>
+
+                                            @elseif(\Auth::user()->role == 'agent')
+                                            
+                                             <li>
+                                                    <a href="{{url('agent/dashboard')}}" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="far fa-user-circle fs-4 me-1" style="font-size:18px;"></i>
+            {{Auth::user()->firstname}} {{Auth::user()->lastname}}
+        </a>
+                                                    </li>
+                                                
+                                            @endif
+
+                                        @endauth
+                                        @guest
+                                            <li style="list-style:none;"><a class="btn btn-outline-dark fw-semibold" href="#" data-target="#signin" data-toggle="modal"><i
+                                                        class="far fa-user"></i> Sign In</a></li>
+                                        @endguest
         </div>
     </div>
 
@@ -483,7 +513,36 @@
 
 
 
-<div class="bb-top-menu-header">
+ @php
+    use App\Helpers\Helper;
+    $sellSubs = Helper::getSubSubcategoriesByCategoryName('Sell');
+    $sellResidentil = $sellSubs['residential'];
+    $sellCommercial = $sellSubs['commercial'];
+
+    $rentSubs = Helper::getSubSubcategoriesByCategoryName('Sell');
+    $rentResidentil = $rentSubs['residential'];
+    $rentCommercial = $rentSubs['commercial'];
+
+    $sellBudgets = [
+      ['label' => 'Under 50 Lakh', 'query' => ['budget' => 'under-50-lakh']],
+      ['label' => '50 Lakh - 1 CR', 'query' => ['budget' => '50-lakh-1-cr']],
+      ['label' => '1 CR - 3 CR', 'query' => ['budget' => '1-cr-3-cr']],
+      ['label' => '3 CR - 5 CR', 'query' => ['budget' => '3-cr-5-cr']],
+      ['label' => '5 CR & Above', 'query' => ['budget' => 'above-5-cr']],
+    ];
+
+
+    $rentBudgets = [
+      ['label' => 'Under 10K', 'query' => ['budget' => 'under-10k']],
+      ['label' => '10,000 - 25,000', 'query' => ['budget' => '10k-25k']],
+      ['label' => '25001 - 35,000', 'query' => ['budget' => '25k1-35k']],
+      ['label' => '35,001 - 50,000', 'query' => ['budget' => '35k1-50k']],
+      ['label' => '50,000 & Above', 'query' => ['budget' => 'above-50k']],
+    ];
+  @endphp
+
+
+  <div class="bb-top-menu-header">
     <nav class="bb-nav">
       <ul class="bb-nav-list">
         <li class="bb-nav-item">
@@ -492,8 +551,8 @@
             <div class="bb-tabs">
               <div class="bb-tab active" data-tab="buyers-tab1">Residentials</div>
               <div class="bb-tab" data-tab="buyers-tab2">Commercial</div>
-              <div class="bb-tab" data-tab="buyers-tab3">Popular Choice</div>
               <div class="bb-tab" data-tab="buyers-tab4">New Launch</div>
+              <div class="bb-tab" data-tab="buyers-tab3">Popular Services</div>
             </div>
             <div class="bb-tab-content">
               <div class="bb-tab-pane active" id="buyers-tab1">
@@ -501,31 +560,40 @@
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Properties</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      @foreach ($sellResidentil as $subSubcat)
+                        <a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
+                          {{ $subSubcat->sub_sub_category_name }}
+                        </a>
+                      @endforeach
                     </div>
                   </div>
+
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Budget</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      @foreach ($sellBudgets as $budget)
+                        <a
+                          href="{{ route('listing.list', array_merge(['sub_category_id' => 34], $budget['query'])) }}">{{ $budget['label'] }}</a>
+                      @endforeach
                     </div>
                   </div>
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Popular Locations</h4>
+                    <h4 class="tab-titles">Popular Choices</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
+                      <a href="{{ route('listing.list', ['sub_category_id' => 34, 'user_role' => 'owner'])}}">Owner
+                        Properties</a>
                       <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move'])}}">Ready
+                        to
+                        Move</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon'])}}">Possession
+                        Soon</a>
+                      <a href="#">Immediate Available</a>
+                      <a href="#">Fully Furnished</a>
+                      <a href="{{ route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch'])}}">New
+                        Launch</a>
                     </div>
                   </div>
                   <div class="image-tab">
@@ -533,36 +601,46 @@
                   </div>
                 </div>
               </div>
+
               <div class="bb-tab-pane" id="buyers-tab2">
                 <div class="tab-content-top-header">
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Properties</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      @foreach ($sellCommercial as $subSubcat)
+                        <a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
+                          {{ $subSubcat->sub_sub_category_name }}
+                        </a>
+                      @endforeach
                     </div>
                   </div>
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Budget</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      @foreach ($sellBudgets as $budget)
+                        <a
+                          href="{{ route('listing.list', array_merge(['sub_category_id' => 35], $budget['query'])) }}">{{ $budget['label'] }}</a>
+                      @endforeach
                     </div>
                   </div>
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Popular Location</h4>
+                    <h4 class="tab-titles">Popular Choices</h4>
+
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
+                      <a href="{{ route('listing.list', ['sub_category_id' => 35, 'user_role' => 'owner'])}}">Owner
+                        Properties</a>
                       <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Ready to Move'])}}">Ready
+                        to
+                        Move</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Possession Soon'])}}">Possession
+                        Soon</a>
+                      <a href="#">Immediate Available</a>
+                      <a href="#">Fully Furnished</a>
+                      <a href="{{ route('listing.list', ['sub_category_id' => 35, 'sort' => 'new-launch'])}}">New
+                        Launch</a>
                     </div>
                   </div>
                   <div class="image-tab">
@@ -570,6 +648,52 @@
                   </div>
                 </div>
               </div>
+
+              <div class="bb-tab-pane" id="buyers-tab4">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">New Launch</h4>
+                    <div class="d-flex flex-column">
+                      <a href="{{ route('listing.list', ['sub_category_id' => 34])}}">Residential Projects</a>
+                      <a href="{{ route('listing.list', ['sub_category_id' => 35])}}">Commercial Projects</a>
+                      <a href="{{ route('listing.list', ['sub_sub_category_ids' => '18,25,27']) }}">Land & Plots</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Budget</h4>
+                    <div class="d-flex flex-column">
+                      @foreach ($sellBudgets as $budget)
+                        <a
+                          href="{{ route('listing.list', array_merge(['category_id' => 22], $budget['query'])) }}">{{ $budget['label'] }}</a>
+                      @endforeach
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Popular Choices</h4>
+
+                    <div class="d-flex flex-column">
+                      <a href="{{ route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch'])}}">New
+                        Launch</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Under Construction'])}}">Under
+                        Construction</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move'])}}">Ready
+                        to
+                        Move</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon'])}}">Possession
+                        Soon</a>
+                      <a href="#">OC Received</a>
+                      <a href="#">RERA Registered</a>
+                    </div>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+
               <div class="bb-tab-pane" id="buyers-tab3">
                 <div class="tab-content-top-header">
                   <div class="tab-content-section">
@@ -606,43 +730,7 @@
                     <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
                   </div>
                 </div>
-              </div>
-              <div class="bb-tab-pane" id="buyers-tab4">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">New Launch</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Upcoming Projects</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Budget</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>
@@ -650,156 +738,112 @@
 
         <li class="bb-nav-item">
           <a href="#" class="bb-nav-link">For Sellers</a>
-<div class="bb-dropdown">
+          <div class="bb-dropdown">
             <div class="bb-tabs">
-              <div class="bb-tab active" data-tab="buyers-tab1">Residential</div>
-              <div class="bb-tab" data-tab="buyers-tab2">Commercial</div>
-              <div class="bb-tab" data-tab="buyers-tab3">Exclusive Launch</div>
-              <div class="bb-tab" data-tab="buyers-tab4">Explore</div>
+              <div class="bb-tab active" data-tab="sellers-tab1">Owners</div>
+              <div class="bb-tab" data-tab="sellers-tab2">Agents</div>
+              <div class="bb-tab" data-tab="sellers-tab3">Builders</div>
+              <div class="bb-tab" data-tab="sellers-tab4">Service Providers</div>
             </div>
             <div class="bb-tab-content">
-              <div class="bb-tab-pane active" id="buyers-tab1">
+              <div class="bb-tab-pane active" id="sellers-tab1">
                 <div class="tab-content-top-header">
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
+                    <h4 class="tab-titles">Services</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      <a href="#">Post Property</a>
+                      <a href="#">Join BB Prime</a>
+                      <a href="#">Dashboard</a>
+                      <a href="#">Enquiries</a>
                     </div>
                   </div>
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
+                    <h4 class="tab-titles">Important Links</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      <a href="#">FAQ</a>
+                      <a href="#">Articles & Blogs</a>
                     </div>
                   </div>
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
+                    <h4 class="tab-titles">Contact Us</h4>
                   </div>
                   <div class="image-tab">
                     <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
                   </div>
                 </div>
               </div>
-              <div class="bb-tab-pane" id="buyers-tab2">
+              <div class="bb-tab-pane" id="sellers-tab2">
                 <div class="tab-content-top-header">
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
+                    <h4 class="tab-titles">Services</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      <a href="#">Post Property</a>
+                      <a href="#">Join BB Prime</a>
+                      <a href="#">Dashboard</a>
+                      <a href="#">Enquiries</a>
                     </div>
                   </div>
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
+                    <h4 class="tab-titles">Important Links</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      <a href="#">FAQ</a>
+                      <a href="#">Articles & Blogs</a>
                     </div>
                   </div>
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
+                    <h4 class="tab-titles">Contact Us</h4>
                   </div>
                   <div class="image-tab">
                     <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
                   </div>
                 </div>
               </div>
-              <div class="bb-tab-pane" id="buyers-tab3">
+              <div class="bb-tab-pane" id="sellers-tab3">
                 <div class="tab-content-top-header">
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
+                    <h4 class="tab-titles">Services</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      <a href="#">Post Property</a>
+                      <a href="#">Join BB Prime</a>
+                      <a href="#">Dashboard</a>
+                      <a href="#">Enquiries</a>
                     </div>
                   </div>
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
+                    <h4 class="tab-titles">Important Links</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      <a href="#">FAQ</a>
+                      <a href="#">Articles & Blogs</a>
                     </div>
                   </div>
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
+                    <h4 class="tab-titles">Contact Us</h4>
                   </div>
                   <div class="image-tab">
                     <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
                   </div>
                 </div>
               </div>
-              <div class="bb-tab-pane" id="buyers-tab4">
+              <div class="bb-tab-pane" id="sellers-tab4">
                 <div class="tab-content-top-header">
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
+                    <h4 class="tab-titles">Start Selling</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      <a href="#">List Your Service</a>
+                      <a href="#">Dashboard</a>
+                      <a href="#">Check Enquiries</a>
+                      <a href="#">Join BB Prime</a>
                     </div>
                   </div>
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
+                    <h4 class="tab-titles">Important Links</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      <a href="#">FAQ</a>
+                      <a href="#">Articles & Blogs</a>
                     </div>
                   </div>
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
+                    <h4 class="tab-titles">Contact Us</h4>
                   </div>
                   <div class="image-tab">
                     <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
@@ -813,42 +857,40 @@
           <a href="#" class="bb-nav-link">For Rent</a>
           <div class="bb-dropdown">
             <div class="bb-tabs">
-              <div class="bb-tab active" data-tab="buyers-tab1">Popular Choices</div>
-              <div class="bb-tab" data-tab="buyers-tab2">Property Types</div>
-              <div class="bb-tab" data-tab="buyers-tab3">Budget</div>
-              <div class="bb-tab" data-tab="buyers-tab4">Explore</div>
+              <div class="bb-tab active" data-tab="rent-tab1">Residential</div>
+              <div class="bb-tab" data-tab="rent-tab2">Commercial</div>
+              <div class="bb-tab" data-tab="rent-tab3">Popular Services</div>
             </div>
             <div class="bb-tab-content">
-              <div class="bb-tab-pane active" id="buyers-tab1">
+              <div class="bb-tab-pane active" id="rent-tab1">
                 <div class="tab-content-top-header">
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Properties</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      @foreach ($rentResidentil as $subSubcat)
+                        <a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
+                          {{ $subSubcat->sub_sub_category_name }}
+                        </a>
+                      @endforeach
                     </div>
                   </div>
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
+                    <h4 class="tab-titles">Budget</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      @foreach ($rentBudgets as $budget)
+                        <a
+                          href="{{ route('listing.list', array_merge(['sub_category_id' => 38], $budget['query'])) }}">{{ $budget['label'] }}</a>
+                      @endforeach
                     </div>
                   </div>
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
+                    <h4 class="tab-titles">Popular Choise</h4>
                     <div class="d-flex flex-column">
                       <a href="#">Owner Properties</a>
                       <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      <a href="#">Ready to Move</a>
+                      <a href="#">Immediate Available</a>
+                      <a href="#">Fully Furnished</a>
                     </div>
                   </div>
                   <div class="image-tab">
@@ -856,36 +898,39 @@
                   </div>
                 </div>
               </div>
-              <div class="bb-tab-pane" id="buyers-tab2">
+              <div class="bb-tab-pane" id="rent-tab2">
                 <div class="tab-content-top-header">
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Properties</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      @foreach ($rentCommercial as $subSubcat)
+                        <a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
+                          {{ $subSubcat->sub_sub_category_name }}
+                        </a>
+                      @endforeach
                     </div>
                   </div>
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
+                    <h4 class="tab-titles">Budget</h4>
+
+
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      @foreach ($rentBudgets as $budget)
+                        <a href="{{ route('listing.list', array_merge(['sub_category_id' => 37], $budget['query'])) }}">
+                          {{ $budget['label'] }}
+                        </a>
+                      @endforeach
                     </div>
+
                   </div>
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
+                    <h4 class="tab-titles">Popular Choise</h4>
                     <div class="d-flex flex-column">
                       <a href="#">Owner Properties</a>
                       <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      <a href="#">Ready to Move</a>
+                      <a href="#">Immediate Available</a>
+                      <a href="#">Fully Furnished</a>
                     </div>
                   </div>
                   <div class="image-tab">
@@ -893,7 +938,7 @@
                   </div>
                 </div>
               </div>
-              <div class="bb-tab-pane" id="buyers-tab3">
+              <div class="bb-tab-pane" id="rent-tab3">
                 <div class="tab-content-top-header">
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Properties</h4>
@@ -906,221 +951,21 @@
                     </div>
                   </div>
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
+                    <h4 class="tab-titles">Budget</h4>
                     <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      @foreach ($rentBudgets as $budget)
+                        <a href="{{ route('listing.list', $budget['query']) }}">{{ $budget['label'] }}</a>
+                      @endforeach
                     </div>
                   </div>
                   <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
+                    <h4 class="tab-titles">Popular Choise</h4>
                     <div class="d-flex flex-column">
                       <a href="#">Owner Properties</a>
                       <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-              <div class="bb-tab-pane" id="buyers-tab4">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li class="bb-nav-item">
-          <a href="#" class="bb-nav-link">Agent & Builders</a>
-          <div class="bb-dropdown">
-            <div class="bb-tabs">
-              <div class="bb-tab active" data-tab="buyers-tab1">Popular Choices</div>
-              <div class="bb-tab" data-tab="buyers-tab2">Property Types</div>
-              <div class="bb-tab" data-tab="buyers-tab3">Budget</div>
-              <div class="bb-tab" data-tab="buyers-tab4">Explore</div>
-            </div>
-            <div class="bb-tab-content">
-              <div class="bb-tab-pane active" id="buyers-tab1">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-              <div class="bb-tab-pane" id="buyers-tab2">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-              <div class="bb-tab-pane" id="buyers-tab3">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-              <div class="bb-tab-pane" id="buyers-tab4">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">Owner Properties</a>
-                      <a href="#">Verified Properties</a>
-                      <a href="#">Furnished Homes</a>
-                      <a href="#">Bachelor Friendly</a>
-                      <a href="#">Immediately Available</a>
+                      <a href="#">Ready to Move</a>
+                      <a href="#">Immediate Available</a>
+                      <a href="#">Fully Furnished</a>
                     </div>
                   </div>
                   <div class="image-tab">
@@ -1292,9 +1137,8 @@
             </div>
           </div>
         </li>
-
         <li class="bb-nav-item">
-          <a href="#" class="bb-nav-link bb-highlight">Exclusive Launch</a>
+          <a href="#" class="bb-nav-link">Exclusive Launch</a>
           <div class="bb-dropdown">
             <div class="bb-tabs">
               <div class="bb-tab active" data-tab="buyers-tab1">Popular Choices</div>
@@ -1454,10 +1298,10 @@
             </div>
           </div>
         </li>
+
       </ul>
     </nav>
   </div>
-
 
 
 
