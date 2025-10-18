@@ -232,110 +232,110 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script type="text/javascript">
-    $(document).on('click', '.pagination a', function(event){
-        event.preventDefault(); 
-        var page = $(this).attr('href').split('page=')[1];
-        var state_id = $('#running_state').val();
-        fetch_data(page, state_id);
-    });
+<!--<script type="text/javascript">-->
+<!--    $(document).on('click', '.pagination a', function(event){-->
+<!--        event.preventDefault(); -->
+<!--        var page = $(this).attr('href').split('page=')[1];-->
+<!--        var state_id = $('#running_state').val();-->
+<!--        fetch_data(page, state_id);-->
+<!--    });-->
 
-    function fetch_data(page, state_id = null, state_name = null) {
-        state_id = state_id == null || state_id == '' ? $('#running_state').val() : state_id;
-        document.getElementById('running_state').value = state_id;
-        manageStateHover(state_id);
-        var search = $('#search-city').val();
-        page = page == null || typeof page === "undefined" ? 1 : page;
+<!--    function fetch_data(page, state_id = null, state_name = null) {-->
+<!--        state_id = state_id == null || state_id == '' ? $('#running_state').val() : state_id;-->
+<!--        document.getElementById('running_state').value = state_id;-->
+<!--        manageStateHover(state_id);-->
+<!--        var search = $('#search-city').val();-->
+<!--        page = page == null || typeof page === "undefined" ? 1 : page;-->
 
-        if (state_id && state_id !== '') {
-            $('#states-section').hide();
-            $('#breadcrumb').show();
-            $('#other-cities').show();
-            if (state_name) {
-                $('#state-name').text(state_name);
-            }
-        } else {
-            $('#states-section').show();
-            $('#breadcrumb').hide();
-            $('#other-cities').hide();
-        }
+<!--        if (state_id && state_id !== '') {-->
+<!--            $('#states-section').hide();-->
+<!--            $('#breadcrumb').show();-->
+<!--            $('#other-cities').show();-->
+<!--            if (state_name) {-->
+<!--                $('#state-name').text(state_name);-->
+<!--            }-->
+<!--        } else {-->
+<!--            $('#states-section').show();-->
+<!--            $('#breadcrumb').hide();-->
+<!--            $('#other-cities').hide();-->
+<!--        }-->
 
-        $.ajax({
-            url: "{{ url('/') }}/home/get/all/cities/ancher/?page=" + page + "&state_id=" + state_id + "&search=" + search,
-            beforeSend: function() {
-                $(".modal_loading").css('display', 'block');
-                $('#other-cities').css({ opacity: 0, transform: 'translateX(100%)' });
-            },
-            success: function(data) {
-                $('#other-cities').html(data).css({ opacity: 1, transform: 'translateX(0)' });
-            },
-            error: function(response) {
-                $(".modal_loading").css('display', 'none');
-                swal('', response, 'error');
-            },
-            complete: function() {
-                $(".modal_loading").css('display', 'none');
-            }
-        });
-    }
+<!--        $.ajax({-->
+<!--            url: "{{ url('/') }}/home/get/all/cities/ancher/?page=" + page + "&state_id=" + state_id + "&search=" + search,-->
+<!--            beforeSend: function() {-->
+<!--                $(".modal_loading").css('display', 'block');-->
+<!--                $('#other-cities').css({ opacity: 0, transform: 'translateX(100%)' });-->
+<!--            },-->
+<!--            success: function(data) {-->
+<!--                $('#other-cities').html(data).css({ opacity: 1, transform: 'translateX(0)' });-->
+<!--            },-->
+<!--            error: function(response) {-->
+<!--                $(".modal_loading").css('display', 'none');-->
+<!--                swal('', response, 'error');-->
+<!--            },-->
+<!--            complete: function() {-->
+<!--                $(".modal_loading").css('display', 'none');-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
 
-    function manageStateHover(id_one) {
-        var lis = $('.state-data');
-        for (var i = 0; i < lis.length; i++) {
-            var id = lis[i].getAttribute('state-id');
-            if (id_one == id) 
-                lis[i].style.backgroundColor = '#28a745';
-            else
-                lis[i].style.backgroundColor = '#6c757d';
-        }
-        return true;
-    }
+<!--    function manageStateHover(id_one) {-->
+<!--        var lis = $('.state-data');-->
+<!--        for (var i = 0; i < lis.length; i++) {-->
+<!--            var id = lis[i].getAttribute('state-id');-->
+<!--            if (id_one == id) -->
+<!--                lis[i].style.backgroundColor = '#28a745';-->
+<!--            else-->
+<!--                lis[i].style.backgroundColor = '#6c757d';-->
+<!--        }-->
+<!--        return true;-->
+<!--    }-->
 
-    function backToStates() {
-        $('#running_state').val('');
-        $('#states-section').show();
-        $('#breadcrumb').hide();
-        $('#other-cities').hide();
+<!--    function backToStates() {-->
+<!--        $('#running_state').val('');-->
+<!--        $('#states-section').show();-->
+<!--        $('#breadcrumb').hide();-->
+<!--        $('#other-cities').hide();-->
         $('#other-cities').html(''); // Clear city list
-    }
+<!--    }-->
 
     // Handle animated placeholder with prefix
-    const cities = ['Lucknow', 'Mumbai', 'Ahmedabad', 'Delhi', 'Bengaluru', 'Kolkata'];
-    let index = 0;
-    const placeholderText = document.getElementById('placeholder-text');
-    const searchInput = document.getElementById('search-city');
-    const animatedPlaceholder = searchInput.parentElement.querySelector('.animated-placeholder');
+<!--    const cities = ['Lucknow', 'Mumbai', 'Ahmedabad', 'Delhi', 'Bengaluru', 'Kolkata'];-->
+<!--    let index = 0;-->
+<!--    const placeholderText = document.getElementById('placeholder-text');-->
+<!--    const searchInput = document.getElementById('search-city');-->
+<!--    const animatedPlaceholder = searchInput.parentElement.querySelector('.animated-placeholder');-->
 
-    function cyclePlaceholder() {
-        placeholderText.style.opacity = 0;
-        placeholderText.style.transform = 'translateY(-20px)';
-        setTimeout(() => {
-            index = (index + 1) % cities.length;
+<!--    function cyclePlaceholder() {-->
+<!--        placeholderText.style.opacity = 0;-->
+<!--        placeholderText.style.transform = 'translateY(-20px)';-->
+<!--        setTimeout(() => {-->
+<!--            index = (index + 1) % cities.length;-->
             placeholderText.textContent = 'Search ' + cities[index]; // Add prefix
-            placeholderText.style.transition = 'none';
-            placeholderText.style.transform = 'translateY(20px)';
-            setTimeout(() => {
-                placeholderText.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                placeholderText.style.opacity = 1;
-                placeholderText.style.transform = 'translateY(0)';
-            }, 10);
-        }, 500);
-    }
+<!--            placeholderText.style.transition = 'none';-->
+<!--            placeholderText.style.transform = 'translateY(20px)';-->
+<!--            setTimeout(() => {-->
+<!--                placeholderText.style.transition = 'opacity 0.5s ease, transform 0.5s ease';-->
+<!--                placeholderText.style.opacity = 1;-->
+<!--                placeholderText.style.transform = 'translateY(0)';-->
+<!--            }, 10);-->
+<!--        }, 500);-->
+<!--    }-->
 
-    const intervalId = setInterval(cyclePlaceholder, 3000);
+<!--    const intervalId = setInterval(cyclePlaceholder, 3000);-->
 
     // Hide placeholder on input or focus
-    animatedPlaceholder.addEventListener('click', () => searchInput.focus());
-    searchInput.addEventListener('input', () => {
-        animatedPlaceholder.style.display = searchInput.value ? 'none' : 'flex';
-    });
-    searchInput.addEventListener('focus', () => {
-        animatedPlaceholder.style.display = 'none';
-    });
-    searchInput.addEventListener('blur', () => {
-        animatedPlaceholder.style.display = searchInput.value ? 'none' : 'flex';
-    });
-    function closeModal() {
-        $('#location-list').modal('hide');
-    }
-</script>
+<!--    animatedPlaceholder.addEventListener('click', () => searchInput.focus());-->
+<!--    searchInput.addEventListener('input', () => {-->
+<!--        animatedPlaceholder.style.display = searchInput.value ? 'none' : 'flex';-->
+<!--    });-->
+<!--    searchInput.addEventListener('focus', () => {-->
+<!--        animatedPlaceholder.style.display = 'none';-->
+<!--    });-->
+<!--    searchInput.addEventListener('blur', () => {-->
+<!--        animatedPlaceholder.style.display = searchInput.value ? 'none' : 'flex';-->
+<!--    });-->
+<!--    function closeModal() {-->
+<!--        $('#location-list').modal('hide');-->
+<!--    }-->
+<!--</script>-->

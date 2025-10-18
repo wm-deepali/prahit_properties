@@ -119,11 +119,11 @@
                   </div>
 
                   <!--                   <div class="col-sm-3">
-                        <label class="label label-control">Sub Sub Category</label>
-                        <select class="text-control populate_sub_sub_categories" name="sub_sub_category">
-                          <option value="">Select Sub Sub Cat</option>
-                        </select>
-                      </div> -->
+                          <label class="label label-control">Sub Sub Category</label>
+                          <select class="text-control populate_sub_sub_categories" name="sub_sub_category">
+                            <option value="">Select Sub Sub Cat</option>
+                          </select>
+                        </div> -->
 
                   <div class="col-sm-3">
                     <label class="label label-control">Package</label>
@@ -291,6 +291,7 @@
                       <th>Status</th>
                       <th>Trending</th>
                       <th>Featured</th>
+                      <th>Verified</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -583,8 +584,8 @@
                 </select>
               </div>
               <!-- <div class="row" id="publish-check">
-                  <p><input type="checkbox" name="publish" id="publish"><b>  Publish Or Unpublish Property.</b></p>
-                </div> -->
+                    <p><input type="checkbox" name="publish" id="publish"><b>  Publish Or Unpublish Property.</b></p>
+                  </div> -->
               <div class="row form-group" id="text-area">
                 <label>Reason:</label>
                 <textarea class="form-control" name="reason" id="reason" cols="5"></textarea>
@@ -632,6 +633,7 @@
           { data: 'status', name: 'status' },
           { data: 'trending', name: 'trending' },
           { data: 'featured', name: 'featured' },
+          { data: 'verified', name: 'verified' },
           { data: 'action', name: 'action' },
         ],
       });
@@ -653,22 +655,22 @@
               if (response.length < 1) return true;
               $(".populate_categories").append(
                 `
-                  <option value=${y.id}> ${y.category_name} </option>
-                `
+                    <option value=${y.id}> ${y.category_name} </option>
+                  `
               );
               if (y.subcategory.length < 1) return true;
               $.each(y.subcategory, function (a, b) {
                 $(".populate_sub_categories").append(
                   `
-                    <option value=${b.id}> ${b.sub_category_name} </option>
-                  `
+                      <option value=${b.id}> ${b.sub_category_name} </option>
+                    `
                 );
                 if (b.subsubcategory.length < 1) return true;
                 $.each(b.subsubcategory, function (c, d) {
                   $(".populate_sub_sub_categories").append(
                     `
-                      <option value=${d.id}> ${d.sub_sub_category_name} </option>
-                    `
+                        <option value=${d.id}> ${d.sub_sub_category_name} </option>
+                      `
                   );
                 })
 
@@ -963,60 +965,60 @@
               document.getElementById('property-link').style.display = 'none';
               document.getElementById('property-images').style.display = 'none';
               $('#property-title').append(`<h3 class="con-dtitle" style="margin-top:15px;">Property Title</h3>
-                                                <div class="row">
-                                                    <div class="col-sm-10">
-                                                      <input type="text" name="title" id="title" class="form-control" value="${response.data.Property.title}" readonly>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                      <input type="checkbox" id="title-check" class="form-control">
-                                                    </div>
-                                            </div>`);
+                                                  <div class="row">
+                                                      <div class="col-sm-10">
+                                                        <input type="text" name="title" id="title" class="form-control" value="${response.data.Property.title}" readonly>
+                                                      </div>
+                                                      <div class="col-sm-2">
+                                                        <input type="checkbox" id="title-check" class="form-control">
+                                                      </div>
+                                              </div>`);
               $('#property-id').append(`<h3 class="con-dtitle" style="margin-top:15px;">Property Id</h3>
-                                                <div class="row">
-                                                    <div class="col-sm-10">
-                                                      <input type="text" name="listing_id" id="listing_id" class="form-control" value="${response.data.Property.listing_id}" readonly>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                      <input type="checkbox" id="listing-check" class="form-control">
-                                                    </div>
-                                            </div>`);
+                                                  <div class="row">
+                                                      <div class="col-sm-10">
+                                                        <input type="text" name="listing_id" id="listing_id" class="form-control" value="${response.data.Property.listing_id}" readonly>
+                                                      </div>
+                                                      <div class="col-sm-2">
+                                                        <input type="checkbox" id="listing-check" class="form-control">
+                                                      </div>
+                                              </div>`);
             } else {
               document.getElementById('property-title').style.display = 'block';
               document.getElementById('property-id').style.display = 'block';
               document.getElementById('property-link').style.display = 'block';
               document.getElementById('property-images').style.display = 'block';
               $('#property-title').append(`<h3 class="con-dtitle" style="margin-top:15px;">Property Title</h3>
-                                                <div class="row">
-                                                    <div class="col-sm-10">
-                                                      <input type="text" name="title" id="title" class="form-control" value="${response.data.Property.title}" readonly>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                      <input type="checkbox" id="title-check" class="form-control">
-                                                    </div>
-                                            </div>`);
+                                                  <div class="row">
+                                                      <div class="col-sm-10">
+                                                        <input type="text" name="title" id="title" class="form-control" value="${response.data.Property.title}" readonly>
+                                                      </div>
+                                                      <div class="col-sm-2">
+                                                        <input type="checkbox" id="title-check" class="form-control">
+                                                      </div>
+                                              </div>`);
               $('#property-id').append(`<h3 class="con-dtitle" style="margin-top:15px;">Property Id</h3>
-                                                <div class="row">
-                                                    <div class="col-sm-10">
-                                                      <input type="text" name="listing_id" id="listing_id" class="form-control" value="${response.data.Property.listing_id}" readonly>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                      <input type="checkbox" id="listing-check" class="form-control">
-                                                    </div>
-                                            </div>`);
+                                                  <div class="row">
+                                                      <div class="col-sm-10">
+                                                        <input type="text" name="listing_id" id="listing_id" class="form-control" value="${response.data.Property.listing_id}" readonly>
+                                                      </div>
+                                                      <div class="col-sm-2">
+                                                        <input type="checkbox" id="listing-check" class="form-control">
+                                                      </div>
+                                              </div>`);
               $('#property-link').append(`<h3 class="con-dtitle" style="margin-top:15px;">Property Page Link</h3>
-                                                <div class="row">
-                                                    <div class="col-sm-10">
-                                                      <input type="text" name="page-link" id="page-link" class="form-control" value="{{ url('') }}/property/${response.data.Property.slug}" readonly>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                      <input type="checkbox" id="link-check" class="form-control">
-                                                    </div>
-                                            </div>`);
+                                                  <div class="row">
+                                                      <div class="col-sm-10">
+                                                        <input type="text" name="page-link" id="page-link" class="form-control" value="{{ url('') }}/property/${response.data.Property.slug}" readonly>
+                                                      </div>
+                                                      <div class="col-sm-2">
+                                                        <input type="checkbox" id="link-check" class="form-control">
+                                                      </div>
+                                              </div>`);
               $.each(response.data.Property.property_gallery, function (key, image) {
                 $("#render-images").append(`<div class="col-sm-3">
-                                                <img src="{{config('app.url')}}/public/${image.image_path}" style="height:50px;" /><br>
-                                                <input type="checkbox" name="document" value="{{config('app.url')}}/public/${image.image_path}" />
-                                              </div>`);
+                                                  <img src="{{config('app.url')}}/public/${image.image_path}" style="height:50px;" /><br>
+                                                  <input type="checkbox" name="document" value="{{config('app.url')}}/public/${image.image_path}" />
+                                                </div>`);
               });
 
             }
@@ -1237,6 +1239,31 @@
     function manageFeaturedStatus(id) {
       $.ajax({
         url: '{{ route('admin.manageFeaturedStatus') }}',
+        method: "post",
+        data: {
+          '_token': '{{ csrf_token() }}',
+          'id': id
+        },
+        beforeSend: function (argument) {
+          $(".loading").css('display', 'block');
+        },
+        success: function (response) {
+          toastr.success(response);
+          $('#properties').DataTable().ajax.reload();
+        },
+        error: function (response) {
+          toastr.error('An error occured');
+          $(".loading").css('display', 'none');
+        },
+        complete: function () {
+          $(".loading").css('display', 'none');
+        }
+      });
+    }
+
+     function manageVerifiedStatus(id) {
+      $.ajax({
+        url: '{{ route('admin.manageVerifiedStatus') }}',
         method: "post",
         data: {
           '_token': '{{ csrf_token() }}',

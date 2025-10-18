@@ -14,7 +14,8 @@ class WebDirectorySubCategory extends Model
 		'property_category_id',
 		'sub_category_id',
 		'sub_sub_category_id',
-		'status'
+		'status',
+		'is_popular'
 	];
 
 	public function WebDirectoryCategory()

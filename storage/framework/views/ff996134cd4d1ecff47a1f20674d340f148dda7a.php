@@ -7,8 +7,8 @@
 <?php $__env->startSection('css'); ?>
   <style type="text/css">
     /*.table-fitems tbody tr td:nth-child(2) {
-        width: 60%;
-    }*/
+            width: 60%;
+        }*/
     .checkbox {
       pointer-events: none !important;
     }
@@ -64,7 +64,7 @@
                   <?php echo e(method_field('PATCH')); ?>
 
                   <div class="form-group row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                       <label class="label-control">Category</label>
                       <select class="text-control" name="category_id" id="category_id" required="">
                         <?php if(isset($categories)): ?>
@@ -86,83 +86,94 @@
                         <?php endif; ?>
                       </select>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                       <label class="label-control">Sub Category</label>
                       <input type="text" placeholder="Enter Sub Category Name" id="sub_category_name" class="text-control"
                         onkeyup="autoFilledSlug()" name="sub_category_name" value="<?php echo e($picked->sub_category_name); ?>"
                         required />
                     </div>
-                    <div class="col-sm-4">
-                      <label class="label-control">Sub Category Slug</label>
-                      <input type="text" placeholder="Enter Sub Category Slug" id="sub_category_slug"
-                        value="<?php echo e($picked->sub_category_slug); ?>" class="text-control" name="sub_category_slug" required />
-                    </div>
+
                   </div>
 
                   <!-- <h4 class="form-section-h">Assigned To Property Category</h4>
 
-                  <div class="form-group row">
-                    <div class="col-sm-4">
-                      <label class="label-control">Property Available For</label>
-                      <select class="text-control populate_categories" name="property_category_id"
-                        onchange="fetch_subcategories(this.value, fetch_subsubcategories)" required="">
-                        <?php if(count($p_categories) < 1): ?>
-                          <option value="">No records found</option>
-                        <?php else: ?>
-                          <option value="">Select Category</option>
-                          <?php $__currentLoopData = $p_categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <?php if($picked->property_category_id == $v->id): ?>
-                              <option value="<?php echo e($v->id); ?>" selected=""><?php echo e($v->category_name); ?></option>
+                      <div class="form-group row">
+                        <div class="col-sm-4">
+                          <label class="label-control">Property Available For</label>
+                          <select class="text-control populate_categories" name="property_category_id"
+                            onchange="fetch_subcategories(this.value, fetch_subsubcategories)" required="">
+                            <?php if(count($p_categories) < 1): ?>
+                              <option value="">No records found</option>
                             <?php else: ?>
-                              <option value="<?php echo e($v->id); ?>"><?php echo e($v->category_name); ?></option>
+                              <option value="">Select Category</option>
+                              <?php $__currentLoopData = $p_categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php if($picked->property_category_id == $v->id): ?>
+                                  <option value="<?php echo e($v->id); ?>" selected=""><?php echo e($v->category_name); ?></option>
+                                <?php else: ?>
+                                  <option value="<?php echo e($v->id); ?>"><?php echo e($v->category_name); ?></option>
+                                <?php endif; ?>
+                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <?php endif; ?>
-                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        <?php endif; ?>
-                      </select>
-                    </div>
-                    <div class="col-sm-4">
-                      <label class="label-control">Property Category</label>
-                      <select class="text-control populate_subcategories" name="sub_category_id"
-                        onchange="fetch_subsubcategories(this.value)" required>
-                        <option value="">Select Sub Category</option>
-                        <?php $__currentLoopData = $p_sub_categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <?php if($picked->sub_category_id == $v->id): ?>
-                            <option value="<?php echo e($v->id); ?>" selected=""><?php echo e($v->sub_category_name); ?></option>
-                          <?php else: ?>
-                            <option value="<?php echo e($v->id); ?>"><?php echo e($v->sub_category_name); ?></option>
-                          <?php endif; ?>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                      </select>
-                    </div>
-
-                    <div class="col-sm-4">
-                      <label>Property Type</label>
-                      <div id="sub_sub_category_list" class="border rounded p-2"
-                        style="max-height:200px; overflow-y:auto;">
-                        <div class="form-check mb-2">
-                          <input type="checkbox" class="form-check-input" id="select_all_sub_sub">
-                          <label class="form-check-label" for="select_all_sub_sub"><strong>Select All</strong></label>
+                          </select>
                         </div>
-                        <div id="sub_sub_category_items">
-                          <?php if(isset($p_sub_sub_categories) && count($p_sub_sub_categories) > 0): ?>
-                            <?php $__currentLoopData = $p_sub_sub_categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                              <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="sub_sub_category_ids[]"
-                                  id="subsub_<?php echo e($v->id); ?>" value="<?php echo e($v->id); ?>" <?php echo e(in_array($v->id, $picked->sub_sub_category_id ?? []) ? 'checked' : ''); ?>>
-                                <label class="form-check-label"
-                                  for="subsub_<?php echo e($v->id); ?>"><?php echo e($v->sub_sub_category_name); ?></label>
-                              </div>
+                        <div class="col-sm-4">
+                          <label class="label-control">Property Category</label>
+                          <select class="text-control populate_subcategories" name="sub_category_id"
+                            onchange="fetch_subsubcategories(this.value)" required>
+                            <option value="">Select Sub Category</option>
+                            <?php $__currentLoopData = $p_sub_categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                              <?php if($picked->sub_category_id == $v->id): ?>
+                                <option value="<?php echo e($v->id); ?>" selected=""><?php echo e($v->sub_category_name); ?></option>
+                              <?php else: ?>
+                                <option value="<?php echo e($v->id); ?>"><?php echo e($v->sub_category_name); ?></option>
+                              <?php endif; ?>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                          <?php else: ?>
-                            <p class="text-muted m-0">Select a property subcategory first</p>
-                          <?php endif; ?>
+                          </select>
                         </div>
-                      </div>
+
+                        <div class="col-sm-4">
+                          <label>Property Type</label>
+                          <div id="sub_sub_category_list" class="border rounded p-2"
+                            style="max-height:200px; overflow-y:auto;">
+                            <div class="form-check mb-2">
+                              <input type="checkbox" class="form-check-input" id="select_all_sub_sub">
+                              <label class="form-check-label" for="select_all_sub_sub"><strong>Select All</strong></label>
+                            </div>
+                            <div id="sub_sub_category_items">
+                              <?php if(isset($p_sub_sub_categories) && count($p_sub_sub_categories) > 0): ?>
+                                <?php $__currentLoopData = $p_sub_sub_categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="sub_sub_category_ids[]"
+                                      id="subsub_<?php echo e($v->id); ?>" value="<?php echo e($v->id); ?>" <?php echo e(in_array($v->id, $picked->sub_sub_category_id ?? []) ? 'checked' : ''); ?>>
+                                    <label class="form-check-label"
+                                      for="subsub_<?php echo e($v->id); ?>"><?php echo e($v->sub_sub_category_name); ?></label>
+                                  </div>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                              <?php else: ?>
+                                <p class="text-muted m-0">Select a property subcategory first</p>
+                              <?php endif; ?>
+                            </div>
+                          </div>
+                        </div>
+
+
+                      </div> -->
+
+                  <div class="form-group row">
+                    <div class="col-sm-6">
+                      <label class="label-control">Sub Category Slug</label>
+                      <input type="text" placeholder="Enter Sub Category Slug" id="sub_category_slug"
+                        value="<?php echo e($picked->sub_category_slug); ?>" class="text-control" name="sub_category_slug" required />
+                    </div>
+                    <div class="col-sm-6">
+                      <label class="label-control">Popular</label>
+                      <select class="text-control" name="is_popular">
+                        <option value="0" <?php echo e($picked->is_popular == 0 ? 'selected' : ''); ?>>No</option>
+                        <option value="1" <?php echo e($picked->is_popular == 1 ? 'selected' : ''); ?>>Yes</option>
+                      </select>
                     </div>
 
-
-                  </div> -->
-
+                  </div>
                   <div class="form-group row">
                     <div class="col-sm-12 text-center">
                       <button class="btn btn-primary" type="submit">Update Sub Category</button>
@@ -314,10 +325,10 @@
               $.each(subSubCategories, function (i, v) {
                 var checked = preSelected.includes(v.id) ? 'checked' : '';
                 html += `<div class="form-check">
-                                      <input class="form-check-input" type="checkbox" name="sub_sub_category_ids[]" 
-                                             id="subsub_${v.id}" value="${v.id}" ${checked}>
-                                      <label class="form-check-label" for="subsub_${v.id}">${v.sub_sub_category_name}</label>
-                                   </div>`;
+                                          <input class="form-check-input" type="checkbox" name="sub_sub_category_ids[]" 
+                                                 id="subsub_${v.id}" value="${v.id}" ${checked}>
+                                          <label class="form-check-label" for="subsub_${v.id}">${v.sub_sub_category_name}</label>
+                                       </div>`;
               });
             } else {
               html = '<p class="text-muted m-0">No Property Types found</p>';

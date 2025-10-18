@@ -711,6 +711,19 @@ class PropertiesController extends AppController
 							</label>';
 					}
 				})
+				->addColumn('verified', function ($datas) {
+					if ($datas->verified == 'Yes') {
+						return '<label class="switch">
+							  <input type="checkbox" onclick="manageVerifiedStatus(' . $datas->id . ')" checked>
+							  <span class="slider round"></span>
+							</label>';
+					} else {
+						return '<label class="switch">
+							  <input type="checkbox" onclick="manageVerifiedStatus(' . $datas->id . ')">
+							  <span class="slider round"></span>
+							</label>';
+					}
+				})
 				->addColumn('action', function ($datas) {
 					if ($datas->status) {
 						$button = '<ul class="action"><li><a style="cursor: pointer;" onclick="changeStatusProperty(' . $datas->id . ')" title="Change Property Status"><i class="fa fa-align-justify" aria-hidden="true"></i></a></li><li><a style="cursor: pointer;" onclick="changeStatus(' . $datas->id . ')" title="Block Property"><i class="fa fa-check-circle" aria-hidden="true"></i></a></li><li><a href="' . url('master/property/detail') . '/' . $datas->id . '" title="View Property Details"><i class="fa fa-eye" aria-hidden="true"></i></a></li><li><a name="edit"  href="' . url('master/properties/' . base64_encode($datas->id) . '/edit') . '" title="Edit Property"><i class="fas fa-pencil-alt" style="cursor:pointer;"></i></a></li><li><a style="cursor:pointer;" title="Download Property Images" href="' . url('create/property-images/zip') . '/' . $datas->id . '"><i class="fa fa-download" aria-hidden="true"></i></a></li><li><a style="cursor:pointer;" title="Share Property" publish-status="' . $datas->publish_status . '" id="publish_status' . $datas->id . '" onclick="shareDocuments(' . $datas->id . ')"><i class="fa fa-share-alt" aria-hidden="true"></i></a></li><li><a style="cursor:pointer;" onclick="delete_record(' . $datas->id . ')" title="Delete Property"><i class="fas fa-trash" ></i></a></li></ul>';
@@ -721,7 +734,7 @@ class PropertiesController extends AppController
 						return $button;
 					}
 				})
-				->rawColumns(['action', 'listing_id', 'owner_type', 'trending', 'featured', 'category'])
+				->rawColumns(['action', 'listing_id', 'owner_type', 'trending', 'featured', 'category', 'verified'])
 				->make(true);
 		}
 	}
@@ -1785,6 +1798,19 @@ class PropertiesController extends AppController
 		$picked->update(
 			[
 				'featured' => $status
+			]
+		);
+		return $msg;
+	}
+
+	public function manageVerifiedStatus(Request $request)
+	{
+		$picked = Properties::find($request->id);
+		$status = $picked->verified == 'Yes' ? 'No' : 'Yes';
+		$msg = $picked->verified == 'Yes' ? 'De-Activated' : 'Activated';
+		$picked->update(
+			[
+				'verified' => $status
 			]
 		);
 		return $msg;

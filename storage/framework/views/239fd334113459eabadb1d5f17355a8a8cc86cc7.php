@@ -469,80 +469,6 @@
     </div>
   </div>
 
-  
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
-  <script>
-
-    $(document).ready(function () {
-      $('#citySelect').select2({
-        placeholder: "Select City",
-        allowClear: true
-      });
-    });
-
-    const tabs = document.querySelectorAll('.newupdateTab');
-    const searchBar = document.querySelector('.newupdateSearchBar');
-    const searchInput = document.querySelector('.newupdateSearchInput');
-    const filterBlocks = document.querySelectorAll('.newupdateFilters');
-
-    // Switch tabs
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-
-        const type = tab.getAttribute('data-type');
-        searchBar.setAttribute('data-type', type);
-
-        filterBlocks.forEach(f => f.style.display = 'none');
-        const activeFilter = document.querySelector(`.newupdateFilters[data-type="${type}"]`);
-        if (activeFilter) activeFilter.style.display = 'block';
-
-        let placeholder = '';
-        switch (type) {
-          case 'buy': placeholder = 'Search by Project, Locality, or Builder'; break;
-          case 'rental': placeholder = 'Search by Location, Apartment, or PG'; break;
-          case 'pg-hostels': placeholder = 'Search by PG Name or Locality'; break;
-          case 'exculsive-launch': placeholder = 'Search by Project or Builder'; break;
-          case 'plot-land': placeholder = 'Search by Area or Plot Type'; break;
-          default: placeholder = 'Search properties...';
-        }
-        searchInput.placeholder = placeholder;
-      });
-    });
-
-    // Search button click
-    document.querySelectorAll('.newupdateSearchBtn').forEach(btn => {
-      btn.addEventListener('click', function () {
-        const activeType = document.querySelector('.newupdateTab.active').getAttribute('data-type');
-        const location = document.querySelector('.newupdateSearchBar select').value;
-        const searchQuery = searchInput.value;
-
-        const activeFilters = document.querySelector(`.newupdateFilters[data-type="${activeType}"]`);
-        const selects = activeFilters.querySelectorAll('select');
-
-        let params = new URLSearchParams();
-        params.append('type', activeType);
-        if (location) params.append('city', location);
-        if (searchQuery) params.append('search', searchQuery);
-
-        // Loop through all selects for this tab and add non-empty values
-        selects.forEach(select => {
-          if (select.value) {
-            params.append(select.id, select.value);
-          }
-        });
-
-        // Redirect to backend route with all filters
-        window.location.href = "<?php echo e(route('listing.list')); ?>" + "?" + params.toString();
-      });
-    });
-
-    // Show default buy filters
-    document.querySelector(`.newupdateFilters[data-type="buy"]`).style.display = 'block';
-  </script>
-
 
   <section class="property-popular-cities">
     <div class="container">
@@ -553,10 +479,10 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class=" popular-city-scroll">
         <?php if(count($popular_cities) > 0): ?>
           <?php $__currentLoopData = $popular_cities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $popular_city): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="col-sm-6 col-lg-4 col-xl">
+            <div class="popular-card-image">
               <div class="city-main text-center">
                 <?php
                   $get_city = App\City::find($popular_city->city_id);
@@ -667,7 +593,7 @@
                             </p>
 
                             <div class="d-flex justify-content-between">
-                              <p class="m-0 small"><strong>Owner:</strong><br><?php echo e($value->getUser->firstname); ?></p>
+                              <p class="m-0 small"><strong>Owner:</strong><br><?php echo e($value->getUser->firstname ?? ''); ?></p>
                               <p class="m-0 small">
                                 <strong>Posted:</strong><br><?php echo e(optional($value->created_at)->format('d M Y')); ?>
 
@@ -740,7 +666,7 @@
                 </div>
                 <div class="d-flex justify-content-between">
                   <span class="newdesign-proj-owner"><strong>Builder:</strong><br>
-                    <?php echo e($value->getUser->firstname ?? 'Green Homes Ltd.'); ?></span>
+                    <?php echo e($value->getUser->firstname ?? '' ?? 'Green Homes Ltd.'); ?></span>
                   <span class="newdesign-proj-owner"><strong>Posted:</strong><br>
                     <?php echo e(optional($value->created_at)->format('d M Y')); ?></span>
                 </div>
@@ -767,7 +693,7 @@
 
       <!-- Tabs -->
       <div class="tabs-wrap mb-4 text-center">
-        <div class="tabs-btns d-inline-flex flex-wrap justify-content-center gap-2">
+        <div class="tabs-btns ">
           <button type="button" class="property-tab active" data-filter="all">All</button>
           <?php $__currentLoopData = $sellCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <button type="button" class="property-tab" data-filter="<?php echo e($subSubcat->sub_sub_category_name); ?>">
@@ -826,7 +752,7 @@
                         </p>
 
                         <div class="d-flex justify-content-between">
-                          <p class="m-0 small"><strong>Owner:</strong><br><?php echo e($value->getUser->firstname); ?></p>
+                          <p class="m-0 small"><strong>Owner:</strong><br><?php echo e($value->getUser->firstname ?? ''); ?></p>
                           <p class="m-0 small">
                             <strong>Posted:</strong><br><?php echo e(optional($value->created_at)->format('d M Y')); ?>
 
@@ -954,7 +880,7 @@
 
       <!-- Tabs -->
       <div class="tabs-wrap mb-4 text-center">
-        <div class="tabs-btns d-inline-flex flex-wrap justify-content-center gap-2">
+        <div class="tabs-btns ">
           <button type="button" class="property-tab active" data-filter="all">All</button>
           <?php $__currentLoopData = $sellResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <button type="button" class="property-tab" data-filter="<?php echo e($subSubcat->sub_sub_category_name); ?>">
@@ -1014,7 +940,7 @@
                         </p>
 
                         <div class="d-flex justify-content-between">
-                          <p class="m-0 small"><strong>Owner:</strong><br><?php echo e($value->getUser->firstname); ?></p>
+                          <p class="m-0 small"><strong>Owner:</strong><br><?php echo e($value->getUser->firstname ?? ''); ?></p>
                           <p class="m-0 small">
                             <strong>Posted:</strong><br><?php echo e(optional($value->created_at)->format('d M Y')); ?>
 
@@ -1057,7 +983,7 @@
 
       <!-- Tabs -->
       <div class="tabs-wrap mb-4 text-center">
-        <div class="tabs-btns d-inline-flex flex-wrap justify-content-center gap-2">
+        <div class="tabs-btns ">
           <button type="button" class="property-tab active" data-filter="all">All</button>
           <?php $__currentLoopData = $rentCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <button type="button" class="property-tab" data-filter="<?php echo e($subSubcat->sub_sub_category_name); ?>">
@@ -1116,7 +1042,7 @@
                         </p>
 
                         <div class="d-flex justify-content-between">
-                          <p class="m-0 small"><strong>Owner:</strong><br><?php echo e($value->getUser->firstname); ?></p>
+                          <p class="m-0 small"><strong>Owner:</strong><br><?php echo e($value->getUser->firstname ?? ''); ?></p>
                           <p class="m-0 small">
                             <strong>Posted:</strong><br><?php echo e(optional($value->created_at)->format('d M Y')); ?>
 
@@ -1159,11 +1085,13 @@
 
       <!-- Tabs -->
       <div class="tabs-wrap mb-4 text-center">
-        <div class="tabs-btns d-inline-flex flex-wrap justify-content-center gap-2">
+        <div class="tabs-btns">
           <button type="button" class="property-tab active" data-filter="all">All</button>
           <?php $__currentLoopData = $rentResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <button type="button" class="property-tab" data-filter="<?php echo e($subSubcat->sub_sub_category_name); ?>">
-              <?php echo e($subSubcat->sub_sub_category_name); ?></button>
+              <?php echo e($subSubcat->sub_sub_category_name); ?>
+
+            </button>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
       </div>
@@ -1218,7 +1146,7 @@
                         </p>
 
                         <div class="d-flex justify-content-between">
-                          <p class="m-0 small"><strong>Owner:</strong><br><?php echo e($value->getUser->firstname); ?></p>
+                          <p class="m-0 small"><strong>Owner:</strong><br><?php echo e($value->getUser->firstname ?? ''); ?></p>
                           <p class="m-0 small">
                             <strong>Posted:</strong><br><?php echo e(optional($value->created_at)->format('d M Y')); ?>
 
@@ -1450,7 +1378,7 @@
                           </p>
 
                           <div class="d-flex justify-content-between">
-                            <p class="m-0 small"><strong>Owner:</strong><br><?php echo e($value->getUser->firstname); ?></p>
+                            <p class="m-0 small"><strong>Owner:</strong><br><?php echo e($value->getUser->firstname ?? ''); ?></p>
                             <p class="m-0 small">
                               <strong>Posted:</strong><br><?php echo e(optional($value->created_at)->format('d M Y')); ?>
 
@@ -1557,7 +1485,7 @@
                         </p>
 
                         <div class="d-flex justify-content-between">
-                          <p class="m-0 small"><strong>Owner:</strong><br><?php echo e($value->getUser->firstname); ?></p>
+                          <p class="m-0 small"><strong>Owner:</strong><br><?php echo e($value->getUser->firstname ?? ''); ?></p>
                           <p class="m-0 small">
                             <strong>Posted:</strong><br><?php echo e(optional($value->created_at)->format('d M Y')); ?>
 
@@ -1648,7 +1576,7 @@
                           </p>
 
                           <div class="d-flex justify-content-between">
-                            <p class="m-0 small"><strong>Owner:</strong><br><?php echo e($value->getUser->firstname); ?></p>
+                            <p class="m-0 small"><strong>Owner:</strong><br><?php echo e($value->getUser->firstname ?? ''); ?></p>
                             <p class="m-0 small">
                               <strong>Posted:</strong><br><?php echo e(optional($value->created_at)->format('d M Y')); ?>
 
@@ -1868,7 +1796,74 @@
 
 <?php $__env->startSection('js'); ?>
 
-  <!-- JS -->
+  <!-- Select2 CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+  <!-- Select2 JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#citySelect').select2({
+        placeholder: 'Select City',
+        allowClear: true,
+        ajax: {
+          url: '/api/cities/search',  // You will create this route in Laravel
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              query: params.term // search term from user
+            };
+          },
+          processResults: function (data) {
+            // Convert your cities data to Select2 format
+            return {
+              results: data.map(city => ({ id: city.id, text: city.name }))
+            };
+          },
+          cache: true
+        },
+        minimumInputLength: 1 // Start searching after typing 1 char
+      });
+    });
+
+
+    $('.newupdateSearchIcon').click(function () {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          $.ajax({
+            url: '/location/reverse',
+            type: 'GET',
+            data: {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            },
+            dataType: 'json',
+            success: function (city) {
+              if (city && city.id && city.name) {
+                var newOption = new Option(city.name, city.id, true, true);
+                $('#citySelect').append(newOption).trigger('change');
+              } else {
+                alert('City not found');
+              }
+            },
+            error: function () {
+              alert('Failed to detect city from location');
+            }
+          });
+        }, function () {
+          alert('Could not get your location');
+        });
+      } else {
+        alert('Geolocation not supported');
+      }
+
+    });
+
+
+  </script>
+
+
+  <!-- Initialize Select2 -->
   <script>
     document.querySelectorAll('.property-tab').forEach(tab => {
       tab.addEventListener('click', function () {
@@ -1926,7 +1921,68 @@
     })();
   </script>
 
+  <script>
+    const tabs = document.querySelectorAll('.newupdateTab');
+    const searchBar = document.querySelector('.newupdateSearchBar');
+    const searchInput = document.querySelector('.newupdateSearchInput');
+    const filterBlocks = document.querySelectorAll('.newupdateFilters');
 
+    // Switch tabs
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        const type = tab.getAttribute('data-type');
+        searchBar.setAttribute('data-type', type);
+
+        filterBlocks.forEach(f => f.style.display = 'none');
+        const activeFilter = document.querySelector(`.newupdateFilters[data-type="${type}"]`);
+        if (activeFilter) activeFilter.style.display = 'block';
+
+        let placeholder = '';
+        switch (type) {
+          case 'buy': placeholder = 'Search by Project, Locality, or Builder'; break;
+          case 'rental': placeholder = 'Search by Location, Apartment, or PG'; break;
+          case 'pg-hostels': placeholder = 'Search by PG Name or Locality'; break;
+          case 'exculsive-launch': placeholder = 'Search by Project or Builder'; break;
+          case 'plot-land': placeholder = 'Search by Area or Plot Type'; break;
+          default: placeholder = 'Search properties...';
+        }
+        searchInput.placeholder = placeholder;
+      });
+    });
+
+    // Search button click
+    document.querySelectorAll('.newupdateSearchBtn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const activeType = document.querySelector('.newupdateTab.active').getAttribute('data-type');
+        const location = document.querySelector('.newupdateSearchBar select').value;
+        const searchQuery = searchInput.value;
+
+        const activeFilters = document.querySelector(`.newupdateFilters[data-type="${activeType}"]`);
+        const selects = activeFilters.querySelectorAll('select');
+
+        let params = new URLSearchParams();
+        params.append('type', activeType);
+        if (location) params.append('city', location);
+        if (searchQuery) params.append('search', searchQuery);
+
+        // Loop through all selects for this tab and add non-empty values
+        selects.forEach(select => {
+          if (select.value) {
+            params.append(select.id, select.value);
+          }
+        });
+
+        // Redirect to backend route with all filters
+        window.location.href = "<?php echo e(route('listing.list')); ?>" + "?" + params.toString();
+      });
+    });
+
+    // Show default buy filters
+    document.querySelector(`.newupdateFilters[data-type="buy"]`).style.display = 'block';
+  </script>
 
   <!-- Swiper JS -->
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>

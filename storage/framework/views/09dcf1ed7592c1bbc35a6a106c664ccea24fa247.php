@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('title'); ?>
   Manage Formtypes
 <?php $__env->stopSection(); ?>

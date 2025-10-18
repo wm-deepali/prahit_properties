@@ -13,26 +13,35 @@ use Illuminate\Http\Request;
 |
 */
 
- 
-Route::group(['namespace' => 'Api'], function() {
+
+Route::group(['namespace' => 'Api'], function () {
+
+	Route::get('/cities/search', function (Request $request) {
+		$term = $request->get('query');
+		$cities = App\City::where('name', 'LIKE', "%{$term}%")
+			->limit(10)
+			->get(['id', 'name']);
+		return response()->json($cities);
+	});
+
 
 	// auth 
-	Route::post('login','AuthController@login');
-	Route::post('register','AuthController@register');
+	Route::post('login', 'AuthController@login');
+	Route::post('register', 'AuthController@register');
 	Route::post('verify-otp', 'AuthController@verifyOTP');
 	Route::post('forgot-password', 'AuthController@forgotPassword');
 	Route::post('reset-password', 'AuthController@resetPassword');
 
 	// authenticated
-	Route::group(['middleware' => 'api.auth'], function() {
+	Route::group(['middleware' => 'api.auth'], function () {
 		Route::post('change_password', 'AuthController@change_password');
 		Route::post('update_profile', 'AuthController@update_profile');
 	});
 
-	/* unauthenticated */ 
+	/* unauthenticated */
 
 	// Categories
-	Route::group(['prefix' => 'category'], function() {
+	Route::group(['prefix' => 'category'], function () {
 		Route::get('/', 'CategoryController@index');
 	});
 	Route::get('category_tree', 'CategoryController@category_tree');
@@ -56,7 +65,7 @@ Route::group(['namespace' => 'Api'], function() {
 	Route::post('owner/', 'OwnersController@store');
 
 	// property
-	Route::group(['prefix' => 'property'], function() {
+	Route::group(['prefix' => 'property'], function () {
 		Route::get('show/{slug}', 'PropertyController@show');
 		Route::get('search', 'PropertyController@search_property');
 		Route::get('my_properties', 'PropertyController@my_properties');

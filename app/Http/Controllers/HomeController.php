@@ -209,6 +209,19 @@ class HomeController extends AppController
 		}
 
 
+
+		// Filter by city if provided (optional)
+		if ($request->filled('status')) {
+			switch ($request->status) {
+				case 'verified':
+					$query->where('verified', 'yes');
+					break;
+				default:
+					$query->latest();
+			}
+		}
+
+
 		// Sorting
 		if ($request->filled('sort')) {
 			switch ($request->sort) {
@@ -229,26 +242,32 @@ class HomeController extends AppController
 		}
 
 		// pending pg_availavle_for, 
-
 		// Pagination
 		$properties = $query->paginate(10)->withQueryString();
+
 
 		return view('front.listing-list', compact('properties'));
 	}
 
-
 	public function directoryList(Request $request)
 	{
-		$query = BusinessListing::query();
+		$query = BusinessListing::query()->where('status', 'Active');
 
-		// Fixed filters
-		$query->where('status', 'Active');
+		// 🔹 Filter by Web Directory Subcategory
+		if ($request->has('subcategory') && !empty($request->subcategory)) {
+			$subcategoryId = $request->subcategory;
 
-		// Pagination
+			$query->whereHas('subCategories', function ($q) use ($subcategoryId) {
+				$q->where('web_directory_sub_categories.id', $subcategoryId);
+			});
+		}
+
 		$list = $query->paginate(10);
 
 		return view('front.directory-listing', compact('list'));
 	}
+
+
 	public function create_property()
 	{
 		$category = Category::all();

@@ -843,7 +843,7 @@
                                             <div class="d-flex justify-content-between">
                                                 <div class="listing-owner-info mb-2">
                                                     <div class="owner-avatar">RA</div>
-                                                    <span><strong>Owner:</strong> <?php echo e($property?->getUser?->firstname); ?></span>
+                                                    <span><strong>Owner:</strong> <?php echo e($property->getUser->firstname ?? ''); ?></span>
                                                 </div>
                                                 <div class="listing-owner-info mb-2">
 

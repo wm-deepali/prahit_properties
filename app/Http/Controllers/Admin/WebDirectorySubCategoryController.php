@@ -63,11 +63,10 @@ class WebDirectorySubCategoryController extends AppController
 				'category_id' => $request->category_id,
 				'sub_category_name' => $request->sub_category_name,
 				'sub_category_slug' => $request->sub_category_slug,
-				// 'property_category_id' => $request->property_category_id,
-				// 'sub_category_id' => $request->sub_category_id,
-				// 'sub_sub_category_id' => $subSubCatString, // ✅ stored as comma-separated IDs
 				'status' => 'Yes',
+				'is_popular' => $request->has('is_popular') ? 1 : 0, // ✅ Add this
 			]);
+
 
 			return redirect('master/web-directory-sub-category')
 				->with('alert-success', 'Sub Category Created Successfully.');
@@ -138,10 +137,9 @@ class WebDirectorySubCategoryController extends AppController
 				'category_id' => $request->category_id,
 				'sub_category_name' => $request->sub_category_name,
 				'sub_category_slug' => $request->sub_category_slug,
-				// 'property_category_id' => $request->property_category_id,
-				// 'sub_category_id' => $request->sub_category_id,
-				// 'sub_sub_category_id' => $subSubCatString, // ✅ store as CSV string
+				'is_popular' => $request->has('is_popular') ? 1 : 0, // ✅ Add this
 			]);
+
 
 			return redirect('master/web-directory-sub-category')
 				->with('alert-success', 'Sub Category Updated Successfully.');

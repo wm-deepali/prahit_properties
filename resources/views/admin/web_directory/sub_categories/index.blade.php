@@ -46,6 +46,7 @@
                         <th>Category</th>
                         <th>Name</th>
                         <th>Slug</th>
+                        <th>Popular</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
@@ -74,6 +75,8 @@
                             <td> {{ $t->WebDirectoryCategory->category_name }} </td>
                             <td> {{ $t->sub_category_name }} </td>
                             <td> {{ $t->sub_category_slug }} </td>
+                            <td>{{ $t->is_popular ? 'Yes' : 'No' }}</td>
+
                             <td>
                               @if($t->status == "Yes")
                                 Active

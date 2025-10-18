@@ -46,6 +46,7 @@
                         <th>Category</th>
                         <th>Name</th>
                         <th>Slug</th>
+                        <th>Popular</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
@@ -75,6 +76,8 @@
                             <td> <?php echo e($t->WebDirectoryCategory->category_name); ?> </td>
                             <td> <?php echo e($t->sub_category_name); ?> </td>
                             <td> <?php echo e($t->sub_category_slug); ?> </td>
+                            <td><?php echo e($t->is_popular ? 'Yes' : 'No'); ?></td>
+
                             <td>
                               <?php if($t->status == "Yes"): ?>
                                 Active

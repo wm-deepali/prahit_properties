@@ -2,7 +2,8 @@
 @section('title')
     <title>Directory Listing</title>
 @endsection
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <style>
     .directory-card {
         display: flex;
@@ -390,369 +391,384 @@
     /*    overflow-y: auto;*/
     /*    max-height: calc(100vh - 100px);*/
     /*}*/
-   .category-group {
-   
-    width: 100%;
-    padding: 10px;
-    background: #fff;
-   
-}
+    .category-group {
 
-.category-group h2 {
-    font-size: 14px;
-    font-weight: 600;
-    margin: 0 0 7px 0;
-    color: #000;
-    text-transform: uppercase;
-}
+        width: 100%;
+        padding: 10px;
+        background: #fff;
 
-.category-list {
-    /*border: 1px solid #d1d5db;*/
-    border-radius:3px;
-    display: flex;
-    flex-direction: column;
-    /*gap: 10px;*/
-    width: 100%;
-}
+    }
 
-.category-wrapper {
-    width: 100%;
-}
+    .category-group h2 {
+        font-size: 14px;
+        font-weight: 600;
+        margin: 0 0 7px 0;
+        color: #000;
+        text-transform: uppercase;
+    }
 
-.category-item {
-    padding: 8px 12px;
-    border-bottom: 1px solid #d1d5db;
-    /*border-radius: 4px;*/
-    background: #f9f9f9;
-    font-size: 15px;
-    font-weight:500;
-    cursor: pointer;
-    color: gray;
-    transition: background-color 0.2s, color 0.2s;
-    width: 100%;
-    /*text-align: center;*/
-    margin:0px;
-}
+    .category-list {
+        /*border: 1px solid #d1d5db;*/
+        border-radius: 3px;
+        display: flex;
+        flex-direction: column;
+        /*gap: 10px;*/
+        width: 100%;
+    }
 
-.category-item.active {
-    background-color: #e38e32;
-    color: white;
-}
+    .category-wrapper {
+        width: 100%;
+    }
 
-.subcategory-section {
-    margin-top: 10px;
-    width: 100%;
-    padding: 0 10px;
-}
+    .category-item {
+        padding: 8px 12px;
+        border-bottom: 1px solid #d1d5db;
+        /*border-radius: 4px;*/
+        background: #f9f9f9;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        color: gray;
+        transition: background-color 0.2s, color 0.2s;
+        width: 100%;
+        /*text-align: center;*/
+        margin: 0px;
+    }
 
-.separator {
-    border: 0;
-    height: 1px;
-    background: #d1d5db;
-    margin: 10px 0;
-}
+    .category-item.active {
+        background-color: #e38e32;
+        color: white;
+    }
 
-.subcategory-list {
-    padding-left: 20px;
-}
+    .subcategory-section {
+        margin-top: 10px;
+        width: 100%;
+        padding: 0 10px;
+    }
 
-.subcategory-list p {
-    margin: 0px 0;
-    font-size: 14px;
-    color: #333;
-    cursor: pointer;
-    padding: 8px 12px;
-    border-bottom: 1px solid #d1d5db;
-    /*border-radius: 4px;*/
-    background: #fff;
-    width: 100%;
-    /*text-align: center;*/
-}
+    .separator {
+        border: 0;
+        height: 1px;
+        background: #d1d5db;
+        margin: 10px 0;
+    }
 
-.subcategory-list p.active {
-   font-weight: 600;
-    background-color: #f7f6f5;
-    color: #6e6e6e;
-    border-color: #d97706;
-   
-}
+    .subcategory-list {
+        padding-left: 20px;
+    }
 
+    .subcategory-list p {
+        margin: 0px 0;
+        font-size: 14px;
+        color: #333;
+        cursor: pointer;
+        padding: 8px 12px;
+        border-bottom: 1px solid #d1d5db;
+        /*border-radius: 4px;*/
+        background: #fff;
+        width: 100%;
+        /*text-align: center;*/
+    }
+
+    .subcategory-list p.active {
+        font-weight: 600;
+        background-color: #f7f6f5;
+        color: #6e6e6e;
+        border-color: #d97706;
+
+    }
 </style>
 @section('content')
 
-<section style="background:#f9f9f9;">
-    <div class="top-search-section">
-        <div class="d-flex align-items-center justify-content-center gap-3">
-            <div class="search-container">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-input" placeholder="Search Anything" onkeyup="filterResults()">
-                <i class="fas fa-microphone mic-icon"></i>
-            </div>
-            <div class="filter-buttons">
-                <span class="filter-label">Search By</span>
-                <button class="filter-btn">Travel Time</button>
-                <button class="filter-btn">Near by Metro Station</button>
-                <button class="filter-btn">Near Me Properties</button>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="listing-page">
-                <div class="listing-page-left">
-                    <div class="directory-filter">
-                        <div class="reset-btn d-flex justify-content-between align-items-center">
-                            <h2 style="font-size:20px;">Filters</h2>
-                            <button onclick="resetFilters()">Reset</button>
-                        </div>
-                        <hr>
-<div class="category-group">
-    <h2>Categories</h2>
-    <hr>
-    <div class="category-list">
-        <div class="category-wrapper">
-            <p class="category-item" onclick="toggleCategory(this, 'Real Estate')">Real Estate</p>
-            <div class="subcategory-section" style="display: none;">
-                <!--<hr class="separator">-->
-                <div class="subcategory-list"></div>
-            </div>
-        </div>
-        <div class="category-wrapper">
-            <p class="category-item" onclick="toggleCategory(this, 'Construction')">Construction</p>
-            <div class="subcategory-section" style="display: none;">
-                <!--<hr class="separator">-->
-                <div class="subcategory-list"></div>
-            </div>
-        </div>
-        <div class="category-wrapper">
-            <p class="category-item" onclick="toggleCategory(this, 'Interior Design')">Interior Design</p>
-            <div class="subcategory-section" style="display: none;">
-                <!--<hr class="separator">-->
-                <div class="subcategory-list"></div>
-            </div>
-        </div>
-        <div class="category-wrapper">
-            <p class="category-item" onclick="toggleCategory(this, 'Property Management')">Property Management</p>
-            <div class="subcategory-section" style="display: none;">
-                <!--<hr class="separator">-->
-                <div class="subcategory-list"></div>
-            </div>
-        </div>
-    </div>
-</div>
-<hr>
-                        <div class="rating-group">
-                            <h2>Ratings</h2>
-                            <div class="rating-button">
-                                <button><input type="checkbox" class="filter-checkbox" value="5" onchange="filterResults()"> <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> 5 Stars</button>
-                                <button><input type="checkbox" class="filter-checkbox" value="4" onchange="filterResults()"> <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> 4 Stars & Above</button>
-                                <button><input type="checkbox" class="filter-checkbox" value="3" onchange="filterResults()"> <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i> 3 Stars & Above</button>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="category-group">
-                            <h2>Apply Filter</h2>
-                            <div class="category-button">
-                                <button><input type="checkbox" class="filter-checkbox" value="Verified Sellers" onchange="filterResults()"> Verified Sellers</button>
-                                <button><input type="checkbox" class="filter-checkbox" value="Premium Sellers" onchange="filterResults()"> Premium Sellers</button>
-                                <button><input type="checkbox" class="filter-checkbox" value="Most Rated" onchange="filterResults()"> Most Rated</button>
-                            </div>
-                        </div>
-                    </div>
+    <section style="background:#f9f9f9;">
+        <div class="top-search-section">
+            <div class="d-flex align-items-center justify-content-center gap-3">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search Anything" onkeyup="filterResults()">
+                    <i class="fas fa-microphone mic-icon"></i>
                 </div>
-                <div class="listing-page-right">
-                    <div class="right-sorting">
-                        <div class="search-title mb-2"><strong>Directory Listing:</strong> Business Companies</div>
-                        <div class="sorting-options">
-                            <select onchange="sortResults(this.value)">
-                                <option value="default">Sort by: Default</option>
-                                <option value="rating-high">Rating: High to Low</option>
-                                <option value="views-high">Views: High to Low</option>
-                                <option value="established-old">Established Year: Oldest First</option>
-                                <option value="member-old">Member Since: Oldest First</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div id="directory-cards"></div>
+                <div class="filter-buttons">
+                    <span class="filter-label">Search By</span>
+                    <button class="filter-btn">Travel Time</button>
+                    <button class="filter-btn">Near by Metro Station</button>
+                    <button class="filter-btn">Near Me Properties</button>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+        <div class="container">
+            <div class="row">
+                <div class="listing-page">
+                    <div class="listing-page-left">
+                        <div class="directory-filter">
+                            <div class="reset-btn d-flex justify-content-between align-items-center">
+                                <h2 style="font-size:20px;">Filters</h2>
+                                <button onclick="resetFilters()">Reset</button>
+                            </div>
+                            <hr>
+                            <div class="category-group">
+                                <h2>Categories</h2>
+                                <hr>
+                                <div class="category-list">
+                                    <div class="category-wrapper">
+                                        <p class="category-item" onclick="toggleCategory(this, 'Real Estate')">Real Estate
+                                        </p>
+                                        <div class="subcategory-section" style="display: none;">
+                                            <!--<hr class="separator">-->
+                                            <div class="subcategory-list"></div>
+                                        </div>
+                                    </div>
+                                    <div class="category-wrapper">
+                                        <p class="category-item" onclick="toggleCategory(this, 'Construction')">Construction
+                                        </p>
+                                        <div class="subcategory-section" style="display: none;">
+                                            <!--<hr class="separator">-->
+                                            <div class="subcategory-list"></div>
+                                        </div>
+                                    </div>
+                                    <div class="category-wrapper">
+                                        <p class="category-item" onclick="toggleCategory(this, 'Interior Design')">Interior
+                                            Design</p>
+                                        <div class="subcategory-section" style="display: none;">
+                                            <!--<hr class="separator">-->
+                                            <div class="subcategory-list"></div>
+                                        </div>
+                                    </div>
+                                    <div class="category-wrapper">
+                                        <p class="category-item" onclick="toggleCategory(this, 'Property Management')">
+                                            Property Management</p>
+                                        <div class="subcategory-section" style="display: none;">
+                                            <!--<hr class="separator">-->
+                                            <div class="subcategory-list"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="rating-group">
+                                <h2>Ratings</h2>
+                                <div class="rating-button">
+                                    <button><input type="checkbox" class="filter-checkbox" value="5"
+                                            onchange="filterResults()"> <i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i> 5 Stars</button>
+                                    <button><input type="checkbox" class="filter-checkbox" value="4"
+                                            onchange="filterResults()"> <i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="far fa-star"></i> 4 Stars & Above</button>
+                                    <button><input type="checkbox" class="filter-checkbox" value="3"
+                                            onchange="filterResults()"> <i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i
+                                            class="far fa-star"></i> 3 Stars & Above</button>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="category-group">
+                                <h2>Apply Filter</h2>
+                                <div class="category-button">
+                                    <button><input type="checkbox" class="filter-checkbox" value="Verified Sellers"
+                                            onchange="filterResults()"> Verified Sellers</button>
+                                    <button><input type="checkbox" class="filter-checkbox" value="Premium Sellers"
+                                            onchange="filterResults()"> Premium Sellers</button>
+                                    <button><input type="checkbox" class="filter-checkbox" value="Most Rated"
+                                            onchange="filterResults()"> Most Rated</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="listing-page-right">
+                        <div class="right-sorting">
+                            <div class="search-title mb-2"><strong>Directory Listing:</strong> Business Companies</div>
+                            <div class="sorting-options">
+                                <select onchange="sortResults(this.value)">
+                                    <option value="default">Sort by: Default</option>
+                                    <option value="rating-high">Rating: High to Low</option>
+                                    <option value="views-high">Views: High to Low</option>
+                                    <option value="established-old">Established Year: Oldest First</option>
+                                    <option value="member-old">Member Since: Oldest First</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="directory-cards"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 @endsection
 @section('js')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-<script>
-    // Sample data for directory listings
-    const directoryData = [
-        { name: "ABC Real Estate", logo: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Leading real estate company specializing in residential properties.", category: "Real Estate", subCategory: "Residential", established: 2010, memberSince: 2015, views: 5678, rating: 4.5, verified: true, premium: false, mostRated: true },
-        { name: "XYZ Construction", logo: "https://images.unsplash.com/photo-1560520659-7d106de61d58?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Expert in building high-quality commercial structures.", category: "Construction", subCategory: "Commercial", established: 2005, memberSince: 2010, views: 4321, rating: 4.8, verified: false, premium: true, mostRated: false },
-        { name: "LMN Interior Design", logo: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Creative interior design solutions for homes.", category: "Interior Design", subCategory: "Residential", established: 2018, memberSince: 2020, views: 3456, rating: 4.2, verified: true, premium: false, mostRated: false },
-        { name: "PQR Property Management", logo: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Professional property management services.", category: "Property Management", subCategory: "Commercial", established: 2012, memberSince: 2016, views: 2789, rating: 4.9, verified: false, premium: true, mostRated: true },
-        { name: "DEF Builders", logo: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Specialized in residential and commercial construction.", category: "Construction", subCategory: "Villas", established: 2008, memberSince: 2013, views: 4890, rating: 4.6, verified: true, premium: false, mostRated: true },
-        { name: "GHI Design Studio", logo: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Innovative interior designs for modern homes.", category: "Interior Design", subCategory: "Apartments", established: 2015, memberSince: 2017, views: 3210, rating: 4.3, verified: false, premium: true, mostRated: false }
-    ];
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+        // Sample data for directory listings
+        const directoryData = [
+            { name: "ABC Real Estate", logo: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Leading real estate company specializing in residential properties.", category: "Real Estate", subCategory: "Residential", established: 2010, memberSince: 2015, views: 5678, rating: 4.5, verified: true, premium: false, mostRated: true },
+            { name: "XYZ Construction", logo: "https://images.unsplash.com/photo-1560520659-7d106de61d58?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Expert in building high-quality commercial structures.", category: "Construction", subCategory: "Commercial", established: 2005, memberSince: 2010, views: 4321, rating: 4.8, verified: false, premium: true, mostRated: false },
+            { name: "LMN Interior Design", logo: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Creative interior design solutions for homes.", category: "Interior Design", subCategory: "Residential", established: 2018, memberSince: 2020, views: 3456, rating: 4.2, verified: true, premium: false, mostRated: false },
+            { name: "PQR Property Management", logo: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Professional property management services.", category: "Property Management", subCategory: "Commercial", established: 2012, memberSince: 2016, views: 2789, rating: 4.9, verified: false, premium: true, mostRated: true },
+            { name: "DEF Builders", logo: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Specialized in residential and commercial construction.", category: "Construction", subCategory: "Villas", established: 2008, memberSince: 2013, views: 4890, rating: 4.6, verified: true, premium: false, mostRated: true },
+            { name: "GHI Design Studio", logo: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Innovative interior designs for modern homes.", category: "Interior Design", subCategory: "Apartments", established: 2015, memberSince: 2017, views: 3210, rating: 4.3, verified: false, premium: true, mostRated: false }
+        ];
 
-    function createCard(company) {
-        return `
-            <div class="directory-card">
-                <div class="logo-section">
-                    <img src="${company.logo}" alt="Company Logo" class="company-logo">
-                </div>
-                <div class="content-section">
-                    <div>
-                        <div class="directory-header">
-                            <h1 class="company-name">${company.name}</h1>
-                            <div class="directory-actions">
-                                <button class="action-btn" title="Like"><i class="fas fa-heart"></i></button>
-                                <button class="action-btn" title="Share"><i class="fas fa-share"></i></button>
-                                <button class="action-btn" title="More"><i class="fas fa-ellipsis-h"></i></button>
+        function createCard(company) {
+            return `
+                <div class="directory-card">
+                    <div class="logo-section">
+                        <img src="${company.logo}" alt="Company Logo" class="company-logo">
+                    </div>
+                    <div class="content-section">
+                        <div>
+                            <div class="directory-header">
+                                <h1 class="company-name">${company.name}</h1>
+                                <div class="directory-actions">
+                                    <button class="action-btn" title="Like"><i class="fas fa-heart"></i></button>
+                                    <button class="action-btn" title="Share"><i class="fas fa-share"></i></button>
+                                    <button class="action-btn" title="More"><i class="fas fa-ellipsis-h"></i></button>
+                                </div>
+                            </div>
+                            <div class="short-content">${company.content}</div>
+                            <div class="directory-features">
+                                <div class="feature-item">
+                                    <i class="fas fa-tag feature-icon"></i>
+                                    <span class="feature-value">Category: ${company.category}</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-tags feature-icon"></i>
+                                    <span class="feature-value">Sub Category: ${company.subCategory}</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-calendar-alt feature-icon"></i>
+                                    <span class="feature-value">Established: ${company.established}</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-user-clock feature-icon"></i>
+                                    <span class="feature-value">Member Since: ${company.memberSince}</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-eye feature-icon"></i>
+                                    <span class="feature-value">Views: ${company.views}</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="short-content">${company.content}</div>
-                        <div class="directory-features">
-                            <div class="feature-item">
-                                <i class="fas fa-tag feature-icon"></i>
-                                <span class="feature-value">Category: ${company.category}</span>
-                            </div>
-                            <div class="feature-item">
-                                <i class="fas fa-tags feature-icon"></i>
-                                <span class="feature-value">Sub Category: ${company.subCategory}</span>
-                            </div>
-                            <div class="feature-item">
-                                <i class="fas fa-calendar-alt feature-icon"></i>
-                                <span class="feature-value">Established: ${company.established}</span>
-                            </div>
-                            <div class="feature-item">
-                                <i class="fas fa-user-clock feature-icon"></i>
-                                <span class="feature-value">Member Since: ${company.memberSince}</span>
-                            </div>
-                            <div class="feature-item">
-                                <i class="fas fa-eye feature-icon"></i>
-                                <span class="feature-value">Views: ${company.views}</span>
-                            </div>
+                        <div class="directory-buttons">
+                            <button class="contact-btn">Contact Now</button>
+                            <button class="detail-btn">View Detail</button>
                         </div>
                     </div>
-                    <div class="directory-buttons">
-                        <button class="contact-btn">Contact Now</button>
-                        <button class="detail-btn">View Detail</button>
-                    </div>
                 </div>
-            </div>
-        `;
-    }
+            `;
+        }
 
-   // JavaScript to handle category and subcategory toggling
-let activeCategory = null;
-let activeSubCategory = null;
+        // JavaScript to handle category and subcategory toggling
+        let activeCategory = null;
+        let activeSubCategory = null;
 
-function toggleCategory(element, category) {
-    const categoryWrappers = document.querySelectorAll('.category-wrapper');
-    const subcategorySection = element.nextElementSibling;
-    const subcategoryList = subcategorySection.querySelector('.subcategory-list');
-    const subCategories = {
-        "Real Estate": ["Residential", "Commercial", "Land/Plot"],
-        "Construction": ["Villas", "Commercial", "Residential"],
-        "Interior Design": ["Apartments", "Residential"],
-        "Property Management": ["Commercial", "Land/Plot"]
-    };
+        function toggleCategory(element, category) {
+            const categoryWrappers = document.querySelectorAll('.category-wrapper');
+            const subcategorySection = element.nextElementSibling;
+            const subcategoryList = subcategorySection.querySelector('.subcategory-list');
+            const subCategories = {
+                "Real Estate": ["Residential", "Commercial", "Land/Plot"],
+                "Construction": ["Villas", "Commercial", "Residential"],
+                "Interior Design": ["Apartments", "Residential"],
+                "Property Management": ["Commercial", "Land/Plot"]
+            };
 
-    // Remove active state from all categories and close their subcategories
-    categoryWrappers.forEach(wrapper => {
-        const categoryItem = wrapper.querySelector('.category-item');
-        categoryItem.classList.remove('active');
-        wrapper.querySelector('.subcategory-section').style.display = 'none';
-        wrapper.querySelector('.subcategory-list').innerHTML = '';
-    });
-
-    // Set active state on clicked category and open its subcategory section
-    element.classList.add('active');
-    activeCategory = category;
-    subcategorySection.style.display = 'block';
-
-    // Populate subcategory list for the selected category
-    subCategories[category].forEach(subCat => {
-        const p = document.createElement('p');
-        p.textContent = subCat;
-        p.onclick = () => toggleSubCategory(p, category, subCat);
-        subcategoryList.appendChild(p);
-    });
-
-    // Trigger filter update
-    filterResults();
-}
-
-function toggleSubCategory(element, category, subCategory) {
-    const subcategoryItems = element.parentElement.querySelectorAll('p');
-    subcategoryItems.forEach(item => item.classList.remove('active'));
-    element.classList.add('active');
-    activeCategory = category;
-    activeSubCategory = subCategory;
-
-    // Trigger filter update
-    filterResults();
-}
-
-// Ensure filterResults is updated to handle category and subcategory
-function filterResults() {
-    const searchInput = document.querySelector('.search-input')?.value.toLowerCase() || '';
-    let filteredData = [...directoryData];
-
-    // Apply search filter
-    if (searchInput) {
-        filteredData = filteredData.filter(company =>
-            company.name.toLowerCase().includes(searchInput) ||
-            company.content.toLowerCase().includes(searchInput) ||
-            company.category.toLowerCase().includes(searchInput) ||
-            company.subCategory.toLowerCase().includes(searchInput)
-        );
-    }
-
-    // Apply category filter
-    if (activeCategory) {
-        filteredData = filteredData.filter(company => company.category === activeCategory);
-    }
-
-    // Apply subcategory filter
-    if (activeSubCategory) {
-        filteredData = filteredData.filter(company => company.subCategory === activeSubCategory);
-    }
-
-    // Apply rating filter
-    const ratingFilters = document.querySelectorAll('.filter-checkbox:checked');
-    if (ratingFilters.length > 0) {
-        const ratingValues = Array.from(ratingFilters).map(cb => parseInt(cb.value));
-        filteredData = filteredData.filter(company => ratingValues.some(rating => company.rating >= rating));
-    }
-
-    // Apply special filters
-    const specialFilters = Array.from(document.querySelectorAll('.filter-checkbox:checked'))
-        .filter(cb => ["Verified Sellers", "Premium Sellers", "Most Rated"].includes(cb.value))
-        .map(cb => cb.value);
-    if (specialFilters.length > 0) {
-        filteredData = filteredData.filter(company => {
-            return specialFilters.every(filter => {
-                if (filter === "Verified Sellers") return company.verified;
-                if (filter === "Premium Sellers") return company.premium;
-                if (filter === "Most Rated") return company.mostRated;
-                return true;
+            // Remove active state from all categories and close their subcategories
+            categoryWrappers.forEach(wrapper => {
+                const categoryItem = wrapper.querySelector('.category-item');
+                categoryItem.classList.remove('active');
+                wrapper.querySelector('.subcategory-section').style.display = 'none';
+                wrapper.querySelector('.subcategory-list').innerHTML = '';
             });
-        });
-    }
 
-    // Sort if a sorting option is selected
-    const sortOption = document.querySelector('.sorting-options select')?.value || 'default';
-    if (sortOption === "rating-high") filteredData.sort((a, b) => b.rating - a.rating);
-    if (sortOption === "views-high") filteredData.sort((a, b) => b.views - a.views);
-    if (sortOption === "established-old") filteredData.sort((a, b) => a.established - b.established);
-    if (sortOption === "member-old") filteredData.sort((a, b) => a.memberSince - b.memberSince);
+            // Set active state on clicked category and open its subcategory section
+            element.classList.add('active');
+            activeCategory = category;
+            subcategorySection.style.display = 'block';
 
-    // Render only the first card
-    const cardsContainer = document.getElementById('directory-cards');
-    cardsContainer.innerHTML = filteredData.length > 0 ? createCard(filteredData[0]) : '<p>No results found.</p>';
-}
+            // Populate subcategory list for the selected category
+            subCategories[category].forEach(subCat => {
+                const p = document.createElement('p');
+                p.textContent = subCat;
+                p.onclick = () => toggleSubCategory(p, category, subCat);
+                subcategoryList.appendChild(p);
+            });
 
-// Initial call to set up (optional, as toggling handles this)
-</script>
+            // Trigger filter update
+            filterResults();
+        }
+
+        function toggleSubCategory(element, category, subCategory) {
+            const subcategoryItems = element.parentElement.querySelectorAll('p');
+            subcategoryItems.forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            activeCategory = category;
+            activeSubCategory = subCategory;
+
+            // Trigger filter update
+            filterResults();
+        }
+
+        // Ensure filterResults is updated to handle category and subcategory
+        function filterResults() {
+            const searchInput = document.querySelector('.search-input')?.value.toLowerCase() || '';
+            let filteredData = [...directoryData];
+
+            // Apply search filter
+            if (searchInput) {
+                filteredData = filteredData.filter(company =>
+                    company.name.toLowerCase().includes(searchInput) ||
+                    company.content.toLowerCase().includes(searchInput) ||
+                    company.category.toLowerCase().includes(searchInput) ||
+                    company.subCategory.toLowerCase().includes(searchInput)
+                );
+            }
+
+            // Apply category filter
+            if (activeCategory) {
+                filteredData = filteredData.filter(company => company.category === activeCategory);
+            }
+
+            // Apply subcategory filter
+            if (activeSubCategory) {
+                filteredData = filteredData.filter(company => company.subCategory === activeSubCategory);
+            }
+
+            // Apply rating filter
+            const ratingFilters = document.querySelectorAll('.filter-checkbox:checked');
+            if (ratingFilters.length > 0) {
+                const ratingValues = Array.from(ratingFilters).map(cb => parseInt(cb.value));
+                filteredData = filteredData.filter(company => ratingValues.some(rating => company.rating >= rating));
+            }
+
+            // Apply special filters
+            const specialFilters = Array.from(document.querySelectorAll('.filter-checkbox:checked'))
+                .filter(cb => ["Verified Sellers", "Premium Sellers", "Most Rated"].includes(cb.value))
+                .map(cb => cb.value);
+            if (specialFilters.length > 0) {
+                filteredData = filteredData.filter(company => {
+                    return specialFilters.every(filter => {
+                        if (filter === "Verified Sellers") return company.verified;
+                        if (filter === "Premium Sellers") return company.premium;
+                        if (filter === "Most Rated") return company.mostRated;
+                        return true;
+                    });
+                });
+            }
+
+            // Sort if a sorting option is selected
+            const sortOption = document.querySelector('.sorting-options select')?.value || 'default';
+            if (sortOption === "rating-high") filteredData.sort((a, b) => b.rating - a.rating);
+            if (sortOption === "views-high") filteredData.sort((a, b) => b.views - a.views);
+            if (sortOption === "established-old") filteredData.sort((a, b) => a.established - b.established);
+            if (sortOption === "member-old") filteredData.sort((a, b) => a.memberSince - b.memberSince);
+
+            // Render only the first card
+            const cardsContainer = document.getElementById('directory-cards');
+            cardsContainer.innerHTML = filteredData.length > 0 ? createCard(filteredData[0]) : '<p>No results found.</p>';
+        }
+
+        // Initial call to set up (optional, as toggling handles this)
+    </script>
 
 @endsection

@@ -1899,6 +1899,40 @@
 
 @section('js')
 
+  <!-- Select2 CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+  <!-- Select2 JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+  <!-- Initialize Select2 -->
+  <script>
+    $(document).ready(function () {
+      $('#citySelect').select2({
+        placeholder: 'Select City',
+        allowClear: true,
+        ajax: {
+          url: '/api/cities/search',  // You will create this route in Laravel
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              query: params.term // search term from user
+            };
+          },
+          processResults: function (data) {
+            // Convert your cities data to Select2 format
+            return {
+              results: data.map(city => ({ id: city.id, text: city.name }))
+            };
+          },
+          cache: true
+        },
+        minimumInputLength: 1 // Start searching after typing 1 char
+      });
+    });
+
+  </script>
+  
   <!-- JS -->
   <script>
     document.querySelectorAll('.property-tab').forEach(tab => {
@@ -1957,17 +1991,7 @@
     })();
   </script>
 
-  {{-- JavaScript --}}
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
   <script>
-
-    $(document).ready(function () {
-      $('#citySelect').select2({
-        placeholder: "Select City",
-        allowClear: true
-      });
-    });
 
     const tabs = document.querySelectorAll('.newupdateTab');
     const searchBar = document.querySelector('.newupdateSearchBar');

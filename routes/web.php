@@ -12,10 +12,10 @@
 */
 
 Route::get('/profile-page', function () {
-    return view('front.profile-page'); // view file: resources/views/frontend/faq.blade.php
+	return view('front.profile-page'); // view file: resources/views/frontend/faq.blade.php
 })->name('profile.page');
 Route::get('/business-details', function () {
-    return view('front.business-details'); // view file: resources/views/frontend/faq.blade.php
+	return view('front.business-details'); // view file: resources/views/frontend/faq.blade.php
 })->name('business.details');
 
 Route::get('/listing-list', 'HomeController@list')->name('listing.list');
@@ -23,12 +23,12 @@ Route::get('/directory-list', 'HomeController@directoryList')->name('directory.l
 
 
 Route::get('login', 'AuthController@login');
-Route::post('login', 'AuthController@login');  
+Route::post('login', 'AuthController@login');
 Route::post('login_ajax', 'User\UserController@login_ajax')->name('login_ajax');
 Route::post('forgot-password', 'AppController@forgot_password')->name('forgot_password');
 Route::post('send-otp', 'AppController@visitor_otp')->name('send_otp');
 
-Route::get('post-property', 'HomeController@create_property')->name('create_property'); 
+Route::get('post-property', 'HomeController@create_property')->name('create_property');
 Route::get('property/{title}', 'HomeController@property_detail')->name('property_detail');
 Route::get('search/', 'HomeController@search_property')->name('search_property');
 Route::get('search/grid/', 'HomeController@searchPropertyGrid')->name('grid.search_property');
@@ -68,10 +68,10 @@ Route::get('home/builder/profile', 'HomeController@builderProfile')->name('front
 // Get Multiple Cities Based On Multiple States
 Route::post('get/multiple/cities', 'Admin\FrontSectionContentController@getMultipleCities')->name('state.getMultipleCities');
 
-Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin.check'], 'prefix' => 'master'], function() {
+Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin.check'], 'prefix' => 'master'], function () {
 	Route::get('cities_states/{id}', 'LocationsController@fetch_cities_states')->name('cities_states');
 
-	Route::group(['as' => 'admin.'], function() {
+	Route::group(['as' => 'admin.'], function () {
 
 		// AJAX
 		Route::get('fetch_form_type', 'FormTypeController@fetch_form_type')->name('fetch_form_type');
@@ -82,22 +82,22 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin.check'], '
 		Route::post('update-password', 'AdminController@update_password')->name('update_password');
 
 		// Category 
-		Route::group(['as' => 'category.'], function() {
+		Route::group(['as' => 'category.'], function () {
 			Route::get('fetch-category-tree', 'CategoryController@fetch_category_tree')->name('fetch_category_tree');
 		});
-		
+
 		// Sub Category 
-		Route::group(['as' => 'sub_category.'], function() {
+		Route::group(['as' => 'sub_category.'], function () {
 			Route::get('fetch_subcategories_by_cat_id/{id}', 'SubCategoryController@fetch_subcategories_by_cat_id')->name('fetch_subcategories_by_cat_id');
 			Route::get('fetch_multiple_subcategories_by_cat_id', 'SubCategoryController@fetch_multiple_subcategories_by_cat_id')->name('fetch_multiple_subcategories_by_cat_id');
 		});
 
-		Route::get('category_to_formtype_availablity/{cats}/{subcats}/{subsubcats}','FormTypeController@category_to_formtype_availablity')->name('category_to_formtype_availablity');
+		Route::get('category_to_formtype_availablity/{cats}/{subcats}/{subsubcats}', 'FormTypeController@category_to_formtype_availablity')->name('category_to_formtype_availablity');
 
 
-		Route::group(['prefix' => 'properties', 'as' => 'properties.'], function() {
+		Route::group(['prefix' => 'properties', 'as' => 'properties.'], function () {
 			Route::get('apply_filters', 'PropertiesController@apply_filters')->name('apply_filters');
-			
+
 		});
 
 		Route::post('property/change-status', 'PropertiesController@changeStatus')->name('property.changeStatus');
@@ -123,34 +123,34 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin.check'], '
 
 		Route::post('update_property', 'PropertiesController@update')->name('properties.update_property');
 
-		Route::get('sms-config','SmsApiController@edit_config')->name('sms_config');
-		Route::post('update_sms_config','SmsApiController@update_config')->name('update_sms_config');
+		Route::get('sms-config', 'SmsApiController@edit_config')->name('sms_config');
+		Route::post('update_sms_config', 'SmsApiController@update_config')->name('update_sms_config');
 
 		Route::resource('category', 'CategoryController');
 		Route::resource('sub-category', 'SubCategoryController');
 
 		Route::resource('web-directory-category', 'WebDirectoryCategoryController');
-		Route::resource('web-directory-sub-category', 'WebDirectorySubCategoryController'); 
-		Route::resource('business-listing', 'BusinessListingController'); 
-		
+		Route::resource('web-directory-sub-category', 'WebDirectorySubCategoryController');
+		Route::resource('business-listing', 'BusinessListingController');
+
 		Route::get('edit/sub-directory/{id}', 'WebDirectorySubCategoryController@editView');
-	
+
 		Route::resource('sub-sub-category', 'SubSubCategoryController');
 		Route::resource('features', 'FeaturesController');
 		Route::resource('locations', 'LocationsController');
-		Route::resource('owners', 'OwnersController'); 
-		Route::resource('properties', 'PropertiesController'); 
-		Route::get('preview/property/{id}', 'PropertiesController@previewProperty')->name('preview.property'); 
+		Route::resource('owners', 'OwnersController');
+		Route::resource('properties', 'PropertiesController');
+		Route::get('preview/property/{id}', 'PropertiesController@previewProperty')->name('preview.property');
 		Route::resource('formtype', 'FormTypeController');
 		Route::resource('payment-gateway', 'PaymentGatewayController');
 		Route::resource('email-integration', 'EmailIntegrationController');
 
-		Route::resource('manage-enquiries','EnquiriesController');
-		Route::resource('manage-complaints','FeedbackController');
-		Route::resource('manage-ads','Ads\AdsManagementController');
-		Route::resource('manage-audience','Ads\AudienceController');
+		Route::resource('manage-enquiries', 'EnquiriesController');
+		Route::resource('manage-complaints', 'FeedbackController');
+		Route::resource('manage-ads', 'Ads\AdsManagementController');
+		Route::resource('manage-audience', 'Ads\AudienceController');
 
-		Route::group(['as' => 'complaints.'], function() {
+		Route::group(['as' => 'complaints.'], function () {
 			Route::get('apply_filters', 'FeedbackController@apply_filters')->name('apply_filters');
 		});
 
@@ -380,6 +380,7 @@ Route::group(['middleware' => ['auth', 'admin.check']], function () {
 	Route::post('property/trending/status', 'Admin\PropertiesController@manageTrendingStatus')->name('admin.manageTrendingStatus');
 	// Manage Featured Status
 	Route::post('property/featured/status', 'Admin\PropertiesController@manageFeaturedStatus')->name('admin.manageFeaturedStatus');
+	Route::post('property/Verified/status', 'Admin\PropertiesController@manageVerifiedStatus')->name('admin.manageVerifiedStatus');
 
 	// Property Feedback
 	Route::get('master/property/feedback', 'Admin\FeedbackController@propertyFeedbacks')->name('admin.propertyFeedbacks');
@@ -410,28 +411,28 @@ Route::group(['middleware' => ['auth', 'owner.check']], function () {
 	Route::get('user/dashboard', 'User\UserController@dashboard')->name('user.dashboard');
 	Route::get('user/properties', 'User\UserController@all_properties')->name('user.properties');
 	Route::get('user/profile', 'User\UserController@see_profile')->name('user.see_profile');
-	Route::post('user/update_profile','User\UserController@update_profile')->name('user.update_profile');
-	Route::post('user/update_password','User\UserController@update_password')->name('user.update_password');
-	Route::post('user/logout','User\UserController@userlogout')->name('user.userlogout');
+	Route::post('user/update_profile', 'User\UserController@update_profile')->name('user.update_profile');
+	Route::post('user/update_password', 'User\UserController@update_password')->name('user.update_password');
+	Route::post('user/logout', 'User\UserController@userlogout')->name('user.userlogout');
 });
-Route::post('user/upload_avatar','User\UserController@upload_avatar')->name('user.upload_avatar');
+Route::post('user/upload_avatar', 'User\UserController@upload_avatar')->name('user.upload_avatar');
 
 Route::group(['middleware' => ['auth', 'builder.check']], function () {
 	Route::get('builder/dashboard', 'User\UserController@builderDashboard')->name('builder.builderDashboard');
 	Route::get('builder/properties', 'User\UserController@builderAllProperties')->name('builder.builderAllProperties');
 	Route::get('builder/profile', 'User\UserController@seeBuilderProfile')->name('builder.seeBuilderProfile');
-	Route::post('builder/update_profile','User\UserController@update_profile')->name('builder.update_profile');
-	Route::post('builder/update_password','User\UserController@update_password')->name('builder.update_password');
-	Route::post('builder/logout','User\UserController@userlogout')->name('builder.userlogout');
+	Route::post('builder/update_profile', 'User\UserController@update_profile')->name('builder.update_profile');
+	Route::post('builder/update_password', 'User\UserController@update_password')->name('builder.update_password');
+	Route::post('builder/logout', 'User\UserController@userlogout')->name('builder.userlogout');
 });
 
 Route::group(['middleware' => ['auth', 'agent.check']], function () {
 	Route::get('agent/dashboard', 'User\UserController@agentDashboard')->name('agent.agentDashboard');
 	Route::get('agent/properties', 'User\UserController@agentAllProperties')->name('agent.agentAllProperties');
 	Route::get('agent/profile', 'User\UserController@seeAgentProfile')->name('agent.seeAgentProfile');
-	Route::post('agent/update_profile','User\UserController@update_profile')->name('agent.update_profile');
-	Route::post('agent/update_password','User\UserController@update_password')->name('agent.update_password');
-	Route::post('agent/logout','User\UserController@userlogout')->name('agent.userlogout');
+	Route::post('agent/update_profile', 'User\UserController@update_profile')->name('agent.update_profile');
+	Route::post('agent/update_password', 'User\UserController@update_password')->name('agent.update_password');
+	Route::post('agent/logout', 'User\UserController@userlogout')->name('agent.userlogout');
 });
 
 // After Login Common Routes
@@ -441,7 +442,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('update/property', 'HomeController@updateProperty')->name('property.updateProperty');
 	Route::post('delete/property/images', 'HomeController@deleteGalleryImages')->name('property.deleteGalleryImages');
 	Route::post('delete/property', 'HomeController@deleteProperty')->name('property.delete');
-	
+
 	Route::get('post/property/final/{id}', 'Admin\PropertiesController@postPropertyFinalView')->name('property.postPropertyFinalView');
 	Route::post('post/property/final', 'Admin\PropertiesController@postPropertyFinal')->name('property.postPropertyFinal');
 
@@ -491,5 +492,5 @@ Route::get('login/{provider}', 'SocialController@redirect');
 Route::get('login/{provider}/callback', 'SocialController@Callback');
 
 Route::get('signup/{provider}', 'SocialController@redirectSignup');
-Route::get('login/google/callback','SocialController@googleCallback');
+Route::get('login/google/callback', 'SocialController@googleCallback');
 

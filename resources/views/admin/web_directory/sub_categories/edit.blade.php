@@ -7,8 +7,8 @@
 @section('css')
   <style type="text/css">
     /*.table-fitems tbody tr td:nth-child(2) {
-        width: 60%;
-    }*/
+            width: 60%;
+        }*/
     .checkbox {
       pointer-events: none !important;
     }
@@ -63,7 +63,7 @@
                   @csrf
                   {{ method_field('PATCH') }}
                   <div class="form-group row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                       <label class="label-control">Category</label>
                       <select class="text-control" name="category_id" id="category_id" required="">
                         @if(isset($categories))
@@ -83,83 +83,94 @@
                         @endif
                       </select>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                       <label class="label-control">Sub Category</label>
                       <input type="text" placeholder="Enter Sub Category Name" id="sub_category_name" class="text-control"
                         onkeyup="autoFilledSlug()" name="sub_category_name" value="{{ $picked->sub_category_name }}"
                         required />
                     </div>
-                    <div class="col-sm-4">
-                      <label class="label-control">Sub Category Slug</label>
-                      <input type="text" placeholder="Enter Sub Category Slug" id="sub_category_slug"
-                        value="{{ $picked->sub_category_slug }}" class="text-control" name="sub_category_slug" required />
-                    </div>
+
                   </div>
 
                   <!-- <h4 class="form-section-h">Assigned To Property Category</h4>
 
-                  <div class="form-group row">
-                    <div class="col-sm-4">
-                      <label class="label-control">Property Available For</label>
-                      <select class="text-control populate_categories" name="property_category_id"
-                        onchange="fetch_subcategories(this.value, fetch_subsubcategories)" required="">
-                        @if(count($p_categories) < 1)
-                          <option value="">No records found</option>
-                        @else
-                          <option value="">Select Category</option>
-                          @foreach($p_categories as $k => $v)
-                            @if($picked->property_category_id == $v->id)
-                              <option value="{{$v->id}}" selected="">{{$v->category_name}}</option>
+                      <div class="form-group row">
+                        <div class="col-sm-4">
+                          <label class="label-control">Property Available For</label>
+                          <select class="text-control populate_categories" name="property_category_id"
+                            onchange="fetch_subcategories(this.value, fetch_subsubcategories)" required="">
+                            @if(count($p_categories) < 1)
+                              <option value="">No records found</option>
                             @else
-                              <option value="{{$v->id}}">{{$v->category_name}}</option>
+                              <option value="">Select Category</option>
+                              @foreach($p_categories as $k => $v)
+                                @if($picked->property_category_id == $v->id)
+                                  <option value="{{$v->id}}" selected="">{{$v->category_name}}</option>
+                                @else
+                                  <option value="{{$v->id}}">{{$v->category_name}}</option>
+                                @endif
+                              @endforeach
                             @endif
-                          @endforeach
-                        @endif
-                      </select>
-                    </div>
-                    <div class="col-sm-4">
-                      <label class="label-control">Property Category</label>
-                      <select class="text-control populate_subcategories" name="sub_category_id"
-                        onchange="fetch_subsubcategories(this.value)" required>
-                        <option value="">Select Sub Category</option>
-                        @foreach($p_sub_categories as $k => $v)
-                          @if($picked->sub_category_id == $v->id)
-                            <option value="{{$v->id}}" selected="">{{$v->sub_category_name}}</option>
-                          @else
-                            <option value="{{$v->id}}">{{$v->sub_category_name}}</option>
-                          @endif
-                        @endforeach
-                      </select>
-                    </div>
-
-                    <div class="col-sm-4">
-                      <label>Property Type</label>
-                      <div id="sub_sub_category_list" class="border rounded p-2"
-                        style="max-height:200px; overflow-y:auto;">
-                        <div class="form-check mb-2">
-                          <input type="checkbox" class="form-check-input" id="select_all_sub_sub">
-                          <label class="form-check-label" for="select_all_sub_sub"><strong>Select All</strong></label>
+                          </select>
                         </div>
-                        <div id="sub_sub_category_items">
-                          @if(isset($p_sub_sub_categories) && count($p_sub_sub_categories) > 0)
-                            @foreach($p_sub_sub_categories as $v)
-                              <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="sub_sub_category_ids[]"
-                                  id="subsub_{{ $v->id }}" value="{{ $v->id }}" {{ in_array($v->id, $picked->sub_sub_category_id ?? []) ? 'checked' : '' }}>
-                                <label class="form-check-label"
-                                  for="subsub_{{ $v->id }}">{{ $v->sub_sub_category_name }}</label>
-                              </div>
+                        <div class="col-sm-4">
+                          <label class="label-control">Property Category</label>
+                          <select class="text-control populate_subcategories" name="sub_category_id"
+                            onchange="fetch_subsubcategories(this.value)" required>
+                            <option value="">Select Sub Category</option>
+                            @foreach($p_sub_categories as $k => $v)
+                              @if($picked->sub_category_id == $v->id)
+                                <option value="{{$v->id}}" selected="">{{$v->sub_category_name}}</option>
+                              @else
+                                <option value="{{$v->id}}">{{$v->sub_category_name}}</option>
+                              @endif
                             @endforeach
-                          @else
-                            <p class="text-muted m-0">Select a property subcategory first</p>
-                          @endif
+                          </select>
                         </div>
-                      </div>
+
+                        <div class="col-sm-4">
+                          <label>Property Type</label>
+                          <div id="sub_sub_category_list" class="border rounded p-2"
+                            style="max-height:200px; overflow-y:auto;">
+                            <div class="form-check mb-2">
+                              <input type="checkbox" class="form-check-input" id="select_all_sub_sub">
+                              <label class="form-check-label" for="select_all_sub_sub"><strong>Select All</strong></label>
+                            </div>
+                            <div id="sub_sub_category_items">
+                              @if(isset($p_sub_sub_categories) && count($p_sub_sub_categories) > 0)
+                                @foreach($p_sub_sub_categories as $v)
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="sub_sub_category_ids[]"
+                                      id="subsub_{{ $v->id }}" value="{{ $v->id }}" {{ in_array($v->id, $picked->sub_sub_category_id ?? []) ? 'checked' : '' }}>
+                                    <label class="form-check-label"
+                                      for="subsub_{{ $v->id }}">{{ $v->sub_sub_category_name }}</label>
+                                  </div>
+                                @endforeach
+                              @else
+                                <p class="text-muted m-0">Select a property subcategory first</p>
+                              @endif
+                            </div>
+                          </div>
+                        </div>
+
+
+                      </div> -->
+
+                  <div class="form-group row">
+                    <div class="col-sm-6">
+                      <label class="label-control">Sub Category Slug</label>
+                      <input type="text" placeholder="Enter Sub Category Slug" id="sub_category_slug"
+                        value="{{ $picked->sub_category_slug }}" class="text-control" name="sub_category_slug" required />
+                    </div>
+                    <div class="col-sm-6">
+                      <label class="label-control">Popular</label>
+                      <select class="text-control" name="is_popular">
+                        <option value="0" {{ $picked->is_popular == 0 ? 'selected' : '' }}>No</option>
+                        <option value="1" {{ $picked->is_popular == 1 ? 'selected' : '' }}>Yes</option>
+                      </select>
                     </div>
 
-
-                  </div> -->
-
+                  </div>
                   <div class="form-group row">
                     <div class="col-sm-12 text-center">
                       <button class="btn btn-primary" type="submit">Update Sub Category</button>
@@ -311,10 +322,10 @@
               $.each(subSubCategories, function (i, v) {
                 var checked = preSelected.includes(v.id) ? 'checked' : '';
                 html += `<div class="form-check">
-                                      <input class="form-check-input" type="checkbox" name="sub_sub_category_ids[]" 
-                                             id="subsub_${v.id}" value="${v.id}" ${checked}>
-                                      <label class="form-check-label" for="subsub_${v.id}">${v.sub_sub_category_name}</label>
-                                   </div>`;
+                                          <input class="form-check-input" type="checkbox" name="sub_sub_category_ids[]" 
+                                                 id="subsub_${v.id}" value="${v.id}" ${checked}>
+                                          <label class="form-check-label" for="subsub_${v.id}">${v.sub_sub_category_name}</label>
+                                       </div>`;
               });
             } else {
               html = '<p class="text-muted m-0">No Property Types found</p>';

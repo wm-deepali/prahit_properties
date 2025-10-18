@@ -46,6 +46,7 @@ class Properties extends Model
         'reason',
         'trending',
         'featured',
+        'verified',
         'property_status',
         'property_status_second',
         'registration_status',
