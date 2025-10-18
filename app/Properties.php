@@ -71,6 +71,11 @@ class Properties extends Model
         return $this->hasOne('App\SubCategory', 'id', 'sub_category_id');
     }
 
+    public function SubSubCategory()
+    {
+        return $this->hasOne('App\SubSubCategory', 'id', 'sub_sub_category_id');
+    }
+
     public function Location()
     {
         return $this->hasOne('App\Locations', 'id', 'location_id');
@@ -180,6 +185,23 @@ class Properties extends Model
     public function getFurnishingStatusObj()
     {
         return \App\Models\FurnishingStatus::find($this->furnishing_status);
+    }
+
+    public function getCategoryHierarchyName()
+    {
+        if ($this->SubSubCategory && !empty($this->SubSubCategory->sub_sub_category_name)) {
+            return $this->SubSubCategory->sub_sub_category_name;
+        }
+
+        if ($this->SubCategory && !empty($this->SubCategory->sub_category_name)) {
+            return $this->SubCategory->sub_category_name;
+        }
+
+        if ($this->Category && !empty($this->Category->category_name)) {
+            return $this->Category->category_name;
+        }
+
+        return null;
     }
 
 }

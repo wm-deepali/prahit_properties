@@ -128,8 +128,8 @@ class PropertyController extends BaseApiController
 			'location_id' => 'required',
 			'custom_location_input' => 'nullable|string|max:255',
 			"gallery_images_file.*" => 'required|mimes:jpg,png,jpeg',
-            'sub_location_id' => 'nullable|array',
-            'sub_location_id.*' => 'nullable|string',
+			'sub_location_id' => 'nullable|array',
+			'sub_location_id.*' => 'nullable|string',
 		];
 
 		$validator = \Validator::make($request->all(), $rules);
@@ -146,7 +146,7 @@ class PropertyController extends BaseApiController
 		try {
 			$user = User::where('auth_token', $token)->first();
 			if (isset($user) && $user->role == 'admin') { // IF Admin
-
+				$request['user_id'] = $user->id;
 			} else {
 				if ((empty($token) && !empty($request->mobile_number))) {
 					$user = User::where('mobile_number', $request->mobile_number)->first();
@@ -212,8 +212,8 @@ class PropertyController extends BaseApiController
 
 
 			// Handle custom location if 'other' is selected
-            $locationId = $request->location_id;
-            if ($locationId === 'other') {
+			$locationId = $request->location_id;
+			if ($locationId === 'other') {
 				$customLocationName = trim($request->custom_location_input);
 				if (!empty($customLocationName)) {
 					// Capitalize each word's first letter
@@ -226,7 +226,7 @@ class PropertyController extends BaseApiController
 						'location' => $customLocationName,
 						'status' => 1, // or as appropriate
 					]);
-                    $locationId = $newLocation->id;
+					$locationId = $newLocation->id;
 				} else {
 					// Optional: fail with error if "other" selected but no input given
 					return response()->json([
@@ -236,51 +236,53 @@ class PropertyController extends BaseApiController
 				}
 			}
 
-            // Persist final single location_id
-            $request->merge([
-                'location_id' => $locationId,
-            ]);
+			// Persist final single location_id
+			$request->merge([
+				'location_id' => $locationId,
+			]);
 
-            // Handle sub locations: allow tagged names; create if needed then store names on property
-            $submittedSubLocations = $request->input('sub_location_id', []);
-            $resolvedSubLocationNames = [];
-            $resolvedSubLocationIds = [];
-            if (!empty($submittedSubLocations)) {
-                $primaryLocationId = $locationId ? (int)$locationId : null;
-                foreach ($submittedSubLocations as $value) {
-                    $value = trim(($value ?? ''));
-                    if ($value === '') { continue; }
+			// Handle sub locations: allow tagged names; create if needed then store names on property
+			$submittedSubLocations = $request->input('sub_location_id', []);
+			$resolvedSubLocationNames = [];
+			$resolvedSubLocationIds = [];
+			if (!empty($submittedSubLocations)) {
+				$primaryLocationId = $locationId ? (int) $locationId : null;
+				foreach ($submittedSubLocations as $value) {
+					$value = trim(($value ?? ''));
+					if ($value === '') {
+						continue;
+					}
 
-                    if (ctype_digit($value)) {
-                        $existing = SubLocations::find((int)$value);
-                        if ($existing) {
-                            $resolvedSubLocationNames[] = $existing->sub_location_name;
-                            $resolvedSubLocationIds[] = (int)$existing->id;
-                        }
-                        continue;
-                    }
+					if (ctype_digit($value)) {
+						$existing = SubLocations::find((int) $value);
+						if ($existing) {
+							$resolvedSubLocationNames[] = $existing->sub_location_name;
+							$resolvedSubLocationIds[] = (int) $existing->id;
+						}
+						continue;
+					}
 
-                    // Create new sublocation for this location
-                    if ($primaryLocationId) {
-                        $name = ucwords(strtolower($value));
-                        // ensure not duplicate for this location
-                        $dup = SubLocations::where(['location_id' => $primaryLocationId, 'sub_location_name' => $name])->first();
-                        if ($dup) {
-                            $resolvedSubLocationNames[] = $dup->sub_location_name;
-                            $resolvedSubLocationIds[] = (int)$dup->id;
-                        } else {
-                            $newSub = SubLocations::create([
-                                'location_id' => $primaryLocationId,
-                                'sub_location_name' => $name,
-                            ]);
-                            if ($newSub) {
-                                $resolvedSubLocationNames[] = $newSub->sub_location_name;
-                                $resolvedSubLocationIds[] = (int)$newSub->id;
-                            }
-                        }
-                    }
-                }
-            }
+					// Create new sublocation for this location
+					if ($primaryLocationId) {
+						$name = ucwords(strtolower($value));
+						// ensure not duplicate for this location
+						$dup = SubLocations::where(['location_id' => $primaryLocationId, 'sub_location_name' => $name])->first();
+						if ($dup) {
+							$resolvedSubLocationNames[] = $dup->sub_location_name;
+							$resolvedSubLocationIds[] = (int) $dup->id;
+						} else {
+							$newSub = SubLocations::create([
+								'location_id' => $primaryLocationId,
+								'sub_location_name' => $name,
+							]);
+							if ($newSub) {
+								$resolvedSubLocationNames[] = $newSub->sub_location_name;
+								$resolvedSubLocationIds[] = (int) $newSub->id;
+							}
+						}
+					}
+				}
+			}
 
 			// user data save into database ----
 			$count = Properties::count();
@@ -294,13 +296,13 @@ class PropertyController extends BaseApiController
 			$request['city_id'] = $request->city;
 			$request['construction_age'] = $request->construction_age;
 			$request['location_id'] = $request->location_id;
-            // Persist sub_location_id as comma separated ids if resolved
-            if (!empty($resolvedSubLocationIds)) {
-                $request['sub_location_id'] = implode(',', $resolvedSubLocationIds);
-            } else {
-                // ensure we don't pass array into create()
-                $request->request->remove('sub_location_id');
-            }
+			// Persist sub_location_id as comma separated ids if resolved
+			if (!empty($resolvedSubLocationIds)) {
+				$request['sub_location_id'] = implode(',', $resolvedSubLocationIds);
+			} else {
+				// ensure we don't pass array into create()
+				$request->request->remove('sub_location_id');
+			}
 			$request['amenities'] = $request->has('amenity') ? implode(',', $request->amenity) : null;
 
 			$listing = Properties::create($request->all());

@@ -159,8 +159,7 @@
   .newupdateSecondaryBtn:hover {
     background-color: #3d3d7c;
   }
-</style>
-<style>
+
   .property-tab {
     border: 1px solid #e38e32;
     background: #fff;
@@ -244,65 +243,306 @@
       // Assign variable dynamically with null fallback if not found
       ${$varName} = $allContents->get($slug) ?? null;
     }
-  ?>
-  
-  <?php
+
     $popular_cities_content = App\PopularCity::where('slug', 'heading')->first();
     $popular_cities = App\PopularCity::where('slug', 'city')->get();
+
+  ?>
+  
+
+  <?php
+    use App\Helpers\Helper;
+    $buyFilters = Helper::getBuyFilterData();
+    $rentalFilters = Helper::getRentalFilterData();
+    $pgFilters = Helper::getPgHostelFilterData();
+    $exclusiveFilters = Helper::getExclusiveLaunchFilterData(); // create this in Helper
+    $plotFilters = Helper::getPlotLandFilterData();
+    $cities = App\PopularCity::where('slug', 'city')->get();
   ?>
 
   <div class="newupdateContainer">
     <div class="banner-top-content">
       <h1><?php echo e($banner ? $banner->heading : 'Gateway to Verified Properties Across India'); ?></h1>
       <p>
-        <?php echo e($banner ? $banner->title : 'Discover thousands of verified properties, exclusive builder projects, and trusted service providers all in one
-                                                                                    place. Connect, explore, and make informed decisions with Bhawan Bhoomi – your reliable real estate partner.'); ?>
+        <?php echo e($banner ? $banner->title : 'Discover thousands of verified properties, exclusive builder projects, and trusted service providers all in one place. Connect, explore, and make informed decisions with Bhawan Bhoomi – your reliable real estate partner.'); ?>
 
       </p>
     </div>
+
     <div class="newupdateSearchContainer">
       <div class="newupdateTabs">
         <button class="newupdateTab active" data-type="buy">Buy</button>
         <button class="newupdateTab" data-type="rental">Rental</button>
-        <button class="newupdateTab" data-type="projects">Projects</button>
         <button class="newupdateTab" data-type="pg-hostels">PG / Hostels</button>
+        <button class="newupdateTab" data-type="exculsive-launch">Exclusive Launch</button>
         <button class="newupdateTab" data-type="plot-land">Plot & Land</button>
-        <button class="newupdateTab" data-type="commercial">Commercial</button>
-        <button class="newupdateTab" data-type="agents">Agents</button>
       </div>
+
       <div class="newupdateSearchBar" data-type="buy">
-        <select class="newupdateDropdown">
-          <option value="Chennai">Chennai</option>
-          <option value="Mumbai">Mumbai</option>
-          <option value="Delhi">Delhi</option>
+        <select class="newupdateDropdown" id="citySelect">
+          <option value="">Select City</option>
+          <?php $__currentLoopData = $cities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $city): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <option value="<?php echo e($city->getCity->id); ?>"><?php echo e($city->getCity->name); ?></option>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </select>
+
         <input type="text" placeholder="Search by Project, Locality, or Builder" class="newupdateSearchInput">
         <button class="newupdateSearchIcon"><i class="fa-solid fa-location-crosshairs"></i></button>
-        <!--<button class="newupdateMicIcon">ðŸŽ¤</button>-->
       </div>
-      <div class="newupdateFilters">
+
+      
+      <div class="newupdateFilters" data-type="buy">
         <div class="newupdateFilterOptions">
-          <select class="newupdateDropdown">
-            <option value="Budget">Budget</option>
-            <option value="0-10L">0-10L</option>
-            <option value="10-20L">10-20L</option>
+          <select class="newupdateDropdown" id="sub_category_id">
+            <option value="">Property Category</option>
+            <?php $__currentLoopData = $buyFilters['categories']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($cat->id); ?>"><?php echo e($cat->sub_category_name); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </select>
-          <select class="newupdateDropdown">
-            <option value="Property Type">Property Type</option>
-            <option value="Apartment">Apartment</option>
-            <option value="House">House</option>
+
+          <select class="newupdateDropdown" id="sub_sub_category_id">
+            <option value="">Property Type</option>
+            <?php $__currentLoopData = $buyFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($type->id); ?>"><?php echo e($type->sub_sub_category_name); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </select>
-          <select class="newupdateDropdown">
-            <option value="Furnishing Status">Furnishing Status</option>
-            <option value="Furnished">Furnished</option>
-            <option value="Unfurnished">Unfurnished</option>
+
+          <select class="newupdateDropdown" id="budget">
+            <option value="">Budget</option>
+            <?php $__currentLoopData = $buyFilters['budgets']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($budget['query']); ?>"><?php echo e($budget['label']); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+
+          <select class="newupdateDropdown" id="property_status">
+            <option value="">Possession</option>
+            <?php $__currentLoopData = $buyFilters['possession']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pos): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($pos->name); ?>"><?php echo e($pos->name); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+
+          <select class="newupdateDropdown" id="user_role">
+            <option value="">Posted By</option>
+            <?php $__currentLoopData = $buyFilters['posted_by']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e(strtolower($poster)); ?>"><?php echo e($poster); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </select>
         </div>
-        <button class="newupdateSearchBtn">Search</button>
+        <button class="newupdateSearchBtn mt-2">Search</button>
+      </div>
+
+      
+      <div class="newupdateFilters" data-type="rental" style="display:none;">
+        <div class="newupdateFilterOptions">
+          <select class="newupdateDropdown" id="sub_category_id">
+            <option value="">Property Category</option>
+            <?php $__currentLoopData = $rentalFilters['categories']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($cat->id); ?>"><?php echo e($cat->sub_category_name); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+
+          <select class="newupdateDropdown" id="sub_sub_category_id">
+            <option value="">Property Type</option>
+            <?php $__currentLoopData = $rentalFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($type->id); ?>"><?php echo e($type->sub_sub_category_name); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+
+          <select class="newupdateDropdown" id="budget">
+            <option value="">Budget</option>
+            <?php $__currentLoopData = $rentalFilters['budgets']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($budget['query']); ?>"><?php echo e($budget['label']); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+
+          <select class="newupdateDropdown" id="furnishing_status">
+            <option value="">Furnishing Status</option>
+            <?php $__currentLoopData = $rentalFilters['furnishing']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($item->name); ?>"><?php echo e($item->name); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+
+          <select class="newupdateDropdown" id="user_role">
+            <option value="">Posted By</option>
+            <?php $__currentLoopData = $rentalFilters['posted_by']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e(strtolower($poster)); ?>"><?php echo e($poster); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+        </div>
+        <button class="newupdateSearchBtn mt-2">Search</button>
+      </div>
+
+      
+      <div class="newupdateFilters" data-type="pg-hostels" style="display:none;">
+        <div class="newupdateFilterOptions">
+          <select class="newupdateDropdown" id="budget">
+            <option value="">Budget</option>
+            <?php $__currentLoopData = $pgFilters['budgets']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($budget['query']); ?>"><?php echo e($budget['label']); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+
+          <select class="newupdateDropdown" id="pg_availavle_for">
+            <option value="">Available For</option>
+            <?php $__currentLoopData = $pgFilters['available_for']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $option): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e(strtolower($option)); ?>"><?php echo e($option); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+
+          <select class="newupdateDropdown" id="user_role">
+            <option value="">Posted By</option>
+            <?php $__currentLoopData = $pgFilters['posted_by']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e(strtolower($poster)); ?>"><?php echo e($poster); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+        </div>
+        <button class="newupdateSearchBtn mt-2">Search</button>
+      </div>
+
+      
+      <div class="newupdateFilters" data-type="exculsive-launch" style="display:none;">
+        <div class="newupdateFilterOptions">
+          <select class="newupdateDropdown" id="sub_category_id">
+            <option value="">Sub Category</option>
+            <?php $__currentLoopData = $exclusiveFilters['categories']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($cat->id); ?>"><?php echo e($cat->sub_category_name); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+
+          <select class="newupdateDropdown" id="sub_sub_category_id">
+            <option value="">Property Type</option>
+            <?php $__currentLoopData = $exclusiveFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($type->id); ?>"><?php echo e($type->sub_sub_category_name); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+
+          <select class="newupdateDropdown" id="budget">
+            <option value="">Budget</option>
+            <?php $__currentLoopData = $exclusiveFilters['budgets']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($budget['query']); ?>"><?php echo e($budget['label']); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+
+          <select class="newupdateDropdown" id="property_status">
+            <option value="">Property Status</option>
+            <?php $__currentLoopData = $exclusiveFilters['status']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($status->id); ?>"><?php echo e($status->name); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+
+          <select class="newupdateDropdown" id="user_role">
+            <option value="">Posted By</option>
+            <?php $__currentLoopData = $exclusiveFilters['posted_by']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e(strtolower($poster)); ?>"><?php echo e($poster); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+        </div>
+        <button class="newupdateSearchBtn mt-2">Search</button>
+      </div>
+
+      <div class="newupdateFilters" data-type="plot-land" style="display:none;">
+        <div class="newupdateFilterOptions">
+          <select class="newupdateDropdown" id="sub_sub_category_id">
+            <option value="">Property Type</option>
+            <?php $__currentLoopData = $plotFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($type->id); ?>"><?php echo e($type->sub_sub_category_name); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+
+          <select class="newupdateDropdown" id="budget">
+            <option value="">Budget</option>
+            <?php $__currentLoopData = $plotFilters['budgets']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e($budget['query']); ?>"><?php echo e($budget['label']); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+
+          <select class="newupdateDropdown" id="user_role">
+            <option value="">Posted By</option>
+            <?php $__currentLoopData = $plotFilters['posted_by']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value="<?php echo e(strtolower($poster)); ?>"><?php echo e($poster); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          </select>
+        </div>
+        <button class="newupdateSearchBtn mt-2">Search</button>
       </div>
 
     </div>
   </div>
+
+  
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+  <script>
+
+    $(document).ready(function () {
+      $('#citySelect').select2({
+        placeholder: "Select City",
+        allowClear: true
+      });
+    });
+
+    const tabs = document.querySelectorAll('.newupdateTab');
+    const searchBar = document.querySelector('.newupdateSearchBar');
+    const searchInput = document.querySelector('.newupdateSearchInput');
+    const filterBlocks = document.querySelectorAll('.newupdateFilters');
+
+    // Switch tabs
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        const type = tab.getAttribute('data-type');
+        searchBar.setAttribute('data-type', type);
+
+        filterBlocks.forEach(f => f.style.display = 'none');
+        const activeFilter = document.querySelector(`.newupdateFilters[data-type="${type}"]`);
+        if (activeFilter) activeFilter.style.display = 'block';
+
+        let placeholder = '';
+        switch (type) {
+          case 'buy': placeholder = 'Search by Project, Locality, or Builder'; break;
+          case 'rental': placeholder = 'Search by Location, Apartment, or PG'; break;
+          case 'pg-hostels': placeholder = 'Search by PG Name or Locality'; break;
+          case 'exculsive-launch': placeholder = 'Search by Project or Builder'; break;
+          case 'plot-land': placeholder = 'Search by Area or Plot Type'; break;
+          default: placeholder = 'Search properties...';
+        }
+        searchInput.placeholder = placeholder;
+      });
+    });
+
+    // Search button click
+    document.querySelectorAll('.newupdateSearchBtn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const activeType = document.querySelector('.newupdateTab.active').getAttribute('data-type');
+        const location = document.querySelector('.newupdateSearchBar select').value;
+        const searchQuery = searchInput.value;
+
+        const activeFilters = document.querySelector(`.newupdateFilters[data-type="${activeType}"]`);
+        const selects = activeFilters.querySelectorAll('select');
+
+        let params = new URLSearchParams();
+        params.append('type', activeType);
+        if (location) params.append('city', location);
+        if (searchQuery) params.append('search', searchQuery);
+
+        // Loop through all selects for this tab and add non-empty values
+        selects.forEach(select => {
+          if (select.value) {
+            params.append(select.id, select.value);
+          }
+        });
+
+        // Redirect to backend route with all filters
+        window.location.href = "<?php echo e(route('listing.list')); ?>" + "?" + params.toString();
+      });
+    });
+
+    // Show default buy filters
+    document.querySelector(`.newupdateFilters[data-type="buy"]`).style.display = 'block';
+  </script>
+
 
   <section class="property-popular-cities">
     <div class="container">
@@ -339,6 +579,31 @@
     </div>
   </section>
 
+  <?php
+    $city_id = Cache::get('location-id');
+
+    $propertiesSellCommercial = Helper::getPropertiesByCategoryAndSubcategory('Sell', 'ALL COMMERCIAL', $city_id);
+    $propertiesSellResidential = Helper::getPropertiesByCategoryAndSubcategory('Sell', 'ALL RESIDENTIAL', $city_id);
+
+    $propertiesRentCommercial = Helper::getPropertiesByCategoryAndSubcategory('Rent', 'ALL COMMERCIAL', $city_id);
+    $propertiesRentResidential = Helper::getPropertiesByCategoryAndSubcategory('Rent', 'ALL RESIDENTIAL', $city_id);
+
+    $exculsiveProperties = Helper::getPropertiesByCategory('Exclusive Launch', $city_id);
+    $business_list = Helper::getAllBusinessListings();
+
+    $sellSubs = Helper::getSubSubcategoriesByCategoryName('Sell');
+    $sellResidentil = $sellSubs['residential'];
+    $sellCommercial = $sellSubs['commercial'];
+
+    $rentSubs = Helper::getSubSubcategoriesByCategoryName('Rent');
+    $rentResidentil = $rentSubs['residential'];
+    $rentCommercial = $rentSubs['commercial'];
+
+    $projects = Helper::getTrendingProjectsByCity($city_id);
+    $featured_projects = Helper::getFeaturedProjectsByCity($city_id);
+  ?>
+
+
   <!-- hand picked projects section -->
   <section class="property-home-list">
     <div class="container">
@@ -350,7 +615,6 @@
         </div>
       </div>
       <div class="row">
-
         <div class="col-sm-12">
           <div class="swiper directory-slider pt-3 pb-3">
             <div class="swiper-wrapper">
@@ -379,7 +643,7 @@
                             <hr class="" style="margin-bottom:10px; margin-top:10px;">
                             <div class="d-flex justify-content-between align-items-center">
                               <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                                style=" height:30px;">Office Space</p>
+                                style=" height:30px;"><?php echo e($value->getCategoryHierarchyName()); ?></p>
                               <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
                               <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
@@ -432,7 +696,7 @@
     </div>
   </section>
 
-  <!--static card-->
+  <!-- exculsive launched projects section -->
   <section class="newdesign-property-topprojects">
     <div class="container">
       <div class="row">
@@ -447,123 +711,49 @@
         </div>
       </div>
       <div class="row">
-        <!-- Property Card 1 -->
-        <div class="col-lg-4 mb-3">
-          <div class="newdesign-project-main">
-            <!--<a href="#">-->
-            <div class="newdesign-image-proj">
-              <img
-                src="https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;"
-                class="img-fluid" alt="Property 1">
-              <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+        <?php $__currentLoopData = $exculsiveProperties; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <!-- Property Card 1 -->
+          <div class="col-lg-4 mb-3">
+            <div class="newdesign-project-main">
+              <!--<a href="#">-->
+              <div class="newdesign-image-proj">
+                <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
+                  <img
+                    src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;'); ?>"
+                    class="img-fluid" alt="Property 1">
+                </a>
+                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+              </div>
+              <div class="newdesign-info-proj">
+                <div class="d-flex justify-content-between">
+                  <h4 class="newdesign-proj-name"> <a
+                      href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>"><?php echo e($value->title); ?></a></h4>
+                  <span class="newdesign-proj-category">Villa</span>
+                </div>
+                <span class="newdesign-apart-name"> <?php echo e(\Illuminate\Support\Str::limit($value->description, 50)); ?></span>
+                <hr>
+                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> <?php echo e($value->getCity->name); ?>,
+                  <?php echo e($value->getState->name); ?></span>
+
+                <div class="newdesign-proj-price">
+                  <span><i class="fas fa-rupee-sign"></i><?php echo e(number_format($value->price, 2)); ?></span>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span class="newdesign-proj-owner"><strong>Builder:</strong><br>
+                    <?php echo e($value->getUser->firstname ?? 'Green Homes Ltd.'); ?></span>
+                  <span class="newdesign-proj-owner"><strong>Posted:</strong><br>
+                    <?php echo e(optional($value->created_at)->format('d M Y')); ?></span>
+                </div>
+              </div>
+              <!--</a>-->
             </div>
-            <div class="newdesign-info-proj">
-              <div class="d-flex justify-content-between">
-                <h4 class="newdesign-proj-name"> West Center Meridian Courts</h4>
-                <span class="newdesign-proj-category">Villa</span>
-              </div>
-              <span class="newdesign-apart-name">Presenting West Center Meridian Courts, a residential property located in
-                the heart of Kandivali....</span>
-              <hr>
-              <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, Bandra
-                West</span>
-
-
-
-              <div class="newdesign-proj-price">
-                <span><i class="fas fa-rupee-sign"></i>2.5 Cr - 4.8 Cr</span>
-              </div>
-              <div class="d-flex justify-content-between">
-                <span class="newdesign-proj-owner"><strong>Builder:</strong><br> Green Homes Ltd.</span>
-                <span class="newdesign-proj-owner"><strong>Posted:</strong><br> 10 Oct 2027.</span>
-              </div>
-            </div>
-            <!--</a>-->
           </div>
-        </div>
-        <!-- Property Card 2 -->
-        <div class="col-lg-4 mb-3">
-          <div class="newdesign-project-main">
-
-            <div class="newdesign-image-proj">
-              <img
-                src="https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;"
-                class="img-fluid" alt="Property 2">
-              <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-            </div>
-            <div class="newdesign-info-proj">
-              <div class="d-flex justify-content-between">
-                <h4 class="newdesign-proj-name"> Origin Rock Highland</h4>
-                <span class="newdesign-proj-category">Apartment</span>
-              </div>
-              <span class="newdesign-apart-name">Presenting West Center Meridian Courts, a residential property located in
-                the heart of Kandivali....</span>
-              <hr>
-              <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, Bandra
-                West</span>
-
-
-
-              <div class="newdesign-proj-price">
-                <span><i class="fas fa-rupee-sign"></i>2.5 Cr - 4.8 Cr</span>
-              </div>
-              <div class="d-flex justify-content-between">
-                <span class="newdesign-proj-owner"><strong>Builder:</strong><br> Green Homes Ltd.</span>
-                <span class="newdesign-proj-owner"><strong>Publish:</strong><br> 10 Oct 2027.</span>
-              </div>
-            </div>
-
-
-          </div>
-        </div>
-        <!-- Property Card 3 -->
-        <div class="col-lg-4 mb-3">
-          <div class="newdesign-project-main">
-
-            <div class="newdesign-image-proj">
-              <img
-                src="https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;"
-                class="img-fluid" alt="Property 3">
-              <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-            </div>
-            <div class="newdesign-info-proj">
-              <div class="d-flex justify-content-between">
-                <h4 class="newdesign-proj-name">Greenfield Estate</h4>
-                <span class="newdesign-proj-category">Apartment</span>
-              </div>
-              <span class="newdesign-apart-name">Presenting West Center Meridian Courts, a residential property located in
-                the heart of Kandivali....</span>
-              <hr>
-              <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, Bandra
-                West</span>
-              <div class="newdesign-proj-price">
-                <span><i class="fas fa-rupee-sign"></i>2.5 Cr - 4.8 Cr</span>
-              </div>
-              <div class="d-flex justify-content-between">
-                <span class="newdesign-proj-owner"><strong>Builder:</strong><br> Green Homes Ltd.</span>
-                <span class="newdesign-proj-owner"><strong>Publish:</strong><br> 10 Oct 2027.</span>
-              </div>
-            </div>
-
-
-          </div>
-        </div>
-
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
       </div>
     </div>
   </section>
 
-  <?php
-    use App\Helpers\Helper;
-    $propertiesSellCommercial = Helper::getPropertiesByCategoryAndSubcategory('Sell', 'ALL COMMERCIAL');
-    $propertiesSellResidential = Helper::getPropertiesByCategoryAndSubcategory('Sell', 'ALL RESIDENTIAL');
-
-    $propertiesRentCommercial = Helper::getPropertiesByCategoryAndSubcategory('Rent', 'ALL COMMERCIAL');
-    $propertiesRentResidential = Helper::getPropertiesByCategoryAndSubcategory('Rent', 'ALL RESIDENTIAL');
-
-  ?>
-
-
+  <!-- Sell Commercial projects section -->
   <section class="newdesign-property-topprojects py-5" style="background:#fff;">
     <div class="container">
       <!-- Heading -->
@@ -579,10 +769,10 @@
       <div class="tabs-wrap mb-4 text-center">
         <div class="tabs-btns d-inline-flex flex-wrap justify-content-center gap-2">
           <button type="button" class="property-tab active" data-filter="all">All</button>
-          <button type="button" class="property-tab" data-filter="office">Office Space</button>
-          <button type="button" class="property-tab" data-filter="shops">Shops & Showrooms</button>
-          <button type="button" class="property-tab" data-filter="godowns">Godowns & Warehouse</button>
-          <button type="button" class="property-tab" data-filter="lands">Lands & Plots</button>
+          <?php $__currentLoopData = $sellCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <button type="button" class="property-tab" data-filter="<?php echo e($subSubcat->sub_sub_category_name); ?>">
+              <?php echo e($subSubcat->sub_sub_category_name); ?></button>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
       </div>
       <div class="row">
@@ -592,7 +782,7 @@
               <!-- Directory Card 1 -->
               <?php $__currentLoopData = $propertiesSellCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="swiper-slide">
-                  <div class=" property-card" data-type="office">
+                  <div class=" property-card" data-type="<?php echo e($value->getCategoryHierarchyName()); ?>">
                     <div class="newdesign-project-main shadow-sm">
                       <div class="newdesign-image-proj position-relative">
                         <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
@@ -612,7 +802,7 @@
                         <hr class="" style="margin-bottom:10px; margin-top:10px;">
                         <div class="d-flex justify-content-between align-items-center">
                           <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                            style=" height:30px;">Office Space</p>
+                            style=" height:30px;"><?php echo e($value->getCategoryHierarchyName()); ?></p>
                           <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
                           <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
@@ -665,7 +855,7 @@
     </div>
   </section>
 
-  <!-- CSS -->
+  <!-- business lists section -->
   <section class="newdesign-directory" style="background:#fff;">
     <div class="container">
       <div class="row">
@@ -684,263 +874,59 @@
           <div class="swiper directory-slider pt-3 pb-3">
             <div class="swiper-wrapper">
               <!-- Directory Card 1 -->
-              <div class="swiper-slide">
-                <div class="directory-card-main d-flex flex-column">
-                  <div class="directory-logo">
-                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg"
-                      class="img-fluid" alt="Company Logo 1">
-                  </div>
-                  <div class="verified-seal">
-                    <div class="top-veri">
-                      <img src="<?php echo e(asset('images')); ?>/verify.png" alt="verified">
-                      <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
+              <?php $__currentLoopData = $business_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $list): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="swiper-slide">
+                  <div class="directory-card-main d-flex flex-column">
+                    <div class="directory-logo">
+                      <img
+                        src="<?php echo e(isset($list->logo) ? asset('storage/' . $list->logo) : "https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg"); ?>"
+                        class="img-fluid" alt="Company Logo 1">
                     </div>
-
-
-                  </div>
-                  <div class="directory-info">
-                    <h4 class="directory-company-name">Tech Innovations Inc.</h4>
-                    <hr>
-
-                    <div class="cat-btn">
-                      <button class="category-name-btn">Category Name</button>
-                      <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
-                    </div>
-                    <div class="horizontal-line"></div>
-                    <div class="d-flex justify-content-between">
-                      <div class="dir-left">
-                        <h5>Member Since</h5>
-                        <p>2019</p>
-                      </div>
-                      <div class="ver-line"></div>
-                      <div class="dir-left">
-                        <h5>Location</h5>
-                        <p>Aliganj, Lucknow</p>
+                    <div class="verified-seal">
+                      <div class="top-veri">
+                        <img src="<?php echo e(asset('images')); ?>/verify.png" alt="verified">
+                        <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
                       </div>
                     </div>
+                    <div class="directory-info">
+                      <h4 class="directory-company-name"><?php echo e($list->business_name); ?></h4>
+                      <hr>
 
-                    <div class="horizontal-line"></div>
-
-                    <p class="directory-description">Leading provider of cutting-edge software solutions and IT services
-                      for businesses worldwide.</p>
-                    <div class="directory-buttons">
-                      <div class="d-flex align-items-center">
-                        <p class="m-0" style="font-size:14px;"><strong>Publish:</strong><br>26 Aug 2023</p>
+                      <div class="cat-btn">
+                        <button class="category-name-btn"><?php echo e($list->category->category_name ?? ''); ?></button>
+                        <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
                       </div>
-                      <button class="btn btn-sm btn-primary">Contact Now</button>
-                      <!--<button class="btn btn-sm btn-secondary">Views</button>-->
-
-                      <!--<button class="btn btn-sm btn-info">Share Now</button>-->
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- Directory Card 2 -->
-              <div class="swiper-slide">
-                <div class="directory-card-main d-flex flex-column">
-                  <div class="directory-logo">
-                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg"
-                      class="img-fluid" alt="Company Logo 1">
-                  </div>
-                  <div class="verified-seal">
-                    <div class="top-veri">
-                      <img src="<?php echo e(asset('images')); ?>/verify.png" alt="verified">
-                      <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
-                    </div>
-
-
-                  </div>
-                  <div class="directory-info">
-                    <h4 class="directory-company-name">Tech Innovations Inc.</h4>
-                    <hr>
-
-                    <div class="cat-btn">
-                      <button class="category-name-btn">Category Name</button>
-                      <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
-                    </div>
-                    <div class="horizontal-line"></div>
-                    <div class="d-flex justify-content-between">
-                      <div class="dir-left">
-                        <h5>Member Since</h5>
-                        <p>2019</p>
+                      <div class="horizontal-line"></div>
+                      <div class="d-flex justify-content-between">
+                        <div class="dir-left">
+                          <h5>Established Year</h5>
+                          <p><?php echo e($list->established_year); ?></p>
+                        </div>
+                        <div class="ver-line"></div>
+                        <div class="dir-left">
+                          <h5>Location</h5>
+                          <p><?php echo e($list->city); ?>, <?php echo e($list->state); ?></p>
+                        </div>
                       </div>
-                      <div class="ver-line"></div>
-                      <div class="dir-left">
-                        <h5>Location</h5>
-                        <p>Aliganj, Lucknow</p>
+
+                      <div class="horizontal-line"></div>
+
+                      <p class="directory-description"><?php echo e($list->introduction); ?></p>
+                      <div class="directory-buttons">
+                        <div class="d-flex align-items-center">
+                          <p class="m-0" style="font-size:14px;"><strong>Member
+                              Since:</strong><br><?php echo e(optional($list->created_at)->format('d M Y')); ?></p>
+                        </div>
+                        <button class="btn btn-sm btn-primary">Contact Now</button>
+                        <!--<button class="btn btn-sm btn-secondary">Views</button>-->
+
+                        <!--<button class="btn btn-sm btn-info">Share Now</button>-->
                       </div>
-                    </div>
-
-                    <div class="horizontal-line"></div>
-
-                    <p class="directory-description">Leading provider of cutting-edge software solutions and IT services
-                      for businesses worldwide.</p>
-                    <div class="directory-buttons">
-                      <div class="d-flex align-items-center">
-                        <p class="m-0" style="font-size:14px;"><strong>Publish:</strong><br>26 Aug 2023</p>
-                      </div>
-                      <button class="btn btn-sm btn-primary">Contact Now</button>
-                      <!--<button class="btn btn-sm btn-secondary">Views</button>-->
-
-                      <!--<button class="btn btn-sm btn-info">Share Now</button>-->
                     </div>
                   </div>
                 </div>
-              </div>
-              <!-- Directory Card 3 -->
-              <div class="swiper-slide">
-                <div class="directory-card-main d-flex flex-column">
-                  <div class="directory-logo">
-                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg"
-                      class="img-fluid" alt="Company Logo 1">
-                  </div>
-                  <div class="verified-seal">
-                    <div class="top-veri">
-                      <img src="<?php echo e(asset('images')); ?>/verify.png" alt="verified">
-                      <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
-                    </div>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-
-                  </div>
-                  <div class="directory-info">
-                    <h4 class="directory-company-name">Tech Innovations Inc.</h4>
-                    <hr>
-
-                    <div class="cat-btn">
-                      <button class="category-name-btn">Category Name</button>
-                      <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
-                    </div>
-                    <div class="horizontal-line"></div>
-                    <div class="d-flex justify-content-between">
-                      <div class="dir-left">
-                        <h5>Member Since</h5>
-                        <p>2019</p>
-                      </div>
-                      <div class="ver-line"></div>
-                      <div class="dir-left">
-                        <h5>Location</h5>
-                        <p>Aliganj, Lucknow</p>
-                      </div>
-                    </div>
-
-                    <div class="horizontal-line"></div>
-
-                    <p class="directory-description">Leading provider of cutting-edge software solutions and IT services
-                      for businesses worldwide.</p>
-                    <div class="directory-buttons">
-                      <div class="d-flex align-items-center">
-                        <p class="m-0" style="font-size:14px;"><strong>Publish:</strong><br>26 Aug 2023</p>
-                      </div>
-                      <button class="btn btn-sm btn-primary">Contact Now</button>
-                      <!--<button class="btn btn-sm btn-secondary">Views</button>-->
-
-                      <!--<button class="btn btn-sm btn-info">Share Now</button>-->
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="directory-card-main d-flex flex-column">
-                  <div class="directory-logo">
-                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg"
-                      class="img-fluid" alt="Company Logo 1">
-                  </div>
-                  <div class="verified-seal">
-                    <div class="top-veri">
-                      <img src="<?php echo e(asset('images')); ?>/verify.png" alt="verified">
-                      <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
-                    </div>
-
-
-                  </div>
-                  <div class="directory-info">
-                    <h4 class="directory-company-name">Tech Innovations Inc.</h4>
-                    <hr>
-
-                    <div class="cat-btn">
-                      <button class="category-name-btn">Category Name</button>
-                      <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
-                    </div>
-                    <div class="horizontal-line"></div>
-                    <div class="d-flex justify-content-between">
-                      <div class="dir-left">
-                        <h5>Member Since</h5>
-                        <p>2019</p>
-                      </div>
-                      <div class="ver-line"></div>
-                      <div class="dir-left">
-                        <h5>Location</h5>
-                        <p>Aliganj, Lucknow</p>
-                      </div>
-                    </div>
-
-                    <div class="horizontal-line"></div>
-
-                    <p class="directory-description">Leading provider of cutting-edge software solutions and IT services
-                      for businesses worldwide.</p>
-                    <div class="directory-buttons">
-                      <div class="d-flex align-items-center">
-                        <p class="m-0" style="font-size:14px;"><strong>Publish:</strong><br>26 Aug 2023</p>
-                      </div>
-                      <button class="btn btn-sm btn-primary">Contact Now</button>
-                      <!--<button class="btn btn-sm btn-secondary">Views</button>-->
-
-                      <!--<button class="btn btn-sm btn-info">Share Now</button>-->
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="directory-card-main d-flex flex-column">
-                  <div class="directory-logo">
-                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg"
-                      class="img-fluid" alt="Company Logo 1">
-                  </div>
-                  <div class="verified-seal">
-                    <div class="top-veri">
-                      <img src="<?php echo e(asset('images')); ?>/verify.png" alt="verified">
-                      <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
-                    </div>
-
-
-                  </div>
-                  <div class="directory-info">
-                    <h4 class="directory-company-name">Tech Innovations Inc.</h4>
-                    <hr>
-
-                    <div class="cat-btn">
-                      <button class="category-name-btn">Category Name</button>
-                      <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
-                    </div>
-                    <div class="horizontal-line"></div>
-                    <div class="d-flex justify-content-between">
-                      <div class="dir-left">
-                        <h5>Member Since</h5>
-                        <p>2019</p>
-                      </div>
-                      <div class="ver-line"></div>
-                      <div class="dir-left">
-                        <h5>Location</h5>
-                        <p>Aliganj, Lucknow</p>
-                      </div>
-                    </div>
-
-                    <div class="horizontal-line"></div>
-
-                    <p class="directory-description">Leading provider of cutting-edge software solutions and IT services
-                      for businesses worldwide.</p>
-                    <div class="directory-buttons">
-                      <div class="d-flex align-items-center">
-                        <p class="m-0" style="font-size:14px;"><strong>Publish:</strong><br>26 Aug 2023</p>
-                      </div>
-                      <button class="btn btn-sm btn-primary">Contact Now</button>
-                      <!--<button class="btn btn-sm btn-secondary">Views</button>-->
-
-                      <!--<button class="btn btn-sm btn-info">Share Now</button>-->
-                    </div>
-                  </div>
-                </div>
-              </div>
               <!-- Add more slides as needed -->
             </div>
             <!-- Add Pagination -->
@@ -954,6 +940,7 @@
     </div>
   </section>
 
+  <!-- Sell Residential projects section -->
   <section class="newdesign-property-topprojects py-5" style="background:#fff;">
     <div class="container">
       <!-- Heading -->
@@ -969,9 +956,10 @@
       <div class="tabs-wrap mb-4 text-center">
         <div class="tabs-btns d-inline-flex flex-wrap justify-content-center gap-2">
           <button type="button" class="property-tab active" data-filter="all">All</button>
-          <button type="button" class="property-tab" data-filter="office">Flats</button>
-          <button type="button" class="property-tab" data-filter="shops">House & Villa</button>
-          <button type="button" class="property-tab" data-filter="godowns">Lands & Plots</button>
+          <?php $__currentLoopData = $sellResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <button type="button" class="property-tab" data-filter="<?php echo e($subSubcat->sub_sub_category_name); ?>">
+              <?php echo e($subSubcat->sub_sub_category_name); ?></button>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
         </div>
       </div>
@@ -982,7 +970,7 @@
               <!-- Directory Card 1 -->
               <?php $__currentLoopData = $propertiesSellResidential; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="swiper-slide">
-                  <div class=" property-card" data-type="office">
+                  <div class=" property-card" data-type="<?php echo e($value->getCategoryHierarchyName()); ?>">
                     <div class="newdesign-project-main shadow-sm">
                       <div class="newdesign-image-proj position-relative">
                         <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
@@ -1002,7 +990,7 @@
                         <hr class="" style="margin-bottom:10px; margin-top:10px;">
                         <div class="d-flex justify-content-between align-items-center">
                           <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                            style=" height:30px;">Office Space</p>
+                            style=" height:30px;"><?php echo e($value->getCategoryHierarchyName()); ?></p>
                           <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
                           <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
@@ -1052,11 +1040,10 @@
           </div>
         </div>
       </div>
-
-
     </div>
   </section>
 
+  <!-- Rent Commercial projects section -->
   <section class="newdesign-property-topprojects py-5" style="background:#fff;">
     <div class="container">
       <!-- Heading -->
@@ -1072,10 +1059,10 @@
       <div class="tabs-wrap mb-4 text-center">
         <div class="tabs-btns d-inline-flex flex-wrap justify-content-center gap-2">
           <button type="button" class="property-tab active" data-filter="all">All</button>
-          <button type="button" class="property-tab" data-filter="office">Office Space</button>
-          <button type="button" class="property-tab" data-filter="shops">Shops & Showrooms</button>
-          <button type="button" class="property-tab" data-filter="godowns">Warehouse & Godowns</button>
-
+          <?php $__currentLoopData = $rentCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <button type="button" class="property-tab" data-filter="<?php echo e($subSubcat->sub_sub_category_name); ?>">
+              <?php echo e($subSubcat->sub_sub_category_name); ?></button>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
       </div>
       <div class="row">
@@ -1085,7 +1072,7 @@
               <!-- Directory Card 1 -->
               <?php $__currentLoopData = $propertiesRentCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="swiper-slide">
-                  <div class=" property-card" data-type="office">
+                  <div class=" property-card" data-type="<?php echo e($value->getCategoryHierarchyName()); ?>">
                     <div class="newdesign-project-main shadow-sm">
                       <div class="newdesign-image-proj position-relative">
                         <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
@@ -1105,7 +1092,7 @@
                         <hr class="" style="margin-bottom:10px; margin-top:10px;">
                         <div class="d-flex justify-content-between align-items-center">
                           <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                            style=" height:30px;">Office Space</p>
+                            style=" height:30px;"><?php echo e($value->getCategoryHierarchyName()); ?></p>
                           <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
                           <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
@@ -1158,6 +1145,7 @@
     </div>
   </section>
 
+  <!-- Rent Residential projects section -->
   <section class="newdesign-property-topprojects py-5" style="background:#fff;">
     <div class="container">
       <!-- Heading -->
@@ -1173,10 +1161,10 @@
       <div class="tabs-wrap mb-4 text-center">
         <div class="tabs-btns d-inline-flex flex-wrap justify-content-center gap-2">
           <button type="button" class="property-tab active" data-filter="all">All</button>
-          <button type="button" class="property-tab" data-filter="office">Office Space</button>
-          <button type="button" class="property-tab" data-filter="shops">Shops & Showrooms</button>
-          <button type="button" class="property-tab" data-filter="godowns">Warehouse & Godowns</button>
-
+          <?php $__currentLoopData = $rentResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <button type="button" class="property-tab" data-filter="<?php echo e($subSubcat->sub_sub_category_name); ?>">
+              <?php echo e($subSubcat->sub_sub_category_name); ?></button>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
       </div>
       <div class="row">
@@ -1186,7 +1174,7 @@
               <!-- Directory Card 1 -->
               <?php $__currentLoopData = $propertiesRentResidential; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="swiper-slide">
-                  <div class=" property-card" data-type="office">
+                  <div class=" property-card" data-type="<?php echo e($value->getCategoryHierarchyName()); ?>">
                     <div class="newdesign-project-main shadow-sm">
                       <div class="newdesign-image-proj position-relative">
                         <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
@@ -1206,7 +1194,7 @@
                         <hr class="" style="margin-bottom:10px; margin-top:10px;">
                         <div class="d-flex justify-content-between align-items-center">
                           <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                            style=" height:30px;">Office Space</p>
+                            style=" height:30px;"><?php echo e($value->getCategoryHierarchyName()); ?></p>
                           <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
                           <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
@@ -1258,6 +1246,7 @@
       </div>
     </div>
   </section>
+
 
   <section class="new-card-section">
     <div class="new-main-card">
@@ -1399,10 +1388,6 @@
   </section>
 
   <!-- trending property section -->
-  <?php
-    $city_id = Cache::get('location-id');
-    $projects = App\Properties::where('publish_status', 'Publish')->where('approval', '!=', 'Rejected')->where('trending', 'Yes')->where('status', '1')->where('city_id', $city_id)->orderBy('id', 'DESC')->get();
-  ?>
   <?php if(count($projects) > 0): ?>
     <section class="property-topprojects">
       <div class="container">
@@ -1421,7 +1406,7 @@
                 <!-- Directory Card 1 -->
                 <?php $__currentLoopData = $projects; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                   <div class="swiper-slide">
-                    <div class=" property-card" data-type="office">
+                    <div class=" property-card">
                       <div class="newdesign-project-main shadow-sm">
                         <div class="newdesign-image-proj position-relative">
                           <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
@@ -1441,7 +1426,7 @@
                           <hr class="" style="margin-bottom:10px; margin-top:10px;">
                           <div class="d-flex justify-content-between align-items-center">
                             <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                              style=" height:30px;">Office Space</p>
+                              style=" height:30px;"><?php echo e($value->getCategoryHierarchyName()); ?></p>
                             <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
                             <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
@@ -1528,7 +1513,7 @@
               <!-- Directory Card 1 -->
               <?php $__currentLoopData = $listings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="swiper-slide">
-                  <div class=" property-card" data-type="office">
+                  <div class=" property-card">
                     <div class="newdesign-project-main shadow-sm">
                       <div class="newdesign-image-proj position-relative">
                         <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
@@ -1548,7 +1533,7 @@
                         <hr class="" style="margin-bottom:10px; margin-top:10px;">
                         <div class="d-flex justify-content-between align-items-center">
                           <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                            style=" height:30px;">Office Space</p>
+                            style=" height:30px;"><?php echo e($value->getCategoryHierarchyName()); ?></p>
                           <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
                           <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
@@ -1599,9 +1584,6 @@
   </section>
 
   <!-- featured property section -->
-  <?php
-    $featured_projects = App\Properties::where('publish_status', 'Publish')->where('approval', '!=', 'Rejected')->where('featured', 'Yes')->where('status', '1')->where('city_id', $city_id)->orderBy('id', 'DESC')->get();
-  ?>
   <?php if(count($featured_projects) > 0): ?>
     <section class="featured-sold-section">
       <div class="container">
@@ -1622,7 +1604,7 @@
                 <!-- Directory Card 1 -->
                 <?php $__currentLoopData = $featured_projects; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                   <div class="swiper-slide">
-                    <div class=" property-card" data-type="office">
+                    <div class=" property-card">
                       <div class="newdesign-project-main shadow-sm">
                         <div class="newdesign-image-proj position-relative">
                           <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
@@ -1642,7 +1624,7 @@
                           <hr class="" style="margin-bottom:10px; margin-top:10px;">
                           <div class="d-flex justify-content-between align-items-center">
                             <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                              style=" height:30px;">Office Space</p>
+                              style=" height:30px;"><?php echo e($value->getCategoryHierarchyName()); ?></p>
                             <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
                             <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
@@ -1943,84 +1925,9 @@
 
     })();
   </script>
-  <script>
-    const tabs = document.querySelectorAll('.newupdateTab');
-    const searchBar = document.querySelector('.newupdateSearchBar');
-    const filters = document.querySelector('.newupdateFilterOptions');
-    const searchInput = document.querySelector('.newupdateSearchInput');
 
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
 
-        const type = tab.getAttribute('data-type');
-        searchBar.setAttribute('data-type', type);
 
-        let placeholder = '';
-        switch (type) {
-          case 'buy':
-            placeholder = 'Search by Project, Locality, or Builder';
-            break;
-          case 'rental':
-            placeholder = 'Search by Location, Apartment, or PG';
-            break;
-          case 'projects':
-            placeholder = 'Search by Project Name or Builder';
-            break;
-          case 'pg-hostels':
-            placeholder = 'Search by PG Name or Locality';
-            break;
-          case 'plot-land':
-            placeholder = 'Search by Area or Plot Type';
-            break;
-          case 'commercial':
-            placeholder = 'Search by Office or Shop';
-            break;
-          case 'agents':
-            placeholder = 'Search by Agent Name or Area';
-            break;
-        }
-        searchInput.placeholder = placeholder;
-
-        const dropdowns = filters.querySelectorAll('.newupdateDropdown');
-        dropdowns.forEach((dropdown, index) => {
-          dropdown.innerHTML = '';
-          let options = [];
-          switch (type) {
-            case 'buy':
-              options = index === 0 ? ['Budget', '0-10L', '10-20L'] :
-                index === 1 ? ['Property Type', 'Apartment', 'House'] :
-                  ['Furnishing Status', 'Furnished', 'Unfurnished'];
-              break;
-            case 'rental':
-              options = index === 0 ? ['Budget', '0-5L', '5-10L'] :
-                index === 1 ? ['Property Type', 'Apartment', 'Flat'] :
-                  ['Furnishing Status', 'Furnished', 'Semi-Furnished'];
-              break;
-            default:
-              options = ['Option 1', 'Option 2', 'Option 3'];
-          }
-          options.forEach(option => {
-            const opt = document.createElement('option')
-            opt.value = option;
-            opt.textContent = option;
-            dropdown.appendChild(opt);
-          });
-        });
-      });
-    });
-
-    document.querySelector('.newupdateSearchBtn').addEventListener('click', function () {
-      const location = document.querySelector('.newupdateSearchBar select').value;
-      const query = document.querySelector('.newupdateSearchInput').value;
-      const budget = document.querySelectorAll('.newupdateFilters select')[0].value;
-      const propertyType = document.querySelectorAll('.newupdateFilters select')[1].value;
-      const furnishing = document.querySelectorAll('.newupdateFilters select')[2].value;
-      console.log(`Search: ${location}, ${query}, ${budget}, ${propertyType}, ${furnishing}`);
-      alert(`Searching for: ${location}, ${query}, ${budget}, ${propertyType}, ${furnishing}`);
-    });
-  </script>
   <!-- Swiper JS -->
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
@@ -2028,8 +1935,8 @@
     var swiper = new Swiper('.directory-slider', {
       slidesPerView: 3,
       spaceBetween: 30,
-      slidesPerGroup: 1, // Slide one card at a time
-      loop: true, // Disable loop for now, enable if you want infinite sliding
+      slidesPerGroup: 1,
+      loop: true,
       pagination: {
         el: '.swiper-pagination',
         clickable: true,
@@ -2039,15 +1946,22 @@
         prevEl: '.swiper-button-prev',
       },
       breakpoints: {
-        992: {
-          slidesPerView: 4,
+        0: {
+          slidesPerView: 1, // 📱 Mobile: 1 card
         },
         768: {
-          slidesPerView: 1,
+          slidesPerView: 2, // Tablet: 2 cards
+        },
+        992: {
+          slidesPerView: 3, // Desktop: 3 cards
+        },
+        1200: {
+          slidesPerView: 4, // Large Desktop: 4 cards
         },
       },
     });
   </script>
+
   <script>
     // Tab switching
     const newTabButtons = document.querySelectorAll(".new-tab-btn");

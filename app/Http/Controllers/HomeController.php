@@ -11,7 +11,6 @@ use App\City;
 use App\State;
 use Location;
 use Exception;
-use App\Cities;
 use App\Amenity;
 use App\Feature;
 use App\Category;
@@ -35,15 +34,10 @@ use App\PropertyTypes;
 use App\SubLocations;
 use App\PropertyGallery;
 use App\HomePageContent;
-use Illuminate\Mail\Message;
+use App\BusinessListing;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\AppController;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Validator;
-use Stevebauman\Location\Drivers\Driver;
-use App\Notifications\GlobalNotification;
 use App\Http\Controllers\Concern\GlobalTrait;
 use App\Notifications\WelcomeEmailNotification;
 use App\Models\PriceLabel;
@@ -121,7 +115,7 @@ class HomeController extends AppController
 	{
 		$query = Properties::query();
 
-		// Fixed filters
+		// Fixed filters: only approved and published properties
 		$query->where('approval', 'Approved')
 			->where('publish_status', 'Publish');
 
@@ -140,7 +134,7 @@ class HomeController extends AppController
 			$query->where('sub_category_id', $request->sub_category_id);
 		}
 
-		// Apply budget filter for Sell or Rent budgets
+		// Budget filters
 		$sellBudgets = [
 			'under-50-lakh' => [0, 5000000],
 			'50-lakh-1-cr' => [5000001, 10000000],
@@ -159,6 +153,7 @@ class HomeController extends AppController
 
 		if ($request->filled('budget')) {
 			$budgetKey = $request->budget;
+
 			if (isset($sellBudgets[$budgetKey])) {
 				[$minPrice, $maxPrice] = $sellBudgets[$budgetKey];
 				$query->whereBetween('price', [$minPrice, $maxPrice]);
@@ -168,41 +163,92 @@ class HomeController extends AppController
 			}
 		}
 
-		// Filter by user_role (e.g., 'owner') if present
+		// Filter by user role (owner, broker, etc.)
 		if ($request->filled('user_role')) {
 			$query->whereHas('getUser', function ($q) use ($request) {
-				$q->where('role', $request->user_role); // Assuming user model has 'role' field
+				$q->where('role', $request->user_role);
 			});
 		}
 
-		// Filter by property_status if present
+		// Filter by property_status
 		if ($request->filled('property_status')) {
 			$status = PropertyStatus::where('name', $request->property_status)->first();
 			if ($status) {
 				$query->where('property_status', $status->id);
 			} else {
-				// If no matching status found, optionally make query return no results
-				$query->whereRaw('1 = 0'); // No results
+				$query->whereRaw('1 = 0'); // no matching status -> no results
 			}
 		}
 
+		// Filter by furnishing_status
+		if ($request->filled('furnishing_status')) {
+			$status = FurnishingStatus::where('name', $request->furnishing_status)->first();
+			if ($status) {
+				$query->where('furnishing_status', $status->id);
+			} else {
+				$query->whereRaw('1 = 0'); // no matching status -> no results
+			}
+		}
+
+		// Search query for title and location
+		if ($request->filled('search')) {
+			$search = $request->search;
+			$query->where(function ($q) use ($search) {
+				$q->where('title', 'like', "%{$search}%")
+					->orWhereHas('Location', function ($q2) use ($search) {
+						$q2->where('location', 'like', "%{$search}%");
+					});
+			});
+		}
+
+		// Filter by city if provided (optional)
+		if ($request->filled('city')) {
+			$query->whereHas('getCity', function ($q) use ($request) {
+				$q->where('id', $request->city);
+			});
+		}
+
+
+		// Sorting
 		if ($request->filled('sort')) {
-			if ($request->sort === 'new-launch') {
-				// Sort by latest published_date descending
-				$query->orderBy('published_date', 'desc');
+			switch ($request->sort) {
+				case 'new-launch':
+					$query->orderBy('published_date', 'desc');
+					break;
+				case 'price-low-high':
+					$query->orderBy('price', 'asc');
+					break;
+				case 'price-high-low':
+					$query->orderBy('price', 'desc');
+					break;
+				default:
+					$query->latest();
 			}
-			// You can add more sorting options here for other 'sort' values
+		} else {
+			$query->latest(); // default order
 		}
 
+		// pending pg_availavle_for, 
 
 		// Pagination
-		$properties = $query->paginate(10);
+		$properties = $query->paginate(10)->withQueryString();
 
 		return view('front.listing-list', compact('properties'));
 	}
 
 
+	public function directoryList(Request $request)
+	{
+		$query = BusinessListing::query();
 
+		// Fixed filters
+		$query->where('status', 'Active');
+
+		// Pagination
+		$list = $query->paginate(10);
+
+		return view('front.directory-listing', compact('list'));
+	}
 	public function create_property()
 	{
 		$category = Category::all();

@@ -143,8 +143,8 @@ class BlogController extends Controller
 			'meta_title' => $request->meta_title,
 			'meta_keywords' => $request->meta_keywords,
 			'meta_description' => $request->meta_description,
-			'featured' => 0,
-			'status' => 1
+			// 'featured' => 0,
+			// 'status' => 1
 		]);
 
 		return redirect()->route('admin.manageBlogs')->with('success', 'Blog Posted Successfully.');

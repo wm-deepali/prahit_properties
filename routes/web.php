@@ -11,7 +11,15 @@
 |
 */
 
+Route::get('/profile-page', function () {
+    return view('front.profile-page'); // view file: resources/views/frontend/faq.blade.php
+})->name('profile.page');
+Route::get('/business-details', function () {
+    return view('front.business-details'); // view file: resources/views/frontend/faq.blade.php
+})->name('business.details');
+
 Route::get('/listing-list', 'HomeController@list')->name('listing.list');
+Route::get('/directory-list', 'HomeController@directoryList')->name('directory.list');
 
 
 Route::get('login', 'AuthController@login');

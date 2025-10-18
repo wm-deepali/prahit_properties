@@ -1,6 +1,9 @@
 @extends('layouts.front.app')
 @section('title')
-	<title>Blog Detail</title>
+	<title>{{ $blog_detail->meta_title ?? $blog_detail->heading }}</title>
+	<meta name="description"
+		content="{{ $blog_detail->meta_description ?? \Illuminate\Support\Str::limit(strip_tags($blog_detail->description), 160) }}">
+	<meta name="keywords" content="{{ $blog_detail->meta_keywords ?? '' }}">
 @endsection
 @section('content')
 <section class="breadcrumb-section">
@@ -32,7 +35,7 @@
 							<span><i class="fas fa-clock"></i> {{ date('d M Y', strtotime($blog_detail->created_at)) }}</span>
 						</div>
 						<div class="blog-img">
-							<img src="{{ asset('storage') }}/{{ $blog_detail->image }}" class="img-fluid">
+					<img alt="{{ $blog_detail->image_alt }}" src="{{ asset('storage') }}/{{ $blog_detail->image }}" class="img-fluid">
 						</div>
 
 						<div class="blog-content">
@@ -53,11 +56,11 @@
 									@foreach($related_blogs as $n_blog)
 										<li>
 											<div class="blog-li">
-												<div class="blog-img"><a href="blog-detail.php"><img alt="" src="{{ asset('storage') }}/{{ $n_blog->image }}" class="img-fluid"></a>
+												<div class="blog-img"><a href="blog-detail.php"><img alt="{{ $n_blog->image_alt }}" src="{{ asset('storage') }}/{{ $n_blog->image }}" class="img-fluid"></a>
 												</div>
 												<div class="blog-cont">
 													<h6><a href="{{ route('front.blogDetail', $n_blog->id) }}">{{ $n_blog->heading }}</a></h6>
-													<p>{!! \Illuminate\Support\Str::limit($n_blog->description, 100, '...') !!}</p>
+													<p>{!! \Illuminate\Support\Str::limit($n_blog->description, 50, '...') !!}</p>
 												</div>
 											</div>
 										</li>
