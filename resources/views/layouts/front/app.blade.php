@@ -383,85 +383,80 @@
     }
   </style>
   <style>
-    .offcanvas {
-      /*  width: 300px !important;*/
-      /*  background-color: #f8f9fa;*/
-      /*}*/
+    .offcanvas-header {
+      background-color: #f9f9f9;
+      border-bottom: 1px solid gray;
+      /*color: #fff;*/
+    }
 
-      .offcanvas-header {
-        background-color: #f9f9f9;
-        border-bottom: 1px solid gray;
-        /*color: #fff;*/
-      }
+    /*.offcanvas-title {*/
+    /*  font-size: 1.25rem;*/
+    /*  font-weight: 600;*/
+    /*}*/
 
-      /*.offcanvas-title {*/
-      /*  font-size: 1.25rem;*/
-      /*  font-weight: 600;*/
-      /*}*/
+    .accordion-button {
+      font-size: 1.1rem;
+      font-weight: 500;
+      background-color: #fff;
+      color: #333;
+      padding: 15px;
+      border-bottom: 1px solid #e9ecef;
+    }
 
-      .accordion-button {
-        font-size: 1.1rem;
-        font-weight: 500;
-        background-color: #fff;
-        color: #333;
-        padding: 15px;
-        border-bottom: 1px solid #e9ecef;
-      }
+    .accordion-button:not(.collapsed) {
+      background-color: #e9ecef;
+      color: #007bff;
+    }
 
-      .accordion-button:not(.collapsed) {
-        background-color: #e9ecef;
-        color: #007bff;
-      }
+    .sub-accordion {
+      font-size: 1rem;
+      font-weight: 400;
+      padding-left: 30px;
+      background-color: #f1f3f5;
+    }
 
-      .sub-accordion {
-        font-size: 1rem;
-        font-weight: 400;
-        padding-left: 30px;
-        background-color: #f1f3f5;
-      }
+    .sub-accordion:not(.collapsed) {
+      background-color: #dee2e6;
+    }
 
-      .sub-accordion:not(.collapsed) {
-        background-color: #dee2e6;
-      }
+    .accordion-body {
+      padding: 10px 20px;
+    }
 
-      .accordion-body {
-        padding: 10px 20px;
-      }
+    .menu-section {
+      margin-bottom: 20px;
+    }
 
-      .menu-section {
-        margin-bottom: 20px;
-      }
+    .menu-section h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #007bff;
+      margin-bottom: 10px;
+    }
 
-      .menu-section h4 {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #007bff;
-        margin-bottom: 10px;
-      }
+    .menu-section ul li {
+      margin-bottom: 8px;
+    }
 
-      .menu-section ul li {
-        margin-bottom: 8px;
-      }
+    .menu-section ul li a {
+      color: #333;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
 
-      .menu-section ul li a {
-        color: #333;
-        text-decoration: none;
-        font-size: 0.85rem;
-        transition: color 0.2s;
-      }
+    .menu-section ul li a:hover {
+      color: #007bff;
+    }
 
-      .menu-section ul li a:hover {
-        color: #007bff;
-      }
+    .accordion-button::after {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23333'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    }
 
-      .accordion-button::after {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23333'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-      }
-
-      .accordion-button:not(.collapsed)::after {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23007bff'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-        transform: rotate(-180deg);
-      }
+    .accordion-button:not(.collapsed)::after {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23007bff'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+      transform: rotate(-180deg);
+    }
   </style>
 
 </head>
@@ -529,11 +524,9 @@
                   <i class="fas fa-phone-alt me-2"></i> +91 9451591515
                 </a>
                 <hr>
-                <button type="button" onclick="window.location='{{ route('front.contactUs') }}'"
-                  class="btn btn-outline-secondary btn-sm w-100" style="font-size: 14px;">
+                <button class="btn btn-outline-secondary btn-sm w-100" style="font-size: 14px;">
                   <i class="fas fa-phone-alt me-2"></i> Request A Callback
                 </button>
-
               </div>
             </li>
           </ul>
@@ -630,6 +623,7 @@
     </div>
   </header>
 
+
   @php
     use App\Helpers\Helper;
     $sellSubs = Helper::getSubSubcategoriesByCategoryName('Sell');
@@ -670,594 +664,6 @@
 
   @endphp
 
-
-  <div class="bb-top-menu-header">
-    <nav class="bb-nav">
-      <ul class="bb-nav-list">
-        <li class="bb-nav-item">
-          <a href="#" class="bb-nav-link">For Buyers</a>
-          <div class="bb-dropdown">
-            <div class="bb-tabs">
-              <div class="bb-tab active" data-tab="buyers-tab1">Residentials</div>
-              <div class="bb-tab" data-tab="buyers-tab2">Commercial</div>
-              <div class="bb-tab" data-tab="buyers-tab4">New Launch</div>
-              <div class="bb-tab" data-tab="buyers-tab3">Popular Services</div>
-            </div>
-            <div class="bb-tab-content">
-              <div class="bb-tab-pane active" id="buyers-tab1">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      @foreach ($sellResidentil as $subSubcat)
-                        <a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
-                          {{ $subSubcat->sub_sub_category_name }}
-                        </a>
-                      @endforeach
-                    </div>
-                  </div>
-
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Budget</h4>
-                    <div class="d-flex flex-column">
-                      @foreach ($sellBudgets as $budget)
-                        <a
-                          href="{{ route('listing.list', array_merge(['sub_category_id' => 34], $budget['query'])) }}">{{ $budget['label'] }}</a>
-                      @endforeach
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Popular Choices</h4>
-                    <div class="d-flex flex-column">
-                      <a href="{{ route('listing.list', ['sub_category_id' => 34, 'user_role' => 'owner'])}}">Owner
-                        Properties</a>
-                      <a href="{{ route('listing.list', ['sub_category_id' => 34, 'status' => 'verified'])}}">Verified
-                        Properties</a>
-                      <a
-                        href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move'])}}">Ready
-                        to
-                        Move</a>
-                      <a
-                        href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon'])}}">Possession
-                        Soon</a>
-                      <a href="#">Immediate Available</a>
-                      <a
-                        href="{{ route('listing.list', ['sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])}}">Full
-                        Furnished</a>
-                      <a href="{{ route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch'])}}">New
-                        Launch</a>
-                    </div>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-
-              <div class="bb-tab-pane" id="buyers-tab2">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      @foreach ($sellCommercial as $subSubcat)
-                        <a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
-                          {{ $subSubcat->sub_sub_category_name }}
-                        </a>
-                      @endforeach
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Budget</h4>
-                    <div class="d-flex flex-column">
-                      @foreach ($sellBudgets as $budget)
-                        <a
-                          href="{{ route('listing.list', array_merge(['sub_category_id' => 35], $budget['query'])) }}">{{ $budget['label'] }}</a>
-                      @endforeach
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Popular Choices</h4>
-
-                    <div class="d-flex flex-column">
-                      <a href="{{ route('listing.list', ['sub_category_id' => 35, 'user_role' => 'owner'])}}">Owner
-                        Properties</a>
-                      <a href="{{ route('listing.list', ['sub_category_id' => 35, 'status' => 'verified'])}}">Verified
-                        Properties</a>
-                      <a
-                        href="{{ route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Ready to Move'])}}">Ready
-                        to
-                        Move</a>
-                      <a
-                        href="{{ route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Possession Soon'])}}">Possession
-                        Soon</a>
-                      <a href="#">Immediate Available</a>
-                      <a
-                        href="{{ route('listing.list', ['sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])}}">Fully
-                        Furnished</a>
-                      <a href="{{ route('listing.list', ['sub_category_id' => 35, 'sort' => 'new-launch'])}}">New
-                        Launch</a>
-                    </div>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-
-              <div class="bb-tab-pane" id="buyers-tab4">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">New Launch</h4>
-                    <div class="d-flex flex-column">
-                      <a href="{{ route('listing.list', ['sub_category_id' => 34])}}">Residential Projects</a>
-                      <a href="{{ route('listing.list', ['sub_category_id' => 35])}}">Commercial Projects</a>
-                      <a href="{{ route('listing.list', ['sub_sub_category_ids' => '18,25,27']) }}">Land & Plots</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Budget</h4>
-                    <div class="d-flex flex-column">
-                      @foreach ($sellBudgets as $budget)
-                        <a
-                          href="{{ route('listing.list', array_merge(['category_id' => 22], $budget['query'])) }}">{{ $budget['label'] }}</a>
-                      @endforeach
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Popular Choices</h4>
-
-                    <div class="d-flex flex-column">
-                      <a href="{{ route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch'])}}">New
-                        Launch</a>
-                      <a
-                        href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Under Construction'])}}">Under
-                        Construction</a>
-                      <a
-                        href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move'])}}">Ready
-                        to
-                        Move</a>
-                      <a
-                        href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon'])}}">Possession
-                        Soon</a>
-                      <a href="#">OC Received</a>
-                      <a href="#">RERA Registered</a>
-                    </div>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-
-              <div class="bb-tab-pane" id="buyers-tab3">
-                <div class="tab-content-top-header">
-
-                  @foreach($webDirectoryCategories as $category)
-                    @php
-                      // Only take popular subcategories
-                      $popularSubs = $category->subcategories->where('is_popular', 1);
-                      $showLimit = 5; // Number of subcategories to show initially
-                    @endphp
-
-                    @if($popularSubs->count() > 0)
-                      <div class="tab-content-section">
-                        <h4 class="tab-titles">{{ $category->category_name }}</h4>
-                        <div class="d-flex flex-column">
-                          @foreach($popularSubs->take($showLimit) as $sub)
-                            <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
-                              {{ $sub->sub_category_name }}
-                            </a>
-                          @endforeach
-
-                          @if($popularSubs->count() > $showLimit)
-                            <div class="more-subcategories" style="display:none;">
-                              @foreach($popularSubs->slice($showLimit) as $sub)
-                                <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
-                                  {{ $sub->sub_category_name }}
-                                </a>
-                              @endforeach
-                            </div>
-                            <a href="javascript:void(0);" class="view-more"
-                              onclick="this.previousElementSibling.style.display='block'; this.style.display='none';">
-                              View More
-                            </a>
-                          @endif
-                        </div>
-                      </div>
-                    @endif
-                  @endforeach
-
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-
-
-            </div>
-          </div>
-        </li>
-
-        <li class="bb-nav-item">
-          <a href="#" class="bb-nav-link">For Sellers</a>
-          <div class="bb-dropdown">
-            <div class="bb-tabs">
-              <div class="bb-tab active" data-tab="sellers-tab1">Owners</div>
-              <div class="bb-tab" data-tab="sellers-tab2">Agents</div>
-              <div class="bb-tab" data-tab="sellers-tab3">Builders</div>
-              <div class="bb-tab" data-tab="sellers-tab4">Service Providers</div>
-            </div>
-            <div class="bb-tab-content">
-              <div class="bb-tab-pane active" id="sellers-tab1">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Services</h4>
-                    <div class="d-flex flex-column">
-                      <a href="{{ route('create_property') }}">Post Property</a>
-                      <a href="#">Join BB Prime</a>
-                      <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
-                        @unless(auth()->check()) onclick="openSigninModal()" @endunless>
-                        Dashboard
-                      </a>
-                      <a href="#">Enquiries</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Important Links</h4>
-                    <div class="d-flex flex-column">
-                      <a href="{{ route('front.faq') }}">FAQ</a>
-                      <a href="{{ route('front.blog') }}">Articles & Blogs</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Contact Us</h4>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-              <div class="bb-tab-pane" id="sellers-tab2">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Services</h4>
-                    <div class="d-flex flex-column">
-                      <a href="{{ route('create_property') }}">Post Property</a>
-                      <a href="#">Join BB Prime</a>
-                      <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
-                        @unless(auth()->check()) onclick="openSigninModal()" @endunless>
-                        Dashboard
-                      </a>
-
-                      <a href="#">Enquiries</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Important Links</h4>
-                    <div class="d-flex flex-column">
-                      <a href="{{ route('front.faq') }}">FAQ</a>
-                      <a href="{{ route('front.blog') }}">Articles & Blogs</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Contact Us</h4>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-              <div class="bb-tab-pane" id="sellers-tab3">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Services</h4>
-                    <div class="d-flex flex-column">
-                      <a href="{{ route('create_property') }}">Post Property</a>
-                      <a href="#">Join BB Prime</a>
-                      <a href="">Dashboard</a>
-                      <a href="#">Enquiries</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Important Links</h4>
-                    <div class="d-flex flex-column">
-                      <a href="{{ route('front.faq') }}">FAQ</a>
-                      <a href="{{ route('front.blog') }}">Articles & Blogs</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Contact Us</h4>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-              <div class="bb-tab-pane" id="sellers-tab4">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Start Selling</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">List Your Service</a>
-                      <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
-                        @unless(auth()->check()) onclick="openSigninModal()" @endunless>
-                        Dashboard
-                      </a>
-
-                      <a href="#">Check Enquiries</a>
-                      <a href="#">Join BB Prime</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Important Links</h4>
-                    <div class="d-flex flex-column">
-                      <a href="{{ route('front.faq') }}">FAQ</a>
-                      <a href="{{ route('front.blog') }}">Articles & Blogs</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Contact Us</h4>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </li>
-
-        <li class="bb-nav-item">
-          <a href="#" class="bb-nav-link">For Rent</a>
-          <div class="bb-dropdown">
-            <div class="bb-tabs">
-              <div class="bb-tab active" data-tab="rent-tab1">Residential</div>
-              <div class="bb-tab" data-tab="rent-tab2">Commercial</div>
-              <div class="bb-tab" data-tab="rent-tab3">Popular Services</div>
-            </div>
-            <div class="bb-tab-content">
-              <div class="bb-tab-pane active" id="rent-tab1">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      @foreach ($rentResidentil as $subSubcat)
-                        <a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
-                          {{ $subSubcat->sub_sub_category_name }}
-                        </a>
-                      @endforeach
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Budget</h4>
-                    <div class="d-flex flex-column">
-                      @foreach ($rentBudgets as $budget)
-                        <a
-                          href="{{ route('listing.list', array_merge(['sub_category_id' => 38], $budget['query'])) }}">{{ $budget['label'] }}</a>
-                      @endforeach
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Popular Choise</h4>
-                    <div class="d-flex flex-column">
-                      <a href="{{ route('listing.list', ['sub_category_id' => 38, 'user_role' => 'owner'])}}">Owner
-                        Properties</a>
-                      <a href="{{ route('listing.list', ['sub_category_id' => 38, 'status' => 'verified'])}}">Verified
-                        Properties</a>
-                      <a
-                        href="{{ route('listing.list', ['sub_category_id' => 38, 'property_status' => 'Ready to Move'])}}">Ready
-                        to
-                        Move</a>
-                      <a href="#">Immediate Available</a>
-                      <a
-                        href="{{ route('listing.list', ['sub_category_id' => 38, 'furnishing_status' => 'Full Furnished'])}}">Full
-                        Furnished</a>
-                    </div>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-              <div class="bb-tab-pane" id="rent-tab2">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      @foreach ($rentCommercial as $subSubcat)
-                        <a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
-                          {{ $subSubcat->sub_sub_category_name }}
-                        </a>
-                      @endforeach
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Budget</h4>
-
-
-                    <div class="d-flex flex-column">
-                      @foreach ($rentBudgets as $budget)
-                        <a href="{{ route('listing.list', array_merge(['sub_category_id' => 37], $budget['query'])) }}">
-                          {{ $budget['label'] }}
-                        </a>
-                      @endforeach
-                    </div>
-
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Popular Choise</h4>
-                    <div class="d-flex flex-column">
-                      <a href="{{ route('listing.list', ['sub_category_id' => 37, 'user_role' => 'owner'])}}">Owner
-                        Properties</a>
-                      <a href="{{ route('listing.list', ['sub_category_id' => 37, 'status' => 'verified'])}}">Verified
-                        Properties</a>
-                      <a
-                        href="{{ route('listing.list', ['sub_category_id' => 37, 'property_status' => 'Ready to Move'])}}">Ready
-                        to
-                        Move</a>
-                      <a href="#">Immediate Available</a>
-                      <a
-                        href="{{ route('listing.list', ['sub_category_id' => 37, 'furnishing_status' => 'Full Furnished'])}}">Full
-                        Furnished</a>
-                    </div>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-              <div class="bb-tab-pane" id="rent-tab3">
-                <div class="tab-content-top-header">
-
-                  @foreach($webDirectoryCategories as $category)
-                    @php
-                      // Only take popular subcategories
-                      $popularSubs = $category->subcategories->where('is_popular', 1);
-                      $showLimit = 5; // Number of subcategories to show initially
-                    @endphp
-
-                    @if($popularSubs->count() > 0)
-                      <div class="tab-content-section">
-                        <h4 class="tab-titles">{{ $category->category_name }}</h4>
-                        <div class="d-flex flex-column">
-                          @foreach($popularSubs->take($showLimit) as $sub)
-                            <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
-                              {{ $sub->sub_category_name }}
-                            </a>
-                          @endforeach
-
-                          @if($popularSubs->count() > $showLimit)
-                            <div class="more-subcategories" style="display:none;">
-                              @foreach($popularSubs->slice($showLimit) as $sub)
-                                <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
-                                  {{ $sub->sub_category_name }}
-                                </a>
-                              @endforeach
-                            </div>
-                            <a href="javascript:void(0);" class="view-more"
-                              onclick="this.previousElementSibling.style.display='block'; this.style.display='none';">
-                              View More
-                            </a>
-                          @endif
-                        </div>
-                      </div>
-                    @endif
-                  @endforeach
-
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </li>
-
-
-        <li class="bb-nav-item">
-          <a href="#" class="bb-nav-link">Directory & Services</a>
-          <div class="bb-dropdown">
-            <div class="bb-tabs">
-              @foreach($webDirectoryCategories as $index => $category)
-                <div class="bb-tab {{ $index == 0 ? 'active' : '' }}" data-tab="tab{{ $category->id }}">
-                  {{ $category->category_name }}
-                </div>
-              @endforeach
-            </div>
-
-            <div class="bb-tab-content">
-              @foreach($webDirectoryCategories as $index => $category)
-                <div class="bb-tab-pane {{ $index == 0 ? 'active' : '' }}" id="tab{{ $category->id }}">
-                  <div class="tab-content-top-header">
-                    <div class="tab-content-section">
-                      <h4 class="tab-titles">Sub Categories</h4>
-                      <div class="d-flex flex-column">
-                        @foreach($category->subcategories as $sub)
-                          <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
-                            {{ $sub->sub_category_name }}
-                          </a>
-                        @endforeach
-                      </div>
-                    </div>
-                    <div class="image-tab">
-                      <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                    </div>
-                  </div>
-                </div>
-              @endforeach
-            </div>
-          </div>
-        </li>
-
-
-        @if($subCategories->count())
-          <li class="bb-nav-item">
-            <a href="#" class="bb-nav-link">Exclusive Launch</a>
-            <div class="bb-dropdown">
-              <div class="bb-tabs">
-                @foreach($subCategories as $index => $subCat)
-                  <div class="bb-tab {{ $index == 0 ? 'active' : '' }}" data-tab="exclusive-tab{{ $subCat->id }}">
-                    {{ $subCat->sub_category_name }}
-                  </div>
-                @endforeach
-              </div>
-
-              <div class="bb-tab-content">
-                @foreach($subCategories as $index => $subCat)
-                  <div class="bb-tab-pane {{ $index == 0 ? 'active' : '' }}" id="exclusive-tab{{ $subCat->id }}">
-                    <div class="tab-content-top-header">
-                      <div class="tab-content-section">
-                        <h4 class="tab-titles">Projects</h4>
-                        <div class="d-flex flex-column">
-                          @php
-                            // Get all properties in this subcategory
-                            $properties = Properties::where('category_id', $exclusiveCategory->id)
-                              ->where('sub_category_id', $subCat->id)
-                              ->where('approval', 'Approved')
-                              ->where('publish_status', 'Publish')
-                              ->get();
-                          @endphp
-
-                          @forelse($properties as $property)
-                            <a href="{{ route('property.show', $property->id) }}">
-                              {{ $property->title }}
-                            </a>
-                          @empty
-                            <span class="text-muted">No properties available</span>
-                          @endforelse
-                        </div>
-                      </div>
-
-                      <div class="tab-content-section">
-                        <h4 class="tab-titles">Budget</h4>
-                        <div class="d-flex flex-column">
-                          @foreach ($sellBudgets as $budget)
-                            <a
-                              href="{{ route('listing.list', array_merge(['sub_category_id' => $subCat->id], $budget['query'])) }}">
-                              {{ $budget['label'] }}
-                            </a>
-                          @endforeach
-                        </div>
-                      </div>
-
-                      <div class="image-tab">
-                        <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png"
-                          alt="{{ $subCat->sub_category_name }}">
-                      </div>
-                    </div>
-                  </div>
-                @endforeach
-              </div>
-            </div>
-          </li>
-        @endif
-
-      </ul>
-    </nav>
-  </div>
-
-
-  <!-- Offcanvas Menu -->
   <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions"
     aria-labelledby="offcanvasWithBothOptionsLabel">
     <div class="offcanvas-header">
@@ -1522,19 +928,15 @@
                         <ul class="list-unstyled">
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
-                          <li><a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
-                              @unless(auth()->check()) onclick="openSigninModal()" @endunless>
-                              Dashboard
-                            </a>
-                          </li>
+                          <li><a href="#">Dashboard</a></li>
                           <li><a href="#">Enquiries</a></li>
                         </ul>
                       </div>
                       <div class="menu-section">
                         <h4>Important Links</h4>
                         <ul class="list-unstyled">
-                          <li><a href="{{ route('front.faq') }}">FAQ</a></li>
-                          <li> <a href="{{ route('front.blog') }}">Articles & Blogs</a></li>
+                          <li><a href="#">FAQ</a></li>
+                          <li><a href="#">Articles & Blogs</a></li>
                         </ul>
                       </div>
                       <div class="menu-section">
@@ -1563,19 +965,15 @@
                         <ul class="list-unstyled">
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
-                          <li><a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
-                              @unless(auth()->check()) onclick="openSigninModal()" @endunless>
-                              Dashboard
-                            </a>
-                          </li>
+                          <li><a href="#">Dashboard</a></li>
                           <li><a href="#">Enquiries</a></li>
                         </ul>
                       </div>
                       <div class="menu-section">
                         <h4>Important Links</h4>
                         <ul class="list-unstyled">
-                          <li><a href="{{ route('front.faq') }}">FAQ</a></li>
-                          <li> <a href="{{ route('front.blog') }}">Articles & Blogs</a></li>
+                          <li><a href="#">FAQ</a></li>
+                          <li><a href="#">Articles & Blogs</a></li>
                         </ul>
                       </div>
                       <div class="menu-section">
@@ -1604,19 +1002,15 @@
                         <ul class="list-unstyled">
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
-                          <li><a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
-                              @unless(auth()->check()) onclick="openSigninModal()" @endunless>
-                              Dashboard
-                            </a>
-                          </li>
+                          <li><a href="#">Dashboard</a></li>
                           <li><a href="#">Enquiries</a></li>
                         </ul>
                       </div>
                       <div class="menu-section">
                         <h4>Important Links</h4>
                         <ul class="list-unstyled">
-                          <li><a href="{{ route('front.faq') }}">FAQ</a></li>
-                          <li> <a href="{{ route('front.blog') }}">Articles & Blogs</a></li>
+                          <li><a href="#">FAQ</a></li>
+                          <li><a href="#">Articles & Blogs</a></li>
                         </ul>
                       </div>
                       <div class="menu-section">
@@ -1644,11 +1038,7 @@
                         <h4>Start Selling</h4>
                         <ul class="list-unstyled">
                           <li><a href="#">List Your Service</a></li>
-                          <li><a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
-                              @unless(auth()->check()) onclick="openSigninModal()" @endunless>
-                              Dashboard
-                            </a>
-                          </li>
+                          <li><a href="#">Dashboard</a></li>
                           <li><a href="#">Check Enquiries</a></li>
                           <li><a href="#">Join BB Prime</a></li>
                         </ul>
@@ -1656,8 +1046,8 @@
                       <div class="menu-section">
                         <h4>Important Links</h4>
                         <ul class="list-unstyled">
-                          <li><a href="{{ route('front.faq') }}">FAQ</a></li>
-                          <li> <a href="{{ route('front.blog') }}">Articles & Blogs</a></li>
+                          <li><a href="#">FAQ</a></li>
+                          <li><a href="#">Articles & Blogs</a></li>
                         </ul>
                       </div>
                       <div class="menu-section">
@@ -2060,6 +1450,604 @@
       </div>
     </div>
   </div>
+
+
+  <div class="bb-top-menu-header">
+    <nav class="bb-nav">
+      <ul class="bb-nav-list">
+        <li class="bb-nav-item">
+          <a href="#" class="bb-nav-link">For Buyers</a>
+          <div class="bb-dropdown">
+            <div class="bb-tabs">
+              <div class="bb-tab active" data-tab="buyers-tab1">Residentials</div>
+              <div class="bb-tab" data-tab="buyers-tab2">Commercial</div>
+              <div class="bb-tab" data-tab="buyers-tab4">New Launch</div>
+              <div class="bb-tab" data-tab="buyers-tab3">Popular Services</div>
+            </div>
+            <div class="bb-tab-content">
+              <div class="bb-tab-pane active" id="buyers-tab1">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Properties</h4>
+                    <div class="d-flex flex-column">
+                      @foreach ($sellResidentil as $subSubcat)
+                        <a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
+                          {{ $subSubcat->sub_sub_category_name }}
+                        </a>
+                      @endforeach
+                    </div>
+                  </div>
+
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Budget</h4>
+                    <div class="d-flex flex-column">
+                      @foreach ($sellBudgets as $budget)
+                        <a
+                          href="{{ route('listing.list', array_merge(['sub_category_id' => 34], $budget['query'])) }}">{{ $budget['label'] }}</a>
+                      @endforeach
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Popular Choices</h4>
+                    <div class="d-flex flex-column">
+                      <a href="{{ route('listing.list', ['sub_category_id' => 34, 'user_role' => 'owner'])}}">Owner
+                        Properties</a>
+                      <a href="{{ route('listing.list', ['sub_category_id' => 34, 'status' => 'verified'])}}">Verified
+                        Properties</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move'])}}">Ready
+                        to
+                        Move</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon'])}}">Possession
+                        Soon</a>
+                      <a href="#">Immediate Available</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])}}">Full
+                        Furnished</a>
+                      <a href="{{ route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch'])}}">New
+                        Launch</a>
+                    </div>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+
+              <div class="bb-tab-pane" id="buyers-tab2">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Properties</h4>
+                    <div class="d-flex flex-column">
+                      @foreach ($sellCommercial as $subSubcat)
+                        <a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
+                          {{ $subSubcat->sub_sub_category_name }}
+                        </a>
+                      @endforeach
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Budget</h4>
+                    <div class="d-flex flex-column">
+                      @foreach ($sellBudgets as $budget)
+                        <a
+                          href="{{ route('listing.list', array_merge(['sub_category_id' => 35], $budget['query'])) }}">{{ $budget['label'] }}</a>
+                      @endforeach
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Popular Choices</h4>
+
+                    <div class="d-flex flex-column">
+                      <a href="{{ route('listing.list', ['sub_category_id' => 35, 'user_role' => 'owner'])}}">Owner
+                        Properties</a>
+                      <a href="{{ route('listing.list', ['sub_category_id' => 35, 'status' => 'verified'])}}">Verified
+                        Properties</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Ready to Move'])}}">Ready
+                        to
+                        Move</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Possession Soon'])}}">Possession
+                        Soon</a>
+                      <a href="#">Immediate Available</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])}}">Fully
+                        Furnished</a>
+                      <a href="{{ route('listing.list', ['sub_category_id' => 35, 'sort' => 'new-launch'])}}">New
+                        Launch</a>
+                    </div>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+
+              <div class="bb-tab-pane" id="buyers-tab4">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">New Launch</h4>
+                    <div class="d-flex flex-column">
+                      <a href="{{ route('listing.list', ['sub_category_id' => 34])}}">Residential Projects</a>
+                      <a href="{{ route('listing.list', ['sub_category_id' => 35])}}">Commercial Projects</a>
+                      <a href="{{ route('listing.list', ['sub_sub_category_id' => '18,25,27']) }}">Land & Plots</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Budget</h4>
+                    <div class="d-flex flex-column">
+                      @foreach ($sellBudgets as $budget)
+                        <a
+                          href="{{ route('listing.list', array_merge(['category_id' => 22], $budget['query'])) }}">{{ $budget['label'] }}</a>
+                      @endforeach
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Popular Choices</h4>
+
+                    <div class="d-flex flex-column">
+                      <a href="{{ route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch'])}}">New
+                        Launch</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Under Construction'])}}">Under
+                        Construction</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move'])}}">Ready
+                        to
+                        Move</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon'])}}">Possession
+                        Soon</a>
+                      <a href="#">OC Received</a>
+                      <a href="#">RERA Registered</a>
+                    </div>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+
+              <div class="bb-tab-pane" id="buyers-tab3">
+                <div class="tab-content-top-header">
+
+                  @foreach($webDirectoryCategories as $category)
+                    @php
+                      // Only take popular subcategories
+                      $popularSubs = $category->subcategories->where('is_popular', 1);
+                      $showLimit = 5; // Number of subcategories to show initially
+                    @endphp
+
+                    @if($popularSubs->count() > 0)
+                      <div class="tab-content-section">
+                        <h4 class="tab-titles">{{ $category->category_name }}</h4>
+                        <div class="d-flex flex-column">
+                          @foreach($popularSubs->take($showLimit) as $sub)
+                            <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
+                              {{ $sub->sub_category_name }}
+                            </a>
+                          @endforeach
+
+                          @if($popularSubs->count() > $showLimit)
+                            <div class="more-subcategories" style="display:none;">
+                              @foreach($popularSubs->slice($showLimit) as $sub)
+                                <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
+                                  {{ $sub->sub_category_name }}
+                                </a>
+                              @endforeach
+                            </div>
+                            <a href="javascript:void(0);" class="view-more"
+                              onclick="this.previousElementSibling.style.display='block'; this.style.display='none';">
+                              View More
+                            </a>
+                          @endif
+                        </div>
+                      </div>
+                    @endif
+                  @endforeach
+
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </li>
+
+        <li class="bb-nav-item">
+          <a href="#" class="bb-nav-link">For Sellers</a>
+          <div class="bb-dropdown">
+            <div class="bb-tabs">
+              <div class="bb-tab active" data-tab="sellers-tab1">Owners</div>
+              <div class="bb-tab" data-tab="sellers-tab2">Agents</div>
+              <div class="bb-tab" data-tab="sellers-tab3">Builders</div>
+              <div class="bb-tab" data-tab="sellers-tab4">Service Providers</div>
+            </div>
+            <div class="bb-tab-content">
+              <div class="bb-tab-pane active" id="sellers-tab1">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Services</h4>
+                    <div class="d-flex flex-column">
+                      <a href="{{ route('create_property') }}">Post Property</a>
+                      <a href="#">Join BB Prime</a>
+                      <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
+                        @unless(auth()->check()) onclick="openSigninModal()" @endunless>
+                        Dashboard
+                      </a>
+                      <a href="#">Enquiries</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Important Links</h4>
+                    <div class="d-flex flex-column">
+                      <a href="{{ route('front.faq') }}">FAQ</a>
+                      <a href="{{ route('front.blog') }}">Articles & Blogs</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Contact Us</h4>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+              <div class="bb-tab-pane" id="sellers-tab2">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Services</h4>
+                    <div class="d-flex flex-column">
+                      <a href="{{ route('create_property') }}">Post Property</a>
+                      <a href="#">Join BB Prime</a>
+                      <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
+                        @unless(auth()->check()) onclick="openSigninModal()" @endunless>
+                        Dashboard
+                      </a>
+
+                      <a href="#">Enquiries</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Important Links</h4>
+                    <div class="d-flex flex-column">
+                      <a href="{{ route('front.faq') }}">FAQ</a>
+                      <a href="{{ route('front.blog') }}">Articles & Blogs</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Contact Us</h4>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+              <div class="bb-tab-pane" id="sellers-tab3">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Services</h4>
+                    <div class="d-flex flex-column">
+                      <a href="{{ route('create_property') }}">Post Property</a>
+                      <a href="#">Join BB Prime</a>
+                      <a href="">Dashboard</a>
+                      <a href="#">Enquiries</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Important Links</h4>
+                    <div class="d-flex flex-column">
+                      <a href="{{ route('front.faq') }}">FAQ</a>
+                      <a href="{{ route('front.blog') }}">Articles & Blogs</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Contact Us</h4>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+              <div class="bb-tab-pane" id="sellers-tab4">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Start Selling</h4>
+                    <div class="d-flex flex-column">
+                      <a href="#">List Your Service</a>
+                      <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
+                        @unless(auth()->check()) onclick="openSigninModal()" @endunless>
+                        Dashboard
+                      </a>
+
+                      <a href="#">Check Enquiries</a>
+                      <a href="#">Join BB Prime</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Important Links</h4>
+                    <div class="d-flex flex-column">
+                      <a href="{{ route('front.faq') }}">FAQ</a>
+                      <a href="{{ route('front.blog') }}">Articles & Blogs</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Contact Us</h4>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="bb-nav-item">
+          <a href="#" class="bb-nav-link">For Rent</a>
+          <div class="bb-dropdown">
+            <div class="bb-tabs">
+              <div class="bb-tab active" data-tab="rent-tab1">Residential</div>
+              <div class="bb-tab" data-tab="rent-tab2">Commercial</div>
+              <div class="bb-tab" data-tab="rent-tab3">Popular Services</div>
+            </div>
+            <div class="bb-tab-content">
+              <div class="bb-tab-pane active" id="rent-tab1">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Properties</h4>
+                    <div class="d-flex flex-column">
+                      @foreach ($rentResidentil as $subSubcat)
+                        <a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
+                          {{ $subSubcat->sub_sub_category_name }}
+                        </a>
+                      @endforeach
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Budget</h4>
+                    <div class="d-flex flex-column">
+                      @foreach ($rentBudgets as $budget)
+                        <a
+                          href="{{ route('listing.list', array_merge(['sub_category_id' => 38], $budget['query'])) }}">{{ $budget['label'] }}</a>
+                      @endforeach
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Popular Choise</h4>
+                    <div class="d-flex flex-column">
+                      <a href="{{ route('listing.list', ['sub_category_id' => 38, 'user_role' => 'owner'])}}">Owner
+                        Properties</a>
+                      <a href="{{ route('listing.list', ['sub_category_id' => 38, 'status' => 'verified'])}}">Verified
+                        Properties</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 38, 'property_status' => 'Ready to Move'])}}">Ready
+                        to
+                        Move</a>
+                      <a href="#">Immediate Available</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 38, 'furnishing_status' => 'Full Furnished'])}}">Full
+                        Furnished</a>
+                    </div>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+              <div class="bb-tab-pane" id="rent-tab2">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Properties</h4>
+                    <div class="d-flex flex-column">
+                      @foreach ($rentCommercial as $subSubcat)
+                        <a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
+                          {{ $subSubcat->sub_sub_category_name }}
+                        </a>
+                      @endforeach
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Budget</h4>
+
+
+                    <div class="d-flex flex-column">
+                      @foreach ($rentBudgets as $budget)
+                        <a href="{{ route('listing.list', array_merge(['sub_category_id' => 37], $budget['query'])) }}">
+                          {{ $budget['label'] }}
+                        </a>
+                      @endforeach
+                    </div>
+
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Popular Choise</h4>
+                    <div class="d-flex flex-column">
+                      <a href="{{ route('listing.list', ['sub_category_id' => 37, 'user_role' => 'owner'])}}">Owner
+                        Properties</a>
+                      <a href="{{ route('listing.list', ['sub_category_id' => 37, 'status' => 'verified'])}}">Verified
+                        Properties</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 37, 'property_status' => 'Ready to Move'])}}">Ready
+                        to
+                        Move</a>
+                      <a href="#">Immediate Available</a>
+                      <a
+                        href="{{ route('listing.list', ['sub_category_id' => 37, 'furnishing_status' => 'Full Furnished'])}}">Full
+                        Furnished</a>
+                    </div>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+              <div class="bb-tab-pane" id="rent-tab3">
+                <div class="tab-content-top-header">
+
+                  @foreach($webDirectoryCategories as $category)
+                    @php
+                      // Only take popular subcategories
+                      $popularSubs = $category->subcategories->where('is_popular', 1);
+                      $showLimit = 5; // Number of subcategories to show initially
+                    @endphp
+
+                    @if($popularSubs->count() > 0)
+                      <div class="tab-content-section">
+                        <h4 class="tab-titles">{{ $category->category_name }}</h4>
+                        <div class="d-flex flex-column">
+                          @foreach($popularSubs->take($showLimit) as $sub)
+                            <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
+                              {{ $sub->sub_category_name }}
+                            </a>
+                          @endforeach
+
+                          @if($popularSubs->count() > $showLimit)
+                            <div class="more-subcategories" style="display:none;">
+                              @foreach($popularSubs->slice($showLimit) as $sub)
+                                <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
+                                  {{ $sub->sub_category_name }}
+                                </a>
+                              @endforeach
+                            </div>
+                            <a href="javascript:void(0);" class="view-more"
+                              onclick="this.previousElementSibling.style.display='block'; this.style.display='none';">
+                              View More
+                            </a>
+                          @endif
+                        </div>
+                      </div>
+                    @endif
+                  @endforeach
+
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+
+        <li class="bb-nav-item">
+          <a href="#" class="bb-nav-link">Directory & Services</a>
+          <div class="bb-dropdown">
+            <div class="bb-tabs">
+              @foreach($webDirectoryCategories as $index => $category)
+                <div class="bb-tab {{ $index == 0 ? 'active' : '' }}" data-tab="tab{{ $category->id }}">
+                  {{ $category->category_name }}
+                </div>
+              @endforeach
+            </div>
+
+            <div class="bb-tab-content">
+              @foreach($webDirectoryCategories as $index => $category)
+                <div class="bb-tab-pane {{ $index == 0 ? 'active' : '' }}" id="tab{{ $category->id }}">
+                  <div class="tab-content-top-header">
+                    @php
+                      // Split subcategories into chunks of 5 per column
+                      $subChunks = $category->subcategories->chunk(5);
+                    @endphp
+                    @foreach($subChunks as $chunk)
+                      <div class="tab-content-section">
+                        <h4 class="tab-titles">Sub Categories</h4>
+                        <div class="d-flex flex-column">
+                          @foreach($chunk as $sub)
+                            <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
+                              {{ $sub->sub_category_name }}
+                            </a>
+                          @endforeach
+                        </div>
+                      </div>
+                    @endforeach
+
+                    <div class="image-tab">
+                      <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png"
+                        alt="{{ $category->category_name }}">
+                    </div>
+                  </div>
+                </div>
+              @endforeach
+            </div>
+          </div>
+        </li>
+
+
+
+        @if($subCategories->count())
+          <li class="bb-nav-item">
+            <a href="#" class="bb-nav-link">Exclusive Launch</a>
+            <div class="bb-dropdown">
+              <div class="bb-tabs">
+                @foreach($subCategories as $index => $subCat)
+                  <div class="bb-tab {{ $index == 0 ? 'active' : '' }}" data-tab="exclusive-tab{{ $subCat->id }}">
+                    {{ $subCat->sub_category_name }}
+                  </div>
+                @endforeach
+              </div>
+
+              <div class="bb-tab-content">
+                @foreach($subCategories as $index => $subCat)
+                  <div class="bb-tab-pane {{ $index == 0 ? 'active' : '' }}" id="exclusive-tab{{ $subCat->id }}">
+                    <div class="tab-content-top-header">
+                      <div class="tab-content-section">
+                        <h4 class="tab-titles">Projects</h4>
+                        <div class="d-flex flex-column">
+                          @php
+                            // Get all properties in this subcategory
+                            $properties = Properties::where('category_id', $exclusiveCategory->id)
+                              ->where('sub_category_id', $subCat->id)
+                              ->where('approval', 'Approved')
+                              ->where('publish_status', 'Publish')
+                              ->get();
+                          @endphp
+
+                          @forelse($properties as $property)
+                            <a href="{{ route('property.show', $property->id) }}">
+                              {{ $property->title }}
+                            </a>
+                          @empty
+                            <span class="text-muted">No properties available</span>
+                          @endforelse
+                        </div>
+                      </div>
+
+                      <div class="tab-content-section">
+                        <h4 class="tab-titles">Budget</h4>
+                        <div class="d-flex flex-column">
+                          @foreach ($sellBudgets as $budget)
+                            <a
+                              href="{{ route('listing.list', array_merge(['sub_category_id' => $subCat->id], $budget['query'])) }}">
+                              {{ $budget['label'] }}
+                            </a>
+                          @endforeach
+                        </div>
+                      </div>
+
+                      <div class="image-tab">
+                        <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png"
+                          alt="{{ $subCat->sub_category_name }}">
+                      </div>
+                    </div>
+                  </div>
+                @endforeach
+              </div>
+            </div>
+          </li>
+        @endif
+
+      </ul>
+    </nav>
+  </div>
+
+
+  <!-- Offcanvas Menu -->
 
   <!-- Custom CSS -->
 
@@ -2892,16 +2880,6 @@
 @include('layouts.front.app_js')
 
 <script type="text/javascript">
-
-  function openSigninModal() {
-    // Example: if using Bootstrap modal
-    $('#signin').modal('show');
-
-    // Or if using a custom modal system
-    // document.getElementById('signinModal').classList.add('open');
-  }
-
-
   $(document).ready(function () {
     // Fallback to close modal if needed (from previous context)
     $('.close').on('click', function () {

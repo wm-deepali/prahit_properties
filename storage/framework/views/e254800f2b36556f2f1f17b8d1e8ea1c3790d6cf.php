@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title'); ?>
     <title>Welcome</title>
 <?php $__env->stopSection(); ?>
@@ -769,8 +768,30 @@
                             <!--    </div>-->
                             <!--    <button class="nav-arrow right-arrow" onclick="scrollSection(200)">&#10095;</button>-->
                             <!--</div>-->
-                            <div class="search-title mb-2"><strong>Search Results:</strong> 2 BHK Flat for Rent in Gulshan
-                                Nagar, Srinagar</div>
+                            <div class="search-title mb-2">
+                                <strong>Search Results:</strong> 
+                                <?php if(request()->filled('search')): ?>
+                                    <?php echo e(request('search')); ?> in 
+                                <?php endif; ?>
+                                <?php if(request()->filled('city')): ?>
+                                    <?php
+                                        $city = App\City::find(request('city'));
+                                        echo $city ? $city->name : '';
+                                    ?>
+                                <?php endif; ?>
+                                <?php if(request()->filled('type')): ?>
+                                    - <?php echo e(ucfirst(request('type'))); ?> Properties
+                                <?php endif; ?>
+                                <?php if(request()->filled('sub_sub_category_id')): ?>
+                                    <?php
+                                        $propertyTypes = explode(',', request('sub_sub_category_id'));
+                                        $typeNames = App\SubSubCategory::whereIn('id', $propertyTypes)->pluck('sub_sub_category_name')->toArray();
+                                        if(count($typeNames) > 0) {
+                                            echo ' - ' . implode(', ', $typeNames);
+                                        }
+                                    ?>
+                                <?php endif; ?>
+                            </div>
 
                             <div class="sorting-options">
                                 <select>
@@ -797,7 +818,12 @@
                                     <div class="content-section">
                                         <div>
                                             <div class="listing-header">
-                                                <h1 class="listing-title"><?php echo e($property->title ?? ''); ?></h1>
+                                                <h1 class="listing-title">
+                                                    <a href="<?php echo e(route('property_detail', ['title' => $property->slug])); ?>" style="text-decoration: none; color: inherit;">
+                                                        <?php echo e($property->title ?? ''); ?>
+
+                                                    </a>
+                                                </h1>
                                                 <div class="listing-actions">
                                                     <button class="action-btn" title="Like"><i class="fas fa-heart"></i></button>
                                                     <button class="action-btn" title="Share"><i class="fas fa-share"></i></button>

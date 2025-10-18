@@ -325,4 +325,87 @@ class Helper
             'posted_by' => self::POSTED_BY,
         ];
     }
+
+    /**
+     * Format price in Indian format (Lakh, CR)
+     */
+    public static function formatIndianPrice($price): string
+    {
+        if (!$price || $price <= 0) {
+            return '0';
+        }
+
+        $price = (float) $price;
+
+        // Convert to crores if >= 1 crore
+        if ($price >= 10000000) {
+            $crores = $price / 10000000;
+            return number_format($crores, 1) . ' CR';
+        }
+
+        // Convert to lakhs if >= 1 lakh
+        if ($price >= 100000) {
+            $lakhs = $price / 100000;
+            return number_format($lakhs, 1) . ' Lakh';
+        }
+
+        // For amounts less than 1 lakh, show in thousands
+        if ($price >= 1000) {
+            $thousands = $price / 1000;
+            return number_format($thousands, 0) . 'K';
+        }
+
+        // For amounts less than 1000, show as is
+        return number_format($price, 0);
+    }
+
+    /**
+     * Get properties suitable for businesses
+     */
+    public static function getBusinessProperties($city_id = null, $businessType = null, $limit = 6): \Illuminate\Support\Collection
+    {
+        $query = Properties::where('approval', 'Approved')
+            ->where('publish_status', 'Publish')
+            ->where('status', '1');
+
+        if (!empty($city_id)) {
+            $query->where('city_id', $city_id);
+        }
+
+        $query->where(function ($q) use ($businessType) {
+    
+            // If a business type (tab) is provided, filter by that only
+            if (!empty($businessType)) {
+                $q->Where(function ($subQ) use ($businessType) {
+                    $subQ->where('additional_info', 'LIKE', '%"Ideal For Businesses"%')
+                        ->where('additional_info', 'LIKE', "%\"$businessType\"%");
+                });
+            }
+        });
+
+        $properties = $query->orderBy('id', 'DESC')->limit($limit)->get();
+
+        // dd($businessType, $properties->toArray());
+        // Fallback if no results found
+        if ($properties->isEmpty()) {
+            $query = Properties::where('approval', 'Approved')
+                ->where('publish_status', 'Publish')
+                ->where('status', '1');
+
+            $query->where(function ($q) use ($businessType) {
+
+                if (!empty($businessType)) {
+                    $q->orWhere(function ($subQ) use ($businessType) {
+                        $subQ->where('additional_info', 'LIKE', '%"Ideal For Businesses"%')
+                            ->where('additional_info', 'LIKE', "%\"$businessType\"%");
+                    });
+                }
+            });
+
+            $properties = $query->orderBy('id', 'DESC')->limit($limit)->get();
+        }
+
+        return $properties;
+    }
+
 }

@@ -50,7 +50,7 @@
 									<div class="col-sm-5">
 										<div class="price-detail">
 											<h3><i class="fas fa-rupee-sign"></i> <span class="property_price">
-													{{isset($property_detail->price) ? number_format($property_detail->price) : ''}}
+													{{isset($property_detail->price) ? \App\Helpers\Helper::formatIndianPrice($property_detail->price) : ''}}
 												</span> </h3>
 											<a href="#property-othercharges"><i class="fas fa-info-circle"></i> Other
 												Charges</a>

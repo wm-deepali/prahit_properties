@@ -67,7 +67,7 @@
               </div> -->
               <div class="col-sm-4">
                 <label class="content-label">Price</label>
-                <h5 class="content-h">{{ $data->price }}</h5>
+                <h5 class="content-h">₹{{\App\Helpers\Helper::formatIndianPrice($data->price)}}</h5>
               </div>
 
               {{-- Price Label --}}

@@ -769,8 +769,30 @@
                             <!--    </div>-->
                             <!--    <button class="nav-arrow right-arrow" onclick="scrollSection(200)">&#10095;</button>-->
                             <!--</div>-->
-                            <div class="search-title mb-2"><strong>Search Results:</strong> 2 BHK Flat for Rent in Gulshan
-                                Nagar, Srinagar</div>
+                            <div class="search-title mb-2">
+                                <strong>Search Results:</strong> 
+                                @if(request()->filled('search'))
+                                    {{ request('search') }} in 
+                                @endif
+                                @if(request()->filled('city'))
+                                    @php
+                                        $city = App\City::find(request('city'));
+                                        echo $city ? $city->name : '';
+                                    @endphp
+                                @endif
+                                @if(request()->filled('type'))
+                                    - {{ ucfirst(request('type')) }} Properties
+                                @endif
+                                @if(request()->filled('sub_sub_category_id'))
+                                    @php
+                                        $propertyTypes = explode(',', request('sub_sub_category_id'));
+                                        $typeNames = App\SubSubCategory::whereIn('id', $propertyTypes)->pluck('sub_sub_category_name')->toArray();
+                                        if(count($typeNames) > 0) {
+                                            echo ' - ' . implode(', ', $typeNames);
+                                        }
+                                    @endphp
+                                @endif
+                            </div>
 
                             <div class="sorting-options">
                                 <select>
@@ -790,14 +812,18 @@
                                         <img src="{{isset($property->PropertyGallery[0]->image_path) ? asset('') . $property->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'}}"
                                             alt="Industrial worker" class="property-image">
                                         <div class="price-text">
-                                            <h2 class="m-0">₹{{number_format($property->price ?? 0, 2)}}</h2>
+                                            <h2 class="m-0">₹{{\App\Helpers\Helper::formatIndianPrice($property->price ?? 0)}}</h2>
                                             <p class="m-0">See other charges</p>
                                         </div>
                                     </div>
                                     <div class="content-section">
                                         <div>
                                             <div class="listing-header">
-                                                <h1 class="listing-title">{{ $property->title ?? '' }}</h1>
+                                                <h1 class="listing-title">
+                                                    <a href="{{ route('property_detail', ['title' => $property->slug]) }}" style="text-decoration: none; color: inherit;">
+                                                        {{ $property->title ?? '' }}
+                                                    </a>
+                                                </h1>
                                                 <div class="listing-actions">
                                                     <button class="action-btn" title="Like"><i class="fas fa-heart"></i></button>
                                                     <button class="action-btn" title="Share"><i class="fas fa-share"></i></button>

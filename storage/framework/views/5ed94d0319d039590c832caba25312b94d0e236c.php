@@ -384,85 +384,80 @@
     }
   </style>
   <style>
-    .offcanvas {
-      /*  width: 300px !important;*/
-      /*  background-color: #f8f9fa;*/
-      /*}*/
+    .offcanvas-header {
+      background-color: #f9f9f9;
+      border-bottom: 1px solid gray;
+      /*color: #fff;*/
+    }
 
-      .offcanvas-header {
-        background-color: #f9f9f9;
-        border-bottom: 1px solid gray;
-        /*color: #fff;*/
-      }
+    /*.offcanvas-title {*/
+    /*  font-size: 1.25rem;*/
+    /*  font-weight: 600;*/
+    /*}*/
 
-      /*.offcanvas-title {*/
-      /*  font-size: 1.25rem;*/
-      /*  font-weight: 600;*/
-      /*}*/
+    .accordion-button {
+      font-size: 1.1rem;
+      font-weight: 500;
+      background-color: #fff;
+      color: #333;
+      padding: 15px;
+      border-bottom: 1px solid #e9ecef;
+    }
 
-      .accordion-button {
-        font-size: 1.1rem;
-        font-weight: 500;
-        background-color: #fff;
-        color: #333;
-        padding: 15px;
-        border-bottom: 1px solid #e9ecef;
-      }
+    .accordion-button:not(.collapsed) {
+      background-color: #e9ecef;
+      color: #007bff;
+    }
 
-      .accordion-button:not(.collapsed) {
-        background-color: #e9ecef;
-        color: #007bff;
-      }
+    .sub-accordion {
+      font-size: 1rem;
+      font-weight: 400;
+      padding-left: 30px;
+      background-color: #f1f3f5;
+    }
 
-      .sub-accordion {
-        font-size: 1rem;
-        font-weight: 400;
-        padding-left: 30px;
-        background-color: #f1f3f5;
-      }
+    .sub-accordion:not(.collapsed) {
+      background-color: #dee2e6;
+    }
 
-      .sub-accordion:not(.collapsed) {
-        background-color: #dee2e6;
-      }
+    .accordion-body {
+      padding: 10px 20px;
+    }
 
-      .accordion-body {
-        padding: 10px 20px;
-      }
+    .menu-section {
+      margin-bottom: 20px;
+    }
 
-      .menu-section {
-        margin-bottom: 20px;
-      }
+    .menu-section h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #007bff;
+      margin-bottom: 10px;
+    }
 
-      .menu-section h4 {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #007bff;
-        margin-bottom: 10px;
-      }
+    .menu-section ul li {
+      margin-bottom: 8px;
+    }
 
-      .menu-section ul li {
-        margin-bottom: 8px;
-      }
+    .menu-section ul li a {
+      color: #333;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
 
-      .menu-section ul li a {
-        color: #333;
-        text-decoration: none;
-        font-size: 0.85rem;
-        transition: color 0.2s;
-      }
+    .menu-section ul li a:hover {
+      color: #007bff;
+    }
 
-      .menu-section ul li a:hover {
-        color: #007bff;
-      }
+    .accordion-button::after {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23333'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    }
 
-      .accordion-button::after {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23333'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-      }
-
-      .accordion-button:not(.collapsed)::after {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23007bff'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-        transform: rotate(-180deg);
-      }
+    .accordion-button:not(.collapsed)::after {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23007bff'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+      transform: rotate(-180deg);
+    }
   </style>
 
 </head>
@@ -531,11 +526,9 @@
                   <i class="fas fa-phone-alt me-2"></i> +91 9451591515
                 </a>
                 <hr>
-                <button type="button" onclick="window.location='<?php echo e(route('front.contactUs')); ?>'"
-                  class="btn btn-outline-secondary btn-sm w-100" style="font-size: 14px;">
+                <button class="btn btn-outline-secondary btn-sm w-100" style="font-size: 14px;">
                   <i class="fas fa-phone-alt me-2"></i> Request A Callback
                 </button>
-
               </div>
             </li>
           </ul>
@@ -600,6 +593,7 @@
     </div>
   </header>
 
+
   <?php
     use App\Helpers\Helper;
     $sellSubs = Helper::getSubSubcategoriesByCategoryName('Sell');
@@ -640,608 +634,6 @@
 
   ?>
 
-
-  <div class="bb-top-menu-header">
-    <nav class="bb-nav">
-      <ul class="bb-nav-list">
-        <li class="bb-nav-item">
-          <a href="#" class="bb-nav-link">For Buyers</a>
-          <div class="bb-dropdown">
-            <div class="bb-tabs">
-              <div class="bb-tab active" data-tab="buyers-tab1">Residentials</div>
-              <div class="bb-tab" data-tab="buyers-tab2">Commercial</div>
-              <div class="bb-tab" data-tab="buyers-tab4">New Launch</div>
-              <div class="bb-tab" data-tab="buyers-tab3">Popular Services</div>
-            </div>
-            <div class="bb-tab-content">
-              <div class="bb-tab-pane active" id="buyers-tab1">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <?php $__currentLoopData = $sellResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => $subSubcat->id])); ?>">
-                          <?php echo e($subSubcat->sub_sub_category_name); ?>
-
-                        </a>
-                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </div>
-                  </div>
-
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Budget</h4>
-                    <div class="d-flex flex-column">
-                      <?php $__currentLoopData = $sellBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a
-                          href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => 34], $budget['query']))); ?>"><?php echo e($budget['label']); ?></a>
-                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Popular Choices</h4>
-                    <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'user_role' => 'owner'])); ?>">Owner
-                        Properties</a>
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'status' => 'verified'])); ?>">Verified
-                        Properties</a>
-                      <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move'])); ?>">Ready
-                        to
-                        Move</a>
-                      <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon'])); ?>">Possession
-                        Soon</a>
-                      <a href="#">Immediate Available</a>
-                      <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])); ?>">Full
-                        Furnished</a>
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch'])); ?>">New
-                        Launch</a>
-                    </div>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-
-              <div class="bb-tab-pane" id="buyers-tab2">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <?php $__currentLoopData = $sellCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => $subSubcat->id])); ?>">
-                          <?php echo e($subSubcat->sub_sub_category_name); ?>
-
-                        </a>
-                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Budget</h4>
-                    <div class="d-flex flex-column">
-                      <?php $__currentLoopData = $sellBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a
-                          href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => 35], $budget['query']))); ?>"><?php echo e($budget['label']); ?></a>
-                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Popular Choices</h4>
-
-                    <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'user_role' => 'owner'])); ?>">Owner
-                        Properties</a>
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'status' => 'verified'])); ?>">Verified
-                        Properties</a>
-                      <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Ready to Move'])); ?>">Ready
-                        to
-                        Move</a>
-                      <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Possession Soon'])); ?>">Possession
-                        Soon</a>
-                      <a href="#">Immediate Available</a>
-                      <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])); ?>">Fully
-                        Furnished</a>
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'sort' => 'new-launch'])); ?>">New
-                        Launch</a>
-                    </div>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-
-              <div class="bb-tab-pane" id="buyers-tab4">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">New Launch</h4>
-                    <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 34])); ?>">Residential Projects</a>
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 35])); ?>">Commercial Projects</a>
-                      <a href="<?php echo e(route('listing.list', ['sub_sub_category_ids' => '18,25,27'])); ?>">Land & Plots</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Budget</h4>
-                    <div class="d-flex flex-column">
-                      <?php $__currentLoopData = $sellBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a
-                          href="<?php echo e(route('listing.list', array_merge(['category_id' => 22], $budget['query']))); ?>"><?php echo e($budget['label']); ?></a>
-                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Popular Choices</h4>
-
-                    <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch'])); ?>">New
-                        Launch</a>
-                      <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Under Construction'])); ?>">Under
-                        Construction</a>
-                      <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move'])); ?>">Ready
-                        to
-                        Move</a>
-                      <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon'])); ?>">Possession
-                        Soon</a>
-                      <a href="#">OC Received</a>
-                      <a href="#">RERA Registered</a>
-                    </div>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-
-              <div class="bb-tab-pane" id="buyers-tab3">
-                <div class="tab-content-top-header">
-
-                  <?php $__currentLoopData = $webDirectoryCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <?php
-                      // Only take popular subcategories
-                      $popularSubs = $category->subcategories->where('is_popular', 1);
-                      $showLimit = 5; // Number of subcategories to show initially
-                    ?>
-
-                    <?php if($popularSubs->count() > 0): ?>
-                      <div class="tab-content-section">
-                        <h4 class="tab-titles"><?php echo e($category->category_name); ?></h4>
-                        <div class="d-flex flex-column">
-                          <?php $__currentLoopData = $popularSubs->take($showLimit); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <a href="<?php echo e(route('directory.list', ['subcategory' => $sub->id])); ?>">
-                              <?php echo e($sub->sub_category_name); ?>
-
-                            </a>
-                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                          <?php if($popularSubs->count() > $showLimit): ?>
-                            <div class="more-subcategories" style="display:none;">
-                              <?php $__currentLoopData = $popularSubs->slice($showLimit); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <a href="<?php echo e(route('directory.list', ['subcategory' => $sub->id])); ?>">
-                                  <?php echo e($sub->sub_category_name); ?>
-
-                                </a>
-                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </div>
-                            <a href="javascript:void(0);" class="view-more"
-                              onclick="this.previousElementSibling.style.display='block'; this.style.display='none';">
-                              View More
-                            </a>
-                          <?php endif; ?>
-                        </div>
-                      </div>
-                    <?php endif; ?>
-                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-
-
-            </div>
-          </div>
-        </li>
-
-        <li class="bb-nav-item">
-          <a href="#" class="bb-nav-link">For Sellers</a>
-          <div class="bb-dropdown">
-            <div class="bb-tabs">
-              <div class="bb-tab active" data-tab="sellers-tab1">Owners</div>
-              <div class="bb-tab" data-tab="sellers-tab2">Agents</div>
-              <div class="bb-tab" data-tab="sellers-tab3">Builders</div>
-              <div class="bb-tab" data-tab="sellers-tab4">Service Providers</div>
-            </div>
-            <div class="bb-tab-content">
-              <div class="bb-tab-pane active" id="sellers-tab1">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Services</h4>
-                    <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('create_property')); ?>">Post Property</a>
-                      <a href="#">Join BB Prime</a>
-                      <a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
-                        <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
-                        Dashboard
-                      </a>
-                      <a href="#">Enquiries</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Important Links</h4>
-                    <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('front.faq')); ?>">FAQ</a>
-                      <a href="<?php echo e(route('front.blog')); ?>">Articles & Blogs</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Contact Us</h4>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-              <div class="bb-tab-pane" id="sellers-tab2">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Services</h4>
-                    <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('create_property')); ?>">Post Property</a>
-                      <a href="#">Join BB Prime</a>
-                      <a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
-                        <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
-                        Dashboard
-                      </a>
-
-                      <a href="#">Enquiries</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Important Links</h4>
-                    <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('front.faq')); ?>">FAQ</a>
-                      <a href="<?php echo e(route('front.blog')); ?>">Articles & Blogs</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Contact Us</h4>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-              <div class="bb-tab-pane" id="sellers-tab3">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Services</h4>
-                    <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('create_property')); ?>">Post Property</a>
-                      <a href="#">Join BB Prime</a>
-                      <a href="">Dashboard</a>
-                      <a href="#">Enquiries</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Important Links</h4>
-                    <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('front.faq')); ?>">FAQ</a>
-                      <a href="<?php echo e(route('front.blog')); ?>">Articles & Blogs</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Contact Us</h4>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-              <div class="bb-tab-pane" id="sellers-tab4">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Start Selling</h4>
-                    <div class="d-flex flex-column">
-                      <a href="#">List Your Service</a>
-                      <a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
-                        <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
-                        Dashboard
-                      </a>
-
-                      <a href="#">Check Enquiries</a>
-                      <a href="#">Join BB Prime</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Important Links</h4>
-                    <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('front.faq')); ?>">FAQ</a>
-                      <a href="<?php echo e(route('front.blog')); ?>">Articles & Blogs</a>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Contact Us</h4>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </li>
-
-        <li class="bb-nav-item">
-          <a href="#" class="bb-nav-link">For Rent</a>
-          <div class="bb-dropdown">
-            <div class="bb-tabs">
-              <div class="bb-tab active" data-tab="rent-tab1">Residential</div>
-              <div class="bb-tab" data-tab="rent-tab2">Commercial</div>
-              <div class="bb-tab" data-tab="rent-tab3">Popular Services</div>
-            </div>
-            <div class="bb-tab-content">
-              <div class="bb-tab-pane active" id="rent-tab1">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <?php $__currentLoopData = $rentResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => $subSubcat->id])); ?>">
-                          <?php echo e($subSubcat->sub_sub_category_name); ?>
-
-                        </a>
-                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Budget</h4>
-                    <div class="d-flex flex-column">
-                      <?php $__currentLoopData = $rentBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a
-                          href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => 38], $budget['query']))); ?>"><?php echo e($budget['label']); ?></a>
-                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Popular Choise</h4>
-                    <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 38, 'user_role' => 'owner'])); ?>">Owner
-                        Properties</a>
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 38, 'status' => 'verified'])); ?>">Verified
-                        Properties</a>
-                      <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 38, 'property_status' => 'Ready to Move'])); ?>">Ready
-                        to
-                        Move</a>
-                      <a href="#">Immediate Available</a>
-                      <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 38, 'furnishing_status' => 'Full Furnished'])); ?>">Full
-                        Furnished</a>
-                    </div>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-              <div class="bb-tab-pane" id="rent-tab2">
-                <div class="tab-content-top-header">
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Properties</h4>
-                    <div class="d-flex flex-column">
-                      <?php $__currentLoopData = $rentCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => $subSubcat->id])); ?>">
-                          <?php echo e($subSubcat->sub_sub_category_name); ?>
-
-                        </a>
-                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </div>
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Budget</h4>
-
-
-                    <div class="d-flex flex-column">
-                      <?php $__currentLoopData = $rentBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => 37], $budget['query']))); ?>">
-                          <?php echo e($budget['label']); ?>
-
-                        </a>
-                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </div>
-
-                  </div>
-                  <div class="tab-content-section">
-                    <h4 class="tab-titles">Popular Choise</h4>
-                    <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 37, 'user_role' => 'owner'])); ?>">Owner
-                        Properties</a>
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 37, 'status' => 'verified'])); ?>">Verified
-                        Properties</a>
-                      <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 37, 'property_status' => 'Ready to Move'])); ?>">Ready
-                        to
-                        Move</a>
-                      <a href="#">Immediate Available</a>
-                      <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 37, 'furnishing_status' => 'Full Furnished'])); ?>">Full
-                        Furnished</a>
-                    </div>
-                  </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-              <div class="bb-tab-pane" id="rent-tab3">
-                <div class="tab-content-top-header">
-
-                  <?php $__currentLoopData = $webDirectoryCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <?php
-                      // Only take popular subcategories
-                      $popularSubs = $category->subcategories->where('is_popular', 1);
-                      $showLimit = 5; // Number of subcategories to show initially
-                    ?>
-
-                    <?php if($popularSubs->count() > 0): ?>
-                      <div class="tab-content-section">
-                        <h4 class="tab-titles"><?php echo e($category->category_name); ?></h4>
-                        <div class="d-flex flex-column">
-                          <?php $__currentLoopData = $popularSubs->take($showLimit); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <a href="<?php echo e(route('directory.list', ['subcategory' => $sub->id])); ?>">
-                              <?php echo e($sub->sub_category_name); ?>
-
-                            </a>
-                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                          <?php if($popularSubs->count() > $showLimit): ?>
-                            <div class="more-subcategories" style="display:none;">
-                              <?php $__currentLoopData = $popularSubs->slice($showLimit); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <a href="<?php echo e(route('directory.list', ['subcategory' => $sub->id])); ?>">
-                                  <?php echo e($sub->sub_category_name); ?>
-
-                                </a>
-                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </div>
-                            <a href="javascript:void(0);" class="view-more"
-                              onclick="this.previousElementSibling.style.display='block'; this.style.display='none';">
-                              View More
-                            </a>
-                          <?php endif; ?>
-                        </div>
-                      </div>
-                    <?php endif; ?>
-                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </li>
-
-
-        <li class="bb-nav-item">
-          <a href="#" class="bb-nav-link">Directory & Services</a>
-          <div class="bb-dropdown">
-            <div class="bb-tabs">
-              <?php $__currentLoopData = $webDirectoryCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <div class="bb-tab <?php echo e($index == 0 ? 'active' : ''); ?>" data-tab="tab<?php echo e($category->id); ?>">
-                  <?php echo e($category->category_name); ?>
-
-                </div>
-              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </div>
-
-            <div class="bb-tab-content">
-              <?php $__currentLoopData = $webDirectoryCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <div class="bb-tab-pane <?php echo e($index == 0 ? 'active' : ''); ?>" id="tab<?php echo e($category->id); ?>">
-                  <div class="tab-content-top-header">
-                    <div class="tab-content-section">
-                      <h4 class="tab-titles">Sub Categories</h4>
-                      <div class="d-flex flex-column">
-                        <?php $__currentLoopData = $category->subcategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <a href="<?php echo e(route('directory.list', ['subcategory' => $sub->id])); ?>">
-                            <?php echo e($sub->sub_category_name); ?>
-
-                          </a>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                      </div>
-                    </div>
-                    <div class="image-tab">
-                      <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                    </div>
-                  </div>
-                </div>
-              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </div>
-          </div>
-        </li>
-
-
-        <?php if($subCategories->count()): ?>
-          <li class="bb-nav-item">
-            <a href="#" class="bb-nav-link">Exclusive Launch</a>
-            <div class="bb-dropdown">
-              <div class="bb-tabs">
-                <?php $__currentLoopData = $subCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $subCat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  <div class="bb-tab <?php echo e($index == 0 ? 'active' : ''); ?>" data-tab="exclusive-tab<?php echo e($subCat->id); ?>">
-                    <?php echo e($subCat->sub_category_name); ?>
-
-                  </div>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-              </div>
-
-              <div class="bb-tab-content">
-                <?php $__currentLoopData = $subCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $subCat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  <div class="bb-tab-pane <?php echo e($index == 0 ? 'active' : ''); ?>" id="exclusive-tab<?php echo e($subCat->id); ?>">
-                    <div class="tab-content-top-header">
-                      <div class="tab-content-section">
-                        <h4 class="tab-titles">Projects</h4>
-                        <div class="d-flex flex-column">
-                          <?php
-                            // Get all properties in this subcategory
-                            $properties = Properties::where('category_id', $exclusiveCategory->id)
-                              ->where('sub_category_id', $subCat->id)
-                              ->where('approval', 'Approved')
-                              ->where('publish_status', 'Publish')
-                              ->get();
-                          ?>
-
-                          <?php $__empty_1 = true; $__currentLoopData = $properties; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $property): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                            <a href="<?php echo e(route('property.show', $property->id)); ?>">
-                              <?php echo e($property->title); ?>
-
-                            </a>
-                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                            <span class="text-muted">No properties available</span>
-                          <?php endif; ?>
-                        </div>
-                      </div>
-
-                      <div class="tab-content-section">
-                        <h4 class="tab-titles">Budget</h4>
-                        <div class="d-flex flex-column">
-                          <?php $__currentLoopData = $sellBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <a
-                              href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => $subCat->id], $budget['query']))); ?>">
-                              <?php echo e($budget['label']); ?>
-
-                            </a>
-                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </div>
-                      </div>
-
-                      <div class="image-tab">
-                        <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png"
-                          alt="<?php echo e($subCat->sub_category_name); ?>">
-                      </div>
-                    </div>
-                  </div>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-              </div>
-            </div>
-          </li>
-        <?php endif; ?>
-
-      </ul>
-    </nav>
-  </div>
-
-
-  <!-- Offcanvas Menu -->
   <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions"
     aria-labelledby="offcanvasWithBothOptionsLabel">
     <div class="offcanvas-header">
@@ -1506,19 +898,15 @@
                         <ul class="list-unstyled">
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
-                          <li><a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
-                              <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
-                              Dashboard
-                            </a>
-                          </li>
+                          <li><a href="#">Dashboard</a></li>
                           <li><a href="#">Enquiries</a></li>
                         </ul>
                       </div>
                       <div class="menu-section">
                         <h4>Important Links</h4>
                         <ul class="list-unstyled">
-                          <li><a href="<?php echo e(route('front.faq')); ?>">FAQ</a></li>
-                          <li> <a href="<?php echo e(route('front.blog')); ?>">Articles & Blogs</a></li>
+                          <li><a href="#">FAQ</a></li>
+                          <li><a href="#">Articles & Blogs</a></li>
                         </ul>
                       </div>
                       <div class="menu-section">
@@ -1547,19 +935,15 @@
                         <ul class="list-unstyled">
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
-                          <li><a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
-                              <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
-                              Dashboard
-                            </a>
-                          </li>
+                          <li><a href="#">Dashboard</a></li>
                           <li><a href="#">Enquiries</a></li>
                         </ul>
                       </div>
                       <div class="menu-section">
                         <h4>Important Links</h4>
                         <ul class="list-unstyled">
-                          <li><a href="<?php echo e(route('front.faq')); ?>">FAQ</a></li>
-                          <li> <a href="<?php echo e(route('front.blog')); ?>">Articles & Blogs</a></li>
+                          <li><a href="#">FAQ</a></li>
+                          <li><a href="#">Articles & Blogs</a></li>
                         </ul>
                       </div>
                       <div class="menu-section">
@@ -1588,19 +972,15 @@
                         <ul class="list-unstyled">
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
-                          <li><a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
-                              <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
-                              Dashboard
-                            </a>
-                          </li>
+                          <li><a href="#">Dashboard</a></li>
                           <li><a href="#">Enquiries</a></li>
                         </ul>
                       </div>
                       <div class="menu-section">
                         <h4>Important Links</h4>
                         <ul class="list-unstyled">
-                          <li><a href="<?php echo e(route('front.faq')); ?>">FAQ</a></li>
-                          <li> <a href="<?php echo e(route('front.blog')); ?>">Articles & Blogs</a></li>
+                          <li><a href="#">FAQ</a></li>
+                          <li><a href="#">Articles & Blogs</a></li>
                         </ul>
                       </div>
                       <div class="menu-section">
@@ -1628,11 +1008,7 @@
                         <h4>Start Selling</h4>
                         <ul class="list-unstyled">
                           <li><a href="#">List Your Service</a></li>
-                          <li><a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
-                              <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
-                              Dashboard
-                            </a>
-                          </li>
+                          <li><a href="#">Dashboard</a></li>
                           <li><a href="#">Check Enquiries</a></li>
                           <li><a href="#">Join BB Prime</a></li>
                         </ul>
@@ -1640,8 +1016,8 @@
                       <div class="menu-section">
                         <h4>Important Links</h4>
                         <ul class="list-unstyled">
-                          <li><a href="<?php echo e(route('front.faq')); ?>">FAQ</a></li>
-                          <li> <a href="<?php echo e(route('front.blog')); ?>">Articles & Blogs</a></li>
+                          <li><a href="#">FAQ</a></li>
+                          <li><a href="#">Articles & Blogs</a></li>
                         </ul>
                       </div>
                       <div class="menu-section">
@@ -2044,6 +1420,618 @@
       </div>
     </div>
   </div>
+
+
+  <div class="bb-top-menu-header">
+    <nav class="bb-nav">
+      <ul class="bb-nav-list">
+        <li class="bb-nav-item">
+          <a href="#" class="bb-nav-link">For Buyers</a>
+          <div class="bb-dropdown">
+            <div class="bb-tabs">
+              <div class="bb-tab active" data-tab="buyers-tab1">Residentials</div>
+              <div class="bb-tab" data-tab="buyers-tab2">Commercial</div>
+              <div class="bb-tab" data-tab="buyers-tab4">New Launch</div>
+              <div class="bb-tab" data-tab="buyers-tab3">Popular Services</div>
+            </div>
+            <div class="bb-tab-content">
+              <div class="bb-tab-pane active" id="buyers-tab1">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Properties</h4>
+                    <div class="d-flex flex-column">
+                      <?php $__currentLoopData = $sellResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => $subSubcat->id])); ?>">
+                          <?php echo e($subSubcat->sub_sub_category_name); ?>
+
+                        </a>
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                  </div>
+
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Budget</h4>
+                    <div class="d-flex flex-column">
+                      <?php $__currentLoopData = $sellBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a
+                          href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => 34], $budget['query']))); ?>"><?php echo e($budget['label']); ?></a>
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Popular Choices</h4>
+                    <div class="d-flex flex-column">
+                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'user_role' => 'owner'])); ?>">Owner
+                        Properties</a>
+                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'status' => 'verified'])); ?>">Verified
+                        Properties</a>
+                      <a
+                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move'])); ?>">Ready
+                        to
+                        Move</a>
+                      <a
+                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon'])); ?>">Possession
+                        Soon</a>
+                      <a href="#">Immediate Available</a>
+                      <a
+                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])); ?>">Full
+                        Furnished</a>
+                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch'])); ?>">New
+                        Launch</a>
+                    </div>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+
+              <div class="bb-tab-pane" id="buyers-tab2">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Properties</h4>
+                    <div class="d-flex flex-column">
+                      <?php $__currentLoopData = $sellCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => $subSubcat->id])); ?>">
+                          <?php echo e($subSubcat->sub_sub_category_name); ?>
+
+                        </a>
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Budget</h4>
+                    <div class="d-flex flex-column">
+                      <?php $__currentLoopData = $sellBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a
+                          href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => 35], $budget['query']))); ?>"><?php echo e($budget['label']); ?></a>
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Popular Choices</h4>
+
+                    <div class="d-flex flex-column">
+                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'user_role' => 'owner'])); ?>">Owner
+                        Properties</a>
+                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'status' => 'verified'])); ?>">Verified
+                        Properties</a>
+                      <a
+                        href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Ready to Move'])); ?>">Ready
+                        to
+                        Move</a>
+                      <a
+                        href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Possession Soon'])); ?>">Possession
+                        Soon</a>
+                      <a href="#">Immediate Available</a>
+                      <a
+                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])); ?>">Fully
+                        Furnished</a>
+                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'sort' => 'new-launch'])); ?>">New
+                        Launch</a>
+                    </div>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+
+              <div class="bb-tab-pane" id="buyers-tab4">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">New Launch</h4>
+                    <div class="d-flex flex-column">
+                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 34])); ?>">Residential Projects</a>
+                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 35])); ?>">Commercial Projects</a>
+                      <a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => '18,25,27'])); ?>">Land & Plots</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Budget</h4>
+                    <div class="d-flex flex-column">
+                      <?php $__currentLoopData = $sellBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a
+                          href="<?php echo e(route('listing.list', array_merge(['category_id' => 22], $budget['query']))); ?>"><?php echo e($budget['label']); ?></a>
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Popular Choices</h4>
+
+                    <div class="d-flex flex-column">
+                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch'])); ?>">New
+                        Launch</a>
+                      <a
+                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Under Construction'])); ?>">Under
+                        Construction</a>
+                      <a
+                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move'])); ?>">Ready
+                        to
+                        Move</a>
+                      <a
+                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon'])); ?>">Possession
+                        Soon</a>
+                      <a href="#">OC Received</a>
+                      <a href="#">RERA Registered</a>
+                    </div>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+
+              <div class="bb-tab-pane" id="buyers-tab3">
+                <div class="tab-content-top-header">
+
+                  <?php $__currentLoopData = $webDirectoryCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php
+                      // Only take popular subcategories
+                      $popularSubs = $category->subcategories->where('is_popular', 1);
+                      $showLimit = 5; // Number of subcategories to show initially
+                    ?>
+
+                    <?php if($popularSubs->count() > 0): ?>
+                      <div class="tab-content-section">
+                        <h4 class="tab-titles"><?php echo e($category->category_name); ?></h4>
+                        <div class="d-flex flex-column">
+                          <?php $__currentLoopData = $popularSubs->take($showLimit); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <a href="<?php echo e(route('directory.list', ['subcategory' => $sub->id])); ?>">
+                              <?php echo e($sub->sub_category_name); ?>
+
+                            </a>
+                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                          <?php if($popularSubs->count() > $showLimit): ?>
+                            <div class="more-subcategories" style="display:none;">
+                              <?php $__currentLoopData = $popularSubs->slice($showLimit); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <a href="<?php echo e(route('directory.list', ['subcategory' => $sub->id])); ?>">
+                                  <?php echo e($sub->sub_category_name); ?>
+
+                                </a>
+                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </div>
+                            <a href="javascript:void(0);" class="view-more"
+                              onclick="this.previousElementSibling.style.display='block'; this.style.display='none';">
+                              View More
+                            </a>
+                          <?php endif; ?>
+                        </div>
+                      </div>
+                    <?php endif; ?>
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </li>
+
+        <li class="bb-nav-item">
+          <a href="#" class="bb-nav-link">For Sellers</a>
+          <div class="bb-dropdown">
+            <div class="bb-tabs">
+              <div class="bb-tab active" data-tab="sellers-tab1">Owners</div>
+              <div class="bb-tab" data-tab="sellers-tab2">Agents</div>
+              <div class="bb-tab" data-tab="sellers-tab3">Builders</div>
+              <div class="bb-tab" data-tab="sellers-tab4">Service Providers</div>
+            </div>
+            <div class="bb-tab-content">
+              <div class="bb-tab-pane active" id="sellers-tab1">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Services</h4>
+                    <div class="d-flex flex-column">
+                      <a href="<?php echo e(route('create_property')); ?>">Post Property</a>
+                      <a href="#">Join BB Prime</a>
+                      <a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
+                        <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
+                        Dashboard
+                      </a>
+                      <a href="#">Enquiries</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Important Links</h4>
+                    <div class="d-flex flex-column">
+                      <a href="<?php echo e(route('front.faq')); ?>">FAQ</a>
+                      <a href="<?php echo e(route('front.blog')); ?>">Articles & Blogs</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Contact Us</h4>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+              <div class="bb-tab-pane" id="sellers-tab2">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Services</h4>
+                    <div class="d-flex flex-column">
+                      <a href="<?php echo e(route('create_property')); ?>">Post Property</a>
+                      <a href="#">Join BB Prime</a>
+                      <a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
+                        <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
+                        Dashboard
+                      </a>
+
+                      <a href="#">Enquiries</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Important Links</h4>
+                    <div class="d-flex flex-column">
+                      <a href="<?php echo e(route('front.faq')); ?>">FAQ</a>
+                      <a href="<?php echo e(route('front.blog')); ?>">Articles & Blogs</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Contact Us</h4>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+              <div class="bb-tab-pane" id="sellers-tab3">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Services</h4>
+                    <div class="d-flex flex-column">
+                      <a href="<?php echo e(route('create_property')); ?>">Post Property</a>
+                      <a href="#">Join BB Prime</a>
+                      <a href="">Dashboard</a>
+                      <a href="#">Enquiries</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Important Links</h4>
+                    <div class="d-flex flex-column">
+                      <a href="<?php echo e(route('front.faq')); ?>">FAQ</a>
+                      <a href="<?php echo e(route('front.blog')); ?>">Articles & Blogs</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Contact Us</h4>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+              <div class="bb-tab-pane" id="sellers-tab4">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Start Selling</h4>
+                    <div class="d-flex flex-column">
+                      <a href="#">List Your Service</a>
+                      <a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
+                        <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
+                        Dashboard
+                      </a>
+
+                      <a href="#">Check Enquiries</a>
+                      <a href="#">Join BB Prime</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Important Links</h4>
+                    <div class="d-flex flex-column">
+                      <a href="<?php echo e(route('front.faq')); ?>">FAQ</a>
+                      <a href="<?php echo e(route('front.blog')); ?>">Articles & Blogs</a>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Contact Us</h4>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="bb-nav-item">
+          <a href="#" class="bb-nav-link">For Rent</a>
+          <div class="bb-dropdown">
+            <div class="bb-tabs">
+              <div class="bb-tab active" data-tab="rent-tab1">Residential</div>
+              <div class="bb-tab" data-tab="rent-tab2">Commercial</div>
+              <div class="bb-tab" data-tab="rent-tab3">Popular Services</div>
+            </div>
+            <div class="bb-tab-content">
+              <div class="bb-tab-pane active" id="rent-tab1">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Properties</h4>
+                    <div class="d-flex flex-column">
+                      <?php $__currentLoopData = $rentResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => $subSubcat->id])); ?>">
+                          <?php echo e($subSubcat->sub_sub_category_name); ?>
+
+                        </a>
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Budget</h4>
+                    <div class="d-flex flex-column">
+                      <?php $__currentLoopData = $rentBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a
+                          href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => 38], $budget['query']))); ?>"><?php echo e($budget['label']); ?></a>
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Popular Choise</h4>
+                    <div class="d-flex flex-column">
+                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 38, 'user_role' => 'owner'])); ?>">Owner
+                        Properties</a>
+                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 38, 'status' => 'verified'])); ?>">Verified
+                        Properties</a>
+                      <a
+                        href="<?php echo e(route('listing.list', ['sub_category_id' => 38, 'property_status' => 'Ready to Move'])); ?>">Ready
+                        to
+                        Move</a>
+                      <a href="#">Immediate Available</a>
+                      <a
+                        href="<?php echo e(route('listing.list', ['sub_category_id' => 38, 'furnishing_status' => 'Full Furnished'])); ?>">Full
+                        Furnished</a>
+                    </div>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+              <div class="bb-tab-pane" id="rent-tab2">
+                <div class="tab-content-top-header">
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Properties</h4>
+                    <div class="d-flex flex-column">
+                      <?php $__currentLoopData = $rentCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => $subSubcat->id])); ?>">
+                          <?php echo e($subSubcat->sub_sub_category_name); ?>
+
+                        </a>
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Budget</h4>
+
+
+                    <div class="d-flex flex-column">
+                      <?php $__currentLoopData = $rentBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => 37], $budget['query']))); ?>">
+                          <?php echo e($budget['label']); ?>
+
+                        </a>
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
+
+                  </div>
+                  <div class="tab-content-section">
+                    <h4 class="tab-titles">Popular Choise</h4>
+                    <div class="d-flex flex-column">
+                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 37, 'user_role' => 'owner'])); ?>">Owner
+                        Properties</a>
+                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 37, 'status' => 'verified'])); ?>">Verified
+                        Properties</a>
+                      <a
+                        href="<?php echo e(route('listing.list', ['sub_category_id' => 37, 'property_status' => 'Ready to Move'])); ?>">Ready
+                        to
+                        Move</a>
+                      <a href="#">Immediate Available</a>
+                      <a
+                        href="<?php echo e(route('listing.list', ['sub_category_id' => 37, 'furnishing_status' => 'Full Furnished'])); ?>">Full
+                        Furnished</a>
+                    </div>
+                  </div>
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+              <div class="bb-tab-pane" id="rent-tab3">
+                <div class="tab-content-top-header">
+
+                  <?php $__currentLoopData = $webDirectoryCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php
+                      // Only take popular subcategories
+                      $popularSubs = $category->subcategories->where('is_popular', 1);
+                      $showLimit = 5; // Number of subcategories to show initially
+                    ?>
+
+                    <?php if($popularSubs->count() > 0): ?>
+                      <div class="tab-content-section">
+                        <h4 class="tab-titles"><?php echo e($category->category_name); ?></h4>
+                        <div class="d-flex flex-column">
+                          <?php $__currentLoopData = $popularSubs->take($showLimit); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <a href="<?php echo e(route('directory.list', ['subcategory' => $sub->id])); ?>">
+                              <?php echo e($sub->sub_category_name); ?>
+
+                            </a>
+                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                          <?php if($popularSubs->count() > $showLimit): ?>
+                            <div class="more-subcategories" style="display:none;">
+                              <?php $__currentLoopData = $popularSubs->slice($showLimit); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <a href="<?php echo e(route('directory.list', ['subcategory' => $sub->id])); ?>">
+                                  <?php echo e($sub->sub_category_name); ?>
+
+                                </a>
+                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </div>
+                            <a href="javascript:void(0);" class="view-more"
+                              onclick="this.previousElementSibling.style.display='block'; this.style.display='none';">
+                              View More
+                            </a>
+                          <?php endif; ?>
+                        </div>
+                      </div>
+                    <?php endif; ?>
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                  <div class="image-tab">
+                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+
+        <li class="bb-nav-item">
+          <a href="#" class="bb-nav-link">Directory & Services</a>
+          <div class="bb-dropdown">
+            <div class="bb-tabs">
+              <?php $__currentLoopData = $webDirectoryCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="bb-tab <?php echo e($index == 0 ? 'active' : ''); ?>" data-tab="tab<?php echo e($category->id); ?>">
+                  <?php echo e($category->category_name); ?>
+
+                </div>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </div>
+
+            <div class="bb-tab-content">
+              <?php $__currentLoopData = $webDirectoryCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="bb-tab-pane <?php echo e($index == 0 ? 'active' : ''); ?>" id="tab<?php echo e($category->id); ?>">
+                  <div class="tab-content-top-header">
+                    <div class="tab-content-section">
+                      <h4 class="tab-titles">Sub Categories</h4>
+                      <div class="d-flex flex-wrap" style="gap: 20px;">
+                        <?php
+                          $chunks = $category->subcategories->chunk(5); // Split into groups of 5
+                        ?>
+
+                        <?php $__currentLoopData = $chunks->take(3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $chunk): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> 
+                          <div class="d-flex flex-column" style="min-width: 180px;">
+                            <?php $__currentLoopData = $chunk; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                              <a href="<?php echo e(route('directory.list', ['subcategory' => $sub->id])); ?>" class="mb-1">
+                                <?php echo e($sub->sub_category_name); ?>
+
+                              </a>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                          </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                      </div>
+
+                    </div>
+                    <div class="image-tab">
+                      <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                    </div>
+                  </div>
+                </div>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </div>
+          </div>
+        </li>
+
+
+        <?php if($subCategories->count()): ?>
+          <li class="bb-nav-item">
+            <a href="#" class="bb-nav-link">Exclusive Launch</a>
+            <div class="bb-dropdown">
+              <div class="bb-tabs">
+                <?php $__currentLoopData = $subCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $subCat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                  <div class="bb-tab <?php echo e($index == 0 ? 'active' : ''); ?>" data-tab="exclusive-tab<?php echo e($subCat->id); ?>">
+                    <?php echo e($subCat->sub_category_name); ?>
+
+                  </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+              </div>
+
+              <div class="bb-tab-content">
+                <?php $__currentLoopData = $subCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $subCat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                  <div class="bb-tab-pane <?php echo e($index == 0 ? 'active' : ''); ?>" id="exclusive-tab<?php echo e($subCat->id); ?>">
+                    <div class="tab-content-top-header">
+                      <div class="tab-content-section">
+                        <h4 class="tab-titles">Projects</h4>
+                        <div class="d-flex flex-column">
+                          <?php
+                            // Get all properties in this subcategory
+                            $properties = Properties::where('category_id', $exclusiveCategory->id)
+                              ->where('sub_category_id', $subCat->id)
+                              ->where('approval', 'Approved')
+                              ->where('publish_status', 'Publish')
+                              ->get();
+                          ?>
+
+                          <?php $__empty_1 = true; $__currentLoopData = $properties; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $property): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                            <a href="<?php echo e(route('property.show', $property->id)); ?>">
+                              <?php echo e($property->title); ?>
+
+                            </a>
+                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                            <span class="text-muted">No properties available</span>
+                          <?php endif; ?>
+                        </div>
+                      </div>
+
+                      <div class="tab-content-section">
+                        <h4 class="tab-titles">Budget</h4>
+                        <div class="d-flex flex-column">
+                          <?php $__currentLoopData = $sellBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <a
+                              href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => $subCat->id], $budget['query']))); ?>">
+                              <?php echo e($budget['label']); ?>
+
+                            </a>
+                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </div>
+                      </div>
+
+                      <div class="image-tab">
+                        <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png"
+                          alt="<?php echo e($subCat->sub_category_name); ?>">
+                      </div>
+                    </div>
+                  </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+              </div>
+            </div>
+          </li>
+        <?php endif; ?>
+
+      </ul>
+    </nav>
+  </div>
+
+
+  <!-- Offcanvas Menu -->
 
   <!-- Custom CSS -->
 
@@ -2879,16 +2867,6 @@
 <?php echo $__env->make('layouts.front.app_js', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 <script type="text/javascript">
-
-  function openSigninModal() {
-    // Example: if using Bootstrap modal
-    $('#signin').modal('show');
-
-    // Or if using a custom modal system
-    // document.getElementById('signinModal').classList.add('open');
-  }
-
-
   $(document).ready(function () {
     // Fallback to close modal if needed (from previous context)
     $('.close').on('click', function () {

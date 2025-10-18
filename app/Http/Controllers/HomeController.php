@@ -119,16 +119,13 @@ class HomeController extends AppController
 		$query->where('approval', 'Approved')
 			->where('publish_status', 'Publish');
 
-		// Filter by sub_sub_category_id
+		// Filter by sub_sub_category_id (handle multiple selection)
 		if ($request->filled('sub_sub_category_id')) {
-			$query->where('sub_sub_category_id', $request->sub_sub_category_id);
+			$propertyTypes = explode(',', $request->sub_sub_category_id);
+			$query->whereIn('sub_sub_category_id', $propertyTypes);
 		}
 
-		if ($request->filled('sub_sub_category_ids')) {
-			$ids = explode(',', $request->sub_sub_category_ids);
-			$query->whereIn('sub_sub_category_id', $ids);
-		}
-
+		
 		// Filter by sub_category_id
 		if ($request->filled('sub_category_id')) {
 			$query->where('sub_category_id', $request->sub_category_id);

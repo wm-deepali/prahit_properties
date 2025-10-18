@@ -211,7 +211,6 @@
     transform: translateY(-4px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   }
-  
 </style>
 
 @section('content')
@@ -249,147 +248,6 @@
     $popular_cities = App\PopularCity::where('slug', 'city')->get();
 
   @endphp
-  {{--
-  <section class="property-search-filter">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-sm-8">
-          <div class="search-head">
-            <h3>{{ $banner ? $banner->heading : '' }}</h3>
-            <h5>{{ $banner ? $banner->title : '' }}</h5>
-          </div>
-          <div class="search-filters">
-            @php
-            use Illuminate\Support\Facades\Crypt;
-
-            $activeCategory = null;
-            if (request()->has('category')) {
-            try {
-            $activeCategory = Crypt::decrypt(request()->query('category'));
-            } catch (\Exception $e) {
-            $activeCategory = null; // invalid value
-            }
-            }
-            @endphp
-
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-              <li class="nav-item">
-                <a class="nav-link {{ $activeCategory == 22 ? 'active' : '' }}"
-                  href="{{ url('/') }}/{{ Cache::get('location-name') ?? '' }}?category={{ encrypt(22) }}">
-                  Buy
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link {{ $activeCategory == 21 ? 'active' : '' }}"
-                  href="{{ url('/') }}/{{ Cache::get('location-name') ?? '' }}?category={{ encrypt(21) }}">
-                  Rent
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link {{ $activeCategory == 20 ? 'active' : '' }}"
-                  href="{{ url('/') }}/{{ Cache::get('location-name') ?? '' }}?category={{ encrypt(20) }}">
-                  PG / Hostel
-                </a>
-              </li>
-            </ul>
-
-            <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade show active" id="rent" role="tabpanel" aria-labelledby="rent-tab">
-                <div class="search-content-fil">
-                  <form id="search_property" action="{{url('/')}}/search/" name="search_property">
-                    <div class="row no-gutters">
-                      <div class="col-sm-4">
-                        <div class="form-group">
-                          <input type="text" class="text-control" placeholder="Enter Location, Landmark" name="property"
-                            required />
-                        </div>
-                      </div>
-                      <div class="col-sm-3">
-                        <div class="form-group">
-                          <select class="text-control" name="type">
-                            <option value="">Property Type</option>
-                            @if(isset($property_types))
-                            @foreach($property_types as $p => $t)
-                            <option value="{{$t->id}}"> {{$t->type}} </option>
-                            @endforeach
-                            @endif
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-sm-3">
-                        <div class="form-group row no-gutters">
-                          <div class="col-sm-6 col-xs-6">
-                            <select name="min_price" class="text-control" name="min_price" required>
-                              <option data-min="0" value="0">Min</option>
-                              <option data-min="0" value="0">0</option>
-                              <option data-min="10000" value="10000">10 K </option>
-                              <option data-min="20000" value="20000">20 K </option>
-                              <option data-min="30000" value="30000">30 K </option>
-                              <option data-min="40000" value="40000">40 K </option>
-                              <option data-min="50000" value="50000">50 K</option>
-                              <option data-min="100000" value="100000">1 Lakhs</option>
-                              <option data-min="200000" value="200000">2 Lakhs</option>
-                              <option data-min="300000" value="300000">3 Lakhs</option>
-                              <option data-min="500000" value="500000">5 Lakhs</option>
-                              <option data-min="1000000" value="1000000">10 Lakhs</option>
-                              <option data-min="1500000" value="1500000">15 Lakhs</option>
-                              <option data-min="2000000" value="2000000">20 Lakhs</option>
-                              <option data-min="2500000" value="2500000">25 Lakhs</option>
-                              <option data-min="5000000" value="5000000">50 Lakhs</option>
-                              <option data-min="10000000" value="10000000">1 Crore</option>
-                              <option data-min="20000000" value="20000000">2 Crore</option>
-                              <option data-min="30000000" value="30000000">3 Crore</option>
-                              <option data-min="50000000" value="50000000">5 Crore</option>
-                              <option data-min="100000000" value="100000000">10 Crore</option>
-                              <option data-min="500000000" value="500000000">50 Crore</option>
-                              <option data-min="1000000000" value="1000000000">50+ Crore</option>
-                            </select>
-                          </div>
-                          <div class="col-sm-6 col-xs-6">
-                            <select name="max_price" class="text-control" name="max_price" required>
-                              <option data-min="0" value="0">Max</option>
-                              <option data-min="10000" value="10000">10 K </option>
-                              <option data-min="20000" value="20000">20 K </option>
-                              <option data-min="30000" value="30000">30 K </option>
-                              <option data-min="40000" value="40000">40 K </option>
-                              <option data-min="50000" value="50000">50 K</option>
-                              <option data-max="100000" value="100000">1 Lakhs</option>
-                              <option data-min="200000" value="200000">2 Lakhs</option>
-                              <option data-min="300000" value="300000">3 Lakhs</option>
-                              <option data-max="500000" value="500000">5 Lakhs</option>
-                              <option data-max="1000000" value="1000000">10 Lakhs</option>
-                              <option data-max="1500000" value="1500000">15 Lakhs</option>
-                              <option data-max="2000000" value="2000000">20 Lakhs</option>
-                              <option data-max="2500000" value="2500000">25 Lakhs</option>
-                              <option data-max="5000000" value="5000000">50 Lakhs</option>
-                              <option data-max="10000000" value="10000000">1 Crore</option>
-                              <option data-min="20000000" value="20000000">2 Crore</option>
-                              <option data-min="30000000" value="30000000">3 Crore</option>
-                              <option data-max="50000000" value="50000000">5 Crore</option>
-                              <option data-max="100000000" value="100000000">10 Crore</option>
-                              <option data-max="500000000" value="500000000">50 Crore</option>
-                              <option data-min="1000000000" value="1000000000">50+ Crore</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-2">
-                        <div class="form-group">
-                          <button class="btn btn-search" type="submit">Search</button>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="men-prop"> <img src="{{ asset('storage') }}/{{ $banner ? $banner->image : '' }}" class="img-fluid"> </div>
-  </section>
-  --}}
 
   @php
     use App\Helpers\Helper;
@@ -440,24 +298,27 @@
             @endforeach
           </select>
 
-          <select class="newupdateDropdown" id="sub_sub_category_id">
-            <option value="">Property Type</option>
-            @foreach ($buyFilters['types'] as $type)
-              <option value="{{ $type->id }}">{{ $type->sub_sub_category_name }}</option>
-            @endforeach
-          </select>
+          {{-- ✅ Property Type as Checkboxes --}}
+          <div class="newupdateFilterOptions property-type-checkbox-group border rounded p-2"
+            style="max-height:100px; overflow-y:auto; width: 150px;">
+            <label class="fw-bold mb-1">Property Type</label>
+            <div id="sub_sub_category_items">
+              @foreach($buyFilters['types'] as $v)
+                <div class="form-check">
+                  <input class="form-check-input sub-sub-checkbox" type="checkbox" name="sub_sub_category_ids[]"
+                    id="subsub_{{ $v->id }}" value="{{ $v->id }}">
+                  <label class="form-check-label" for="subsub_{{ $v->id }}">
+                    {{ $v->sub_sub_category_name }}
+                  </label>
+                </div>
+              @endforeach
+            </div>
+          </div>
 
           <select class="newupdateDropdown" id="budget">
             <option value="">Budget</option>
             @foreach ($buyFilters['budgets'] as $budget)
               <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-            @endforeach
-          </select>
-
-          <select class="newupdateDropdown" id="property_status">
-            <option value="">Possession</option>
-            @foreach ($buyFilters['possession'] as $pos)
-              <option value="{{ $pos->name }}">{{ $pos->name }}</option>
             @endforeach
           </select>
 
@@ -471,6 +332,7 @@
         <button class="newupdateSearchBtn mt-2">Search</button>
       </div>
 
+
       {{-- RENTAL FILTERS --}}
       <div class="newupdateFilters" data-type="rental" style="display:none;">
         <div class="newupdateFilterOptions">
@@ -481,12 +343,22 @@
             @endforeach
           </select>
 
-          <select class="newupdateDropdown" id="sub_sub_category_id">
-            <option value="">Property Type</option>
-            @foreach ($rentalFilters['types'] as $type)
-              <option value="{{ $type->id }}">{{ $type->sub_sub_category_name }}</option>
-            @endforeach
-          </select>
+          {{-- ✅ Property Type as Checkboxes --}}
+          <div class="newupdateFilterOptions property-type-checkbox-group border rounded p-2"
+            style="max-height:100px; overflow-y:auto; width: 150px;">
+            <label class="fw-bold mb-1">Property Type</label>
+            <div id="sub_sub_category_items">
+              @foreach($buyFilters['types'] as $v)
+                <div class="form-check">
+                  <input class="form-check-input sub-sub-checkbox" type="checkbox" name="sub_sub_category_ids[]"
+                    id="subsub_{{ $v->id }}" value="{{ $v->id }}">
+                  <label class="form-check-label" for="subsub_{{ $v->id }}">
+                    {{ $v->sub_sub_category_name }}
+                  </label>
+                </div>
+              @endforeach
+            </div>
+          </div>
 
           <select class="newupdateDropdown" id="budget">
             <option value="">Budget</option>
@@ -495,12 +367,7 @@
             @endforeach
           </select>
 
-          <select class="newupdateDropdown" id="furnishing_status">
-            <option value="">Furnishing Status</option>
-            @foreach ($rentalFilters['furnishing'] as $item)
-              <option value="{{ $item->name }}">{{ $item->name }}</option>
-            @endforeach
-          </select>
+
 
           <select class="newupdateDropdown" id="user_role">
             <option value="">Posted By</option>
@@ -549,12 +416,12 @@
             @endforeach
           </select>
 
-          <select class="newupdateDropdown" id="sub_sub_category_id">
-            <option value="">Property Type</option>
-            @foreach ($exclusiveFilters['types'] as $type)
-              <option value="{{ $type->id }}">{{ $type->sub_sub_category_name }}</option>
-            @endforeach
-          </select>
+          <!-- <select class="newupdateDropdown" id="sub_sub_category_id"  multiple>
+                              <option value="">Property Type</option>
+                              @foreach ($exclusiveFilters['types'] as $type)
+                                <option value="{{ $type->id }}">{{ $type->sub_sub_category_name }}</option>
+                              @endforeach
+                            </select> -->
 
           <select class="newupdateDropdown" id="budget">
             <option value="">Budget</option>
@@ -563,12 +430,7 @@
             @endforeach
           </select>
 
-          <select class="newupdateDropdown" id="property_status">
-            <option value="">Property Status</option>
-            @foreach ($exclusiveFilters['status'] as $status)
-              <option value="{{ $status->id }}">{{ $status->name }}</option>
-            @endforeach
-          </select>
+
 
           <select class="newupdateDropdown" id="user_role">
             <option value="">Posted By</option>
@@ -582,12 +444,23 @@
 
       <div class="newupdateFilters" data-type="plot-land" style="display:none;">
         <div class="newupdateFilterOptions">
-          <select class="newupdateDropdown" id="sub_sub_category_id">
-            <option value="">Property Type</option>
-            @foreach ($plotFilters['types'] as $type)
-              <option value="{{ $type->id }}">{{ $type->sub_sub_category_name }}</option>
-            @endforeach
-          </select>
+          
+          {{-- ✅ Property Type as Checkboxes --}}
+          <div class="newupdateFilterOptions property-type-checkbox-group border rounded p-2"
+            style="max-height:100px; overflow-y:auto; width: 150px;">
+            <label class="fw-bold mb-1">Property Type</label>
+            <div id="sub_sub_category_items">
+              @foreach($buyFilters['types'] as $v)
+                <div class="form-check">
+                  <input class="form-check-input sub-sub-checkbox" type="checkbox" name="sub_sub_category_ids[]"
+                    id="subsub_{{ $v->id }}" value="{{ $v->id }}">
+                  <label class="form-check-label" for="subsub_{{ $v->id }}">
+                    {{ $v->sub_sub_category_name }}
+                  </label>
+                </div>
+              @endforeach
+            </div>
+          </div>
 
           <select class="newupdateDropdown" id="budget">
             <option value="">Budget</option>
@@ -665,6 +538,23 @@
     $rentResidentil = $rentSubs['residential'];
     $rentCommercial = $rentSubs['commercial'];
 
+    // Filter tabs to only show those with properties
+    $sellResidentilFiltered = $sellResidentil->filter(function ($subSubcat) use ($propertiesSellResidential) {
+      return $propertiesSellResidential->where('sub_sub_category_id', $subSubcat->id)->isNotEmpty();
+    });
+
+    $sellCommercialFiltered = $sellCommercial->filter(function ($subSubcat) use ($propertiesSellCommercial) {
+      return $propertiesSellCommercial->where('sub_sub_category_id', $subSubcat->id)->isNotEmpty();
+    });
+
+    $rentResidentilFiltered = $rentResidentil->filter(function ($subSubcat) use ($propertiesRentResidential) {
+      return $propertiesRentResidential->where('sub_sub_category_id', $subSubcat->id)->isNotEmpty();
+    });
+
+    $rentCommercialFiltered = $rentCommercial->filter(function ($subSubcat) use ($propertiesRentCommercial) {
+      return $propertiesRentCommercial->where('sub_sub_category_id', $subSubcat->id)->isNotEmpty();
+    });
+
     $projects = Helper::getTrendingProjectsByCity($city_id);
     $featured_projects = Helper::getFeaturedProjectsByCity($city_id);
   @endphp
@@ -727,7 +617,7 @@
 
                             <div class="horizontal-line"></div>
                             <p class="small text-muted mb-2 mt-2">
-                              {{ \Illuminate\Support\Str::limit($value->description, 50) }}
+                              {{ \Illuminate\Support\Str::limit($value->description, 85) }}
                             </p>
 
                             <div class="d-flex justify-content-between">
@@ -739,7 +629,7 @@
                             <hr>
                             <div class="d-flex justify-content-between">
                               <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                                {{number_format($value->price, 2)}}</h6>
+                                {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
                               <button class="btn btn-sm btn-primary">Contact Now</button>
                             </div>
                           </div>
@@ -792,13 +682,13 @@
                       href="{{route('property_detail', ['title' => $value->slug])}}">{{$value->title}}</a></h4>
                   <span class="newdesign-proj-category">Villa</span>
                 </div>
-                <span class="newdesign-apart-name"> {{ \Illuminate\Support\Str::limit($value->description, 50) }}</span>
+                <span class="newdesign-apart-name"> {{ \Illuminate\Support\Str::limit($value->description, 100) }}</span>
                 <hr>
                 <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> {{ $value->getCity->name }},
                   {{ $value->getState->name }}</span>
 
                 <div class="newdesign-proj-price">
-                  <span><i class="fas fa-rupee-sign"></i>{{number_format($value->price, 2)}}</span>
+                  <span><i class="fas fa-rupee-sign"></i>{{\App\Helpers\Helper::formatIndianPrice($value->price)}}</span>
                 </div>
                 <div class="d-flex justify-content-between">
                   <span class="newdesign-proj-owner"><strong>Builder:</strong><br>
@@ -830,7 +720,7 @@
       <div class="tabs-wrap mb-4 text-center">
         <div class="tabs-btns ">
           <button type="button" class="property-tab active" data-filter="all">All</button>
-          @foreach ($sellCommercial as $subSubcat)
+          @foreach ($sellCommercialFiltered as $subSubcat)
             <button type="button" class="property-tab" data-filter="{{ $subSubcat->sub_sub_category_name }}">
               {{ $subSubcat->sub_sub_category_name }}</button>
           @endforeach
@@ -881,7 +771,7 @@
 
                         <div class="horizontal-line"></div>
                         <p class="small text-muted mb-2 mt-2">
-                          {{ \Illuminate\Support\Str::limit($value->description, 50) }}
+                          {{ \Illuminate\Support\Str::limit($value->description, 85) }}
                         </p>
 
                         <div class="d-flex justify-content-between">
@@ -893,7 +783,7 @@
                         <hr>
                         <div class="d-flex justify-content-between">
                           <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                            {{number_format($value->price, 2)}}</h6>
+                            {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
                           <button class="btn btn-sm btn-primary">Contact Now</button>
                         </div>
                       </div>
@@ -968,7 +858,7 @@
 
                       <div class="horizontal-line"></div>
 
-                      <p class="directory-description">{{ $list->introduction }}</p>
+                      <p class="directory-description"> {{ \Illuminate\Support\Str::limit($list->introduction, 120) }}</p>
                       <div class="directory-buttons">
                         <div class="d-flex align-items-center">
                           <p class="m-0" style="font-size:14px;"><strong>Member
@@ -1012,7 +902,7 @@
       <div class="tabs-wrap mb-4 text-center">
         <div class="tabs-btns ">
           <button type="button" class="property-tab active" data-filter="all">All</button>
-          @foreach ($sellResidentil as $subSubcat)
+          @foreach ($sellResidentilFiltered as $subSubcat)
             <button type="button" class="property-tab" data-filter="{{ $subSubcat->sub_sub_category_name }}">
               {{ $subSubcat->sub_sub_category_name }}</button>
           @endforeach
@@ -1064,7 +954,7 @@
 
                         <div class="horizontal-line"></div>
                         <p class="small text-muted mb-2 mt-2">
-                          {{ \Illuminate\Support\Str::limit($value->description, 50) }}
+                          {{ \Illuminate\Support\Str::limit($value->description, 85) }}
                         </p>
 
                         <div class="d-flex justify-content-between">
@@ -1076,7 +966,7 @@
                         <hr>
                         <div class="d-flex justify-content-between">
                           <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                            {{number_format($value->price, 2)}}</h6>
+                            {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
                           <button class="btn btn-sm btn-primary">Contact Now</button>
                         </div>
                       </div>
@@ -1111,7 +1001,7 @@
       <div class="tabs-wrap mb-4 text-center">
         <div class="tabs-btns ">
           <button type="button" class="property-tab active" data-filter="all">All</button>
-          @foreach ($rentCommercial as $subSubcat)
+          @foreach ($rentCommercialFiltered as $subSubcat)
             <button type="button" class="property-tab" data-filter="{{ $subSubcat->sub_sub_category_name }}">
               {{ $subSubcat->sub_sub_category_name }}</button>
           @endforeach
@@ -1162,7 +1052,7 @@
 
                         <div class="horizontal-line"></div>
                         <p class="small text-muted mb-2 mt-2">
-                          {{ \Illuminate\Support\Str::limit($value->description, 50) }}
+                          {{ \Illuminate\Support\Str::limit($value->description, 85) }}
                         </p>
 
                         <div class="d-flex justify-content-between">
@@ -1174,7 +1064,7 @@
                         <hr>
                         <div class="d-flex justify-content-between">
                           <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                            {{number_format($value->price, 2)}}</h6>
+                            {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
                           <button class="btn btn-sm btn-primary">Contact Now</button>
                         </div>
                       </div>
@@ -1207,15 +1097,15 @@
 
       <!-- Tabs -->
       <div class="tabs-wrap mb-4 text-center">
-  <div class="tabs-btns">
-    <button type="button" class="property-tab active" data-filter="all">All</button>
-    @foreach ($rentResidentil as $subSubcat)
-      <button type="button" class="property-tab" data-filter="{{ $subSubcat->sub_sub_category_name }}">
-        {{ $subSubcat->sub_sub_category_name }}
-      </button>
-    @endforeach
-  </div>
-</div>
+        <div class="tabs-btns">
+          <button type="button" class="property-tab active" data-filter="all">All</button>
+          @foreach ($rentResidentilFiltered as $subSubcat)
+            <button type="button" class="property-tab" data-filter="{{ $subSubcat->sub_sub_category_name }}">
+              {{ $subSubcat->sub_sub_category_name }}
+            </button>
+          @endforeach
+        </div>
+      </div>
       <div class="row">
         <div class="col-sm-12">
           <div class="swiper directory-slider pt-3 pb-3">
@@ -1261,7 +1151,7 @@
 
                         <div class="horizontal-line"></div>
                         <p class="small text-muted mb-2 mt-2">
-                          {{ \Illuminate\Support\Str::limit($value->description, 50) }}
+                          {{ \Illuminate\Support\Str::limit($value->description, 85) }}
                         </p>
 
                         <div class="d-flex justify-content-between">
@@ -1273,7 +1163,7 @@
                         <hr>
                         <div class="d-flex justify-content-between">
                           <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                            {{number_format($value->price, 2)}}</h6>
+                            {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
                           <button class="btn btn-sm btn-primary">Contact Now</button>
                         </div>
                       </div>
@@ -1298,84 +1188,104 @@
     <div class="new-main-card">
       <!-- LEFT SIDE: Tabs -->
       <div class="new-left-tabs">
-        <button class="new-tab-btn active" data-tab="tab1">Technology</button>
+        <button class="new-tab-btn active" data-tab="tab1">IT / ITES</button>
         <hr />
-        <button class="new-tab-btn" data-tab="tab2">Healthcare</button>
+        <button class="new-tab-btn" data-tab="tab2">Call Center/ BPO</button>
         <hr />
-        <button class="new-tab-btn" data-tab="tab3">Education</button>
+        <button class="new-tab-btn" data-tab="tab3">Corporate Businesses</button>
         <hr />
-        <button class="new-tab-btn" data-tab="tab4">Business</button>
+        <button class="new-tab-btn" data-tab="tab4">Coaching Center</button>
         <hr />
-        <button class="new-tab-btn" data-tab="tab5">Travel</button>
+        <button class="new-tab-btn" data-tab="tab5">Bank</button>
+        <hr />
+        <button class="new-tab-btn" data-tab="tab5">ATM</button>
+        <hr />
+        <button class="new-tab-btn" data-tab="tab5">Pathology</button>
+        <hr />
+        <button class="new-tab-btn" data-tab="tab5">Clinic </button>
+        <hr />
+        <button class="new-tab-btn" data-tab="tab5">Finance</button>
       </div>
 
+      @php
+        $businessTabs = [
+          'IT & Softwares',
+          'call-center',
+          'Corporate Businesses',
+          'coaching-center',
+          'bank',
+          'atm',
+          'pathology',
+          'Clinic',
+          'finance'
+        ];
+      @endphp
       <!-- RIGHT SIDE: Image Sections -->
       <div class="new-right-slider">
-        <div class="new-tab-content active" id="tab1">
-          <div class="new-slider-container">
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=870"
-                alt="AI" />
-              <h3 class="new-image-title">Artificial Intelligence</h3>
-            </div>
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=870"
-                alt="Coding" />
-              <h3 class="new-image-title">Web Development</h3>
-            </div>
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=870"
-                alt="Cybersecurity" />
-              <h3 class="new-image-title">Cybersecurity</h3>
-            </div>
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=870"
-                alt="Tech" />
-              <h3 class="new-image-title">Cloud Computing</h3>
-            </div>
-          </div>
-        </div>
+        @foreach ($businessTabs as $index => $tabName)
+          @php
+            $businessProperties = Helper::getBusinessProperties($city_id ?? null, $tabName);
+          @endphp
+          <div class="new-tab-content {{ $loop->first ? 'active' : '' }}" id="tab{{ $index + 1 }}">
+            <div class="new-slider-container">
+              @forelse ($businessProperties as $value)
+                    <div class="new-slide">
+                      <div class="newdesign-project-main">
+                        <div class="newdesign-image-proj">
+                          <a href="{{ route('property_detail', ['title' => $value->slug]) }}">
+                            <img src="{{ isset($value->PropertyGallery[0]->image_path)
+                ? asset($value->PropertyGallery[0]->image_path)
+                : 'https://static.squareyards.com/resources/images/mumbai/project-image/default.jpg' }}"
+                              class="img-fluid" alt="Property 1">
+                          </a>
+                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                        </div>
+                        <div class="newdesign-info-proj">
+                          <div class="d-flex justify-content-between">
+                            <h4 class="newdesign-proj-name">
+                              <a href="{{ route('property_detail', ['title' => $value->slug]) }}">
+                                {{ $value->title }}
+                              </a>
+                            </h4>
+                            <span class="newdesign-proj-category">
+                              {{ $value->SubSubCategory->sub_sub_category_name ?? 'Commercial' }}
+                            </span>
+                          </div>
+                          <span class="newdesign-apart-name">
+                            {{ \Illuminate\Support\Str::limit($value->description, 100) }}
+                          </span>
+                          <hr>
+                          <span class="newdesign-apart-adress">
+                            <i class="fa-solid fa-location-dot"></i>
+                            {{ $value->getCity->name ?? '' }}, {{ $value->getState->name ?? '' }}
+                          </span>
 
-        <div class="new-tab-content" id="tab2">
-          <div class="new-slider-container">
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1587502536263-9297b6d1a8ef?auto=format&fit=crop&q=80&w=870"
-                alt="Healthcare" />
-              <h3 class="new-image-title">Medical Research</h3>
-            </div>
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1580281657521-95868b0cbec3?auto=format&fit=crop&q=80&w=870"
-                alt="Doctor" />
-              <h3 class="new-image-title">Healthcare Services</h3>
-            </div>
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&q=80&w=870"
-                alt="Hospital" />
-              <h3 class="new-image-title">Modern Hospitals</h3>
-            </div>
-          </div>
-        </div>
+                          <div class="newdesign-proj-price">
+                            <span>
+                              <i class="fas fa-rupee-sign"></i>
+                              {{ \App\Helpers\Helper::formatIndianPrice($value->price) }}
+                            </span>
+                          </div>
 
-        <div class="new-tab-content" id="tab3">
-          <div class="new-slider-container">
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=870"
-                alt="Education" />
-              <h3 class="new-image-title">E-Learning</h3>
-            </div>
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&q=80&w=870"
-                alt="School" />
-              <h3 class="new-image-title">Online Courses</h3>
-            </div>
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&q=80&w=870"
-                alt="Student" />
-              <h3 class="new-image-title">Skill Development</h3>
+                          <div class="d-flex justify-content-between">
+                            <span class="newdesign-proj-owner"><strong>Builder:</strong><br>
+                              {{ $value->getUser->firstname ?? 'Green Homes Ltd.' }}
+                            </span>
+                            <span class="newdesign-proj-owner"><strong>Posted:</strong><br>
+                              {{ optional($value->created_at)->format('d M Y') }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+              @empty
+
+              @endforelse
             </div>
           </div>
-        </div>
+        @endforeach
       </div>
+
     </div>
   </section>
 
@@ -1489,7 +1399,7 @@
 
                           <div class="horizontal-line"></div>
                           <p class="small text-muted mb-2 mt-2">
-                            {{ \Illuminate\Support\Str::limit($value->description, 50) }}
+                            {{ \Illuminate\Support\Str::limit($value->description, 85) }}
                           </p>
 
                           <div class="d-flex justify-content-between">
@@ -1501,7 +1411,7 @@
                           <hr>
                           <div class="d-flex justify-content-between">
                             <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                              {{number_format($value->price, 2)}}</h6>
+                              {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
                             <button class="btn btn-sm btn-primary">Contact Now</button>
                           </div>
                         </div>
@@ -1593,7 +1503,7 @@
 
                         <div class="horizontal-line"></div>
                         <p class="small text-muted mb-2 mt-2">
-                          {{ \Illuminate\Support\Str::limit($value->description, 50) }}
+                          {{ \Illuminate\Support\Str::limit($value->description, 85) }}
                         </p>
 
                         <div class="d-flex justify-content-between">
@@ -1605,7 +1515,7 @@
                         <hr>
                         <div class="d-flex justify-content-between">
                           <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                            {{number_format($value->price, 2)}}</h6>
+                            {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
                           <button class="btn btn-sm btn-primary">Contact Now</button>
                         </div>
                       </div>
@@ -1680,7 +1590,7 @@
 
                           <div class="horizontal-line"></div>
                           <p class="small text-muted mb-2 mt-2">
-                            {{ \Illuminate\Support\Str::limit($value->description, 50) }}
+                            {{ \Illuminate\Support\Str::limit($value->description, 85) }}
                           </p>
 
                           <div class="d-flex justify-content-between">
@@ -1692,7 +1602,7 @@
                           <hr>
                           <div class="d-flex justify-content-between">
                             <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                              {{number_format($value->price, 2)}}</h6>
+                              {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
                             <button class="btn btn-sm btn-primary">Contact Now</button>
                           </div>
                         </div>
@@ -1932,7 +1842,7 @@
     });
 
   </script>
-  
+
   <!-- JS -->
   <script>
     document.querySelectorAll('.property-tab').forEach(tab => {
@@ -2025,11 +1935,12 @@
     });
 
     // Search button click
+    // Search button click
     document.querySelectorAll('.newupdateSearchBtn').forEach(btn => {
       btn.addEventListener('click', function () {
         const activeType = document.querySelector('.newupdateTab.active').getAttribute('data-type');
         const location = document.querySelector('.newupdateSearchBar select').value;
-        const searchQuery = searchInput.value;
+        const searchQuery = document.querySelector('.newupdateSearchInput').value;
 
         const activeFilters = document.querySelector(`.newupdateFilters[data-type="${activeType}"]`);
         const selects = activeFilters.querySelectorAll('select');
@@ -2039,17 +1950,25 @@
         if (location) params.append('city', location);
         if (searchQuery) params.append('search', searchQuery);
 
-        // Loop through all selects for this tab and add non-empty values
+        // Loop through all select dropdowns
         selects.forEach(select => {
           if (select.value) {
             params.append(select.id, select.value);
           }
         });
 
+        // ✅ Collect all checked property type checkboxes
+        const checkedBoxes = activeFilters.querySelectorAll('.sub-sub-checkbox:checked');
+        if (checkedBoxes.length > 0) {
+          const values = Array.from(checkedBoxes).map(cb => cb.value);
+          params.append('sub_sub_category_id', values.join(',')); // comma-separated list
+        }
+
         // Redirect to backend route with all filters
         window.location.href = "{{ route('listing.list') }}" + "?" + params.toString();
       });
     });
+
 
     // Show default buy filters
     document.querySelector(`.newupdateFilters[data-type="buy"]`).style.display = 'block';
@@ -2105,6 +2024,7 @@
         });
       });
     });
+
 
     // Infinite Auto Slide
     setInterval(() => {

@@ -248,7 +248,6 @@
     $popular_cities = App\PopularCity::where('slug', 'city')->get();
 
   ?>
-  
 
   <?php
     use App\Helpers\Helper;
@@ -300,24 +299,28 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </select>
 
-          <select class="newupdateDropdown" id="sub_sub_category_id">
-            <option value="">Property Type</option>
-            <?php $__currentLoopData = $buyFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-              <option value="<?php echo e($type->id); ?>"><?php echo e($type->sub_sub_category_name); ?></option>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-          </select>
+          
+          <div class="newupdateFilterOptions property-type-checkbox-group border rounded p-2"
+            style="max-height:100px; overflow-y:auto; width: 150px;">
+            <label class="fw-bold mb-1">Property Type</label>
+            <div id="sub_sub_category_items">
+              <?php $__currentLoopData = $buyFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="form-check">
+                  <input class="form-check-input sub-sub-checkbox" type="checkbox" name="sub_sub_category_ids[]"
+                    id="subsub_<?php echo e($v->id); ?>" value="<?php echo e($v->id); ?>">
+                  <label class="form-check-label" for="subsub_<?php echo e($v->id); ?>">
+                    <?php echo e($v->sub_sub_category_name); ?>
+
+                  </label>
+                </div>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </div>
+          </div>
 
           <select class="newupdateDropdown" id="budget">
             <option value="">Budget</option>
             <?php $__currentLoopData = $buyFilters['budgets']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
               <option value="<?php echo e($budget['query']); ?>"><?php echo e($budget['label']); ?></option>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-          </select>
-
-          <select class="newupdateDropdown" id="property_status">
-            <option value="">Possession</option>
-            <?php $__currentLoopData = $buyFilters['possession']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pos): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-              <option value="<?php echo e($pos->name); ?>"><?php echo e($pos->name); ?></option>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </select>
 
@@ -331,6 +334,7 @@
         <button class="newupdateSearchBtn mt-2">Search</button>
       </div>
 
+
       
       <div class="newupdateFilters" data-type="rental" style="display:none;">
         <div class="newupdateFilterOptions">
@@ -341,12 +345,23 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </select>
 
-          <select class="newupdateDropdown" id="sub_sub_category_id">
-            <option value="">Property Type</option>
-            <?php $__currentLoopData = $rentalFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-              <option value="<?php echo e($type->id); ?>"><?php echo e($type->sub_sub_category_name); ?></option>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-          </select>
+          
+          <div class="newupdateFilterOptions property-type-checkbox-group border rounded p-2"
+            style="max-height:100px; overflow-y:auto; width: 150px;">
+            <label class="fw-bold mb-1">Property Type</label>
+            <div id="sub_sub_category_items">
+              <?php $__currentLoopData = $buyFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="form-check">
+                  <input class="form-check-input sub-sub-checkbox" type="checkbox" name="sub_sub_category_ids[]"
+                    id="subsub_<?php echo e($v->id); ?>" value="<?php echo e($v->id); ?>">
+                  <label class="form-check-label" for="subsub_<?php echo e($v->id); ?>">
+                    <?php echo e($v->sub_sub_category_name); ?>
+
+                  </label>
+                </div>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </div>
+          </div>
 
           <select class="newupdateDropdown" id="budget">
             <option value="">Budget</option>
@@ -355,12 +370,7 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </select>
 
-          <select class="newupdateDropdown" id="furnishing_status">
-            <option value="">Furnishing Status</option>
-            <?php $__currentLoopData = $rentalFilters['furnishing']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-              <option value="<?php echo e($item->name); ?>"><?php echo e($item->name); ?></option>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-          </select>
+
 
           <select class="newupdateDropdown" id="user_role">
             <option value="">Posted By</option>
@@ -409,12 +419,12 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </select>
 
-          <select class="newupdateDropdown" id="sub_sub_category_id">
-            <option value="">Property Type</option>
-            <?php $__currentLoopData = $exclusiveFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-              <option value="<?php echo e($type->id); ?>"><?php echo e($type->sub_sub_category_name); ?></option>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-          </select>
+          <!-- <select class="newupdateDropdown" id="sub_sub_category_id"  multiple>
+                              <option value="">Property Type</option>
+                              <?php $__currentLoopData = $exclusiveFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($type->id); ?>"><?php echo e($type->sub_sub_category_name); ?></option>
+                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select> -->
 
           <select class="newupdateDropdown" id="budget">
             <option value="">Budget</option>
@@ -423,12 +433,7 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </select>
 
-          <select class="newupdateDropdown" id="property_status">
-            <option value="">Property Status</option>
-            <?php $__currentLoopData = $exclusiveFilters['status']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-              <option value="<?php echo e($status->id); ?>"><?php echo e($status->name); ?></option>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-          </select>
+
 
           <select class="newupdateDropdown" id="user_role">
             <option value="">Posted By</option>
@@ -442,12 +447,24 @@
 
       <div class="newupdateFilters" data-type="plot-land" style="display:none;">
         <div class="newupdateFilterOptions">
-          <select class="newupdateDropdown" id="sub_sub_category_id">
-            <option value="">Property Type</option>
-            <?php $__currentLoopData = $plotFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-              <option value="<?php echo e($type->id); ?>"><?php echo e($type->sub_sub_category_name); ?></option>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-          </select>
+          
+          
+          <div class="newupdateFilterOptions property-type-checkbox-group border rounded p-2"
+            style="max-height:100px; overflow-y:auto; width: 150px;">
+            <label class="fw-bold mb-1">Property Type</label>
+            <div id="sub_sub_category_items">
+              <?php $__currentLoopData = $buyFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="form-check">
+                  <input class="form-check-input sub-sub-checkbox" type="checkbox" name="sub_sub_category_ids[]"
+                    id="subsub_<?php echo e($v->id); ?>" value="<?php echo e($v->id); ?>">
+                  <label class="form-check-label" for="subsub_<?php echo e($v->id); ?>">
+                    <?php echo e($v->sub_sub_category_name); ?>
+
+                  </label>
+                </div>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </div>
+          </div>
 
           <select class="newupdateDropdown" id="budget">
             <option value="">Budget</option>
@@ -525,6 +542,23 @@
     $rentResidentil = $rentSubs['residential'];
     $rentCommercial = $rentSubs['commercial'];
 
+    // Filter tabs to only show those with properties
+    $sellResidentilFiltered = $sellResidentil->filter(function ($subSubcat) use ($propertiesSellResidential) {
+      return $propertiesSellResidential->where('sub_sub_category_id', $subSubcat->id)->isNotEmpty();
+    });
+
+    $sellCommercialFiltered = $sellCommercial->filter(function ($subSubcat) use ($propertiesSellCommercial) {
+      return $propertiesSellCommercial->where('sub_sub_category_id', $subSubcat->id)->isNotEmpty();
+    });
+
+    $rentResidentilFiltered = $rentResidentil->filter(function ($subSubcat) use ($propertiesRentResidential) {
+      return $propertiesRentResidential->where('sub_sub_category_id', $subSubcat->id)->isNotEmpty();
+    });
+
+    $rentCommercialFiltered = $rentCommercial->filter(function ($subSubcat) use ($propertiesRentCommercial) {
+      return $propertiesRentCommercial->where('sub_sub_category_id', $subSubcat->id)->isNotEmpty();
+    });
+
     $projects = Helper::getTrendingProjectsByCity($city_id);
     $featured_projects = Helper::getFeaturedProjectsByCity($city_id);
   ?>
@@ -588,7 +622,7 @@
 
                             <div class="horizontal-line"></div>
                             <p class="small text-muted mb-2 mt-2">
-                              <?php echo e(\Illuminate\Support\Str::limit($value->description, 50)); ?>
+                              <?php echo e(\Illuminate\Support\Str::limit($value->description, 85)); ?>
 
                             </p>
 
@@ -602,7 +636,7 @@
                             <hr>
                             <div class="d-flex justify-content-between">
                               <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                                <?php echo e(number_format($value->price, 2)); ?></h6>
+                                <?php echo e(\App\Helpers\Helper::formatIndianPrice($value->price)); ?></h6>
                               <button class="btn btn-sm btn-primary">Contact Now</button>
                             </div>
                           </div>
@@ -656,13 +690,13 @@
                       href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>"><?php echo e($value->title); ?></a></h4>
                   <span class="newdesign-proj-category">Villa</span>
                 </div>
-                <span class="newdesign-apart-name"> <?php echo e(\Illuminate\Support\Str::limit($value->description, 50)); ?></span>
+                <span class="newdesign-apart-name"> <?php echo e(\Illuminate\Support\Str::limit($value->description, 100)); ?></span>
                 <hr>
                 <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> <?php echo e($value->getCity->name); ?>,
                   <?php echo e($value->getState->name); ?></span>
 
                 <div class="newdesign-proj-price">
-                  <span><i class="fas fa-rupee-sign"></i><?php echo e(number_format($value->price, 2)); ?></span>
+                  <span><i class="fas fa-rupee-sign"></i><?php echo e(\App\Helpers\Helper::formatIndianPrice($value->price)); ?></span>
                 </div>
                 <div class="d-flex justify-content-between">
                   <span class="newdesign-proj-owner"><strong>Builder:</strong><br>
@@ -695,7 +729,7 @@
       <div class="tabs-wrap mb-4 text-center">
         <div class="tabs-btns ">
           <button type="button" class="property-tab active" data-filter="all">All</button>
-          <?php $__currentLoopData = $sellCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <?php $__currentLoopData = $sellCommercialFiltered; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <button type="button" class="property-tab" data-filter="<?php echo e($subSubcat->sub_sub_category_name); ?>">
               <?php echo e($subSubcat->sub_sub_category_name); ?></button>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -747,7 +781,7 @@
 
                         <div class="horizontal-line"></div>
                         <p class="small text-muted mb-2 mt-2">
-                          <?php echo e(\Illuminate\Support\Str::limit($value->description, 50)); ?>
+                          <?php echo e(\Illuminate\Support\Str::limit($value->description, 85)); ?>
 
                         </p>
 
@@ -761,7 +795,7 @@
                         <hr>
                         <div class="d-flex justify-content-between">
                           <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                            <?php echo e(number_format($value->price, 2)); ?></h6>
+                            <?php echo e(\App\Helpers\Helper::formatIndianPrice($value->price)); ?></h6>
                           <button class="btn btn-sm btn-primary">Contact Now</button>
                         </div>
                       </div>
@@ -837,7 +871,7 @@
 
                       <div class="horizontal-line"></div>
 
-                      <p class="directory-description"><?php echo e($list->introduction); ?></p>
+                      <p class="directory-description"> <?php echo e(\Illuminate\Support\Str::limit($list->introduction, 120)); ?></p>
                       <div class="directory-buttons">
                         <div class="d-flex align-items-center">
                           <p class="m-0" style="font-size:14px;"><strong>Member
@@ -882,7 +916,7 @@
       <div class="tabs-wrap mb-4 text-center">
         <div class="tabs-btns ">
           <button type="button" class="property-tab active" data-filter="all">All</button>
-          <?php $__currentLoopData = $sellResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <?php $__currentLoopData = $sellResidentilFiltered; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <button type="button" class="property-tab" data-filter="<?php echo e($subSubcat->sub_sub_category_name); ?>">
               <?php echo e($subSubcat->sub_sub_category_name); ?></button>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -935,7 +969,7 @@
 
                         <div class="horizontal-line"></div>
                         <p class="small text-muted mb-2 mt-2">
-                          <?php echo e(\Illuminate\Support\Str::limit($value->description, 50)); ?>
+                          <?php echo e(\Illuminate\Support\Str::limit($value->description, 85)); ?>
 
                         </p>
 
@@ -949,7 +983,7 @@
                         <hr>
                         <div class="d-flex justify-content-between">
                           <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                            <?php echo e(number_format($value->price, 2)); ?></h6>
+                            <?php echo e(\App\Helpers\Helper::formatIndianPrice($value->price)); ?></h6>
                           <button class="btn btn-sm btn-primary">Contact Now</button>
                         </div>
                       </div>
@@ -985,7 +1019,7 @@
       <div class="tabs-wrap mb-4 text-center">
         <div class="tabs-btns ">
           <button type="button" class="property-tab active" data-filter="all">All</button>
-          <?php $__currentLoopData = $rentCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <?php $__currentLoopData = $rentCommercialFiltered; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <button type="button" class="property-tab" data-filter="<?php echo e($subSubcat->sub_sub_category_name); ?>">
               <?php echo e($subSubcat->sub_sub_category_name); ?></button>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -1037,7 +1071,7 @@
 
                         <div class="horizontal-line"></div>
                         <p class="small text-muted mb-2 mt-2">
-                          <?php echo e(\Illuminate\Support\Str::limit($value->description, 50)); ?>
+                          <?php echo e(\Illuminate\Support\Str::limit($value->description, 85)); ?>
 
                         </p>
 
@@ -1051,7 +1085,7 @@
                         <hr>
                         <div class="d-flex justify-content-between">
                           <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                            <?php echo e(number_format($value->price, 2)); ?></h6>
+                            <?php echo e(\App\Helpers\Helper::formatIndianPrice($value->price)); ?></h6>
                           <button class="btn btn-sm btn-primary">Contact Now</button>
                         </div>
                       </div>
@@ -1087,7 +1121,7 @@
       <div class="tabs-wrap mb-4 text-center">
         <div class="tabs-btns">
           <button type="button" class="property-tab active" data-filter="all">All</button>
-          <?php $__currentLoopData = $rentResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <?php $__currentLoopData = $rentResidentilFiltered; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <button type="button" class="property-tab" data-filter="<?php echo e($subSubcat->sub_sub_category_name); ?>">
               <?php echo e($subSubcat->sub_sub_category_name); ?>
 
@@ -1141,7 +1175,7 @@
 
                         <div class="horizontal-line"></div>
                         <p class="small text-muted mb-2 mt-2">
-                          <?php echo e(\Illuminate\Support\Str::limit($value->description, 50)); ?>
+                          <?php echo e(\Illuminate\Support\Str::limit($value->description, 85)); ?>
 
                         </p>
 
@@ -1155,7 +1189,7 @@
                         <hr>
                         <div class="d-flex justify-content-between">
                           <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                            <?php echo e(number_format($value->price, 2)); ?></h6>
+                            <?php echo e(\App\Helpers\Helper::formatIndianPrice($value->price)); ?></h6>
                           <button class="btn btn-sm btn-primary">Contact Now</button>
                         </div>
                       </div>
@@ -1180,84 +1214,111 @@
     <div class="new-main-card">
       <!-- LEFT SIDE: Tabs -->
       <div class="new-left-tabs">
-        <button class="new-tab-btn active" data-tab="tab1">Technology</button>
+        <button class="new-tab-btn active" data-tab="tab1">IT / ITES</button>
         <hr />
-        <button class="new-tab-btn" data-tab="tab2">Healthcare</button>
+        <button class="new-tab-btn" data-tab="tab2">Call Center/ BPO</button>
         <hr />
-        <button class="new-tab-btn" data-tab="tab3">Education</button>
+        <button class="new-tab-btn" data-tab="tab3">Corporate Businesses</button>
         <hr />
-        <button class="new-tab-btn" data-tab="tab4">Business</button>
+        <button class="new-tab-btn" data-tab="tab4">Coaching Center</button>
         <hr />
-        <button class="new-tab-btn" data-tab="tab5">Travel</button>
+        <button class="new-tab-btn" data-tab="tab5">Bank</button>
+        <hr />
+        <button class="new-tab-btn" data-tab="tab5">ATM</button>
+        <hr />
+        <button class="new-tab-btn" data-tab="tab5">Pathology</button>
+        <hr />
+        <button class="new-tab-btn" data-tab="tab5">Clinic </button>
+        <hr />
+        <button class="new-tab-btn" data-tab="tab5">Finance</button>
       </div>
 
+      <?php
+        $businessTabs = [
+          'IT & Softwares',
+          'call-center',
+          'Corporate Businesses',
+          'coaching-center',
+          'bank',
+          'atm',
+          'pathology',
+          'Clinic',
+          'finance'
+        ];
+      ?>
       <!-- RIGHT SIDE: Image Sections -->
       <div class="new-right-slider">
-        <div class="new-tab-content active" id="tab1">
-          <div class="new-slider-container">
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=870"
-                alt="AI" />
-              <h3 class="new-image-title">Artificial Intelligence</h3>
-            </div>
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=870"
-                alt="Coding" />
-              <h3 class="new-image-title">Web Development</h3>
-            </div>
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=870"
-                alt="Cybersecurity" />
-              <h3 class="new-image-title">Cybersecurity</h3>
-            </div>
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=870"
-                alt="Tech" />
-              <h3 class="new-image-title">Cloud Computing</h3>
-            </div>
-          </div>
-        </div>
+        <?php $__currentLoopData = $businessTabs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $tabName): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <?php
+            $businessProperties = Helper::getBusinessProperties($city_id ?? null, $tabName);
+          ?>
+          <div class="new-tab-content <?php echo e($loop->first ? 'active' : ''); ?>" id="tab<?php echo e($index + 1); ?>">
+            <div class="new-slider-container">
+              <?php $__empty_1 = true; $__currentLoopData = $businessProperties; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <div class="new-slide">
+                      <div class="newdesign-project-main">
+                        <div class="newdesign-image-proj">
+                          <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
+                            <img src="<?php echo e(isset($value->PropertyGallery[0]->image_path)
+                ? asset($value->PropertyGallery[0]->image_path)
+                : 'https://static.squareyards.com/resources/images/mumbai/project-image/default.jpg'); ?>"
+                              class="img-fluid" alt="Property 1">
+                          </a>
+                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                        </div>
+                        <div class="newdesign-info-proj">
+                          <div class="d-flex justify-content-between">
+                            <h4 class="newdesign-proj-name">
+                              <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
+                                <?php echo e($value->title); ?>
 
-        <div class="new-tab-content" id="tab2">
-          <div class="new-slider-container">
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1587502536263-9297b6d1a8ef?auto=format&fit=crop&q=80&w=870"
-                alt="Healthcare" />
-              <h3 class="new-image-title">Medical Research</h3>
-            </div>
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1580281657521-95868b0cbec3?auto=format&fit=crop&q=80&w=870"
-                alt="Doctor" />
-              <h3 class="new-image-title">Healthcare Services</h3>
-            </div>
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&q=80&w=870"
-                alt="Hospital" />
-              <h3 class="new-image-title">Modern Hospitals</h3>
-            </div>
-          </div>
-        </div>
+                              </a>
+                            </h4>
+                            <span class="newdesign-proj-category">
+                              <?php echo e($value->SubSubCategory->sub_sub_category_name ?? 'Commercial'); ?>
 
-        <div class="new-tab-content" id="tab3">
-          <div class="new-slider-container">
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=870"
-                alt="Education" />
-              <h3 class="new-image-title">E-Learning</h3>
-            </div>
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&q=80&w=870"
-                alt="School" />
-              <h3 class="new-image-title">Online Courses</h3>
-            </div>
-            <div class="new-slide">
-              <img src="https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&q=80&w=870"
-                alt="Student" />
-              <h3 class="new-image-title">Skill Development</h3>
+                            </span>
+                          </div>
+                          <span class="newdesign-apart-name">
+                            <?php echo e(\Illuminate\Support\Str::limit($value->description, 100)); ?>
+
+                          </span>
+                          <hr>
+                          <span class="newdesign-apart-adress">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <?php echo e($value->getCity->name ?? ''); ?>, <?php echo e($value->getState->name ?? ''); ?>
+
+                          </span>
+
+                          <div class="newdesign-proj-price">
+                            <span>
+                              <i class="fas fa-rupee-sign"></i>
+                              <?php echo e(\App\Helpers\Helper::formatIndianPrice($value->price)); ?>
+
+                            </span>
+                          </div>
+
+                          <div class="d-flex justify-content-between">
+                            <span class="newdesign-proj-owner"><strong>Builder:</strong><br>
+                              <?php echo e($value->getUser->firstname ?? 'Green Homes Ltd.'); ?>
+
+                            </span>
+                            <span class="newdesign-proj-owner"><strong>Posted:</strong><br>
+                              <?php echo e(optional($value->created_at)->format('d M Y')); ?>
+
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+
+              <?php endif; ?>
             </div>
           </div>
-        </div>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
       </div>
+
     </div>
   </section>
 
@@ -1373,7 +1434,7 @@
 
                           <div class="horizontal-line"></div>
                           <p class="small text-muted mb-2 mt-2">
-                            <?php echo e(\Illuminate\Support\Str::limit($value->description, 50)); ?>
+                            <?php echo e(\Illuminate\Support\Str::limit($value->description, 85)); ?>
 
                           </p>
 
@@ -1387,7 +1448,7 @@
                           <hr>
                           <div class="d-flex justify-content-between">
                             <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                              <?php echo e(number_format($value->price, 2)); ?></h6>
+                              <?php echo e(\App\Helpers\Helper::formatIndianPrice($value->price)); ?></h6>
                             <button class="btn btn-sm btn-primary">Contact Now</button>
                           </div>
                         </div>
@@ -1480,7 +1541,7 @@
 
                         <div class="horizontal-line"></div>
                         <p class="small text-muted mb-2 mt-2">
-                          <?php echo e(\Illuminate\Support\Str::limit($value->description, 50)); ?>
+                          <?php echo e(\Illuminate\Support\Str::limit($value->description, 85)); ?>
 
                         </p>
 
@@ -1494,7 +1555,7 @@
                         <hr>
                         <div class="d-flex justify-content-between">
                           <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                            <?php echo e(number_format($value->price, 2)); ?></h6>
+                            <?php echo e(\App\Helpers\Helper::formatIndianPrice($value->price)); ?></h6>
                           <button class="btn btn-sm btn-primary">Contact Now</button>
                         </div>
                       </div>
@@ -1571,7 +1632,7 @@
 
                           <div class="horizontal-line"></div>
                           <p class="small text-muted mb-2 mt-2">
-                            <?php echo e(\Illuminate\Support\Str::limit($value->description, 50)); ?>
+                            <?php echo e(\Illuminate\Support\Str::limit($value->description, 85)); ?>
 
                           </p>
 
@@ -1585,7 +1646,7 @@
                           <hr>
                           <div class="d-flex justify-content-between">
                             <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                              <?php echo e(number_format($value->price, 2)); ?></h6>
+                              <?php echo e(\App\Helpers\Helper::formatIndianPrice($value->price)); ?></h6>
                             <button class="btn btn-sm btn-primary">Contact Now</button>
                           </div>
                         </div>
@@ -1800,6 +1861,8 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
   <!-- Select2 JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+  <!-- Initialize Select2 -->
   <script>
     $(document).ready(function () {
       $('#citySelect').select2({
@@ -1826,44 +1889,9 @@
       });
     });
 
-
-    $('.newupdateSearchIcon').click(function () {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-          $.ajax({
-            url: '/location/reverse',
-            type: 'GET',
-            data: {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            },
-            dataType: 'json',
-            success: function (city) {
-              if (city && city.id && city.name) {
-                var newOption = new Option(city.name, city.id, true, true);
-                $('#citySelect').append(newOption).trigger('change');
-              } else {
-                alert('City not found');
-              }
-            },
-            error: function () {
-              alert('Failed to detect city from location');
-            }
-          });
-        }, function () {
-          alert('Could not get your location');
-        });
-      } else {
-        alert('Geolocation not supported');
-      }
-
-    });
-
-
   </script>
 
-
-  <!-- Initialize Select2 -->
+  <!-- JS -->
   <script>
     document.querySelectorAll('.property-tab').forEach(tab => {
       tab.addEventListener('click', function () {
@@ -1922,6 +1950,7 @@
   </script>
 
   <script>
+
     const tabs = document.querySelectorAll('.newupdateTab');
     const searchBar = document.querySelector('.newupdateSearchBar');
     const searchInput = document.querySelector('.newupdateSearchInput');
@@ -1954,11 +1983,12 @@
     });
 
     // Search button click
+    // Search button click
     document.querySelectorAll('.newupdateSearchBtn').forEach(btn => {
       btn.addEventListener('click', function () {
         const activeType = document.querySelector('.newupdateTab.active').getAttribute('data-type');
         const location = document.querySelector('.newupdateSearchBar select').value;
-        const searchQuery = searchInput.value;
+        const searchQuery = document.querySelector('.newupdateSearchInput').value;
 
         const activeFilters = document.querySelector(`.newupdateFilters[data-type="${activeType}"]`);
         const selects = activeFilters.querySelectorAll('select');
@@ -1968,17 +1998,25 @@
         if (location) params.append('city', location);
         if (searchQuery) params.append('search', searchQuery);
 
-        // Loop through all selects for this tab and add non-empty values
+        // Loop through all select dropdowns
         selects.forEach(select => {
           if (select.value) {
             params.append(select.id, select.value);
           }
         });
 
+        // ✅ Collect all checked property type checkboxes
+        const checkedBoxes = activeFilters.querySelectorAll('.sub-sub-checkbox:checked');
+        if (checkedBoxes.length > 0) {
+          const values = Array.from(checkedBoxes).map(cb => cb.value);
+          params.append('sub_sub_category_id', values.join(',')); // comma-separated list
+        }
+
         // Redirect to backend route with all filters
         window.location.href = "<?php echo e(route('listing.list')); ?>" + "?" + params.toString();
       });
     });
+
 
     // Show default buy filters
     document.querySelector(`.newupdateFilters[data-type="buy"]`).style.display = 'block';
@@ -2034,6 +2072,7 @@
         });
       });
     });
+
 
     // Infinite Auto Slide
     setInterval(() => {
