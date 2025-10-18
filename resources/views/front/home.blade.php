@@ -609,80 +609,6 @@
     </div>
   </div>
 
-  {{-- JavaScript --}}
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
-  <script>
-
-    $(document).ready(function () {
-      $('#citySelect').select2({
-        placeholder: "Select City",
-        allowClear: true
-      });
-    });
-
-    const tabs = document.querySelectorAll('.newupdateTab');
-    const searchBar = document.querySelector('.newupdateSearchBar');
-    const searchInput = document.querySelector('.newupdateSearchInput');
-    const filterBlocks = document.querySelectorAll('.newupdateFilters');
-
-    // Switch tabs
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-
-        const type = tab.getAttribute('data-type');
-        searchBar.setAttribute('data-type', type);
-
-        filterBlocks.forEach(f => f.style.display = 'none');
-        const activeFilter = document.querySelector(`.newupdateFilters[data-type="${type}"]`);
-        if (activeFilter) activeFilter.style.display = 'block';
-
-        let placeholder = '';
-        switch (type) {
-          case 'buy': placeholder = 'Search by Project, Locality, or Builder'; break;
-          case 'rental': placeholder = 'Search by Location, Apartment, or PG'; break;
-          case 'pg-hostels': placeholder = 'Search by PG Name or Locality'; break;
-          case 'exculsive-launch': placeholder = 'Search by Project or Builder'; break;
-          case 'plot-land': placeholder = 'Search by Area or Plot Type'; break;
-          default: placeholder = 'Search properties...';
-        }
-        searchInput.placeholder = placeholder;
-      });
-    });
-
-    // Search button click
-    document.querySelectorAll('.newupdateSearchBtn').forEach(btn => {
-      btn.addEventListener('click', function () {
-        const activeType = document.querySelector('.newupdateTab.active').getAttribute('data-type');
-        const location = document.querySelector('.newupdateSearchBar select').value;
-        const searchQuery = searchInput.value;
-
-        const activeFilters = document.querySelector(`.newupdateFilters[data-type="${activeType}"]`);
-        const selects = activeFilters.querySelectorAll('select');
-
-        let params = new URLSearchParams();
-        params.append('type', activeType);
-        if (location) params.append('city', location);
-        if (searchQuery) params.append('search', searchQuery);
-
-        // Loop through all selects for this tab and add non-empty values
-        selects.forEach(select => {
-          if (select.value) {
-            params.append(select.id, select.value);
-          }
-        });
-
-        // Redirect to backend route with all filters
-        window.location.href = "{{ route('listing.list') }}" + "?" + params.toString();
-      });
-    });
-
-    // Show default buy filters
-    document.querySelector(`.newupdateFilters[data-type="buy"]`).style.display = 'block';
-  </script>
-
 
   <section class="property-popular-cities">
     <div class="container">
@@ -2031,7 +1957,79 @@
     })();
   </script>
 
+  {{-- JavaScript --}}
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+  <script>
 
+    $(document).ready(function () {
+      $('#citySelect').select2({
+        placeholder: "Select City",
+        allowClear: true
+      });
+    });
+
+    const tabs = document.querySelectorAll('.newupdateTab');
+    const searchBar = document.querySelector('.newupdateSearchBar');
+    const searchInput = document.querySelector('.newupdateSearchInput');
+    const filterBlocks = document.querySelectorAll('.newupdateFilters');
+
+    // Switch tabs
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        const type = tab.getAttribute('data-type');
+        searchBar.setAttribute('data-type', type);
+
+        filterBlocks.forEach(f => f.style.display = 'none');
+        const activeFilter = document.querySelector(`.newupdateFilters[data-type="${type}"]`);
+        if (activeFilter) activeFilter.style.display = 'block';
+
+        let placeholder = '';
+        switch (type) {
+          case 'buy': placeholder = 'Search by Project, Locality, or Builder'; break;
+          case 'rental': placeholder = 'Search by Location, Apartment, or PG'; break;
+          case 'pg-hostels': placeholder = 'Search by PG Name or Locality'; break;
+          case 'exculsive-launch': placeholder = 'Search by Project or Builder'; break;
+          case 'plot-land': placeholder = 'Search by Area or Plot Type'; break;
+          default: placeholder = 'Search properties...';
+        }
+        searchInput.placeholder = placeholder;
+      });
+    });
+
+    // Search button click
+    document.querySelectorAll('.newupdateSearchBtn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const activeType = document.querySelector('.newupdateTab.active').getAttribute('data-type');
+        const location = document.querySelector('.newupdateSearchBar select').value;
+        const searchQuery = searchInput.value;
+
+        const activeFilters = document.querySelector(`.newupdateFilters[data-type="${activeType}"]`);
+        const selects = activeFilters.querySelectorAll('select');
+
+        let params = new URLSearchParams();
+        params.append('type', activeType);
+        if (location) params.append('city', location);
+        if (searchQuery) params.append('search', searchQuery);
+
+        // Loop through all selects for this tab and add non-empty values
+        selects.forEach(select => {
+          if (select.value) {
+            params.append(select.id, select.value);
+          }
+        });
+
+        // Redirect to backend route with all filters
+        window.location.href = "{{ route('listing.list') }}" + "?" + params.toString();
+      });
+    });
+
+    // Show default buy filters
+    document.querySelector(`.newupdateFilters[data-type="buy"]`).style.display = 'block';
+  </script>
 
   <!-- Swiper JS -->
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
