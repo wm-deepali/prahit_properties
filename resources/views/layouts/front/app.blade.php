@@ -608,7 +608,7 @@
         <div class="togle-menu-profile">
           @auth
             <div class="d-flex gap-3 align-items-center">
-               @php
+              @php
                 $avatar = "";
 
                 if (Auth::check()) {
@@ -3153,8 +3153,7 @@
                 default => route('user.see_profile')
               };
             @endphp
-            <a class="bottom-item" data-key="profile" data-bs-toggle="offcanvas" href="#offcanvasExample2"
-          role="button">
+            <a class="bottom-item" data-key="profile" data-bs-toggle="offcanvas" href="#offcanvasExample2" role="button">
           @else
               <a class="bottom-item" data-key="profile" href="#" onclick="event.preventDefault(); openSigninModal();">
             @endauth
@@ -3163,137 +3162,164 @@
                   <path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-5 0-8 2.5-8 5v1h16v-1c0-2.5-3-5-8-5z" />
                 </svg>
               </span>
-              <span class="bottom-badge" >Profile</span>
+              <span class="bottom-badge">Profile</span>
             </a>
 
 
     </div>
   </div>
-  
-           
-         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample2" aria-labelledby="filterMenuLabel"
-        style="width: 320px;">
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title fw-semibold" id="filterMenuLabel">Profile</h5>
-          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
 
-        <div class="offcanvas-body" style="background:#f9f9f9; text-align:left; padding:20px;">
-                    <div class="profile-section mb-3">
-            <div class="profile-image">
-                <div class="pro-user">
-                  @php
+
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample2" aria-labelledby="filterMenuLabel"
+    style="width: 320px;">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title fw-semibold" id="filterMenuLabel">Profile</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body" style="background:#f9f9f9; text-align:left; padding:20px;">
+      @auth
+        <div class="profile-section mb-3">
+          <div class="profile-image">
+            <div class="pro-user">
+              @php
                 $avatar = "";
 
-                if (Auth::check()) {
-                  // User is logged in
-                  if (!empty(Auth::user()->avatar) && file_exists(public_path(Auth::user()->avatar))) {
-                    $avatar = url(Auth::user()->avatar);
-                  } else {
-                    $avatar = 'https://static.99acres.com/universalhp/img/ProfileIcon.shared.png';
-                  }
+                if (!empty(Auth::user()->avatar) && file_exists(public_path(Auth::user()->avatar))) {
+                  $avatar = url(Auth::user()->avatar);
                 } else {
-                  // User is not logged in - show default avatar
                   $avatar = 'https://static.99acres.com/universalhp/img/ProfileIcon.shared.png';
                 }
               @endphp
 
-                <img src="{{$avatar}}" alt="Profile Picture" id="change_avatar" class="img-fluid">
-                <form id="avatar-form" name="avatar-form" enctype="multipart/form-data">
-                  <div class="p-image">
-                      <i class="fas fa-pencil-alt upload-button" id="buttonid"></i>
-                      <input class="file-upload" type="file" id="fileid" name="avatar_file" accept="image/*" onchange="previewImage(this)" style="display: none;">
-                  </div>
-                </form>
+              <img src="{{$avatar}}" alt="Profile Picture" id="change_avatar" class="img-fluid">
+              <form id="avatar-form" name="avatar-form" enctype="multipart/form-data">
+                <div class="p-image">
+                  <i class="fas fa-pencil-alt upload-button" id="buttonid"></i>
+                  <input class="file-upload" type="file" id="fileid" name="avatar_file" accept="image/*"
+                    onchange="previewImage(this)" style="display: none;">
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="user-info d-flex flex-column">
+            <p style="font-weight:600;">{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</p>
+            <p>{{ Auth::user()->email }}
+              @if(Auth::user()->is_verified == 1)
+                <a class="verify-btn-s"><i class="fa fa-check-circle"></i></a>
+              @else
+                <a style="cursor: pointer;" onclick="verifyEmail()" class="verify-btn-s">
+                  <img src="{{ asset('images') }}/verify.png" alt="verified" width="15px;">
+                </a>
+              @endif
+            </p>
+            <p>{{ Auth::user()->mobile_number }}
+              @if(Auth::user()->mobile_verified == 1)
+                <a class="verify-btn-s"><i class="fa fa-check-circle"></i></a>
+              @else
+                <a style="cursor: pointer;" onclick="verifyMobileNumber()" class="verify-btn-s">
+                  <img src="{{ asset('images') }}/verify.png" width="15px;" alt="verified">
+                </a>
+              @endif
+            </p>
+          </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mobile-sidebar">
+          <ul class="list-unstyled">
+            <li class="mb-2">
+              <a href="{{url('user/dashboard')}}"
+                class="d-flex justify-content-between align-items-center sidebar-link active">
+                <span><i class="fas fa-home me-2 text-primary"></i> Dashboard</span>
+              </a>
+            </li>
+
+            <!-- Setting Menu -->
+            <li class="mb-2">
+              <a class="d-flex justify-content-between align-items-center sidebar-link collapsed"
+                data-bs-toggle="collapse" href="#settingMenu" role="button" aria-expanded="false"
+                aria-controls="settingMenu">
+                <span><i class="fas fa-cog me-2 text-warning"></i> Setting</span>
+                <i class="fas fa-chevron-down small"></i>
+              </a>
+              <div class="collapse submenu" id="settingMenu">
+                <ul class="list-unstyled ps-3">
+                  <li><a href="{{url('user/profile')}}" class="submenu-link">Profile</a></li>
+                  <li><a href="{{url('user/change-password')}}" class="submenu-link">Change Password</a></li>
+                  <li><a href="{{url('user/my-activities')}}" class="submenu-link">My Activities</a></li>
+                </ul>
               </div>
-            </div>
-            <div class="user-info d-flex flex-column">
-                <p style="font-weight:600;"> {{Auth::user()->firstname}} {{Auth::user()->lastname}}</p>
-                <p>{{Auth::user()->email}} @if(\Auth::user()->is_verified == 1) <a class="verify-btn-s"><i class="fa fa-check-circle"></i></a> @else <a style="cursor: pointer;" onclick="verifyEmail()" class="verify-btn-s"> <img src="{{ asset('images') }}/verify.png" alt="verified" width="15px;" ></a> @endif</p>
-                <p>{{Auth::user()->mobile_number}} @if(\Auth::user()->mobile_verified == 1) <a class="verify-btn-s"><i class="fa fa-check-circle"></i></a> @else <a style="cursor: pointer;" onclick="verifyMobileNumber()" class="verify-btn-s"> <img src="{{ asset('images') }}/verify.png" width="15px;" alt="verified" ></a> @endif</p>
-                
-            </div>
-            
-        </div>
+            </li>
 
-  <!-- Sidebar Menu -->
-  <nav class="mobile-sidebar">
-    <ul class="list-unstyled">
+            <!-- Property Menu -->
+            <li class="mb-2">
+              <a class="d-flex justify-content-between align-items-center sidebar-link collapsed"
+                data-bs-toggle="collapse" href="#propertyMenu" role="button" aria-expanded="false"
+                aria-controls="propertyMenu">
+                <span><i class="fas fa-building me-2 text-success"></i> Property</span>
+                <i class="fas fa-chevron-down small"></i>
+              </a>
+              <div class="collapse submenu" id="propertyMenu">
+                <ul class="list-unstyled ps-3">
+                  <li><a href="{{url('user/properties')}}" class="submenu-link">My Properties</a></li>
+                  <li><a href="{{url('user/all-inquries')}}" class="submenu-link">All Inquiries</a></li>
+                  <li><a href="{{url('user/my-wishlist')}}" class="submenu-link">My Wishlist</a></li>
+                </ul>
+              </div>
+            </li>
 
-      <li class="mb-2">
-        <a href="{{url('user/dashboard')}}" class="d-flex justify-content-between align-items-center sidebar-link active">
-          <span><i class="fas fa-home me-2 text-primary"></i> Dashboard</span>
-        </a>
-      </li>
+            <!-- Price & Subscriptions Menu -->
+            <li class="mb-2">
+              <a class="d-flex justify-content-between align-items-center sidebar-link collapsed"
+                data-bs-toggle="collapse" href="#priceMenu" role="button" aria-expanded="false" aria-controls="priceMenu">
+                <span><i class="fas fa-tags me-2 text-info"></i> Price & Subscriptions</span>
+                <i class="fas fa-chevron-down small"></i>
+              </a>
+              <div class="collapse submenu" id="priceMenu">
+                <ul class="list-unstyled ps-3">
+                  <li><a href="{{url('user/current-subscriptions')}}" class="submenu-link">Current Subscriptions</a></li>
+                  <li><a href="{{url('user/payments-invoice')}}" class="submenu-link">Payments & Invoice</a></li>
+                  <li><a href="{{url('user/pricing')}}" class="submenu-link">Pricing</a></li>
+                </ul>
+              </div>
+            </li>
 
-      <!-- Setting Menu -->
-      <li class="mb-2">
-        <a class="d-flex justify-content-between align-items-center sidebar-link collapsed" data-bs-toggle="collapse"
-          href="#settingMenu" role="button" aria-expanded="false" aria-controls="settingMenu">
-          <span><i class="fas fa-cog me-2 text-warning"></i> Setting</span>
-          <i class="fas fa-chevron-down small"></i>
-        </a>
-        <div class="collapse submenu" id="settingMenu">
-          <ul class="list-unstyled ps-3">
-            <li><a href="{{url('user/profile')}}" class="submenu-link">Profile</a></li>
-            <li><a href="{{url('user/change-password')}}" class="submenu-link">Change Password</a></li>
-            <li><a href="{{url('user/my-activities')}}" class="submenu-link">My Activities</a></li>
+            <!-- Logout -->
+            <li class="mt-3" style="width:100%;">
+              <a href="#" class="d-flex justify-content-between align-items-center sidebar-link text-danger"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="width:100%;">
+                <div><i class="fas fa-sign-out-alt me-2"></i> Logout</div>
+              </a>
+              <form id="logout-form" action="{{ url('user/logout') }}" method="POST" style="display: none;">
+                {{ csrf_field() }}
+              </form>
+            </li>
           </ul>
+        </nav>
+      @else
+        <!-- Guest View - Show Login Prompt -->
+        <div class="text-center py-5">
+          <img src="https://static.99acres.com/universalhp/img/ProfileIcon.shared.png" alt="Profile"
+            style="width: 80px; opacity: 0.5; margin-bottom: 20px;">
+          <h5>Please Login</h5>
+          <p class="text-muted">Login to access your dashboard and manage properties</p>
+          <a href="{{ route('login') }}" class="btn btn-primary mt-3">
+            <i class="fas fa-sign-in-alt me-2"></i> Login
+          </a>
+          <a href="{{ route('register') }}" class="btn btn-outline-secondary mt-2">
+            <i class="fas fa-user-plus me-2"></i> Register
+          </a>
         </div>
-      </li>
-
-      <!-- Property Menu -->
-      <li class="mb-2">
-        <a class="d-flex justify-content-between align-items-center sidebar-link collapsed" data-bs-toggle="collapse"
-          href="#propertyMenu" role="button" aria-expanded="false" aria-controls="propertyMenu">
-          <span><i class="fas fa-building me-2 text-success"></i> Property</span>
-          <i class="fas fa-chevron-down small"></i>
-        </a>
-        <div class="collapse submenu" id="propertyMenu">
-          <ul class="list-unstyled ps-3">
-            <li><a href="{{url('user/properties')}}" class="submenu-link">My Properties</a></li>
-            <li><a href="{{url('user/all-inquries')}}" class="submenu-link">All Inquiries</a></li>
-            <li><a href="{{url('user/my-wishlist')}}" class="submenu-link">My Wishlist</a></li>
-          </ul>
-        </div>
-      </li>
-
-      <!-- Price & Subscriptions Menu -->
-      <li class="mb-2">
-        <a class="d-flex justify-content-between align-items-center sidebar-link collapsed" data-bs-toggle="collapse"
-          href="#priceMenu" role="button" aria-expanded="false" aria-controls="priceMenu">
-          <span><i class="fas fa-tags me-2 text-info"></i> Price & Subscriptions</span>
-          <i class="fas fa-chevron-down small"></i>
-        </a>
-        <div class="collapse submenu" id="priceMenu">
-          <ul class="list-unstyled ps-3">
-            <li><a href="{{url('user/current-subscriptions')}}" class="submenu-link">Current Subscriptions</a></li>
-            <li><a href="{{url('user/payments-invoice')}}" class="submenu-link">Payments & Invoice</a></li>
-            <li><a href="{{url('user/pricing')}}" class="submenu-link">Pricing</a></li>
-          </ul>
-        </div>
-      </li>
-
-      <!-- Logout -->
-      <li class="mt-3" style="width:100%;">
-        <a href="#" class="d-flex justify-content-between align-items-center sidebar-link text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="width:100%;">
-            <div><i class="fas fa-sign-out-alt me-2"></i> Logout</div>
-          
-        </a>
-        <form id="logout-form" action="{{ url('user/logout') }}" method="POST" style="display: none;">
-          {{ csrf_field() }}
-        </form>
-      </li>
-    </ul>
-  </nav>
-
-</div>
+      @endauth
+    </div>
 
 
 
 
 
-      </div>
+
+  </div>
 
   <footer>
     <div class="footer-top">

@@ -4247,14 +4247,48 @@ footer .footer-bottom {
   object-fit: cover;
   /*border-radius: 12px;*/
 }
+.mobile-sign{
+    display:none !important;
+}
+.mobile-share{
+    gap:10px;
+}
+.breadcrumb-section nav {
+    float: left;
+    line-height: 23px;
+}
+.sidebar-section {
+   display:none;
+}
+.breadcrumb-section{
+    display:none;
+}
+.sidebar-menu{
+    display:none;
+}
+.owner-section {
+    padding: 20px 0;
+    background: #F6F8F9;
+}
+.profile-section{
+    width:100%;
+    border:1px solid gray;
+}
+.pro-user{
+     border:1px solid #80808014;
+}
 
+}
+.icon-button{
+    width:50px;
+    height:40px;
 }
 .ver-line{
       width:1px;
        height:25px;
       background:gray;
   }
-/* Desktop: Center buttons if needed */
+
 @media (min-width: 576px) {
   .tabs-btns {
     justify-content: center; /* Center buttons on larger screens */

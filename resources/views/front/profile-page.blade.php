@@ -411,6 +411,32 @@
                 margin-top: 20px;
             }
         }
+        
+        .info-btn {
+    flex: 1;
+    min-width: 200px;
+    background: #f3f7ff;
+    border: 1px solid #d9e4ff;
+    border-radius: 10px;
+    padding: 12px 15px;
+    text-align: center;
+    font-size: 15px;
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    margin-right:10px;
+  }
+
+  .info-btn:hover {
+    background: #e7f0ff;
+    transform: translateY(-2px);
+  }
+
+  @media(max-width: 768px) {
+    .info-btn {
+      flex: 100%;
+    }
+  }
     </style>
 
     <section class="profile-section1" style="100%">
@@ -427,8 +453,21 @@
                                 <div class="profile-name-info">
                                     <h2 class="m-0">Raju Kumar</h2>
                                     <p class="m-0"><strong>Gupta Properties</strong></p>
-                                    <p class="m-0">Operating since: 2015</p>
+                                    <!--<p class="m-0">Operating since: 2015</p>-->
                                 </div>
+                                <div class="rera-section my-4">
+  <div class="d-flex flex-wrap justify-content-between gap-3">
+    <button class="info-btn">
+      <strong>RERA Number:</strong> UP-RERA-12345
+    </button>
+    <button class="info-btn">
+      <strong>Operating Since:</strong> 2015
+    </button>
+    <button class="info-btn">
+      <strong>Membership:</strong> Paid
+    </button>
+  </div>
+</div>
                                 <div class="hori-line">
                                     <p><strong>22</strong><br>Properties For Sale</p>
                                     <div class="line"></div>
@@ -479,25 +518,25 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="service-item">
-                                    <h5><i class="fas fa-home me-2 text-primary"></i>Residential Properties</h5>
+                                    <h5>Residential Properties</h5>
                                     <p>Apartments, Villas, Independent Houses</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="service-item">
-                                    <h5><i class="fas fa-building me-2 text-success"></i>Commercial Properties</h5>
+                                    <h5>Commercial Properties</h5>
                                     <p>Offices, Shops, Warehouses</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="service-item">
-                                    <h5><i class="fas fa-handshake me-2 text-info"></i>Property Valuation</h5>
+                                    <h5>Property Valuation</h5>
                                     <p>Free market value assessment</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="service-item">
-                                    <h5><i class="fas fa-file-contract me-2 text-warning"></i>Legal Assistance</h5>
+                                    <h5>Legal Assistance</h5>
                                     <p>Documentation & RERA compliance</p>
                                 </div>
                             </div>
@@ -601,8 +640,15 @@
                                 <div class="contact-card">
                                     <h4 class="mb-3">Contact Information</h4>
                                     <div class="mb-3">
+                                        <div class="d-flex gap-2" >
+                                            <div style="white-space:nowrap;">
                                         <i class="fas fa-map-marker-alt me-2 text-primary"></i>
-                                        <strong>Address:</strong> 123 Business Park, Sector 18, Noida - 201301
+                                        <strong>Address:</strong> 
+                                        </div>
+                                        
+                                        
+                                        <div>123 Business Park, Sector 18, Noida - 201301</div>
+                                        </div>
                                     </div>
                                     <div class="mb-3">
                                         <i class="fas fa-phone me-2 text-success"></i>
@@ -612,6 +658,7 @@
                                         <i class="fas fa-envelope me-2 text-info"></i>
                                         <strong>Email:</strong> john@doerealtysolutions.com
                                     </div>
+                                    <hr>
                                     <div class="mb-4">
                                         <h5 class="mb-2">Working Hours</h5>
                                         <div class="timing-item">
@@ -627,12 +674,29 @@
                                             <span>Closed</span>
                                         </div>
                                     </div>
-                                    <a href="#" class="btn btn-success w-100 mb-2">
-                                        <i class="fas fa-phone me-2"></i>Call Now
-                                    </a>
-                                    <a href="#" class="btn btn-outline-primary w-100">
-                                        <i class="fas fa-envelope me-2"></i>Send Message
-                                    </a>
+                                   <div class="contact-now-section d-flex align-items-center my-4 p-3" style="background:#f8f9fa; gap:10px; border-radius:10px;">
+  <h5 class="" style="white-space:nowrap;">Connect <i class="fa-solid fa-hand-point-right" style="color:orange;"></i> </h5>
+  <div class="row g-2" style="gap:15px;padding:0px 15px;">
+    <div class="icon-button">
+      <a href="tel:+919451591515" class="btn btn-success w-100">
+        <i class="fas fa-phone me-2"></i>
+      </a>
+    </div>
+    <div class="icon-button">
+      <a href="https://wa.me/919451591515" target="_blank" class="btn btn-success w-100" style="background:#25D366; border-color:#25D366;">
+        <i class="fab fa-whatsapp me-2"></i>
+      </a>
+    </div>
+    <div class="icon-button">
+      <a href="mailto:example@email.com" class="btn btn-outline-primary w-100">
+        <i class="fas fa-envelope me-2"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+
                                 </div>
                             </div>
 
@@ -641,6 +705,17 @@
                                     <h4 class="mb-4">Leave a Review</h4>
                                     <form>
                                         <div class="mb-3">
+                                            <!--<label class="form-label">Rating</label>-->
+                                            <div class="star-rating mb-2">
+                                                <i class="far fa-star" data-rating="1" style="font-size:30px;color:orange;"></i>
+                                                <i class="far fa-star" data-rating="2" style="font-size:30px;color:orange;"></i>
+                                                <i class="far fa-star" data-rating="3" style="font-size:30px;color:orange;"></i>
+                                                <i class="far fa-star" data-rating="4" style="font-size:30px;color:orange;"></i>
+                                                <i class="far fa-star" data-rating="5" style="font-size:30px;color:orange;"></i>
+                                            </div>
+                                            <input type="hidden" name="rating" id="rating">
+                                        </div>
+                                        <div class="mb-3">
                                             <label class="form-label">Your Name</label>
                                             <input type="text" class="form-control" placeholder="Enter your name">
                                         </div>
@@ -648,17 +723,7 @@
                                             <label class="form-label">Email</label>
                                             <input type="email" class="form-control" placeholder="Enter your email">
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Rating</label>
-                                            <div class="star-rating mb-2">
-                                                <i class="far fa-star" data-rating="1"></i>
-                                                <i class="far fa-star" data-rating="2"></i>
-                                                <i class="far fa-star" data-rating="3"></i>
-                                                <i class="far fa-star" data-rating="4"></i>
-                                                <i class="far fa-star" data-rating="5"></i>
-                                            </div>
-                                            <input type="hidden" name="rating" id="rating">
-                                        </div>
+                                        
                                         <div class="mb-3">
                                             <label class="form-label">Your Review</label>
                                             <textarea class="form-control" rows="4" placeholder="Share your experience..."></textarea>
@@ -781,4 +846,5 @@
             );
         });
     </script>
+    
 @endsection
