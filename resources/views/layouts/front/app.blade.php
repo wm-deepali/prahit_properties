@@ -57,8 +57,10 @@
 
     .bb-nav-list {
       display: flex;
+      align-items: center;
+
       list-style: none;
-      gap: 20px;
+      gap: 10px;
       padding: 10px 0;
       margin-bottom: 0px;
     }
@@ -141,10 +143,16 @@
     /* ======= Left Tabs ======= */
     .bb-tabs {
       width: 190px;
+      height: 350;
+      overflow-y: scroll;
       border-right: 1px solid #eee;
       background: #fafafa;
       display: flex;
       flex-direction: column;
+    }
+
+    .bb-tabs::-webkit-scrollbar {
+      display: none;
     }
 
     .bb-tab {
@@ -457,6 +465,112 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23007bff'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
       transform: rotate(-180deg);
     }
+
+    .bottom-wrap {
+      position: fixed;
+      bottom: 0px;
+      width: min(560px, 100%);
+      display: flex;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .bottom-pill {
+      width: 100%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(250, 253, 255, 0.98));
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+
+      /*border-radius: 18px;*/
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 18px;
+      gap: 6px;
+      position: relative;
+      border: 1px solid rgba(20, 40, 60, 0.03);
+      backdrop-filter: blur(4px);
+    }
+
+    .bottom-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 6px;
+      border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+      color: var(--muted);
+      text-decoration: none;
+      transition: all .18s ease;
+      justify-content: center;
+      flex-direction: column;
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .bottom-item .bottom-icon {
+      width: 20px;
+      height: 20px;
+      display: inline-block;
+      margin-bottom: 4px;
+      opacity: .95;
+    }
+
+    .bottom-item.bottom-active {
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .bottom-plus-button {
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      /*background: linear-gradient(180deg, var(--accent), #0f63b8);*/
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 22px rgba(25, 118, 210, 0.22);
+      border: 3px solid #fff;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    .bottom-plus-button svg {
+      width: 20px;
+      height: 20px;
+      fill: #000000;
+    }
+
+    .bottom-item .bottom-badge {
+      display: block;
+      font-size: 11px;
+      margin-top: -2px;
+    }
+
+    @media (max-width: 420px) {
+      .bottom-item {
+        font-size: 11px;
+        padding: 6px 4px;
+      }
+
+      .bottom-pill {
+        padding: 8px 8px;
+        border-radius: 14px;
+      }
+
+      .bottom-plus-button {
+        width: 40px;
+        height: 40px;
+        top: -20px;
+      }
+    }
   </style>
 
 </head>
@@ -465,18 +579,157 @@
   <!-- Include jQuery and Bootstrap JS if not already included -->
 
   <div class="mobile-view">
-    <div class="d-flex justify-content-between align-item-center p-2">
-      <div class="d-flex align-items-center">
+    <div class="d-flex justify-content-between align-items-center p-2">
+      <div class="d-flex align-items-center gap-2">
+        <h3 class="m-0 d-flex align-items-center" data-bs-toggle="offcanvas" href="#offcanvasExample1" role="button"><i
+            class="fa-solid fa-bars" style="font-size: 22px;"></i></h3>
         <a class="navbar-brand me-3" href="{{ url('/') }}">
-          <img src="{{ asset('images/logoicon.png') }}" alt="Logo" style="height:55px;">
+          <img src="{{ asset('images/logoicon.png') }}" alt="Logo" style="height:40px;">
         </a>
       </div>
 
-      <h3 class="m-0 d-flex align-items-center" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
-        aria-controls="offcanvasWithBothOptions"><i class="fa-solid fa-bars"></i></h3>
+      <a href="{{ route('create_property') }}" class="btn  fw-semibold px-3 py-1 rounded-3"
+        style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;">
+        <i class="fas fa-pencil-alt me-1"></i> Post Property <span class="badge bg-warning text-dark ms-1">Free</span>
+      </a>
+
+
     </div>
 
 
+  </div>
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample1" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasExampleLabel"></h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body" style="background:#f9f9f9;">
+      <div class="toggle-menu-mobile">
+        <div class="togle-menu-profile">
+          @auth
+            <div class="d-flex gap-3 align-items-center">
+               @php
+                $avatar = "";
+
+                if (Auth::check()) {
+                  // User is logged in
+                  if (!empty(Auth::user()->avatar) && file_exists(public_path(Auth::user()->avatar))) {
+                    $avatar = url(Auth::user()->avatar);
+                  } else {
+                    $avatar = 'https://static.99acres.com/universalhp/img/ProfileIcon.shared.png';
+                  }
+                } else {
+                  // User is not logged in - show default avatar
+                  $avatar = 'https://static.99acres.com/universalhp/img/ProfileIcon.shared.png';
+                }
+              @endphp
+
+              <img src="{{ $avatar }}" alt="">
+              <div class=" profile-content">
+                <h4 class="m-0">Welcome</h4>
+                <h6 class="m-0">{{Auth::user()->firstname}} {{Auth::user()->lastname}}</h6>
+                @if(\Auth::user()->role == 'owner')
+                  <a href="{{  route('user.see_profile') }}">
+                    <p class="m-0">Manage Profile</p>
+                  </a>
+                @elseif(\Auth::user()->role == 'builder')
+                  <a href="{{  route('builder.seeBuilderProfile') }}">
+                    <p class="m-0">Manage Profile</p>
+                  </a>
+                @elseif(\Auth::user()->role == 'agent')
+                  <a href="{{  route('agent.seeAgentProfile') }}">
+                    <p class="m-0">Manage Profile</p>
+                  </a>
+                @endif
+              </div>
+            </div>
+          @endauth
+
+          @guest
+            <a href="#" class="btn btn-outline-dark fw-semibold" data-bs-toggle="modal" data-bs-target="#signin">
+              <i class="far fa-user me-1"></i> Login / Signup
+            </a>
+          @endguest
+        </div>
+
+        <div class="post-property-card" @if(!Auth::check()) onclick="openSigninModal()" style="cursor:pointer;" @else
+        onclick="window.location='{{ route('create_property') }}'" @endif>
+          <h3>
+            Post Property
+            <br><span>Sell/ Rent faster with Bhawan Bhoomi</span>
+          </h3>
+          <img src="{{ asset('images/house1.png') }}" alt="">
+        </div>
+
+        <div class="post-property-card" @if(!Auth::check()) onclick="openSigninModal()" style="cursor:pointer;" @else
+        onclick="window.location='{{ route('directory.list') }}'" @endif>
+          <h3>
+            Web Directory
+            <br><span>Sell/ Rent faster with Bhawan Bhoomi</span>
+          </h3>
+          <img src="{{ asset('images/directory.png') }}" alt="">
+        </div>
+
+        <div class="recent-activity">
+          <a href="javascript:void(0)" data-bs-toggle="modal" onclick="viewMoreCities()"
+            style="color:black;width:100%;">
+            <div class="rec-act1">
+              <h2 class="m-0"><i class="fa-solid fa-location-dot"></i> Popular Locations</h2>
+              <img src="{{ asset('images/arrow.png') }}" alt="" width="30px;">
+
+
+
+            </div>
+          </a>
+
+
+        </div>
+
+        <div class="post-property-card">
+          <h3>Search Properties
+            <br><span>Sell/ Rent faster with Bhawan Bhoomi</span>
+          </h3>
+          <img src="{{ asset('images/assets.png') }}" alt="">
+
+        </div>
+        <h6 class="mt-3">Recent Activity</h6>
+        <div class="recent-activity">
+
+          <div class="rec-act">
+            <h2 class="m-0"><i class="fa-solid fa-sort"></i></h2>
+            <p class="m-0">Shortlisted</p>
+
+          </div>
+          <div class="recent-activity-line">
+
+          </div>
+          <div class="rec-act">
+            <h2 class="m-0"><i class="fa-solid fa-eye"></i></h2>
+            <p class="m-0">Viewed</p>
+          </div>
+
+        </div>
+        <div class="recent-activity">
+
+          <div class="rec-act" style="width:100%;overflow:hidden;border-radius: 7px;">
+            <h2 class="m-0"><i class="fa-solid fa-phone-volume"></i></h2>
+            <p class="m-0">Contacted</p>
+
+          </div>
+
+
+        </div>
+
+        <div class="post-property-card">
+          <h3>For Support
+            <br><span>Email, Contact number and WhatsApp Number</span>
+          </h3>
+          <img src="{{ asset('images/technical-support.png') }}" alt="">
+
+        </div>
+
+      </div>
+    </div>
   </div>
 
 
@@ -624,6 +877,9 @@
   </header>
 
 
+
+
+
   @php
     use App\Helpers\Helper;
     $sellSubs = Helper::getSubSubcategoriesByCategoryName('Sell');
@@ -664,799 +920,12 @@
 
   @endphp
 
-  <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions"
-    aria-labelledby="offcanvasWithBothOptionsLabel">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Menu</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body p-0">
-      <div class="accordion" id="mobileMenuAccordion">
-        <!-- For Buyers -->
-        <div class="accordion-item border-0">
-          <h2 class="accordion-header" id="buyersHeading">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#buyersCollapse"
-              aria-expanded="true" aria-controls="buyersCollapse">
-              For Buyers
-            </button>
-          </h2>
-          <div id="buyersCollapse" class="accordion-collapse collapse show" aria-labelledby="buyersHeading"
-            data-bs-parent="#mobileMenuAccordion">
-            <div class="accordion-body p-0">
-              <div class="accordion" id="buyersSubAccordion">
-                <!-- Residential -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="buyersResidentialHeading">
-                    <button class="accordion-button sub-accordion" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#buyersResidentialCollapse" aria-expanded="true"
-                      aria-controls="buyersResidentialCollapse">
-                      Residential
-                    </button>
-                  </h3>
-                  <div id="buyersResidentialCollapse" class="accordion-collapse collapse show"
-                    aria-labelledby="buyersResidentialHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Properties</h4>
-                        <ul class="list-unstyled">
-                          @foreach ($sellResidentil as $subSubcat)
-                            <li><a
-                                href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">{{ $subSubcat->sub_sub_category_name }}</a>
-                            </li>
-                          @endforeach
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Budget</h4>
-                        <ul class="list-unstyled">
-                          @foreach ($sellBudgets as $budget)
-                            <li><a
-                                href="{{ route('listing.list', array_merge(['sub_category_id' => 34], $budget['query'])) }}">{{ $budget['label'] }}</a>
-                            </li>
-                          @endforeach
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Popular Choices</h4>
-                        <ul class="list-unstyled">
-                          <li><a
-                              href="{{ route('listing.list', ['sub_category_id' => 34, 'user_role' => 'owner']) }}">Owner
-                              Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a
-                              href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move']) }}">Ready
-                              to Move</a></li>
-                          <li><a
-                              href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon']) }}">Possession
-                              Soon</a></li>
-                          <li><a href="#">Immediate Available</a></li>
-                          <li><a href="#">Fully Furnished</a></li>
-                          <li><a
-                              href="{{ route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch']) }}">New
-                              Launch</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Commercial -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="buyersCommercialHeading">
-                    <button class="accordion-button sub-accordion collapsed" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#buyersCommercialCollapse" aria-expanded="false"
-                      aria-controls="buyersCommercialCollapse">
-                      Commercial
-                    </button>
-                  </h3>
-                  <div id="buyersCommercialCollapse" class="accordion-collapse collapse"
-                    aria-labelledby="buyersCommercialHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Properties</h4>
-                        <ul class="list-unstyled">
-                          @foreach ($sellCommercial as $subSubcat)
-                            <li><a
-                                href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">{{ $subSubcat->sub_sub_category_name }}</a>
-                            </li>
-                          @endforeach
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Budget</h4>
-                        <ul class="list-unstyled">
-                          @foreach ($sellBudgets as $budget)
-                            <li><a
-                                href="{{ route('listing.list', array_merge(['sub_category_id' => 35], $budget['query'])) }}">{{ $budget['label'] }}</a>
-                            </li>
-                          @endforeach
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Popular Choices</h4>
-                        <ul class="list-unstyled">
-                          <li><a
-                              href="{{ route('listing.list', ['sub_category_id' => 35, 'user_role' => 'owner']) }}">Owner
-                              Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a
-                              href="{{ route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Ready to Move']) }}">Ready
-                              to Move</a></li>
-                          <li><a
-                              href="{{ route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Possession Soon']) }}">Possession
-                              Soon</a></li>
-                          <li><a href="#">Immediate Available</a></li>
-                          <li><a href="#">Fully Furnished</a></li>
-                          <li><a
-                              href="{{ route('listing.list', ['sub_category_id' => 35, 'sort' => 'new-launch']) }}">New
-                              Launch</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- New Launch -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="buyersNewLaunchHeading">
-                    <button class="accordion-button sub-accordion collapsed" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#buyersNewLaunchCollapse" aria-expanded="false"
-                      aria-controls="buyersNewLaunchCollapse">
-                      New Launch
-                    </button>
-                  </h3>
-                  <div id="buyersNewLaunchCollapse" class="accordion-collapse collapse"
-                    aria-labelledby="buyersNewLaunchHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>New Launch</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="{{ route('listing.list', ['sub_category_id' => 34]) }}">Residential Projects</a>
-                          </li>
-                          <li><a href="{{ route('listing.list', ['sub_category_id' => 35]) }}">Commercial Projects</a>
-                          </li>
-                          <li><a href="{{ route('listing.list', ['sub_sub_category_ids' => '18,25,27']) }}">Land &
-                              Plots</a></li>
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Budget</h4>
-                        <ul class="list-unstyled">
-                          @foreach ($sellBudgets as $budget)
-                            <li><a
-                                href="{{ route('listing.list', array_merge(['category_id' => 22], $budget['query'])) }}">{{ $budget['label'] }}</a>
-                            </li>
-                          @endforeach
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Popular Choices</h4>
-                        <ul class="list-unstyled">
-                          <li><a
-                              href="{{ route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch']) }}">New
-                              Launch</a></li>
-                          <li><a
-                              href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Under Construction']) }}">Under
-                              Construction</a></li>
-                          <li><a
-                              href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move']) }}">Ready
-                              to Move</a></li>
-                          <li><a
-                              href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon']) }}">Possession
-                              Soon</a></li>
-                          <li><a href="#">OC Received</a></li>
-                          <li><a href="#">RERA Registered</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Popular Services -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="buyersPopularServicesHeading">
-                    <button class="accordion-button sub-accordion collapsed" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#buyersPopularServicesCollapse" aria-expanded="false"
-                      aria-controls="buyersPopularServicesCollapse">
-                      Popular Services
-                    </button>
-                  </h3>
-                  <div id="buyersPopularServicesCollapse" class="accordion-collapse collapse"
-                    aria-labelledby="buyersPopularServicesHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Most Viewed</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Owner Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a href="#">Furnished Homes</a></li>
-                          <li><a href="#">Bachelor Friendly</a></li>
-                          <li><a href="#">Immediately Available</a></li>
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Popular Locations</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Owner Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a href="#">Furnished Homes</a></li>
-                          <li><a href="#">Bachelor Friendly</a></li>
-                          <li><a href="#">Immediately Available</a></li>
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Owner Properties</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Owner Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a href="#">Furnished Homes</a></li>
-                          <li><a href="#">Bachelor Friendly</a></li>
-                          <li><a href="#">Immediately Available</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- For Sellers -->
-        <div class="accordion-item border-0">
-          <h2 class="accordion-header" id="sellersHeading">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-              data-bs-target="#sellersCollapse" aria-expanded="false" aria-controls="sellersCollapse">
-              For Sellers
-            </button>
-          </h2>
-          <div id="sellersCollapse" class="accordion-collapse collapse" aria-labelledby="sellersHeading"
-            data-bs-parent="#mobileMenuAccordion">
-            <div class="accordion-body p-0">
-              <div class="accordion" id="sellersSubAccordion">
-                <!-- Owners -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="sellersOwnersHeading">
-                    <button class="accordion-button sub-accordion" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#sellersOwnersCollapse" aria-expanded="true"
-                      aria-controls="sellersOwnersCollapse">
-                      Owners
-                    </button>
-                  </h3>
-                  <div id="sellersOwnersCollapse" class="accordion-collapse collapse show"
-                    aria-labelledby="sellersOwnersHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Services</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Post Property</a></li>
-                          <li><a href="#">Join BB Prime</a></li>
-                          <li><a href="#">Dashboard</a></li>
-                          <li><a href="#">Enquiries</a></li>
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Important Links</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">FAQ</a></li>
-                          <li><a href="#">Articles & Blogs</a></li>
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Contact Us</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Contact Us</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Agents -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="sellersAgentsHeading">
-                    <button class="accordion-button sub-accordion collapsed" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#sellersAgentsCollapse" aria-expanded="false"
-                      aria-controls="sellersAgentsCollapse">
-                      Agents
-                    </button>
-                  </h3>
-                  <div id="sellersAgentsCollapse" class="accordion-collapse collapse"
-                    aria-labelledby="sellersAgentsHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Services</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Post Property</a></li>
-                          <li><a href="#">Join BB Prime</a></li>
-                          <li><a href="#">Dashboard</a></li>
-                          <li><a href="#">Enquiries</a></li>
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Important Links</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">FAQ</a></li>
-                          <li><a href="#">Articles & Blogs</a></li>
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Contact Us</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Contact Us</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Builders -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="sellersBuildersHeading">
-                    <button class="accordion-button sub-accordion collapsed" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#sellersBuildersCollapse" aria-expanded="false"
-                      aria-controls="sellersBuildersCollapse">
-                      Builders
-                    </button>
-                  </h3>
-                  <div id="sellersBuildersCollapse" class="accordion-collapse collapse"
-                    aria-labelledby="sellersBuildersHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Services</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Post Property</a></li>
-                          <li><a href="#">Join BB Prime</a></li>
-                          <li><a href="#">Dashboard</a></li>
-                          <li><a href="#">Enquiries</a></li>
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Important Links</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">FAQ</a></li>
-                          <li><a href="#">Articles & Blogs</a></li>
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Contact Us</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Contact Us</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Service Providers -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="sellersServiceProvidersHeading">
-                    <button class="accordion-button sub-accordion collapsed" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#sellersServiceProvidersCollapse" aria-expanded="false"
-                      aria-controls="sellersServiceProvidersCollapse">
-                      Service Providers
-                    </button>
-                  </h3>
-                  <div id="sellersServiceProvidersCollapse" class="accordion-collapse collapse"
-                    aria-labelledby="sellersServiceProvidersHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Start Selling</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">List Your Service</a></li>
-                          <li><a href="#">Dashboard</a></li>
-                          <li><a href="#">Check Enquiries</a></li>
-                          <li><a href="#">Join BB Prime</a></li>
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Important Links</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">FAQ</a></li>
-                          <li><a href="#">Articles & Blogs</a></li>
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Contact Us</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Contact Us</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- For Rent -->
-        <div class="accordion-item border-0">
-          <h2 class="accordion-header" id="rentHeading">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-              data-bs-target="#rentCollapse" aria-expanded="false" aria-controls="rentCollapse">
-              For Rent
-            </button>
-          </h2>
-          <div id="rentCollapse" class="accordion-collapse collapse" aria-labelledby="rentHeading"
-            data-bs-parent="#mobileMenuAccordion">
-            <div class="accordion-body p-0">
-              <div class="accordion" id="rentSubAccordion">
-                <!-- Residential -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="rentResidentialHeading">
-                    <button class="accordion-button sub-accordion" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#rentResidentialCollapse" aria-expanded="true"
-                      aria-controls="rentResidentialCollapse">
-                      Residential
-                    </button>
-                  </h3>
-                  <div id="rentResidentialCollapse" class="accordion-collapse collapse show"
-                    aria-labelledby="rentResidentialHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Properties</h4>
-                        <ul class="list-unstyled">
-                          @foreach ($rentResidentil as $subSubcat)
-                            <li><a
-                                href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">{{ $subSubcat->sub_sub_category_name }}</a>
-                            </li>
-                          @endforeach
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Budget</h4>
-                        <ul class="list-unstyled">
-                          @foreach ($rentBudgets as $budget)
-                            <li><a
-                                href="{{ route('listing.list', array_merge(['sub_category_id' => 38], $budget['query'])) }}">{{ $budget['label'] }}</a>
-                            </li>
-                          @endforeach
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Popular Choices</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Owner Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a href="#">Ready to Move</a></li>
-                          <li><a href="#">Immediate Available</a></li>
-                          <li><a href="#">Fully Furnished</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Commercial -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="rentCommercialHeading">
-                    <button class="accordion-button sub-accordion collapsed" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#rentCommercialCollapse" aria-expanded="false"
-                      aria-controls="rentCommercialCollapse">
-                      Commercial
-                    </button>
-                  </h3>
-                  <div id="rentCommercialCollapse" class="accordion-collapse collapse"
-                    aria-labelledby="rentCommercialHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Properties</h4>
-                        <ul class="list-unstyled">
-                          @foreach ($rentCommercial as $subSubcat)
-                            <li><a
-                                href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">{{ $subSubcat->sub_sub_category_name }}</a>
-                            </li>
-                          @endforeach
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Budget</h4>
-                        <ul class="list-unstyled">
-                          @foreach ($rentBudgets as $budget)
-                            <li><a
-                                href="{{ route('listing.list', array_merge(['sub_category_id' => 37], $budget['query'])) }}">{{ $budget['label'] }}</a>
-                            </li>
-                          @endforeach
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Popular Choices</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Owner Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a href="#">Ready to Move</a></li>
-                          <li><a href="#">Immediate Available</a></li>
-                          <li><a href="#">Fully Furnished</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Popular Services -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="rentPopularServicesHeading">
-                    <button class="accordion-button sub-accordion collapsed" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#rentPopularServicesCollapse" aria-expanded="false"
-                      aria-controls="rentPopularServicesCollapse">
-                      Popular Services
-                    </button>
-                  </h3>
-                  <div id="rentPopularServicesCollapse" class="accordion-collapse collapse"
-                    aria-labelledby="rentPopularServicesHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Properties</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Owner Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a href="#">Furnished Homes</a></li>
-                          <li><a href="#">Bachelor Friendly</a></li>
-                          <li><a href="#">Immediately Available</a></li>
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Budget</h4>
-                        <ul class="list-unstyled">
-                          @foreach ($rentBudgets as $budget)
-                            <li><a href="{{ route('listing.list', $budget['query']) }}">{{ $budget['label'] }}</a></li>
-                          @endforeach
-                        </ul>
-                      </div>
-                      <div class="menu-section">
-                        <h4>Popular Choices</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Owner Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a href="#">Ready to Move</a></li>
-                          <li><a href="#">Immediate Available</a></li>
-                          <li><a href="#">Fully Furnished</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Directory & Services -->
-        <div class="accordion-item border-0">
-          <h2 class="accordion-header" id="directoryHeading">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-              data-bs-target="#directoryCollapse" aria-expanded="false" aria-controls="directoryCollapse">
-              Directory & Services
-            </button>
-          </h2>
-          <div id="directoryCollapse" class="accordion-collapse collapse" aria-labelledby="directoryHeading"
-            data-bs-parent="#mobileMenuAccordion">
-            <div class="accordion-body p-0">
-              <div class="accordion" id="directorySubAccordion">
-                <!-- Popular Choices -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="directoryPopularChoicesHeading">
-                    <button class="accordion-button sub-accordion" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#directoryPopularChoicesCollapse" aria-expanded="true"
-                      aria-controls="directoryPopularChoicesCollapse">
-                      Popular Choices
-                    </button>
-                  </h3>
-                  <div id="directoryPopularChoicesCollapse" class="accordion-collapse collapse show"
-                    aria-labelledby="directoryPopularChoicesHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Properties</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Owner Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a href="#">Furnished Homes</a></li>
-                          <li><a href="#">Bachelor Friendly</a></li>
-                          <li><a href="#">Immediately Available</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Property Types -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="directoryPropertyTypesHeading">
-                    <button class="accordion-button sub-accordion collapsed" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#directoryPropertyTypesCollapse" aria-expanded="false"
-                      aria-controls="directoryPropertyTypesCollapse">
-                      Property Types
-                    </button>
-                  </h3>
-                  <div id="directoryPropertyTypesCollapse" class="accordion-collapse collapse"
-                    aria-labelledby="directoryPropertyTypesHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Properties</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Owner Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a href="#">Furnished Homes</a></li>
-                          <li><a href="#">Bachelor Friendly</a></li>
-                          <li><a href="#">Immediately Available</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Budget -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="directoryBudgetHeading">
-                    <button class="accordion-button sub-accordion collapsed" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#directoryBudgetCollapse" aria-expanded="false"
-                      aria-controls="directoryBudgetCollapse">
-                      Budget
-                    </button>
-                  </h3>
-                  <div id="directoryBudgetCollapse" class="accordion-collapse collapse"
-                    aria-labelledby="directoryBudgetHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Properties</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Owner Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a href="#">Furnished Homes</a></li>
-                          <li><a href="#">Bachelor Friendly</a></li>
-                          <li><a href="#">Immediately Available</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Explore -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="directoryExploreHeading">
-                    <button class="accordion-button sub-accordion collapsed" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#directoryExploreCollapse" aria-expanded="false"
-                      aria-controls="directoryExploreCollapse">
-                      Explore
-                    </button>
-                  </h3>
-                  <div id="directoryExploreCollapse" class="accordion-collapse collapse"
-                    aria-labelledby="directoryExploreHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Properties</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Owner Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a href="#">Furnished Homes</a></li>
-                          <li><a href="#">Bachelor Friendly</a></li>
-                          <li><a href="#">Immediately Available</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Exclusive Launch -->
-        <div class="accordion-item border-0">
-          <h2 class="accordion-header" id="exclusiveLaunchHeading">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-              data-bs-target="#exclusiveLaunchCollapse" aria-expanded="false" aria-controls="exclusiveLaunchCollapse">
-              Exclusive Launch
-            </button>
-          </h2>
-          <div id="exclusiveLaunchCollapse" class="accordion-collapse collapse" aria-labelledby="exclusiveLaunchHeading"
-            data-bs-parent="#mobileMenuAccordion">
-            <div class="accordion-body p-0">
-              <div class="accordion" id="exclusiveLaunchSubAccordion">
-                <!-- Popular Choices -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="exclusivePopularChoicesHeading">
-                    <button class="accordion-button sub-accordion" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#exclusivePopularChoicesCollapse" aria-expanded="true"
-                      aria-controls="exclusivePopularChoicesCollapse">
-                      Popular Choices
-                    </button>
-                  </h3>
-                  <div id="exclusivePopularChoicesCollapse" class="accordion-collapse collapse show"
-                    aria-labelledby="exclusivePopularChoicesHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Properties</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Owner Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a href="#">Furnished Homes</a></li>
-                          <li><a href="#">Bachelor Friendly</a></li>
-                          <li><a href="#">Immediately Available</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Property Types -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="exclusivePropertyTypesHeading">
-                    <button class="accordion-button sub-accordion collapsed" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#exclusivePropertyTypesCollapse" aria-expanded="false"
-                      aria-controls="exclusivePropertyTypesCollapse">
-                      Property Types
-                    </button>
-                  </h3>
-                  <div id="exclusivePropertyTypesCollapse" class="accordion-collapse collapse"
-                    aria-labelledby="exclusivePropertyTypesHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Properties</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Owner Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a href="#">Furnished Homes</a></li>
-                          <li><a href="#">Bachelor Friendly</a></li>
-                          <li><a href="#">Immediately Available</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Budget -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="exclusiveBudgetHeading">
-                    <button class="accordion-button sub-accordion collapsed" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#exclusiveBudgetCollapse" aria-expanded="false"
-                      aria-controls="exclusiveBudgetCollapse">
-                      Budget
-                    </button>
-                  </h3>
-                  <div id="exclusiveBudgetCollapse" class="accordion-collapse collapse"
-                    aria-labelledby="exclusiveBudgetHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Properties</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Owner Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a href="#">Furnished Homes</a></li>
-                          <li><a href="#">Bachelor Friendly</a></li>
-                          <li><a href="#">Immediately Available</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Explore -->
-                <div class="accordion-item border-0">
-                  <h3 class="accordion-header" id="exclusiveExploreHeading">
-                    <button class="accordion-button sub-accordion collapsed" type="button" data-bs-toggle="collapse"
-                      data-bs-target="#exclusiveExploreCollapse" aria-expanded="false"
-                      aria-controls="exclusiveExploreCollapse">
-                      Explore
-                    </button>
-                  </h3>
-                  <div id="exclusiveExploreCollapse" class="accordion-collapse collapse"
-                    aria-labelledby="exclusiveExploreHeading">
-                    <div class="accordion-body">
-                      <div class="menu-section">
-                        <h4>Properties</h4>
-                        <ul class="list-unstyled">
-                          <li><a href="#">Owner Properties</a></li>
-                          <li><a href="#">Verified Properties</a></li>
-                          <li><a href="#">Furnished Homes</a></li>
-                          <li><a href="#">Bachelor Friendly</a></li>
-                          <li><a href="#">Immediately Available</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="bb-top-menu-header">
+  <!-- desktop view header -->
+  <div class="bb-top-menu-header desktop-menu">
     <nav class="bb-nav">
       <ul class="bb-nav-list">
         <li class="bb-nav-item">
-          <a href="#" class="bb-nav-link">For Buyers</a>
+          <a href="#" class="bb-nav-link">Buyers</a>
           <div class="bb-dropdown">
             <div class="bb-tabs">
               <div class="bb-tab active" data-tab="buyers-tab1">Residentials</div>
@@ -1509,9 +978,9 @@
                         Launch</a>
                     </div>
                   </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
+                  <!--<div class="image-tab">-->
+                  <!--  <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">-->
+                  <!--</div>-->
                 </div>
               </div>
 
@@ -1559,9 +1028,9 @@
                         Launch</a>
                     </div>
                   </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
+                  <!--<div class="image-tab">-->
+                  <!--  <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">-->
+                  <!--</div>-->
                 </div>
               </div>
 
@@ -1604,9 +1073,9 @@
                       <a href="#">RERA Registered</a>
                     </div>
                   </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
+                  <!--<div class="image-tab">-->
+                  <!--  <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">-->
+                  <!--</div>-->
                 </div>
               </div>
 
@@ -1648,9 +1117,9 @@
                     @endif
                   @endforeach
 
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
+                  <!--<div class="image-tab">-->
+                  <!--  <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">-->
+                  <!--</div>-->
                 </div>
               </div>
 
@@ -1660,7 +1129,7 @@
         </li>
 
         <li class="bb-nav-item">
-          <a href="#" class="bb-nav-link">For Sellers</a>
+          <a href="#" class="bb-nav-link">Sellers</a>
           <div class="bb-dropdown">
             <div class="bb-tabs">
               <div class="bb-tab active" data-tab="sellers-tab1">Owners</div>
@@ -1674,7 +1143,8 @@
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Services</h4>
                     <div class="d-flex flex-column">
-                      <a href="{{ route('create_property') }}">Post Property</a>
+                      <!--<a href="{{ route('create_property') }}">Post Property</a> -->
+                      <a href="#">Post Property</a>
                       <a href="#">Join BB Prime</a>
                       <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
                         @unless(auth()->check()) onclick="openSigninModal()" @endunless>
@@ -1693,9 +1163,9 @@
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Contact Us</h4>
                   </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
+                  <!--<div class="image-tab">-->
+                  <!--  <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">-->
+                  <!--</div>-->
                 </div>
               </div>
               <div class="bb-tab-pane" id="sellers-tab2">
@@ -1703,7 +1173,8 @@
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Services</h4>
                     <div class="d-flex flex-column">
-                      <a href="{{ route('create_property') }}">Post Property</a>
+                      <!-- <a href="{{ route('create_property') }}">Post Property</a> -->
+                      <a href="#">Post Property</a>
                       <a href="#">Join BB Prime</a>
                       <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
                         @unless(auth()->check()) onclick="openSigninModal()" @endunless>
@@ -1723,9 +1194,9 @@
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Contact Us</h4>
                   </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
+                  <!--<div class="image-tab">-->
+                  <!--  <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">-->
+                  <!--</div>-->
                 </div>
               </div>
               <div class="bb-tab-pane" id="sellers-tab3">
@@ -1733,7 +1204,8 @@
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Services</h4>
                     <div class="d-flex flex-column">
-                      <a href="{{ route('create_property') }}">Post Property</a>
+                      <!--<a href="{{ route('create_property') }}">Post Property</a> -->
+                      <a href="#">Post Property</a>
                       <a href="#">Join BB Prime</a>
                       <a href="">Dashboard</a>
                       <a href="#">Enquiries</a>
@@ -1749,9 +1221,9 @@
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Contact Us</h4>
                   </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
+                  <!--<div class="image-tab">-->
+                  <!--  <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">-->
+                  <!--</div>-->
                 </div>
               </div>
               <div class="bb-tab-pane" id="sellers-tab4">
@@ -1779,9 +1251,9 @@
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Contact Us</h4>
                   </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
+                  <!--<div class="image-tab">-->
+                  <!--  <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">-->
+                  <!--</div>-->
                 </div>
               </div>
             </div>
@@ -1789,7 +1261,7 @@
         </li>
 
         <li class="bb-nav-item">
-          <a href="#" class="bb-nav-link">For Rent</a>
+          <a href="#" class="bb-nav-link">Rent</a>
           <div class="bb-dropdown">
             <div class="bb-tabs">
               <div class="bb-tab active" data-tab="rent-tab1">Residential</div>
@@ -1835,9 +1307,9 @@
                         Furnished</a>
                     </div>
                   </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
+                  <!--<div class="image-tab">-->
+                  <!--  <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">-->
+                  <!--</div>-->
                 </div>
               </div>
               <div class="bb-tab-pane" id="rent-tab2">
@@ -1882,9 +1354,9 @@
                         Furnished</a>
                     </div>
                   </div>
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
+                  <!--<div class="image-tab">-->
+                  <!--  <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">-->
+                  <!--</div>-->
                 </div>
               </div>
               <div class="bb-tab-pane" id="rent-tab3">
@@ -1925,9 +1397,9 @@
                     @endif
                   @endforeach
 
-                  <div class="image-tab">
-                    <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
-                  </div>
+                  <!--<div class="image-tab">-->
+                  <!--  <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">-->
+                  <!--</div>-->
                 </div>
               </div>
             </div>
@@ -1967,18 +1439,16 @@
                       </div>
                     @endforeach
 
-                    <div class="image-tab">
-                      <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png"
-                        alt="{{ $category->category_name }}">
-                    </div>
+                    <!--<div class="image-tab">-->
+                    <!--  <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png"-->
+                    <!--    alt="{{ $category->category_name }}">-->
+                    <!--</div>-->
                   </div>
                 </div>
               @endforeach
             </div>
           </div>
         </li>
-
-
 
         @if($subCategories->count())
           <li class="bb-nav-item">
@@ -2030,10 +1500,10 @@
                         </div>
                       </div>
 
-                      <div class="image-tab">
-                        <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png"
-                          alt="{{ $subCat->sub_category_name }}">
-                      </div>
+                      <!--<div class="image-tab">-->
+                      <!--  <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png"-->
+                      <!--    alt="{{ $subCat->sub_category_name }}">-->
+                      <!--</div>-->
                     </div>
                   </div>
                 @endforeach
@@ -2046,6 +1516,849 @@
     </nav>
   </div>
 
+  <!-- mobile view header -->
+  <div class="bb-top-menu-header mobile-menu">
+    <nav class="bb-nav">
+      <ul class="bb-nav-list">
+        <li class="bb-nav-item">
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
+            aria-controls="offcanvasWithBothOptions" class="bb-nav-link">Buyers</a>
+        </li>
+        <li class="bb-nav-item">
+          <div class="ver-line"></div>
+        </li>
+        <li class="bb-nav-item">
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
+            aria-controls="offcanvasWithBothOptions" class="bb-nav-link">Sellers</a>
+        </li>
+        <li class="bb-nav-item">
+          <div class="ver-line"></div>
+        </li>
+        <li class="bb-nav-item">
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
+            aria-controls="offcanvasWithBothOptions" class="bb-nav-link">Rent</a>
+        </li>
+        <li class="bb-nav-item">
+          <div class="ver-line"></div>
+        </li>
+        <li class="bb-nav-item">
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
+            aria-controls="offcanvasWithBothOptions" class="bb-nav-link">Directory & Services</a>
+        </li>
+        <li class="bb-nav-item">
+          <div class="ver-line"></div>
+        </li>
+        <li class="bb-nav-item">
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
+            aria-controls="offcanvasWithBothOptions" class="bb-nav-link">Exclusive Launch</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions"
+    aria-labelledby="offcanvasWithBothOptionsLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Menu</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+      <div class="accordion" id="mobileMenuAccordion">
+
+        <!-- ====================== BUYERS ====================== -->
+        <div class="accordion-item border-0">
+          <h2 class="accordion-header" id="buyersHeading">
+            <button class="accordion-button main-menu-btn collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#buyersCollapse" aria-expanded="false" aria-controls="buyersCollapse">
+              Buyers
+            </button>
+          </h2>
+          <div id="buyersCollapse" class="accordion-collapse collapse" aria-labelledby="buyersHeading"
+            data-bs-parent="#mobileMenuAccordion">
+            <div class="accordion-body p-0">
+              <div class="accordion" id="buyersSubAccordion">
+
+                <!-- RESIDENTIAL -->
+                <div class="accordion-item border-0">
+                  <h3 class="accordion-header" id="buyersResidentialHeading">
+                    <button class="accordion-button sub-menu-header collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#buyersResidentialCollapse" aria-expanded="false"
+                      aria-controls="buyersResidentialCollapse">
+                      <i class="fas fa-home"></i> Residential
+                    </button>
+                  </h3>
+                  <div id="buyersResidentialCollapse" class="accordion-collapse collapse"
+                    aria-labelledby="buyersResidentialHeading" data-bs-parent="#buyersSubAccordion">
+                    <div class="accordion-body">
+                      <div class="sub-sub-section section-properties">
+                        <h5><i class="fas fa-building"></i> Properties</h5>
+                        <ul class="list-unstyled">
+                          @foreach ($sellResidentil as $subSubcat)
+                            <li><a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
+                                {{ $subSubcat->sub_sub_category_name }}</a></li>
+                          @endforeach
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-budget">
+                        <h5><i class="fas fa-rupee-sign"></i> Budget</h5>
+                        <ul class="list-unstyled">
+                          @foreach ($sellBudgets as $budget)
+                            <li><a
+                                href="{{ route('listing.list', array_merge(['sub_category_id' => 34], $budget['query'])) }}">
+                                {{ $budget['label'] }}</a></li>
+                          @endforeach
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-popular">
+                        <h5><i class="fas fa-star"></i> Popular Choices</h5>
+                        <ul class="list-unstyled">
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 34, 'user_role' => 'owner']) }}">Owner
+                              Properties</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 34, 'status' => 'verified'])}}">Verified
+                              Properties</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move']) }}">Ready
+                              to Move</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon']) }}">Possession
+                              Soon</a></li>
+                          <li><a href="#">Immediate Available</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])}}">Fully
+                              Furnished</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch']) }}">New
+                              Launch</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- COMMERCIAL -->
+                <div class="accordion-item border-0">
+                  <h3 class="accordion-header" id="buyersCommercialHeading">
+                    <button class="accordion-button sub-menu-header collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#buyersCommercialCollapse" aria-expanded="false"
+                      aria-controls="buyersCommercialCollapse">
+                      <i class="fas fa-briefcase"></i> Commercial
+                    </button>
+                  </h3>
+                  <div id="buyersCommercialCollapse" class="accordion-collapse collapse"
+                    aria-labelledby="buyersCommercialHeading" data-bs-parent="#buyersSubAccordion">
+                    <div class="accordion-body">
+                      <div class="sub-sub-section section-properties">
+                        <h5><i class="fas fa-store"></i> Properties</h5>
+                        <ul class="list-unstyled">
+                          @foreach ($sellCommercial as $subSubcat)
+                            <li><a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
+                                {{ $subSubcat->sub_sub_category_name }}</a></li>
+                          @endforeach
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-budget">
+                        <h5><i class="fas fa-rupee-sign"></i> Budget</h5>
+                        <ul class="list-unstyled">
+                          @foreach ($sellBudgets as $budget)
+                            <li><a
+                                href="{{ route('listing.list', array_merge(['sub_category_id' => 35], $budget['query'])) }}">
+                                {{ $budget['label'] }}</a></li>
+                          @endforeach
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-popular">
+                        <h5><i class="fas fa-star"></i> Popular Choices</h5>
+                        <ul class="list-unstyled">
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 35, 'user_role' => 'owner']) }}">Owner
+                              Properties</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 35, 'status' => 'verified'])}}">Verified
+                              Properties</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Ready to Move']) }}">Ready
+                              to Move</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Possession Soon']) }}">Possession
+                              Soon</a></li>
+                          <li><a href="#">Immediate Available</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])}}">Fully
+                              Furnished</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 35, 'sort' => 'new-launch']) }}">New
+                              Launch</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- NEW LAUNCH -->
+                <div class="accordion-item border-0">
+                  <h3 class="accordion-header" id="buyersNewLaunchHeading">
+                    <button class="accordion-button sub-menu-header collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#buyersNewLaunchCollapse" aria-expanded="false"
+                      aria-controls="buyersNewLaunchCollapse">
+                      <i class="fas fa-rocket"></i> New Launch
+                    </button>
+                  </h3>
+                  <div id="buyersNewLaunchCollapse" class="accordion-collapse collapse"
+                    aria-labelledby="buyersNewLaunchHeading" data-bs-parent="#buyersSubAccordion">
+                    <div class="accordion-body">
+                      <div class="sub-sub-section section-properties">
+                        <h5><i class="fas fa-city"></i> New Launch</h5>
+                        <ul class="list-unstyled">
+                          <li><a href="{{ route('listing.list', ['sub_category_id' => 34]) }}">Residential Projects</a>
+                          </li>
+                          <li><a href="{{ route('listing.list', ['sub_category_id' => 35]) }}">Commercial Projects</a>
+                          </li>
+                          <li><a href="{{ route('listing.list', ['sub_sub_category_id' => '18,25,27']) }}">Land &
+                              Plots</a></li>
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-budget">
+                        <h5><i class="fas fa-rupee-sign"></i> Budget</h5>
+                        <ul class="list-unstyled">
+                          @foreach ($sellBudgets as $budget)
+                            <li><a
+                                href="{{ route('listing.list', array_merge(['category_id' => 22], $budget['query'])) }}">
+                                {{ $budget['label'] }}</a></li>
+                          @endforeach
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-popular">
+                        <h5><i class="fas fa-star"></i> Popular Choices</h5>
+                        <ul class="list-unstyled">
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch']) }}">New
+                              Launch</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Under Construction']) }}">Under
+                              Construction</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move']) }}">Ready
+                              to Move</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon']) }}">Possession
+                              Soon</a></li>
+                          <li><a href="#">OC Received</a></li>
+                          <li><a href="#">RERA Registered</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- POPULAR SERVICES -->
+                <div class="accordion-item border-0">
+                  <h3 class="accordion-header" id="buyersPopularServicesHeading">
+                    <button class="accordion-button sub-menu-header collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#buyersPopularServicesCollapse" aria-expanded="false"
+                      aria-controls="buyersPopularServicesCollapse">
+                      <i class="fas fa-thumbs-up"></i> Popular Services
+                    </button>
+                  </h3>
+                  <div id="buyersPopularServicesCollapse" class="accordion-collapse collapse"
+                    aria-labelledby="buyersPopularServicesHeading" data-bs-parent="#buyersSubAccordion">
+                    <div class="accordion-body">
+                      @foreach($webDirectoryCategories as $category)
+                        @php
+                          // Only take popular subcategories
+                          $popularSubs = $category->subcategories->where('is_popular', 1);
+                          $showLimit = 5; // Number of subcategories to show initially
+                        @endphp
+
+                        @if($popularSubs->count() > 0)
+                          <div class="sub-sub-section section-properties">
+                            <h5><i class="fas fa-cog"></i> {{ $category->category_name }}</h5>
+                            <ul class="list-unstyled">
+                              @foreach($popularSubs->take($showLimit) as $sub)
+                                <li>
+                                  <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
+                                    {{ $sub->sub_category_name }}
+                                  </a>
+                                </li>
+                              @endforeach
+
+                              @if($popularSubs->count() > $showLimit)
+                                @foreach($popularSubs->slice($showLimit) as $sub)
+                                  <li class="more-subcategories-mobile-{{ $category->id }}" style="display:none;">
+                                    <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
+                                      {{ $sub->sub_category_name }}
+                                    </a>
+                                  </li>
+                                @endforeach
+                                <li>
+                                  <a href="javascript:void(0);" class="view-more-mobile"
+                                    data-category-id="{{ $category->id }}"
+                                    onclick="toggleViewMoreMobile({{ $category->id }}, this)">
+                                    View More
+                                  </a>
+                                </li>
+                              @endif
+                            </ul>
+                          </div>
+                        @endif
+                      @endforeach
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====================== FOR SELLERS ====================== -->
+        <div class="accordion-item border-0">
+          <h2 class="accordion-header" id="sellersHeading">
+            <button class="accordion-button main-menu-btn collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#sellersCollapse" aria-expanded="false" aria-controls="sellersCollapse">
+              For Sellers
+            </button>
+          </h2>
+          <div id="sellersCollapse" class="accordion-collapse collapse" aria-labelledby="sellersHeading"
+            data-bs-parent="#mobileMenuAccordion">
+            <div class="accordion-body p-0">
+              <div class="accordion" id="sellersSubAccordion">
+
+                <!-- OWNERS -->
+                <div class="accordion-item border-0">
+                  <h3 class="accordion-header" id="sellersOwnersHeading">
+                    <button class="accordion-button sub-menu-header collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#sellersOwnersCollapse" aria-expanded="false"
+                      aria-controls="sellersOwnersCollapse">
+                      <i class="fas fa-user-tie"></i> Owners
+                    </button>
+                  </h3>
+                  <div id="sellersOwnersCollapse" class="accordion-collapse collapse"
+                    aria-labelledby="sellersOwnersHeading" data-bs-parent="#sellersSubAccordion">
+                    <div class="accordion-body">
+                      <div class="sub-sub-section section-properties">
+                        <h5><i class="fas fa-cogs"></i> Services</h5>
+                        <ul class="list-unstyled">
+                          <li><a href="#">Post Property</a></li>
+                          <li><a href="#">Join BB Prime</a></li>
+                          <li> <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
+                              @unless(auth()->check()) onclick="openSigninModal()" @endunless>
+                              Dashboard
+                            </a></li>
+                          <li><a href="#">Enquiries</a></li>
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-budget">
+                        <h5><i class="fas fa-link"></i> Important Links</h5>
+                        <ul class="list-unstyled">
+                          <li> <a href="{{ route('front.faq') }}">FAQ</a></li>
+                          <li> <a href="{{ route('front.blog') }}">Articles & Blogs</a></li>
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-popular">
+                        <h5><i class="fas fa-phone"></i> Contact Us</h5>
+                        <ul class="list-unstyled">
+                          <li><a href="{{ route('front.contactUs') }}">Contact Us</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- AGENTS -->
+                <div class="accordion-item border-0">
+                  <h3 class="accordion-header" id="sellersAgentsHeading">
+                    <button class="accordion-button sub-menu-header collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#sellersAgentsCollapse" aria-expanded="false"
+                      aria-controls="sellersAgentsCollapse">
+                      <i class="fas fa-user-secret"></i> Agents
+                    </button>
+                  </h3>
+                  <div id="sellersAgentsCollapse" class="accordion-collapse collapse"
+                    aria-labelledby="sellersAgentsHeading" data-bs-parent="#sellersSubAccordion">
+                    <div class="accordion-body">
+                      <div class="sub-sub-section section-properties">
+                        <h5><i class="fas fa-cogs"></i> Services</h5>
+                        <ul class="list-unstyled">
+                          <li><a href="#">Post Property</a></li>
+                          <li><a href="#">Join BB Prime</a></li>
+                          <li> <a href="{{ auth()->check() ? route('agent.agentDashboard') : 'javascript:void(0)' }}"
+                              @unless(auth()->check()) onclick="openSigninModal()" @endunless>
+                              Dashboard
+                            </a></li>
+                          <li><a href="#">Enquiries</a></li>
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-budget">
+                        <h5><i class="fas fa-link"></i> Important Links</h5>
+                        <ul class="list-unstyled">
+                          <li> <a href="{{ route('front.faq') }}">FAQ</a></li>
+                          <li> <a href="{{ route('front.blog') }}">Articles & Blogs</a></li>
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-popular">
+                        <h5><i class="fas fa-phone"></i> Contact Us</h5>
+                        <ul class="list-unstyled">
+                          <li><a href="{{ route('front.contactUs') }}">Contact Us</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- BUILDERS -->
+                <div class="accordion-item border-0">
+                  <h3 class="accordion-header" id="sellersBuildersHeading">
+                    <button class="accordion-button sub-menu-header collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#sellersBuildersCollapse" aria-expanded="false"
+                      aria-controls="sellersBuildersCollapse">
+                      <i class="fas fa-hard-hat"></i> Builders
+                    </button>
+                  </h3>
+                  <div id="sellersBuildersCollapse" class="accordion-collapse collapse"
+                    aria-labelledby="sellersBuildersHeading" data-bs-parent="#sellersSubAccordion">
+                    <div class="accordion-body">
+                      <div class="sub-sub-section section-properties">
+                        <h5><i class="fas fa-cogs"></i> Services</h5>
+                        <ul class="list-unstyled">
+                          <li><a href="#">Post Property</a></li>
+                          <li><a href="#">Join BB Prime</a></li>
+                          <li> <a
+                              href="{{ auth()->check() ? route('builder.builderDashboard') : 'javascript:void(0)' }}"
+                              @unless(auth()->check()) onclick="openSigninModal()" @endunless>
+                              Dashboard
+                            </a></li>
+                          <li><a href="#">Enquiries</a></li>
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-budget">
+                        <h5><i class="fas fa-link"></i> Important Links</h5>
+                        <ul class="list-unstyled">
+                          <li> <a href="{{ route('front.faq') }}">FAQ</a></li>
+                          <li> <a href="{{ route('front.blog') }}">Articles & Blogs</a></li>
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-popular">
+                        <h5><i class="fas fa-phone"></i> Contact Us</h5>
+                        <ul class="list-unstyled">
+                          <li><a href="{{ route('front.contactUs') }}">Contact Us</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- SERVICE PROVIDERS -->
+                <div class="accordion-item border-0">
+                  <h3 class="accordion-header" id="sellersServiceProvidersHeading">
+                    <button class="accordion-button sub-menu-header collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#sellersServiceProvidersCollapse" aria-expanded="false"
+                      aria-controls="sellersServiceProvidersCollapse">
+                      <i class="fas fa-tools"></i> Service Providers
+                    </button>
+                  </h3>
+                  <div id="sellersServiceProvidersCollapse" class="accordion-collapse collapse"
+                    aria-labelledby="sellersServiceProvidersHeading" data-bs-parent="#sellersSubAccordion">
+                    <div class="accordion-body">
+                      <div class="sub-sub-section section-properties">
+                        <h5><i class="fas fa-list"></i> Start Selling</h5>
+                        <ul class="list-unstyled">
+                          <li><a href="#">List Your Service</a></li>
+                          <li> <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
+                              @unless(auth()->check()) onclick="openSigninModal()" @endunless>
+                              Dashboard
+                            </a></li>
+                          <li><a href="#">Check Enquiries</a></li>
+                          <li><a href="#">Join BB Prime</a></li>
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-budget">
+                        <h5><i class="fas fa-link"></i> Important Links</h5>
+                        <ul class="list-unstyled">
+                          <li> <a href="{{ route('front.faq') }}">FAQ</a></li>
+                          <li> <a href="{{ route('front.blog') }}">Articles & Blogs</a></li>
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-popular">
+                        <h5><i class="fas fa-phone"></i> Contact Us</h5>
+                        <ul class="list-unstyled">
+                          <li><a href="{{ route('front.contactUs') }}">Contact Us</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====================== FOR RENT ====================== -->
+        <div class="accordion-item border-0">
+          <h2 class="accordion-header" id="rentHeading">
+            <button class="accordion-button main-menu-btn collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#rentCollapse" aria-expanded="false" aria-controls="rentCollapse">
+              For Rent
+            </button>
+          </h2>
+          <div id="rentCollapse" class="accordion-collapse collapse" aria-labelledby="rentHeading"
+            data-bs-parent="#mobileMenuAccordion">
+            <div class="accordion-body p-0">
+              <div class="accordion" id="rentSubAccordion">
+
+                <!-- RESIDENTIAL -->
+                <div class="accordion-item border-0">
+                  <h3 class="accordion-header" id="rentResidentialHeading">
+                    <button class="accordion-button sub-menu-header collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#rentResidentialCollapse" aria-expanded="false"
+                      aria-controls="rentResidentialCollapse">
+                      <i class="fas fa-home"></i> Residential
+                    </button>
+                  </h3>
+                  <div id="rentResidentialCollapse" class="accordion-collapse collapse"
+                    aria-labelledby="rentResidentialHeading" data-bs-parent="#rentSubAccordion">
+                    <div class="accordion-body">
+                      <div class="sub-sub-section section-properties">
+                        <h5><i class="fas fa-building"></i> Properties</h5>
+                        <ul class="list-unstyled">
+                          @foreach ($rentResidentil as $subSubcat)
+                            <li><a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
+                                {{ $subSubcat->sub_sub_category_name }}</a></li>
+                          @endforeach
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-budget">
+                        <h5><i class="fas fa-rupee-sign"></i> Budget</h5>
+                        <ul class="list-unstyled">
+                          @foreach ($rentBudgets as $budget)
+                            <li><a
+                                href="{{ route('listing.list', array_merge(['sub_category_id' => 38], $budget['query'])) }}">
+                                {{ $budget['label'] }}</a></li>
+                          @endforeach
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-popular">
+                        <h5><i class="fas fa-star"></i> Popular Choices</h5>
+                        <ul class="list-unstyled">
+                          <li> <a
+                              href="{{ route('listing.list', ['sub_category_id' => 38, 'user_role' => 'owner'])}}">Owner
+                              Properties</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 38, 'status' => 'verified'])}}">Verified
+                              Properties</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 38, 'property_status' => 'Ready to Move'])}}">Ready
+                              to
+                              Move</a></li>
+                          <li><a href="#">Immediate Available</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 38, 'furnishing_status' => 'Full Furnished'])}}">Full
+                              Furnished</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- COMMERCIAL -->
+                <div class="accordion-item border-0">
+                  <h3 class="accordion-header" id="rentCommercialHeading">
+                    <button class="accordion-button sub-menu-header collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#rentCommercialCollapse" aria-expanded="false"
+                      aria-controls="rentCommercialCollapse">
+                      <i class="fas fa-briefcase"></i> Commercial
+                    </button>
+                  </h3>
+                  <div id="rentCommercialCollapse" class="accordion-collapse collapse"
+                    aria-labelledby="rentCommercialHeading" data-bs-parent="#rentSubAccordion">
+                    <div class="accordion-body">
+                      <div class="sub-sub-section section-properties">
+                        <h5><i class="fas fa-store"></i> Properties</h5>
+                        <ul class="list-unstyled">
+                          @foreach ($rentCommercial as $subSubcat)
+                            <li><a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
+                                {{ $subSubcat->sub_sub_category_name }}</a></li>
+                          @endforeach
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-budget">
+                        <h5><i class="fas fa-rupee-sign"></i> Budget</h5>
+                        <ul class="list-unstyled">
+                          @foreach ($rentBudgets as $budget)
+                            <li><a
+                                href="{{ route('listing.list', array_merge(['sub_category_id' => 37], $budget['query'])) }}">
+                                {{ $budget['label'] }}</a></li>
+                          @endforeach
+                        </ul>
+                      </div>
+                      <div class="sub-sub-section section-popular">
+                        <h5><i class="fas fa-star"></i> Popular Choices</h5>
+                        <ul class="list-unstyled">
+                          <li> <a
+                              href="{{ route('listing.list', ['sub_category_id' => 37, 'user_role' => 'owner'])}}">Owner
+                              Properties</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 37, 'status' => 'verified'])}}">Verified
+                              Properties</a></li>
+                          <li><a
+                              href="{{ route('listing.list', ['sub_category_id' => 37, 'property_status' => 'Ready to Move'])}}">Ready
+                              to
+                              Move</a></li>
+                          <li><a href="#">Immediate Available</a></li>
+                          <li> <a
+                              href="{{ route('listing.list', ['sub_category_id' => 37, 'furnishing_status' => 'Full Furnished'])}}">Full
+                              Furnished</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- POPULAR SERVICES -->
+                <div class="accordion-item border-0">
+                  <h3 class="accordion-header" id="rentPopularServicesHeading">
+                    <button class="accordion-button sub-menu-header collapsed" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#rentPopularServicesCollapse" aria-expanded="false"
+                      aria-controls="rentPopularServicesCollapse">
+                      <i class="fas fa-thumbs-up"></i> Popular Services
+                    </button>
+                  </h3>
+                  <div id="rentPopularServicesCollapse" class="accordion-collapse collapse"
+                    aria-labelledby="rentPopularServicesHeading" data-bs-parent="#rentSubAccordion">
+                    <div class="accordion-body">
+                      @foreach($webDirectoryCategories as $category)
+                        @php
+                          // Only take popular subcategories
+                          $popularSubs = $category->subcategories->where('is_popular', 1);
+                          $showLimit = 5; // Number of subcategories to show initially
+                        @endphp
+
+                        @if($popularSubs->count() > 0)
+                          <div class="sub-sub-section section-properties">
+                            <h5><i class="fas fa-cog"></i> {{ $category->category_name }}</h5>
+                            <ul class="list-unstyled">
+                              @foreach($popularSubs->take($showLimit) as $sub)
+                                <li>
+                                  <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
+                                    {{ $sub->sub_category_name }}
+                                  </a>
+                                </li>
+                              @endforeach
+
+                              @if($popularSubs->count() > $showLimit)
+                                @foreach($popularSubs->slice($showLimit) as $sub)
+                                  <li class="more-subcategories-mobile-{{ $category->id }}" style="display:none;">
+                                    <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
+                                      {{ $sub->sub_category_name }}
+                                    </a>
+                                  </li>
+                                @endforeach
+                                <li>
+                                  <a href="javascript:void(0);" class="view-more-mobile"
+                                    data-category-id="{{ $category->id }}"
+                                    onclick="toggleViewMoreMobile({{ $category->id }}, this)">
+                                    View More
+                                  </a>
+                                </li>
+                              @endif
+                            </ul>
+                          </div>
+                        @endif
+                      @endforeach
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====================== DIRECTORY & SERVICES ====================== -->
+        <div class="accordion-item border-0">
+          <h2 class="accordion-header" id="directoryHeading">
+            <button class="accordion-button main-menu-btn collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#directoryCollapse" aria-expanded="false" aria-controls="directoryCollapse">
+              Directory & Services
+            </button>
+          </h2>
+          <div id="directoryCollapse" class="accordion-collapse collapse" aria-labelledby="directoryHeading"
+            data-bs-parent="#mobileMenuAccordion">
+            <div class="accordion-body p-0">
+              <div class="accordion" id="directorySubAccordion">
+
+                @foreach($webDirectoryCategories as $category)
+                  <!-- DYNAMIC CATEGORY ACCORDION -->
+                  <div class="accordion-item border-0">
+                    <h3 class="accordion-header" id="directory{{ $category->id }}Heading">
+                      <button class="accordion-button sub-menu-header collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#directory{{ $category->id }}Collapse" aria-expanded="false"
+                        aria-controls="directory{{ $category->id }}Collapse">
+                        <i class="fas fa-cog"></i> {{ $category->category_name }}
+                      </button>
+                    </h3>
+                    <div id="directory{{ $category->id }}Collapse" class="accordion-collapse collapse"
+                      aria-labelledby="directory{{ $category->id }}Heading" data-bs-parent="#directorySubAccordion">
+                      <div class="accordion-body">
+                        @php
+                          // Split subcategories into groups for better display
+                          $showLimit = 5;
+                          $allSubs = $category->subcategories;
+                        @endphp
+
+                        @if($allSubs->count() > 0)
+                          <div class="sub-sub-section section-properties">
+                            <h5><i class="fas fa-list"></i> Sub Categories</h5>
+                            <ul class="list-unstyled">
+                              @foreach($allSubs->take($showLimit) as $sub)
+                                <li>
+                                  <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
+                                    {{ $sub->sub_category_name }}
+                                  </a>
+                                </li>
+                              @endforeach
+
+                              @if($allSubs->count() > $showLimit)
+                                @foreach($allSubs->slice($showLimit) as $sub)
+                                  <li class="more-subcategories-directory-{{ $category->id }}" style="display:none;">
+                                    <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
+                                      {{ $sub->sub_category_name }}
+                                    </a>
+                                  </li>
+                                @endforeach
+                                <li>
+                                  <a href="javascript:void(0);" class="view-more-mobile"
+                                    onclick="toggleViewMoreDirectory({{ $category->id }}, this)">
+                                    View More
+                                  </a>
+                                </li>
+                              @endif
+                            </ul>
+                          </div>
+                        @else
+                          <p class="text-muted">No subcategories available</p>
+                        @endif
+                      </div>
+                    </div>
+                  </div>
+                @endforeach
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- ====================== EXCLUSIVE LAUNCH ====================== -->
+        @if($subCategories->count())
+          <div class="accordion-item border-0">
+            <h2 class="accordion-header" id="exclusiveLaunchHeading">
+              <button class="accordion-button main-menu-btn collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#exclusiveLaunchCollapse" aria-expanded="false" aria-controls="exclusiveLaunchCollapse">
+                Exclusive Launch
+              </button>
+            </h2>
+            <div id="exclusiveLaunchCollapse" class="accordion-collapse collapse" aria-labelledby="exclusiveLaunchHeading"
+              data-bs-parent="#mobileMenuAccordion">
+              <div class="accordion-body p-0">
+                <div class="accordion" id="exclusiveLaunchSubAccordion">
+
+                  @foreach($subCategories as $subCat)
+                    <!-- DYNAMIC SUBCATEGORY ACCORDION (Flat, Villa, etc.) -->
+                    <div class="accordion-item border-0">
+                      <h3 class="accordion-header" id="exclusive{{ $subCat->id }}Heading">
+                        <button class="accordion-button sub-menu-header collapsed" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#exclusive{{ $subCat->id }}Collapse" aria-expanded="false"
+                          aria-controls="exclusive{{ $subCat->id }}Collapse">
+                          <i class="fas fa-home"></i> {{ $subCat->sub_category_name }}
+                        </button>
+                      </h3>
+                      <div id="exclusive{{ $subCat->id }}Collapse" class="accordion-collapse collapse"
+                        aria-labelledby="exclusive{{ $subCat->id }}Heading" data-bs-parent="#exclusiveLaunchSubAccordion">
+                        <div class="accordion-body">
+
+                          @php
+                            // Get all properties in this subcategory
+                            $properties = Properties::where('category_id', $exclusiveCategory->id)
+                              ->where('sub_category_id', $subCat->id)
+                              ->where('approval', 'Approved')
+                              ->where('publish_status', 'Publish')
+                              ->get();
+
+                            $showLimit = 5;
+                          @endphp
+
+                          <!-- PROJECTS SECTION -->
+                          @if($properties->count() > 0)
+                            <div class="sub-sub-section section-properties">
+                              <h5><i class="fas fa-building"></i> Projects</h5>
+                              <ul class="list-unstyled">
+                                @foreach($properties->take($showLimit) as $property)
+                                  <li>
+                                    <a href="{{ route('property.show', $property->id) }}">
+                                      {{ $property->title }}
+                                    </a>
+                                  </li>
+                                @endforeach
+
+                                @if($properties->count() > $showLimit)
+                                  @foreach($properties->slice($showLimit) as $property)
+                                    <li class="more-properties-exclusive-{{ $subCat->id }}" style="display:none;">
+                                      <a href="{{ route('property.show', $property->id) }}">
+                                        {{ $property->title }}
+                                      </a>
+                                    </li>
+                                  @endforeach
+                                  <li>
+                                    <a href="javascript:void(0);" class="view-more-mobile"
+                                      onclick="toggleViewMoreExclusiveProperties({{ $subCat->id }}, this)">
+                                      View More
+                                    </a>
+                                  </li>
+                                @endif
+                              </ul>
+                            </div>
+                          @else
+                            <div class="sub-sub-section section-properties">
+                              <h5><i class="fas fa-building"></i> Projects</h5>
+                              <p class="text-muted">No properties available</p>
+                            </div>
+                          @endif
+
+                          <!-- BUDGET SECTION -->
+                          @if(isset($sellBudgets) && count($sellBudgets) > 0)
+                            <div class="sub-sub-section section-budget">
+                              <h5><i class="fas fa-rupee-sign"></i> Budget</h5>
+                              <ul class="list-unstyled">
+                                @foreach($sellBudgets as $budget)
+                                  <li>
+                                    <a
+                                      href="{{ route('listing.list', array_merge(['sub_category_id' => $subCat->id], $budget['query'])) }}">
+                                      {{ $budget['label'] }}
+                                    </a>
+                                  </li>
+                                @endforeach
+                              </ul>
+                            </div>
+                          @endif
+
+                        </div>
+                      </div>
+                    </div>
+                  @endforeach
+
+                </div>
+              </div>
+            </div>
+          </div>
+        @endif
+
+      </div>
+    </div>
+  </div>
 
   <!-- Offcanvas Menu -->
 
@@ -2315,7 +2628,7 @@
         <div class="modal-body">
           <div class="modal-main">
             <div class="row align-items-center">
-              <div class="col-lg-6">
+              <div class="col-lg-6 mobile-sign">
                 <div class="custom-mode-l"
                   style="position: relative; height: 100%; min-height: 400px; background-image: url('https://img.freepik.com/free-photo/construction-concept-with-engineering-tools_1150-17809.jpg'); background-size: cover; background-position: center; border-radius: 10px; overflow: hidden;display: flex;align-items: center; justify-content: center;">
                   <div
@@ -2326,11 +2639,11 @@
                     <div>
                       <a href="#">
                         <h3 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 15px; color: #fff;">
-                          ParhitProperty</h3>
+                          Bhawan Bhoomi</h3>
                       </a>
                       <!--<img src="{{ asset('') }}images/house.png" class="img-fluid" style="max-width: 150px; margin-bottom: 15px;">-->
-                      <p style="font-size: 1.2rem; line-height: 1.6; color: #f0f0f0;">Find the best matches for
-                        you<br />Make the most of high seller scores<br />Experience a joyful journey</p>
+                      <p style="font-size: 1.2rem; line-height: 1.6; color: #f0f0f0;">Bhawan Bhoomi Help you in finding
+                        the Best property<br />across India<br />Experience a joyful journey</p>
                     </div>
                   </div>
                 </div>
@@ -2495,10 +2808,10 @@
         <div class="modal-body">
           <div class="modal-main">
             <div class="row align-items-center">
-              <div class="col-lg-6">
+              <div class="col-lg-6 mobile-sign">
                 <div class="custom-mode-l">
                   <a href="#">
-                    <h3>ParhitProperty</h3>
+                    <h3>Bhawan Bhoomi</h3>
                   </a>
 
 
@@ -2603,25 +2916,36 @@
                   </form>
 
                   <div class="form-group row">
-                    <div class="col-sm-12">
-                      <span class="or-span">Create Account Using</span>
-                    </div>
-
-                    <div class="col-sm-6 mt-2">
-                      <a style="cursor: pointer;" onclick="faceBookSignup()">
-                        <img src="{{ asset('') }}images/loginwithfb.png" class="img-fluid">
-                      </a>
-
+                    <!--<div class="col-sm-12">-->
+                    <!--  <span class="or-span">Create Account Using</span>-->
+                    <!--</div>-->
+                    <div class="devide-or">
+                      <div class="horz-line"> </div>
+                      <h4>OR</h4>
+                      <div class="horz-line"> </div>
 
                     </div>
-
-                    <div class="col-sm-6 mt-2">
-                      <a style="cursor: pointer;" onclick="googleSignup()">
-                        <img src="{{ asset('') }}images/loginwithg.png" class="img-fluid">
-                      </a>
-
+                    <div class="google-signin">
+                      <img src="{{ asset('images/google.png')}}" style="height: 20px;" />
+                      <p>Signin with Google</p>
 
                     </div>
+
+                    <!--<div class="col-sm-6 mt-2">-->
+                    <!--  <a style="cursor: pointer;" onclick="faceBookSignup()">-->
+                    <!--    <img src="{{ asset('') }}images/loginwithfb.png" class="img-fluid">-->
+                    <!--  </a>-->
+
+
+                    <!--</div>-->
+
+                    <!--<div class="col-sm-6 mt-2">-->
+                    <!--  <a style="cursor: pointer;" onclick="googleSignup()">-->
+                    <!--    <img src="{{ asset('') }}images/loginwithg.png" class="img-fluid">-->
+                    <!--  </a>-->
+
+
+                    <!--</div>-->
                   </div>
                 </div>
               </div>
@@ -2753,6 +3077,223 @@
   </div>
 
   <div id="render-cities-modal"></div>
+  <div class="bottom-wrap" role="navigation" aria-label="Bottom menu">
+    <div class="bottom-pill">
+
+      <button class="bottom-plus-button" id="bottomPlusBtn" aria-label="Add">
+        <svg viewBox="0 0 24 24">
+          <path d="M13 11h6a1 1 0 100-2h-6V3a1 1 0 10-2 0v6H5a1 1 0 100 2h6v6a1 1 0 102 0v-6z" />
+        </svg>
+      </button>
+
+      <!-- Home Button -->
+      @auth
+        @php
+          $homeRoute = match (Auth::user()->role) {
+            'owner' => route('user.dashboard'),
+            'builder' => route('builder.dashboard'),
+            'agent' => route('agent.dashboard'),
+            default => route('user.dashboard')
+          };
+        @endphp
+        <a class="bottom-item bottom-active" data-key="home" href="{{ $homeRoute }}">
+      @else
+          <a class="bottom-item bottom-active" data-key="home" href="#"
+            onclick="event.preventDefault(); openSigninModal();">
+        @endauth
+          <span class="bottom-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 10.2L12 3l9 7.2V21a1 1 0 01-1 1h-5v-7H9v7H4a1 1 0 01-1-1V10.2z" />
+            </svg>
+          </span>
+          <span class="bottom-badge">Home</span>
+        </a>
+
+
+        <a class="bottom-item" data-key="insights" href="#">
+          <span class="bottom-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M5 3h2v16H5zM11 8h2v11h-2zM17 13h2v6h-2z" />
+            </svg>
+          </span>
+          <span class="bottom-badge">Wishlist</span>
+        </a>
+
+        @auth
+          <a class="bottom-item" style="margin-top:33px;" data-key="sell" href="{{ route('create_property') }}">
+        @else
+            <a class="bottom-item" style="margin-top:33px;" data-key="sell" href="#"
+              onclick="event.preventDefault(); openSigninModal();">
+          @endauth
+            <!--<span class="bottom-icon">-->
+            <!--  <svg viewBox="0 0 24 24" fill="currentColor">-->
+            <!--    <path d="M21 11l-8-8H3v10l8 8 10-9zM7 7a2 2 0 110-4 2 2 0 010 4z"/>-->
+            <!--  </svg>-->
+            <!--</span>-->
+            <span class="bottom-badge">Sell / Rent</span>
+          </a>
+
+
+          <a class="bottom-item" data-key="shortlist" href="#">
+            <span class="bottom-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 21s-7-4.5-9-8a5 5 0 019-6 5 5 0 019 6c-2 3.5-9 8-9 8z" />
+              </svg>
+            </span>
+            <span class="bottom-badge">Support</span>
+          </a>
+
+          <!-- Profile Button -->
+          @auth
+            @php
+              $profileRoute = match (Auth::user()->role) {
+                'owner' => route('user.see_profile'),
+                'builder' => route('builder.seeBuilderProfile'),
+                'agent' => route('agent.seeAgentProfile'),
+                default => route('user.see_profile')
+              };
+            @endphp
+            <a class="bottom-item" data-key="profile" data-bs-toggle="offcanvas" href="#offcanvasExample2"
+          role="button">
+          @else
+              <a class="bottom-item" data-key="profile" href="#" onclick="event.preventDefault(); openSigninModal();">
+            @endauth
+              <span class="bottom-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-5 0-8 2.5-8 5v1h16v-1c0-2.5-3-5-8-5z" />
+                </svg>
+              </span>
+              <span class="bottom-badge" >Profile</span>
+            </a>
+
+
+    </div>
+  </div>
+  
+           
+         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample2" aria-labelledby="filterMenuLabel"
+        style="width: 320px;">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title fw-semibold" id="filterMenuLabel">Profile</h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body" style="background:#f9f9f9; text-align:left; padding:20px;">
+                    <div class="profile-section mb-3">
+            <div class="profile-image">
+                <div class="pro-user">
+                  @php
+                $avatar = "";
+
+                if (Auth::check()) {
+                  // User is logged in
+                  if (!empty(Auth::user()->avatar) && file_exists(public_path(Auth::user()->avatar))) {
+                    $avatar = url(Auth::user()->avatar);
+                  } else {
+                    $avatar = 'https://static.99acres.com/universalhp/img/ProfileIcon.shared.png';
+                  }
+                } else {
+                  // User is not logged in - show default avatar
+                  $avatar = 'https://static.99acres.com/universalhp/img/ProfileIcon.shared.png';
+                }
+              @endphp
+
+                <img src="{{$avatar}}" alt="Profile Picture" id="change_avatar" class="img-fluid">
+                <form id="avatar-form" name="avatar-form" enctype="multipart/form-data">
+                  <div class="p-image">
+                      <i class="fas fa-pencil-alt upload-button" id="buttonid"></i>
+                      <input class="file-upload" type="file" id="fileid" name="avatar_file" accept="image/*" onchange="previewImage(this)" style="display: none;">
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="user-info d-flex flex-column">
+                <p style="font-weight:600;"> {{Auth::user()->firstname}} {{Auth::user()->lastname}}</p>
+                <p>{{Auth::user()->email}} @if(\Auth::user()->is_verified == 1) <a class="verify-btn-s"><i class="fa fa-check-circle"></i></a> @else <a style="cursor: pointer;" onclick="verifyEmail()" class="verify-btn-s"> <img src="{{ asset('images') }}/verify.png" alt="verified" width="15px;" ></a> @endif</p>
+                <p>{{Auth::user()->mobile_number}} @if(\Auth::user()->mobile_verified == 1) <a class="verify-btn-s"><i class="fa fa-check-circle"></i></a> @else <a style="cursor: pointer;" onclick="verifyMobileNumber()" class="verify-btn-s"> <img src="{{ asset('images') }}/verify.png" width="15px;" alt="verified" ></a> @endif</p>
+                
+            </div>
+            
+        </div>
+
+  <!-- Sidebar Menu -->
+  <nav class="mobile-sidebar">
+    <ul class="list-unstyled">
+
+      <li class="mb-2">
+        <a href="{{url('user/dashboard')}}" class="d-flex justify-content-between align-items-center sidebar-link active">
+          <span><i class="fas fa-home me-2 text-primary"></i> Dashboard</span>
+        </a>
+      </li>
+
+      <!-- Setting Menu -->
+      <li class="mb-2">
+        <a class="d-flex justify-content-between align-items-center sidebar-link collapsed" data-bs-toggle="collapse"
+          href="#settingMenu" role="button" aria-expanded="false" aria-controls="settingMenu">
+          <span><i class="fas fa-cog me-2 text-warning"></i> Setting</span>
+          <i class="fas fa-chevron-down small"></i>
+        </a>
+        <div class="collapse submenu" id="settingMenu">
+          <ul class="list-unstyled ps-3">
+            <li><a href="{{url('user/profile')}}" class="submenu-link">Profile</a></li>
+            <li><a href="{{url('user/change-password')}}" class="submenu-link">Change Password</a></li>
+            <li><a href="{{url('user/my-activities')}}" class="submenu-link">My Activities</a></li>
+          </ul>
+        </div>
+      </li>
+
+      <!-- Property Menu -->
+      <li class="mb-2">
+        <a class="d-flex justify-content-between align-items-center sidebar-link collapsed" data-bs-toggle="collapse"
+          href="#propertyMenu" role="button" aria-expanded="false" aria-controls="propertyMenu">
+          <span><i class="fas fa-building me-2 text-success"></i> Property</span>
+          <i class="fas fa-chevron-down small"></i>
+        </a>
+        <div class="collapse submenu" id="propertyMenu">
+          <ul class="list-unstyled ps-3">
+            <li><a href="{{url('user/properties')}}" class="submenu-link">My Properties</a></li>
+            <li><a href="{{url('user/all-inquries')}}" class="submenu-link">All Inquiries</a></li>
+            <li><a href="{{url('user/my-wishlist')}}" class="submenu-link">My Wishlist</a></li>
+          </ul>
+        </div>
+      </li>
+
+      <!-- Price & Subscriptions Menu -->
+      <li class="mb-2">
+        <a class="d-flex justify-content-between align-items-center sidebar-link collapsed" data-bs-toggle="collapse"
+          href="#priceMenu" role="button" aria-expanded="false" aria-controls="priceMenu">
+          <span><i class="fas fa-tags me-2 text-info"></i> Price & Subscriptions</span>
+          <i class="fas fa-chevron-down small"></i>
+        </a>
+        <div class="collapse submenu" id="priceMenu">
+          <ul class="list-unstyled ps-3">
+            <li><a href="{{url('user/current-subscriptions')}}" class="submenu-link">Current Subscriptions</a></li>
+            <li><a href="{{url('user/payments-invoice')}}" class="submenu-link">Payments & Invoice</a></li>
+            <li><a href="{{url('user/pricing')}}" class="submenu-link">Pricing</a></li>
+          </ul>
+        </div>
+      </li>
+
+      <!-- Logout -->
+      <li class="mt-3" style="width:100%;">
+        <a href="#" class="d-flex justify-content-between align-items-center sidebar-link text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="width:100%;">
+            <div><i class="fas fa-sign-out-alt me-2"></i> Logout</div>
+          
+        </a>
+        <form id="logout-form" action="{{ url('user/logout') }}" method="POST" style="display: none;">
+          {{ csrf_field() }}
+        </form>
+      </li>
+    </ul>
+  </nav>
+
+</div>
+
+
+
+
+
+      </div>
 
   <footer>
     <div class="footer-top">
@@ -2786,7 +3327,7 @@
             <div class="foo-left">
               <div class="foo-logo">
                 <a href="{{route('home')}}">
-                  <img src="{{ asset('images/logo-foo.png')}}" class="img-fluid">
+                  <img src="{{ asset('images/logoicon.png')}}" class="img-fluid">
                 </a>
 
                 <p>{{ $footer_content->title }}</p>
@@ -2794,7 +3335,7 @@
               @php
                 $media = App\SocialMedia::first();
               @endphp
-              <div class="foo-social-app">
+              <div class="foo-social-app mb-2">
                 <ul>
                   <li><a href="{{ $media->facebook }}" target="_blank"><i class="fab fa-facebook-f"></i></a>
                   </li>
@@ -2878,6 +3419,172 @@
 </html>
 
 @include('layouts.front.app_js')
+
+<script>
+
+
+  function openSigninModal() {
+    // Example: if using Bootstrap modal
+    $('#signin').modal('show');
+  }
+
+
+  function toggleViewMoreExclusiveProperties(subCatId, element) {
+    const moreItems = document.querySelectorAll('.more-properties-exclusive-' + subCatId);
+
+    if (moreItems.length > 0) {
+      const firstItem = moreItems[0];
+
+      if (firstItem.style.display === 'none' || firstItem.style.display === '') {
+        // Show all hidden items
+        moreItems.forEach(function (item) {
+          item.style.display = 'list-item';
+        });
+        element.textContent = 'View Less';
+      } else {
+        // Hide all items
+        moreItems.forEach(function (item) {
+          item.style.display = 'none';
+        });
+        element.textContent = 'View More';
+      }
+    }
+  }
+
+  function toggleViewMoreDirectory(categoryId, element) {
+    const moreItems = document.querySelectorAll('.more-subcategories-directory-' + categoryId);
+
+    if (moreItems.length > 0) {
+      const firstItem = moreItems[0];
+
+      if (firstItem.style.display === 'none' || firstItem.style.display === '') {
+        // Show all hidden items
+        moreItems.forEach(function (item) {
+          item.style.display = 'list-item';
+        });
+        element.textContent = 'View Less';
+      } else {
+        // Hide all items
+        moreItems.forEach(function (item) {
+          item.style.display = 'none';
+        });
+        element.textContent = 'View More';
+      }
+    }
+  }
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const offcanvas = document.getElementById('offcanvasWithBothOptions');
+    let targetMenu = null;
+
+    // Capture which menu was clicked
+    document.querySelectorAll('.mobile-menu .bb-nav-link').forEach(function (link) {
+      link.addEventListener('click', function () {
+        // Get the text of the clicked menu item
+        const menuText = this.textContent.trim();
+
+        // Map menu text to accordion IDs
+        switch (menuText) {
+          case 'Buyers':
+            targetMenu = 'buyersCollapse';
+            break;
+          case 'Sellers':
+          case 'For Sellers':
+            targetMenu = 'sellersCollapse';
+            break;
+          case 'Rent':
+          case 'For Rent':
+            targetMenu = 'rentCollapse';
+            break;
+          case 'Directory & Services':
+            targetMenu = 'directoryCollapse';
+            break;
+          case 'Exclusive Launch':
+            targetMenu = 'exclusiveLaunchCollapse';
+            break;
+        }
+      });
+    });
+
+    // When offcanvas opens, show only the selected accordion
+    offcanvas.addEventListener('shown.bs.offcanvas', function () {
+      if (!targetMenu) return;
+
+      // Get all main accordion items
+      const allAccordionItems = document.querySelectorAll('#mobileMenuAccordion > .accordion-item');
+
+      // Hide all accordion items
+      allAccordionItems.forEach(function (item) {
+        item.style.display = 'none';
+      });
+
+      // Close all accordions first
+      document.querySelectorAll('#mobileMenuAccordion .accordion-collapse').forEach(function (collapse) {
+        collapse.classList.remove('show');
+      });
+
+      // Reset all accordion buttons
+      document.querySelectorAll('#mobileMenuAccordion .accordion-button').forEach(function (btn) {
+        btn.classList.add('collapsed');
+        btn.setAttribute('aria-expanded', 'false');
+      });
+
+      // Find and show only the target accordion item
+      const targetCollapse = document.getElementById(targetMenu);
+      const targetButton = document.querySelector(`[data-bs-target="#${targetMenu}"]`);
+
+      if (targetCollapse && targetButton) {
+        // Show the parent accordion-item
+        const parentItem = targetCollapse.closest('.accordion-item');
+        if (parentItem) {
+          parentItem.style.display = 'block';
+        }
+
+        // Open the target accordion
+        targetCollapse.classList.add('show');
+
+        // Update button state
+        targetButton.classList.remove('collapsed');
+        targetButton.setAttribute('aria-expanded', 'true');
+      }
+
+      // Reset targetMenu
+      targetMenu = null;
+    });
+
+    // When offcanvas closes, show all accordion items again
+    offcanvas.addEventListener('hidden.bs.offcanvas', function () {
+      const allAccordionItems = document.querySelectorAll('#mobileMenuAccordion > .accordion-item');
+      allAccordionItems.forEach(function (item) {
+        item.style.display = 'block';
+      });
+    });
+  });
+
+</script>
+
+
+<script>
+  // switch active class
+  document.querySelectorAll('.bottom-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.bottom-item').forEach(i => i.classList.remove('bottom-active'));
+      item.classList.add('bottom-active');
+    });
+  });
+
+  // floating plus button click
+  document.getElementById('bottomPlusBtn').addEventListener('click', () => {
+    const btn = document.getElementById('bottomPlusBtn');
+    btn.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-4px)' }, { transform: 'translateY(0)' }],
+      { duration: 220, easing: 'ease-out' });
+
+    // Redirect to create_property route
+    window.location.href = "{{ route('create_property') }}";
+  });
+
+</script>
 
 <script type="text/javascript">
   $(document).ready(function () {

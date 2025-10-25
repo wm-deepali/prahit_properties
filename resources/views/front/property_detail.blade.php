@@ -40,10 +40,12 @@
 										<h3> {{$property_detail->title}}</h3>
 										<div class="loc-id-detail">
 											<ul>
-												<li><i class="fas fa-map-marker"></i>
-													{{isset($property_detail->location->location) ? $property_detail->location->location : ''}}
+												{{-- Remove location/sub-location from here - showing in featured details
+												below --}}
+												<li>
+													<i class="fas fa-map-marker-alt"></i>
+													{{ $property_detail->getCity ? $property_detail->getCity->name : '' }}{{ $property_detail->getState ? ', ' . $property_detail->getState->name : '' }}
 												</li>
-												<li><i class="fas fa-home"></i> 248239</li>
 											</ul>
 										</div>
 									</div>
@@ -71,99 +73,103 @@
 									<div class="col-sm-8">
 										<div class="property-featured-det">
 											<div class="row">
-												<div class="col-sm-6 col-md-6 col-xs-6">
-													<div class="detail-field-label">Property Type</div>
-													<div class="detail-field-value">
-														{{ $property_detail->property_types ? $property_detail->property_types->type : '' }}
-													</div>
-												</div>
 
+												<!-- Category -->
+												@if($property_detail->Category)
+													<div class="col-sm-6 col-md-6 col-xs-6">
+														<div class="detail-field-label">Property Available For</div>
+														<div class="detail-field-value">
+															{{ $property_detail->Category->category_name }}
+														</div>
+													</div>
+												@endif
+
+												<!-- Sub Category -->
+												@if($property_detail->SubCategory)
+													<div class="col-sm-6 col-md-6 col-xs-6">
+														<div class="detail-field-label">Category</div>
+														<div class="detail-field-value">
+															{{ $property_detail->SubCategory->sub_category_name }}
+														</div>
+													</div>
+												@endif
+
+												<!-- Sub Sub Category -->
+												@if($property_detail->SubSubCategory)
+													<div class="col-sm-6 col-md-6 col-xs-6">
+														<div class="detail-field-label">Property Type</div>
+														<div class="detail-field-value">
+															{{ $property_detail->SubSubCategory->sub_sub_category_name }}
+														</div>
+													</div>
+												@endif
+
+												<!-- State -->
 												<div class="col-sm-6 col-md-6 col-xs-6">
 													<div class="detail-field-label">State</div>
 													<div class="detail-field-value">
-														{{ $property_detail->get_state ? $property_detail->get_state->name : ''  }}
+														{{ $property_detail->getState ? $property_detail->getState->name : 'N/A' }}
 													</div>
 												</div>
+
+												<!-- City -->
 												<div class="col-sm-6 col-md-6 col-xs-6">
 													<div class="detail-field-label">City</div>
 													<div class="detail-field-value">
-														{{ $property_detail->get_city ? $property_detail->get_city->name : ''  }}
+														{{ $property_detail->getCity ? $property_detail->getCity->name : 'N/A' }}
 													</div>
 												</div>
 
+												<!-- Location -->
+												@if($property_detail->Location)
+													<div class="col-sm-6 col-md-6 col-xs-6">
+														<div class="detail-field-label">Location</div>
+														<div class="detail-field-value">
+															{{ $property_detail->Location->location }}
+														</div>
+													</div>
+												@endif
+
+												<!-- Sub Location -->
+												@if($property_detail->sub_location_id)
+													<div class="col-sm-6 col-md-6 col-xs-6">
+														<div class="detail-field-label">Sub Location</div>
+														<div class="detail-field-value">
+															{{ \App\SubLocations::find($property_detail->sub_location_id)->sub_location_name ?? 'N/A' }}
+														</div>
+													</div>
+												@endif
+
+												<!-- Address -->
 												<div class="col-sm-6 col-md-6 col-xs-6">
 													<div class="detail-field-label">Address</div>
-													<div class="detail-field-value">{{ $property_detail->address }}</div>
-												</div>
-												<div class="col-sm-12 col-md-12 col-xs-6">
-													<div class="detail-field-label">Price Label</div>
-													<div class="detail-field-value">
-														{{  $property_detail->getPriceLabels($property_detail->price_label) ?? 'N/A' }}
-														@if($property_detail->price_label_second)
-															<div>
-																<strong>{{ optional($property_detail->getPriceLabelObj())->second_input_label ?? 'Date' }}:</strong>
-																<span>{{ $property_detail->price_label_second }}</span>
-															</div>
-														@endif
+													<div class="detail-field-value">{{ $property_detail->address ?? 'N/A' }}
 													</div>
 												</div>
-
-												<div class="col-sm-12 col-md-12 col-xs-6">
-													<div class="detail-field-label">Property Status</div>
-													<div class="detail-field-value">
-														{{ $property_detail->property_status ? $property_detail->getPropertyStatuses($property_detail->property_status) : 'N/A' }}
-														@if($property_detail->property_status_second)
-															<div>
-																<strong>{{ optional($property_detail->getPropertyStatusObj())->second_input_label ?? 'Date' }}:</strong>
-																<span>{{ $property_detail->property_status_second }}</span>
-															</div>
-														@endif
-													</div>
-												</div>
-
-												<div class="col-sm-12 col-md-12 col-xs-6">
-													<div class="detail-field-label">Registration Status</div>
-													<div class="detail-field-value">
-														{{ $property_detail->registration_status ? $property_detail->getRegistrationStatuses($property_detail->registration_status) : 'N/A' }}
-														@if($property_detail->registration_status_second)
-															<div>
-																<strong>{{ optional($property_detail->getRegistrationStatusObj())->second_input_label ?? 'Date' }}:</strong>
-																<span>{{ $property_detail->registration_status_second }}</span>
-															</div>
-														@endif
-													</div>
-												</div>
-
-												<div class="col-sm-12 col-md-12 col-xs-6">
-													<div class="detail-field-label">Furnishing Status</div>
-													<div class="detail-field-value">
-														{{ $property_detail->furnishing_status ? $property_detail->getFurnishingStatuses($property_detail->furnishing_status) : 'N/A' }}
-														@if($property_detail->furnishing_status_second)
-															<div>
-																<strong>{{ optional($property_detail->getFurnishingStatusObj())->second_input_label ?? 'Date' }}:</strong>
-																<span>{{ $property_detail->furnishing_status_second }}</span>
-															</div>
-														@endif
-													</div>
-												</div>
-
 
 											</div>
 										</div>
 
-
 										<div class="property-featured-btn">
 											<ul>
-												<li><button type="button" class="btn btn-fill" data-toggle="modal"
+												<li>
+													<button type="button" class="btn btn-fill" data-toggle="modal"
 														data-target="#contact-agent"
-														onclick='window.active_listing_id = "{{$property_detail->id}}"'>Contact
-														Agent</button>
+														onclick='window.active_listing_id = "{{$property_detail->id}}"'>
+														Contact Agent
+													</button>
 												</li>
-												<li><button type="button" class="btn btn-outline"
-														onclick="claim('{{ $property_detail->id }}')">Claim Listing</button>
+												<li>
+													<button type="button" class="btn btn-outline"
+														onclick="claim('{{ $property_detail->id }}')">
+														Claim Listing
+													</button>
 												</li>
-												<li><button type="button" class="btn btn-outline" data-toggle="modal"
-														data-target="#feedback-complaint">Feedback / Complaint</button>
+												<li>
+													<button type="button" class="btn btn-outline" data-toggle="modal"
+														data-target="#feedback-complaint">
+														Feedback / Complaint
+													</button>
 												</li>
 											</ul>
 										</div>
@@ -214,14 +220,48 @@
 						<div class="property-location">
 							<div class="row">
 								<div class="col-sm-12">
-									<iframe
-										src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14237.956091373446!2d80.9541594!3d26.8562!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xfb5cc225b2f58aa2!2sWeb%20Mingo%20IT%20Solutions%20Pvt.%20Ltd.%20-%20Website%20Designing%20%26%20Digital%20Marketing%20Company!5e0!3m2!1sen!2sin!4v1591787359000!5m2!1sen!2sin"
-										width="100%" height="200px" frameborder="0" style="border:0;" allowfullscreen=""
-										aria-hidden="false" tabindex="0"></iframe>
+									@php
+										// Build full address for map
+										$mapAddress = [];
+
+										if ($property_detail->address) {
+											$mapAddress[] = $property_detail->address;
+										}
+
+										if ($property_detail->Location) {
+											$mapAddress[] = $property_detail->Location->location;
+										}
+
+										if ($property_detail->getCity) {
+											$mapAddress[] = $property_detail->getCity->name;
+										}
+
+										if ($property_detail->getState) {
+											$mapAddress[] = $property_detail->getState->name;
+										}
+
+										$fullAddress = implode(', ', array_filter($mapAddress));
+										$encodedAddress = urlencode($fullAddress);
+									@endphp
+
+									@if($fullAddress)
+										<iframe src="https://www.google.com/maps?q={{ $encodedAddress }}&output=embed"
+											width="100%" height="400px" frameborder="0" style="border:0; border-radius: 8px;"
+											allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+										</iframe>
+									@else
+										<div
+											style="padding: 60px; text-align: center; background: #f5f5f5; border-radius: 8px;">
+											<i class="fas fa-map-marker-alt"
+												style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+											<p style="color: #999; margin: 0;">Location information not available</p>
+										</div>
+									@endif
 								</div>
 							</div>
 						</div>
 					</div>
+
 					@if(count($amenities) > 0)
 						<div class="card property-widgets">
 							<div class="property-title">
@@ -241,12 +281,84 @@
 							</div>
 						</div>
 					@endif
+
 					<div class="card property-widgets">
 						<div class="property-title">
 							<h3>Property Additional Details</h3>
 						</div>
+
+						<div class="property-additional-details">
+							<div class="row">
+								<!-- Price Label -->
+								@if($property_detail->price_label)
+									<div class="col-sm-6 col-md-6 mb-3">
+										<div class="detail-field-label">Price Label</div>
+										<div class="detail-field-value">
+											{{ $property_detail->getPriceLabels($property_detail->price_label) ?? 'N/A' }}
+											@if($property_detail->price_label_second)
+												<div class="mt-2">
+													<strong>{{ optional($property_detail->getPriceLabelObj())->second_input_label ?? 'Date' }}:</strong>
+													<span>{{ $property_detail->price_label_second }}</span>
+												</div>
+											@endif
+										</div>
+									</div>
+								@endif
+
+								<!-- Property Status -->
+								@if($property_detail->property_status)
+									<div class="col-sm-6 col-md-6 mb-3">
+										<div class="detail-field-label">Property Status</div>
+										<div class="detail-field-value">
+											{{ $property_detail->getPropertyStatuses($property_detail->property_status) ?? 'N/A' }}
+											@if($property_detail->property_status_second)
+												<div class="mt-2">
+													<strong>{{ optional($property_detail->getPropertyStatusObj())->second_input_label ?? 'Date' }}:</strong>
+													<span>{{ $property_detail->property_status_second }}</span>
+												</div>
+											@endif
+										</div>
+									</div>
+								@endif
+
+								<!-- Registration Status -->
+								@if($property_detail->registration_status)
+									<div class="col-sm-6 col-md-6 mb-3">
+										<div class="detail-field-label">Registration Status</div>
+										<div class="detail-field-value">
+											{{ $property_detail->getRegistrationStatuses($property_detail->registration_status) ?? 'N/A' }}
+											@if($property_detail->registration_status_second)
+												<div class="mt-2">
+													<strong>{{ optional($property_detail->getRegistrationStatusObj())->second_input_label ?? 'Date' }}:</strong>
+													<span>{{ $property_detail->registration_status_second }}</span>
+												</div>
+											@endif
+										</div>
+									</div>
+								@endif
+
+								<!-- Furnishing Status -->
+								@if($property_detail->furnishing_status)
+									<div class="col-sm-6 col-md-6 mb-3">
+										<div class="detail-field-label">Furnishing Status</div>
+										<div class="detail-field-value">
+											{{ $property_detail->getFurnishingStatuses($property_detail->furnishing_status) ?? 'N/A' }}
+											@if($property_detail->furnishing_status_second)
+												<div class="mt-2">
+													<strong>{{ optional($property_detail->getFurnishingStatusObj())->second_input_label ?? 'Date' }}:</strong>
+													<span>{{ $property_detail->furnishing_status_second }}</span>
+												</div>
+											@endif
+										</div>
+									</div>
+								@endif
+							</div>
+						</div>
+
+						<!-- Original form-rendered additional info -->
 						<div id="additional-info"></div>
 					</div>
+
 				</div>
 
 				<div class="col-sm-4">
@@ -433,17 +545,97 @@
 	<script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
 	<script type="text/javascript">
 		$(".loading").css('display', 'none');
+
 		$(document).ready(function () {
-			setTimeout(function () {
-				var formData = $('#form-json').val();
-				var json_data = JSON.parse(formData);
-				console.log(json_data);
-				var formRenderOptions = { formData };
-				frInstance = $('#additional-info').formRender(formRenderOptions);
-				$("#additional-info :input").prop("disabled", true);
-			}, 2000);
+			var formData = $('#form-json').val();
+
+			if (formData) {
+				try {
+					var json_data = JSON.parse(formData);
+					var outputHTML = '<div class="row">';
+
+					json_data.forEach(function (field) {
+						// Skip headers and paragraphs (but show them as section titles)
+						if (field.type === 'header' || field.type === 'paragraph') {
+							if (field.label) {
+								outputHTML += '<div class="col-sm-12 mb-3"><h4 style="color: #333; font-size: 18px; font-weight: 600; margin-bottom: 10px; border-bottom: 2px solid #e38e32; padding-bottom: 8px;">' + stripHtml(field.label) + '</h4></div>';
+							}
+							return;
+						}
+
+						var label = field.label ? stripHtml(field.label) : 'N/A';
+						var value = 'Not Provided';
+
+						// Get userData (selected/entered values)
+						if (field.userData && field.userData.length > 0) {
+							// Check if userData has actual values
+							var hasValue = field.userData.some(function (item) {
+								return item !== '' && item !== null && item !== undefined;
+							});
+
+							if (hasValue) {
+								if (field.type === 'radio-group' || field.type === 'select') {
+									// Find the label for selected value
+									var selectedValue = field.userData[0];
+									if (field.values) {
+										var selectedOption = field.values.find(function (v) {
+											return v.value === selectedValue || v.selected === true;
+										});
+										value = selectedOption ? selectedOption.label : selectedValue;
+									}
+								} else if (field.type === 'checkbox-group') {
+									// ✅ Handle multiple checkbox values
+									var selectedValues = [];
+									field.userData.forEach(function (userValue) {
+										if (userValue !== '' && userValue !== null) {
+											// Find label for each checked value
+											if (field.values) {
+												var option = field.values.find(function (v) {
+													return v.value === userValue;
+												});
+												selectedValues.push(option ? option.label : userValue);
+											} else {
+												selectedValues.push(userValue);
+											}
+										}
+									});
+									// Join with bullets or commas
+									value = selectedValues.length > 0 ? selectedValues.join(', ') : 'Not Provided';
+								} else {
+									// ✅ Handle text/number with potential multiple values
+									var filteredValues = field.userData.filter(function (item) {
+										return item !== '' && item !== null && item !== undefined;
+									});
+									value = filteredValues.length > 0 ? filteredValues.join(', ') : 'Not Provided';
+								}
+							}
+						}
+
+						// Display ALL fields
+						outputHTML += '<div class="col-sm-6 col-md-6 mb-3">';
+						outputHTML += '  <div class="detail-field-label">' + label + '</div>';
+						outputHTML += '  <div class="detail-field-value">' + value + '</div>';
+						outputHTML += '</div>';
+					});
+
+					outputHTML += '</div>';
+					$('#additional-info').html(outputHTML);
+				} catch (e) {
+					console.error('Error parsing JSON:', e);
+					$('#additional-info').html('<p style="color: #999;">Additional information not available</p>');
+				}
+			}
 		});
+
+		// Helper function to strip HTML tags
+		function stripHtml(html) {
+			var tmp = document.createElement("DIV");
+			tmp.innerHTML = html;
+			return tmp.textContent || tmp.innerText || "";
+		}
 	</script>
+
+
 	<script type="text/javascript">
 		$("#contact_agent_form").validate({
 			rules: {

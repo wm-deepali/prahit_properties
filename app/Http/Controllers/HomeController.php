@@ -131,7 +131,6 @@ class HomeController extends AppController
 		];
 
 		$categoryName = $typeMap[$request->type] ?? null;
-
 		$category = null;
 		$subcategories = collect();
 		$propertyTypes = collect();
@@ -144,7 +143,6 @@ class HomeController extends AppController
 				$propertyTypes = \App\SubSubCategory::whereIn('sub_category_id', $subcategories->pluck('id'))->get();
 			}
 		}
-
 
 		// Filter by sub_sub_category_id (property types)
 		if ($request->filled('sub_sub_category_id')) {
@@ -228,6 +226,28 @@ class HomeController extends AppController
 			}
 		}
 
+		// Filter by verified property
+		if ($request->boolean('verified_property')) {
+			$query->where('verified', 'yes');
+		}
+
+		// Only show properties that have at least one gallery image or a featured image
+		if ($request->boolean('with_photos')) {
+			$query->where(function ($q) {
+				$q->whereNotNull('featured_image')
+					->where('featured_image', '!=', '')
+					->orWhereHas('PropertyGallery');
+			});
+		}
+
+		// Filter by properties with videos
+		if ($request->boolean('with_videos')) {
+			$query->where(function ($q) {
+				$q->whereNotNull('featured_image')
+					->where('featured_image', '!=', '')
+					->orWhereHas('PropertyGallery');
+			});
+		}
 
 		// Search query for title or location
 		if ($request->filled('search')) {
@@ -240,11 +260,21 @@ class HomeController extends AppController
 			});
 		}
 
-		// Filter by city
 		if ($request->filled('city')) {
 			$query->whereHas('getCity', function ($q) use ($request) {
 				$q->where('id', $request->city);
 			});
+
+			// Fetch locations only for the selected city
+			$locations = Locations::where('status', 1)
+				->where('city_id', $request->city)
+				->orderBy('location', 'asc')
+				->get();
+		} else {
+			// Fetch all active locations if no city is selected
+			$locations = Locations::where('status', 1)
+				->orderBy('location', 'asc')
+				->get();
 		}
 
 		// Filter by status (verified)
@@ -293,6 +323,11 @@ class HomeController extends AppController
 			});
 		}
 
+		if ($request->filled('bedrooms')) {
+			$bedrooms = $request->bedrooms;
+			$query->where('additional_info', 'like', '%"label":"Bedroom"%')
+				->where('additional_info', 'like', '%"userData":["' . $bedrooms . '"]%');
+		}
 
 		// Budget filter
 		if ($request->filled('budget_min') || $request->filled('budget_max')) {
@@ -301,19 +336,72 @@ class HomeController extends AppController
 			$query->whereBetween('price', [$minPrice, $maxPrice]);
 		}
 
+		if ($request->filled('locations')) {
+			$locationIds = is_array($request->locations)
+				? $request->locations
+				: explode(',', $request->locations);
+
+			$query->whereHas('Location', function ($q) use ($locationIds) {
+				$q->whereIn('id', $locationIds);
+			});
+		}
+
+		$sort = $request->get('sort', ''); // default empty
+
+		switch ($sort) {
+			case 'price-low':
+				$query->orderBy('price', 'asc');
+				break;
+
+			case 'price-high':
+				$query->orderBy('price', 'desc');
+				break;
+
+			case 'size-low':
+				// Assuming 'Super Area' is the main size field
+				$query->orderByRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(additional_info, '$.\"Super Area\"')) AS UNSIGNED) ASC");
+				break;
+
+			case 'size-high':
+				$query->orderByRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(additional_info, '$.\"Super Area\"')) AS UNSIGNED) DESC");
+				break;
+
+			default:
+				$query->latest(); // default sorting
+		}
+
+		if ($request->filled('price_negotiable')) {
+			$value = $request->price_negotiable == 1 ? 'yes' : 'no';
+
+			$query->whereRaw(
+				"JSON_CONTAINS(additional_info, JSON_OBJECT('name', 'checkbox-group-1759836890188-0', 'userData', JSON_ARRAY(?)), '$')",
+				[$value]
+			);
+		}
+
+
+		// Filter by security_available
+		if ($request->filled('security_available')) {
+			$securityAvailable = $request->security_available; // 1 or 0
+			$value = $securityAvailable == 1 ? 'yes' : 'no';
+			// Correct JSON path
+			$query->whereRaw(
+				"JSON_CONTAINS(additional_info, JSON_OBJECT('name', 'radio-group-1760078870771-0', 'userData', JSON_ARRAY(?)), '$')",
+				[$value]
+			);
+		}
 
 		// Pagination
 		$properties = $query->paginate(10)->withQueryString();
 		// dd($subcategories);
-		return view('front.listing-list', compact('properties', 'category', 'subcategories', 'propertyTypes'));
+		return view('front.listing-list', compact('properties', 'category', 'subcategories', 'propertyTypes', 'locations'));
 	}
-
 
 	public function directoryList(Request $request)
 	{
-		$query = BusinessListing::query()->where('status', 'Active');
+		$query = BusinessListing::with(['category', 'subCategories'])->where('status', 'Active');
 
-		// 🔹 Filter by Web Directory Subcategory
+		// Filter by Web Directory Subcategory
 		if ($request->has('subcategory') && !empty($request->subcategory)) {
 			$subcategoryId = $request->subcategory;
 
@@ -322,11 +410,87 @@ class HomeController extends AppController
 			});
 		}
 
+		// Filter by Category
+		if ($request->has('category') && !empty($request->category)) {
+			$query->where('category_id', $request->category);
+		}
+
+		// Filter by Rating
+		if ($request->has('rating') && !empty($request->rating)) {
+			$query->where('rating', '>=', $request->rating);
+		}
+
+		// Filter by Verification Status
+		if ($request->has('verified') && $request->verified == 'true') {
+			$query->where('verified_status', 'Verified');
+		}
+
+		// Filter by Membership Type (Premium)
+		if ($request->has('premium') && $request->premium == 'true') {
+			$query->where('membership_type', 'Paid');
+		}
+
+		// ✅ Filter by Most Rated (businesses with rating_count > 0, sorted by rating_count)
+		if ($request->has('most_rated') && $request->most_rated == 'true') {
+			$query->where('rating_count', '>', 0)
+				->orderBy('rating_count', 'desc');
+		}
+
+		// Search functionality
+		if ($request->has('search') && !empty($request->search)) {
+			$searchTerm = $request->search;
+			$query->where(function ($q) use ($searchTerm) {
+				$q->where('business_name', 'LIKE', "%{$searchTerm}%")
+					->orWhere('introduction', 'LIKE', "%{$searchTerm}%")
+					->orWhere('detail', 'LIKE', "%{$searchTerm}%");
+			});
+		}
+
+		// Sorting (only if most_rated is not active)
+		if (!$request->has('most_rated') || $request->most_rated != 'true') {
+			$sortBy = $request->get('sort', 'default');
+			switch ($sortBy) {
+				case 'rating-high':
+					$query->orderBy('rating', 'desc');
+					break;
+				case 'views-high':
+					$query->orderBy('total_views', 'desc');
+					break;
+				case 'established-old':
+					$query->orderBy('established_year', 'asc');
+					break;
+				case 'member-old':
+					$query->orderBy('created_at', 'asc');
+					break;
+				default:
+					$query->orderBy('id', 'desc');
+			}
+		}
+
 		$list = $query->paginate(10);
 
-		return view('front.directory-listing', compact('list'));
+		// Get all categories with subcategories for filter
+		$categories = \App\WebDirectoryCategory::with('subcategories')->get();
+
+		return view('front.directory-listing', compact('list', 'categories'));
 	}
 
+	public function businessDetails($id)
+	{
+		$business = BusinessListing::with([
+			'category',
+			'subCategories',
+			'services',
+			'propertyCategories',
+			'propertySubCategories',
+			'propertySubSubCategories'
+		])->findOrFail($id);
+
+		// Increment views count
+		$business->increment('total_views');
+
+		return view('front.business-details', compact('business'));
+	}
 
 	public function create_property()
 	{
@@ -370,6 +534,7 @@ class HomeController extends AppController
 		])->where('slug', $slug)->first();
 		$property_detail = $property;
 		$amenities = Amenity::whereIn('id', explode(',', $property_detail->amenities))->get();
+		// dd($property_detail->additional_info );
 		return view('front.property_detail', compact('property_detail', 'amenities'));
 	}
 

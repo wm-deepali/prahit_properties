@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title'); ?>
   Preview Properties
 <?php $__env->stopSection(); ?>

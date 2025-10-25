@@ -29,8 +29,8 @@
 
     /* States Buttons */
     .state-data {
-        background-color: #f1f1f1 !important;
-        color: #656464;
+            background-color: #f1f1f1 !important;
+    color: #656464;
         /*border-radius: 20px;*/
         padding: 8px 16px;
         margin: 5px;
@@ -40,12 +40,11 @@
 
     .state-data:hover {
         background-color: #5a6268 !important;
-        color: #ffffff;
+        color:#ffffff;
     }
 
     .badge-success {
-        background-color: #28a745 !important;
-        /* Green for selected */
+        background-color: #28a745 !important; /* Green for selected */
     }
 
     /* Cities List */
@@ -53,25 +52,24 @@
         list-style: none;
         padding: 0;
         transition: opacity 0.5s ease, transform 0.5s ease;
-        display: none;
-        /* Initially hidden */
+        display: none; /* Initially hidden */
     }
 
     .filter-city {
         padding: 10px;
         color: #9b9ea1;
         text-decoration: none;
-        border: 1px solid #9b9ea1;
-        white-space: nowrap;
-        border-radius: 3px;
-
+        border:1px solid #9b9ea1;
+        white-space:nowrap;
+        border-radius:3px;
+      
     }
 
     .filter-city:hover {
         /*text-decoration: underline;*/
-        border: 1px solid blue;
-        color: blue;
-
+        border:1px solid blue;
+        color:blue;
+        
     }
 
     /* Breadcrumb */
@@ -81,8 +79,7 @@
         font-weight: bold;
         display: flex;
         align-items: center;
-        display: none;
-        /* Initially hidden */
+        display: none; /* Initially hidden */
     }
 
     #back-btn {
@@ -122,15 +119,14 @@
 
     /* Animated Placeholder and Search Icon */
     .search-wrapper {
-        max-width: 400px;
+        width: 100%;
         position: relative;
     }
 
     .search-wrapper input {
         height: 45px;
         font-size: 16px;
-        padding-left: 40px !important;
-        /* Increased padding to accommodate icon */
+        padding-left: 40px !important; /* Increased padding to accommodate icon */
         background: #fff;
     }
 
@@ -146,8 +142,7 @@
     .animated-placeholder {
         position: absolute;
         top: 0;
-        left: 40px;
-        /* Adjusted to start after the icon */
+        left: 40px; /* Adjusted to start after the icon */
         height: 100%;
         display: flex;
         align-items: center;
@@ -160,125 +155,146 @@
     #placeholder-text {
         transition: opacity 0.5s ease, transform 0.5s ease;
     }
-
-    .h-line {
-        width: 50px;
-        height: 1px;
-        background: #f9f9f9;
-        margin: 0px 10px;
+    .h-line{
+        width:50px;
+        height:1px;
+        background:#f9f9f9;
+        margin:0px 10px;
         /*margin:auto;*/
     }
 </style>
 
-<div class="modal fade location-modal" id="location-list" tabindex="-1" role="dialog"
-    aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade location-modal" id="location-list" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="cities-section">
                 <div class="modal-close">
-                    <button class="close" data-dismiss="modal" type="button" onclick="closeModal()"><i
-                            class="fas fa-times"></i></button>
+                    <button class="close" data-bs-dismiss="modal" type="button"><i class="fas fa-times"></i></button>
                 </div>
-                <div class="row justify-content-center mt-5">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-                        <div class="location-prompt">
-                            <p>Please choose your preferred location to see the properties in your own city.</p>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-center flex-wrap mb-4">
-                            <div class="search-wrapper flex-grow-1 position-relative">
-                                <i class="fas fa-search search-icon"></i> <!-- Search icon -->
-                                <input type="text" class="form-control rounded-pill px-4 py-2 border" id="search-city"
-                                    onkeyup="fetch_data()" autocomplete="off" style="box-shadow:none; outline:none;">
-                                <div class="animated-placeholder">
-                                    <span id="placeholder-text">Search Lucknow</span>
-                                </div>
-                            </div>
-                            <div class="h-line"></div>
-                            <span class="or-text me-3">OR</span>
-                            <div class="h-line"></div>
-                            <button type="button" class="btn btn-success rounded-pill px-4 py-2 me-3 detect-btn">Detect
-                                my location</button>
 
-                        </div>
-                        <center class="modal_loading mt-2">
-                            <img src="<?php echo e(asset('images/loading.gif')); ?>" alt="Loading.." class="modal_loading"
-                                style="width:40px; display:none;" />
-                        </center>
-                    </div>
-                </div>
+                <!-- Search & Detect -->
+                <!--<div class="row justify-content-center mt-3">-->
+                <!--    <div class="col-sm-12">-->
+                <!--        <div class="search-wrapper mb-3">-->
+                <!--            <i class="fas fa-search search-icon"></i>-->
+                <!--            <input type="text" class="form-control" id="search-city" onkeyup="fetch_data()" placeholder="Search Your City">-->
+                <!--            <div class="animated-placeholder"><span id="placeholder-text">Search Lucknow</span></div>-->
+                <!--        </div>-->
+                <!--    </div>-->
+                <!--</div>-->
+                
+                <div class="row justify-content-center mt-5"> <div class="col-sm-12"> <div class="location-prompt"> <p>Please choose your preferred location to see the properties in your own city.</p> </div> 
+                <div class="d-flex align-items-center justify-content-center flex-wrap mb-4 location-search">
+                     <div class="search-wrapper flex-grow-1 position-relative"> <i class="fas fa-search search-icon"></i> <input type="text" class="form-control rounded-pill px-4 py-2 border" id="search-city" onkeyup="fetch_data()" autocomplete="off" style="box-shadow:none; outline:none;"> 
+                     <div class="animated-placeholder"> <span id="placeholder-text">Search By State Or City</span> </div> </div> 
+                     <!--<div class="h-line"></div>-->
+                     <!--<span class="or-text me-3">OR</span> -->
+                     <!--<div class="h-line"></div>-->
+                     <!--<button type="button" class="btn btn-success rounded-pill px-4 py-2 me-3 detect-btn"> Detect my location </button> -->
+                     </div> <center class="modal_loading mt-2"> <img src="<?php echo e(asset('images/loading.gif')); ?>" alt="Loading.." class="modal_loading" style="width:40px; display:none;" /> </center> </div> </div>
+
                 <input type="hidden" name="running_state" id="running_state" value="">
+
+                <!-- STATES -->
                 <div class="max-cities-scroll">
                     <div class="row" id="states-section">
-                        <div class="col-sm-12 mt-3">
-                            <h4 class="title-city">States</h4><br>
+                        <div class="col-sm-12">
+                            <h4 class="title-city">States</h4>
+                            <br>
                             <?php $__currentLoopData = $states; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <span class="state-data badge" id="state_id<?php echo e($state->id); ?>" state-id="<?php echo e($state->id); ?>"
-                                    onclick="fetch_data(1, '<?php echo e($state->id); ?>', '<?php echo e($state->name); ?>')"
-                                    style="cursor:pointer;padding:10px 20px; margin-bottom:7px;"><?php echo e($state->name); ?></span>
+                                <span class="state-data badge" id="state_id<?php echo e($state->id); ?>" state-id="<?php echo e($state->id); ?>" onclick="fetch_data(1,'<?php echo e($state->id); ?>','<?php echo e($state->name); ?>')" style="cursor:pointer;padding:10px 20px; margin-bottom:7px;">
+                                    <?php echo e($state->name); ?>
+
+                                </span>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
+
+                    <!-- BREADCRUMB -->
                     <div class="row">
                         <div class="col-sm-12 mt-3">
-                            <div id="breadcrumb" class="breadcrumb">
-                                <button id="back-btn" onclick="backToStates()"><i class="fas fa-arrow-left"></i>
-                                    Back</button>
+                            <div id="breadcrumb" class="breadcrumb" style="display:none;">
+                                <button id="back-btn" onclick="backToStates()"><i class="fas fa-arrow-left"></i> Back</button>
                                 <span id="state-name"></span> > City list
                             </div>
                         </div>
                     </div>
+
+                    <!-- CITY LIST -->
                     <div class="row">
                         <div class="col-sm-12">
-                            <ul class="other-cities" id="other-cities"></ul>
+                            <ul class="other-cities" id="other-cities" style="display:none;"></ul>
                         </div>
                     </div>
                 </div>
+
+                <!-- Loading -->
+                <center class="modal_loading">
+                    <img src="<?php echo e(asset('images/loading.gif')); ?>" alt="Loading.." class="modal_loading" style="display:none;width:40px;" />
+                </center>
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    $(document).on('click', '.pagination a', function (event) {
-        event.preventDefault();
-        var page = $(this).attr('href').split('page=')[1];
-        var state_id = $('#running_state').val();
-        fetch_data(page, state_id);
+
+<script>
+function fetch_data(page, state_id = null, state_name = null) {
+    state_id = state_id || $('#running_state').val();
+    $('#running_state').val(state_id);
+    manageStateHover(state_id);
+
+    var search = $('#search-city').val();
+    page = page || 1;
+
+    if(state_id) {
+        $('#states-section').hide();
+        $('#breadcrumb').show();
+        $('#other-cities').show();
+        if(state_name) $('#state-name').text(state_name);
+    } else {
+        $('#states-section').show();
+        $('#breadcrumb').hide();
+        $('#other-cities').hide();
+    }
+
+    $.ajax({
+        url: "<?php echo e(url('/')); ?>/home/get/all/cities/ancher/?page="+page+"&state_id="+state_id+"&search="+search,
+        beforeSend:function() {
+            $(".modal_loading").show();
+            $('#other-cities').css({opacity:0, transform:'translateX(100%)'});
+        },
+        success:function(data) {
+            let container = $('#other-cities');
+            setTimeout(()=>{
+                if(!data.trim()){
+                    container.html('<div class="no-city-message">No city found</div>');
+                } else {
+                    container.html(data);
+                }
+                container.css({opacity:1, transform:'translateX(0)'});
+            }, 300);
+        },
+        complete:function() { $(".modal_loading").hide(); }
     });
+}
 
-    function fetch_data(page, state_id = null) {
-        var state_id = state_id == null || state_id == '' ? $('#running_state').val() : state_id;
-        document.getElementById('running_state').value = state_id;
-        manageStateHover(state_id);
-        var search = $('#search-city').val();
-        page = page == null || typeof page === "undefined" ? 1 : page;
-        $.ajax({
-            url: "<?php echo e(url('/')); ?>/home/get/all/cities/ancher/?page=" + page + "&state_id=" + state_id + "&search=" + search,
-            beforeSend: function () {
-                $(".modal_loading").css('display', 'block');
-            },
-            success: function (data) {
-                console.log('data', data)
-                $('#other-cities').html(data);
-            },
-            error: function (response) {
-                $(".modal_loading").css('display', 'none');
-                swal('', response, 'error');
-            },
-            complete: function () {
-                $(".modal_loading").css('display', 'none');
-            }
-        });
-    }
+function manageStateHover(id) {
+    $('.state-data').each(function(){
+        $(this).css('background-color', $(this).attr('state-id')==id ? '#28a745':'#007bff');
+    });
+}
 
-    function manageStateHover(id_one) {
-        var lis = $('.state-data');
-        for (var i = 0; i < lis.length; i++) {
-            var id = lis[i].getAttribute('state-id');
-            if (id_one == id)
-                lis[i].style.backgroundColor = '#28a745';
-            else
-                lis[i].style.backgroundColor = '#007bff';
-        }
-        return true;
-    }
-</script><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/layouts/front/cities-modal.blade.php ENDPATH**/ ?>
+function backToStates() {
+    $('#running_state').val('');
+    $('#states-section').show();
+    $('#breadcrumb').hide();
+    $('#other-cities').hide().html('');
+}
+
+$(document).on('click', '.pagination a', function(event){
+    event.preventDefault();
+    var page = $(this).attr('href').split('page=')[1];
+    fetch_data(page, $('#running_state').val());
+});
+</script>
+<?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/layouts/front/cities-modal.blade.php ENDPATH**/ ?>

@@ -11,12 +11,34 @@
 |
 */
 
+
+Route::get('/user/my-activities', function () {
+	return view('front.user.my-activities'); 
+})->name('my-activities');
+Route::get('/user/all-inquries', function () {
+	return view('front.user.all-inquries'); 
+})->name('all-inquries');
+Route::get('/user/payments-invoice', function () {
+	return view('front.user.invoice'); 
+})->name('payments-invoice');
+Route::get('/user/invoice-details', function () {
+	return view('front.user.invoice-details'); 
+})->name('invoice-details');
+Route::get('/user/my-wishlist', function () {
+	return view('front.user.my-wishlist'); 
+})->name('my-wishlist');
+
+Route::get('/user/current-subscriptions', function () {
+	return view('front.user.current-subscriptions'); 
+})->name('current-subscriptions');
+
 Route::get('/profile-page', function () {
-	return view('front.profile-page'); // view file: resources/views/frontend/faq.blade.php
+	return view('front.profile-page'); 
 })->name('profile.page');
-Route::get('/business-details', function () {
-	return view('front.business-details'); // view file: resources/views/frontend/faq.blade.php
-})->name('business.details');
+
+Route::get('/business-details/{id}', [App\Http\Controllers\HomeController::class, 'businessDetails'])
+    ->name('business.details');
+
 
 Route::get('/listing-list', 'HomeController@list')->name('listing.list');
 Route::get('/directory-list', 'HomeController@directoryList')->name('directory.list');

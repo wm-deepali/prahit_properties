@@ -1,33 +1,74 @@
-
-<!--<style>-->
-<!--.sidebar-section {-->
-<!--    position: sticky;-->
-<!--    top: 0;-->
-<!--    height: 100vh;-->
-<!--    overflow-y: auto;-->
-<!--    background-color: #f8f9fa;-->
-<!--    padding: 15px;-->
-<!--}-->
-<!--.sidebar-menu .nav-link {-->
-<!--    color: #333;-->
-<!--    padding: 10px 15px;-->
-<!--}-->
-<!--.sidebar-menu .nav-link:hover,-->
-<!--.sidebar-menu .nav-link.active {-->
-<!--    background-color: #007bff;-->
-<!--    color: #fff;-->
-<!--    border-radius: 5px;-->
-<!--}-->
-<!--.sidebar-menu .collapse ul {-->
-<!--    padding-left: 20px;-->
-<!--}-->
-<!--.sidebar-menu .collapse .nav-link {-->
-<!--    padding: 5px 15px;-->
-<!--    font-size: 0.9rem;-->
-<!--}-->
-<!--</style>-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+.sidebar-section {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+    padding: 15px;
+}
+.sidebar-menu .nav-link {
+    color: #333;
+    padding: 10px 15px;
+}
+.sidebar-menu .nav-link:hover {
+    background-color: #007bff;
+    color: #fff !important;
+    border-radius: 5px;
+}
+.sidebar-menu .collapse ul {
+    padding-left: 20px;
+}
+.sidebar-menu .collapse .nav-link {
+    padding: 5px 15px;
+    font-size: 0.9rem;
+}
+</style>
+<style>
+.mobile-sidebar {
+  font-family: 'Segoe UI', sans-serif;
+}
+.sidebar-link {
+  background: #fff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  color: #333;
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.2s ease-in-out;
+}
+.sidebar-link:hover {
+  background: #007bff;
+  color: #fff !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.sidebar-link.active {
+  background: #007bff;
+  color: #fff !important;
+}
+.submenu {
+  background: #f1f4f8;
+  border-radius: 6px;
+  margin-top: 6px;
+  transition: all 0.3s;
+}
+.submenu-link {
+  display: block;
+  color: #555;
+  font-size: 0.95rem;
+  padding: 6px 0;
+  text-decoration: none;
+}
+.submenu-link:hover {
+  color: #007bff;
+  font-weight: 600;
+}
+</style>
 <section class="sidebar-section">
     <div class="row">
+        
         <div class="profile-section">
             <div class="profile-image">
                 <div class="pro-user">
@@ -106,8 +147,8 @@
                     
                     <div class="collapse navbar-collapse nav-side" id="navbarSidebar">
                         <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a href="{{url('user/dashboard')}}" class="nav-link active">Dashboard <span class="sr-only">(current)</span></a>
+                            <li class="nav-item" style="color:#000;">
+                                <a href="{{url('user/dashboard')}}" class="nav-link active" style="color:#000;">Dashboard <span class="sr-only">(current)</span></a>
                             </li>
                             <!-- Setting Menu -->
                             <li class="nav-item">
@@ -118,7 +159,7 @@
                                             <a href="{{url('user/profile')}}" class="nav-link">Profile</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{url('user/change-password')}}" class="nav-link">Change Password</a>
+                                            <a href="{{url('user/profile')}}" class="nav-link">Change Password</a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="{{url('user/my-activities')}}" class="nav-link">My Activities</a>
@@ -135,7 +176,7 @@
                                             <a href="{{url('user/properties')}}" class="nav-link">My Properties</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{url('user/all-inquiries')}}" class="nav-link">All Inquiries</a>
+                                            <a href="{{url('user/all-inquries')}}" class="nav-link">All Inquiries</a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="{{url('user/my-wishlist')}}" class="nav-link">My Wishlist</a>
@@ -266,66 +307,100 @@
 </section>
 
 <script type="text/javascript">
-    function verifyEmail() {
-        swal({
-            title: "Are you sure?",
-            text: "Verify This Email.",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-        .then((willDelete) => {
-          if (willDelete) {
-              $(".loading_2").css('display', 'block');
-              $(".btn-delete").attr('disabled', true);
-              $.ajax({
+
+$(document).ready(function() {
+  // Jab koi menu click ho
+  $('.nav-link[data-toggle="collapse"]').on('click', function(e) {
+    var $this = $(this);
+    var target = $this.data('target'); // target collapse ka ID
+    
+    // Agar same menu already open hai
+    if ($(target).hasClass('show')) {
+      $(target).collapse('hide'); // to close it
+    } else {
+      // Baaki sab band kar do
+      $('.collapse.show').collapse('hide');
+      // aur ye wala open karo
+      $(target).collapse('show');
+    }
+  });
+});
+
+
+
+function verifyEmail() {
+    swal({
+        title: "Are you sure?",
+        text: "Verify This Email.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            $(".loading_2").show();
+            $(".btn-delete").attr('disabled', true);
+            $.ajax({
                 url: '{{ url('user/verify/email') }}',
                 method: "GET",
                 success: function(response) {
-                  toastr.success(response)
-                   $('#email-verify').modal('show');
+                    toastr.success(response);
+                    $('#email-verify').modal('show');
                 },
-                error: function(response) {
-                  toastr.error('An error occured.')
+                error: function() {
+                    toastr.error('An error occurred.');
                 },
                 complete: function() {
-                  $(".loading_2").css('display', 'none');
-                  $(".btn-delete").attr('disabled', false);
+                    $(".loading_2").hide();
+                    $(".btn-delete").attr('disabled', false);
                 }
-              })
-          }
-        });
-    }
+            });
+        }
+    });
+}
 
-    function verifyMobileNumber() {
-        swal({
-            title: "Are you sure?",
-            text: "Verify This Mobile Number.",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-        .then((willDelete) => {
-          if (willDelete) {
-              $(".loading_2").css('display', 'block');
-              $(".btn-delete").attr('disabled', true);
-              $.ajax({
+function verifyMobileNumber() {
+    swal({
+        title: "Are you sure?",
+        text: "Verify This Mobile Number.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            $(".loading_2").show();
+            $(".btn-delete").attr('disabled', true);
+            $.ajax({
                 url: '{{ url('user/verify/mobile') }}',
                 method: "GET",
                 success: function(response) {
-                  toastr.success(response)
-                   $('#mob-verify').modal('show');
+                    toastr.success(response);
+                    $('#mob-verify').modal('show');
                 },
-                error: function(response) {
-                  toastr.error('An error occured.')
+                error: function() {
+                    toastr.error('An error occurred.');
                 },
                 complete: function() {
-                  $(".loading_2").css('display', 'none');
-                  $(".btn-delete").attr('disabled', false);
+                    $(".loading_2").hide();
+                    $(".btn-delete").attr('disabled', false);
                 }
-              })
-          }
-        });
-    }
+            });
+        }
+    });
+}
 </script>
-
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const collapses = document.querySelectorAll('[data-bs-toggle="collapse"]');
+  collapses.forEach(item => {
+    item.addEventListener("click", function () {
+      const target = document.querySelector(this.getAttribute("href"));
+      if (target.classList.contains("show")) {
+        target.classList.remove("show");
+      } else {
+        document.querySelectorAll(".submenu.show").forEach(openMenu => openMenu.classList.remove("show"));
+        target.classList.add("show");
+      }
+    });
+  });
+});
+</script>

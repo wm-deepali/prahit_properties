@@ -557,6 +557,16 @@
         background: #f3e8ff;
         border-color: #a855f7;
     }
+
+    .filter-btn.active {
+        background: #f3e8ff;
+        border-color: #a855f7;
+    }
+
+    .location-btn.active {
+        background-color: #007bff !important;
+        color: #fff;
+    }
 </style>
 
 <?php $__env->startSection('content'); ?>
@@ -572,9 +582,8 @@
                 </div>
                 <div class="filter-buttons">
                     <span class="filter-label">Search By</span>
-                    <button class="filter-btn">Travel Time</button>
-                    <button class="filter-btn">Near by Metro Station</button>
-                    <button class="filter-btn">Near Me Properties</button>
+                    <button type="button" class="filter-btn" data-filter="price_negotiable">Price Negotiable</button>
+                    <button class="filter-btn" data-filter="security_available">Security Available</button>
                 </div>
             </div>
         </div>
@@ -586,18 +595,18 @@
                         <div class="listing-filter">
                             <div class="reset-btn d-flex justify-content-between align-item-center">
                                 <h2 style="font-size:20px;">Filters</h2>
-                                <button>Reset</button>
+                                <button type="button" id="resetFilters">Reset</button>
                             </div>
                             <hr>
                             <!-- <div class="property-type d-flex flex-column">
-                                        <h2>Apply Filter</h2>
-                                        <div class="property-type-button">
-                                            <button><input type="checkbox" checked> Ready to move</button>
-                                            <button><input type="checkbox" checked> Apartment</button>
-                                            <button><input type="checkbox" checked> Villa</button>
-                                        </div>
-                                    </div>
-                                    <hr> -->
+                                                                                                                            <h2>Apply Filter</h2>
+                                                                                                                            <div class="property-type-button">
+                                                                                                                                <button><input type="checkbox" checked> Ready to move</button>
+                                                                                                                                <button><input type="checkbox" checked> Apartment</button>
+                                                                                                                                <button><input type="checkbox" checked> Villa</button>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                        <hr> -->
 
                             <div class="budget">
                                 <h2>Budget</h2>
@@ -756,31 +765,46 @@
                             <div class="bedrooms property-type d-flex flex-column">
                                 <h2>Bedrooms</h2>
                                 <div class="property-type-button">
-                                    <button><input type="checkbox"> 1 BHK</button>
-                                    <button><input type="checkbox"> 1 RK</button>
-                                    <button><input type="checkbox"> 1.5 BHK</button>
-                                    <button><input type="checkbox" checked> 2 BHK</button>
-                                    <button><input type="checkbox"> 2.5 BHK</button>
-                                    <button><input type="checkbox"> 3 BHK</button>
-                                    <button><input type="checkbox"> 3.5 BHK</button>
-                                    <button><input type="checkbox"> 4 BHK</button>
-                                    <button><input type="checkbox"> 5 BHK</button>
-                                    <button><input type="checkbox"> 6 BHK</button>
-                                    <button><input type="checkbox"> 6+ BHK</button>
+                                    <button><input type="checkbox" class="bedroom-checkbox" value="1"> 1 BHK</button>
+                                    <button><input type="checkbox" class="bedroom-checkbox" value="2"> 2 BHK</button>
+                                    <button><input type="checkbox" class="bedroom-checkbox" value="3"> 3 BHK</button>
+                                    <button><input type="checkbox" class="bedroom-checkbox" value="4"> 4 BHK</button>
+                                    <button><input type="checkbox" class="bedroom-checkbox" value="5"> 5 BHK</button>
+                                    <button><input type="checkbox" class="bedroom-checkbox" value="6"> 6 BHK</button>
+                                    <button><input type="checkbox" class="bedroom-checkbox" value="7"> 7 BHK</button>
+                                    <button><input type="checkbox" class="bedroom-checkbox" value="8"> 8 BHK</button>
+                                    <button><input type="checkbox" class="bedroom-checkbox" value="9"> 9 BHK</button>
+                                    <button><input type="checkbox" class="bedroom-checkbox" value="10"> 10 BHK</button>
+                                    <button><input type="checkbox" class="bedroom-checkbox" value="10+"> 10+ BHK</button>
                                 </div>
                             </div>
                             <hr>
                             <div class="localities">
                                 <h2>Localities</h2>
-                                <input type="text" class="search-input" placeholder="Search">
-                                <button>Potheri</button>
-                                <button>Kelambakkam</button>
-                                <button>Siruseri</button>
-                                <button>Kalavakkam</button>
-                                <button>Vandalur</button>
-                                <button>Manapakkam</button>
-                                <button>Redhills</button>
+                                <input type="text" id="locationSearch" class="search-input" placeholder="Search Location">
+
+                                <?php
+                                    $selectedLocations = request()->input('locations') ? explode(',', request()->input('locations')) : [];
+                                    $maxVisible = 10; // number of locations to show initially
+                                ?>
+
+                                <div id="locationsContainer" class="d-flex flex-wrap gap-2 mt-2">
+                                    <?php $__currentLoopData = $locations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $loc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <button
+                                            class="location-btn <?php echo e(in_array($loc->id, $selectedLocations) ? 'active' : ''); ?>"
+                                            data-id="<?php echo e($loc->id); ?>" style="<?php echo e($index >= $maxVisible ? 'display:none;' : ''); ?>">
+                                            <?php echo e($loc->location); ?>
+
+                                        </button>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </div>
+
+                                <?php if($locations->count() > $maxVisible): ?>
+                                    <button id="showMoreLocations" class="btn btn-link">Show More</button>
+                                <?php endif; ?>
+
                             </div>
+
                             <hr>
                             <div class="furnishing-status">
                                 <h2>Furnishing Status</h2>
@@ -798,7 +822,6 @@
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
                             </div>
-
                             <hr>
                             <div class="furnishing-status">
                                 <h2>Property Status</h2>
@@ -806,7 +829,6 @@
                                     <?php
                                         $propertyStatuses = \App\Models\PropertyStatus::where('status', 'active')->get();
                                     ?>
-
                                     <?php $__currentLoopData = $propertyStatuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <button>
                                             <input type="checkbox" class="property-Status-checkbox" value="<?php echo e($status->id); ?>">
@@ -816,7 +838,6 @@
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
                             </div>
-
                             <hr>
                             <div class="d-flex justify-content-between align-item-center">
                                 <div class="d-flex flex-column ">
@@ -826,8 +847,7 @@
                                         By Bhawan Bhoomi</p>
                                 </div>
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch"
-                                        id="flexSwitchCheckDefault">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="verified_property">
 
                                 </div>
                             </div>
@@ -838,8 +858,7 @@
 
                                 </div>
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch"
-                                        id="flexSwitchCheckDefault">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="with_photos">
 
                                 </div>
                             </div>
@@ -850,19 +869,18 @@
 
                                 </div>
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch"
-                                        id="flexSwitchCheckDefault">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="with_videos">
 
                                 </div>
                             </div>
                             <hr>
-                            <div class="furnishing-status">
-                                <h2>Age of Property</h2>
-                                <div class="property-type-button">
-                                    <button><input type="checkbox"> 0-1 year old</button>
-                                    <button><input type="checkbox"> 1-5 year old</button>
-                                </div>
-                            </div>
+                            <!-- <div class="furnishing-status">
+                                                                                                            <h2>Age of Property</h2>
+                                                                                                            <div class="property-type-button">
+                                                                                                                <button><input type="checkbox"> 0-1 year old</button>
+                                                                                                                <button><input type="checkbox"> 1-5 year old</button>
+                                                                                                            </div>
+                                                                                                        </div> -->
                         </div>
                     </div>
                     <div class="listing-page-right">
@@ -892,14 +910,20 @@
                                 <?php endif; ?>
                             </div>
                             <div class="sorting-options">
-                                <select>
-                                    <option value="">Sort by: Default</option>
-                                    <option value="price-low">Price: Low to High</option>
-                                    <option value="price-high">Price: High to Low</option>
-                                    <option value="size-low">Size: Low to High</option>
-                                    <option value="size-high">Size: High to Low</option>
+                                <select id="sortBy" name="sort">
+                                    <option value="" <?php echo e(request('sort') == '' ? 'selected' : ''); ?>>Sort by: Default</option>
+                                    <option value="price-low" <?php echo e(request('sort') == 'price-low' ? 'selected' : ''); ?>>Price:
+                                        Low to High</option>
+                                    <option value="price-high" <?php echo e(request('sort') == 'price-high' ? 'selected' : ''); ?>>Price:
+                                        High to Low</option>
+                                    <option value="size-low" <?php echo e(request('sort') == 'size-low' ? 'selected' : ''); ?>>Size: Low
+                                        to High</option>
+                                    <option value="size-high" <?php echo e(request('sort') == 'size-high' ? 'selected' : ''); ?>>Size:
+                                        High to Low</option>
                                 </select>
+
                             </div>
+
                         </div>
                         <?php if(isset($properties)): ?>
                             <?php $__currentLoopData = $properties; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $property): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -931,7 +955,6 @@
                                                 </div>
                                                 <!--<div class="listing-price">₹16,000</div>-->
                                             </div>
-
                                             <div class="listing-features">
                                                 <div class="feature-item">
                                                     <i class="fas fa-home feature-icon"></i>
@@ -971,7 +994,6 @@
                                                     <span><strong>Owner:</strong> <?php echo e($property->getUser->firstname ?? ''); ?></span>
                                                 </div>
                                                 <div class="listing-owner-info mb-2">
-
                                                     <span><strong>Posted on:</strong>
                                                         <?php echo e(optional($property->created_at)->format('d M Y')); ?></span>
                                                 </div>
@@ -979,10 +1001,7 @@
 
                                                     <span><strong><i class="fa-solid fa-eye"></i></strong> 1289</span>
                                                 </div>
-
-
                                             </div>
-
                                             <div class="listing-buttons">
                                                 <button class="contact-btn">Contact Owner</button>
                                                 <button class="society-btn">Ask Society Name</button>
@@ -996,10 +1015,8 @@
                             <?php echo e($properties->links()); ?>
 
                         </div>
-
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -1011,6 +1028,107 @@
             const container = document.querySelector('.filter-options-container');
             if (container) container.scrollLeft += distance;
         }
+
+
+
+        document.getElementById('resetFilters')?.addEventListener('click', function () {
+            const params = new URLSearchParams(window.location.search);
+
+            // Remove only filters applied on this page
+            ['budget_min', 'budget_max', 'size_min', 'size_max', 'sub_category_id', 'sub_sub_category_id', 'furnishing_status', 'property_status', 'verified_property', 'with_photos', 'with_videos', 'bedrooms', 'sort'].forEach(key => {
+                params.delete(key);
+            });
+
+            // Redirect without these filters, keeping other params (like search, city, type)
+            window.location.href = `${window.location.pathname}?${params.toString()}`;
+        });
+
+
+        // ----- Search By buttons -----
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                this.classList.toggle('active'); // visually toggle
+                updateSearchByFilters(); // update URL params
+            });
+        });
+
+        function updateSearchByFilters() {
+            const params = new URLSearchParams(window.location.search);
+
+            // Check which buttons are active
+            const priceBtn = document.querySelector('.filter-btn[data-filter="price_negotiable"]');
+            const securityBtn = document.querySelector('.filter-btn[data-filter="security_available"]');
+
+            if (priceBtn && priceBtn.classList.contains('active')) {
+                params.set('price_negotiable', '1');
+            } else {
+                params.delete('price_negotiable');
+            }
+
+            if (securityBtn && securityBtn.classList.contains('active')) {
+                params.set('security_available', '1');
+            } else {
+                params.delete('security_available');
+            }
+
+            // Redirect with updated params
+            window.location.href = `${window.location.pathname}?${params.toString()}`;
+        }
+
+
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('price_negotiable') === '1') {
+            document.querySelector('.filter-btn[data-filter="price_negotiable"]')?.classList.add('active');
+        }
+        if (params.get('security_available') === '1') {
+            document.querySelector('.filter-btn[data-filter="security_available"]')?.classList.add('active');
+        }
+
+        // Select elements
+        const locationContainer = document.getElementById('locationsContainer');
+        const locationButtons = Array.from(locationContainer.querySelectorAll('.location-btn'));
+
+        // Toggle active class on click and update query params
+        locationButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                this.classList.toggle('active');
+                updateLocationsFilter();
+            });
+        });
+
+        // Search input
+        document.getElementById('locationSearch').addEventListener('input', function () {
+            const query = this.value.toLowerCase();
+            locationButtons.forEach(btn => {
+                // Show button if it matches query OR is selected
+                if (btn.textContent.toLowerCase().includes(query) || btn.classList.contains('active')) {
+                    btn.style.display = 'inline-block';
+                } else {
+                    btn.style.display = 'none';
+                }
+            });
+        });
+
+        document.getElementById('showMoreLocations')?.addEventListener('click', function () {
+            locationButtons.forEach(btn => btn.style.display = 'inline-block');
+            this.style.display = 'none'; // hide button after click
+        });
+
+        // Update locations in URL params
+        function updateLocationsFilter() {
+            const params = new URLSearchParams(window.location.search);
+            const selected = locationButtons.filter(btn => btn.classList.contains('active'))
+                .map(btn => btn.dataset.id);
+
+            if (selected.length) {
+                params.set('locations', selected.join(','));
+            } else {
+                params.delete('locations');
+            }
+
+            window.location.href = `${window.location.pathname}?${params.toString()}`;
+        }
+
 
         document.addEventListener('DOMContentLoaded', function () {
             const params = new URLSearchParams(window.location.search);
@@ -1061,6 +1179,22 @@
                 });
             }
 
+            ['verified_property', 'with_photos', 'with_videos'].forEach(param => {
+                const el = document.getElementById(param);
+
+                if (el && params.get(param) === '1') el.checked = true;
+            });
+
+            // Initialize Bedrooms checkboxes
+            const bedroomVals = params.get('bedrooms');
+            if (bedroomVals) {
+                bedroomVals.split(',').forEach(val => {
+                    const cb = document.querySelector(`.bedroom-checkbox[value='${val}']`);
+                    if (cb) cb.checked = true;
+                });
+            }
+
+
         });
 
         // ----- Update Filters Function -----
@@ -1103,6 +1237,29 @@
             if (propertyIds.length) params.set('property_status', propertyIds.join(','));
             else params.delete('property_status');
 
+            // Verified Properties
+            const verified = document.getElementById('verified_property')?.checked;
+            if (verified) params.set('verified_property', '1');
+            else params.delete('verified_property');
+
+            // Properties with Photos
+            const withPhotos = document.getElementById('with_photos')?.checked;
+            if (withPhotos) params.set('with_photos', '1');
+            else params.delete('with_photos');
+
+            // Properties with Video
+            const withVideos = document.getElementById('with_videos')?.checked;
+            if (withVideos) params.set('with_videos', '1');
+            else params.delete('with_videos');
+
+
+            // Bedrooms
+            const bedroomVals = Array.from(document.querySelectorAll('.bedroom-checkbox:checked'))
+                .map(cb => cb.value);
+            if (bedroomVals.length) params.set('bedrooms', bedroomVals.join(','));
+            else params.delete('bedrooms');
+
+
             // Redirect with updated params
             window.location.href = `${window.location.pathname}?${params.toString()}`;
         }
@@ -1135,6 +1292,23 @@
             cb.addEventListener('change', function () {
                 updateFilters();
             });
+        });
+
+        ['verified_property', 'with_photos', 'with_videos'].forEach(id => {
+            document.getElementById(id)?.addEventListener('change', updateFilters);
+        });
+
+        document.querySelectorAll('.bedroom-checkbox').forEach(cb => {
+            cb.addEventListener('change', updateFilters);
+        });
+
+
+        document.getElementById('sortBy').addEventListener('change', function () {
+            const params = new URLSearchParams(window.location.search);
+            const value = this.value;
+            if (value) params.set('sort', value);
+            else params.delete('sort');
+            window.location.href = `${window.location.pathname}?${params.toString()}`;
         });
 
     </script>

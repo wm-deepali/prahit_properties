@@ -360,6 +360,7 @@
         white-space: nowrap;
     }
 
+
     .filter-btn {
         padding: 8px 12px;
         border: 1px solid #d1d5db;
@@ -368,11 +369,23 @@
         font-size: 14px;
         cursor: pointer;
         white-space: nowrap;
+        transition: all 0.2s ease;
     }
 
     .filter-btn:hover {
         background: #f3e8ff;
         border-color: #a855f7;
+    }
+
+    .filter-btn.active {
+        background: #e38e32;
+        color: white;
+        border-color: #e38e32;
+    }
+
+    .filter-btn i {
+        margin-right: 4px;
+        font-size: 13px;
     }
 
     .row {
@@ -479,21 +492,36 @@
     }
 </style>
 <?php $__env->startSection('content'); ?>
-
     <section style="background:#f9f9f9;">
         <div class="top-search-section">
             <div class="d-flex align-items-center justify-content-center gap-3">
                 <div class="search-container">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" class="search-input" placeholder="Search Anything" onkeyup="filterResults()">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search Anything"
+                        value="<?php echo e(request('search')); ?>">
                     <i class="fas fa-microphone mic-icon"></i>
                 </div>
                 <div class="filter-buttons">
-                    <span class="filter-label">Search By</span>
-                    <button class="filter-btn">Travel Time</button>
-                    <button class="filter-btn">Near by Metro Station</button>
-                    <button class="filter-btn">Near Me Properties</button>
+                    <span class="filter-label">Quick Filters:</span>
+                    <button class="filter-btn <?php echo e(request('verified') == 'true' ? 'active' : ''); ?>"
+                        onclick="applyQuickFilter('verified')">
+                        <i class="fas fa-check-circle"></i> Verified
+                    </button>
+                    <button class="filter-btn <?php echo e(request('premium') == 'true' ? 'active' : ''); ?>"
+                        onclick="applyQuickFilter('premium')">
+                        <i class="fas fa-crown"></i> Premium
+                    </button>
+                    <button class="filter-btn <?php echo e(request('sort') == 'rating-high' ? 'active' : ''); ?>"
+                        onclick="applyQuickFilter('top_rated')">
+                        <i class="fas fa-star"></i> Top Rated
+                    </button>
+                    <button class="filter-btn <?php echo e(request('sort') == 'views-high' ? 'active' : ''); ?>"
+                        onclick="applyQuickFilter('most_viewed')">
+                        <i class="fas fa-fire"></i> Popular
+                    </button>
                 </div>
+
+
             </div>
         </div>
         <div class="container">
@@ -510,265 +538,391 @@
                                 <h2>Categories</h2>
                                 <hr>
                                 <div class="category-list">
-                                    <div class="category-wrapper">
-                                        <p class="category-item" onclick="toggleCategory(this, 'Real Estate')">Real Estate
-                                        </p>
-                                        <div class="subcategory-section" style="display: none;">
-                                            <!--<hr class="separator">-->
-                                            <div class="subcategory-list"></div>
+                                    <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <div class="category-wrapper">
+                                            <p class="category-item" data-category-id="<?php echo e($category->id); ?>"
+                                                onclick="toggleCategory(this, '<?php echo e($category->category_name); ?>', <?php echo e($category->id); ?>)">
+                                                <?php echo e($category->category_name); ?>
+
+                                            </p>
+                                            <div class="subcategory-section" style="display: none;">
+                                                <div class="subcategory-list">
+                                                    <?php $__currentLoopData = $category->subcategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subCat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <p data-subcategory-id="<?php echo e($subCat->id); ?>"
+                                                            onclick="selectSubCategory(this, <?php echo e($category->id); ?>, <?php echo e($subCat->id); ?>)">
+                                                            <?php echo e($subCat->sub_category_name); ?>
+
+                                                        </p>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="category-wrapper">
-                                        <p class="category-item" onclick="toggleCategory(this, 'Construction')">Construction
-                                        </p>
-                                        <div class="subcategory-section" style="display: none;">
-                                            <!--<hr class="separator">-->
-                                            <div class="subcategory-list"></div>
-                                        </div>
-                                    </div>
-                                    <div class="category-wrapper">
-                                        <p class="category-item" onclick="toggleCategory(this, 'Interior Design')">Interior
-                                            Design</p>
-                                        <div class="subcategory-section" style="display: none;">
-                                            <!--<hr class="separator">-->
-                                            <div class="subcategory-list"></div>
-                                        </div>
-                                    </div>
-                                    <div class="category-wrapper">
-                                        <p class="category-item" onclick="toggleCategory(this, 'Property Management')">
-                                            Property Management</p>
-                                        <div class="subcategory-section" style="display: none;">
-                                            <!--<hr class="separator">-->
-                                            <div class="subcategory-list"></div>
-                                        </div>
-                                    </div>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
                             </div>
                             <hr>
                             <div class="rating-group">
                                 <h2>Ratings</h2>
                                 <div class="rating-button">
-                                    <button><input type="checkbox" class="filter-checkbox" value="5"
-                                            onchange="filterResults()"> <i class="fas fa-star"></i><i
-                                            class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                            class="fas fa-star"></i> 5 Stars</button>
-                                    <button><input type="checkbox" class="filter-checkbox" value="4"
-                                            onchange="filterResults()"> <i class="fas fa-star"></i><i
-                                            class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                            class="far fa-star"></i> 4 Stars & Above</button>
-                                    <button><input type="checkbox" class="filter-checkbox" value="3"
-                                            onchange="filterResults()"> <i class="fas fa-star"></i><i
-                                            class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i
-                                            class="far fa-star"></i> 3 Stars & Above</button>
+                                    <button>
+                                        <input type="checkbox" class="filter-checkbox" name="rating" value="5">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i> 5 Stars
+                                    </button>
+                                    <button>
+                                        <input type="checkbox" class="filter-checkbox" name="rating" value="4">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="far fa-star"></i> 4 Stars & Above
+                                    </button>
+                                    <button>
+                                        <input type="checkbox" class="filter-checkbox" name="rating" value="3">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i><i class="far fa-star"></i> 3 Stars & Above
+                                    </button>
                                 </div>
                             </div>
                             <hr>
                             <div class="category-group">
                                 <h2>Apply Filter</h2>
                                 <div class="category-button">
-                                    <button><input type="checkbox" class="filter-checkbox" value="Verified Sellers"
-                                            onchange="filterResults()"> Verified Sellers</button>
-                                    <button><input type="checkbox" class="filter-checkbox" value="Premium Sellers"
-                                            onchange="filterResults()"> Premium Sellers</button>
-                                    <button><input type="checkbox" class="filter-checkbox" value="Most Rated"
-                                            onchange="filterResults()"> Most Rated</button>
+                                    <button>
+                                        <input type="checkbox" class="filter-checkbox" name="verified" value="true">
+                                        Verified Sellers
+                                    </button>
+                                    <button>
+                                        <input type="checkbox" class="filter-checkbox" name="premium" value="true">
+                                        Premium Sellers
+                                    </button>
+                                    <button>
+                                        <input type="checkbox" class="filter-checkbox" name="most_rated" value="true">
+                                        Most Rated
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="listing-page-right">
                         <div class="right-sorting">
-                            <div class="search-title mb-2"><strong>Directory Listing:</strong> Business Companies</div>
+                            <div class="search-title mb-2">
+                                <strong>Directory Listing:</strong> Business Companies (<?php echo e($list->total()); ?> Results)
+                            </div>
                             <div class="sorting-options">
-                                <select onchange="sortResults(this.value)">
-                                    <option value="default">Sort by: Default</option>
-                                    <option value="rating-high">Rating: High to Low</option>
-                                    <option value="views-high">Views: High to Low</option>
-                                    <option value="established-old">Established Year: Oldest First</option>
-                                    <option value="member-old">Member Since: Oldest First</option>
+                                <select id="sortSelect">
+                                    <option value="default" <?php echo e(request('sort') == 'default' ? 'selected' : ''); ?>>Sort by:
+                                        Default</option>
+                                    <option value="rating-high" <?php echo e(request('sort') == 'rating-high' ? 'selected' : ''); ?>>
+                                        Rating: High to Low</option>
+                                    <option value="views-high" <?php echo e(request('sort') == 'views-high' ? 'selected' : ''); ?>>Views:
+                                        High to Low</option>
+                                    <option value="established-old" <?php echo e(request('sort') == 'established-old' ? 'selected' : ''); ?>>Established Year: Oldest First</option>
+                                    <option value="member-old" <?php echo e(request('sort') == 'member-old' ? 'selected' : ''); ?>>Member
+                                        Since: Oldest First</option>
                                 </select>
                             </div>
                         </div>
-                        <div id="directory-cards"></div>
+                        <div id="directory-cards">
+                            <?php $__empty_1 = true; $__currentLoopData = $list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $company): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <div class="directory-card">
+                                    <div class="logo-section">
+                                        <img src="<?php echo e(isset($company->logo) ? asset('storage/' . $company->logo) : 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80'); ?>"
+                                            alt="Company Logo" class="company-logo">
+                                    </div>
+                                    <div class="content-section">
+                                        <div>
+                                            <div class="directory-header">
+                                                <h1 class="company-name"><?php echo e($company->business_name); ?></h1>
+                                                <div class="directory-actions">
+                                                    <button class="action-btn" title="Like">
+                                                        <i class="fas fa-heart"></i>
+                                                    </button>
+                                                    <button class="action-btn" title="Share">
+                                                        <i class="fas fa-share"></i>
+                                                    </button>
+                                                    <button class="action-btn" title="More">
+                                                        <i class="fas fa-ellipsis-h"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="short-content">
+                                                <?php echo e(\Illuminate\Support\Str::limit($company->introduction, 350)); ?>
+
+                                            </div>
+                                            <div class="directory-features">
+                                                <div class="feature-item">
+                                                    <i class="fas fa-tag feature-icon"></i>
+                                                    <span class="feature-value">Category:
+                                                        <?php echo e($company->category->category_name ?? 'N/A'); ?></span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <i class="fas fa-tags feature-icon"></i>
+                                                    <span class="feature-value">
+                                                        Sub Category:
+                                                        <?php echo e($company->subCategories->pluck('sub_category_name')->implode(', ')); ?>
+
+                                                    </span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <i class="fas fa-calendar-alt feature-icon"></i>
+                                                    <span class="feature-value">Established:
+                                                        <?php echo e($company->established_year); ?></span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <i class="fas fa-user-clock feature-icon"></i>
+                                                    <span class="feature-value">
+                                                        Member Since: <?php echo e($company->created_at->format('Y')); ?>
+
+                                                    </span>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <i class="fas fa-eye feature-icon"></i>
+                                                    <span class="feature-value">Views: <?php echo e($company->total_views); ?></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="directory-buttons">
+                                            <button class="contact-btn" onclick="contactBusiness(<?php echo e($company->id); ?>)">
+                                                Contact Now
+                                            </button>
+                                            <a href="<?php echo e(route('business.details', $company->id)); ?>" class="detail-btn"
+                                                style="text-decoration:none; display:flex; align-items:center; justify-content:center;">
+                                                View Detail
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                <p>No results found.</p>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="mt-4">
+                            <?php echo e($list->links()); ?>
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 <?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('js'); ?>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <script>
-        // Sample data for directory listings
-        const directoryData = [
-            { name: "ABC Real Estate", logo: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Leading real estate company specializing in residential properties.", category: "Real Estate", subCategory: "Residential", established: 2010, memberSince: 2015, views: 5678, rating: 4.5, verified: true, premium: false, mostRated: true },
-            { name: "XYZ Construction", logo: "https://images.unsplash.com/photo-1560520659-7d106de61d58?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Expert in building high-quality commercial structures.", category: "Construction", subCategory: "Commercial", established: 2005, memberSince: 2010, views: 4321, rating: 4.8, verified: false, premium: true, mostRated: false },
-            { name: "LMN Interior Design", logo: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Creative interior design solutions for homes.", category: "Interior Design", subCategory: "Residential", established: 2018, memberSince: 2020, views: 3456, rating: 4.2, verified: true, premium: false, mostRated: false },
-            { name: "PQR Property Management", logo: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Professional property management services.", category: "Property Management", subCategory: "Commercial", established: 2012, memberSince: 2016, views: 2789, rating: 4.9, verified: false, premium: true, mostRated: true },
-            { name: "DEF Builders", logo: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Specialized in residential and commercial construction.", category: "Construction", subCategory: "Villas", established: 2008, memberSince: 2013, views: 4890, rating: 4.6, verified: true, premium: false, mostRated: true },
-            { name: "GHI Design Studio", logo: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80", content: "Innovative interior designs for modern homes.", category: "Interior Design", subCategory: "Apartments", established: 2015, memberSince: 2017, views: 3210, rating: 4.3, verified: false, premium: true, mostRated: false }
-        ];
+        let selectedCategory = null;
+        let selectedSubCategory = null;
+        let selectedRating = null;
+        let selectedFilters = {
+            verified: false,
+            premium: false,
+            most_rated: false
+        };
 
-        function createCard(company) {
-            return `
-                <div class="directory-card">
-                    <div class="logo-section">
-                        <img src="${company.logo}" alt="Company Logo" class="company-logo">
-                    </div>
-                    <div class="content-section">
-                        <div>
-                            <div class="directory-header">
-                                <h1 class="company-name">${company.name}</h1>
-                                <div class="directory-actions">
-                                    <button class="action-btn" title="Like"><i class="fas fa-heart"></i></button>
-                                    <button class="action-btn" title="Share"><i class="fas fa-share"></i></button>
-                                    <button class="action-btn" title="More"><i class="fas fa-ellipsis-h"></i></button>
-                                </div>
-                            </div>
-                            <div class="short-content">${company.content}</div>
-                            <div class="directory-features">
-                                <div class="feature-item">
-                                    <i class="fas fa-tag feature-icon"></i>
-                                    <span class="feature-value">Category: ${company.category}</span>
-                                </div>
-                                <div class="feature-item">
-                                    <i class="fas fa-tags feature-icon"></i>
-                                    <span class="feature-value">Sub Category: ${company.subCategory}</span>
-                                </div>
-                                <div class="feature-item">
-                                    <i class="fas fa-calendar-alt feature-icon"></i>
-                                    <span class="feature-value">Established: ${company.established}</span>
-                                </div>
-                                <div class="feature-item">
-                                    <i class="fas fa-user-clock feature-icon"></i>
-                                    <span class="feature-value">Member Since: ${company.memberSince}</span>
-                                </div>
-                                <div class="feature-item">
-                                    <i class="fas fa-eye feature-icon"></i>
-                                    <span class="feature-value">Views: ${company.views}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="directory-buttons">
-                            <button class="contact-btn">Contact Now</button>
-                            <button class="detail-btn">View Detail</button>
-                        </div>
-                    </div>
-                </div>
-            `;
+        // ✅ Quick Filter Function
+        function applyQuickFilter(filterType) {
+            const params = new URLSearchParams(window.location.search);
+
+            // Clear conflicting filters
+            params.delete('verified');
+            params.delete('premium');
+            params.delete('sort');
+
+            switch (filterType) {
+                case 'verified':
+                    params.set('verified', 'true');
+                    break;
+                case 'premium':
+                    params.set('premium', 'true');
+                    break;
+                case 'top_rated':
+                    params.set('sort', 'rating-high');
+                    break;
+                case 'most_viewed':
+                    params.set('sort', 'views-high');
+                    break;
+            }
+
+            window.location.href = "<?php echo e(route('directory.list')); ?>?" + params.toString();
         }
 
-        // JavaScript to handle category and subcategory toggling
-        let activeCategory = null;
-        let activeSubCategory = null;
-
-        function toggleCategory(element, category) {
+        // Toggle category and show subcategories
+        function toggleCategory(element, categoryName, categoryId) {
             const categoryWrappers = document.querySelectorAll('.category-wrapper');
             const subcategorySection = element.nextElementSibling;
-            const subcategoryList = subcategorySection.querySelector('.subcategory-list');
-            const subCategories = {
-                "Real Estate": ["Residential", "Commercial", "Land/Plot"],
-                "Construction": ["Villas", "Commercial", "Residential"],
-                "Interior Design": ["Apartments", "Residential"],
-                "Property Management": ["Commercial", "Land/Plot"]
-            };
 
             // Remove active state from all categories and close their subcategories
             categoryWrappers.forEach(wrapper => {
                 const categoryItem = wrapper.querySelector('.category-item');
                 categoryItem.classList.remove('active');
                 wrapper.querySelector('.subcategory-section').style.display = 'none';
-                wrapper.querySelector('.subcategory-list').innerHTML = '';
             });
 
-            // Set active state on clicked category and open its subcategory section
+            // Set active state on clicked category
             element.classList.add('active');
-            activeCategory = category;
+            selectedCategory = categoryId;
+            selectedSubCategory = null; // Reset subcategory
             subcategorySection.style.display = 'block';
 
-            // Populate subcategory list for the selected category
-            subCategories[category].forEach(subCat => {
-                const p = document.createElement('p');
-                p.textContent = subCat;
-                p.onclick = () => toggleSubCategory(p, category, subCat);
-                subcategoryList.appendChild(p);
-            });
-
-            // Trigger filter update
-            filterResults();
+            // Apply filters
+            applyFilters();
         }
 
-        function toggleSubCategory(element, category, subCategory) {
+        // Select subcategory
+        function selectSubCategory(element, categoryId, subCategoryId) {
             const subcategoryItems = element.parentElement.querySelectorAll('p');
             subcategoryItems.forEach(item => item.classList.remove('active'));
             element.classList.add('active');
-            activeCategory = category;
-            activeSubCategory = subCategory;
 
-            // Trigger filter update
-            filterResults();
+            selectedCategory = categoryId;
+            selectedSubCategory = subCategoryId;
+
+            // Apply filters
+            applyFilters();
         }
 
-        // Ensure filterResults is updated to handle category and subcategory
-        function filterResults() {
-            const searchInput = document.querySelector('.search-input')?.value.toLowerCase() || '';
-            let filteredData = [...directoryData];
+        // Search input with debounce
+        let searchTimeout;
+        document.getElementById('searchInput').addEventListener('input', function () {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                applyFilters();
+            }, 500);
+        });
 
-            // Apply search filter
-            if (searchInput) {
-                filteredData = filteredData.filter(company =>
-                    company.name.toLowerCase().includes(searchInput) ||
-                    company.content.toLowerCase().includes(searchInput) ||
-                    company.category.toLowerCase().includes(searchInput) ||
-                    company.subCategory.toLowerCase().includes(searchInput)
-                );
-            }
+        // Sort change
+        document.getElementById('sortSelect').addEventListener('change', function () {
+            applyFilters();
+        });
 
-            // Apply category filter
-            if (activeCategory) {
-                filteredData = filteredData.filter(company => company.category === activeCategory);
-            }
-
-            // Apply subcategory filter
-            if (activeSubCategory) {
-                filteredData = filteredData.filter(company => company.subCategory === activeSubCategory);
-            }
-
-            // Apply rating filter
-            const ratingFilters = document.querySelectorAll('.filter-checkbox:checked');
-            if (ratingFilters.length > 0) {
-                const ratingValues = Array.from(ratingFilters).map(cb => parseInt(cb.value));
-                filteredData = filteredData.filter(company => ratingValues.some(rating => company.rating >= rating));
-            }
-
-            // Apply special filters
-            const specialFilters = Array.from(document.querySelectorAll('.filter-checkbox:checked'))
-                .filter(cb => ["Verified Sellers", "Premium Sellers", "Most Rated"].includes(cb.value))
-                .map(cb => cb.value);
-            if (specialFilters.length > 0) {
-                filteredData = filteredData.filter(company => {
-                    return specialFilters.every(filter => {
-                        if (filter === "Verified Sellers") return company.verified;
-                        if (filter === "Premium Sellers") return company.premium;
-                        if (filter === "Most Rated") return company.mostRated;
-                        return true;
+        // Rating and other filters
+        document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                if (this.name === 'rating') {
+                    // Clear other rating checkboxes
+                    document.querySelectorAll('.filter-checkbox[name="rating"]').forEach(cb => {
+                        if (cb !== this) cb.checked = false;
                     });
-                });
-            }
+                    selectedRating = this.checked ? this.value : null;
+                } else if (this.name === 'verified') {
+                    selectedFilters.verified = this.checked;
+                } else if (this.name === 'premium') {
+                    selectedFilters.premium = this.checked;
+                } else if (this.name === 'most_rated') {
+                    selectedFilters.most_rated = this.checked;
+                }
+                applyFilters();
+            });
+        });
 
-            // Sort if a sorting option is selected
-            const sortOption = document.querySelector('.sorting-options select')?.value || 'default';
-            if (sortOption === "rating-high") filteredData.sort((a, b) => b.rating - a.rating);
-            if (sortOption === "views-high") filteredData.sort((a, b) => b.views - a.views);
-            if (sortOption === "established-old") filteredData.sort((a, b) => a.established - b.established);
-            if (sortOption === "member-old") filteredData.sort((a, b) => a.memberSince - b.memberSince);
+        // Apply all filters
+        function applyFilters() {
+            const params = new URLSearchParams();
 
-            // Render only the first card
-            const cardsContainer = document.getElementById('directory-cards');
-            cardsContainer.innerHTML = filteredData.length > 0 ? createCard(filteredData[0]) : '<p>No results found.</p>';
+            // Add search
+            const searchValue = document.getElementById('searchInput').value;
+            if (searchValue) params.append('search', searchValue);
+
+            // Add category
+            if (selectedCategory) params.append('category', selectedCategory);
+
+            // Add subcategory
+            if (selectedSubCategory) params.append('subcategory', selectedSubCategory);
+
+            // Add rating
+            if (selectedRating) params.append('rating', selectedRating);
+
+            // Add verified filter
+            if (selectedFilters.verified) params.append('verified', 'true');
+
+            // Add premium filter
+            if (selectedFilters.premium) params.append('premium', 'true');
+
+            // Add most_rated filter
+            if (selectedFilters.most_rated) params.append('most_rated', 'true');
+
+            // Add sorting
+            const sortValue = document.getElementById('sortSelect').value;
+            if (sortValue !== 'default') params.append('sort', sortValue);
+
+            // Redirect with filters
+            window.location.href = "<?php echo e(route('directory.list')); ?>?" + params.toString();
         }
 
-        // Initial call to set up (optional, as toggling handles this)
+        // Reset all filters
+        function resetFilters() {
+            window.location.href = "<?php echo e(route('directory.list')); ?>";
+        }
+
+        // Contact business (you can implement modal or redirect)
+        function contactBusiness(businessId) {
+            // Implement your contact logic here
+            alert('Contact business ID: ' + businessId);
+        }
+
+        // Set active states on page load based on URL parameters
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // Set category active
+            const categoryParam = urlParams.get('category');
+            if (categoryParam) {
+                const categoryEl = document.querySelector(`[data-category-id="${categoryParam}"]`);
+                if (categoryEl) {
+                    categoryEl.classList.add('active');
+                    categoryEl.nextElementSibling.style.display = 'block';
+                    selectedCategory = parseInt(categoryParam);
+                }
+            }
+
+            // Set subcategory active
+            const subcategoryParam = urlParams.get('subcategory');
+            if (subcategoryParam) {
+                const subcategoryEl = document.querySelector(`[data-subcategory-id="${subcategoryParam}"]`);
+                if (subcategoryEl) {
+                    subcategoryEl.classList.add('active');
+                    selectedSubCategory = parseInt(subcategoryParam);
+                }
+            }
+
+            // Set rating
+            const ratingParam = urlParams.get('rating');
+            if (ratingParam) {
+                const ratingCheckbox = document.querySelector(`.filter-checkbox[name="rating"][value="${ratingParam}"]`);
+                if (ratingCheckbox) {
+                    ratingCheckbox.checked = true;
+                    selectedRating = ratingParam;
+                }
+            }
+
+            // Set verified
+            if (urlParams.get('verified') === 'true') {
+                const verifiedCheckbox = document.querySelector('.filter-checkbox[name="verified"]');
+                if (verifiedCheckbox) {
+                    verifiedCheckbox.checked = true;
+                    selectedFilters.verified = true;
+                }
+            }
+
+            // Set premium
+            if (urlParams.get('premium') === 'true') {
+                const premiumCheckbox = document.querySelector('.filter-checkbox[name="premium"]');
+                if (premiumCheckbox) {
+                    premiumCheckbox.checked = true;
+                    selectedFilters.premium = true;
+                }
+            }
+
+            // Set most_rated
+            if (urlParams.get('most_rated') === 'true') {
+                const mostRatedCheckbox = document.querySelector('.filter-checkbox[name="most_rated"]');
+                if (mostRatedCheckbox) {
+                    mostRatedCheckbox.checked = true;
+                    selectedFilters.most_rated = true;
+                }
+            }
+        });
     </script>
 
 <?php $__env->stopSection(); ?>

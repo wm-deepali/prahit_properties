@@ -4,6 +4,47 @@
 <title>My Properties</title>
 @endsection
 
+<style>
+.single-listing.card {
+  border-radius: 10px;
+  transition: transform 0.2s;
+}
+.single-listing.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.card-img {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.card-body {
+  padding: 1.25rem;
+}
+.property-title a {
+  color: #007bff;
+  text-decoration: none;
+}
+.property-title a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+.property-buttons .btn {
+  margin-right: 5px;
+}
+.property-buttons .btn:last-child {
+  margin-right: 0;
+}
+.alert-info {
+  background-color: #e9f1ff;
+  border-color: #cce5ff;
+}
+.card-text{
+    margin:0px;
+    font-weight:400;
+    font-size:14px;
+}
+</style>
+
 @section('content')
 
 <section class="breadcrumb-section">
@@ -50,29 +91,32 @@
                   <div class="col-sm-12">
                     @if(count($properties) > 0)
                     @foreach($properties as $k=>$v)
-                    <div class="single-listing">
-                      <div class="media">
-                        <img class="mr-3 img-fluid" src="{{ asset('') }}{{ $v->PropertyGallery[0]->image_path }}" alt="Title">
-                        <div class="media-body">
-                          <h1 class="property-title"><a href="{{route('property_detail', ['title' => $v->slug])}}">{{$v->title}}</a></h1>
-                          <h3 class="property-price"><i class="fas fa-rupee-sign"></i> {{$v->price}}</h3>
-                          <h3 class="property-listed">Listing in <a href="#">{{$v->category->category_name}}</a> </h3>
-                          <div class="property-buttons">
-                            <ul>
-                              <li><a href="{{ url('update/property') }}/{{ $v->id }}" title="Edit Property"><i class="fas fa-pencil-alt"></i></a>
-                              </li>
-                              <li><a  href="{{route('property_detail', ['title' => $v->slug])}}" title="View Property"><i class="fas fa-eye"></i></a>
-                              </li>
-                              <li><a style="cursor: pointer;" title="Delete Property" onclick="deleteProperty('{{ $v->id }}')"><i class="fas fa-trash"></i></a>
-                              </li>
-                            </ul>
+                    <div class="single-listing card shadow-sm mb-3">
+                      <div class="row no-gutters">
+                        <div class="col-md-4">
+                          <img class="card-img" src="{{ asset('') }}{{ $v->PropertyGallery[0]->image_path }}" alt="{{ $v->title }}" style="object-fit: cover; height: 200px;">
+                        </div>
+                        <div class="col-md-8">
+                          <div class="card-body">
+                            <h5 class="card-title property-title"><a href="{{route('property_detail', ['title' => $v->slug])}}">{{ $v->title }}</a></h5>
+                            <p class="card-text"><strong>Price:</strong> <i class="fas fa-rupee-sign"></i> {{ $v->price }}</p>
+                            <p class="card-text"><strong>Category:</strong> <a href="#">{{ $v->category->category_name }}</a></p>
+                            <p class="card-text"><strong>Location:</strong> Mumbai, Andheri (Static Example)</p>
+                            <p class="card-text"><strong>Subcategory:</strong> Residential (Static Example)</p>
+                            <div class="property-buttons mt-2">
+                              <ul class="list-inline">
+                                <li class="list-inline-item"><a href="{{ url('update/property') }}/{{ $v->id }}" title="Edit Property" class="btn btn-sm btn-outline-primary"><i class="fas fa-pencil-alt"></i></a></li>
+                                <li class="list-inline-item"><a href="{{route('property_detail', ['title' => $v->slug])}}" title="View Property" class="btn btn-sm btn-outline-info"><i class="fas fa-eye"></i></a></li>
+                                <li class="list-inline-item"><a style="cursor: pointer;" title="Delete Property" onclick="deleteProperty('{{ $v->id }}')" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a></li>
+                              </ul>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                     @endforeach
                     @else 
-                    <div class=""> No records found </div>
+                    <div class="alert alert-info text-center">No records found</div>
                     @endif
                   </div>
                 </div>
@@ -81,29 +125,6 @@
               <div class="tab-pane fade" id="prop-approved" role="tabpanel" aria-labelledby="prop-approved-tab"></div>
               <div class="tab-pane fade" id="prop-rejected" role="tabpanel" aria-labelledby="prop-rejected-tab"></div>
             </div>
-
-<!--          <div class="row">
-              <div class="col-sm-12">
-                <div class="pagination justify-content-center">
-                  <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                      <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1">Previous</a>
-                      </li>
-                      <li class="page-item"><a class="page-link" href="#">1</a>
-                      </li>
-                      <li class="page-item active"><a class="page-link" href="#">2</a>
-                      </li>
-                      <li class="page-item"><a class="page-link" href="#">3</a>
-                      </li>
-                      <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
-              </div>
-            </div> -->
           </section>
         </div>
       </div>

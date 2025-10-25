@@ -34,7 +34,7 @@
     align-items: center;
   }
 
-  .banner-top-content h1 {
+  use App\Helpers\Helper .banner-top-content h1 {
     font-size: 46px;
     font-weight: 700;
   }
@@ -225,7 +225,57 @@
     padding-left: 2.25rem;
   }
 </style>
+<style>
+  .filter-item select {
+    background: #fff;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    appearance: auto;
+  }
 
+  .city-item {
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .city-item:hover {
+    background: #f2f2f2;
+  }
+
+  .new-slider-container {
+    display: flex;
+    /* Align slides horizontally */
+    gap: 15px;
+    /* Space between slides */
+    overflow-x: auto;
+    /* Enable horizontal scroll */
+    scroll-behavior: smooth;
+    /* Smooth scrolling */
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scrolling on mobile */
+    padding-bottom: 10px;
+    /* Optional padding for scrollbar */
+  }
+
+  .new-slide {
+    flex: 0 0 auto;
+    /* Prevent shrinking, allow scrolling */
+    width: 280px;
+    /* Adjust width of each slide */
+    scroll-snap-align: start;
+    /* Optional: snap to start */
+  }
+
+  /* Optional: scrollbar styling */
+  .new-slider-container::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .new-slider-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+</style>
 @section('content')
   @php
     // Get all front contents keyed by slug
@@ -260,9 +310,7 @@
     $popular_cities_content = App\PopularCity::where('slug', 'heading')->first();
     $popular_cities = App\PopularCity::where('slug', 'city')->get();
 
-  @endphp
 
-  @php
     use App\Helpers\Helper;
     $buyFilters = Helper::getBuyFilterData();
     $rentalFilters = Helper::getRentalFilterData();
@@ -274,15 +322,16 @@
 
   <div class="newupdateContainer">
     <div class="banner-top-content">
-      <h1 class="banner-top-content" style=" ">{{ $banner ? $banner->heading : 'Gateway to Verified Properties Across India' }}
+      <h1 class="banner-top-content" style=" ">
+        {{ $banner ? $banner->heading : 'Gateway to Verified Properties Across India' }}
       </h1>
       <p class="banner-discription" style="width:80%;margin:auto; padding-bottom:30px;">
         {{ $banner ? $banner->title : 'Discover thousands of verified properties, exclusive builder projects, and trusted service providers all in one place. Connect, explore, and make informed decisions with Bhawan Bhoomi – your reliable real estate partner.' }}
       </p>
       <p class="banner-discription-mobile" style="width:100%;margin:auto; padding-bottom:30px;">
-          Discover verified properties and trusted real estate projects with Bhawan Bhoomi.
- 
-        
+        Discover verified properties and trusted real estate projects with Bhawan Bhoomi.
+
+
       </p>
     </div>
 
@@ -296,7 +345,7 @@
       </div>
 
       <div class="newupdateSearchBar" data-type="buy">
-          
+
 
         <div class="newupdateFilterOptions">
           <select class="newupdateDropdown" id="citySelect" style="padding: 10px;">
@@ -309,20 +358,87 @@
 
         <input type="text" placeholder="Search by Project, Locality, or Builder" class="newupdateSearchInput">
         <button class="newupdateSearchIcon"><i class="fa-solid fa-location-crosshairs"></i></button>
-        
-        
-        <i class="fa-solid fa-filter"></i>
+
+
+        <!--<i class="fa-solid fa-filter"></i>-->
       </div>
-      
-            <div class="newupdateSearchBarmobile" data-type="buy">
-          
 
-       
-
+      <div class="newupdateSearchBarmobile" data-type="buy">
         <input type="text" placeholder="Search by Project, Locality, or Builder" class="newupdateSearchInput">
-        <button class="newupdateSearchIcon mobile-view"><img src="{{ asset('images/filter (1).png') }}" alt="" style="width:30px; transform: rotate(-90deg);">
+        <button class="newupdateSearchIcon mobile-view" data-bs-toggle="offcanvas" href="#offcanvasExample"
+          role="button"><img src="{{ asset('images/filter (1).png') }}" alt="" style="width:30px; ">
       </div>
-transform: rotate(-90deg);
+
+
+      <!-- Filter Offcanvas -->
+      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="filterMenuLabel"
+        style="width: 320px;">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title fw-semibold" id="filterMenuLabel">Filters</h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body" style="background:#f9f9f9; text-align: left;">
+
+          <!-- Location Filter -->
+          <div class="filter-item border-bottom py-2 mb-3" style="text-align: left;">
+            <h6 class="fw-semibold mb-0 d-flex justify-content-between align-items-center" data-bs-toggle="offcanvas"
+              data-bs-target="#locationCanvas" aria-controls="locationCanvas" style="cursor:pointer;">
+              <span>
+                <i class="fas fa-map-marker-alt text-danger"></i>
+                Location
+              </span>
+              <img src="{{ asset('images/arrow.png') }}" alt="" width="20px;">
+            </h6>
+
+            <div id="selectedCityDisplay" class="mt-2 p-2 bg-light rounded" style="display:none;">
+              <small class="text-muted">Selected City:</small><br>
+              <strong id="selectedCityName"></strong>
+              <i class="fas fa-times-circle text-danger float-end" id="clearCitySelection" style="cursor:pointer;"></i>
+            </div>
+          </div>
+
+          <!-- Dynamic Filters Based on Active Tab -->
+          <div id="mobileFilterContent" style="text-align: left;">
+            <!-- Content will be dynamically inserted here -->
+          </div>
+
+          <button class="btn btn-dark w-100 mt-3" id="mobileApplyFilters">Apply Filters</button>
+        </div>
+      </div>
+
+      <!-- Location Sub Offcanvas -->
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="locationCanvas" aria-labelledby="locationCanvasLabel"
+        style="width: 320px;">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title fw-semibold" id="locationCanvasLabel">
+            <i class="fa-solid fa-arrow-left me-2" data-bs-dismiss="offcanvas" aria-label="Close"
+              style="cursor:pointer;"></i>
+            Select Location
+          </h5>
+        </div>
+
+        <div class="offcanvas-body" style="background:#fff;">
+          <div class="search-bar mb-3">
+            <input type="text" id="locationSearch" class="form-control" placeholder="Search city or state..." />
+          </div>
+
+          <div id="locationList">
+            @foreach($cities as $city)
+              <div class="city-item py-2 border-bottom" data-city-id="{{ $city->getCity->id }}"
+                data-city-name="{{ $city->getCity->name }}">
+                {{ $city->getCity->name }}
+              </div>
+            @endforeach
+          </div>
+
+          <div id="noCityFound" class="text-center text-muted mt-4" style="display:none;">No city found</div>
+        </div>
+      </div>
+
+
+
+
       {{-- BUY FILTERS --}}
       <div class="newupdateFilters" data-type="buy">
         <div class="row">
@@ -471,11 +587,11 @@ transform: rotate(-90deg);
           </select>
 
           <!-- <select class="newupdateDropdown" id="sub_sub_category_id"  multiple>
-                                          <option value="">Property Type</option>
-                                          @foreach ($exclusiveFilters['types'] as $type)
-                                            <option value="{{ $type->id }}">{{ $type->sub_sub_category_name }}</option>
-                                          @endforeach
-                                        </select> -->
+                                            <option value="">Property Type</option>
+                                            @foreach ($exclusiveFilters['types'] as $type)
+                                              <option value="{{ $type->id }}">{{ $type->sub_sub_category_name }}</option>
+                                            @endforeach
+                                          </select> -->
 
           <select class="newupdateDropdown" id="budget">
             <option value="">Budget</option>
@@ -746,14 +862,14 @@ transform: rotate(-90deg);
                   <!--<span class="newdesign-proj-category">Villa</span>-->
                 </div>
                 <hr class="" style="margin-bottom:10px; margin-top:10px;">
-                        <div class="d-flex justify-content-between align-items-center">
-                          <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                            style=" height:30px;">Villa</p>
-                          <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                    style=" height:30px;">Villa</p>
+                  <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                  <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
-                        </div>
-                        <div class="horizontal-line mt-2 mb-2"></div>
+                </div>
+                <div class="horizontal-line mt-2 mb-2"></div>
                 <span class="newdesign-apart-name"> {{ \Illuminate\Support\Str::limit($value->description, 100) }}</span>
                 <hr>
                 <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> {{ $value->getCity->name }},
@@ -897,9 +1013,11 @@ transform: rotate(-90deg);
                 <div class="swiper-slide">
                   <div class="directory-card-main d-flex flex-column">
                     <div class="directory-logo">
-                      <img
-                        src="{{isset($list->logo) ? asset('storage/' . $list->logo) : "https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg"}}"
-                        class="img-fluid" alt="Company Logo 1">
+                      <a href="{{ route('business.details', $list->id) }}">
+                        <img
+                          src="{{isset($list->logo) ? asset('storage/' . $list->logo) : "https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg"}}"
+                          class="img-fluid" alt="Company Logo 1">
+                      </a>
                     </div>
                     <div class="verified-seal">
                       <div class="top-veri">
@@ -909,8 +1027,10 @@ transform: rotate(-90deg);
                     </div>
                     <div class="directory-info">
 
-                      <h4 class="directory-company-name">{{ $list->business_name }}</h4>
+                       <h4 class="directory-company-name"><a
+                          href="{{ route('business.details', $list->id) }}">{{ $list->business_name }}</a></h4>
                       <hr>
+
 
                       <div class="cat-btn">
                         @php
@@ -1262,7 +1382,21 @@ transform: rotate(-90deg);
   </section>
 
 
+  <section>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="section-title section-center">
+            <h4 class="text-center">{{ $latest_properties ? $latest_properties->heading : '' }}</h4>
+            <p class="text-center">{{ $latest_properties ? $latest_properties->title : '' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="new-card-section">
+
     <div class="new-main-card">
       <!-- LEFT SIDE: Tabs -->
       <div class="new-left-tabs">
@@ -1319,16 +1453,26 @@ transform: rotate(-90deg);
                           <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
                         </div>
                         <div class="newdesign-info-proj">
+
                           <div class="d-flex justify-content-between">
                             <h4 class="newdesign-proj-name">
                               <a href="{{ route('property_detail', ['title' => $value->slug]) }}">
                                 {{ $value->title }}
                               </a>
                             </h4>
-                            <span class="newdesign-proj-category">
-                              {{ $value->SubSubCategory->sub_sub_category_name ?? 'Commercial' }}
-                            </span>
+                            <!--<span class="newdesign-proj-category">-->
+                            <!--  {{ $value->SubSubCategory->sub_sub_category_name ?? 'Commercial' }}-->
+                            <!--</span>-->
                           </div>
+                          <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                          <div class="d-flex justify-content-between align-items-center">
+                            <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                              style=" height:30px;">{{ $value->SubSubCategory->sub_sub_category_name ?? 'Commercial' }}</p>
+                            <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                            <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+
+                          </div>
+                          <div class="horizontal-line mt-2 mb-2"></div>
                           <span class="newdesign-apart-name">
                             {{ \Illuminate\Support\Str::limit($value->description, 100) }}
                           </span>
@@ -1818,11 +1962,14 @@ transform: rotate(-90deg);
           </div>
         </div>
       </div>
-      <div class="row justify-content-center">
+      <div class="row justify-content-center mobile-share">
         <div class="col-md-4">
           <div class="help-box box-1">
             {!! $help_content->content_one !!}
-            <a class="btn btn-startweb" href="#"> Start Chat</a>
+            <a class="btn btn-startweb" href="https://wa.me/919451591515" target="_blank">
+              Start Chat
+            </a>
+
           </div>
         </div>
         <div class="col-md-4">
@@ -1833,6 +1980,10 @@ transform: rotate(-90deg);
         <div class="col-md-4">
           <div class="help-box box-3">
             {!! $help_content->content_three !!}
+            <a class="btn btn-startweb" href="{{ route('front.faq') }}">
+              View FAQ
+            </a>
+
           </div>
         </div>
       </div>
@@ -1889,6 +2040,408 @@ transform: rotate(-90deg);
   <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />-->
   <!-- Select2 JS -->
   <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>-->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      let currentActiveTab = 'buy'; // Default active tab
+      let selectedCityId = null;
+      let selectedCityName = null;
+
+      // Track active tab changes
+      document.querySelectorAll('.newupdateTab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          currentActiveTab = this.getAttribute('data-type');
+        });
+      });
+
+      // When filter button is clicked, load appropriate filters into offcanvas
+      const filterButton = document.querySelector('.newupdateSearchIcon.mobile-view');
+      if (filterButton) {
+        filterButton.addEventListener('click', function () {
+          loadMobileFilters(currentActiveTab);
+        });
+      }
+
+      // City selection from locationCanvas
+      document.querySelectorAll('#locationList .city-item').forEach(function (cityItem) {
+        cityItem.addEventListener('click', function () {
+          selectedCityId = this.getAttribute('data-city-id');
+          selectedCityName = this.getAttribute('data-city-name');
+
+          // Update display
+          document.getElementById('selectedCityName').textContent = selectedCityName;
+          document.getElementById('selectedCityDisplay').style.display = 'block';
+
+          // Close locationCanvas - Simple method without getInstance
+          const locationCanvasEl = document.getElementById('locationCanvas');
+          const closeBtn = locationCanvasEl.querySelector('.btn-close, .fa-arrow-left');
+          if (closeBtn) {
+            closeBtn.click();
+          }
+        });
+      });
+
+      // Clear city selection
+      const clearButton = document.getElementById('clearCitySelection');
+      if (clearButton) {
+        clearButton.addEventListener('click', function () {
+          selectedCityId = null;
+          selectedCityName = null;
+          document.getElementById('selectedCityDisplay').style.display = 'none';
+        });
+      }
+
+      // Search functionality for cities
+      const locationSearch = document.getElementById('locationSearch');
+      if (locationSearch) {
+        locationSearch.addEventListener('input', function () {
+          const searchValue = this.value.toLowerCase();
+          const cities = document.querySelectorAll('#locationList .city-item');
+          let anyMatch = false;
+
+          cities.forEach(city => {
+            if (city.textContent.toLowerCase().includes(searchValue)) {
+              city.style.display = 'block';
+              anyMatch = true;
+            } else {
+              city.style.display = 'none';
+            }
+          });
+
+          const noCityFound = document.getElementById('noCityFound');
+          if (noCityFound) {
+            noCityFound.style.display = anyMatch ? 'none' : 'block';
+          }
+        });
+      }
+
+      function loadMobileFilters(tabType) {
+        const mobileFilterContent = document.getElementById('mobileFilterContent');
+        if (!mobileFilterContent) return;
+
+        // Clear previous content
+        mobileFilterContent.innerHTML = '';
+
+        switch (tabType) {
+          case 'buy':
+            mobileFilterContent.innerHTML = `
+                          <!-- Property Category -->
+                          <div class="filter-item border-bottom py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Property Category</h6>
+                              <select class="form-select sub_category_items" id="mobile_sub_category_id">
+                                  <option value="">Select Category</option>
+                                  @foreach ($buyFilters['categories'] as $cat)
+                                    <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+
+                          <!-- Property Type -->
+                          <div class="filter-item border-bottom py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Property Type</h6>
+                              <div class="property-type-checkboxes" style="max-height:150px; overflow-y:auto;">
+                                  @foreach($buyFilters['types'] as $type)
+                                    <div class="form-check" data-category="{{ $type->sub_category_id }}">
+                                        <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
+                                               name="mobile_sub_sub_category_ids[]"
+                                               id="mobile_subsub_{{ $type->id }}" value="{{ $type->id }}">
+                                        <label class="form-check-label" for="mobile_subsub_{{ $type->id }}">
+                                            {{ $type->sub_sub_category_name }}
+                                        </label>
+                                    </div>
+                                  @endforeach
+                              </div>
+                          </div>
+
+                          <!-- Budget -->
+                          <div class="filter-item border-bottom py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Budget</h6>
+                              <select class="form-select" id="mobile_budget">
+                                  <option value="">Select Budget</option>
+                                  @foreach ($buyFilters['budgets'] as $budget)
+                                    <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+
+                          <!-- Posted By -->
+                          <div class="filter-item py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Posted By</h6>
+                              <select class="form-select" id="mobile_user_role">
+                                  <option value="">Select</option>
+                                  @foreach ($buyFilters['posted_by'] as $poster)
+                                    <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+                      `;
+            break;
+
+          case 'rental':
+            mobileFilterContent.innerHTML = `
+                          <!-- Property Category -->
+                          <div class="filter-item border-bottom py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Property Category</h6>
+                              <select class="form-select sub_category_items" id="mobile_sub_category_id">
+                                  <option value="">Select Category</option>
+                                  @foreach ($rentalFilters['categories'] as $cat)
+                                    <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+
+                          <!-- Property Type -->
+                          <div class="filter-item border-bottom py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Property Type</h6>
+                              <div class="property-type-checkboxes" style="max-height:150px; overflow-y:auto;">
+                                  @foreach($rentalFilters['types'] as $v)
+                                    <div class="form-check" data-category="{{ $v->sub_category_id }}">
+                                        <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
+                                               name="mobile_sub_sub_category_ids[]"
+                                               id="mobile_subsub_{{ $v->id }}" value="{{ $v->id }}">
+                                        <label class="form-check-label" for="mobile_subsub_{{ $v->id }}">
+                                            {{ $v->sub_sub_category_name }}
+                                        </label>
+                                    </div>
+                                  @endforeach
+                              </div>
+                          </div>
+
+                          <!-- Budget -->
+                          <div class="filter-item border-bottom py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Budget</h6>
+                              <select class="form-select" id="mobile_budget">
+                                  <option value="">Select Budget</option>
+                                  @foreach ($rentalFilters['budgets'] as $budget)
+                                    <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+
+                          <!-- Posted By -->
+                          <div class="filter-item py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Posted By</h6>
+                              <select class="form-select" id="mobile_user_role">
+                                  <option value="">Select</option>
+                                  @foreach ($rentalFilters['posted_by'] as $poster)
+                                    <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+                      `;
+            break;
+
+          case 'pg-hostels':
+            mobileFilterContent.innerHTML = `
+                          <!-- Budget -->
+                          <div class="filter-item border-bottom py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Budget</h6>
+                              <select class="form-select" id="mobile_budget">
+                                  <option value="">Select Budget</option>
+                                  @foreach ($pgFilters['budgets'] as $budget)
+                                    <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+
+                          <!-- Available For -->
+                          <div class="filter-item border-bottom py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Available For</h6>
+                              <select class="form-select" id="mobile_pg_availavle_for">
+                                  <option value="">Select</option>
+                                  @foreach ($pgFilters['available_for'] as $option)
+                                    <option value="{{ strtolower($option) }}">{{ $option }}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+
+                          <!-- Posted By -->
+                          <div class="filter-item py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Posted By</h6>
+                              <select class="form-select" id="mobile_user_role">
+                                  <option value="">Select</option>
+                                  @foreach ($pgFilters['posted_by'] as $poster)
+                                    <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+                      `;
+            break;
+
+          case 'exculsive-launch':
+            mobileFilterContent.innerHTML = `
+                          <!-- Sub Category -->
+                          <div class="filter-item border-bottom py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Sub Category</h6>
+                              <select class="form-select sub_category_items" id="mobile_sub_category_id">
+                                  <option value="">Select Category</option>
+                                  @foreach ($exclusiveFilters['categories'] as $cat)
+                                    <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+
+                          <!-- Budget -->
+                          <div class="filter-item border-bottom py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Budget</h6>
+                              <select class="form-select" id="mobile_budget">
+                                  <option value="">Select Budget</option>
+                                  @foreach ($exclusiveFilters['budgets'] as $budget)
+                                    <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+
+                          <!-- Posted By -->
+                          <div class="filter-item py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Posted By</h6>
+                              <select class="form-select" id="mobile_user_role">
+                                  <option value="">Select</option>
+                                  @foreach ($exclusiveFilters['posted_by'] as $poster)
+                                    <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+                      `;
+            break;
+
+          case 'plot-land':
+            mobileFilterContent.innerHTML = `
+                          <!-- Property Type -->
+                          <div class="filter-item border-bottom py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Property Type</h6>
+                              <div class="property-type-checkboxes" style="max-height:150px; overflow-y:auto;">
+                                  @foreach($plotFilters['types'] as $v)
+                                    <div class="form-check">
+                                        <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
+                                               name="mobile_sub_sub_category_ids[]"
+                                               id="mobile_subsub_{{ $v->id }}" value="{{ $v->id }}">
+                                        <label class="form-check-label" for="mobile_subsub_{{ $v->id }}">
+                                            {{ $v->sub_sub_category_name }}
+                                        </label>
+                                    </div>
+                                  @endforeach
+                              </div>
+                          </div>
+
+                          <!-- Budget -->
+                          <div class="filter-item border-bottom py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Budget</h6>
+                              <select class="form-select" id="mobile_budget">
+                                  <option value="">Select Budget</option>
+                                  @foreach ($plotFilters['budgets'] as $budget)
+                                    <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+
+                          <!-- Posted By -->
+                          <div class="filter-item py-2 mb-3">
+                              <h6 class="fw-semibold mb-2">Posted By</h6>
+                              <select class="form-select" id="mobile_user_role">
+                                  <option value="">Select</option>
+                                  @foreach ($plotFilters['posted_by'] as $poster)
+                                    <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+                      `;
+            break;
+        }
+
+        // After loading content, add event listener for category changes (for Buy/Rental)
+        if (tabType === 'buy' || tabType === 'rental') {
+          setupPropertyTypeFiltering();
+        }
+      }
+
+      // Filter property types based on selected category
+      function setupPropertyTypeFiltering() {
+        const categorySelect = document.getElementById('mobile_sub_category_id');
+        if (categorySelect) {
+          categorySelect.addEventListener('change', function () {
+            const selectedCategory = this.value;
+            const checkboxes = document.querySelectorAll('.mobile-sub-sub-checkbox');
+
+            checkboxes.forEach(function (checkbox) {
+              const parent = checkbox.closest('.form-check');
+              const categoryAttr = parent.getAttribute('data-category');
+
+              if (selectedCategory === '' || categoryAttr === selectedCategory) {
+                parent.style.display = 'block';
+              } else {
+                parent.style.display = 'none';
+                checkbox.checked = false;
+              }
+            });
+          });
+        }
+      }
+
+      // Handle Apply Filters button
+      const applyButton = document.getElementById('mobileApplyFilters');
+      if (applyButton) {
+        applyButton.addEventListener('click', function () {
+          const activeType = currentActiveTab;
+          const location = selectedCityId;
+          const searchInput = document.querySelector('.newupdateSearchBarmobile .newupdateSearchInput');
+          const searchQuery = searchInput ? searchInput.value : '';
+
+          // Get filter selects based on active type
+          const subCategory = document.getElementById('mobile_sub_category_id')?.value || '';
+          const budget = document.getElementById('mobile_budget')?.value || '';
+          const userRole = document.getElementById('mobile_user_role')?.value || '';
+          const pgAvailableFor = document.getElementById('mobile_pg_availavle_for')?.value || '';
+
+          // Build URLSearchParams
+          let params = new URLSearchParams();
+
+          // Add type
+          params.append('type', activeType);
+
+          // Add location (city)
+          if (location) {
+            params.append('city', location);
+          }
+
+          // Add search query
+          if (searchQuery) {
+            params.append('search', searchQuery);
+          }
+
+          // Add sub_category_id
+          if (subCategory) {
+            params.append('sub_category_id', subCategory);
+          }
+
+          // Add budget
+          if (budget) {
+            params.append('budget', budget);
+          }
+
+          // Add user_role
+          if (userRole) {
+            params.append('user_role', userRole);
+          }
+
+          // Add PG available for
+          if (pgAvailableFor) {
+            params.append('pg_availavle_for', pgAvailableFor);
+          }
+
+          // Collect checked property types
+          const checkedBoxes = document.querySelectorAll('.mobile-sub-sub-checkbox:checked');
+          if (checkedBoxes.length > 0) {
+            const values = Array.from(checkedBoxes).map(cb => cb.value);
+            params.append('sub_sub_category_id', values.join(','));
+          }
+
+          // Redirect to listing.list route
+          window.location.href = "{{ route('listing.list') }}?" + params.toString();
+        });
+      }
+    });
+  </script>
 
   <!-- Initialize Select2 -->
   <script>
@@ -2043,7 +2596,7 @@ transform: rotate(-90deg);
     // Search button click
     document.querySelectorAll('.newupdateSearchBtn').forEach(btn => {
       btn.addEventListener('click', function () {
-                const activeType = document.querySelector('.newupdateTab.active').getAttribute('data-type') ?? 'buy';
+        const activeType = document.querySelector('.newupdateTab.active').getAttribute('data-type') ?? 'buy';
 
         const location = document.querySelector('.newupdateSearchBar select').value;
         const searchQuery = document.querySelector('.newupdateSearchInput').value;
@@ -2133,11 +2686,11 @@ transform: rotate(-90deg);
 
 
     // Infinite Auto Slide
-    setInterval(() => {
-      document.querySelectorAll(".new-slider-container").forEach((container) => {
-        container.appendChild(container.firstElementChild);
-      });
-    }, 2500);
+    // setInterval(() => {
+    //   document.querySelectorAll(".new-slider-container").forEach((container) => {
+    //     container.appendChild(container.firstElementChild);
+    //   });
+    // }, 2500);
 
     // Infinite Auto Slide for Testimonials
     setInterval(() => {
@@ -2163,6 +2716,24 @@ transform: rotate(-90deg);
       });
     });
     $("#search_property").validate();
+  </script>
+  <script>
+    document.getElementById("locationSearch").addEventListener("input", function () {
+      const searchValue = this.value.toLowerCase();
+      const cities = document.querySelectorAll("#locationList .city-item");
+      let anyMatch = false;
+
+      cities.forEach(city => {
+        if (city.textContent.toLowerCase().includes(searchValue)) {
+          city.style.display = "block";
+          anyMatch = true;
+        } else {
+          city.style.display = "none";
+        }
+      });
+
+      document.getElementById("noCityFound").style.display = anyMatch ? "none" : "block";
+    });
   </script>
 
 @endsection

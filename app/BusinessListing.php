@@ -29,6 +29,8 @@ class BusinessListing extends Model
         'banner_image',
         'total_views',
         'total_enquiries',
+        'rating',
+        'rating_count',
         'status',
     ];
 
@@ -63,6 +65,37 @@ class BusinessListing extends Model
     public function propertySubSubCategories()
     {
         return $this->belongsToMany(SubSubCategory::class, 'business_property_sub_subcategories');
+    }
+
+    /**
+     * Get average rating formatted
+     */
+    public function getAverageRatingAttribute()
+    {
+        return number_format($this->rating, 1);
+    }
+
+    /**
+     * Get rating stars HTML
+     */
+    public function getRatingStarsAttribute()
+    {
+        $fullStars = floor($this->rating);
+        $halfStar = ($this->rating - $fullStars) >= 0.5;
+        $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
+
+        $html = '';
+        for ($i = 0; $i < $fullStars; $i++) {
+            $html .= '<i class="fas fa-star"></i>';
+        }
+        if ($halfStar) {
+            $html .= '<i class="fas fa-star-half-alt"></i>';
+        }
+        for ($i = 0; $i < $emptyStars; $i++) {
+            $html .= '<i class="far fa-star"></i>';
+        }
+
+        return $html;
     }
 
 }
