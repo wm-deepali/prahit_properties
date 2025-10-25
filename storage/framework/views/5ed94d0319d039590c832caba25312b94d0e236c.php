@@ -1930,28 +1930,27 @@
               <?php $__currentLoopData = $webDirectoryCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="bb-tab-pane <?php echo e($index == 0 ? 'active' : ''); ?>" id="tab<?php echo e($category->id); ?>">
                   <div class="tab-content-top-header">
-                    <div class="tab-content-section">
-                      <h4 class="tab-titles">Sub Categories</h4>
-                      <div class="d-flex flex-wrap" style="gap: 20px;">
-                        <?php
-                          $chunks = $category->subcategories->chunk(5); // Split into groups of 5
-                        ?>
+                    <?php
+                      // Split subcategories into chunks of 5 per column
+                      $subChunks = $category->subcategories->chunk(5);
+                    ?>
+                    <?php $__currentLoopData = $subChunks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $chunk): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                      <div class="tab-content-section">
+                        <h4 class="tab-titles">Sub Categories</h4>
+                        <div class="d-flex flex-column">
+                          <?php $__currentLoopData = $chunk; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <a href="<?php echo e(route('directory.list', ['subcategory' => $sub->id])); ?>">
+                              <?php echo e($sub->sub_category_name); ?>
 
-                        <?php $__currentLoopData = $chunks->take(3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $chunk): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> 
-                          <div class="d-flex flex-column" style="min-width: 180px;">
-                            <?php $__currentLoopData = $chunk; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                              <a href="<?php echo e(route('directory.list', ['subcategory' => $sub->id])); ?>" class="mb-1">
-                                <?php echo e($sub->sub_category_name); ?>
-
-                              </a>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                          </div>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </a>
+                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </div>
                       </div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                    </div>
                     <div class="image-tab">
-                      <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png">
+                      <img src="https://www.99acres.com/universalapp/img/hp_ppf_banner.png"
+                        alt="<?php echo e($category->category_name); ?>">
                     </div>
                   </div>
                 </div>
@@ -1959,6 +1958,7 @@
             </div>
           </div>
         </li>
+
 
 
         <?php if($subCategories->count()): ?>

@@ -45,6 +45,8 @@ use App\Models\PropertyStatus;
 use App\Models\FurnishingStatus;
 use App\Models\RegistrationStatus;
 use App\SubSubCategory;
+use App\Models\Faq;
+use App\Models\FaqCategory;
 
 class HomeController extends AppController
 {
@@ -119,13 +121,40 @@ class HomeController extends AppController
 		$query->where('approval', 'Approved')
 			->where('publish_status', 'Publish');
 
-		// Filter by sub_sub_category_id (handle multiple selection)
-		if ($request->filled('sub_sub_category_id')) {
-			$propertyTypes = explode(',', $request->sub_sub_category_id);
-			$query->whereIn('sub_sub_category_id', $propertyTypes);
+		// Normalize "type" to match category_name in DB
+		$typeMap = [
+			'buy' => 'Sell-6bspkyo',
+			'rental' => 'Rent-qr3r6rf',
+			'pg-hostels' => 'PG-Hostel-0lmf9h8',
+			'exculsive-launch' => 'Exclusive-Launch',
+			'plot-land' => 'Sell-6bspkyo'
+		];
+
+		$categoryName = $typeMap[$request->type] ?? null;
+
+		$category = null;
+		$subcategories = collect();
+		$propertyTypes = collect();
+
+		if ($categoryName) {
+			$category = Category::where('category_slug', $categoryName)->first();
+
+			if ($category) {
+				$subcategories = $category->Subcategory()->get();
+				$propertyTypes = \App\SubSubCategory::whereIn('sub_category_id', $subcategories->pluck('id'))->get();
+			}
 		}
 
-		
+
+		// Filter by sub_sub_category_id (property types)
+		if ($request->filled('sub_sub_category_id')) {
+			$propertyTypesFilter = is_array($request->sub_sub_category_id)
+				? $request->sub_sub_category_id
+				: explode(',', $request->sub_sub_category_id);
+			// dd($propertyTypesFilter);
+			$query->whereIn('sub_sub_category_id', $propertyTypesFilter);
+		}
+
 		// Filter by sub_category_id
 		if ($request->filled('sub_category_id')) {
 			$query->where('sub_category_id', $request->sub_category_id);
@@ -160,7 +189,7 @@ class HomeController extends AppController
 			}
 		}
 
-		// Filter by user role (owner, broker, etc.)
+		// Filter by user role
 		if ($request->filled('user_role')) {
 			$query->whereHas('getUser', function ($q) use ($request) {
 				$q->where('role', $request->user_role);
@@ -169,25 +198,38 @@ class HomeController extends AppController
 
 		// Filter by property_status
 		if ($request->filled('property_status')) {
-			$status = PropertyStatus::where('name', $request->property_status)->first();
-			if ($status) {
-				$query->where('property_status', $status->id);
+			$statuses = is_array($request->property_status)
+				? $request->property_status
+				: explode(',', $request->property_status);
+
+			if (is_numeric($statuses[0])) {
+				// IDs sent from front-end
+				$query->whereIn('property_status', $statuses);
 			} else {
-				$query->whereRaw('1 = 0'); // no matching status -> no results
+				// Names sent from front-end
+				$statusIds = PropertyStatus::whereIn('name', $statuses)->pluck('id');
+				$query->whereIn('property_status', $statusIds);
 			}
 		}
 
 		// Filter by furnishing_status
 		if ($request->filled('furnishing_status')) {
-			$status = FurnishingStatus::where('name', $request->furnishing_status)->first();
-			if ($status) {
-				$query->where('furnishing_status', $status->id);
+			$statuses = is_array($request->furnishing_status)
+				? $request->furnishing_status
+				: explode(',', $request->furnishing_status);
+
+			if (is_numeric($statuses[0])) {
+				// IDs sent from front-end
+				$query->whereIn('furnishing_status', $statuses);
 			} else {
-				$query->whereRaw('1 = 0'); // no matching status -> no results
+				// Names sent from front-end
+				$statusIds = FurnishingStatus::whereIn('name', $statuses)->pluck('id');
+				$query->whereIn('furnishing_status', $statusIds);
 			}
 		}
 
-		// Search query for title and location
+
+		// Search query for title or location
 		if ($request->filled('search')) {
 			$search = $request->search;
 			$query->where(function ($q) use ($search) {
@@ -198,16 +240,14 @@ class HomeController extends AppController
 			});
 		}
 
-		// Filter by city if provided (optional)
+		// Filter by city
 		if ($request->filled('city')) {
 			$query->whereHas('getCity', function ($q) use ($request) {
 				$q->where('id', $request->city);
 			});
 		}
 
-
-
-		// Filter by city if provided (optional)
+		// Filter by status (verified)
 		if ($request->filled('status')) {
 			switch ($request->status) {
 				case 'verified':
@@ -217,7 +257,6 @@ class HomeController extends AppController
 					$query->latest();
 			}
 		}
-
 
 		// Sorting
 		if ($request->filled('sort')) {
@@ -238,13 +277,37 @@ class HomeController extends AppController
 			$query->latest(); // default order
 		}
 
-		// pending pg_availavle_for, 
+		// Area filters (Carpet Area / Super Area)
+		if ($request->filled('min_area') || $request->filled('max_area')) {
+			$minArea = $request->min_area ?: 0;
+			$maxArea = $request->max_area ?: PHP_INT_MAX;
+
+			$query->where(function ($q) use ($minArea, $maxArea) {
+				// Carpet Area
+				$q->orWhere('additional_info', 'LIKE', "%\"Carpet Area\": \"$minArea\"%")
+					->orWhere('additional_info', 'LIKE', "%\"Carpet Area\": \"$maxArea\"%");
+
+				// Super Area
+				$q->orWhere('additional_info', 'LIKE', "%\"Super Area\": \"$minArea\"%")
+					->orWhere('additional_info', 'LIKE', "%\"Super Area\": \"$maxArea\"%");
+			});
+		}
+
+
+		// Budget filter
+		if ($request->filled('budget_min') || $request->filled('budget_max')) {
+			$minPrice = $request->budget_min ?: 0;
+			$maxPrice = $request->budget_max ?: PHP_INT_MAX;
+			$query->whereBetween('price', [$minPrice, $maxPrice]);
+		}
+
+
 		// Pagination
 		$properties = $query->paginate(10)->withQueryString();
-
-
-		return view('front.listing-list', compact('properties'));
+		// dd($subcategories);
+		return view('front.listing-list', compact('properties', 'category', 'subcategories', 'propertyTypes'));
 	}
+
 
 	public function directoryList(Request $request)
 	{
@@ -1133,7 +1196,31 @@ class HomeController extends AppController
 
 	public function faq()
 	{
-		return view('front.faq');
+
+		// Fetch all FAQs with their category
+		$faqs = Faq::with('category')->get();
+
+		// Optionally, fetch categories if needed for filtering/display
+		$categories = FaqCategory::where('status', 'Published')->get();
+
+		return view('front.faq', compact('faqs', 'categories'));
+	}
+
+
+	public function faqCategory($slug)
+	{
+		$category = FaqCategory::where('slug', $slug)->firstOrFail();
+
+		$faqs = Faq::where('status', 'Published')
+			->where('category_id', $category->id)
+			->latest()
+			->get();
+
+		$categories = FaqCategory::where('status', 'Published')
+			->where('id', "!=", $category->id)
+			->get();
+
+		return view('front.faq-category', compact('category', 'faqs', 'categories'));
 	}
 
 	public function adertisementPolicy()

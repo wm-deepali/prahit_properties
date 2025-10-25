@@ -1,7 +1,7 @@
 @extends('layouts.front.app')
 
 @section('title')
-  <title>Welcome</title>
+  <title>Welcome to Bhawan Bhoomi</title>
 @endsection
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -14,10 +14,10 @@
 <style>
   .newupdateContainer {
     text-align: center;
-    padding: 20px;
+    padding: 70px 60px;
     /*max-width: 900px;*/
     width: 100%;
-    height: 550px;
+    min-height: 650px;
     margin: auto;
     background: linear-gradient(135deg,
         /* Angle of the gradient */
@@ -88,11 +88,11 @@
   }
 
   .newupdateDropdown {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    width: 150px;
+    padding: 10px !important;
+    border: 1px solid #ccc !important;
+    border-radius: 5px !important;
+    font-size: 14px !important;
+    width: 150px !important;
     appearance: none;
     background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="%23666" d="M7 10l5 5 5-5z"/></svg>') no-repeat right 10px center;
     background-size: 12px;
@@ -211,6 +211,19 @@
     transform: translateY(-4px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   }
+
+  .newupdateFilterOptions {
+    display: grid;
+    gap: 10px;
+
+  }
+
+  .form-check {
+    text-align: left;
+    position: relative;
+    display: block;
+    padding-left: 2.25rem;
+  }
 </style>
 
 @section('content')
@@ -261,9 +274,15 @@
 
   <div class="newupdateContainer">
     <div class="banner-top-content">
-      <h1>{{ $banner ? $banner->heading : 'Gateway to Verified Properties Across India' }}</h1>
-      <p>
+      <h1 class="banner-top-content" style=" ">{{ $banner ? $banner->heading : 'Gateway to Verified Properties Across India' }}
+      </h1>
+      <p class="banner-discription" style="width:80%;margin:auto; padding-bottom:30px;">
         {{ $banner ? $banner->title : 'Discover thousands of verified properties, exclusive builder projects, and trusted service providers all in one place. Connect, explore, and make informed decisions with Bhawan Bhoomi – your reliable real estate partner.' }}
+      </p>
+      <p class="banner-discription-mobile" style="width:100%;margin:auto; padding-bottom:30px;">
+          Discover verified properties and trusted real estate projects with Bhawan Bhoomi.
+ 
+        
       </p>
     </div>
 
@@ -277,111 +296,146 @@
       </div>
 
       <div class="newupdateSearchBar" data-type="buy">
-        <select class="newupdateDropdown" id="citySelect">
-          <option value="">Select City</option>
-          @foreach($cities as $city)
-            <option value="{{ $city->getCity->id }}">{{ $city->getCity->name }}</option>
-          @endforeach
-        </select>
+          
 
-        <input type="text" placeholder="Search by Project, Locality, or Builder" class="newupdateSearchInput">
-        <button class="newupdateSearchIcon"><i class="fa-solid fa-location-crosshairs"></i></button>
-      </div>
-
-      {{-- BUY FILTERS --}}
-      <div class="newupdateFilters" data-type="buy">
         <div class="newupdateFilterOptions">
-          <select class="newupdateDropdown" id="sub_category_id">
-            <option value="">Property Category</option>
-            @foreach ($buyFilters['categories'] as $cat)
-              <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
-            @endforeach
-          </select>
-
-          {{-- ✅ Property Type as Checkboxes --}}
-          <div class="newupdateFilterOptions property-type-checkbox-group border rounded p-2"
-            style="max-height:100px; overflow-y:auto; width: 150px;">
-            <label class="fw-bold mb-1">Property Type</label>
-            <div id="sub_sub_category_items">
-              @foreach($buyFilters['types'] as $v)
-                <div class="form-check">
-                  <input class="form-check-input sub-sub-checkbox" type="checkbox" name="sub_sub_category_ids[]"
-                    id="subsub_{{ $v->id }}" value="{{ $v->id }}">
-                  <label class="form-check-label" for="subsub_{{ $v->id }}">
-                    {{ $v->sub_sub_category_name }}
-                  </label>
-                </div>
-              @endforeach
-            </div>
-          </div>
-
-          <select class="newupdateDropdown" id="budget">
-            <option value="">Budget</option>
-            @foreach ($buyFilters['budgets'] as $budget)
-              <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-            @endforeach
-          </select>
-
-          <select class="newupdateDropdown" id="user_role">
-            <option value="">Posted By</option>
-            @foreach ($buyFilters['posted_by'] as $poster)
-              <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+          <select class="newupdateDropdown" id="citySelect" style="padding: 10px;">
+            <option value="">Select City</option>
+            @foreach($cities as $city)
+              <option value="{{ $city->getCity->id }}">{{ $city->getCity->name }}</option>
             @endforeach
           </select>
         </div>
+
+        <input type="text" placeholder="Search by Project, Locality, or Builder" class="newupdateSearchInput">
+        <button class="newupdateSearchIcon"><i class="fa-solid fa-location-crosshairs"></i></button>
+        
+        
+        <i class="fa-solid fa-filter"></i>
+      </div>
+      
+            <div class="newupdateSearchBarmobile" data-type="buy">
+          
+
+       
+
+        <input type="text" placeholder="Search by Project, Locality, or Builder" class="newupdateSearchInput">
+        <button class="newupdateSearchIcon mobile-view"><img src="{{ asset('images/filter (1).png') }}" alt="" style="width:30px; transform: rotate(-90deg);">
+      </div>
+transform: rotate(-90deg);
+      {{-- BUY FILTERS --}}
+      <div class="newupdateFilters" data-type="buy">
+        <div class="row">
+          <div class="col-sm-3">
+            <select class="newupdateDropdown w-100 sub_category_items" id="sub_category_id">
+              <option value="">Property Category</option>
+              @foreach ($buyFilters['categories'] as $cat)
+                <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
+              @endforeach
+            </select>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="newupdateFilterOptions property-type-checkbox-group border rounded p-2"
+              style="max-height:150px; overflow-y:auto;">
+              <label class="text-left mb-1" id="propertyTypeLabelBuy">Property Type</label>
+              <div id="sub_sub_category_items" class="propertyTypeBuy collapse">
+                @foreach($buyFilters['types'] as $type)
+                  <div class="form-check" data-category="{{ $type->sub_category_id }}">
+                    <input class="form-check-input sub-sub-checkbox" type="checkbox" name="sub_sub_category_ids[]"
+                      id="subsub_{{ $type->id }}" value="{{ $type->id }}">
+                    <label class="form-check-label" for="subsub_{{ $type->id }}">
+                      {{ $type->sub_sub_category_name }}
+                    </label>
+                  </div>
+                @endforeach
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-sm-3">
+            <select class="newupdateDropdown w-100" id="budget">
+              <option value="">Budget</option>
+              @foreach ($buyFilters['budgets'] as $budget)
+                <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="col-sm-3">
+            <select class="newupdateDropdown w-100" id="user_role">
+              <option value="">Posted By</option>
+              @foreach ($buyFilters['posted_by'] as $poster)
+                <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+              @endforeach
+            </select>
+          </div>
+        </div>
+
+
         <button class="newupdateSearchBtn mt-2">Search</button>
       </div>
 
 
       {{-- RENTAL FILTERS --}}
       <div class="newupdateFilters" data-type="rental" style="display:none;">
-        <div class="newupdateFilterOptions">
-          <select class="newupdateDropdown" id="sub_category_id">
-            <option value="">Property Category</option>
-            @foreach ($rentalFilters['categories'] as $cat)
-              <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
-            @endforeach
-          </select>
+        <div class="row">
 
-          {{-- ✅ Property Type as Checkboxes --}}
-          <div class="newupdateFilterOptions property-type-checkbox-group border rounded p-2"
-            style="max-height:100px; overflow-y:auto; width: 150px;">
-            <label class="fw-bold mb-1">Property Type</label>
-            <div id="sub_sub_category_items">
-              @foreach($buyFilters['types'] as $v)
-                <div class="form-check">
-                  <input class="form-check-input sub-sub-checkbox" type="checkbox" name="sub_sub_category_ids[]"
-                    id="subsub_{{ $v->id }}" value="{{ $v->id }}">
-                  <label class="form-check-label" for="subsub_{{ $v->id }}">
-                    {{ $v->sub_sub_category_name }}
-                  </label>
-                </div>
+          <div class="col-sm-3">
+            <select class="newupdateDropdown w-100 sub_category_items" id="sub_category_id">
+              <option value="">Property Category</option>
+              @foreach ($rentalFilters['categories'] as $cat)
+                <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
               @endforeach
+            </select>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="newupdateFilterOptions property-type-checkbox-group border rounded p-2"
+              style="max-height:150px; overflow-y:auto;">
+              <label class="text-left mb-1" id="propertyTypeLabelRental">Property Type</label>
+              <div id="sub_sub_category_items" class="propertyTypeRental collapse">
+                @foreach($rentalFilters['types'] as $v)
+                  <div class="form-check" data-category="{{ $v->sub_category_id }}">
+                    <input class="form-check-input sub-sub-checkbox" type="checkbox" name="sub_sub_category_ids[]"
+                      id="subsub_{{ $v->id }}" value="{{ $v->id }}">
+                    <label class="form-check-label" for="subsub_{{ $v->id }}">
+                      {{ $v->sub_sub_category_name }}
+                    </label>
+                  </div>
+                @endforeach
+              </div>
             </div>
           </div>
 
-          <select class="newupdateDropdown" id="budget">
-            <option value="">Budget</option>
-            @foreach ($rentalFilters['budgets'] as $budget)
-              <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-            @endforeach
-          </select>
+          {{-- ✅ Property Type as Checkboxes --}}
 
+          <div class="col-sm-3">
+            <select class="newupdateDropdown w-100" id="budget">
+              <option value="">Budget</option>
+              @foreach ($rentalFilters['budgets'] as $budget)
+                <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+              @endforeach
+            </select>
+          </div>
 
-
-          <select class="newupdateDropdown" id="user_role">
-            <option value="">Posted By</option>
-            @foreach ($rentalFilters['posted_by'] as $poster)
-              <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-            @endforeach
-          </select>
+          <div class="col-sm-3">
+            <select class="newupdateDropdown w-100" id="user_role">
+              <option value="">Posted By</option>
+              @foreach ($rentalFilters['posted_by'] as $poster)
+                <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+              @endforeach
+            </select>
+          </div>
         </div>
+
+
         <button class="newupdateSearchBtn mt-2">Search</button>
       </div>
 
       {{-- PG / HOSTELS FILTERS --}}
       <div class="newupdateFilters" data-type="pg-hostels" style="display:none;">
-        <div class="newupdateFilterOptions">
+        <div class="newupdateFilterOptions1 d-flex gap-2">
           <select class="newupdateDropdown" id="budget">
             <option value="">Budget</option>
             @foreach ($pgFilters['budgets'] as $budget)
@@ -408,8 +462,8 @@
 
       {{-- EXCLUSIVE LAUNCH FILTERS --}}
       <div class="newupdateFilters" data-type="exculsive-launch" style="display:none;">
-        <div class="newupdateFilterOptions">
-          <select class="newupdateDropdown" id="sub_category_id">
+        <div class="newupdateFilterOptions1 d-flex gap-2">
+          <select class="newupdateDropdown sub_category_items" id="sub_category_id">
             <option value="">Sub Category</option>
             @foreach ($exclusiveFilters['categories'] as $cat)
               <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
@@ -417,11 +471,11 @@
           </select>
 
           <!-- <select class="newupdateDropdown" id="sub_sub_category_id"  multiple>
-                              <option value="">Property Type</option>
-                              @foreach ($exclusiveFilters['types'] as $type)
-                                <option value="{{ $type->id }}">{{ $type->sub_sub_category_name }}</option>
-                              @endforeach
-                            </select> -->
+                                          <option value="">Property Type</option>
+                                          @foreach ($exclusiveFilters['types'] as $type)
+                                            <option value="{{ $type->id }}">{{ $type->sub_sub_category_name }}</option>
+                                          @endforeach
+                                        </select> -->
 
           <select class="newupdateDropdown" id="budget">
             <option value="">Budget</option>
@@ -443,39 +497,48 @@
       </div>
 
       <div class="newupdateFilters" data-type="plot-land" style="display:none;">
-        <div class="newupdateFilterOptions">
-          
-          {{-- ✅ Property Type as Checkboxes --}}
-          <div class="newupdateFilterOptions property-type-checkbox-group border rounded p-2"
-            style="max-height:100px; overflow-y:auto; width: 150px;">
-            <label class="fw-bold mb-1">Property Type</label>
-            <div id="sub_sub_category_items">
-              @foreach($buyFilters['types'] as $v)
-                <div class="form-check">
-                  <input class="form-check-input sub-sub-checkbox" type="checkbox" name="sub_sub_category_ids[]"
-                    id="subsub_{{ $v->id }}" value="{{ $v->id }}">
-                  <label class="form-check-label" for="subsub_{{ $v->id }}">
-                    {{ $v->sub_sub_category_name }}
-                  </label>
-                </div>
-              @endforeach
+        <div class="d-flex justify-content-center" style="gap:20px;">
+          <div class="">
+            <div class="newupdateFilterOptions property-type-checkbox-group border rounded p-2"
+              style="max-height:150px; overflow-y:auto; width: 250px;">
+              <label class="fw-bold mb-1">Property Type</label>
+              <div id="sub_sub_category_items">
+                @foreach($plotFilters['types'] as $v)
+                  <div class="form-check">
+                    <input class="form-check-input sub-sub-checkbox" type="checkbox" name="sub_sub_category_ids[]"
+                      id="subsub_{{ $v->id }}" value="{{ $v->id }}">
+                    <label class="form-check-label" for="subsub_{{ $v->id }}">
+                      {{ $v->sub_sub_category_name }}
+                    </label>
+                  </div>
+                @endforeach
+              </div>
             </div>
+
           </div>
 
-          <select class="newupdateDropdown" id="budget">
-            <option value="">Budget</option>
-            @foreach ($plotFilters['budgets'] as $budget)
-              <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-            @endforeach
-          </select>
+          <div class="newupdateFilterOptions">
 
-          <select class="newupdateDropdown" id="user_role">
-            <option value="">Posted By</option>
-            @foreach ($plotFilters['posted_by'] as $poster)
-              <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-            @endforeach
-          </select>
+            {{-- ✅ Property Type as Checkboxes --}}
+
+
+            <select class="newupdateDropdown" id="budget">
+              <option value="">Budget</option>
+              @foreach ($plotFilters['budgets'] as $budget)
+                <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+              @endforeach
+            </select>
+
+            <select class="newupdateDropdown" id="user_role">
+              <option value="">Posted By</option>
+              @foreach ($plotFilters['posted_by'] as $poster)
+                <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+              @endforeach
+            </select>
+          </div>
         </div>
+
+
         <button class="newupdateSearchBtn mt-2">Search</button>
       </div>
 
@@ -680,8 +743,17 @@
                 <div class="d-flex justify-content-between">
                   <h4 class="newdesign-proj-name"> <a
                       href="{{route('property_detail', ['title' => $value->slug])}}">{{$value->title}}</a></h4>
-                  <span class="newdesign-proj-category">Villa</span>
+                  <!--<span class="newdesign-proj-category">Villa</span>-->
                 </div>
+                <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                            style=" height:30px;">Villa</p>
+                          <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+
+                        </div>
+                        <div class="horizontal-line mt-2 mb-2"></div>
                 <span class="newdesign-apart-name"> {{ \Illuminate\Support\Str::limit($value->description, 100) }}</span>
                 <hr>
                 <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> {{ $value->getCity->name }},
@@ -836,11 +908,17 @@
                       </div>
                     </div>
                     <div class="directory-info">
+
                       <h4 class="directory-company-name">{{ $list->business_name }}</h4>
                       <hr>
 
                       <div class="cat-btn">
-                        <button class="category-name-btn">{{ $list->category->category_name ?? '' }}</button>
+                        @php
+                          $catWords = explode(' ', $list->category->category_name ?? '');
+                          $shortCat = count($catWords) > 2 ? implode(' ', array_slice($catWords, 0, 2)) . '...' : ($list->category->category_name ?? '');
+                        @endphp
+
+                        <button class="category-name-btn">{{ $shortCat }}</button>
                         <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
                       </div>
                       <div class="horizontal-line"></div>
@@ -1289,58 +1367,56 @@
     </div>
   </section>
 
+
   <!-- reels section -->
   <section class="testimonial-reels-section py-5 bg-light">
     <div class="container">
-      <h2 class="sec__title mb-3 text-center">{{ $reels->heading ?? 'Reels'}}</h2>
+      @php
+        use App\Models\ClientReel;
+        $reels = ClientReel::all();
+      @endphp
+
+      <h2 class="sec__title mb-3 text-center">Reels</h2>
       <p class="sec__desc text-center">
-        {{ $reels->title ?? 'Explore a range of digital assets ready to buy or sell'}}
+        Explore a range of digital assets ready to buy or sell
       </p>
+
       <div class="row g-4 justify-content-center">
+        @foreach($reels as $reel)
+          <div class="col-md-3 col-sm-6">
+            <div class="reel-card">
 
-        <!-- Reel 1 -->
-        <div class="col-md-3 col-sm-6">
-          <div class="reel-card">
-            <video controls loop muted autoplay playsinline>
-              <source src="{{ asset('images') }}/reels.mp4" type="video/mp4">
-              Your browser does not support video.
-            </video>
+              {{-- Reel Preview --}}
+              @if($reel->reel_type === 'youtube' && $reel->youtube_url)
+                @php
+                  parse_str(parse_url($reel->youtube_url, PHP_URL_QUERY), $ytParams);
+                  $ytEmbed = isset($ytParams['v']) ? 'https://www.youtube.com/embed/' . $ytParams['v'] : $reel->youtube_url;
+                @endphp
+                <iframe width="100%" height="100%" src="{{ $ytEmbed }}" title="YouTube video" frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen></iframe>
+
+              @elseif($reel->reel_type === 'facebook' && $reel->facebook_url)
+                <iframe width="100%" height="100%" src="{{ $reel->facebook_url }}" title="Facebook video" frameborder="0"
+                  allowfullscreen></iframe>
+
+              @elseif($reel->reel_type === 'upload' && $reel->video_file)
+                <video controls loop muted autoplay playsinline width="100%" height="100%">
+                  <source src="{{ asset('storage/' . $reel->video_file) }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+
+              @else
+                <p class="text-muted text-center">No preview available</p>
+              @endif
+
+            </div>
           </div>
-        </div>
-
-        <!-- Reel 2 -->
-        <div class="col-md-3 col-sm-6">
-          <div class="reel-card">
-            <video controls loop muted autoplay playsinline>
-              <source src="{{ asset('images') }}/reels1.mp4" type="video/mp4">
-              Your browser does not support video.
-            </video>
-          </div>
-        </div>
-
-        <!-- Reel 3 -->
-        <div class="col-md-3 col-sm-6">
-          <div class="reel-card">
-            <video controls loop muted autoplay playsinline>
-              <source src="{{ asset('images') }}/reels.mp4" type="video/mp4">
-              Your browser does not support video.
-            </video>
-          </div>
-        </div>
-
-        <!-- Reel 4 -->
-        <div class="col-md-3 col-sm-6">
-          <div class="reel-card">
-            <video controls loop muted autoplay playsinline>
-              <source src="{{ asset('images') }}/reels1.mp4" type="video/mp4">
-              Your browser does not support video.
-            </video>
-          </div>
-        </div>
-
+        @endforeach
       </div>
     </div>
   </section>
+
 
   <!-- trending property section -->
   @if(count($projects) > 0)
@@ -1810,35 +1886,64 @@
 @section('js')
 
   <!-- Select2 CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+  <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />-->
   <!-- Select2 JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>-->
 
   <!-- Initialize Select2 -->
   <script>
     $(document).ready(function () {
-      $('#citySelect').select2({
-        placeholder: 'Select City',
-        allowClear: true,
-        ajax: {
-          url: '/api/cities/search',  // You will create this route in Laravel
-          dataType: 'json',
-          delay: 250,
-          data: function (params) {
-            return {
-              query: params.term // search term from user
-            };
-          },
-          processResults: function (data) {
-            // Convert your cities data to Select2 format
-            return {
-              results: data.map(city => ({ id: city.id, text: city.name }))
-            };
-          },
-          cache: true
-        },
-        minimumInputLength: 1 // Start searching after typing 1 char
+      // $('#citySelect').select2({
+      //   placeholder: 'Select City',
+      //   allowClear: true,
+      //   ajax: {
+      //     url: '/api/cities/search',  // You will create this route in Laravel
+      //     dataType: 'json',
+      //     delay: 250,
+      //     data: function (params) {
+      //       return {
+      //         query: params.term // search term from user
+      //       };
+      //     },
+      //     processResults: function (data) {
+      //       // Convert your cities data to Select2 format
+      //       return {
+      //         results: data.map(city => ({ id: city.id, text: city.name }))
+      //       };
+      //     },
+      //     cache: true
+      //   },
+      //   minimumInputLength: 1 // Start searching after typing 1 char
+      // });
+
+
+      $('.sub_category_items').change(function () {
+        const selectedCategory = $(this).val();
+        const $container = $(this).closest('.newupdateFilters').find('.form-check'); // target checkboxes in the same tab
+
+        console.log(selectedCategory);
+
+        $container.each(function () {
+          const typeCategory = $(this).data('category');
+
+          if (selectedCategory === "" || typeCategory == selectedCategory) {
+            $(this).show();
+          } else {
+            $(this).hide();
+            $(this).find('input').prop('checked', false);
+          }
+        });
+
+        // Expand the collapse if necessary
+        if (selectedCategory) {
+          $(this).closest('.newupdateFilters').find('.propertyTypeBuy').collapse('show');
+        } else {
+          $(this).closest('.newupdateFilters').find('.propertyTypeBuy').collapse('hide');
+        }
       });
+
+
+
     });
 
   </script>
@@ -1938,7 +2043,8 @@
     // Search button click
     document.querySelectorAll('.newupdateSearchBtn').forEach(btn => {
       btn.addEventListener('click', function () {
-        const activeType = document.querySelector('.newupdateTab.active').getAttribute('data-type');
+                const activeType = document.querySelector('.newupdateTab.active').getAttribute('data-type') ?? 'buy';
+
         const location = document.querySelector('.newupdateSearchBar select').value;
         const searchQuery = document.querySelector('.newupdateSearchInput').value;
 
@@ -2044,6 +2150,18 @@
 
 
   <script type="text/javascript">
+    $(document).ready(function () {
+      // Toggle collapse when clicking on the "Property Type" label
+      $('#propertyTypeLabelRental').click(function () {
+        $('.propertyTypeRental').collapse('toggle');
+      });
+    });
+    $(document).ready(function () {
+      // Toggle collapse when clicking on the "Property Type" label
+      $('#propertyTypeLabelBuy').click(function () {
+        $('.propertyTypeBuy').collapse('toggle');
+      });
+    });
     $("#search_property").validate();
   </script>
 

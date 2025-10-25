@@ -60,6 +60,8 @@ Route::get('home/autocomplete-search', 'HomeController@autoSearch')->name('front
 Route::get('cookies/policy', 'HomeController@cookiesPolicy')->name('front.cookiesPolicy');
 Route::get('refund-cancellation/policy', 'HomeController@cancellationPolicy')->name('front.cancellationPolicy');
 Route::get('home/faq', 'HomeController@faq')->name('front.faq');
+Route::get('faq/category/{slug}', 'HomeController@faqCategory')->name('faq.category');
+
 Route::get('adertisement/policy', 'HomeController@adertisementPolicy')->name('front.adertisementPolicy');
 Route::get('home/agent/properties', 'HomeController@agentProperties')->name('front.agentProperties');
 Route::get('home/builder/properties', 'HomeController@builderProperties')->name('front.builderProperties');
@@ -161,6 +163,7 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin.check'], '
 
 // Builders Routes
 Route::group(['middleware' => ['auth', 'admin.check']], function () {
+
 
 	// Owner User Routes
 	Route::post('master/create/owner', 'Admin\OwnersController@create')->name('owner.create');
@@ -397,6 +400,9 @@ Route::group(['middleware' => ['auth', 'admin.check']], function () {
 		Route::resource('/property-statuses', Admin\PropertyStatusController::class);
 		Route::resource('/registration-statuses', Admin\RegistrationStatusController::class);
 		Route::resource('/furnishing-statuses', Admin\FurnishingStatusController::class);
+		Route::resource('/faq-categories', Admin\FaqCategoryController::class);
+		Route::resource('/faqs', Admin\FaqController::class);
+		Route::resource('/client-reels', Admin\ClientReelController::class);
 	});
 
 

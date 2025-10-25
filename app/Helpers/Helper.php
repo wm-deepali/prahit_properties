@@ -250,7 +250,7 @@ class Helper
             });
         }
 
-        $subSubCategories = $query->get(['id', 'sub_sub_category_name']);
+        $subSubCategories = $query->get(['id', 'sub_sub_category_name', 'sub_category_id']);
 
         return [$subCategories, $subSubCategories];
     }

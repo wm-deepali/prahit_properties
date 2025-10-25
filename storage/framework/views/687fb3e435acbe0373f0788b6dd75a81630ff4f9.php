@@ -248,6 +248,10 @@
                                     <a class="dropdown-item" href="<?php echo e(route('admin.manageBlogCategories')); ?>">Manage Blog
                                         Category</a>
                                     <a class="dropdown-item" href="<?php echo e(route('admin.manageBlogs')); ?>">Manage Blogs</a>
+
+                                     <a class="dropdown-item" href="<?php echo e(route('admin.faq-categories.index')); ?>">Manage Faq
+                                        Category</a>
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.faqs.index')); ?>">Manage Faqs</a>
                                 
                                     <a class="dropdown-item" href="<?php echo e(route('admin.client-reels.index')); ?>">Client Reels</a>
                                 </div>
@@ -319,5 +323,6 @@
         toastr.error('<?php echo e(session('error')); ?>')
     </script>
 <?php endif; ?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <?php echo $__env->yieldContent('js'); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/layouts/app.blade.php ENDPATH**/ ?>

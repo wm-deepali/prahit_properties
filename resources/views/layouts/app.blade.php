@@ -240,12 +240,18 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-cogs"></i> Blog
+                                    <i class="fas fa-cogs"></i> Content Management
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{route('admin.manageBlogCategories')}}">Manage Blog
                                         Category</a>
                                     <a class="dropdown-item" href="{{route('admin.manageBlogs')}}">Manage Blogs</a>
+
+                                     <a class="dropdown-item" href="{{route('admin.faq-categories.index')}}">Manage Faq
+                                        Category</a>
+                                    <a class="dropdown-item" href="{{route('admin.faqs.index')}}">Manage Faqs</a>
+                                
+                                    <a class="dropdown-item" href="{{ route('admin.client-reels.index') }}">Client Reels</a>
                                 </div>
                             </li>
 
@@ -315,5 +321,6 @@
         toastr.error('{{ session('error') }}')
     </script>
 @endif
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @yield('js')

@@ -1,40 +1,43 @@
 
 
+<?php $__env->startSection('title'); ?>
+  Manage Client Reels
+<?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('content'); ?>
-  <div class="app-content content">
-    <div class="content-overlay"></div>
-    <div class="header-navbar-shadow"></div>
-    <div class="content-wrapper">
-      <div class="content-header row">
-        <div class="content-header-left col-md-9 col-12 mb-2">
-          <div class="row breadcrumbs-top">
-            <div class="col-12">
-              <div class="breadcrumb-wrapper">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="<?php echo e(route('home')); ?>">Home</a></li>
-                  <li class="breadcrumb-item active">Client Reels</li>
-                </ol>
-              </div>
+
+  <section class="breadcrumb-section">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 col-xs-12">
+          <div class="content-header">
+            <div class="loading">
+              <img src="<?php echo e(url('/images/loading.gif')); ?>" alt="Loading.." class="loading" />
             </div>
-          </div>
-        </div>
-        <div class="content-header-right text-md-right col-md-3 col-12 d-md-block d-none">
-          <div class="form-group breadcrumb-right">
-            <a href="javascript:void(0)" class="btn btn-primary btn-round btn-sm" id="add-reel">Add Reel</a>
+            <h3 class="content-header-title">Master</h3>
+            <a href="javascript:void(0)" id="add-reel">
+              <button class="btn btn-primary btn-save"><i class="fas fa-plus"></i> Add Reel</button>
+            </a>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="<?php echo e(route('admin.dashboard')); ?>">Dashboard</a></li>
+              <li class="breadcrumb-item">Client Reels</li>
+              <li class="breadcrumb-item active">Manage Client Reels</li>
+            </ol>
           </div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <div class="content-body">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-                <h4 class="card-title">Client Reels</h4>
-              </div>
-              <div class="card-body">
+  <section class="content-main-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-block">
                 <div class="table-responsive">
-                  <table class="table" id="reel-table">
+                  <table class="table table-bordered table-fitems" id="reel-table">
                     <thead>
                       <tr>
                         <th>#</th>
@@ -78,14 +81,14 @@
                           </td>
                           <td><?php echo e($reel->created_at->format('d M Y, h:i A')); ?></td>
                           <td>
-                            <ul class="list-inline">
-                              <li class="list-inline-item">
+                            <ul class="action">
+                              <li>
                                 <a href="javascript:void(0)" class="btn btn-primary btn-sm edit-reel"
                                   data-id="<?php echo e($reel->id); ?>">
                                   <i class="fas fa-pencil-alt"></i>
                                 </a>
                               </li>
-                              <li class="list-inline-item">
+                              <li>
                                 <a href="javascript:void(0)" onclick="deleteReel(<?php echo e($reel->id); ?>)"
                                   class="btn btn-danger btn-sm">
                                   <i class="fa fa-trash"></i>
@@ -104,145 +107,148 @@
         </div>
       </div>
     </div>
+  </section>
 
-    
-    <div class="modal fade" id="reel-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>
-  </div>
+  
+  <div class="modal fade" id="reel-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
 <?php $__env->stopSection(); ?>
 
-<?php $__env->startPush('scripts'); ?>
+<?php $__env->startSection('js'); ?>
+
   <script>
-    $(document).ready(function () {
-      // Open add reel modal
-      $(document).on('click', '#add-reel', function () {
-        $.get("<?php echo e(route('admin.client-reels.create')); ?>", function (result) {
-          if (result.success) {
-            $('#reel-modal').html(result.html).modal('show');
-          }
-        });
-      });
 
-      // Open edit reel modal
-      $(document).on('click', '.edit-reel', function () {
-        let id = $(this).data('id');
-        $.get(`<?php echo e(url('admin/client-reels')); ?>/${id}/edit`, function (result) {
-          if (result.success) {
-            $('#reel-modal').html(result.html).modal('show');
-          }
-        });
-      });
+  $(document).ready(function () {
+  // Open Add Modal
+  $(document).on('click', '#add-reel', function () {
+  $.get("<?php echo e(route('admin.client-reels.create')); ?>", function (result) {
+  if (result.success) {
+  $('#reel-modal').html(result.html).modal('show');
+  }
+  });
+  });
 
-      // CSRF setup
-      $.ajaxSetup({
-        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
-      });
+  // Open Edit Modal
+  $(document).on('click', '.edit-reel', function () {
+  let id = $(this).data('id');
+  $.get(`<?php echo e(url('admin/client-reels')); ?>/${id}/edit`, function (result) {
+  if (result.success) {
+  $('#reel-modal').html(result.html).modal('show');
+  }
+  });
+  });
 
-      // Save reel
-      $(document).on('click', '#add-clientreel-btn', function () {
-        let btn = $(this);
-        btn.prop('disabled', true);
-        $('.validation-err').text('');
+  // CSRF setup
+  $.ajaxSetup({
+  headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+  });
 
-        let formData = new FormData($('#reel-form')[0]);
+  // Save reel
+  $(document).on('click', '#add-clientreel-btn', function () {
+  let btn = $(this);
+  btn.prop('disabled', true);
+  $('.validation-err').text('');
 
-        $.ajax({
-          url: '<?php echo e(route("admin.client-reels.store")); ?>',
-          type: 'POST',
-          data: formData,
-          contentType: false,
-          processData: false,
-          success: function (response) {
-            if (response.success) {
-              Swal.fire('Success!', response.message, 'success');
-              $('#reel-modal').modal('hide');
-              setTimeout(() => location.reload(), 1000);
-            } else {
-              Swal.fire('Error', response.message || 'Failed to save.', 'error');
-            }
-            btn.prop('disabled', false);
-          },
-          error: function (xhr) {
-            btn.prop('disabled', false);
-            if (xhr.status === 422) {
-              let errors = xhr.responseJSON.errors;
-              for (let field in errors) {
-                $('#' + field + '-err').text(errors[field][0]);
-              }
-            } else {
-              Swal.fire('Error', 'Something went wrong.', 'error');
-            }
-          }
-        });
-      });
+  let formData = new FormData($('#reel-form')[0]);
 
-      // Update reel
-      $(document).on('click', '#update-clientreel-btn', function () {
-        let btn = $(this);
-        btn.prop('disabled', true);
-        $('.validation-err').text('');
+  $.ajax({
+  url: '<?php echo e(route("admin.client-reels.store")); ?>',
+  type: 'POST',
+  data: formData,
+  contentType: false,
+  processData: false,
+  success: function (response) {
+  if (response.success) {
+  Swal.fire('Success!', response.message, 'success');
+  $('#reel-modal').modal('hide');
+  setTimeout(() => location.reload(), 1000);
+  } else {
+  Swal.fire('Error', response.message || 'Failed to save.', 'error');
+  }
+  btn.prop('disabled', false);
+  },
+  error: function (xhr) {
+  btn.prop('disabled', false);
+  if (xhr.status === 422) {
+  let errors = xhr.responseJSON.errors;
+  for (let field in errors) {
+  $('#' + field + '-err').text(errors[field][0]);
+  }
+  } else {
+  Swal.fire('Error', 'Something went wrong.', 'error');
+  }
+  }
+  });
+  });
 
-        let formData = new FormData($('#reel-edit-form')[0]);
-        formData.append('_method', 'PUT');
+  // Update reel
+  $(document).on('click', '#update-clientReel-btn', function () {
+    console.log("hello");
+    
+  let btn = $(this);
+  btn.prop('disabled', true);
+  $('.validation-err').text('');
 
-        let reelId = btn.data('reel-id');
+  let formData = new FormData($('#reel-edit-form')[0]);
+  formData.append('_method', 'PUT');
+  let reelId = btn.data('reel-id');
 
-        $.ajax({
-          url: `/admin/client-reels/${reelId}`,
-          type: 'POST',
-          data: formData,
-          contentType: false,
-          processData: false,
-          success: function (response) {
-            if (response.success) {
-              Swal.fire('Success!', response.message, 'success');
-              $('#reel-modal').modal('hide');
-              setTimeout(() => location.reload(), 1000);
-            } else {
-              Swal.fire('Error', response.message || 'Failed to update.', 'error');
-            }
-            btn.prop('disabled', false);
-          },
-          error: function (xhr) {
-            btn.prop('disabled', false);
-            if (xhr.status === 422) {
-              let errors = xhr.responseJSON.errors;
-              for (let field in errors) {
-                $('#' + field + '-err').text(errors[field][0]);
-              }
-            } else {
-              Swal.fire('Error', 'Something went wrong.', 'error');
-            }
-          }
-        });
-      });
+  $.ajax({
+  url: `/admin/client-reels/${reelId}`,
+  type: 'POST',
+  data: formData,
+  contentType: false,
+  processData: false,
+  success: function (response) {
+  if (response.success) {
+  Swal.fire('Success!', response.message, 'success');
+  $('#reel-modal').modal('hide');
+  setTimeout(() => location.reload(), 1000);
+  } else {
+  Swal.fire('Error', response.message || 'Failed to update.', 'error');
+  }
+  btn.prop('disabled', false);
+  },
+  error: function (xhr) {
+  btn.prop('disabled', false);
+  if (xhr.status === 422) {
+  let errors = xhr.responseJSON.errors;
+  for (let field in errors) {
+  $('#' + field + '-err').text(errors[field][0]);
+  }
+  } else {
+  Swal.fire('Error', 'Something went wrong.', 'error');
+  }
+  }
+  });
+  });
 
-      // Delete reel
-      window.deleteReel = function (id) {
-        Swal.fire({
-          title: 'Are you sure?',
-          text: "You can't reverse this!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            $.ajax({
-              url: `<?php echo e(url('admin/client-reels')); ?>/${id}`,
-              type: 'DELETE',
-              success: function (res) {
-                if (res.success) {
-                  Swal.fire('Deleted!', '', 'success');
-                  setTimeout(() => location.reload(), 500);
-                } else {
-                  Swal.fire('Error', res.message || 'Failed to delete', 'error');
-                }
-              }
-            });
-          }
-        });
-      }
-    });
+  // Delete reel
+  window.deleteReel = function (id) {
+  Swal.fire({
+  title: 'Are you sure?',
+  text: "You can't reverse this!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+  if (result.isConfirmed) {
+  $.ajax({
+  url: `<?php echo e(url('admin/client-reels')); ?>/${id}`,
+  type: 'DELETE',
+  success: function (res) {
+  if (res.success) {
+  Swal.fire('Deleted!', '', 'success');
+  setTimeout(() => location.reload(), 500);
+  } else {
+  Swal.fire('Error', res.message || 'Failed to delete', 'error');
+  }
+  }
+  });
+  }
+  });
+  }
+  });
   </script>
-<?php $__env->stopPush(); ?>
-
+<?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/admin/client_reels/index.blade.php ENDPATH**/ ?>

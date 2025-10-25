@@ -567,7 +567,8 @@
             <div class="d-flex align-item-center justify-content-center gap-3">
                 <div class="search-container">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" class="search-input" placeholder="Search Anything">
+                    <input type="text" class="search-input" placeholder="Search Anything" value="{{ request('search') }}">
+
                     <i class="fas fa-microphone mic-icon"></i>
                 </div>
                 <div class="filter-buttons">
@@ -589,73 +590,167 @@
                                 <button>Reset</button>
                             </div>
                             <hr>
-                            <div class="property-type d-flex flex-column">
-                                <h2>Apply Filter</h2>
-                                <div class="property-type-button">
-                                    <button><input type="checkbox" checked> Ready to move</button>
-                                    <button><input type="checkbox" checked> Apartment</button>
-                                    <button><input type="checkbox" checked> Villa</button>
-
-                                </div>
-                            </div>
-                            <hr>
+                            <!-- <div class="property-type d-flex flex-column">
+                                        <h2>Apply Filter</h2>
+                                        <div class="property-type-button">
+                                            <button><input type="checkbox" checked> Ready to move</button>
+                                            <button><input type="checkbox" checked> Apartment</button>
+                                            <button><input type="checkbox" checked> Villa</button>
+                                        </div>
+                                    </div>
+                                    <hr> -->
 
                             <div class="budget">
                                 <h2>Budget</h2>
                                 <div class="range-group">
-                                    <select>
+                                    <select id="budget_min" name="budget_min">
                                         <option value="">Min</option>
-                                        <option value="1000">₹1,000</option>
-                                        <option value="5000">₹5,000</option>
-                                        <option value="10000">₹10,000</option>
+                                        <option value="5000" {{ request('budget_min') == 5000 ? 'selected' : '' }}>₹5,000
+                                        </option>
+                                        <option value="10000" {{ request('budget_min') == 10000 ? 'selected' : '' }}>₹10,000
+                                        </option>
+                                        <option value="25000" {{ request('budget_min') == 25000 ? 'selected' : '' }}>₹25,000
+                                        </option>
+                                        <option value="50000" {{ request('budget_min') == 50000 ? 'selected' : '' }}>₹50,000
+                                        </option>
+                                        <option value="100000" {{ request('budget_min') == 100000 ? 'selected' : '' }}>₹1 Lakh
+                                        </option>
+                                        <option value="500000" {{ request('budget_min') == 500000 ? 'selected' : '' }}>₹5 Lakh
+                                        </option>
+                                        <option value="1000000" {{ request('budget_min') == 1000000 ? 'selected' : '' }}>₹10
+                                            Lakh</option>
+                                        <option value="2500000" {{ request('budget_min') == 2500000 ? 'selected' : '' }}>₹25
+                                            Lakh</option>
+                                        <option value="5000000" {{ request('budget_min') == 5000000 ? 'selected' : '' }}>₹50
+                                            Lakh</option>
+                                        <option value="10000000" {{ request('budget_min') == 10000000 ? 'selected' : '' }}>₹1
+                                            Cr</option>
+                                        <option value="30000000" {{ request('budget_min') == 30000000 ? 'selected' : '' }}>₹3
+                                            Cr</option>
+                                        <option value="50000000" {{ request('budget_min') == 50000000 ? 'selected' : '' }}>₹5
+                                            Cr</option>
                                     </select>
-                                    <select>
+
+                                    <select id="budget_max" name="budget_max">
                                         <option value="">Max</option>
-                                        <option value="20000">₹20,000</option>
-                                        <option value="50000">₹50,000</option>
-                                        <option value="100000">₹1,00,000</option>
+                                        <option value="10000" {{ request('budget_max') == 10000 ? 'selected' : '' }}>₹10,000
+                                        </option>
+                                        <option value="25000" {{ request('budget_max') == 25000 ? 'selected' : '' }}>₹25,000
+                                        </option>
+                                        <option value="50000" {{ request('budget_max') == 50000 ? 'selected' : '' }}>₹50,000
+                                        </option>
+                                        <option value="100000" {{ request('budget_max') == 100000 ? 'selected' : '' }}>₹1 Lakh
+                                        </option>
+                                        <option value="500000" {{ request('budget_max') == 500000 ? 'selected' : '' }}>₹5 Lakh
+                                        </option>
+                                        <option value="1000000" {{ request('budget_max') == 1000000 ? 'selected' : '' }}>₹10
+                                            Lakh</option>
+                                        <option value="2500000" {{ request('budget_max') == 2500000 ? 'selected' : '' }}>₹25
+                                            Lakh</option>
+                                        <option value="5000000" {{ request('budget_max') == 5000000 ? 'selected' : '' }}>₹50
+                                            Lakh</option>
+                                        <option value="10000000" {{ request('budget_max') == 10000000 ? 'selected' : '' }}>₹1
+                                            Cr</option>
+                                        <option value="30000000" {{ request('budget_max') == 30000000 ? 'selected' : '' }}>₹3
+                                            Cr</option>
+                                        <option value="50000000" {{ request('budget_max') == 50000000 ? 'selected' : '' }}>₹5
+                                            Cr</option>
+                                        <option value="100000000" {{ request('budget_max') == 100000000 ? 'selected' : '' }}>
+                                            ₹10 Cr+</option>
                                     </select>
                                 </div>
                             </div>
+
                             <hr>
                             <div class="size">
                                 <h2>Size</h2>
                                 <div class="range-group">
-                                    <select>
+                                    <select id="size_min" name="size_min">
                                         <option value="">Min</option>
-                                        <option value="500">500 sqft</option>
-                                        <option value="1000">1000 sqft</option>
-                                        <option value="1500">1500 sqft</option>
+                                        <option value="100" {{ request('size_min') == 100 ? 'selected' : '' }}>100 sqft
+                                        </option>
+                                        <option value="250" {{ request('size_min') == 250 ? 'selected' : '' }}>250 sqft
+                                        </option>
+                                        <option value="500" {{ request('size_min') == 500 ? 'selected' : '' }}>500 sqft
+                                        </option>
+                                        <option value="750" {{ request('size_min') == 750 ? 'selected' : '' }}>750 sqft
+                                        </option>
+                                        <option value="1000" {{ request('size_min') == 1000 ? 'selected' : '' }}>1,000 sqft
+                                        </option>
+                                        <option value="1500" {{ request('size_min') == 1500 ? 'selected' : '' }}>1,500 sqft
+                                        </option>
+                                        <option value="2000" {{ request('size_min') == 2000 ? 'selected' : '' }}>2,000 sqft
+                                        </option>
+                                        <option value="2500" {{ request('size_min') == 2500 ? 'selected' : '' }}>2,500 sqft
+                                        </option>
+                                        <option value="3000" {{ request('size_min') == 3000 ? 'selected' : '' }}>3,000 sqft
+                                        </option>
+                                        <option value="4000" {{ request('size_min') == 4000 ? 'selected' : '' }}>4,000 sqft
+                                        </option>
+                                        <option value="5000" {{ request('size_min') == 5000 ? 'selected' : '' }}>5,000 sqft
+                                        </option>
+                                        <option value="10000" {{ request('size_min') == 10000 ? 'selected' : '' }}>10,000 sqft
+                                        </option>
+                                        <option value="20000" {{ request('size_min') == 20000 ? 'selected' : '' }}>20,000 sqft
+                                        </option>
                                     </select>
-                                    <select>
+
+                                    <select id="size_max" name="size_max">
                                         <option value="">Max</option>
-                                        <option value="2000">2000 sqft</option>
-                                        <option value="3000">3000 sqft</option>
-                                        <option value="4000">4000 sqft</option>
+                                        <option value="500" {{ request('size_max') == 500 ? 'selected' : '' }}>500 sqft
+                                        </option>
+                                        <option value="750" {{ request('size_max') == 750 ? 'selected' : '' }}>750 sqft
+                                        </option>
+                                        <option value="1000" {{ request('size_max') == 1000 ? 'selected' : '' }}>1,000 sqft
+                                        </option>
+                                        <option value="1500" {{ request('size_max') == 1500 ? 'selected' : '' }}>1,500 sqft
+                                        </option>
+                                        <option value="2000" {{ request('size_max') == 2000 ? 'selected' : '' }}>2,000 sqft
+                                        </option>
+                                        <option value="2500" {{ request('size_max') == 2500 ? 'selected' : '' }}>2,500 sqft
+                                        </option>
+                                        <option value="3000" {{ request('size_max') == 3000 ? 'selected' : '' }}>3,000 sqft
+                                        </option>
+                                        <option value="4000" {{ request('size_max') == 4000 ? 'selected' : '' }}>4,000 sqft
+                                        </option>
+                                        <option value="5000" {{ request('size_max') == 5000 ? 'selected' : '' }}>5,000 sqft
+                                        </option>
+                                        <option value="10000" {{ request('size_max') == 10000 ? 'selected' : '' }}>10,000 sqft
+                                        </option>
+                                        <option value="20000" {{ request('size_max') == 20000 ? 'selected' : '' }}>20,000 sqft
+                                        </option>
+                                        <option value="50000" {{ request('size_max') == 50000 ? 'selected' : '' }}>50,000
+                                            sqft+</option>
                                     </select>
                                 </div>
                             </div>
                             <hr>
+                            <!-- Building Type Buttons -->
                             <div class="building-type d-flex flex-column">
                                 <h2>Building Type</h2>
-                                <div class="d-flex justify-content-between gap-2" style="gap: 10px;">
-                                    <button class="active">Residential</button>
-                                    <button>Commercial</button>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach($subcategories as $subcat)
+                                        <button type="button" class="sub-category-btn" data-id="{{ $subcat->id }}">
+                                            {{ $subcat->sub_category_name }}
+                                        </button>
+                                    @endforeach
                                 </div>
-
                             </div>
                             <hr>
+                            <!-- Property Type Checkboxes -->
                             <div class="property-type d-flex flex-column">
                                 <h2>Property Type</h2>
                                 <div class="property-type-button">
-                                    <button><input type="checkbox" checked> Plot</button>
-                                    <button><input type="checkbox" checked> Apartment</button>
-                                    <button><input type="checkbox"> Villa</button>
-                                    <button><input type="checkbox"> Builder Floor</button>
-                                    <button><input type="checkbox"> Independent House</button>
-                                    <button><input type="checkbox"> Penthouse</button>
+                                    @foreach($propertyTypes as $ptype)
+                                        <button>
+                                            <input type="checkbox" class="sub-sub-category-checkbox" data-id="{{ $ptype->id }}">
+                                            {{ $ptype->sub_sub_category_name }}
+                                        </button>
+                                    @endforeach
                                 </div>
                             </div>
+
+
                             <hr>
                             <div class="bedrooms property-type d-flex flex-column">
                                 <h2>Bedrooms</h2>
@@ -688,20 +783,37 @@
                             <hr>
                             <div class="furnishing-status">
                                 <h2>Furnishing Status</h2>
-                                <div class="property-type-button">
-                                    <button><input type="checkbox"> Furnished</button>
-                                    <button><input type="checkbox"> Semi-Furnished</button>
+                                <div class="property-type-button d-flex flex-wrap gap-2">
+                                    @php
+                                        $furnishingStatuses = \App\Models\FurnishingStatus::where('status', 'active')->get();
+                                    @endphp
+
+                                    @foreach($furnishingStatuses as $status)
+                                        <button>
+                                            <input type="checkbox" class="furnishing-Status-checkbox" value="{{ $status->id }}">
+                                            {{ $status->name }}
+                                        </button>
+                                    @endforeach
                                 </div>
                             </div>
+
                             <hr>
                             <div class="furnishing-status">
-                                <h2>Available from</h2>
-                                <div class="property-type-button">
-                                    <button><input type="checkbox"> Any time</button>
-                                    <button><input type="checkbox"> Within 1 Month</button>
-                                    <button><input type="checkbox"> After 1 Month</button>
+                                <h2>Property Status</h2>
+                                <div class="property-type-button d-flex flex-wrap gap-2">
+                                    @php
+                                        $propertyStatuses = \App\Models\PropertyStatus::where('status', 'active')->get();
+                                    @endphp
+
+                                    @foreach($propertyStatuses as $status)
+                                        <button>
+                                            <input type="checkbox" class="property-Status-checkbox" value="{{ $status->id }}">
+                                            {{ $status->name }}
+                                        </button>
+                                    @endforeach
                                 </div>
                             </div>
+
                             <hr>
                             <div class="d-flex justify-content-between align-item-center">
                                 <div class="d-flex flex-column ">
@@ -751,28 +863,11 @@
                         </div>
                     </div>
                     <div class="listing-page-right">
-
                         <div class="right-sorting">
-                            <!--		                <div class="filter-selected-section">-->
-                            <!--    <button class="nav-arrow left-arrow" onclick="scrollSection(-200)">&#10094;</button>-->
-                            <!--    <div class="filter-options-container">-->
-                            <!--        <button class="filter-option"><input type="checkbox" checked> Budget: ₹10,000 - ₹50,000</button>-->
-                            <!--        <button class="filter-option"><input type="checkbox"> Size: 500 - 2000 sqft</button>-->
-                            <!--        <button class="filter-option"><input type="checkbox" checked> Building Type: Residential</button>-->
-                            <!--        <button class="filter-option"><input type="checkbox"> Property Type: Apartment</button>-->
-                            <!--        <button class="filter-option"><input type="checkbox" checked> Bedrooms: 2 BHK</button>-->
-                            <!--        <button class="filter-option"><input type="checkbox"> Localities: Potheri</button>-->
-                            <!--        <button class="filter-option"><input type="checkbox"> Furnishing: Semi-Furnished</button>-->
-                            <!--        <button class="filter-option"><input type="checkbox"> Additional Option 1</button>-->
-                            <!--        <button class="filter-option"><input type="checkbox"> Additional Option 2</button>-->
-                            <!--        <button class="filter-option"><input type="checkbox"> Additional Option 3</button>-->
-                            <!--    </div>-->
-                            <!--    <button class="nav-arrow right-arrow" onclick="scrollSection(200)">&#10095;</button>-->
-                            <!--</div>-->
                             <div class="search-title mb-2">
-                                <strong>Search Results:</strong> 
+                                <strong>Search Results:</strong>
                                 @if(request()->filled('search'))
-                                    {{ request('search') }} in 
+                                    {{ request('search') }} in
                                 @endif
                                 @if(request()->filled('city'))
                                     @php
@@ -787,13 +882,12 @@
                                     @php
                                         $propertyTypes = explode(',', request('sub_sub_category_id'));
                                         $typeNames = App\SubSubCategory::whereIn('id', $propertyTypes)->pluck('sub_sub_category_name')->toArray();
-                                        if(count($typeNames) > 0) {
+                                        if (count($typeNames) > 0) {
                                             echo ' - ' . implode(', ', $typeNames);
                                         }
                                     @endphp
                                 @endif
                             </div>
-
                             <div class="sorting-options">
                                 <select>
                                     <option value="">Sort by: Default</option>
@@ -820,7 +914,8 @@
                                         <div>
                                             <div class="listing-header">
                                                 <h1 class="listing-title">
-                                                    <a href="{{ route('property_detail', ['title' => $property->slug]) }}" style="text-decoration: none; color: inherit;">
+                                                    <a href="{{ route('property_detail', ['title' => $property->slug]) }}"
+                                                        style="text-decoration: none; color: inherit;">
                                                         {{ $property->title ?? '' }}
                                                     </a>
                                                 </h1>
@@ -892,89 +987,6 @@
                                 </div>
                             @endforeach
                         @endif
-
-                        <!--static card-->
-                        <div class="listing-page-card">
-                            <div class="image-section">
-                                <div class="image-count">1 Photo</div>
-                                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
-                                    alt="Industrial worker" class="property-image">
-                                <div class="price-text">
-                                    <h2 class="m-0">₹16 Cr</h2>
-                                    <p class="m-0">See other charges</p>
-                                </div>
-                            </div>
-                            <div class="content-section">
-                                <div>
-                                    <div class="listing-header">
-                                        <h1 class="listing-title">2 BHK Flat for Rent in Gulshan Nagar, Srinagar</h1>
-                                        <div class="listing-actions">
-                                            <button class="action-btn" title="Like"><i class="fas fa-heart"></i></button>
-                                            <button class="action-btn" title="Share"><i class="fas fa-share"></i></button>
-                                            <button class="action-btn" title="More"><i
-                                                    class="fas fa-ellipsis-h"></i></button>
-                                        </div>
-                                        <!--<div class="listing-price">₹16,000</div>-->
-                                    </div>
-
-                                    <div class="listing-features">
-                                        <div class="feature-item">
-                                            <i class="fas fa-home feature-icon"></i>
-                                            <span class="feature-value">Unfurnished</span>
-                                        </div>
-                                        <div class="feature-item">
-                                            <i class="fas fa-bath feature-icon"></i>
-                                            <span class="feature-value">2</span>
-                                            <span class="feature-label">Bathrooms</span>
-                                        </div>
-                                        <div class="feature-item">
-                                            <i class="fas fa-calendar-check feature-icon"></i>
-                                            <span class="feature-value">Immediately</span>
-                                        </div>
-                                        <div class="feature-item">
-                                            <i class="fas fa-expand-arrows-alt feature-icon"></i>
-                                            <span class="feature-value">950 sqft</span>
-                                        </div>
-                                        <div class="feature-item">
-                                            <i class="fas fa-layer-group feature-icon"></i>
-                                            <span class="feature-value">1 out of 1</span>
-                                        </div>
-                                        <div class="feature-item">
-                                            <i class="fas fa-user-friends feature-icon"></i>
-                                            <span class="feature-value">Bachelors</span>
-                                        </div>
-                                    </div>
-                                    <div class="listing-description">
-                                        2 BHK, Multistorey Apartment is available for Rent in Gulshan Nagar, Srinagar for
-                                        16000
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="listing-owner-info mb-2">
-                                            <div class="owner-avatar">RA</div>
-                                            <span><strong>Owner:</strong> Rafiq Ahmad</span>
-                                        </div>
-                                        <div class="listing-owner-info mb-2">
-
-                                            <span><strong>Posted on:</strong> 15 Oct 2025</span>
-                                        </div>
-                                        <div class="listing-owner-info mb-2">
-
-                                            <span><strong><i class="fa-solid fa-eye"></i></strong> 1289</span>
-                                        </div>
-
-
-                                    </div>
-
-                                    <div class="listing-buttons">
-                                        <button class="contact-btn">Contact Owner</button>
-                                        <button class="society-btn">Ask Society Name</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="d-flex justify-content-center">
                             {{ $properties->links() }}
                         </div>
@@ -987,52 +999,138 @@
     </section>
 @endsection
 @section('js')
-
     <script>
+        // Scroll Section Function
         function scrollSection(distance) {
             const container = document.querySelector('.filter-options-container');
-            container.scrollLeft += distance;
+            if (container) container.scrollLeft += distance;
         }
-    </script>
-    <script>
-        function filterResults() {
-            const searchInput = document.querySelector('.search-input').value.toLowerCase();
-            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
-            const cards = document.querySelectorAll('.listing-page-card');
 
-            cards.forEach(card => {
-                const title = card.querySelector('.listing-title').textContent.toLowerCase();
-                const description = card.querySelector('.listing-description').textContent.toLowerCase();
-                let match = true;
+        document.addEventListener('DOMContentLoaded', function () {
+            const params = new URLSearchParams(window.location.search);
 
-                // Filter based on active button
-                if (activeFilter !== 'all') {
-                    match = false;
-                    if (activeFilter === 'rent' && title.includes('for rent')) match = true;
-                    if (activeFilter === 'sale' && title.includes('for sale')) match = true;
-                    if (activeFilter === 'property' && title.includes('property type')) match = true;
-                    if (activeFilter === 'budget' && description.includes('budget')) match = true;
-                    if (activeFilter === 'location' && description.includes('location')) match = true;
-                }
+            // ----- Initialize Sub Category Buttons -----
+            const subCategoryIds = params.get('sub_category_id');
+            if (subCategoryIds) {
+                subCategoryIds.split(',').forEach(id => {
+                    const btn = document.querySelector(`.sub-category-btn[data-id='${id}']`);
+                    if (btn) btn.classList.add('active');
+                });
+            }
 
-                // Filter based on search input
-                if (searchInput && !(title.includes(searchInput) || description.includes(searchInput))) {
-                    match = false;
-                }
+            // ----- Initialize Property Type Checkboxes -----
+            const propertyTypeIds = params.get('sub_sub_category_id');
+            if (propertyTypeIds) {
+                propertyTypeIds.split(',').forEach(id => {
+                    const cb = document.querySelector(`.sub-sub-category-checkbox[data-id='${id}']`);
+                    if (cb) cb.checked = true;
+                });
+            }
 
-                card.style.display = match ? 'flex' : 'none';
+            // ----- Initialize Budget & Size Inputs -----
+            ['budget_min', 'budget_max', 'size_min', 'size_max'].forEach(field => {
+                const el = document.getElementById(field);
+                if (el && params.get(field)) el.value = params.get(field);
             });
+
+            // ----- Initialize Search Input -----
+            const searchInput = document.querySelector('.search-input');
+            if (searchInput && params.get('search')) searchInput.value = params.get('search');
+
+            // Initialize Furnishing Status checkboxes
+            const furnishingIds = params.get('furnishing_status');
+            if (furnishingIds) {
+                furnishingIds.split(',').forEach(id => {
+                    const cb = document.querySelector(`.furnishing-Status-checkbox[value='${id}']`);
+                    if (cb) cb.checked = true;
+                });
+            }
+
+            // Initialize Property Status checkboxes
+            const propertyIds = params.get('property_status');
+            if (propertyIds) {
+                propertyIds.split(',').forEach(id => {
+                    const cb = document.querySelector(`.property-Status-checkbox[value='${id}']`);
+                    if (cb) cb.checked = true;
+                });
+            }
+
+        });
+
+        // ----- Update Filters Function -----
+        function updateFilters() {
+            const params = new URLSearchParams(window.location.search);
+
+            // Search Input
+            const searchVal = document.querySelector('.search-input')?.value?.trim();
+            if (searchVal) params.set('search', searchVal);
+            else params.delete('search');
+
+            // Budget & Size
+            ['budget_min', 'budget_max', 'size_min', 'size_max'].forEach(id => {
+                const val = document.getElementById(id)?.value;
+                if (val) params.set(id, val);
+                else params.delete(id);
+            });
+
+            // Sub-category Buttons
+            const subCatIds = Array.from(document.querySelectorAll('.sub-category-btn.active'))
+                .map(btn => btn.dataset.id);
+            if (subCatIds.length) params.set('sub_category_id', subCatIds.join(','));
+            else params.delete('sub_category_id');
+
+            // Property Type Checkboxes
+            const propertyTypeIds = Array.from(document.querySelectorAll('.sub-sub-category-checkbox:checked'))
+                .map(cb => cb.dataset.id);
+            params.set('sub_sub_category_id', propertyTypeIds.join(',')); // keep empty if none selected
+
+
+            // Furnishing Status
+            const furnishingIds = Array.from(document.querySelectorAll('.furnishing-Status-checkbox:checked'))
+                .map(cb => cb.value);
+            if (furnishingIds.length) params.set('furnishing_status', furnishingIds.join(','));
+            else params.delete('furnishing_status');
+
+            // Property Status
+            const propertyIds = Array.from(document.querySelectorAll('.property-Status-checkbox:checked'))
+                .map(cb => cb.value);
+            if (propertyIds.length) params.set('property_status', propertyIds.join(','));
+            else params.delete('property_status');
+
+            // Redirect with updated params
+            window.location.href = `${window.location.pathname}?${params.toString()}`;
         }
 
-        document.querySelectorAll('.filter-btn').forEach(button => {
-            button.addEventListener('click', function () {
-                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                filterResults();
+        // ----- Event Listeners -----
+
+        // Search input Enter
+        document.querySelector('.search-input')?.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') updateFilters();
+        });
+
+        // Budget & Size changes
+        ['budget_min', 'budget_max', 'size_min', 'size_max'].forEach(id => {
+            document.getElementById(id)?.addEventListener('change', updateFilters);
+        });
+
+        // Sub-category button toggle
+        document.querySelectorAll('.sub-category-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                this.classList.toggle('active');
+                updateFilters();
             });
         });
 
-        // Initial filter on page load
-        filterResults();
+        // Property type, bedrooms, furnishing, property status checkboxes
+        document.querySelectorAll('.sub-sub-category-checkbox')
+            .forEach(cb => cb.addEventListener('change', updateFilters));
+
+        document.querySelectorAll('.furnishing-Status-checkbox, .property-Status-checkbox').forEach(cb => {
+            cb.addEventListener('change', function () {
+                updateFilters();
+            });
+        });
+
     </script>
+
 @endsection
