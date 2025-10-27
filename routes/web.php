@@ -15,6 +15,9 @@
 Route::get('/user/my-activities', function () {
 	return view('front.user.my-activities'); 
 })->name('my-activities');
+Route::get('/user/pricing', function () {
+	return view('front.user.pricing'); 
+})->name('pricing');
 Route::get('/user/all-inquries', function () {
 	return view('front.user.all-inquries'); 
 })->name('all-inquries');
@@ -32,8 +35,8 @@ Route::get('/user/current-subscriptions', function () {
 	return view('front.user.current-subscriptions'); 
 })->name('current-subscriptions');
 
-Route::get('/profile-page', function () {
-	return view('front.profile-page'); 
+Route::get('/profile-page/{slug}', function ($slug) {
+    return view('front.profile-page', compact('slug'));
 })->name('profile.page');
 
 Route::get('/business-details/{id}', [App\Http\Controllers\HomeController::class, 'businessDetails'])

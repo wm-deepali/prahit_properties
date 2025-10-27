@@ -15,7 +15,8 @@
     @include('layouts.app_css')
 
     @yield('css')
-
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 
 <body>
@@ -188,8 +189,8 @@
                                     <a class="dropdown-item"
                                         href="{{route('admin.web-directory-sub-category.index')}}">Manage Sub
                                         Category</a>
-                                    <a class="dropdown-item"
-                                        href="{{ route('admin.business-listing.index') }}">Business Listing</a>
+                                    <a class="dropdown-item" href="{{ route('admin.business-listing.index') }}">Business
+                                        Listing</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
@@ -247,11 +248,12 @@
                                         Category</a>
                                     <a class="dropdown-item" href="{{route('admin.manageBlogs')}}">Manage Blogs</a>
 
-                                     <a class="dropdown-item" href="{{route('admin.faq-categories.index')}}">Manage Faq
+                                    <a class="dropdown-item" href="{{route('admin.faq-categories.index')}}">Manage Faq
                                         Category</a>
                                     <a class="dropdown-item" href="{{route('admin.faqs.index')}}">Manage Faqs</a>
-                                
-                                    <a class="dropdown-item" href="{{ route('admin.client-reels.index') }}">Client Reels</a>
+
+                                    <a class="dropdown-item" href="{{ route('admin.client-reels.index') }}">Client
+                                        Reels</a>
                                 </div>
                             </li>
 

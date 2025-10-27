@@ -1,3 +1,4 @@
+
 <?php $__env->startSection('title'); ?>
     <title>Welcome</title>
 <?php $__env->stopSection(); ?>
@@ -792,16 +793,16 @@
                                     <?php $__currentLoopData = $locations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $loc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <button
                                             class="location-btn <?php echo e(in_array($loc->id, $selectedLocations) ? 'active' : ''); ?>"
-                                            data-id="<?php echo e($loc->id); ?>" style="<?php echo e($index >= $maxVisible ? 'display:none;' : ''); ?>">
+                                            data-id="<?php echo e($loc->id); ?>" style="<?php echo e(in_array($loc->id, $selectedLocations) ? '' : 'display:none;'); ?>">
                                             <?php echo e($loc->location); ?>
 
                                         </button>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </div>
 
-                                <?php if($locations->count() > $maxVisible): ?>
+                                <!-- <?php if($locations->count() > $maxVisible): ?>
                                     <button id="showMoreLocations" class="btn btn-link">Show More</button>
-                                <?php endif; ?>
+                                <?php endif; ?> -->
 
                             </div>
 
@@ -1109,10 +1110,10 @@
             });
         });
 
-        document.getElementById('showMoreLocations')?.addEventListener('click', function () {
-            locationButtons.forEach(btn => btn.style.display = 'inline-block');
-            this.style.display = 'none'; // hide button after click
-        });
+        // document.getElementById('showMoreLocations')?.addEventListener('click', function () {
+        //     locationButtons.forEach(btn => btn.style.display = 'inline-block');
+        //     this.style.display = 'none'; // hide button after click
+        // });
 
         // Update locations in URL params
         function updateLocationsFilter() {

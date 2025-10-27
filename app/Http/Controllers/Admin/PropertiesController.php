@@ -1237,12 +1237,12 @@ class PropertiesController extends AppController
 			$request->validate([
 				'id' => 'required|exists:properties,id',
 				'title' => 'required|max:200',
-				'type_id' => 'nullable',
+				// 'type_id' => 'nullable',
 				'price' => 'required|numeric',
 				'price_label.*' => 'nullable',
 				'category_id' => 'required',
 				// 'sub_category_id' => 'required',
-				'construction_age' => 'nullable',
+				// 'construction_age' => 'nullable',
 				'description' => 'required',
 				'address' => 'required',
 				'location_id' => 'required',
@@ -1359,6 +1359,8 @@ class PropertiesController extends AppController
 				'additional_info' => $request->additional_info,
 				'construction_age' => $request->construction_age,
 				'featured_image' => $featured_image,
+				'latitude' => $request->latitude,
+				'longitude' => $request->longitude,
 			]);
 
 			// ✅ Handle gallery images upload

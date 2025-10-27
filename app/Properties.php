@@ -52,7 +52,9 @@ class Properties extends Model
         'registration_status',
         'registration_status_second',
         'furnishing_status',
-        'furnishing_status_second'
+        'furnishing_status_second',
+        'latitude',
+        'longitude',
     ];
 
     // protected static function boot() {

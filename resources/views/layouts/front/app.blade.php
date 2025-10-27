@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
     integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 
   {{csrf_field()}}
@@ -644,8 +646,18 @@
               </div>
             </div>
           @endauth
-
           @guest
+            <div class="d-flex gap-3 align-items-center">
+              <img src="https://static.99acres.com/universalhp/img/ProfileIcon.shared.png" alt="">
+              <div class=" profile-content">
+                <h4 class="m-0">Welcome</h4>
+                <h6 class="m-0">Guest Name</h6>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#signin">
+                  <p class="m-0">Manage Profile</p>
+                </a>
+              </div>
+            </div>
+
             <a href="#" class="btn btn-outline-dark fw-semibold" data-bs-toggle="modal" data-bs-target="#signin">
               <i class="far fa-user me-1"></i> Login / Signup
             </a>
@@ -3086,21 +3098,9 @@
         </svg>
       </button>
 
-      <!-- Home Button -->
-      @auth
-        @php
-          $homeRoute = match (Auth::user()->role) {
-            'owner' => route('user.dashboard'),
-            'builder' => route('builder.dashboard'),
-            'agent' => route('agent.dashboard'),
-            default => route('user.dashboard')
-          };
-        @endphp
-        <a class="bottom-item bottom-active" data-key="home" href="{{ $homeRoute }}">
-      @else
-          <a class="bottom-item bottom-active" data-key="home" href="#"
-            onclick="event.preventDefault(); openSigninModal();">
-        @endauth
+    
+        <a class="bottom-item bottom-active" data-key="home" href="{{ route('home') }}">
+   
           <span class="bottom-icon">
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path d="M3 10.2L12 3l9 7.2V21a1 1 0 01-1 1h-5v-7H9v7H4a1 1 0 01-1-1V10.2z" />

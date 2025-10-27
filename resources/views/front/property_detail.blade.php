@@ -220,43 +220,10 @@
 						<div class="property-location">
 							<div class="row">
 								<div class="col-sm-12">
-									@php
-										// Build full address for map
-										$mapAddress = [];
-
-										if ($property_detail->address) {
-											$mapAddress[] = $property_detail->address;
-										}
-
-										if ($property_detail->Location) {
-											$mapAddress[] = $property_detail->Location->location;
-										}
-
-										if ($property_detail->getCity) {
-											$mapAddress[] = $property_detail->getCity->name;
-										}
-
-										if ($property_detail->getState) {
-											$mapAddress[] = $property_detail->getState->name;
-										}
-
-										$fullAddress = implode(', ', array_filter($mapAddress));
-										$encodedAddress = urlencode($fullAddress);
-									@endphp
-
-									@if($fullAddress)
-										<iframe src="https://www.google.com/maps?q={{ $encodedAddress }}&output=embed"
-											width="100%" height="400px" frameborder="0" style="border:0; border-radius: 8px;"
-											allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-										</iframe>
-									@else
-										<div
-											style="padding: 60px; text-align: center; background: #f5f5f5; border-radius: 8px;">
-											<i class="fas fa-map-marker-alt"
-												style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
-											<p style="color: #999; margin: 0;">Location information not available</p>
-										</div>
-									@endif
+									<div id="propertyMap"
+										style="width:100%; height:400px; border-radius: 8px; margin-bottom: 10px;"></div>
+									<input type="hidden" id="latitude" name="latitude" value="{{ $property_detail->latitude }}">
+									<input type="hidden" id="longitude" name="longitude" value="{{ $property_detail->longitude }}">
 								</div>
 							</div>
 						</div>
@@ -492,7 +459,7 @@
 											<li><label><input type="checkbox" name="complaint[]" value="4"> Broker property
 													as Owner</label></li>
 											<li><label><input type="checkbox" name="complaint[]" value="5"> Others*
-													(Floor,Amenities,Furnished</label></li>
+													(Floor,Amenities,Furnished)</label></li>
 											<li><label><input type="checkbox" name="complaint[]" value="6"> Incorrect
 													Price</label></li>
 										</ul>
@@ -544,6 +511,46 @@
 	<script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
 	<script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
 	<script type="text/javascript">
+	
+		  function createMap(lat, lng) {
+            var map = L.map('propertyMap').setView([lat, lng], 16);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            var marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+
+            marker.on('dragend', function (e) {
+                var p = e.target.getLatLng();
+                document.getElementById('latitude').value = p.lat;
+                document.getElementById('longitude').value = p.lng;
+            });
+
+            map.on('click', function (e) {
+                marker.setLatLng(e.latlng);
+                document.getElementById('latitude').value = e.latlng.lat;
+                document.getElementById('longitude').value = e.latlng.lng;
+            });
+        }
+
+        @if(!empty($property_detail->latitude) && !empty($property_detail->longitude))
+            // Property has saved lat/lng; use those
+            createMap({{ $property_detail->latitude }}, {{ $property_detail->longitude }});
+        @else
+            // Use browser geolocation or default
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (pos) {
+                    createMap(pos.coords.latitude, pos.coords.longitude);
+                }, function () {
+                    createMap(28.6139, 77.2090); // fallback: Delhi
+                });
+            } else {
+                createMap(28.6139, 77.2090);
+            }
+        @endif
+
 		$(".loading").css('display', 'none');
 
 		$(document).ready(function () {
@@ -719,12 +726,7 @@
 		// 	}
 		// });
 
-		unit_price('property_price', $(".property_price").text());
 
-		@auth
-			mask_label('mask_email', 'Email', '{{Auth::user()->email}}');
-			mask_label('mask_number', 'Mobile Number:', '{{Auth::user()->mobile_number}}');
-		@endauth
 	</script>
 
 @endsection

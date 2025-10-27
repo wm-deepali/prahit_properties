@@ -791,15 +791,15 @@
                                     @foreach($locations as $index => $loc)
                                         <button
                                             class="location-btn {{ in_array($loc->id, $selectedLocations) ? 'active' : '' }}"
-                                            data-id="{{ $loc->id }}" style="{{ $index >= $maxVisible ? 'display:none;' : '' }}">
+                                            data-id="{{ $loc->id }}" style="{{ in_array($loc->id, $selectedLocations) ? '' : 'display:none;' }}">
                                             {{ $loc->location }}
                                         </button>
                                     @endforeach
                                 </div>
 
-                                @if($locations->count() > $maxVisible)
+                                <!-- @if($locations->count() > $maxVisible)
                                     <button id="showMoreLocations" class="btn btn-link">Show More</button>
-                                @endif
+                                @endif -->
 
                             </div>
 
@@ -1102,10 +1102,10 @@
             });
         });
 
-        document.getElementById('showMoreLocations')?.addEventListener('click', function () {
-            locationButtons.forEach(btn => btn.style.display = 'inline-block');
-            this.style.display = 'none'; // hide button after click
-        });
+        // document.getElementById('showMoreLocations')?.addEventListener('click', function () {
+        //     locationButtons.forEach(btn => btn.style.display = 'inline-block');
+        //     this.style.display = 'none'; // hide button after click
+        // });
 
         // Update locations in URL params
         function updateLocationsFilter() {

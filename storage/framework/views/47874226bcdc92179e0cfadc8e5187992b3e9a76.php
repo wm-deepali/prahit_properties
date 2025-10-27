@@ -9,7 +9,7 @@
 	<section class="breadcrumb-section">
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-12">
+				<div class="form-group col-sm-12">
 					<h3>Post Property</h3>
 					<nav aria-label="breadcrumb">
 						<ol class="breadcrumb">
@@ -35,96 +35,54 @@
 						<div class="card property-left-widgets">
 							<div class="form-sep">
 								<h3>Property Description &amp; Price</h3>
-								<div class="form-group row">
-									<div class="col-sm-8">
-										<label class="label-control">Property Title</label>
-										<input type="text" class="text-control" placeholder="Title" name="title" id="title"
-											value="<?php echo e($property->title); ?>" required />
-									</div>
-									<!-- <div class="col-sm-4">
-																					<label class="label-control">Type</label>
-																					<select class="text-control" name="type_id" id="type_id" required>
-																						<option value="">Select Type</option>
-																						<?php if($property->type_id == 1): ?>
-																							<option value="1" selected="">Commercial</option>
-																							<option value="2">Agricultural</option>
-																							<option value="3">Industrial</option>
-																							<option value="4">Free Hold</option>
-																						<?php elseif($property->type_id == 2): ?>
-																							<option value="1">Commercial</option>
-																							<option value="2" selected="">Agricultural</option>
-																							<option value="3">Industrial</option>
-																							<option value="4">Free Hold</option>
-																						<?php elseif($property->type_id == 3): ?>
-																							<option value="1">Commercial</option>
-																							<option value="2">Agricultural</option>
-																							<option value="3" selected="">Industrial</option>
-																							<option value="4">Free Hold</option>
-																						<?php elseif($property->type_id == 4): ?>
-																							<option value="1">Commercial</option>
-																							<option value="2">Agricultural</option>
-																							<option value="3">Industrial</option>
-																							<option value="4" selected="">Free Hold</option>
-																						<?php else: ?>
-																							<option value="1">Commercial</option>
-																							<option value="2">Agricultural</option>
-																							<option value="3">Industrial</option>
-																							<option value="4">Free Hold</option>
-																						<?php endif; ?>
-																					</select>
-																				</div> -->
-									<div class="col-sm-4">
-										<label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
-										<input type="number" class="text-control" placeholder="Enter Price" name="price"
-											id="price" value="<?php echo e($property->price); ?>" required />
-									</div>
-								</div>
 
-
-								<div class="form-group row">
-									<div class="col-sm-4">
+								<div class="row">
+									<div class="form-group col-sm-4">
 										<label class="label-control">Property Available For</label>
-										<select class="text-control populate_categories" name="category_id" id="category_id"
-											onchange="fetch_subcategories(this.value, fetch_form_type)" required="">
-											<?php if(count($category) < 1): ?>
-												<option value="">No records found</option>
-											<?php else: ?>
-												<?php $__currentLoopData = $category; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-													<?php if($property->category_id == $v->id): ?>
-														<option value="<?php echo e($v->id); ?>" selected=""><?php echo e($v->category_name); ?></option>
-													<?php else: ?>
-														<option value="<?php echo e($v->id); ?>"><?php echo e($v->category_name); ?></option>
-													<?php endif; ?>
-												<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-											<?php endif; ?>
-										</select>
+										<select class="text-control populate_categories" name="category_id"
+											onchange="fetch_subcategories(this.value, fetch_form_type);">
+											<?php $__currentLoopData = $category; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+												<option value="<?php echo e($v->id); ?>" <?php echo e($property->category_id == $v->id ? "selected" : ""); ?>>
+													<?php echo e($v->category_name); ?>
 
+												</option>
+											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+										</select>
 									</div>
-									<div class="col-sm-4">
+									<div class="form-group col-sm-4">
 										<label class="label-control">Category</label>
 										<select class="text-control populate_subcategories" name="sub_category_id"
-											id="sub_category_id" required>
+											onchange="fetch_subsubcategories(this.value, fetch_form_type);">
 											<option value="">Select Category</option>
 										</select>
-
 									</div>
-
-									<div class="col-sm-4">
+									<div class="form-group col-sm-4">
 										<label class="label-control">Property Type</label>
 										<select class="text-control populate_subsubcategories" name="sub_sub_category_id"
 											id="sub_sub_category_id" onchange="fetch_form_type();">
 											<option value="">Select Property Type</option>
 										</select>
 									</div>
+								</div>
 
+								<div class="row">
+									<div class="col-sm-8">
+										<label class="label-control">Title </label>
+										<input type="text" class="text-control" name="title"
+											placeholder="Enter Property Name" value="<?php echo e($property->title); ?>" required />
+									</div>
+									<div class="form-group col-sm-4">
+										<label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
+										<input type="number" class="text-control" name="price" min="0"
+											placeholder="Enter Price" value="<?php echo e($property->price); ?>" required />
+									</div>
 								</div>
 
 								<div class="form-row">
-
 									
 									<?php $col = ($price_labels->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-									<div id="priceLabelField" class="form-group <?php echo e($col); ?>">
-										<label class="label-control">Price Label</label>
+									<div id="priceLabelField" class="form-group <?php echo e($col); ?>" style="display:none;">
+										<label class="label-control d-flex">Price Label</label>
 										<?php if($price_labels->first()->input_format == 'checkbox'): ?>
 											<?php $__currentLoopData = $price_labels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 												<label>
@@ -155,12 +113,20 @@
 													value="<?php echo e($property->price_label_second); ?>">
 											</div>
 										<?php endif; ?>
+
+										
+										<div class="mt-2" id="price_label_second_container" style="display:none;">
+											<label id="price_label_second_label" class="label-control"></label>
+											<input type="date" name="price_label_second" class="form-control"
+												value="<?php echo e(old('price_label_second')); ?>">
+										</div>
+
 									</div>
 
 
 									
 									<?php $col = ($property_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-									<div id="propertyStatusField" class="form-group <?php echo e($col); ?>">
+									<div id="propertyStatusField" class="form-group <?php echo e($col); ?>" style="display:none;">
 										<label class="label-control">Property Status</label>
 										<?php if($property_statuses->first()->input_format == 'checkbox'): ?>
 											<?php $__currentLoopData = $property_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -192,12 +158,19 @@
 													value="<?php echo e($property->property_status_second); ?>">
 											</div>
 										<?php endif; ?>
+
+										<div class="mt-2" id="property_status_second_container" style="display:none;">
+											<label id="property_status_second_label" class="label-control"></label>
+											<input type="date" name="property_status_second" class="form-control"
+												value="<?php echo e(old('property_status_second')); ?>">
+										</div>
+
 									</div>
 
 
 									
 									<?php $col = ($registration_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-									<div id="registrationStatusField" class="form-group <?php echo e($col); ?>">
+									<div id="registrationStatusField" class="form-group <?php echo e($col); ?>" style="display:none;">
 										<label class="label-control">Registration Status</label>
 										<?php if($registration_statuses->first()->input_format == 'checkbox'): ?>
 											<?php $__currentLoopData = $registration_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -211,8 +184,7 @@
 											<select name="registration_status" class="form-control">
 												<option value="">Select</option>
 												<?php $__currentLoopData = $registration_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-													<option value="<?php echo e($status->id); ?>" <?php echo e($property->registration_status == $status->id ? 'selected' : ''); ?>>
-														<?php echo e($status->name); ?>
+													<option value="<?php echo e($status->id); ?>" <?php echo e($property->registration_status == $status->id ? 'selected' : ''); ?>><?php echo e($status->name); ?>
 
 													</option>
 												<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -229,12 +201,19 @@
 													value="<?php echo e($property->registration_status_second); ?>">
 											</div>
 										<?php endif; ?>
+
+										<div class="mt-2" id="registration_status_second_container" style="display:none;">
+											<label id="registration_status_second_label" class="label-control"></label>
+											<input type="date" name="registration_status_second" class="form-control"
+												value="<?php echo e(old('registration_status_second')); ?>">
+										</div>
+
 									</div>
 
 
 									
 									<?php $col = ($furnishing_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-									<div id="furnishingStatusField" class="form-group <?php echo e($col); ?>">
+									<div id="furnishingStatusField" class="form-group <?php echo e($col); ?>" style="display:none;">
 										<label class="label-control">Furnishing Status</label>
 										<?php if($furnishing_statuses->first()->input_format == 'checkbox'): ?>
 											<?php $__currentLoopData = $furnishing_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -248,8 +227,7 @@
 											<select name="furnishing_status" class="form-control">
 												<option value="">Select</option>
 												<?php $__currentLoopData = $furnishing_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-													<option value="<?php echo e($status->id); ?>" <?php echo e($property->furnishing_status == $status->id ? 'selected' : ''); ?>>
-														<?php echo e($status->name); ?>
+													<option value="<?php echo e($status->id); ?>" <?php echo e($property->furnishing_status == $status->id ? 'selected' : ''); ?>><?php echo e($status->name); ?>
 
 													</option>
 												<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -266,23 +244,28 @@
 													value="<?php echo e($property->furnishing_status_second); ?>">
 											</div>
 										<?php endif; ?>
+
+										<div class="mt-2" id="furnishing_status_second_container" style="display:none;">
+											<label id="furnishing_status_second_label" class="label-control"></label>
+											<input type="date" name="furnishing_status_second" class="form-control"
+												value="<?php echo e(old('furnishing_status_second')); ?>">
+										</div>
+
 									</div>
 
 								</div>
 
-
-
-								<div class="form-group row">
-									<div class="col-sm-12">
+								<div class="row">
+									<div class="form-group col-sm-12">
 										<label class="label-control">Description</label>
-										<textarea class="text-control" rows="2" cols="4" name="description" id="description"
-											required=""><?php echo e($property->description); ?></textarea>
+										<textarea class="text-control" rows="2" cols="4" name="description"
+											required> <?php echo e($property->description); ?></textarea>
 									</div>
 								</div>
 
-								<div id="amenitiesField">
-									<h3>Amenities</h3>
-									<div class="form-group row">
+								<div id="amenitiesField" style="display:none;">
+									<h4 class="form-section-h">Amenities</h4>
+									<div class="row">
 										<?php $__currentLoopData = $amenities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $amenity): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 											<div class="col-sm-3">
 												<img src="<?php echo e(asset('storage')); ?>/<?php echo e($amenity->icon); ?>" style="height: 30px;">
@@ -294,9 +277,9 @@
 									</div>
 								</div>
 
-								<h3>Property Location</h3>
-								<div class="form-group row">
-									<div class="col-sm-6">
+								<h4 class="form-section-h">Property Location</h4>
+								<div class="row">
+									<div class="form-group col-sm-6">
 										<label class="label-control">State </label>
 										<select class="form-control" name="state" id="state" required="">
 											<option value="">Select State </option>
@@ -309,7 +292,7 @@
 											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 										</select>
 									</div>
-									<div class="col-sm-6">
+									<div class="form-group col-sm-6">
 										<label class="label-control">City </label>
 										<select class="form-control" name="city" id="city" required="">
 											<?php $__currentLoopData = $cities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $city): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -322,13 +305,12 @@
 										</select>
 									</div>
 								</div>
-								<div class="form-group row">
-									<div class="col-sm-6">
+								<div class="row">
+									<div class="form-group col-sm-6">
 										<label class="label-control">Location </label>
-										<select class="text-control" name="location_id[]" id="location_id" multiple=""
-											required="">
+										<select class="text-control" name="location_id" id="location_id" required="">
 											<?php $__currentLoopData = $locations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $location): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-												<?php if(in_array($location->id, explode(',', $property->location_id))): ?>
+												<?php if($property->location_id == $location->id): ?>
 													<option value="<?php echo e($location->id); ?>" selected=""><?php echo e($location->location); ?>
 
 													</option>
@@ -336,31 +318,32 @@
 													<option value="<?php echo e($location->id); ?>"><?php echo e($location->location); ?></option>
 												<?php endif; ?>
 											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+											<option value="other">Others</option>
 										</select>
 
+										<div id="custom-location-container" style="display:none; margin-top:10px;">
+											<input type="text" class="text-control" name="custom_location_input" accept=""
+												id="custom_location_input" placeholder="Enter new location" />
+										</div>
+
 									</div>
-									<div class="col-sm-6">
+									<div class="form-group col-sm-6">
 										<label class="label-control">Sub Location</label>
-										<input type="text" name="sub_location_name" id="sub_location_name"
-											class="text-control" value="<?php echo e($property->sub_location_name ?? ''); ?>" />
+										<select class="text-control" name="sub_location_id[]" id="sub_location_id" multiple>
+										</select>
 									</div>
 								</div>
-								<div class="form-group row">
-									<div class="col-sm-12">
+								<div class="row">
+									<div class="form-group col-sm-12">
 										<label class="label-control">Address </label>
 										<input type="text" class="text-control" placeholder="Enter Address" id="address"
 											name="address" value="<?php echo e($property->address); ?>" required />
 									</div>
 								</div>
 
-								<div class="form-group row">
-									<div class="col-sm-12">
-										<iframe
-											src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14237.956091373446!2d80.9541594!3d26.8562!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xfb5cc225b2f58aa2!2sWeb%20Mingo%20IT%20Solutions%20Pvt.%20Ltd.%20-%20Website%20Designing%20%26%20Digital%20Marketing%20Company!5e0!3m2!1sen!2sin!4v1590990421763!5m2!1sen!2sin"
-											width="100%" height="200" frameborder="0" style="border:0;" allowfullscreen=""
-											aria-hidden="false" tabindex="0"></iframe>
-									</div>
-								</div>
+								<div id="propertyMap" style="width:100%; height:300px;margin-bottom:10px"></div>
+								<input type="hidden" name="latitude" id="latitude">
+								<input type="hidden" name="longitude" id="longitude">
 
 								<h3>Uploaded Photos</h3>
 								<div class="form-group dropzone row">
@@ -382,7 +365,7 @@
 								</div>
 								<h3>Property Photos</h3>
 								<div class="form-group row">
-									<div class="col-sm-12">
+									<div class="form-group col-sm-12">
 										<div class="dropzone">
 											<input type="file" id="file" name="gallery_images_file[]" multiple />
 										</div>
@@ -398,46 +381,23 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-4">
+					<div class="form-group col-sm-4">
 						<div class="card property-right-widgets">
 							<div class="form-sep">
 								<center class="loading_2">
 									<img src="<?php echo e(asset('images/loading.gif')); ?>" alt="Loading.." class="loading_2" />
 								</center>
 								<h3>Contact Information</h3>
-								<!-- 								<div class="form-group mb-0 row">
-																				<div class="col-sm-12">
-																					<label class="label-control">Ownership Type</label>
-																					<ul class="ownertype">
-																						<?php if(\Auth::user()->role == 'owner' || old('owner_type') == 1): ?>
-																							<li><label><input type="radio" name="owner_type" value="1" checked="" readonly="" /> Owner</label></li>
-																							<li><label><input type="radio" name="owner_type" value="2"  readonly=""/> Builder</label></li>
-																							<li><label><input type="radio" name="owner_type" value="3"  readonly=""/> Agent</label></li>
-																						<?php elseif(\Auth::user()->role == 'builder' || old('owner_type') == 2): ?>
-																							<li><label><input type="radio" name="owner_type" value="1" readonly=""/> Owner</label></li>
-																							<li><label><input type="radio" name="owner_type" value="2"  checked="" readonly=""/> Builder</label></li>
-																							<li><label><input type="radio" name="owner_type" value="3" readonly="" /> Agent</label></li>
-																						<?php elseif(\Auth::user()->role == 'agent' || old('owner_type') == 3): ?>
-																							<li><label><input type="radio" name="owner_type" value="1" readonly=""/> Owner</label></li>
-																							<li><label><input type="radio" name="owner_type" value="2"  readonly=""/> Builder</label></li>
-																							<li><label><input type="radio" name="owner_type" value="3"  checked="" readonly=""/> Agent</label></li>
-																						<?php else: ?>
-																							<li><label><input type="radio" name="owner_type" value="1" checked="" readonly=""/> Owner</label></li>
-																							<li><label><input type="radio" name="owner_type" value="2"  readonly=""/> Builder</label></li>
-																							<li><label><input type="radio" name="owner_type" value="3"  readonly=""/> Agent</label></li>
-																						<?php endif; ?>
-																					</ul>
-																				</div>
-																			</div> -->
+
 								<div class="form-group row">
-									<div class="col-sm-6">
+									<div class="form-group col-sm-6">
 										<label class="label-control">First Name</label>
 										<input type="text" class="text-control " placeholder="Enter First Name"
 											id="firstname" name="firstname"
 											value="<?php if(\Auth::user()): ?><?php echo e(\Auth::user()->firstname); ?><?php else: ?><?php echo e(old('firstname')); ?><?php endif; ?>"
 											required="" readonly="" />
 									</div>
-									<div class="col-sm-6">
+									<div class="form-group col-sm-6">
 										<label class="label-control">Last Name</label>
 										<input type="text" class="text-control " placeholder="Enter Last Name" id="lastname"
 											name="lastname"
@@ -447,7 +407,7 @@
 								</div>
 
 								<div class="form-group row">
-									<div class="col-sm-12">
+									<div class="form-group col-sm-12">
 										<label class="label-control">Email</label>
 										<input type="email" class="text-control email" placeholder="Enter Email" id="email"
 											name="email"
@@ -479,7 +439,7 @@
 					</div>
 
 
-					<div class="col-sm-12 mt-4 text-center">
+					<div class="form-group col-sm-12 mt-4 text-center">
 						<button class="btn btn-postproperty" type="button" onclick="createProperty()">Update Property <i
 								class="fas fa-chevron-circle-right"></i></button>
 					</div>
@@ -496,7 +456,52 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 	<script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
 	<script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 	<script type="text/javascript">
+
+		<?php if(!empty($property->latitude) && !empty($property->longitude)): ?>
+
+			// Initialize map with property coordinates
+			createMap(<?php echo e($property->latitude); ?>, <?php echo e($property->longitude); ?>);
+		<?php else: ?>
+															// Otherwise use browser geolocation or default
+															if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function (pos) {
+					createMap(pos.coords.latitude, pos.coords.longitude);
+				}, function () {
+					createMap(28.6139, 77.2090); // fallback Delhi
+				});
+			} else {
+				createMap(28.6139, 77.2090);
+			}
+		<?php endif; ?>
+
+
+		function createMap(lat, lng) {
+			var map = L.map('propertyMap').setView([lat, lng], 16);
+			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				attribution: '&copy; OpenStreetMap contributors'
+			}).addTo(map);
+
+			var marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+			document.getElementById('latitude').value = lat;
+			document.getElementById('longitude').value = lng;
+
+			marker.on('dragend', function (e) {
+				var p = e.target.getLatLng();
+				document.getElementById('latitude').value = p.lat;
+				document.getElementById('longitude').value = p.lng;
+			});
+
+			map.on('click', function (e) {
+				marker.setLatLng(e.latlng);
+				document.getElementById('latitude').value = e.latlng.lat;
+				document.getElementById('longitude').value = e.latlng.lng;
+			});
+		}
 
 		$(function () {
 			$(".loading_2").css('display', 'none');
@@ -509,14 +514,16 @@
 				`<center class='m0-auto'> Please select category </center>`
 			);
 
-			// Dropzone.autoDiscover = false;
-			// jQuery(document).ready(function() {
+			fetch_subcategories('<?php echo e($property->category_id); ?>', function () {
+				$(".populate_subcategories").val('<?php echo e($property->sub_category_id); ?>');
+				fetch_form_type();
+				fetch_subsubcategories('<?php echo e($property->sub_category_id); ?>', function () {
+					$(".populate_subsubcategories").val('<?php echo e($property->sub_sub_category_id); ?>');
+					fetch_form_type();
+				});
+			});
 
-			//   $(".dropzone").dropzone({
-			//     url: "/file/post"
-			//   });
 
-			// });
 		});
 
 		//-------------------- Get city By state --------------------//
@@ -557,26 +564,9 @@
 					$.each(result, function (key, location) {
 						$("#location_id").append('<option value="' + location.id + '" >' + location.location + '</option>');
 					});
-				}
-			});
-		});
 
-		$('#location_id').on('change', function () {
-			var location_id = $('#location_id').val();
-			$("#sub_location_id").html('');
-			$.ajax({
-				url: "<?php echo e(route('front.getSubLocations')); ?>",
-				type: "POST",
-				data: {
-					location_id: location_id,
-					_token: '<?php echo e(csrf_token()); ?>',
-				},
-				dataType: 'json',
-				success: function (result) {
-					$('#sub_location_id').html('<option value="">Select Location</option>');
-					$.each(result, function (key, location) {
-						$("#sub_location_id").append('<option value="' + location.id + '" >' + location.sub_location_name + '</option>');
-					});
+					// Append the "Others" option at the end
+					$('#location_id').append('<option value="other">Others</option>');
 				}
 			});
 		});
@@ -618,47 +608,17 @@
 				});
 		}
 
-		function send_otp(element) {
 
-			var email = $(".email").val();
-			var mobile_number = $(".mobile_number").val();
-			$.ajax({
-				url: "<?php echo e(config('app.api_url') . '/property/create_visitor_otp'); ?>",
-				method: "POST",
-				data: {
-					"_token": $("input[name='_token']").val(),
-					"mobile_number": mobile_number,
-					"email": email
-				},
-				beforeSend: function () {
-					$(".loading_2").css('display', 'block');
-					$(element).addClass('disabled');
-				},
-				success: function (response) {
-					response.responseCode === 200 ? toastr.success(response.message) : toastr.error('An error occured');
-				},
-				error: function (response) {
-					var response = JSON.parse(response.responseText);
-					response.responseCode === 400 ? toastr.error(response.message) : toastr.error('An error occured');
-				},
-				complete: function () {
-					$(".loading_2").css('display', 'none');
-					$(element).removeClass('disabled');
-				}
-
-			})
-		}
-
-		var frInstance;
+		//-------------------- Get sub categories By category --------------------//
 		function fetch_subcategories(id, callback) {
-			var route = "<?php echo e(url('get/sub-categories')); ?>/" + id
+			// var route = "<?php echo e(route('admin.sub_category.fetch_subcategories_by_cat_id', ['id' => ':id'])); ?>";
+			var route = "<?php echo e(url('get/sub-categories')); ?>/" + id  // var route = route.replace(':id', id);
 			$.ajax({
 				url: route,
 				method: 'get',
 				beforeSend: function () {
-					$(".addproperty").attr('disabled', true);
-					$(".add_formtype").empty();
-					$(".loading").css('display', 'block');
+					$(".updateproperty").attr('disabled', true);
+					$(".location").css('display', 'block');
 				},
 				success: function (response) {
 					// var response = JSON.parse(response);
@@ -667,18 +627,16 @@
 						var subcategories = response.subcategories;
 						if (subcategories.length > 0) {
 							$.each(subcategories, function (x, y) {
-								if ('<?php echo e($property->sub_category_id); ?>' == y.id)
-									$(".populate_subcategories").append(
-										`<option value=${y.id} selected> ${y.sub_category_name} </option>`
-									);
-								else
-									$(".populate_subcategories").append(
-										`<option value=${y.id}> ${y.sub_category_name} </option>`
-									);
+								$(".populate_subcategories").append(
+									`<option> Select </option>`
+								);
+								$(".populate_subcategories").append(
+									`<option value=${y.id}> ${y.sub_category_name} </option>`
+								);
 							});
 						} else {
 							$(".populate_subcategories").append(
-								`<option value=''> Please add a category </option>`
+								`<option value=''> No records found </option>`
 							);
 						}
 						if (callback) {
@@ -687,65 +645,52 @@
 					}
 				},
 				error: function (response) {
-					toastr.error('An error occured while fetching subcategories');
+					toastr.error('An error occured while fetching sub categories');
 				},
 				complete: function () {
-					$(".loading").css('display', 'none');
-					// $(".addproperty").attr('disabled', false);
+					$(".location").css('display', 'none');
+					$(".updateproperty").attr('disabled', false);
 				}
 			})
 		}
 
 
-		var cachedSubSubCategories = {}; // Object to store sub sub categories keyed by subcategory ID
-
-		function loadSubSubCategories(subcategoryId, selectedId = null) {
+		//-------------------- Get sub sub categories By sub category --------------------//
+		var cachedSubSubCategories = {};
+		function fetch_subsubcategories(id, callback) {
 			$('#sub_sub_category_id').html('<option value="">Loading...</option>');
-			var route = "<?php echo e(url('get/sub-sub-categories')); ?>/" + subcategoryId;
+			var route = "<?php echo e(url('get/sub-sub-categories')); ?>/" + id;
 
 			$.ajax({
 				url: route,
 				method: 'GET',
 				success: function (response) {
 					$('#sub_sub_category_id').empty().append('<option value="">Select Property Type</option>');
-					if (response.subsubcategories && response.subsubcategories.length) {
+					if (response.subsubcategories && response.subsubcategories.length > 0) {
 						cachedSubSubCategories = response.subsubcategories || [];
+
 						$.each(response.subsubcategories, function (i, subsub) {
-							let selected = (selectedId == subsub.id) ? "selected" : "";
+							let selected = (<?php echo e($property->sub_category_id ?? 0); ?> == subsub.id) ? "selected" : "";
 							$('#sub_sub_category_id').append(
 								'<option value="' + subsub.id + '" ' + selected + '>' + subsub.sub_sub_category_name + '</option>'
 							);
 						});
+
 					} else {
 						$('#sub_sub_category_id').append('<option value="">No property type found</option>');
 					}
-					fetch_form_type();
+
+
+					if (callback) {
+						callback();
+					}
+
 				},
 				error: function () {
 					$('#sub_sub_category_id').html('<option value="">Error loading</option>');
 				}
 			});
 		}
-
-		// On subcategory change
-		$('#sub_category_id').on('change', function () {
-			let subcategoryId = $(this).val();
-			if (subcategoryId) {
-				loadSubSubCategories(subcategoryId);
-			} else {
-				$('#sub_sub_category_id').html('<option value="">Select Property Type</option>');
-			}
-		});
-
-		// 🔹 Auto-load on page load if editing
-		$(document).ready(function () {
-			let preselectedSubCategory = "<?php echo e($property->sub_category_id); ?>";
-			let preselectedSubSubCategory = "<?php echo e($property->sub_sub_category_id); ?>";
-
-			if (preselectedSubCategory) {
-				loadSubSubCategories(preselectedSubCategory, preselectedSubSubCategory);
-			}
-		});
 
 
 		$('#sub_sub_category_id').on('change', function () {
@@ -827,16 +772,10 @@
 		}
 
 
-
 		function fetch_form_type() {
 			var cat = $(".populate_categories option:selected").val();
 			var subcat = $(".populate_subcategories option:selected").val();
 			var subsubcat = $(".populate_subsubcategories option:selected").val();
-
-			// if(subcat=="") {
-			// 	clearFormType(true);
-			// 	return true;
-			// }
 
 			var route = "<?php echo e(url('category/related-form')); ?>";
 			$.ajax({
@@ -855,20 +794,19 @@
 				},
 				success: function (response) {
 					if (response != 0) {
-						console.log('<?php echo e($property->category_id); ?>' == response.category_id, 'condition');
 
 						if (
-							'<?php echo e($property->category_id); ?>' == response.category_id &&
-							'<?php echo e($property->sub_category_id); ?>' == response.sub_category_id &&
+							'<?php echo e($property->category_id); ?>' == response.category_id ||
+							'<?php echo e($property->sub_category_id); ?>' == response.sub_category_id ||
 							'<?php echo e($property->sub_sub_category_id); ?>' == response.sub_sub_category_id
 						) {
 							document.getElementById('fb-render').innerHTML = '';
 							var formData = $('#save_json').val();
 							var formRenderOptions = { formData };
 							frInstance = $('#fb-render').formRender(formRenderOptions);
+
 						} else {
 							document.getElementById('fb-render').innerHTML = '';
-							console.log(response);
 							var formData = response.form_data;
 							var formRenderOptions = { formData };
 							frInstance = $('#fb-render').formRender(formRenderOptions);
@@ -876,7 +814,7 @@
 
 					} else {
 						document.getElementById('fb-render').innerHTML = '';
-						toastr.error('No Any Form Found');
+						// toastr.error('No Any Form Found');
 					}
 				},
 				error: function (response) {
@@ -889,6 +827,108 @@
 			})
 		}
 
+
+
+		function handleSecondInput(selectId, containerId, checkboxClass) {
+			const select = document.getElementById(selectId);
+			const container = document.getElementById(containerId);
+			const label = container.querySelector('label');
+
+			if (select) {
+				function toggle() {
+					const option = select.selectedOptions[0];
+					const show = option.dataset.secondInput === 'yes';
+					label.textContent = option.dataset.secondLabel || '';
+					container.style.display = show ? 'block' : 'none';
+				}
+				select.addEventListener('change', toggle);
+				toggle(); // initialize
+			}
+
+			if (checkboxClass) {
+				const checkboxes = document.querySelectorAll(checkboxClass);
+				function toggleCheckbox() {
+					let show = false;
+					let lbl = '';
+					checkboxes.forEach(cb => {
+						if (cb.checked && cb.dataset.secondInput === 'yes') {
+							show = true;
+							lbl = cb.dataset.secondLabel;
+						}
+					});
+					label.textContent = lbl;
+					container.style.display = show ? 'block' : 'none';
+				}
+				checkboxes.forEach(cb => cb.addEventListener('change', toggleCheckbox));
+				toggleCheckbox(); // initialize
+			}
+		}
+
+		// Price Label
+		handleSecondInput('price_label', 'price_label_second_container', '.price_checkbox');
+		// Property Status
+		handleSecondInput('property_status', 'property_status_second_container', '.property_checkbox');
+		// Registration Status
+		handleSecondInput('registration_status', 'registration_status_second_container', '.registration_checkbox');
+		// Furnishing Status
+		handleSecondInput('furnishing_status', 'furnishing_status_second_container', '.furnishing_checkbox');
+
+		$('#location_id').on('change', function () {
+			// toggle new location input
+			if ($(this).val() && $(this).val() === 'other') {
+				$('#custom-location-container').show();
+			} else {
+				$('#custom-location-container').hide();
+			}
+			// load sub locations for selected location
+			var location_id = $('#location_id').val();
+			if (!location_id || location_id === 'other') { $('#sub_location_id').empty().trigger('change'); return; }
+			$("#sub_location_id").html('');
+			$.ajax({
+				url: "<?php echo e(route('front.getSubLocations')); ?>",
+				type: "POST",
+				data: {
+					location_id: location_id,
+					_token: '<?php echo e(csrf_token()); ?>',
+				},
+				dataType: 'json',
+				success: function (result) {
+					$('#sub_location_id').empty();
+					$.each(result, function (key, location) {
+						$("#sub_location_id").append('<option value="' + location.id + '">' + location.sub_location_name + '</option>');
+					});
+					// reselect existing values from property
+					var selectedIds = "<?php echo e($property->sub_location_id ?? ''); ?>";
+					console.log(selectedIds, 'ids');
+					
+					if (selectedIds) {
+						var arr = selectedIds.split(',');
+						$('#sub_location_id').val(arr).trigger('change');
+					}
+				}
+			});
+		});
+		// Initialize Sub Location select2 with tagging
+		function initEditSubLocationSelect2() {
+			$('#sub_location_id').select2({
+				tags: true,
+				width: '100%',
+				placeholder: 'Select or add sub locations',
+				closeOnSelect: false,
+				createTag: function (params) {
+					var term = $.trim(params.term);
+					if (term === '') { return null; }
+					return { id: term, text: term, isNew: true };
+				}
+			});
+		}
+		initEditSubLocationSelect2();
+
+		// On load: trigger city->locations and preload sublocations
+		$(document).ready(function () {
+			var locId = $('#location_id').val();
+			if (locId) { $('#location_id').trigger('change'); }
+		});
 
 
 
@@ -967,8 +1007,8 @@
 					formData.append('is_visitor', true);
 				<?php endif; ?>
 
-														// console.log(obj)
-														if (jQuery.isEmptyObject(obj)) {
+																						// console.log(obj)
+																						if (jQuery.isEmptyObject(obj)) {
 					returnIfInvalid();
 				}
 
@@ -988,7 +1028,7 @@
 							<?php if(auth()->guard()->check()): ?>
 								request.setRequestHeader('auth-token', '<?php echo e(Auth::user()->auth_token); ?>');
 							<?php endif; ?>
-																	},
+																									},
 						success: function (response) {
 							// var response = JSON.parse(response);
 							if (response.responseCode === 200) {
@@ -999,7 +1039,7 @@
 									// window.location.href = "<?php echo e(route('admin.properties.index')); ?>";
 									//          	}, 1000);
 								<?php endif; ?>
-																		} else if (response.responseCode === 400) {
+																										} else if (response.responseCode === 400) {
 								toastr.error(response.message)
 							} else {
 								toastr.error('An error occured')

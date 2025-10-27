@@ -271,6 +271,11 @@
                     </div>
                   </div>
 
+                  <div id="propertyMap" style="width:100%; height:300px;margin-bottom:10px"></div>
+                  <input type="hidden" name="latitude" id="latitude">
+                  <input type="hidden" name="longitude" id="longitude">
+
+
                   <h4 class="form-section-h">Property Images</h4>
 
                   <div class="form-group-f row">
@@ -318,6 +323,42 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
   <script type="text/javascript">
 
+    // Center at user's current location if available
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        createMap(pos.coords.latitude, pos.coords.longitude);
+      }, function () {
+        createMap(28.6139, 77.2090); // fallback: Delhi
+      });
+    } else {
+      createMap(28.6139, 77.2090);
+    }
+
+    function createMap(lat, lng) {
+      var map = L.map('propertyMap').setView([lat, lng], 16);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      var marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+      document.getElementById('latitude').value = lat;
+      document.getElementById('longitude').value = lng;
+
+      marker.on('dragend', function (e) {
+        var p = e.target.getLatLng();
+        document.getElementById('latitude').value = p.lat;
+        document.getElementById('longitude').value = p.lng;
+      });
+
+      map.on('click', function (e) {
+        marker.setLatLng(e.latlng);
+        document.getElementById('latitude').value = e.latlng.lat;
+        document.getElementById('longitude').value = e.latlng.lng;
+      });
+    }
+
+
+
     $(function () {
       $(".populate_categories,  .populate_locations").change();
 
@@ -357,7 +398,7 @@
       });
     });
 
-    //-------------------- Get locationa By city --------------------//
+    //-------------------- Get locations By city --------------------//
     $('#city').on('change', function () {
       var city_id = this.value;
       $("#location_id").html('');

@@ -665,7 +665,7 @@
     })
 
     function delete_record(id) {
-      swal({
+      swal.fire({
         title: "Are you sure?",
         text: "Delete this Property",
         icon: "warning",
@@ -693,7 +693,7 @@
     }
 
     function changeStatus(id) {
-      swal({
+      swal.fire({
         title: "Are you sure?",
         text: "Change Status This Property.",
         icon: "warning",
@@ -765,7 +765,7 @@
     }
 
     function approveProperty(id) {
-      swal({
+      swal.fire({
         title: "Are you sure?",
         text: "Approved This Property.",
         icon: "warning",
@@ -911,7 +911,7 @@
     }
 
     function publishedProperty(id) {
-      swal({
+      swal.fire({
         title: "Are you sure?",
         text: "Published This Property.",
         icon: "warning",

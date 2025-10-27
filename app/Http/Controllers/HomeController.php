@@ -252,13 +252,58 @@ class HomeController extends AppController
 		// Search query for title or location
 		if ($request->filled('search')) {
 			$search = $request->search;
-			$query->where(function ($q) use ($search) {
-				$q->where('title', 'like', "%{$search}%")
-					->orWhereHas('Location', function ($q2) use ($search) {
-						$q2->where('location', 'like', "%{$search}%");
+			$terms = explode(' ', $search); // split search by spaces
+
+			$query->where(function ($q) use ($terms) {
+				foreach ($terms as $term) {
+					$q->orWhere(function ($inner) use ($term) {
+						// Direct property fields
+						$inner->where('title', 'like', "%{$term}%")
+							->orWhere('description', 'like', "%{$term}%")
+							->orWhere('address', 'like', "%{$term}%")
+							->orWhere('price_label', 'like', "%{$term}%")
+							->orWhere('price_label_second', 'like', "%{$term}%");
+
+						// Category name
+						$inner->orWhereHas('Category', function ($cat) use ($term) {
+							$cat->where('category_name', 'like', "%{$term}%");
+						});
+
+						// Subcategory name
+						$inner->orWhereHas('SubCategory', function ($sub) use ($term) {
+							$sub->where('sub_category_name', 'like', "%{$term}%");
+						});
+
+						// Sub-Sub-Category name
+						$inner->orWhereHas('SubSubCategory', function ($subsub) use ($term) {
+							$subsub->where('sub_sub_category_name', 'like', "%{$term}%");
+						});
+
+						// Location
+						$inner->orWhereHas('Location', function ($loc) use ($term) {
+							$loc->where('location', 'like', "%{$term}%");
+						});
+
+						// City
+						$inner->orWhereHas('getCity', function ($city) use ($term) {
+							$city->where('name', 'like', "%{$term}%");
+						});
+
+						// State
+						$inner->orWhereHas('getState', function ($state) use ($term) {
+							$state->where('name', 'like', "%{$term}%");
+						});
+
+						// Owner (User)
+						$inner->orWhereHas('getUser', function ($user) use ($term) {
+							$user->where('firstname', 'like', "%{$term}%")
+								->orWhere('lastname', 'like', "%{$term}%");
+						});
 					});
+				}
 			});
 		}
+
 
 		if ($request->filled('city')) {
 			$query->whereHas('getCity', function ($q) use ($request) {
@@ -683,15 +728,15 @@ class HomeController extends AppController
 		// dd($request->all());
 		$request->validate([
 			'title' => 'required|max:200',
-			'type_id' => 'nullable',
 			'price' => 'required|numeric',
 			'price_label.*' => 'nullable',
 			'category_id' => 'required',
-			'sub_category_id' => 'required',
-			'construction_age' => 'nullable',
 			'description' => 'required',
 			'address' => 'required',
 			'location_id' => 'required',
+			'custom_location_input' => 'nullable|string|max:255',
+			'sub_location_id' => 'nullable|array',
+			'sub_location_id.*' => 'nullable|string',
 			'owner_type' => 'required',
 			'firstname' => 'required',
 			'lastname' => 'required',
@@ -699,7 +744,6 @@ class HomeController extends AppController
 			'mobile_number' => 'required|numeric|digits:10',
 			'otp' => 'required',
 			"gallery_images_file.*" => 'required|mimes:jpg,png,jpeg',
-			'sub_location_name' => 'nullable|string|max:255',
 		]);
 
 		// Check OTP first
@@ -781,12 +825,86 @@ class HomeController extends AppController
 		$unique_id = 'PP-' . str_pad($count, 4, '0', STR_PAD_LEFT);
 		$slug = str_replace('/', '-', str_replace(' ', '-', $request->title));
 
+		// Handle custom location if 'other' is selected
+		$locationId = $request->location_id;
+		if ($locationId === 'other') {
+			$customLocationName = trim($request->custom_location_input);
+			if (!empty($customLocationName)) {
+				// Capitalize each word's first letter
+				$customLocationName = ucwords(strtolower($customLocationName));
+
+				// Insert new location into DB with state and city from request
+				$newLocation = Locations::create([
+					'state_id' => $request->state,
+					'city_id' => $request->city,
+					'location' => $customLocationName,
+					'status' => 1, // or as appropriate
+				]);
+				$locationId = $newLocation->id;
+			} else {
+				// Optional: fail with error if "other" selected but no input given
+				return response()->json([
+					'status' => 'error',
+					'message' => 'Please enter the custom location name.',
+				], 422);
+			}
+		}
+
+		// Persist final single location_id
+		$request->merge([
+			'location_id' => $locationId,
+		]);
+
+		// Handle sub locations: allow tagged names; create if needed then store names on property
+		$submittedSubLocations = $request->input('sub_location_id', []);
+		$resolvedSubLocationNames = [];
+		$resolvedSubLocationIds = [];
+		if (!empty($submittedSubLocations)) {
+			$primaryLocationId = $locationId ? (int) $locationId : null;
+			foreach ($submittedSubLocations as $value) {
+				$value = trim(($value ?? ''));
+				if ($value === '') {
+					continue;
+				}
+
+				if (ctype_digit($value)) {
+					$existing = SubLocations::find((int) $value);
+					if ($existing) {
+						$resolvedSubLocationNames[] = $existing->sub_location_name;
+						$resolvedSubLocationIds[] = (int) $existing->id;
+					}
+					continue;
+				}
+
+				// Create new sublocation for this location
+				if ($primaryLocationId) {
+					$name = ucwords(strtolower($value));
+					// ensure not duplicate for this location
+					$dup = SubLocations::where(['location_id' => $primaryLocationId, 'sub_location_name' => $name])->first();
+					if ($dup) {
+						$resolvedSubLocationNames[] = $dup->sub_location_name;
+						$resolvedSubLocationIds[] = (int) $dup->id;
+					} else {
+						$newSub = SubLocations::create([
+							'location_id' => $primaryLocationId,
+							'sub_location_name' => $name,
+						]);
+						if ($newSub) {
+							$resolvedSubLocationNames[] = $newSub->sub_location_name;
+							$resolvedSubLocationIds[] = (int) $newSub->id;
+						}
+					}
+				}
+			}
+		}
+
+
+
 		$property = Properties::create([
 			'user_id' => $user->id,
 			'title' => $request->title,
 			'listing_id' => $unique_id,
 			'slug' => $slug,
-			'type_id' => $request->type_id,
 			'price' => $request->price,
 			'price_label' => is_array($request->price_label) ? implode(',', $request->price_label) : $request->price_label,
 			'price_label_second' => $request->price_label_second ?? null,
@@ -798,16 +916,17 @@ class HomeController extends AppController
 			'furnishing_status_second' => $request->furnishing_status_second ?? null,
 			'description' => $request->description,
 			'category_id' => $request->category_id,
-			'sub_category_id' => $request->sub_category_id,
-			'sub_sub_category_id' => $request->sub_sub_category_id,
+			'sub_category_id' => $request->sub_category_id ?? null,
+			'sub_sub_category_id' => $request->sub_sub_category_id ?? null,
 			'address' => $request->address,
 			'state_id' => $request->state,
 			'city_id' => $request->city,
-			'location_id' => implode(',', $request->location_id),
-			'sub_location_name' => $request->sub_location_name ?? null,
+			'location_id' => $request->location_id,
+			'sub_location_name' => implode(',', $resolvedSubLocationIds),
 			'amenities' => $request->amenity ? implode(',', $request->amenity) : null,
 			'additional_info' => $request->form_json,
-			'construction_age' => $request->construction_age
+			'latitude' => $request->latitude,
+			'longitude' => $request->longitude,
 		]);
 
 		// Handle gallery images
@@ -905,16 +1024,17 @@ class HomeController extends AppController
 	{
 		$request->validate([
 			'title' => 'required|max:200',
-			'type_id' => 'nullable',
+			// 'type_id' => 'nullable',
 			'price' => 'required|numeric',
 			'price_label.*' => 'nullable',
 			'category_id' => 'required',
-			'sub_category_id' => 'required',
-			'construction_age' => 'nullable',
+			// 'sub_category_id' => 'required',
+			// 'construction_age' => 'nullable',
 			'description' => 'required',
 			'address' => 'required',
 			'location_id' => 'required',
-			'sub_location_name' => 'nullable|string|max:255',
+			'sub_location_id' => 'nullable|array',
+			'sub_location_id.*' => 'nullable|string',
 			"gallery_images_file.*" => 'nullable|mimes:jpg,png,jpeg',
 		]);
 
@@ -926,9 +1046,71 @@ class HomeController extends AppController
 		$registration_status = $request->has('registration_status') ? implode(',', (array) $request->registration_status) : null;
 		$furnishing_status = $request->has('furnishing_status') ? implode(',', (array) $request->furnishing_status) : null;
 
+
+		// Handle custom location if 'other' is selected (single location)
+		$locationId = $request->location_id;
+		if ($locationId === 'other') {
+			$customLocationName = trim($request->custom_location_input);
+			if (!empty($customLocationName)) {
+				$customLocationName = ucwords(strtolower($customLocationName));
+				$newLocation = \App\Locations::create([
+					'state_id' => $request->state,
+					'city_id' => $request->city,
+					'location' => $customLocationName,
+					'status' => 1,
+				]);
+				$locationId = $newLocation->id;
+			} else {
+				return response()->json([
+					'status' => 'error',
+					'message' => 'Please enter the custom location name.',
+				], 422);
+			}
+		}
+
+		// Resolve sub locations: accept IDs or names; create new names under selected location
+		$submittedSubLocations = $request->input('sub_location_id', []);
+		$resolvedSubLocationIds = [];
+		if (!empty($submittedSubLocations)) {
+			$primaryLocationId = $locationId ? (int) $locationId : null;
+			foreach ($submittedSubLocations as $value) {
+				$value = trim(($value ?? ''));
+				if ($value === '') {
+					continue;
+				}
+				if (ctype_digit($value)) {
+					$existing = \App\SubLocations::find((int) $value);
+					if ($existing) {
+						$resolvedSubLocationIds[] = (int) $existing->id;
+					}
+					continue;
+				}
+				if ($primaryLocationId) {
+					$name = ucwords(strtolower($value));
+					$dup = \App\SubLocations::where([
+						'location_id' => $primaryLocationId,
+						'sub_location_name' => $name
+					])->first();
+					if ($dup) {
+						$resolvedSubLocationIds[] = (int) $dup->id;
+					} else {
+						$newSub = \App\SubLocations::create([
+							'location_id' => $primaryLocationId,
+							'sub_location_name' => $name,
+						]);
+						if ($newSub) {
+							$resolvedSubLocationIds[] = (int) $newSub->id;
+						}
+					}
+				}
+			}
+		}
+
+		// Persist normalized fields back into request-like variables
+		$normalizedSubLocationId = !empty($resolvedSubLocationIds) ? implode(',', $resolvedSubLocationIds) : null;
+
 		$picked->update([
 			'title' => $request->title,
-			'type_id' => $request->type_id,
 			'price' => $request->price,
 			'price_label' => $price_label,
 			'price_label_second' => $request->price_label_second, // new field
@@ -945,11 +1127,12 @@ class HomeController extends AppController
 			'address' => $request->address,
 			'state_id' => $request->state,
 			'city_id' => $request->city,
-			'location_id' => implode(',', (array) $request->location_id),
-			'sub_location_name' => $request->sub_location_name ?? null,
+			'location_id' => $locationId,
+			'sub_location_id' => $normalizedSubLocationId,
 			'amenities' => $request->has('amenity') ? implode(',', (array) $request->amenity) : null,
 			'additional_info' => $request->form_json,
-			'construction_age' => $request->construction_age,
+			'latitude' => $request->latitude,
+			'longitude' => $request->longitude,
 		]);
 
 		// Handle gallery images upload

@@ -23,20 +23,6 @@
                   <h4 class="form-section-h">Preview Property Details</h4>
 
                   <div class="form-group-f row">
-                    <div class="col-sm-8">
-                      <label class="label-control">Title </label>
-                      <input type="text" class="text-control" name="title" placeholder="Enter Property Name"
-                        value="{{$property->title}}" required readonly="" />
-                    </div>
-
-                    <div class="col-sm-4">
-                      <label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
-                      <input type="number" class="text-control" name="price" min="0" placeholder="Enter Price"
-                        value="{{$property->price}}" required readonly="" />
-                    </div>
-                  </div>
-
-                  <div class="form-group-f row">
                     <div class="col-sm-4">
                       <label class="label-control">Property Available For</label>
                       <select class="text-control populate_categories" name="category_id"
@@ -64,6 +50,21 @@
                     </div>
 
                   </div>
+
+                  <div class="form-group-f row">
+                    <div class="col-sm-8">
+                      <label class="label-control">Title </label>
+                      <input type="text" class="text-control" name="title" placeholder="Enter Property Name"
+                        value="{{$property->title}}" required readonly="" />
+                    </div>
+
+                    <div class="col-sm-4">
+                      <label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
+                      <input type="number" class="text-control" name="price" min="0" placeholder="Enter Price"
+                        value="{{$property->price}}" required readonly="" />
+                    </div>
+                  </div>
+
 
                   <div class="form-row">
 
@@ -230,8 +231,7 @@
                   <div class="form-group-f row">
                     <div class="col-sm-6">
                       <label class="label-control">Location </label>
-                      <select class="text-control" name="location_id" id="location_id" required=""
-                        disabled="">
+                      <select class="text-control" name="location_id" id="location_id" required="" disabled="">
                         @foreach($locations as $location)
                           @if($property->location_id == $location->id)
                             <option value="{{ $location->id }}" selected="">{{ $location->location }}</option>
@@ -245,7 +245,8 @@
                     <div class="col-sm-6">
                       <label class="label-control">Sub Location </label>
                       <input type="text" class="text-control" name="sub_location_display" id="sub_location_display"
-                        value="{{ $property->sub_location_id ? $property->getSubLocations($property->sub_location_id) : '' }}" disabled />
+                        value="{{ $property->sub_location_id ? $property->getSubLocations($property->sub_location_id) : '' }}"
+                        disabled />
                     </div>
 
                   </div>
@@ -256,6 +257,10 @@
                         value="{{ $property->address }}" required readonly="" />
                     </div>
                   </div>
+
+                  <div id="propertyMap" style="width:100%; height:300px;margin-bottom:10px"></div>
+                  <input type="hidden" value="{{ $property->latitude }}" name="latitude" id="latitude">
+                  <input type="hidden" value="{{ $property->longitude }}" name="longitude" id="longitude">
 
                   <div class="row">
                     <h4 style="border-bottom-style: ridge;">Property Images</h4>
@@ -311,6 +316,48 @@
   <script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
   <script type="text/javascript">
 
+    @if(!empty($property->latitude) && !empty($property->longitude))
+
+      // Initialize map with property coordinates
+      createMap({{ $property->latitude }}, {{ $property->longitude }});
+    @else
+              // Otherwise use browser geolocation or default
+              if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (pos) {
+          createMap(pos.coords.latitude, pos.coords.longitude);
+        }, function () {
+          createMap(28.6139, 77.2090); // fallback Delhi
+        });
+      } else {
+        createMap(28.6139, 77.2090);
+      }
+    @endif
+
+
+    function createMap(lat, lng) {
+      var map = L.map('propertyMap').setView([lat, lng], 16);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      var marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+      document.getElementById('latitude').value = lat;
+      document.getElementById('longitude').value = lng;
+
+      marker.on('dragend', function (e) {
+        var p = e.target.getLatLng();
+        document.getElementById('latitude').value = p.lat;
+        document.getElementById('longitude').value = p.lng;
+      });
+
+      map.on('click', function (e) {
+        marker.setLatLng(e.latlng);
+        document.getElementById('latitude').value = e.latlng.lat;
+        document.getElementById('longitude').value = e.latlng.lng;
+      });
+    }
+
+
     $(function () {
       fetch_subcategories('{{$property->category_id}}', function () {
         $(".populate_subcategories").val('{{$property->sub_category_id}}');
@@ -320,7 +367,7 @@
           fetch_form_type();
         });
       });
-     
+
       $(".property_use_for").hide();
 
       setTimeout(function () {
@@ -616,69 +663,69 @@
                     // console.log('sub_f_id =>',y.sub_f_id);
                     $(".add_formtype").append(
                       `
-                              <div class='col-sm-4'>
-                              <label> 
-                              <input type='checkbox' class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} value="checked"  name=${y.sub_feature_slug}  />
-                              ${y.sub_feature_name} 
-                              </label>
-                              </div>
-                              `
+                                <div class='col-sm-4'>
+                                <label> 
+                                <input type='checkbox' class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} value="checked"  name=${y.sub_feature_slug}  />
+                                ${y.sub_feature_name} 
+                                </label>
+                                </div>
+                                `
                     );
                     break;
 
                   case "2":
                     $(".add_formtype").append(
                       `
-                              <div class='col-sm-4'>
-                              <label> 
-                              <input type='text'  class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} name=${y.sub_feature_slug}   />
-                              ${y.sub_feature_name} 
-                              </label>
-                              </div>
-                              `
+                                <div class='col-sm-4'>
+                                <label> 
+                                <input type='text'  class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} name=${y.sub_feature_slug}   />
+                                ${y.sub_feature_name} 
+                                </label>
+                                </div>
+                                `
                     );
                     break;
 
                   case "3":
                     $(".add_formtype").append(
                       `
-                              <div class='col-sm-4'>
-                              <label> 
-                              <input type='radio'  class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} value='on' name='radio[]'  />
-                              ${y.sub_feature_name} 
-                              </label>
-                              </div>
-                              `
+                                <div class='col-sm-4'>
+                                <label> 
+                                <input type='radio'  class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} value='on' name='radio[]'  />
+                                ${y.sub_feature_name} 
+                                </label>
+                                </div>
+                                `
                     );
                     break;
 
                   case "4":
                     $(".add_formtype").append(
                       `
-                              <div class='col-sm-4'>
-                              <label> 
-                              <textarea class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} name=${y.sub_feature_slug}></textarea>
-                              ${y.sub_feature_name} 
-                              </label>
-                              </div>
-                              `
+                                <div class='col-sm-4'>
+                                <label> 
+                                <textarea class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} name=${y.sub_feature_slug}></textarea>
+                                ${y.sub_feature_name} 
+                                </label>
+                                </div>
+                                `
                     );
                     break;
 
                   case "5":
                     $(".add_formtype").append(
                       `
-                              <div class='col-sm-4'>
-                              <label> 
-                              ${y.sub_feature_name} 
-                              <select>
-                              <option value='' class='text-control dynamic_forms' data-sub-feature-id=${y.sub_f_id} name=${y.sub_feature_slug} data-input-type=${y.input_type}>
-                              Select
-                              </option>
-                              </select>
-                              </label>
-                              </div>
-                              `
+                                <div class='col-sm-4'>
+                                <label> 
+                                ${y.sub_feature_name} 
+                                <select>
+                                <option value='' class='text-control dynamic_forms' data-sub-feature-id=${y.sub_f_id} name=${y.sub_feature_slug} data-input-type=${y.input_type}>
+                                Select
+                                </option>
+                                </select>
+                                </label>
+                                </div>
+                                `
                     );
                     break;
 
@@ -720,5 +767,6 @@
         }
       })
     }
+
   </script>
 @endsection
