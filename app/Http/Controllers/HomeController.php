@@ -155,7 +155,10 @@ class HomeController extends AppController
 
 		// Filter by sub_category_id
 		if ($request->filled('sub_category_id')) {
-			$query->where('sub_category_id', $request->sub_category_id);
+			$categoriesFilter = is_array($request->sub_category_id)
+				? $request->sub_category_id
+				: explode(',', $request->sub_category_id);
+			$query->whereIn('sub_category_id', $categoriesFilter);
 		}
 
 		// Budget filters
@@ -438,6 +441,12 @@ class HomeController extends AppController
 
 		// Pagination
 		$properties = $query->paginate(10)->withQueryString();
+
+		if ($request->ajax()) {
+			// Return only the listing partial view (HTML of properties)
+			return view('front.partials.property-listings', compact('properties'))->render();
+		}
+
 		// dd($subcategories);
 		return view('front.listing-list', compact('properties', 'category', 'subcategories', 'propertyTypes', 'locations'));
 	}

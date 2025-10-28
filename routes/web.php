@@ -35,7 +35,7 @@ Route::get('/user/current-subscriptions', function () {
 	return view('front.user.current-subscriptions'); 
 })->name('current-subscriptions');
 
-Route::get('/profile-page/{slug}', function ($slug) {
+Route::get('/profile-page/{slug?}', function ($slug) {
     return view('front.profile-page', compact('slug'));
 })->name('profile.page');
 

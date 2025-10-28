@@ -4,6 +4,10 @@
 <?php $__env->stopSection(); ?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
     .listing-page-card {
         display: flex;
@@ -568,6 +572,162 @@
         background-color: #007bff !important;
         color: #fff;
     }
+
+    #offcanvasBottom {
+        height: 50vh !important;
+        /* makes drawer taller */
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+
+    .sorting-options label {
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    .sorting-options input[type="checkbox"] {
+        accent-color: #0d1b3e;
+    }
+
+    .accordion-button {
+        background-color: #fff !important;
+        color: #222;
+        font-weight: 600;
+        font-size: 15px;
+        padding: 10px 12px;
+    }
+
+    .accordion-item {
+        border: none !important;
+        /*border-bottom: 1px solid #ddd;*/
+    }
+
+    .accordion-body {
+        background: #f9f9f9;
+        padding: 10px 5px 10px 15px;
+    }
+
+    .filter-checkbox-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .filter-option {
+        display: flex;
+        align-items: center;
+        background: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 8px 12px;
+        width: 100%;
+        transition: all 0.2s ease;
+    }
+
+    .filter-option:hover {
+        background: #e6f2ff;
+        border-color: #007bff;
+    }
+
+    .filter-option input[type="checkbox"] {
+        margin-right: 10px;
+        transform: scale(1.1);
+    }
+
+    .filter-option label {
+        margin: 0;
+        font-size: 15px;
+        color: #333;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .sub-category-btn {
+        width: 100%;
+        text-align: start;
+        padding: 4px 10px;
+        background: #ffffff;
+        border: none;
+    }
+
+    .property-type-button button {
+        width: 100%;
+        text-align: start;
+        padding: 4px 10px;
+        background: #ffffff;
+        border: none;
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: #e9ecef;
+        color: orange !important;
+    }
+
+    .accordion-button:focus {
+        z-index: 3;
+        border-color: #fdfdfd;
+        outline: 0;
+        box-shadow: #fff !important;
+    }
+</style>
+<style>
+    .sort-btn {
+        width: 100%;
+        background: #f8f9fa40;
+        border: 1px solid #ddd;
+        color: #333;
+        font-weight: 500;
+        border-radius: 8px;
+        padding: 10px;
+        text-align: left;
+        transition: all 0.2s ease;
+    }
+
+    .sort-btn:hover {
+        background: #e9f2ff;
+        border-color: #007bff;
+        color: #007bff;
+    }
+
+    .sort-btn.active {
+        background: orange;
+        color: #fff;
+        border-color: orange;
+    }
+</style>
+<style>
+    .offcanvas-body {
+        padding: 15px;
+    }
+
+    .accordion-button {
+        background: #f7f9fc;
+        color: #0d1b3e;
+        font-weight: 600;
+        border-radius: 8px !important;
+        box-shadow: none;
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: #e6f0ff;
+        color: #0056d2;
+    }
+
+    .accordion-body {
+        padding-left: 20px;
+        padding-bottom: 10px;
+    }
+
+    .accordion-body label {
+        font-size: 14px;
+        color: #333;
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    .accordion-body input[type="checkbox"] {
+        accent-color: #0056d2;
+    }
 </style>
 
 <?php $__env->startSection('content'); ?>
@@ -588,6 +748,497 @@
                 </div>
             </div>
         </div>
+        <div class="filter-inmobile">
+            <div class="filter-text" data-bs-toggle="offcanvas" href="#offcanvasExample3" role="button">
+                <p class="m-0">Category</p>
+            </div>
+            <div class="ver-line"></div>
+            <div class="filter-text" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom"
+                aria-controls="offcanvasBottom">
+                <p class="m-0"><i class="fa-solid fa-sort"></i> Short By</p>
+            </div>
+            <div class="ver-line"></div>
+            <div class="filter-text">
+                <p class="m-0" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"><i
+                        class="fa-solid fa-sliders"></i> Filter</p>
+            </div>
+
+        </div>
+
+
+
+
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample3" aria-labelledby="filterMenuLabel"
+            style="width: 320px;">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title fw-semibold" id="filterMenuLabel">Filter By Category</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+
+            <div class="offcanvas-body" style="background:#f9f9f9; text-align: left;">
+                <div class="accordion" id="categoryAccordion">
+
+                    <!-- Residential -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingResidential">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseResidential" aria-expanded="false"
+                                aria-controls="collapseResidential">
+                                Residential
+                            </button>
+                        </h2>
+                        <div id="collapseResidential" class="accordion-collapse collapse"
+                            aria-labelledby="headingResidential" data-bs-parent="#categoryAccordion">
+                            <div class="accordion-body">
+                                <label><input type="checkbox" name="residential[]" value="flat"> Flat /
+                                    Apartment</label><br>
+                                <label><input type="checkbox" name="residential[]" value="villa"> Villa</label><br>
+                                <label><input type="checkbox" name="residential[]" value="house"> Independent
+                                    House</label><br>
+                                <label><input type="checkbox" name="residential[]" value="studio"> Studio Apartment</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Commercial -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingCommercial">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseCommercial" aria-expanded="false"
+                                aria-controls="collapseCommercial">
+                                Commercial
+                            </button>
+                        </h2>
+                        <div id="collapseCommercial" class="accordion-collapse collapse" aria-labelledby="headingCommercial"
+                            data-bs-parent="#categoryAccordion">
+                            <div class="accordion-body">
+                                <label><input type="checkbox" name="commercial[]" value="office"> Office Space</label><br>
+                                <label><input type="checkbox" name="commercial[]" value="shop"> Shop / Showroom</label><br>
+                                <label><input type="checkbox" name="commercial[]" value="warehouse"> Warehouse /
+                                    Godown</label><br>
+                                <label><input type="checkbox" name="commercial[]" value="coworking"> Co-working
+                                    Space</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Land & Plots -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingLand">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseLand" aria-expanded="false" aria-controls="collapseLand">
+                                Land & Plots
+                            </button>
+                        </h2>
+                        <div id="collapseLand" class="accordion-collapse collapse" aria-labelledby="headingLand"
+                            data-bs-parent="#categoryAccordion">
+                            <div class="accordion-body">
+                                <label><input type="checkbox" name="land[]" value="residential-plot"> Residential
+                                    Plot</label><br>
+                                <label><input type="checkbox" name="land[]" value="commercial-plot"> Commercial
+                                    Plot</label><br>
+                                <label><input type="checkbox" name="land[]" value="industrial-plot"> Industrial
+                                    Plot</label><br>
+                                <label><input type="checkbox" name="land[]" value="agriculture-land"> Agricultural
+                                    Land</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PG / Hostel -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingPG">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapsePG" aria-expanded="false" aria-controls="collapsePG">
+                                PG / Hostel
+                            </button>
+                        </h2>
+                        <div id="collapsePG" class="accordion-collapse collapse" aria-labelledby="headingPG"
+                            data-bs-parent="#categoryAccordion">
+                            <div class="accordion-body">
+                                <label><input type="checkbox" name="pg[]" value="boys-pg"> Boys PG</label><br>
+                                <label><input type="checkbox" name="pg[]" value="girls-pg"> Girls PG</label><br>
+                                <label><input type="checkbox" name="pg[]" value="hostel"> Hostel</label><br>
+                                <label><input type="checkbox" name="pg[]" value="shared-room"> Shared Room</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="filterMenuLabel"
+            style="width: 320px;">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title fw-semibold" id="filterMenuLabel">Filters</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+
+            <div class="offcanvas-body" style="background:#f9f9f9; text-align: left;">
+
+                <!-- Location Filter -->
+                <div class="filter-item border-bottom py-2 mb-3" style="text-align: left;">
+                    <h6 class="fw-semibold mb-0 d-flex justify-content-between align-items-center"
+                        data-bs-toggle="offcanvas" data-bs-target="#locationCanvas" aria-controls="locationCanvas"
+                        style="cursor:pointer;">
+                        <span>
+                            <i class="fas fa-map-marker-alt text-danger"></i>
+                            Location
+                        </span>
+                        <img src="<?php echo e(asset('images/arrow.png')); ?>" alt="" width="20px;">
+                    </h6>
+
+                    <div id="selectedCityDisplay" class="mt-2 p-2 bg-light rounded" style="display:none;">
+                        <small class="text-muted">Selected City:</small><br>
+                        <strong id="selectedCityName"></strong>
+                        <i class="fas fa-times-circle text-danger float-end" id="clearCitySelection"
+                            style="cursor:pointer;"></i>
+                    </div>
+                </div>
+
+                <div class="listing-filter">
+                    <div class="reset-btn d-flex justify-content-between align-item-center">
+                        <h2 style="font-size:20px;">Filters</h2>
+                        <button type="button" id="resetFiltersmobile">Reset</button>
+                    </div>
+                    <hr>
+
+
+                    <div class="budget">
+                        <h2>Budget</h2>
+                        <div class="range-group">
+                            <select id="budget_min_mobile" name="budget_min">
+                                <option value="">Min</option>
+                                <option value="5000" <?php echo e(request('budget_min') == 5000 ? 'selected' : ''); ?>>₹5,000
+                                </option>
+                                <option value="10000" <?php echo e(request('budget_min') == 10000 ? 'selected' : ''); ?>>₹10,000
+                                </option>
+                                <option value="25000" <?php echo e(request('budget_min') == 25000 ? 'selected' : ''); ?>>₹25,000
+                                </option>
+                                <option value="50000" <?php echo e(request('budget_min') == 50000 ? 'selected' : ''); ?>>₹50,000
+                                </option>
+                                <option value="100000" <?php echo e(request('budget_min') == 100000 ? 'selected' : ''); ?>>₹1 Lakh
+                                </option>
+                                <option value="500000" <?php echo e(request('budget_min') == 500000 ? 'selected' : ''); ?>>₹5 Lakh
+                                </option>
+                                <option value="1000000" <?php echo e(request('budget_min') == 1000000 ? 'selected' : ''); ?>>₹10
+                                    Lakh</option>
+                                <option value="2500000" <?php echo e(request('budget_min') == 2500000 ? 'selected' : ''); ?>>₹25
+                                    Lakh</option>
+                                <option value="5000000" <?php echo e(request('budget_min') == 5000000 ? 'selected' : ''); ?>>₹50
+                                    Lakh</option>
+                                <option value="10000000" <?php echo e(request('budget_min') == 10000000 ? 'selected' : ''); ?>>₹1
+                                    Cr</option>
+                                <option value="30000000" <?php echo e(request('budget_min') == 30000000 ? 'selected' : ''); ?>>₹3
+                                    Cr</option>
+                                <option value="50000000" <?php echo e(request('budget_min') == 50000000 ? 'selected' : ''); ?>>₹5
+                                    Cr</option>
+                            </select>
+
+                            <select id="budget_max_mobile" name="budget_max">
+                                <option value="">Max</option>
+                                <option value="10000" <?php echo e(request('budget_max') == 10000 ? 'selected' : ''); ?>>₹10,000
+                                </option>
+                                <option value="25000" <?php echo e(request('budget_max') == 25000 ? 'selected' : ''); ?>>₹25,000
+                                </option>
+                                <option value="50000" <?php echo e(request('budget_max') == 50000 ? 'selected' : ''); ?>>₹50,000
+                                </option>
+                                <option value="100000" <?php echo e(request('budget_max') == 100000 ? 'selected' : ''); ?>>₹1 Lakh
+                                </option>
+                                <option value="500000" <?php echo e(request('budget_max') == 500000 ? 'selected' : ''); ?>>₹5 Lakh
+                                </option>
+                                <option value="1000000" <?php echo e(request('budget_max') == 1000000 ? 'selected' : ''); ?>>₹10
+                                    Lakh</option>
+                                <option value="2500000" <?php echo e(request('budget_max') == 2500000 ? 'selected' : ''); ?>>₹25
+                                    Lakh</option>
+                                <option value="5000000" <?php echo e(request('budget_max') == 5000000 ? 'selected' : ''); ?>>₹50
+                                    Lakh</option>
+                                <option value="10000000" <?php echo e(request('budget_max') == 10000000 ? 'selected' : ''); ?>>₹1
+                                    Cr</option>
+                                <option value="30000000" <?php echo e(request('budget_max') == 30000000 ? 'selected' : ''); ?>>₹3
+                                    Cr</option>
+                                <option value="50000000" <?php echo e(request('budget_max') == 50000000 ? 'selected' : ''); ?>>₹5
+                                    Cr</option>
+                                <option value="100000000" <?php echo e(request('budget_max') == 100000000 ? 'selected' : ''); ?>>
+                                    ₹10 Cr+</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="size">
+                        <h2>Size</h2>
+                        <div class="range-group">
+                            <select id="size_min_mobile" name="size_min">
+                                <option value="">Min</option>
+                                <option value="100" <?php echo e(request('size_min') == 100 ? 'selected' : ''); ?>>100 sqft
+                                </option>
+                                <option value="250" <?php echo e(request('size_min') == 250 ? 'selected' : ''); ?>>250 sqft
+                                </option>
+                                <option value="500" <?php echo e(request('size_min') == 500 ? 'selected' : ''); ?>>500 sqft
+                                </option>
+                                <option value="750" <?php echo e(request('size_min') == 750 ? 'selected' : ''); ?>>750 sqft
+                                </option>
+                                <option value="1000" <?php echo e(request('size_min') == 1000 ? 'selected' : ''); ?>>1,000 sqft
+                                </option>
+                                <option value="1500" <?php echo e(request('size_min') == 1500 ? 'selected' : ''); ?>>1,500 sqft
+                                </option>
+                                <option value="2000" <?php echo e(request('size_min') == 2000 ? 'selected' : ''); ?>>2,000 sqft
+                                </option>
+                                <option value="2500" <?php echo e(request('size_min') == 2500 ? 'selected' : ''); ?>>2,500 sqft
+                                </option>
+                                <option value="3000" <?php echo e(request('size_min') == 3000 ? 'selected' : ''); ?>>3,000 sqft
+                                </option>
+                                <option value="4000" <?php echo e(request('size_min') == 4000 ? 'selected' : ''); ?>>4,000 sqft
+                                </option>
+                                <option value="5000" <?php echo e(request('size_min') == 5000 ? 'selected' : ''); ?>>5,000 sqft
+                                </option>
+                                <option value="10000" <?php echo e(request('size_min') == 10000 ? 'selected' : ''); ?>>10,000 sqft
+                                </option>
+                                <option value="20000" <?php echo e(request('size_min') == 20000 ? 'selected' : ''); ?>>20,000 sqft
+                                </option>
+                            </select>
+
+                            <select id="size_max_mobile" name="size_max">
+                                <option value="">Max</option>
+                                <option value="500" <?php echo e(request('size_max') == 500 ? 'selected' : ''); ?>>500 sqft
+                                </option>
+                                <option value="750" <?php echo e(request('size_max') == 750 ? 'selected' : ''); ?>>750 sqft
+                                </option>
+                                <option value="1000" <?php echo e(request('size_max') == 1000 ? 'selected' : ''); ?>>1,000 sqft
+                                </option>
+                                <option value="1500" <?php echo e(request('size_max') == 1500 ? 'selected' : ''); ?>>1,500 sqft
+                                </option>
+                                <option value="2000" <?php echo e(request('size_max') == 2000 ? 'selected' : ''); ?>>2,000 sqft
+                                </option>
+                                <option value="2500" <?php echo e(request('size_max') == 2500 ? 'selected' : ''); ?>>2,500 sqft
+                                </option>
+                                <option value="3000" <?php echo e(request('size_max') == 3000 ? 'selected' : ''); ?>>3,000 sqft
+                                </option>
+                                <option value="4000" <?php echo e(request('size_max') == 4000 ? 'selected' : ''); ?>>4,000 sqft
+                                </option>
+                                <option value="5000" <?php echo e(request('size_max') == 5000 ? 'selected' : ''); ?>>5,000 sqft
+                                </option>
+                                <option value="10000" <?php echo e(request('size_max') == 10000 ? 'selected' : ''); ?>>10,000 sqft
+                                </option>
+                                <option value="20000" <?php echo e(request('size_max') == 20000 ? 'selected' : ''); ?>>20,000 sqft
+                                </option>
+                                <option value="50000" <?php echo e(request('size_max') == 50000 ? 'selected' : ''); ?>>50,000
+                                    sqft+</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <!-- Building Type Buttons -->
+                    <div class="accordion" id="filterAccordion">
+
+                        <!-- Building Type -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingBuilding">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseBuilding" aria-expanded="false"
+                                    aria-controls="collapseBuilding">
+                                    Building Type
+                                </button>
+                            </h2>
+                            <div id="collapseBuilding" class="accordion-collapse collapse" aria-labelledby="headingBuilding"
+                                data-bs-parent="#filterAccordion">
+                                <div class="accordion-body">
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <?php $__currentLoopData = $subcategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <button type="button" class="sub-category-btn" data-id="<?php echo e($subcat->id); ?>">
+                                                <?php echo e($subcat->sub_category_name); ?>
+
+                                            </button>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Property Type -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingPropertyType">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapsePropertyType" aria-expanded="false"
+                                    aria-controls="collapsePropertyType">
+                                    Property Type
+                                </button>
+                            </h2>
+                            <div id="collapsePropertyType" class="accordion-collapse collapse"
+                                aria-labelledby="headingPropertyType" data-bs-parent="#filterAccordion">
+                                <div class="accordion-body">
+                                    <div class="property-type-button">
+                                        <?php $__currentLoopData = $propertyTypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ptype): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <button>
+                                                <input type="checkbox" class="sub-sub-category-checkbox"
+                                                    data-id="<?php echo e($ptype->id); ?>">
+                                                <?php echo e($ptype->sub_sub_category_name); ?>
+
+                                            </button>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bedrooms -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingBedrooms">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseBedrooms" aria-expanded="false"
+                                    aria-controls="collapseBedrooms">
+                                    Bedrooms
+                                </button>
+                            </h2>
+                            <div id="collapseBedrooms" class="accordion-collapse collapse" aria-labelledby="headingBedrooms"
+                                data-bs-parent="#filterAccordion">
+                                <div class="accordion-body">
+                                    <div class="property-type-button d-flex flex-wrap gap-2">
+                                        <?php for($i = 1; $i <= 10; $i++): ?>
+                                            <button><input type="checkbox" class="bedroom-checkbox" value="<?php echo e($i); ?>"> <?php echo e($i); ?>
+
+                                                BHK</button>
+                                        <?php endfor; ?>
+                                        <button><input type="checkbox" class="bedroom-checkbox" value="10+"> 10+
+                                            BHK</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Furnishing Status -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFurnishing">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseFurnishing" aria-expanded="false"
+                                    aria-controls="collapseFurnishing">
+                                    Furnishing Status
+                                </button>
+                            </h2>
+                            <div id="collapseFurnishing" class="accordion-collapse collapse"
+                                aria-labelledby="headingFurnishing" data-bs-parent="#filterAccordion">
+                                <div class="accordion-body">
+                                    <div class="property-type-button d-flex flex-wrap gap-2">
+                                        <?php
+                                            $furnishingStatuses = \App\Models\FurnishingStatus::where('status', 'active')->get();
+                                        ?>
+                                        <?php $__currentLoopData = $furnishingStatuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <button>
+                                                <input type="checkbox" class="furnishing-Status-checkbox"
+                                                    value="<?php echo e($status->id); ?>">
+                                                <?php echo e($status->name); ?>
+
+                                            </button>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Property Status -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingPropertyStatus">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapsePropertyStatus" aria-expanded="false"
+                                    aria-controls="collapsePropertyStatus">
+                                    Property Status
+                                </button>
+                            </h2>
+                            <div id="collapsePropertyStatus" class="accordion-collapse collapse"
+                                aria-labelledby="headingPropertyStatus" data-bs-parent="#filterAccordion">
+                                <div class="accordion-body">
+                                    <div class="property-type-button d-flex flex-wrap gap-2">
+                                        <?php
+                                            $propertyStatuses = \App\Models\PropertyStatus::where('status', 'active')->get();
+                                        ?>
+                                        <?php $__currentLoopData = $propertyStatuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <button>
+                                                <input type="checkbox" class="property-Status-checkbox"
+                                                    value="<?php echo e($status->id); ?>">
+                                                <?php echo e($status->name); ?>
+
+                                            </button>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <hr>
+                    <div class="d-flex justify-content-between align-item-center">
+                        <div class="d-flex flex-column ">
+                            <h2 style="margin:0px;">Verified properties</h2>
+                            <p class="m-0 mt-1" style="font-size:10px;"><span
+                                    style="background:green;border-radius:2px;padding:2px 6px;color:#fff;margin-top:3px;">Verified</span>
+                                By Bhawan Bhoomi</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="verified_property_mobile">
+
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-item-center">
+                        <div class="d-flex flex-column ">
+                            <h2 style="margin:0px;">Properties with photos</h2>
+
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="with_photos_mobile">
+
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-item-center">
+                        <div class="d-flex flex-column ">
+                            <h2 style="margin:0px;">Properties with Video</h2>
+
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="with_videos_mobile">
+
+                        </div>
+                    </div>
+                    <hr>
+
+                </div>
+
+                <button class="btn btn-dark w-100 mt-3" id="mobileApplyFilters">Apply Filters</button>
+            </div>
+        </div>
+
+
+
+        <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasBottomLabel">Sort By</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+
+            <div class="offcanvas-body" style="min-height: 300px;">
+                <div class="sorting-options" style="display: flex; flex-direction: column; gap: 12px;">
+                    <!--<span style="font-weight: 600; color: #0d1b3e;">Sort by:</span>-->
+
+                    <button class="sort-btn" data-value="price-low">Price: Low to High</button>
+                    <button class="sort-btn" data-value="price-high">Price: High to Low</button>
+                    <button class="sort-btn" data-value="size-low">Size: Low to High</button>
+                    <button class="sort-btn" data-value="size-high">Size: High to Low</button>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
 
         <div class="container">
             <div class="row">
@@ -599,15 +1250,7 @@
                                 <button type="button" id="resetFilters">Reset</button>
                             </div>
                             <hr>
-                            <!-- <div class="property-type d-flex flex-column">
-                                                                                                                            <h2>Apply Filter</h2>
-                                                                                                                            <div class="property-type-button">
-                                                                                                                                <button><input type="checkbox" checked> Ready to move</button>
-                                                                                                                                <button><input type="checkbox" checked> Apartment</button>
-                                                                                                                                <button><input type="checkbox" checked> Villa</button>
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                        <hr> -->
+
 
                             <div class="budget">
                                 <h2>Budget</h2>
@@ -793,7 +1436,8 @@
                                     <?php $__currentLoopData = $locations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $loc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <button
                                             class="location-btn <?php echo e(in_array($loc->id, $selectedLocations) ? 'active' : ''); ?>"
-                                            data-id="<?php echo e($loc->id); ?>" style="<?php echo e(in_array($loc->id, $selectedLocations) ? '' : 'display:none;'); ?>">
+                                            data-id="<?php echo e($loc->id); ?>"
+                                            style="<?php echo e(in_array($loc->id, $selectedLocations) ? '' : 'display:none;'); ?>">
                                             <?php echo e($loc->location); ?>
 
                                         </button>
@@ -801,8 +1445,8 @@
                                 </div>
 
                                 <!-- <?php if($locations->count() > $maxVisible): ?>
-                                    <button id="showMoreLocations" class="btn btn-link">Show More</button>
-                                <?php endif; ?> -->
+                                                                                                        <button id="showMoreLocations" class="btn btn-link">Show More</button>
+                                                                                                    <?php endif; ?> -->
 
                             </div>
 
@@ -876,12 +1520,12 @@
                             </div>
                             <hr>
                             <!-- <div class="furnishing-status">
-                                                                                                            <h2>Age of Property</h2>
-                                                                                                            <div class="property-type-button">
-                                                                                                                <button><input type="checkbox"> 0-1 year old</button>
-                                                                                                                <button><input type="checkbox"> 1-5 year old</button>
-                                                                                                            </div>
-                                                                                                        </div> -->
+                                                                                                                                                                                <h2>Age of Property</h2>
+                                                                                                                                                                                <div class="property-type-button">
+                                                                                                                                                                                    <button><input type="checkbox"> 0-1 year old</button>
+                                                                                                                                                                                    <button><input type="checkbox"> 1-5 year old</button>
+                                                                                                                                                                                </div>
+                                                                                                                                                                            </div> -->
                         </div>
                     </div>
                     <div class="listing-page-right">
@@ -926,96 +1570,10 @@
                             </div>
 
                         </div>
-                        <?php if(isset($properties)): ?>
-                            <?php $__currentLoopData = $properties; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $property): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <div class="listing-page-card">
-                                    <div class="image-section">
-                                        <div class="image-count">1 Photo</div>
-                                        <img src="<?php echo e(isset($property->PropertyGallery[0]->image_path) ? asset('') . $property->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'); ?>"
-                                            alt="Industrial worker" class="property-image">
-                                        <div class="price-text">
-                                            <h2 class="m-0">₹<?php echo e(\App\Helpers\Helper::formatIndianPrice($property->price ?? 0)); ?></h2>
-                                            <p class="m-0">See other charges</p>
-                                        </div>
-                                    </div>
-                                    <div class="content-section">
-                                        <div>
-                                            <div class="listing-header">
-                                                <h1 class="listing-title">
-                                                    <a href="<?php echo e(route('property_detail', ['title' => $property->slug])); ?>"
-                                                        style="text-decoration: none; color: inherit;">
-                                                        <?php echo e($property->title ?? ''); ?>
-
-                                                    </a>
-                                                </h1>
-                                                <div class="listing-actions">
-                                                    <button class="action-btn" title="Like"><i class="fas fa-heart"></i></button>
-                                                    <button class="action-btn" title="Share"><i class="fas fa-share"></i></button>
-                                                    <button class="action-btn" title="More"><i
-                                                            class="fas fa-ellipsis-h"></i></button>
-                                                </div>
-                                                <!--<div class="listing-price">₹16,000</div>-->
-                                            </div>
-                                            <div class="listing-features">
-                                                <div class="feature-item">
-                                                    <i class="fas fa-home feature-icon"></i>
-                                                    <span class="feature-value">Unfurnished</span>
-                                                </div>
-                                                <div class="feature-item">
-                                                    <i class="fas fa-bath feature-icon"></i>
-                                                    <span class="feature-value">2</span>
-                                                    <span class="feature-label">Bathrooms</span>
-                                                </div>
-                                                <div class="feature-item">
-                                                    <i class="fas fa-calendar-check feature-icon"></i>
-                                                    <span class="feature-value">Immediately</span>
-                                                </div>
-                                                <div class="feature-item">
-                                                    <i class="fas fa-expand-arrows-alt feature-icon"></i>
-                                                    <span class="feature-value">950 sqft</span>
-                                                </div>
-                                                <div class="feature-item">
-                                                    <i class="fas fa-layer-group feature-icon"></i>
-                                                    <span class="feature-value">1 out of 1</span>
-                                                </div>
-                                                <div class="feature-item">
-                                                    <i class="fas fa-user-friends feature-icon"></i>
-                                                    <span class="feature-value">Bachelors</span>
-                                                </div>
-                                            </div>
-                                            <div class="listing-description">
-                                                <?php echo e(\Illuminate\Support\Str::limit($property->description, 50)); ?>
-
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="listing-owner-info mb-2">
-                                                    <div class="owner-avatar">RA</div>
-                                                    <span><strong>Owner:</strong> <?php echo e($property->getUser->firstname ?? ''); ?></span>
-                                                </div>
-                                                <div class="listing-owner-info mb-2">
-                                                    <span><strong>Posted on:</strong>
-                                                        <?php echo e(optional($property->created_at)->format('d M Y')); ?></span>
-                                                </div>
-                                                <div class="listing-owner-info mb-2">
-
-                                                    <span><strong><i class="fa-solid fa-eye"></i></strong> 1289</span>
-                                                </div>
-                                            </div>
-                                            <div class="listing-buttons">
-                                                <button class="contact-btn">Contact Owner</button>
-                                                <button class="society-btn">Ask Society Name</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        <?php endif; ?>
-                        <div class="d-flex justify-content-center">
-                            <?php echo e($properties->links()); ?>
-
+                        <div id="listings-container">
+                            <?php echo $__env->make('front.partials.property-listings', ['properties' => $properties], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -1024,121 +1582,17 @@
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('js'); ?>
     <script>
-        // Scroll Section Function
-        function scrollSection(distance) {
-            const container = document.querySelector('.filter-options-container');
-            if (container) container.scrollLeft += distance;
-        }
-
-
-
-        document.getElementById('resetFilters')?.addEventListener('click', function () {
-            const params = new URLSearchParams(window.location.search);
-
-            // Remove only filters applied on this page
-            ['budget_min', 'budget_max', 'size_min', 'size_max', 'sub_category_id', 'sub_sub_category_id', 'furnishing_status', 'property_status', 'verified_property', 'with_photos', 'with_videos', 'bedrooms', 'sort'].forEach(key => {
-                params.delete(key);
-            });
-
-            // Redirect without these filters, keeping other params (like search, city, type)
-            window.location.href = `${window.location.pathname}?${params.toString()}`;
-        });
-
-
-        // ----- Search By buttons -----
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                this.classList.toggle('active'); // visually toggle
-                updateSearchByFilters(); // update URL params
-            });
-        });
-
-        function updateSearchByFilters() {
-            const params = new URLSearchParams(window.location.search);
-
-            // Check which buttons are active
-            const priceBtn = document.querySelector('.filter-btn[data-filter="price_negotiable"]');
-            const securityBtn = document.querySelector('.filter-btn[data-filter="security_available"]');
-
-            if (priceBtn && priceBtn.classList.contains('active')) {
-                params.set('price_negotiable', '1');
-            } else {
-                params.delete('price_negotiable');
-            }
-
-            if (securityBtn && securityBtn.classList.contains('active')) {
-                params.set('security_available', '1');
-            } else {
-                params.delete('security_available');
-            }
-
-            // Redirect with updated params
-            window.location.href = `${window.location.pathname}?${params.toString()}`;
-        }
-
-
-        const params = new URLSearchParams(window.location.search);
-        if (params.get('price_negotiable') === '1') {
-            document.querySelector('.filter-btn[data-filter="price_negotiable"]')?.classList.add('active');
-        }
-        if (params.get('security_available') === '1') {
-            document.querySelector('.filter-btn[data-filter="security_available"]')?.classList.add('active');
-        }
-
-        // Select elements
-        const locationContainer = document.getElementById('locationsContainer');
-        const locationButtons = Array.from(locationContainer.querySelectorAll('.location-btn'));
-
-        // Toggle active class on click and update query params
-        locationButtons.forEach(btn => {
-            btn.addEventListener('click', function () {
-                this.classList.toggle('active');
-                updateLocationsFilter();
-            });
-        });
-
-        // Search input
-        document.getElementById('locationSearch').addEventListener('input', function () {
-            const query = this.value.toLowerCase();
-            locationButtons.forEach(btn => {
-                // Show button if it matches query OR is selected
-                if (btn.textContent.toLowerCase().includes(query) || btn.classList.contains('active')) {
-                    btn.style.display = 'inline-block';
-                } else {
-                    btn.style.display = 'none';
-                }
-            });
-        });
-
-        // document.getElementById('showMoreLocations')?.addEventListener('click', function () {
-        //     locationButtons.forEach(btn => btn.style.display = 'inline-block');
-        //     this.style.display = 'none'; // hide button after click
-        // });
-
-        // Update locations in URL params
-        function updateLocationsFilter() {
-            const params = new URLSearchParams(window.location.search);
-            const selected = locationButtons.filter(btn => btn.classList.contains('active'))
-                .map(btn => btn.dataset.id);
-
-            if (selected.length) {
-                params.set('locations', selected.join(','));
-            } else {
-                params.delete('locations');
-            }
-
-            window.location.href = `${window.location.pathname}?${params.toString()}`;
-        }
-
-
         document.addEventListener('DOMContentLoaded', function () {
+            const listingsContainer = document.getElementById('listings-container');
             const params = new URLSearchParams(window.location.search);
+            const searchInput = document.querySelector('.search-input');
 
             // ----- Initialize Sub Category Buttons -----
             const subCategoryIds = params.get('sub_category_id');
             if (subCategoryIds) {
                 subCategoryIds.split(',').forEach(id => {
-                    const btn = document.querySelector(`.sub-category-btn[data-id='${id}']`);
+                    const btns = Array.from(document.querySelectorAll(`.sub-category-btn[data-id='${id}']`));
+                    const btn = btns.filter(btn => btn.offsetParent !== null)[0];
                     if (btn) btn.classList.add('active');
                 });
             }
@@ -1147,26 +1601,19 @@
             const propertyTypeIds = params.get('sub_sub_category_id');
             if (propertyTypeIds) {
                 propertyTypeIds.split(',').forEach(id => {
-                    const cb = document.querySelector(`.sub-sub-category-checkbox[data-id='${id}']`);
+                    const cbList = Array.from(document.querySelectorAll(`.sub-sub-category-checkbox[data-id='${id}']`));
+                    const cb = cbList.filter(cb => cb.offsetParent !== null)[0];
                     if (cb) cb.checked = true;
+
                 });
             }
-
-            // ----- Initialize Budget & Size Inputs -----
-            ['budget_min', 'budget_max', 'size_min', 'size_max'].forEach(field => {
-                const el = document.getElementById(field);
-                if (el && params.get(field)) el.value = params.get(field);
-            });
-
-            // ----- Initialize Search Input -----
-            const searchInput = document.querySelector('.search-input');
-            if (searchInput && params.get('search')) searchInput.value = params.get('search');
 
             // Initialize Furnishing Status checkboxes
             const furnishingIds = params.get('furnishing_status');
             if (furnishingIds) {
                 furnishingIds.split(',').forEach(id => {
-                    const cb = document.querySelector(`.furnishing-Status-checkbox[value='${id}']`);
+                    const cbs = Array.from(document.querySelectorAll(`.furnishing-Status-checkbox[value='${id}']`));
+                    const cb = cbs.filter(el => el.offsetParent !== null)[0];
                     if (cb) cb.checked = true;
                 });
             }
@@ -1175,143 +1622,254 @@
             const propertyIds = params.get('property_status');
             if (propertyIds) {
                 propertyIds.split(',').forEach(id => {
-                    const cb = document.querySelector(`.property-Status-checkbox[value='${id}']`);
+                    const cbs = Array.from(document.querySelectorAll(`.property-Status-checkbox[value='${id}']`));
+                    const cb = cbs.filter(el => el.offsetParent !== null)[0];
                     if (cb) cb.checked = true;
                 });
             }
-
-            ['verified_property', 'with_photos', 'with_videos'].forEach(param => {
-                const el = document.getElementById(param);
-
-                if (el && params.get(param) === '1') el.checked = true;
-            });
 
             // Initialize Bedrooms checkboxes
             const bedroomVals = params.get('bedrooms');
             if (bedroomVals) {
                 bedroomVals.split(',').forEach(val => {
-                    const cb = document.querySelector(`.bedroom-checkbox[value='${val}']`);
+                    const cbs = Array.from(document.querySelectorAll(`.bedroom-checkbox[value='${val}']`));
+                    const cb = cbs.filter(el => el.offsetParent !== null)[0];
                     if (cb) cb.checked = true;
                 });
             }
 
+            ['budget_min', 'budget_max', 'size_min', 'size_max'].forEach(field => {
+                const el = document.getElementById(field);
+                if (el && params.get(field)) el.value = params.get(field);
+            });
 
-        });
+            if (searchInput && params.get('search')) searchInput.value = params.get('search');
 
-        // ----- Update Filters Function -----
-        function updateFilters() {
-            const params = new URLSearchParams(window.location.search);
+            ['verified_property', 'with_photos', 'with_videos'].forEach(param => {
+                const el = document.getElementById(param);
+                if (el && params.get(param) === '1') el.checked = true;
+            });
 
-            // Search Input
-            const searchVal = document.querySelector('.search-input')?.value?.trim();
-            if (searchVal) params.set('search', searchVal);
-            else params.delete('search');
 
-            // Budget & Size
+            if (params.get('price_negotiable') === '1') {
+                document.querySelector('.filter-btn[data-filter="price_negotiable"]')?.classList.add('active');
+            }
+            if (params.get('security_available') === '1') {
+                document.querySelector('.filter-btn[data-filter="security_available"]')?.classList.add('active');
+            }
+
+            // Select elements
+            const locationContainer = document.getElementById('locationsContainer');
+            const locationButtons = Array.from(locationContainer.querySelectorAll('.location-btn'));
+
+            // Toggle active class on click and update query params
+            locationButtons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    this.classList.toggle('active');
+                    updateLocationsFilter();
+                });
+            });
+
+            // Search input
+            document.getElementById('locationSearch').addEventListener('input', function () {
+                const query = this.value.toLowerCase();
+                locationButtons.forEach(btn => {
+                    // Show button if it matches query OR is selected
+                    if (btn.textContent.toLowerCase().includes(query) || btn.classList.contains('active')) {
+                        btn.style.display = 'inline-block';
+                    } else {
+                        btn.style.display = 'none';
+                    }
+                });
+            });
+
+            // Update locations in URL params
+            function updateLocationsFilter() {
+                const selected = locationButtons.filter(btn => btn.classList.contains('active'))
+                    .map(btn => btn.dataset.id);
+
+                if (selected.length) {
+                    params.set('locations', selected.join(','));
+                } else {
+                    params.delete('locations');
+                }
+                updateFiltersAjax();
+
+            }
+
+
+            // Collect all filters, generate URL params, and send AJAX request
+            function updateFiltersAjax() {
+
+                // Search input
+                if (searchInput && searchInput.value.trim()) {
+                    params.set('search', searchInput.value.trim());
+                }
+
+                // Budget and Size
+                ['budget_min', 'budget_max', 'size_min', 'size_max'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el && el.value) {
+                        params.set(id, el.value);
+                    }
+                });
+
+                // Sub-category buttons active
+                const subCatIds = Array.from(document.querySelectorAll('.sub-category-btn.active'))
+                    .map(btn => btn.dataset.id);
+                if (subCatIds.length) params.set('sub_category_id', subCatIds.join(','));
+
+                // Property Type checkboxes
+                const propertyTypeIds = Array.from(document.querySelectorAll('.sub-sub-category-checkbox:checked'))
+                    .map(cb => cb.dataset.id);
+                params.set('sub_sub_category_id', propertyTypeIds.join(','));
+
+                // Furnishing Status checkboxes
+                const furnishingIds = Array.from(document.querySelectorAll('.furnishing-Status-checkbox:checked'))
+                    .map(cb => cb.value);
+                if (furnishingIds.length) params.set('furnishing_status', furnishingIds.join(','));
+
+                // Property Status checkboxes
+                const propertyIds = Array.from(document.querySelectorAll('.property-Status-checkbox:checked'))
+                    .map(cb => cb.value);
+                if (propertyIds.length) params.set('property_status', propertyIds.join(','));
+
+                // Verified Properties
+                if (document.getElementById('verified_property')?.checked) {
+                    params.set('verified_property', '1');
+                }
+
+                // Properties with Photos
+                if (document.getElementById('with_photos')?.checked) {
+                    params.set('with_photos', '1');
+                }
+
+                // Properties with Videos
+                if (document.getElementById('with_videos')?.checked) {
+                    params.set('with_videos', '1');
+                }
+
+                // Bedrooms
+                const bedroomVals = Array.from(document.querySelectorAll('.bedroom-checkbox:checked'))
+                    .map(cb => cb.value);
+                if (bedroomVals.length) params.set('bedrooms', bedroomVals.join(','));
+
+                // Sort
+                const sortEl = document.getElementById('sortBy');
+                if (sortEl && sortEl.value) {
+                    params.set('sort', sortEl.value);
+                }
+
+
+                // Check which buttons are active
+                const priceBtn = document.querySelector('.filter-btn[data-filter="price_negotiable"]');
+                const securityBtn = document.querySelector('.filter-btn[data-filter="security_available"]');
+
+                if (priceBtn && priceBtn.classList.contains('active')) {
+                    params.set('price_negotiable', '1');
+                } else {
+                    params.delete('price_negotiable');
+                }
+
+                if (securityBtn && securityBtn.classList.contains('active')) {
+                    params.set('security_available', '1');
+                } else {
+                    params.delete('security_available');
+                }
+
+                // Fetch filtered listings via AJAX
+                fetch(`${window.location.pathname}?${params.toString()}`, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                    .then(response => response.text())
+                    .then(html => {
+                        listingsContainer.innerHTML = html;
+                        history.pushState(null, '', `${window.location.pathname}?${params.toString()}`);
+                    })
+                    .catch(console.error);
+            }
+
+            // Bind updateFiltersAjax to all filter input changes
+            document.querySelectorAll('.filter-input, .sub-category-btn, .sub-sub-category-checkbox, .furnishing-Status-checkbox, .property-Status-checkbox, .bedroom-checkbox').forEach(el => {
+                el.addEventListener('change', updateFiltersAjax);
+            });
+
+            // For sub-category buttons which are buttons with active class toggling
+            document.querySelectorAll('.sub-category-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.classList.toggle('active');
+                    updateFiltersAjax();
+                });
+            });
+
+
             ['budget_min', 'budget_max', 'size_min', 'size_max'].forEach(id => {
-                const val = document.getElementById(id)?.value;
-                if (val) params.set(id, val);
-                else params.delete(id);
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('change', updateFiltersAjax);
+                }
             });
 
-            // Sub-category Buttons
-            const subCatIds = Array.from(document.querySelectorAll('.sub-category-btn.active'))
-                .map(btn => btn.dataset.id);
-            if (subCatIds.length) params.set('sub_category_id', subCatIds.join(','));
-            else params.delete('sub_category_id');
 
-            // Property Type Checkboxes
-            const propertyTypeIds = Array.from(document.querySelectorAll('.sub-sub-category-checkbox:checked'))
-                .map(cb => cb.dataset.id);
-            params.set('sub_sub_category_id', propertyTypeIds.join(',')); // keep empty if none selected
+            ['verified_property', 'with_photos', 'with_videos'].forEach(id => {
+                document.getElementById(id)?.addEventListener('change', updateFiltersAjax);
+            });
 
 
-            // Furnishing Status
-            const furnishingIds = Array.from(document.querySelectorAll('.furnishing-Status-checkbox:checked'))
-                .map(cb => cb.value);
-            if (furnishingIds.length) params.set('furnishing_status', furnishingIds.join(','));
-            else params.delete('furnishing_status');
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    this.classList.toggle('active'); // visually toggle
+                    updateFiltersAjax(); // update URL params
+                });
+            });
 
-            // Property Status
-            const propertyIds = Array.from(document.querySelectorAll('.property-Status-checkbox:checked'))
-                .map(cb => cb.value);
-            if (propertyIds.length) params.set('property_status', propertyIds.join(','));
-            else params.delete('property_status');
+            // Sort select
+            const sortBy = document.getElementById('sortBy');
+            if (sortBy) {
+                sortBy.addEventListener('change', updateFiltersAjax);
+            }
 
-            // Verified Properties
-            const verified = document.getElementById('verified_property')?.checked;
-            if (verified) params.set('verified_property', '1');
-            else params.delete('verified_property');
+            // Search input Enter key
+            if (searchInput) {
+                searchInput.addEventListener('keypress', e => {
+                    if (e.key === 'Enter') {
+                        updateFiltersAjax();
+                    }
+                });
+            }
 
-            // Properties with Photos
-            const withPhotos = document.getElementById('with_photos')?.checked;
-            if (withPhotos) params.set('with_photos', '1');
-            else params.delete('with_photos');
+            // ----- Reset Filters -----
+            document.getElementById('resetFilters')?.addEventListener('click', function () {
+                const params = new URLSearchParams(window.location.search);
 
-            // Properties with Video
-            const withVideos = document.getElementById('with_videos')?.checked;
-            if (withVideos) params.set('with_videos', '1');
-            else params.delete('with_videos');
+                // Remove only filters applied on this page
+                ['budget_min', 'budget_max', 'size_min', 'size_max', 'sub_category_id', 'sub_sub_category_id', 'furnishing_status', 'property_status', 'verified_property', 'with_photos', 'with_videos', 'bedrooms', 'sort'].forEach(key => {
+                    params.delete(key);
+                });
 
+                // Redirect without these filters, keeping other params (like search, city, type)
+                window.location.href = `${window.location.pathname}?${params.toString()}`;
 
-            // Bedrooms
-            const bedroomVals = Array.from(document.querySelectorAll('.bedroom-checkbox:checked'))
-                .map(cb => cb.value);
-            if (bedroomVals.length) params.set('bedrooms', bedroomVals.join(','));
-            else params.delete('bedrooms');
+            });
 
-
-            // Redirect with updated params
-            window.location.href = `${window.location.pathname}?${params.toString()}`;
-        }
-
-        // ----- Event Listeners -----
-
-        // Search input Enter
-        document.querySelector('.search-input')?.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') updateFilters();
         });
 
-        // Budget & Size changes
-        ['budget_min', 'budget_max', 'size_min', 'size_max'].forEach(id => {
-            document.getElementById(id)?.addEventListener('change', updateFilters);
-        });
 
-        // Sub-category button toggle
-        document.querySelectorAll('.sub-category-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                this.classList.toggle('active');
-                updateFilters();
+    </script>
+    <script>
+        document.querySelectorAll('.sort-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active state from all buttons
+                document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+                // Add active state to clicked button
+                btn.classList.add('active');
+                // Optional: you can send the value for filtering
+                const sortValue = btn.getAttribute('data-value');
+                console.log('Selected sort:', sortValue);
+                // Example redirect or API call:
+                // window.location.href = `?sort=${sortValue}`;
             });
         });
-
-        // Property type, bedrooms, furnishing, property status checkboxes
-        document.querySelectorAll('.sub-sub-category-checkbox')
-            .forEach(cb => cb.addEventListener('change', updateFilters));
-
-        document.querySelectorAll('.furnishing-Status-checkbox, .property-Status-checkbox').forEach(cb => {
-            cb.addEventListener('change', function () {
-                updateFilters();
-            });
-        });
-
-        ['verified_property', 'with_photos', 'with_videos'].forEach(id => {
-            document.getElementById(id)?.addEventListener('change', updateFilters);
-        });
-
-        document.querySelectorAll('.bedroom-checkbox').forEach(cb => {
-            cb.addEventListener('change', updateFilters);
-        });
-
-
-        document.getElementById('sortBy').addEventListener('change', function () {
-            const params = new URLSearchParams(window.location.search);
-            const value = this.value;
-            if (value) params.set('sort', value);
-            else params.delete('sort');
-            window.location.href = `${window.location.pathname}?${params.toString()}`;
-        });
-
     </script>
 
 <?php $__env->stopSection(); ?>
