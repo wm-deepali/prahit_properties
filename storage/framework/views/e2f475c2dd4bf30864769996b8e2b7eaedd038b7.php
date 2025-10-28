@@ -14,7 +14,8 @@
                 <div>
                     <div class="listing-header">
                         <h1 class="listing-title">
-                            <a href="<?php echo e(route('property_detail', ['title' => $property->slug])); ?>"style="text-decoration: none; color: inherit;">
+                            <a href="<?php echo e(route('property_detail', ['title' => $property->slug])); ?>"
+                                style="text-decoration: none; color: inherit;">
                                 <?php echo e($property->title ?? ''); ?>
 
                             </a>
@@ -51,12 +52,10 @@
             </div>
         </div>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-    <div class="pagination-links">
+    <div class="d-flex justify-content-center">
         <?php echo e($properties->links()); ?>
 
     </div>
 <?php else: ?>
     <p>No properties found matching your criteria.</p>
-<?php endif; ?>
-<?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/partials/property-listings.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/partials/property-listings.blade.php ENDPATH**/ ?>

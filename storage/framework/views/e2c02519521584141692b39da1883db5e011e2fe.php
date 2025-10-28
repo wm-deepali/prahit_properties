@@ -375,6 +375,4 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->stopSection(); ?>
-
-
 <?php echo $__env->make('layouts.front.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/user/dashboard.blade.php ENDPATH**/ ?>

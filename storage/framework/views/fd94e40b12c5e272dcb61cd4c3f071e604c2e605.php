@@ -472,7 +472,7 @@
 											<li><label><input type="checkbox" name="complaint[]" value="4"> Broker property
 													as Owner</label></li>
 											<li><label><input type="checkbox" name="complaint[]" value="5"> Others*
-													Floor,Amenities,Furnished</label></li>
+													(Floor,Amenities,Furnished)</label></li>
 											<li><label><input type="checkbox" name="complaint[]" value="6"> Incorrect
 													Price</label></li>
 										</ul>
@@ -523,12 +523,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 	<script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
 	<script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
-	   <!-- Leaflet CSS and JS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
 	<script type="text/javascript">
-
+	
 		  function createMap(lat, lng) {
             var map = L.map('propertyMap').setView([lat, lng], 16);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -742,6 +738,7 @@
 
 		// 	}
 		// });
+
 
 	</script>
 

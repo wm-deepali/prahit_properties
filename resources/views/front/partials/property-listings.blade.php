@@ -14,7 +14,8 @@
                 <div>
                     <div class="listing-header">
                         <h1 class="listing-title">
-                            <a href="{{ route('property_detail', ['title' => $property->slug]) }}"style="text-decoration: none; color: inherit;">
+                            <a href="{{ route('property_detail', ['title' => $property->slug]) }}"
+                                style="text-decoration: none; color: inherit;">
                                 {{ $property->title ?? '' }}
                             </a>
                         </h1>
@@ -49,8 +50,7 @@
             </div>
         </div>
     @endforeach
-
-    <div class="pagination-links">
+    <div class="d-flex justify-content-center">
         {{ $properties->links() }}
     </div>
 @else

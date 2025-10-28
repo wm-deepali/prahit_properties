@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title'); ?>
   <title>Welcome to Bhawan Bhoomi</title>
 <?php $__env->stopSection(); ?>

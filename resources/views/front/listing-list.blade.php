@@ -650,6 +650,19 @@
         border: none;
     }
 
+    .sub-category-mobile-btn {
+        width: 100%;
+        text-align: start;
+        padding: 4px 10px;
+        background: #ffffff;
+        border: none;
+    }
+
+    .sub-category-mobile-btn.active {
+        background: #111827;
+        color: white;
+    }
+
     .property-type-button button {
         width: 100%;
         text-align: start;
@@ -738,7 +751,6 @@
                 <div class="search-container">
                     <i class="fas fa-search search-icon"></i>
                     <input type="text" class="search-input" placeholder="Search Anything" value="{{ request('search') }}">
-
                     <i class="fas fa-microphone mic-icon"></i>
                 </div>
                 <div class="filter-buttons">
@@ -749,10 +761,7 @@
             </div>
         </div>
         <div class="filter-inmobile">
-            <div class="filter-text" data-bs-toggle="offcanvas" href="#offcanvasExample3" role="button">
-                <p class="m-0">Category</p>
-            </div>
-            <div class="ver-line"></div>
+            <!-- <div class="ver-line"></div> -->
             <div class="filter-text" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom"
                 aria-controls="offcanvasBottom">
                 <p class="m-0"><i class="fa-solid fa-sort"></i> Short By</p>
@@ -761,111 +770,6 @@
             <div class="filter-text">
                 <p class="m-0" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"><i
                         class="fa-solid fa-sliders"></i> Filter</p>
-            </div>
-
-        </div>
-
-
-
-
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample3" aria-labelledby="filterMenuLabel"
-            style="width: 320px;">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title fw-semibold" id="filterMenuLabel">Filter By Category</h5>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-
-            <div class="offcanvas-body" style="background:#f9f9f9; text-align: left;">
-                <div class="accordion" id="categoryAccordion">
-
-                    <!-- Residential -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingResidential">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseResidential" aria-expanded="false"
-                                aria-controls="collapseResidential">
-                                Residential
-                            </button>
-                        </h2>
-                        <div id="collapseResidential" class="accordion-collapse collapse"
-                            aria-labelledby="headingResidential" data-bs-parent="#categoryAccordion">
-                            <div class="accordion-body">
-                                <label><input type="checkbox" name="residential[]" value="flat"> Flat /
-                                    Apartment</label><br>
-                                <label><input type="checkbox" name="residential[]" value="villa"> Villa</label><br>
-                                <label><input type="checkbox" name="residential[]" value="house"> Independent
-                                    House</label><br>
-                                <label><input type="checkbox" name="residential[]" value="studio"> Studio Apartment</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Commercial -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingCommercial">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseCommercial" aria-expanded="false"
-                                aria-controls="collapseCommercial">
-                                Commercial
-                            </button>
-                        </h2>
-                        <div id="collapseCommercial" class="accordion-collapse collapse" aria-labelledby="headingCommercial"
-                            data-bs-parent="#categoryAccordion">
-                            <div class="accordion-body">
-                                <label><input type="checkbox" name="commercial[]" value="office"> Office Space</label><br>
-                                <label><input type="checkbox" name="commercial[]" value="shop"> Shop / Showroom</label><br>
-                                <label><input type="checkbox" name="commercial[]" value="warehouse"> Warehouse /
-                                    Godown</label><br>
-                                <label><input type="checkbox" name="commercial[]" value="coworking"> Co-working
-                                    Space</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Land & Plots -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingLand">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseLand" aria-expanded="false" aria-controls="collapseLand">
-                                Land & Plots
-                            </button>
-                        </h2>
-                        <div id="collapseLand" class="accordion-collapse collapse" aria-labelledby="headingLand"
-                            data-bs-parent="#categoryAccordion">
-                            <div class="accordion-body">
-                                <label><input type="checkbox" name="land[]" value="residential-plot"> Residential
-                                    Plot</label><br>
-                                <label><input type="checkbox" name="land[]" value="commercial-plot"> Commercial
-                                    Plot</label><br>
-                                <label><input type="checkbox" name="land[]" value="industrial-plot"> Industrial
-                                    Plot</label><br>
-                                <label><input type="checkbox" name="land[]" value="agriculture-land"> Agricultural
-                                    Land</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- PG / Hostel -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingPG">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapsePG" aria-expanded="false" aria-controls="collapsePG">
-                                PG / Hostel
-                            </button>
-                        </h2>
-                        <div id="collapsePG" class="accordion-collapse collapse" aria-labelledby="headingPG"
-                            data-bs-parent="#categoryAccordion">
-                            <div class="accordion-body">
-                                <label><input type="checkbox" name="pg[]" value="boys-pg"> Boys PG</label><br>
-                                <label><input type="checkbox" name="pg[]" value="girls-pg"> Girls PG</label><br>
-                                <label><input type="checkbox" name="pg[]" value="hostel"> Hostel</label><br>
-                                <label><input type="checkbox" name="pg[]" value="shared-room"> Shared Room</label>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
             </div>
         </div>
 
@@ -878,34 +782,12 @@
             </div>
 
             <div class="offcanvas-body" style="background:#f9f9f9; text-align: left;">
-
-                <!-- Location Filter -->
-                <div class="filter-item border-bottom py-2 mb-3" style="text-align: left;">
-                    <h6 class="fw-semibold mb-0 d-flex justify-content-between align-items-center"
-                        data-bs-toggle="offcanvas" data-bs-target="#locationCanvas" aria-controls="locationCanvas"
-                        style="cursor:pointer;">
-                        <span>
-                            <i class="fas fa-map-marker-alt text-danger"></i>
-                            Location
-                        </span>
-                        <img src="{{ asset('images/arrow.png') }}" alt="" width="20px;">
-                    </h6>
-
-                    <div id="selectedCityDisplay" class="mt-2 p-2 bg-light rounded" style="display:none;">
-                        <small class="text-muted">Selected City:</small><br>
-                        <strong id="selectedCityName"></strong>
-                        <i class="fas fa-times-circle text-danger float-end" id="clearCitySelection"
-                            style="cursor:pointer;"></i>
-                    </div>
-                </div>
-
                 <div class="listing-filter">
                     <div class="reset-btn d-flex justify-content-between align-item-center">
                         <h2 style="font-size:20px;">Filters</h2>
                         <button type="button" id="resetFiltersmobile">Reset</button>
                     </div>
                     <hr>
-
 
                     <div class="budget">
                         <h2>Budget</h2>
@@ -1034,7 +916,6 @@
                     <hr>
                     <!-- Building Type Buttons -->
                     <div class="accordion" id="filterAccordion">
-
                         <!-- Building Type -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingBuilding">
@@ -1049,7 +930,7 @@
                                 <div class="accordion-body">
                                     <div class="d-flex flex-wrap gap-2">
                                         @foreach($subcategories as $subcat)
-                                            <button type="button" class="sub-category-btn" data-id="{{ $subcat->id }}">
+                                            <button type="button" class="sub-category-mobile-btn" data-id="{{ $subcat->id }}">
                                                 {{ $subcat->sub_category_name }}
                                             </button>
                                         @endforeach
@@ -1073,8 +954,8 @@
                                     <div class="property-type-button">
                                         @foreach($propertyTypes as $ptype)
                                             <button>
-                                                <input type="checkbox" class="sub-sub-category-checkbox"
-                                                    data-id="{{ $ptype->id }}">
+                                                <input type="checkbox" class="sub-sub-category-mobile-checkbox"
+                                                    value="{{ $ptype->id }}" data-id="{{ $ptype->id }}">
                                                 {{ $ptype->sub_sub_category_name }}
                                             </button>
                                         @endforeach
@@ -1097,10 +978,11 @@
                                 <div class="accordion-body">
                                     <div class="property-type-button d-flex flex-wrap gap-2">
                                         @for($i = 1; $i <= 10; $i++)
-                                            <button><input type="checkbox" class="bedroom-checkbox" value="{{ $i }}"> {{ $i }}
+                                            <button><input type="checkbox" class="bedroom-mobile-checkbox" value="{{ $i }}">
+                                                {{ $i }}
                                                 BHK</button>
                                         @endfor
-                                        <button><input type="checkbox" class="bedroom-checkbox" value="10+"> 10+
+                                        <button><input type="checkbox" class="bedroom-mobile-checkbox" value="10+"> 10+
                                             BHK</button>
                                     </div>
                                 </div>
@@ -1125,7 +1007,7 @@
                                         @endphp
                                         @foreach($furnishingStatuses as $status)
                                             <button>
-                                                <input type="checkbox" class="furnishing-Status-checkbox"
+                                                <input type="checkbox" class="furnishing-Status-mobile-checkbox"
                                                     value="{{ $status->id }}">
                                                 {{ $status->name }}
                                             </button>
@@ -1153,7 +1035,7 @@
                                         @endphp
                                         @foreach($propertyStatuses as $status)
                                             <button>
-                                                <input type="checkbox" class="property-Status-checkbox"
+                                                <input type="checkbox" class="property-Status-mobile-checkbox"
                                                     value="{{ $status->id }}">
                                                 {{ $status->name }}
                                             </button>
@@ -1165,7 +1047,26 @@
 
                     </div>
 
+                    <hr>
+                    <div class="localities">
+                        <h2>Localities</h2>
+                        <input type="text" id="locationSearchMobile" class="search-input" placeholder="Search Location">
 
+                        @php
+                            $selectedLocations = request()->input('locations') ? explode(',', request()->input('locations')) : [];
+                            $maxVisible = 10; // number of locations to show initially
+                        @endphp
+
+                        <div id="locationsContainerMobile" class="d-flex flex-wrap gap-2 mt-2">
+                            @foreach($locations as $index => $loc)
+                                <button class="location-btn {{ in_array($loc->id, $selectedLocations) ? 'active' : '' }}"
+                                    data-id="{{ $loc->id }}"
+                                    style="{{ in_array($loc->id, $selectedLocations) ? '' : 'display:none;' }}">
+                                    {{ $loc->location }}
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
                     <hr>
                     <div class="d-flex justify-content-between align-item-center">
                         <div class="d-flex flex-column ">
@@ -1203,12 +1104,10 @@
                     </div>
                     <hr>
 
+                    <button class="btn btn-dark w-100 mt-3" id="mobileApplyFilters">Apply Filters</button>
                 </div>
-
-                <button class="btn btn-dark w-100 mt-3" id="mobileApplyFilters">Apply Filters</button>
             </div>
         </div>
-
 
 
         <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
@@ -1220,7 +1119,6 @@
             <div class="offcanvas-body" style="min-height: 300px;">
                 <div class="sorting-options" style="display: flex; flex-direction: column; gap: 12px;">
                     <!--<span style="font-weight: 600; color: #0d1b3e;">Sort by:</span>-->
-
                     <button class="sort-btn" data-value="price-low">Price: Low to High</button>
                     <button class="sort-btn" data-value="price-high">Price: High to Low</button>
                     <button class="sort-btn" data-value="size-low">Size: Low to High</button>
@@ -1228,12 +1126,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
-
 
         <div class="container">
             <div class="row">
@@ -1245,8 +1137,6 @@
                                 <button type="button" id="resetFilters">Reset</button>
                             </div>
                             <hr>
-
-
                             <div class="budget">
                                 <h2>Budget</h2>
                                 <div class="range-group">
@@ -1307,7 +1197,6 @@
                                     </select>
                                 </div>
                             </div>
-
                             <hr>
                             <div class="size">
                                 <h2>Size</h2>
@@ -1435,13 +1324,7 @@
                                         </button>
                                     @endforeach
                                 </div>
-
-                                <!-- @if($locations->count() > $maxVisible)
-                                                                                                        <button id="showMoreLocations" class="btn btn-link">Show More</button>
-                                                                                                    @endif -->
-
                             </div>
-
                             <hr>
                             <div class="furnishing-status">
                                 <h2>Furnishing Status</h2>
@@ -1509,13 +1392,7 @@
                                 </div>
                             </div>
                             <hr>
-                            <!-- <div class="furnishing-status">
-                                                                                                                                                                                <h2>Age of Property</h2>
-                                                                                                                                                                                <div class="property-type-button">
-                                                                                                                                                                                    <button><input type="checkbox"> 0-1 year old</button>
-                                                                                                                                                                                    <button><input type="checkbox"> 1-5 year old</button>
-                                                                                                                                                                                </div>
-                                                                                                                                                                            </div> -->
+
                         </div>
                     </div>
                     <div class="listing-page-right">
@@ -1568,10 +1445,279 @@
                 </div>
             </div>
         </div>
+
     </section>
 @endsection
 @section('js')
     <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+             // Select elements
+            const locationContainerMobile = document.getElementById('locationsContainerMobile');
+            const locationButtonsMobile = Array.from(locationContainerMobile.querySelectorAll('.location-btn'));
+
+            // Toggle active class on click and update query params
+            locationButtonsMobile.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    this.classList.toggle('active');
+                });
+            });
+
+            document.getElementById('locationSearchMobile').addEventListener('input', function () {
+                const query = this.value.toLowerCase();
+
+                // Filtered buttons list: buttons matching query or currently active
+                const filteredButtons = locationButtonsMobile.filter(btn =>
+                    btn.textContent.toLowerCase().includes(query) || btn.classList.contains('active')
+                );
+
+                // Show first 10 filtered buttons and also always show active buttons beyond 10
+                let shownCount = 0;
+
+                locationButtonsMobile.forEach(btn => {
+                    const isMatching = btn.textContent.toLowerCase().includes(query);
+                    const isActive = btn.classList.contains('active');
+
+                    if (isActive || (isMatching && shownCount < 10)) {
+                        btn.style.display = 'inline-block';
+                        if (isMatching) shownCount++;
+                    } else {
+                        btn.style.display = 'none';
+                    }
+                });
+            });
+
+
+            const sortButtons = document.querySelectorAll('#offcanvasBottom .sort-btn');
+            let currentSort = new URLSearchParams(window.location.search).get('sort') || '';
+
+            function updateSortUI(selectedValue) {
+                sortButtons.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.value === selectedValue);
+                });
+            }
+
+            updateSortUI(currentSort);
+
+            sortButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const selectedSort = button.dataset.value;
+
+                    // Update URL parameter
+                    const params = new URLSearchParams(window.location.search);
+                    params.set('sort', selectedSort);
+                    history.pushState(null, '', window.location.pathname + '?' + params.toString());
+
+                    // Update UI
+                    updateSortUI(selectedSort);
+
+                    // Fetch filtered listings via AJAX
+                    const listingsContainer = document.getElementById('listings_container');
+                    fetch(window.location.pathname + '?' + params.toString(), {
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    })
+                        .then(response => response.text())
+                        .then(html => {
+                            if (listingsContainer) listingsContainer.innerHTML = html;
+                            history.pushState(null, '', window.location.pathname + '?' + params.toString());
+                        })
+                        .catch(console.error);
+                });
+            });
+
+            const offcanvas = document.getElementById('offcanvasExample');
+
+            function restoreFilters() {
+                const params = new URLSearchParams(window.location.search);
+
+                // Budget & Size selects - keys without '_mobile' but inputs have '_mobile'
+                ['budget_min', 'budget_max', 'size_min', 'size_max'].forEach(key => {
+                    const el = document.getElementById(key + '_mobile');
+                    if (el) el.value = params.get(key) || '';
+                });
+
+                // Sub-category buttons
+                const subCatIds = params.get('subcategoryid');
+                if (subCatIds) {
+                    document.querySelectorAll('.sub-category-mobile-btn').forEach(btn => {
+                        btn.classList.toggle('active', subCatIds.split(',').includes(btn.dataset.id));
+                    });
+                }
+
+                // Property type checkboxes
+                const propTypeIds = params.get('subsubcategoryid');
+                if (propTypeIds) {
+                    document.querySelectorAll('.sub-sub-category-mobile-checkbox').forEach(cb => {
+                        cb.checked = propTypeIds.split(',').includes(cb.value);
+                    });
+                }
+
+                // Bedrooms checkboxes
+                const bedroomVals = params.get('bedrooms');
+                if (bedroomVals) {
+                    document.querySelectorAll('.bedroom-mobile-checkbox').forEach(cb => {
+                        cb.checked = bedroomVals.split(',').includes(cb.value);
+                    });
+                }
+
+                // Location buttons active state
+                const locationIds = params.get('locations');
+                if (locationIds) {
+                    document.querySelectorAll('#locationsContainer .location-btn').forEach(btn => {
+                        btn.classList.toggle('active', locationIds.split(',').includes(btn.dataset.id));
+                    });
+                }
+
+                // Furnishing Status checkboxes
+                const furnishingVals = params.get('furnishingstatus');
+                if (furnishingVals) {
+                    document.querySelectorAll('.furnishing-Status-mobile-checkbox').forEach(cb => {
+                        cb.checked = furnishingVals.split(',').includes(cb.value);
+                    });
+                }
+
+                // Property Status checkboxes
+                const propertyStatusVals = params.get('propertystatus');
+                if (propertyStatusVals) {
+                    document.querySelectorAll('.property-Status-mobile-checkbox').forEach(cb => {
+                        cb.checked = propertyStatusVals.split(',').includes(cb.value);
+                    });
+                }
+
+                // Verified Property checkbox
+                const verifiedEl = document.getElementById('verified_property_mobile');
+                if (verifiedEl) verifiedEl.checked = params.get('verified_property') === '1';
+
+                // With Photos checkbox
+                const photosEl = document.getElementById('with_photos_mobile');
+                if (photosEl) photosEl.checked = params.get('with_photos') === '1';
+
+                // With Videos checkbox
+                const videosEl = document.getElementById('with_videos_mobile');
+                if (videosEl) videosEl.checked = params.get('with_videos') === '1';
+
+                // Location search input
+                const searchInput = document.getElementById('locationSearch');
+                if (searchInput) searchInput.value = params.get('search') || '';
+            }
+
+            if (offcanvas) {
+                offcanvas.addEventListener('shown.bs.offcanvas', restoreFilters);
+            }
+ 
+            
+            // For sub-category buttons which are buttons with active class toggling
+            document.querySelectorAll('.sub-category-mobile-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.classList.toggle('active');
+                });
+            });
+
+            const mobileApplyBtn = document.getElementById('mobileApplyFilters'); // Use the *exact* button ID!
+
+            if (mobileApplyBtn) {
+
+                mobileApplyBtn.addEventListener('click', function () {
+                    const params = new URLSearchParams(window.location.search);
+
+                    // Budget & Size
+                    ['budget_min_mobile', 'budget_max_mobile', 'size_min_mobile', 'size_max_mobile'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el && el.value) {
+                            params.set(id.replace('_mobile', ''), el.value);
+                        } else {
+                            params.delete(id.replace('_mobile', ''));
+                        }
+                    });
+
+                    // Sub-Category
+                    const subCatIds = Array.from(document.querySelectorAll('.sub-category-mobile-btn.active')).map(btn => btn.dataset.id);
+                    if (subCatIds.length) params.set('sub_category_id', subCatIds.join(','));
+                    else params.delete('sub_category_id');
+
+                    // Property Type (sub-sub-category)
+                    const propertyTypeIds = Array.from(document.querySelectorAll('.sub-sub-category-mobile-checkbox:checked')).map(cb => cb.value);
+                    if (propertyTypeIds.length) params.set('sub_sub_category_id', propertyTypeIds.join(','));
+                    else params.delete('sub_sub_category_id');
+
+                    // Bedrooms
+                    const bedroomVals = Array.from(document.querySelectorAll('.bedroom-mobile-checkbox:checked')).map(cb => cb.value);
+                    if (bedroomVals.length) params.set('bedrooms', bedroomVals.join(','));
+                    else params.delete('bedrooms');
+
+                    const selected = locationButtonsMobile.filter(btn => btn.classList.contains('active'))
+                        .map(btn => btn.dataset.id);
+
+                    if (selected.length) {
+                        params.set('locations', selected.join(','));
+                    } else {
+                        params.delete('locations');
+                    }
+
+
+                    // Furnishing Status
+                    const furnishingVals = Array.from(document.querySelectorAll('.furnishing-Status-mobile-checkbox:checked')).map(cb => cb.value);
+                    if (furnishingVals.length) params.set('furnishing_status', furnishingVals.join(','));
+                    else params.delete('furnishing_status');
+
+                    // Property Status
+                    const propertyStatusVals = Array.from(document.querySelectorAll('.property-Status-mobile-checkbox:checked')).map(cb => cb.value);
+                    if (propertyStatusVals.length) params.set('property_status', propertyStatusVals.join(','));
+                    else params.delete('property_status');
+
+                    // Verified properties
+                    const verifiedEl = document.getElementById('verified_property_mobile');
+                    if (verifiedEl && verifiedEl.checked) params.set('verified_property', 1);
+                    else params.delete('verified_property');
+
+                    // With Photos
+                    const withPhotosEl = document.getElementById('with_photos_mobile');
+                    if (withPhotosEl && withPhotosEl.checked) params.set('with_photos', 1);
+                    else params.delete('with_photos');
+
+                    // With Videos
+                    const withVideosEl = document.getElementById('with_videos_mobile');
+                    if (withVideosEl && withVideosEl.checked) params.set('with_videos', 1);
+                    else params.delete('with_videos');
+
+                    // Search box
+                    const searchInput = document.getElementById('location_search_mobile');
+                    if (searchInput && searchInput.value.trim()) params.set('search', searchInput.value.trim());
+                    else params.delete('search');
+
+                    // Fetch filtered listings via AJAX
+                    const listingsContainer = document.getElementById('listings_container');
+                    fetch(window.location.pathname + '?' + params.toString(), {
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    })
+                        .then(response => response.text())
+                        .then(html => {
+                            if (listingsContainer) listingsContainer.innerHTML = html;
+                            history.pushState(null, '', window.location.pathname + '?' + params.toString());
+                        })
+                        .catch(console.error);
+                });
+            }
+
+            // ----- Reset Filters -----
+            const resetFiltersmobile = document.getElementById('resetFiltersmobile');
+
+            if (resetFiltersmobile) {
+                resetFiltersmobile.addEventListener('click', function () {
+                    const params = new URLSearchParams(window.location.search);
+                    // Remove only filters applied on this page
+                    ['budget_min', 'budget_max', 'size_min', 'size_max', 'sub_category_id', 'sub_sub_category_id', 'furnishing_status', 'property_status', 'verified_property', 'with_photos', 'with_videos', 'bedrooms', 'sort'].forEach(key => {
+                        params.delete(key);
+                    });
+
+                    // Redirect without these filters, keeping other params (like search, city, type)
+                    window.location.href = `${window.location.pathname}?${params.toString()}`;
+                });
+            }
+
+
+        });
+
         document.addEventListener('DOMContentLoaded', function () {
             const listingsContainer = document.getElementById('listings-container');
             const params = new URLSearchParams(window.location.search);
@@ -1660,18 +1806,30 @@
                 });
             });
 
-            // Search input
             document.getElementById('locationSearch').addEventListener('input', function () {
                 const query = this.value.toLowerCase();
+
+                // Filtered buttons list: buttons matching query or currently active
+                const filteredButtons = locationButtons.filter(btn =>
+                    btn.textContent.toLowerCase().includes(query) || btn.classList.contains('active')
+                );
+
+                // Show first 10 filtered buttons and also always show active buttons beyond 10
+                let shownCount = 0;
+
                 locationButtons.forEach(btn => {
-                    // Show button if it matches query OR is selected
-                    if (btn.textContent.toLowerCase().includes(query) || btn.classList.contains('active')) {
+                    const isMatching = btn.textContent.toLowerCase().includes(query);
+                    const isActive = btn.classList.contains('active');
+
+                    if (isActive || (isMatching && shownCount < 10)) {
                         btn.style.display = 'inline-block';
+                        if (isMatching) shownCount++;
                     } else {
                         btn.style.display = 'none';
                     }
                 });
             });
+
 
             // Update locations in URL params
             function updateLocationsFilter() {
@@ -1844,22 +2002,7 @@
 
         });
 
+    </script>
 
-    </script>
-    <script>
-        document.querySelectorAll('.sort-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Remove active state from all buttons
-                document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
-                // Add active state to clicked button
-                btn.classList.add('active');
-                // Optional: you can send the value for filtering
-                const sortValue = btn.getAttribute('data-value');
-                console.log('Selected sort:', sortValue);
-                // Example redirect or API call:
-                // window.location.href = `?sort=${sortValue}`;
-            });
-        });
-    </script>
 
 @endsection
