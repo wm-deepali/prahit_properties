@@ -9,18 +9,21 @@ use App\SubLocations;
 use App\Cities;
 use App\City;
 
-class LocationController extends BaseApiController {
+class LocationController extends BaseApiController
+{
 
-	public function index() {
+	public function index()
+	{
 		try {
 			$locations = Locations::all();
 			$this->_sendResponse(['Locations' => $locations], 'Locations found successfully');
-		} catch(\Exception $e) {
+		} catch (\Exception $e) {
 			$this->_sendErrorResponse(500, 'An error occured');
 		}
 	}
 
-	public function state() {
+	public function state()
+	{
 		try {
 			$state = Cities::all()->unique('city_state')->flatten();
 			$this->_sendResponse(['States' => $state], 'States found successfully');
@@ -29,7 +32,8 @@ class LocationController extends BaseApiController {
 		}
 	}
 
-	public function city($id) {
+	public function city($id)
+	{
 		try {
 			$state_id = Cities::findOrFail($id);
 			$state = Cities::where('city_state', $state_id->city_state)->get();
@@ -39,7 +43,8 @@ class LocationController extends BaseApiController {
 		}
 	}
 
-	public function show($id) {
+	public function show($id)
+	{
 		try {
 			$location = Locations::findOrFail($id);
 			$this->_sendResponse(['Location' => $location], 'Location found successfully');
@@ -48,7 +53,8 @@ class LocationController extends BaseApiController {
 		}
 	}
 
-	public function show_sublocation($id) {
+	public function show_sublocation($id)
+	{
 		try {
 			$sub_location = SubLocations::findOrFail($id);
 			$this->_sendResponse(['SubLocation' => $sub_location], 'SubLocation found successfully');
@@ -57,33 +63,55 @@ class LocationController extends BaseApiController {
 		}
 	}
 
-	public function fetch_sublocations($id) {
+	public function fetch_sublocations($id)
+	{
 		try {
-			$sublocation = SubLocations::where('location_id',$id)->get();
-			$this->_sendResponse(['SubLocation' => $sublocation], 'SubLocation found successfully');
-		} catch (\Exception $e) {
-			$this->_sendErrorResponse(500, $e->getMessage());
-		}
-	}
-	
-	public function fetch_sublocation($id) {
-		try {
-			$sublocation = SubLocations::where('id',$id)->first();
+			$sublocation = SubLocations::where('location_id', $id)->get();
 			$this->_sendResponse(['SubLocation' => $sublocation], 'SubLocation found successfully');
 		} catch (\Exception $e) {
 			$this->_sendErrorResponse(500, $e->getMessage());
 		}
 	}
 
-	public function fetch_cities_states($id) {
+	public function fetch_sublocation($id)
+	{
+		try {
+			$sublocation = SubLocations::where('id', $id)->first();
+			$this->_sendResponse(['SubLocation' => $sublocation], 'SubLocation found successfully');
+		} catch (\Exception $e) {
+			$this->_sendErrorResponse(500, $e->getMessage());
+		}
+	}
+
+	public function fetch_cities_states($id)
+	{
 		try {
 			$cities = City::where('state_id', $id)->get();
-			$this->_sendResponse(['Cities' => $cities], 'City found successfully');
+
+			if ($cities->isEmpty()) {
+				return response()->json([
+					'status' => false,
+					'message' => 'No cities found for this state.',
+					'data' => [],
+				], 404);
+			}
+
+			return response()->json([
+				'status' => true,
+				'message' => 'Cities fetched successfully.',
+				'data' => [
+					'Cities' => $cities
+				],
+			], 200);
+
 		} catch (\Exception $e) {
-			$this->_sendErrorResponse(500, $e->getMessage());
+			return response()->json([
+				'status' => false,
+				'message' => 'Something went wrong.',
+				'error' => $e->getMessage(),
+			], 500);
 		}
 	}
-
 
 
 }

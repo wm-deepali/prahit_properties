@@ -85,56 +85,40 @@
           <h3 class="head-tit mb-4">Saved Properties</h3>
 
           <div class="row g-3">
-            <!-- 🏡 Card 1 -->
-            <div class="col-md-4 mb-4">
-              <div class="card wishlist-card">
-                <img src="https://bhawanbhoomi.com/uploads/properties/gallery_images/99115_03FFDC5E-937D-4A9A-9553-423C4482941B.png" alt="Luxury Apartment">
-                <div class="wishlist-info">
-                  <h5><a href="#">Luxury Apartment in Andheri</a></h5>
-                  <p><strong>Price:</strong> ₹1.2 Cr</p>
-                  <p><strong>Location:</strong> Mumbai, Andheri West</p>
-                  <p><strong>Category:</strong> Residential</p>
-                  <div class="property-actions">
-                    <a href="#" class="btn btn-sm btn-outline-info"><i class="fas fa-eye"></i> View</a>
-                    <a href="#" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i> Remove</a>
+            <?php $__empty_1 = true; $__currentLoopData = $wishlistItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+              <?php
+                $p = $item->property;
+              ?>
+              <div class="col-md-4 mb-4">
+                <div class="card wishlist-card">
+                  <img src="<?php echo e(asset($p->PropertyGallery[0]->image_path ?? 'front/images/no-image.jpg')); ?>"
+                       alt="<?php echo e($p->title); ?>">
+                  <div class="wishlist-info">
+                    <h5><a href="<?php echo e(route('property_detail', ['title' => $p->slug])); ?>"><?php echo e($p->title); ?></a></h5>
+                    <p><strong>Price:</strong> ₹<?php echo e(\App\Helpers\Helper::formatIndianPrice($p->price)); ?></p>
+                    <p><strong>Location:</strong> <?php echo e($p->getCity->name ?? 'N/A'); ?>, <?php echo e($p->getState->name ?? 'N/A'); ?></p>
+                    <p><strong>Category:</strong> <?php echo e($p->Category->category_name ?? '-'); ?></p>
+                    <div class="property-actions">
+                      <a href="<?php echo e(route('property_detail', ['title' => $p->slug])); ?>"
+                         class="btn btn-sm btn-outline-info">
+                        <i class="fas fa-eye"></i> View
+                      </a>
+                      <a href="javascript:void(0)" 
+                         class="btn btn-sm btn-outline-danger remove-wishlist" 
+                         data-id="<?php echo e($p->id); ?>">
+                        <i class="fas fa-trash"></i> Remove
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <!-- 🏡 Card 2 -->
-            <div class="col-md-4 mb-4">
-              <div class="card wishlist-card">
-                <img src="https://bhawanbhoomi.com/uploads/properties/gallery_images/99115_03FFDC5E-937D-4A9A-9553-423C4482941B.png" alt="Office Space">
-                <div class="wishlist-info">
-                  <h5><a href="#">Premium Office Space</a></h5>
-                  <p><strong>Price:</strong> ₹85 Lakh</p>
-                  <p><strong>Location:</strong> Pune, Hinjewadi</p>
-                  <p><strong>Category:</strong> Commercial</p>
-                  <div class="property-actions">
-                    <a href="#" class="btn btn-sm btn-outline-info"><i class="fas fa-eye"></i> View</a>
-                    <a href="#" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i> Remove</a>
-                  </div>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+              <div class="col-12">
+                <div class="alert alert-info text-center mb-0">
+                  You haven't added any properties to your wishlist yet.
                 </div>
               </div>
-            </div>
-
-            <!-- 🏡 Card 3 -->
-            <div class="col-md-4 mb-4">
-              <div class="card wishlist-card">
-                <img src="https://bhawanbhoomi.com/uploads/properties/gallery_images/99115_03FFDC5E-937D-4A9A-9553-423C4482941B.png" alt="Villa Property">
-                <div class="wishlist-info">
-                  <h5><a href="#">Elegant Villa with Garden</a></h5>
-                  <p><strong>Price:</strong> ₹2.5 Cr</p>
-                  <p><strong>Location:</strong> Bangalore, Whitefield</p>
-                  <p><strong>Category:</strong> Residential</p>
-                  <div class="property-actions">
-                    <a href="#" class="btn btn-sm btn-outline-info"><i class="fas fa-eye"></i> View</a>
-                    <a href="#" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i> Remove</a>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <?php endif; ?>
           </div> <!-- row end -->
         </div>
       </div>
@@ -143,4 +127,26 @@
 </section>
 
 <?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('js'); ?>
+<script>
+$(document).on('click', '.remove-wishlist', function() {
+  let property_id = $(this).data('id');
+  if (confirm('Are you sure you want to remove this property from your wishlist?')) {
+    $.ajax({
+      url: "<?php echo e(route('wishlist.toggle')); ?>",
+      type: "POST",
+      data: {
+        _token: "<?php echo e(csrf_token()); ?>",
+        property_id: property_id
+      },
+      success: function(response) {
+        location.reload();
+      }
+    });
+  }
+});
+</script>
+<?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layouts.front.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/user/my-wishlist.blade.php ENDPATH**/ ?>

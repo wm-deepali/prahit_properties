@@ -15,6 +15,35 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    .toast-container>div {
+      opacity: 1 !important;
+      color: #fff !important;
+      font-weight: 500 !important;
+      z-index: 99999 !important;
+    }
+
+    .toast-success {
+      background-color: #28a745 !important;
+      /* Green */
+    }
+
+    .toast-error {
+      background-color: #dc3545 !important;
+      /* Red */
+    }
+
+    .toast-warning {
+      background-color: #ffc107 !important;
+      /* Yellow */
+      color: #000 !important;
+    }
+
+    .toast-info {
+      background-color: #17a2b8 !important;
+      /* Blue */
+    }
+  </style>
 
 
   <?php echo e(csrf_field()); ?>
@@ -3096,72 +3125,72 @@
         </svg>
       </button>
 
-    
-        <a class="bottom-item bottom-active" data-key="home" href="<?php echo e(route('home')); ?>">
-   
-          <span class="bottom-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M3 10.2L12 3l9 7.2V21a1 1 0 01-1 1h-5v-7H9v7H4a1 1 0 01-1-1V10.2z" />
-            </svg>
-          </span>
-          <span class="bottom-badge">Home</span>
+
+      <a class="bottom-item bottom-active" data-key="home" href="<?php echo e(route('home')); ?>">
+
+        <span class="bottom-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 10.2L12 3l9 7.2V21a1 1 0 01-1 1h-5v-7H9v7H4a1 1 0 01-1-1V10.2z" />
+          </svg>
+        </span>
+        <span class="bottom-badge">Home</span>
+      </a>
+
+
+      <a class="bottom-item" data-key="insights" href="#">
+        <span class="bottom-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M5 3h2v16H5zM11 8h2v11h-2zM17 13h2v6h-2z" />
+          </svg>
+        </span>
+        <span class="bottom-badge">Wishlist</span>
+      </a>
+
+      <?php if(auth()->guard()->check()): ?>
+        <a class="bottom-item" style="margin-top:33px;" data-key="sell" href="<?php echo e(route('create_property')); ?>">
+      <?php else: ?>
+          <a class="bottom-item" style="margin-top:33px;" data-key="sell" href="#"
+            onclick="event.preventDefault(); openSigninModal();">
+        <?php endif; ?>
+          <!--<span class="bottom-icon">-->
+          <!--  <svg viewBox="0 0 24 24" fill="currentColor">-->
+          <!--    <path d="M21 11l-8-8H3v10l8 8 10-9zM7 7a2 2 0 110-4 2 2 0 010 4z"/>-->
+          <!--  </svg>-->
+          <!--</span>-->
+          <span class="bottom-badge">Sell / Rent</span>
         </a>
 
 
-        <a class="bottom-item" data-key="insights" href="#">
+        <a class="bottom-item" data-key="shortlist" href="#">
           <span class="bottom-icon">
             <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M5 3h2v16H5zM11 8h2v11h-2zM17 13h2v6h-2z" />
+              <path d="M12 21s-7-4.5-9-8a5 5 0 019-6 5 5 0 019 6c-2 3.5-9 8-9 8z" />
             </svg>
           </span>
-          <span class="bottom-badge">Wishlist</span>
+          <span class="bottom-badge">Support</span>
         </a>
 
+        <!-- Profile Button -->
         <?php if(auth()->guard()->check()): ?>
-          <a class="bottom-item" style="margin-top:33px;" data-key="sell" href="<?php echo e(route('create_property')); ?>">
+          <?php
+            $profileRoute = match (Auth::user()->role) {
+              'owner' => route('user.see_profile'),
+              'builder' => route('builder.seeBuilderProfile'),
+              'agent' => route('agent.seeAgentProfile'),
+              default => route('user.see_profile')
+            };
+          ?>
+          <a class="bottom-item" data-key="profile" data-bs-toggle="offcanvas" href="#offcanvasExample2" role="button">
         <?php else: ?>
-            <a class="bottom-item" style="margin-top:33px;" data-key="sell" href="#"
-              onclick="event.preventDefault(); openSigninModal();">
+            <a class="bottom-item" data-key="profile" href="#" onclick="event.preventDefault(); openSigninModal();">
           <?php endif; ?>
-            <!--<span class="bottom-icon">-->
-            <!--  <svg viewBox="0 0 24 24" fill="currentColor">-->
-            <!--    <path d="M21 11l-8-8H3v10l8 8 10-9zM7 7a2 2 0 110-4 2 2 0 010 4z"/>-->
-            <!--  </svg>-->
-            <!--</span>-->
-            <span class="bottom-badge">Sell / Rent</span>
-          </a>
-
-
-          <a class="bottom-item" data-key="shortlist" href="#">
             <span class="bottom-icon">
               <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 21s-7-4.5-9-8a5 5 0 019-6 5 5 0 019 6c-2 3.5-9 8-9 8z" />
+                <path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-5 0-8 2.5-8 5v1h16v-1c0-2.5-3-5-8-5z" />
               </svg>
             </span>
-            <span class="bottom-badge">Support</span>
+            <span class="bottom-badge">Profile</span>
           </a>
-
-          <!-- Profile Button -->
-          <?php if(auth()->guard()->check()): ?>
-            <?php
-              $profileRoute = match (Auth::user()->role) {
-                'owner' => route('user.see_profile'),
-                'builder' => route('builder.seeBuilderProfile'),
-                'agent' => route('agent.seeAgentProfile'),
-                default => route('user.see_profile')
-              };
-            ?>
-            <a class="bottom-item" data-key="profile" data-bs-toggle="offcanvas" href="#offcanvasExample2" role="button">
-          <?php else: ?>
-              <a class="bottom-item" data-key="profile" href="#" onclick="event.preventDefault(); openSigninModal();">
-            <?php endif; ?>
-              <span class="bottom-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-5 0-8 2.5-8 5v1h16v-1c0-2.5-3-5-8-5z" />
-                </svg>
-              </span>
-              <span class="bottom-badge">Profile</span>
-            </a>
 
 
     </div>

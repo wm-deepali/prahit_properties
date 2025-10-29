@@ -1,5 +1,5 @@
 @extends('layouts.front.app')
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 @section('title')
 	<title>{{$property_detail->title}} - {{config('app.name')}}</title>
 	<style type="text/css">
@@ -153,11 +153,14 @@
 										<div class="property-featured-btn">
 											<ul>
 												<li>
-													<button type="button" class="btn btn-fill" data-toggle="modal"
+													<button class="btn btn-fill" type="button" data-toggle="modal"
 														data-target="#contact-agent"
-														onclick='window.active_listing_id = "{{$property_detail->id}}"'>
+														onclick='window.active_listing_id = "{{$property_detail->id}}"'
+														@if(auth()->check() && $property_detail->user_id === auth()->id())
+														disabled @endif>
 														Contact Agent
 													</button>
+
 												</li>
 												<li>
 													<button type="button" class="btn btn-outline"
@@ -171,6 +174,14 @@
 														Feedback / Complaint
 													</button>
 												</li>
+												<li>
+													<button id="wishlistButton"
+														class="btn btn-outline purchase-wishlist-btn"
+														data-submission="{{ $property_detail->id }}">
+														{!! $isInWishlist ? '❤️ Added to Wishlist' : '♡ Add to Wishlist' !!}
+													</button>
+												</li>
+
 											</ul>
 										</div>
 									</div>
@@ -222,8 +233,10 @@
 								<div class="col-sm-12">
 									<div id="propertyMap"
 										style="width:100%; height:400px; border-radius: 8px; margin-bottom: 10px;"></div>
-									<input type="hidden" id="latitude" name="latitude" value="{{ $property_detail->latitude }}">
-									<input type="hidden" id="longitude" name="longitude" value="{{ $property_detail->longitude }}">
+									<input type="hidden" id="latitude" name="latitude"
+										value="{{ $property_detail->latitude }}">
+									<input type="hidden" id="longitude" name="longitude"
+										value="{{ $property_detail->longitude }}">
 								</div>
 							</div>
 						</div>
@@ -375,7 +388,10 @@
 
 								<div class="form-group row">
 									<div class="col-sm-12 text-center">
-										<button class="btn btn-submit" type="submit">Send Enquiry</button>
+										<button class="btn btn-submit" type="submit" @if(auth()->check() && $property_detail->user_id === auth()->id()) disabled @endif>
+											Send Enquiry
+										</button>
+
 										<p>By sending a request., you accept our Terms of Use and Privacy Policy</p>
 									</div>
 								</div>
@@ -511,45 +527,80 @@
 	<script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
 	<script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
 	<script type="text/javascript">
-	
-		  function createMap(lat, lng) {
-            var map = L.map('propertyMap').setView([lat, lng], 16);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(map);
 
-            var marker = L.marker([lat, lng], { draggable: true }).addTo(map);
-            document.getElementById('latitude').value = lat;
-            document.getElementById('longitude').value = lng;
+		function createMap(lat, lng) {
+			var map = L.map('propertyMap').setView([lat, lng], 16);
+			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				attribution: '&copy; OpenStreetMap contributors'
+			}).addTo(map);
 
-            marker.on('dragend', function (e) {
-                var p = e.target.getLatLng();
-                document.getElementById('latitude').value = p.lat;
-                document.getElementById('longitude').value = p.lng;
-            });
+			var marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+			document.getElementById('latitude').value = lat;
+			document.getElementById('longitude').value = lng;
 
-            map.on('click', function (e) {
-                marker.setLatLng(e.latlng);
-                document.getElementById('latitude').value = e.latlng.lat;
-                document.getElementById('longitude').value = e.latlng.lng;
-            });
-        }
+			marker.on('dragend', function (e) {
+				var p = e.target.getLatLng();
+				document.getElementById('latitude').value = p.lat;
+				document.getElementById('longitude').value = p.lng;
+			});
 
-        @if(!empty($property_detail->latitude) && !empty($property_detail->longitude))
-            // Property has saved lat/lng; use those
-            createMap({{ $property_detail->latitude }}, {{ $property_detail->longitude }});
-        @else
-            // Use browser geolocation or default
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (pos) {
-                    createMap(pos.coords.latitude, pos.coords.longitude);
-                }, function () {
-                    createMap(28.6139, 77.2090); // fallback: Delhi
-                });
-            } else {
-                createMap(28.6139, 77.2090);
-            }
-        @endif
+			map.on('click', function (e) {
+				marker.setLatLng(e.latlng);
+				document.getElementById('latitude').value = e.latlng.lat;
+				document.getElementById('longitude').value = e.latlng.lng;
+			});
+		}
+
+		@if(!empty($property_detail->latitude) && !empty($property_detail->longitude))
+			// Property has saved lat/lng; use those
+			createMap({{ $property_detail->latitude }}, {{ $property_detail->longitude }});
+		@else
+																	// Use browser geolocation or default
+																	if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function (pos) {
+					createMap(pos.coords.latitude, pos.coords.longitude);
+				}, function () {
+					createMap(28.6139, 77.2090); // fallback: Delhi
+				});
+			} else {
+				createMap(28.6139, 77.2090);
+			}
+		@endif
+
+
+		document.addEventListener('DOMContentLoaded', function () {
+			var wishlistBtn = document.getElementById('wishlistButton');
+			if (wishlistBtn) {
+				wishlistBtn.addEventListener('click', function () {
+					var button = this;
+					var submissionId = button.getAttribute('data-submission');
+
+					@if(!Auth::user())
+						alert('Please login to manage your wishlist.');
+						return;
+					@endif
+
+					fetch("{{ route('wishlist.toggle') }}", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+							"X-CSRF-TOKEN": "{{ csrf_token() }}"
+						},
+						body: JSON.stringify({ property_id: submissionId })
+					}).then(response => response.json())
+						.then(data => {
+							if (data.added) {
+								button.textContent = '❤️ Added to Wishlist';
+							} else {
+								button.textContent = '♡ Add to Wishlist';
+							}
+						}).catch(() => {
+							alert('Could not update wishlist. Please try again.');
+						});
+				});
+			}
+
+		});
 
 		$(".loading").css('display', 'none');
 
@@ -642,91 +693,5 @@
 		}
 	</script>
 
-
-	<script type="text/javascript">
-		$("#contact_agent_form").validate({
-			rules: {
-				mobile_number: {
-					number: true,
-					minlength: 10,
-					maxlength: 10,
-				}
-			},
-			submitHandler: function () {
-				var formData = $("#contact_agent_form").serializeArray();
-				formData.push({ name: 'property_id', value: "{{$property_detail->id}}" });
-
-				$.ajax({
-					url: "{{config('app.api_url') . '/property/agent_enquiry'}}",
-					method: 'post',
-					data: formData,
-					beforeSend: function () {
-						$(".loading").css('display', 'block');
-					},
-					success: function (response) {
-						if (response.responseCode === 200) {
-							toastr.success('Enquiry sent successfully')
-							$("#contact_agent_form").trigger('reset');
-						} else {
-							toastr.error(response.message);
-						}
-					},
-					error: function (response) {
-						toastr.error('An error occured');
-					},
-					complete: function () {
-						$(".loading").css('display', 'none');
-					}
-				})
-
-			}
-		});
-
-
-		// 
-
-
-		// $("#feedback_form").validate({
-		// 	// rules:{
-		// 	// 	mobile_number:{
-		// 	// 		number:true,
-		// 	// 		minlength:10,
-		// 	// 		maxlength:10,
-		// 	// 	}
-		// 	// },
-		// 	submitHandler:function() {
-		// 		var formData = $("#feedback_form").serializeArray();
-		// 		formData.push({name: 'property_id', value:"{{$property_detail->id}}"});
-
-		// 		$.ajax({
-		// 			url: "{{config('app.api_url') . '/property/feedback'}}",
-		// 			method:'post',
-		// 			data: formData,
-		// 			beforeSend:function(){
-		// 				$(".loading").css('display','block');
-		// 			},
-		// 			success:function(response){
-		// 				if(response.responseCode === 200) {
-		// 					toastr.success('Feedback submitted successfully')
-		// 					$("#feedback_form").trigger('reset');
-		// 				} else {
-		// 					toastr.error(response.message);
-		// 				}
-		// 			}, 
-		// 			error:function(response) {
-		// 				var response = JSON.parse(response.responseText);
-		// 				response.responseCode === 400 ? toastr.error(response.message) : toastr.error('An error occured');
-		// 			},
-		// 			complete:function(){
-		// 				$(".modal").modal('hide');
-		// 				$(".loading").css('display','none');
-		// 			}
-		// 		})
-
-		// 	}
-		// });
-
-
-	</script>
 
 @endsection

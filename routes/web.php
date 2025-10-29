@@ -11,36 +11,33 @@
 |
 */
 
-
-Route::get('/user/my-activities', function () {
-	return view('front.user.my-activities'); 
-})->name('my-activities');
 Route::get('/user/pricing', function () {
-	return view('front.user.pricing'); 
+	return view('front.user.pricing');
 })->name('pricing');
-Route::get('/user/all-inquries', function () {
-	return view('front.user.all-inquries'); 
-})->name('all-inquries');
+
+Route::get('/user/all-inquries', [App\Http\Controllers\User\UserController::class, 'allInquiries'])->name('all-inquries');
+Route::get('/user/my-wishlist', [App\Http\Controllers\WishlistController::class, 'myWishlist'])->name('my-wishlist');
+Route::get('/user/my-activities', [App\Http\Controllers\User\UserController::class, 'myActivities'])->name('my-activities');
+Route::get('user/sent-inquries', [App\Http\Controllers\User\UserController::class, 'sentEnquiries'])->name('user.sent-inquiries');
+
+
 Route::get('/user/payments-invoice', function () {
-	return view('front.user.invoice'); 
+	return view('front.user.invoice');
 })->name('payments-invoice');
 Route::get('/user/invoice-details', function () {
-	return view('front.user.invoice-details'); 
+	return view('front.user.invoice-details');
 })->name('invoice-details');
-Route::get('/user/my-wishlist', function () {
-	return view('front.user.my-wishlist'); 
-})->name('my-wishlist');
 
 Route::get('/user/current-subscriptions', function () {
-	return view('front.user.current-subscriptions'); 
+	return view('front.user.current-subscriptions');
 })->name('current-subscriptions');
 
 Route::get('/profile-page/{slug?}', function ($slug) {
-    return view('front.profile-page', compact('slug'));
+	return view('front.profile-page', compact('slug'));
 })->name('profile.page');
 
 Route::get('/business-details/{id}', [App\Http\Controllers\HomeController::class, 'businessDetails'])
-    ->name('business.details');
+	->name('business.details');
 
 
 Route::get('/listing-list', 'HomeController@list')->name('listing.list');
@@ -486,6 +483,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('user/verify/email', 'HomeController@userVerifyEmail')->name('user.verifyEmail');
 	Route::get('user/verify/mobile', 'HomeController@userVerifyMobile')->name('user.userVerifyMobile');
 	Route::post('user/email-mobile/verify/otp', 'HomeController@emailMobileOtpVerification')->name('user.emailMobileOtpVerification');
+	Route::post('/wishlist/toggle', [App\Http\Controllers\WishlistController::class, 'toggle'])->name('wishlist.toggle');
 });
 
 //Enquery Routes 

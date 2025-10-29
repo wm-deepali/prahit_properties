@@ -17,14 +17,20 @@ class LocationsController extends AppController
 
 	public function index(Request $request)
 	{
-		if ($request->input('city_id')) {
-			$locations = Locations::with('Cities')->where('city_id', $request->input('city_id'))->withCount('SubLocations')->latest()->paginate(10);
-		} else {
-			$locations = Locations::with('Cities')->withCount('SubLocations')->latest()->paginate(10);
+		$query = Locations::with('Cities')
+			->withCount('SubLocations')
+			->whereHas('Cities'); // ✅ Only include locations that have a related city
+
+		if ($request->filled('city_id')) {
+			$query->where('city_id', $request->input('city_id'));
 		}
+
+		$locations = $query->latest()->paginate(10);
 		$states = State::where('country_id', 101)->get();
+
 		return view('admin.locations.index', compact('locations', 'states'));
 	}
+
 
 	public function store(Request $request)
 	{
@@ -82,7 +88,7 @@ class LocationsController extends AppController
 			$this->JsonResponse(500, 'An error occured');
 		}
 	}
-	
+
 	public function show($id)
 	{
 		$locations = Locations::findOrFail($id);

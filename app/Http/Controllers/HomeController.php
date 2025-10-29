@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Http;
 use App\Otp;
+use Auth;
 use App\Job;
 use App\Blog;
 use App\User;
@@ -47,6 +48,8 @@ use App\Models\RegistrationStatus;
 use App\SubSubCategory;
 use App\Models\Faq;
 use App\Models\FaqCategory;
+use App\Models\Wishlist;
+use App\Models\PropertyView;
 
 class HomeController extends AppController
 {
@@ -588,8 +591,26 @@ class HomeController extends AppController
 		])->where('slug', $slug)->first();
 		$property_detail = $property;
 		$amenities = Amenity::whereIn('id', explode(',', $property_detail->amenities))->get();
+
+
+		// Log the view
+		PropertyView::firstOrCreate([
+			'property_id' => $property->id,
+			'user_id' => auth()->id(),
+			'ip_address' => request()->ip(),
+		]);
+
+
+		$isInWishlist = false;
+		$user = Auth::user();
+		if ($user) {
+			$isInWishlist = Wishlist::where('user_id', $user->id)
+				->where('property_id', $property_detail->id)
+				->exists();
+		}
+
 		// dd($property_detail->additional_info );
-		return view('front.property_detail', compact('property_detail', 'amenities'));
+		return view('front.property_detail', compact('property_detail', 'amenities', 'isInWishlist'));
 	}
 
 	public function search_property(Request $request)

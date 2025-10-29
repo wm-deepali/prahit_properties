@@ -15,7 +15,8 @@
     <?php echo $__env->make('layouts.app_css', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
     <?php echo $__env->yieldContent('css'); ?>
-
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 
 <body>
@@ -190,8 +191,8 @@
                                     <a class="dropdown-item"
                                         href="<?php echo e(route('admin.web-directory-sub-category.index')); ?>">Manage Sub
                                         Category</a>
-                                    <a class="dropdown-item"
-                                        href="<?php echo e(route('admin.business-listing.index')); ?>">Business Listing</a>
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.business-listing.index')); ?>">Business
+                                        Listing</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
@@ -249,11 +250,12 @@
                                         Category</a>
                                     <a class="dropdown-item" href="<?php echo e(route('admin.manageBlogs')); ?>">Manage Blogs</a>
 
-                                     <a class="dropdown-item" href="<?php echo e(route('admin.faq-categories.index')); ?>">Manage Faq
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.faq-categories.index')); ?>">Manage Faq
                                         Category</a>
                                     <a class="dropdown-item" href="<?php echo e(route('admin.faqs.index')); ?>">Manage Faqs</a>
-                                
-                                    <a class="dropdown-item" href="<?php echo e(route('admin.client-reels.index')); ?>">Client Reels</a>
+
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.client-reels.index')); ?>">Client
+                                        Reels</a>
                                 </div>
                             </li>
 
