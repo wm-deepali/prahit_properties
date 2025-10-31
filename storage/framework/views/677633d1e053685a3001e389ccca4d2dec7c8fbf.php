@@ -1,7 +1,7 @@
 
 
 <?php $__env->startSection('title'); ?>
-  <title>My Properties</title>
+  <title>My Activities</title>
 <?php $__env->stopSection(); ?>
 
 
@@ -17,7 +17,7 @@
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="<?php echo e(url('/')); ?>">Home</a>
               </li>
-              <li class="breadcrumb-item active" aria-current="page">My Properties</li>
+              <li class="breadcrumb-item active" aria-current="page">My Activities</li>
             </ol>
           </nav>
         </div>

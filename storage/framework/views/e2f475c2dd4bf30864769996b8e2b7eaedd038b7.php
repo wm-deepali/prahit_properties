@@ -21,13 +21,48 @@
                             </a>
                         </h1>
                         <div class="listing-actions">
-                            <button class="action-btn" title="Like"><i class="fas fa-heart"></i></button>
-                            <button class="action-btn" title="Share"><i class="fas fa-share"></i></button>
-                            <button class="action-btn" title="More"><i class="fas fa-ellipsis-h"></i></button>
+                            <button class="action-btn wishlist-btn" data-property-id="<?php echo e($property->id); ?>" title="Wishlist">
+                                <i
+                                    class="fas fa-heart <?php echo e(auth()->check() && \App\Models\Wishlist::where('user_id', auth()->id())->where('property_id', $property->id)->exists() ? 'text-danger' : ''); ?>"></i>
+                            </button>
+
+                            <button class="action-btn share-btn" data-id="<?php echo e($property->id); ?>"
+                                data-name="<?php echo e($property->title); ?>" title="Share">
+                                <i class="fas fa-share"></i>
+                            </button>
+
+                            <button class="action-btn more-btn" data-url="<?php echo e(route('property_detail', ['title' => $property->slug])); ?>"
+                                title="View Details">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
                         </div>
                     </div>
                     <div class="listing-features">
-                        <!-- Your property features here -->
+                        <div class="feature-item">
+                            <i class="fas fa-home feature-icon"></i>
+                            <span class="feature-value">Unfurnished</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-bath feature-icon"></i>
+                            <span class="feature-value">2</span>
+                            <span class="feature-label">Bathrooms</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-calendar-check feature-icon"></i>
+                            <span class="feature-value">Immediately</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-expand-arrows-alt feature-icon"></i>
+                            <span class="feature-value">950 sqft</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-layer-group feature-icon"></i>
+                            <span class="feature-value">1 out of 1</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-user-friends feature-icon"></i>
+                            <span class="feature-value">Bachelors</span>
+                        </div>
                     </div>
                     <div class="listing-description">
                         <?php echo e(\Illuminate\Support\Str::limit($property->description, 50)); ?>

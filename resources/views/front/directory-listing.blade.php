@@ -4,6 +4,10 @@
 @endsection
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
     .directory-card {
         display: flex;
@@ -253,6 +257,7 @@
         font-size: 14px;
         cursor: pointer;
         color: gray;
+        text-align: start;
     }
 
     .right-sorting {
@@ -490,7 +495,72 @@
         border-color: #d97706;
 
     }
+
+    .sort-btn {
+        width: 100%;
+        background: #f8f9fa40;
+        border: 1px solid #ddd;
+        color: #333;
+        font-weight: 500;
+        border-radius: 8px;
+        padding: 10px;
+        text-align: left;
+        transition: all 0.2s ease;
+    }
+
+    .sort-btn:hover {
+        background: #e9f2ff;
+        border-color: #007bff;
+        color: #007bff;
+    }
+
+    .sort-btn.active {
+        background: orange;
+        color: #fff;
+        border-color: orange;
+    }
+
+    .offcanvas-body {
+        padding: 15px;
+    }
+
+    .accordion-button {
+        background: #f7f9fc;
+        color: #0d1b3e;
+        font-weight: 600;
+        border-radius: 8px !important;
+        box-shadow: none;
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: #e6f0ff;
+        color: #0056d2;
+    }
+
+    .accordion-body {
+        padding-left: 20px;
+        padding-bottom: 10px;
+    }
+
+    .accordion-body label {
+        font-size: 14px;
+        color: #333;
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    .accordion-body input[type="checkbox"] {
+        accent-color: #0056d2;
+    }
+
+    #offcanvasBottom {
+        height: 50vh !important;
+        /* makes drawer taller */
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
 </style>
+
 @section('content')
     <section style="background:#f9f9f9;">
         <div class="top-search-section">
@@ -503,25 +573,141 @@
                 </div>
                 <div class="filter-buttons">
                     <span class="filter-label">Quick Filters:</span>
-                    <button class="filter-btn {{ request('verified') == 'true' ? 'active' : '' }}"
+                    <button class="filter-btn {{ request('verified') == 'true' ? 'active' : '' }}" data-filter="verified"
                         onclick="applyQuickFilter('verified')">
                         <i class="fas fa-check-circle"></i> Verified
                     </button>
-                    <button class="filter-btn {{ request('premium') == 'true' ? 'active' : '' }}"
+
+                    <button class="filter-btn {{ request('premium') == 'true' ? 'active' : '' }}" data-filter="premium"
                         onclick="applyQuickFilter('premium')">
                         <i class="fas fa-crown"></i> Premium
                     </button>
+
                     <button class="filter-btn {{ request('sort') == 'rating-high' ? 'active' : '' }}"
-                        onclick="applyQuickFilter('top_rated')">
+                        data-filter="top_rated" onclick="applyQuickFilter('top_rated')">
                         <i class="fas fa-star"></i> Top Rated
                     </button>
+
                     <button class="filter-btn {{ request('sort') == 'views-high' ? 'active' : '' }}"
-                        onclick="applyQuickFilter('most_viewed')">
+                        data-filter="most_viewed" onclick="applyQuickFilter('most_viewed')">
                         <i class="fas fa-fire"></i> Popular
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <div class="filter-inmobile">
+            <!-- <div class="ver-line"></div> -->
+            <div class="filter-text" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom"
+                aria-controls="offcanvasBottom">
+                <p class="m-0"><i class="fa-solid fa-sort"></i> Short By</p>
+            </div>
+            <div class="ver-line"></div>
+            <div class="filter-text">
+                <p class="m-0" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"><i
+                        class="fa-solid fa-sliders"></i> Filter</p>
+            </div>
+        </div>
+
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="filterMenuLabel"
+            style="width: 320px;">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title fw-semibold" id="filterMenuLabel"></h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+
+            <div class="offcanvas-body" style="background:#f9f9f9; text-align: left;">
+                <div class="directory-filter">
+                    <div class="reset-btn d-flex justify-content-between align-items-center">
+                        <h2 style="font-size:20px;">Filters</h2>
+                        <button onclick="resetFilters()">Reset</button>
+                    </div>
+                    <hr>
+                    <div class="category-group">
+                        <h2>Categories</h2>
+                        <hr>
+                        <div class="category-list">
+                            @foreach($categories as $category)
+                                <div class="category-wrapper">
+                                    <p class="category-item" data-category-id="{{ $category->id }}"
+                                        onclick="toggleCategory(this, '{{ $category->category_name }}', {{ $category->id }})">
+                                        {{ $category->category_name }}
+                                    </p>
+                                    <div class="subcategory-section" style="display: none;">
+                                        <div class="subcategory-list">
+                                            @foreach($category->subcategories as $subCat)
+                                                <p data-subcategory-id="{{ $subCat->id }}"
+                                                    onclick="selectSubCategory(this, {{ $category->id }}, {{ $subCat->id }})">
+                                                    {{ $subCat->sub_category_name }}
+                                                </p>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="rating-group">
+                        <h2>Ratings</h2>
+                        <div class="rating-button">
+                            <button>
+                                <input type="checkbox" class="filter-checkbox" name="rating" value="5">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i> 5 Stars
+                            </button>
+                            <button>
+                                <input type="checkbox" class="filter-checkbox" name="rating" value="4">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i><i class="far fa-star"></i> 4 Stars & Above
+                            </button>
+                            <button>
+                                <input type="checkbox" class="filter-checkbox" name="rating" value="3">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="far fa-star"></i><i class="far fa-star"></i> 3 Stars & Above
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="category-group">
+                        <h2>Apply Filter</h2>
+                        <div class="category-button">
+                            <button>
+                                <input type="checkbox" class="filter-checkbox" name="verified" value="true">
+                                Verified Sellers
+                            </button>
+                            <button>
+                                <input type="checkbox" class="filter-checkbox" name="premium" value="true">
+                                Premium Sellers
+                            </button>
+                            <button>
+                                <input type="checkbox" class="filter-checkbox" name="most_rated" value="true">
+                                Most Rated
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
+        <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasBottomLabel">Sort By</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+
+            <div class="offcanvas-body" style="min-height: 300px;">
+                <div class="sorting-options" style="display: flex; flex-direction: column; gap: 12px;">
+                    <!--<span style="font-weight: 600; color: #0d1b3e;">Sort by:</span>-->
+                    <button class="sort-btn" data-value="rating-high">Rating: High to Low</button>
+                    <button class="sort-btn" data-value="views-high">Views:
+                        High to Low</button>
+                    <button class="sort-btn" data-value="established-old">Established
+                        Year: Oldest First</button>
+                    <button class="sort-btn" data-value="member-old">Member
+                        Since: Oldest First</button>
+                </div>
             </div>
         </div>
         <div class="container">
@@ -599,6 +785,8 @@
                             </div>
                         </div>
                     </div>
+
+
                     <div class="listing-page-right">
                         <div class="right-sorting">
                             <div class="search-title mb-2">
@@ -619,76 +807,7 @@
                             </div>
                         </div>
                         <div id="directory-cards">
-                            @forelse($list as $company)
-                                <div class="directory-card">
-                                    <div class="logo-section">
-                                        <img src="{{ isset($company->logo) ? asset('storage/' . $company->logo) : 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80' }}"
-                                            alt="Company Logo" class="company-logo">
-                                    </div>
-                                    <div class="content-section">
-                                        <div>
-                                            <div class="directory-header">
-                                                <h1 class="company-name">{{ $company->business_name }}</h1>
-                                                <div class="directory-actions">
-                                                    <button class="action-btn" title="Like">
-                                                        <i class="fas fa-heart"></i>
-                                                    </button>
-                                                    <button class="action-btn" title="Share">
-                                                        <i class="fas fa-share"></i>
-                                                    </button>
-                                                    <button class="action-btn" title="More">
-                                                        <i class="fas fa-ellipsis-h"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="short-content">
-                                                {{ \Illuminate\Support\Str::limit($company->introduction, 350) }}
-                                            </div>
-                                            <div class="directory-features">
-                                                <div class="feature-item">
-                                                    <i class="fas fa-tag feature-icon"></i>
-                                                    <span class="feature-value">Category:
-                                                        {{ $company->category->category_name ?? 'N/A' }}</span>
-                                                </div>
-                                                <div class="feature-item">
-                                                    <i class="fas fa-tags feature-icon"></i>
-                                                    <span class="feature-value">
-                                                        Sub Category:
-                                                        {{ $company->subCategories->pluck('sub_category_name')->implode(', ') }}
-                                                    </span>
-                                                </div>
-                                                <div class="feature-item">
-                                                    <i class="fas fa-calendar-alt feature-icon"></i>
-                                                    <span class="feature-value">Established:
-                                                        {{ $company->established_year }}</span>
-                                                </div>
-                                                <div class="feature-item">
-                                                    <i class="fas fa-user-clock feature-icon"></i>
-                                                    <span class="feature-value">
-                                                        Member Since: {{ $company->created_at->format('Y') }}
-                                                    </span>
-                                                </div>
-                                                <div class="feature-item">
-                                                    <i class="fas fa-eye feature-icon"></i>
-                                                    <span class="feature-value">Views: {{ $company->total_views }}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="directory-buttons">
-                                            <button class="contact-btn" onclick="contactBusiness({{ $company->id }})">
-                                                Contact Now
-                                            </button>
-                                            <a href="{{ route('business.details', $company->id) }}" class="detail-btn"
-                                                style="text-decoration:none; display:flex; align-items:center; justify-content:center;">
-                                                View Detail
-                                            </a>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            @empty
-                                <p>No results found.</p>
-                            @endforelse
+                            @include('front.partials.directory-items', ['list' => $list])
                         </div>
 
                         <!-- Pagination -->
@@ -700,6 +819,73 @@
             </div>
         </div>
     </section>
+
+
+    <!-- Contact Business Modal -->
+    <div class="modal fade" id="contactBusinessModal" tabindex="-1" aria-labelledby="contactBusinessLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="contactBusinessLabel">Contact Business</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="contactBusinessForm">
+                        @csrf
+                        <input type="hidden" id="business_id" name="business_id">
+
+                        <!-- Step 1 -->
+                        <div class="step1">
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" name="name"
+                                    value="{{ auth()->user()->firstname ?? '' }}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    value="{{ auth()->user()->email ?? '' }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Mobile No.</label>
+                                <input type="text" class="form-control" id="mobile" name="mobile"
+                                    value="{{ auth()->user()->mobile_number ?? '' }}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Message</label>
+                                <textarea class="form-control" id="message" name="message" rows="3"
+                                    placeholder="Write your message..." required></textarea>
+                            </div>
+
+                            <button type="button" id="sendEnquiryBtn" class="btn btn-warning w-100">
+                                Send Enquiry <i class="fas fa-paper-plane ms-1"></i>
+                            </button>
+                        </div>
+
+                        <!-- Step 2: OTP Verification -->
+                        <div class="step2" style="display:none;">
+                            <div class="mb-3 text-center">
+                                <p class="fw-bold mb-2">Enter OTP sent to your mobile number</p>
+                                <input type="text" id="otp" class="form-control text-center" maxlength="4"
+                                    placeholder="Enter 4-digit OTP" required>
+                            </div>
+                            <button type="button" id="verifyOtpBtn" class="btn btn-success w-100">Verify & Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
 @endsection
 
 @section('js')
@@ -713,57 +899,59 @@
             premium: false,
             most_rated: false
         };
+        let selectedSort = "{{ request('sort') ?? 'default' }}"; // unified for desktop & mobile
 
-        // ✅ Quick Filter Function
+        // ✅ Apply quick filters (Verified, Premium, etc.)
         function applyQuickFilter(filterType) {
             const params = new URLSearchParams(window.location.search);
-
-            // Clear conflicting filters
             params.delete('verified');
             params.delete('premium');
             params.delete('sort');
 
+            // Remove all active quick filter highlights (both desktop + mobile if exists)
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+
             switch (filterType) {
                 case 'verified':
                     params.set('verified', 'true');
+                    document.querySelectorAll('.filter-btn[data-filter="verified"]').forEach(btn => btn.classList.add('active'));
                     break;
                 case 'premium':
                     params.set('premium', 'true');
+                    document.querySelectorAll('.filter-btn[data-filter="premium"]').forEach(btn => btn.classList.add('active'));
                     break;
                 case 'top_rated':
                     params.set('sort', 'rating-high');
+                    document.querySelectorAll('.filter-btn[data-filter="top_rated"]').forEach(btn => btn.classList.add('active'));
                     break;
                 case 'most_viewed':
                     params.set('sort', 'views-high');
+                    document.querySelectorAll('.filter-btn[data-filter="most_viewed"]').forEach(btn => btn.classList.add('active'));
                     break;
             }
 
-            window.location.href = "{{ route('directory.list') }}?" + params.toString();
+            fetchDirectoryResults("{{ route('directory.list') }}?" + params.toString());
         }
 
-        // Toggle category and show subcategories
+        // ✅ Toggle category and show subcategories
         function toggleCategory(element, categoryName, categoryId) {
             const categoryWrappers = document.querySelectorAll('.category-wrapper');
             const subcategorySection = element.nextElementSibling;
 
-            // Remove active state from all categories and close their subcategories
             categoryWrappers.forEach(wrapper => {
                 const categoryItem = wrapper.querySelector('.category-item');
                 categoryItem.classList.remove('active');
                 wrapper.querySelector('.subcategory-section').style.display = 'none';
             });
 
-            // Set active state on clicked category
             element.classList.add('active');
             selectedCategory = categoryId;
-            selectedSubCategory = null; // Reset subcategory
+            selectedSubCategory = null;
             subcategorySection.style.display = 'block';
-
-            // Apply filters
             applyFilters();
         }
 
-        // Select subcategory
+        // ✅ Select subcategory
         function selectSubCategory(element, categoryId, subCategoryId) {
             const subcategoryItems = element.parentElement.querySelectorAll('p');
             subcategoryItems.forEach(item => item.classList.remove('active'));
@@ -771,12 +959,10 @@
 
             selectedCategory = categoryId;
             selectedSubCategory = subCategoryId;
-
-            // Apply filters
             applyFilters();
         }
 
-        // Search input with debounce
+        // ✅ Debounced search
         let searchTimeout;
         document.getElementById('searchInput').addEventListener('input', function () {
             clearTimeout(searchTimeout);
@@ -785,16 +971,31 @@
             }, 500);
         });
 
-        // Sort change
+        // ✅ Desktop Sort change
         document.getElementById('sortSelect').addEventListener('change', function () {
+            selectedSort = this.value;
             applyFilters();
         });
 
-        // Rating and other filters
+        // ✅ Mobile sort buttons
+        document.querySelectorAll('.sort-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedSort = this.getAttribute('data-value');
+                applyFilters();
+
+                // Close offcanvas after applying
+                const offcanvasEl = document.getElementById('offcanvasBottom');
+                const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+                if (bsOffcanvas) bsOffcanvas.hide();
+            });
+        });
+
+        // ✅ Rating / checkbox filters
         document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', function () {
                 if (this.name === 'rating') {
-                    // Clear other rating checkboxes
                     document.querySelectorAll('.filter-checkbox[name="rating"]').forEach(cb => {
                         if (cb !== this) cb.checked = false;
                     });
@@ -810,113 +1011,306 @@
             });
         });
 
-        // Apply all filters
-        function applyFilters() {
+        // ✅ Central function to apply filters (AJAX)
+        function applyFilters(pageUrl = "{{ route('directory.list') }}") {
             const params = new URLSearchParams();
 
-            // Add search
             const searchValue = document.getElementById('searchInput').value;
             if (searchValue) params.append('search', searchValue);
-
-            // Add category
             if (selectedCategory) params.append('category', selectedCategory);
-
-            // Add subcategory
             if (selectedSubCategory) params.append('subcategory', selectedSubCategory);
-
-            // Add rating
             if (selectedRating) params.append('rating', selectedRating);
-
-            // Add verified filter
             if (selectedFilters.verified) params.append('verified', 'true');
-
-            // Add premium filter
             if (selectedFilters.premium) params.append('premium', 'true');
-
-            // Add most_rated filter
             if (selectedFilters.most_rated) params.append('most_rated', 'true');
+            if (selectedSort && selectedSort !== 'default') params.append('sort', selectedSort);
 
-            // Add sorting
-            const sortValue = document.getElementById('sortSelect').value;
-            if (sortValue !== 'default') params.append('sort', sortValue);
-
-            // Redirect with filters
-            window.location.href = "{{ route('directory.list') }}?" + params.toString();
+            fetchDirectoryResults(pageUrl + "?" + params.toString());
         }
 
-        // Reset all filters
+        // ✅ AJAX fetch (for filters & pagination)
+        function fetchDirectoryResults(url) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                beforeSend: function () {
+                    $('#directory-cards').html('<div class="text-center py-5">Loading...</div>');
+                },
+                success: function (data) {
+                    $('#directory-cards').html(data);
+                    window.history.replaceState({}, '', url);
+                },
+                error: function () {
+                    $('#directory-cards').html('<div class="text-center text-danger py-5">Error loading listings.</div>');
+                }
+            });
+        }
+
+        // ✅ Pagination click (AJAX)
+        $(document).on('click', '.pagination a', function (e) {
+            e.preventDefault();
+            const pageUrl = $(this).attr('href');
+            fetchDirectoryResults(pageUrl);
+        });
+
+        // ✅ Reset filters
         function resetFilters() {
-            window.location.href = "{{ route('directory.list') }}";
+            selectedCategory = null;
+            selectedSubCategory = null;
+            selectedRating = null;
+            selectedFilters = { verified: false, premium: false, most_rated: false };
+            selectedSort = 'default';
+            window.history.replaceState({}, '', "{{ route('directory.list') }}");
+            fetchDirectoryResults("{{ route('directory.list') }}");
         }
 
-        // Contact business (you can implement modal or redirect)
-        function contactBusiness(businessId) {
-            // Implement your contact logic here
-            alert('Contact business ID: ' + businessId);
-        }
-
-        // Set active states on page load based on URL parameters
+        // ✅ Set active states on page load
         document.addEventListener('DOMContentLoaded', function () {
             const urlParams = new URLSearchParams(window.location.search);
-
-            // Set category active
             const categoryParam = urlParams.get('category');
-            if (categoryParam) {
-                const categoryEl = document.querySelector(`[data-category-id="${categoryParam}"]`);
-                if (categoryEl) {
-                    categoryEl.classList.add('active');
-                    categoryEl.nextElementSibling.style.display = 'block';
-                    selectedCategory = parseInt(categoryParam);
-                }
-            }
-
-            // Set subcategory active
             const subcategoryParam = urlParams.get('subcategory');
-            if (subcategoryParam) {
-                const subcategoryEl = document.querySelector(`[data-subcategory-id="${subcategoryParam}"]`);
-                if (subcategoryEl) {
-                    subcategoryEl.classList.add('active');
-                    selectedSubCategory = parseInt(subcategoryParam);
-                }
-            }
-
-            // Set rating
             const ratingParam = urlParams.get('rating');
-            if (ratingParam) {
-                const ratingCheckbox = document.querySelector(`.filter-checkbox[name="rating"][value="${ratingParam}"]`);
-                if (ratingCheckbox) {
-                    ratingCheckbox.checked = true;
-                    selectedRating = ratingParam;
+
+            const desktopFilter = document.querySelector('.listing-page-left');
+            const mobileFilter = document.getElementById('offcanvasExample');
+
+            function activateCategoryAndSubcategory(scope) {
+                if (!scope) return;
+                if (categoryParam) {
+                    const categoryEl = scope.querySelector(`[data-category-id="${categoryParam}"]`);
+                    if (categoryEl) {
+                        categoryEl.classList.add('active');
+                        const subSec = categoryEl.nextElementSibling;
+                        if (subSec) subSec.style.display = 'block';
+                        selectedCategory = parseInt(categoryParam);
+                    }
+                }
+                if (subcategoryParam) {
+                    const subcategoryEl = scope.querySelector(`[data-subcategory-id="${subcategoryParam}"]`);
+                    if (subcategoryEl) {
+                        subcategoryEl.classList.add('active');
+                        selectedSubCategory = parseInt(subcategoryParam);
+                    }
                 }
             }
 
-            // Set verified
-            if (urlParams.get('verified') === 'true') {
-                const verifiedCheckbox = document.querySelector('.filter-checkbox[name="verified"]');
-                if (verifiedCheckbox) {
-                    verifiedCheckbox.checked = true;
+            function activateFilters(scope) {
+                if (!scope) return;
+                if (ratingParam) {
+                    const ratingCheckbox = scope.querySelector(`.filter-checkbox[name="rating"][value="${ratingParam}"]`);
+                    if (ratingCheckbox) {
+                        ratingCheckbox.checked = true;
+                        selectedRating = ratingParam;
+                    }
+                }
+                if (urlParams.get('verified') === 'true') {
+                    const el = scope.querySelector('.filter-checkbox[name="verified"]');
+                    if (el) el.checked = true;
                     selectedFilters.verified = true;
                 }
-            }
-
-            // Set premium
-            if (urlParams.get('premium') === 'true') {
-                const premiumCheckbox = document.querySelector('.filter-checkbox[name="premium"]');
-                if (premiumCheckbox) {
-                    premiumCheckbox.checked = true;
+                if (urlParams.get('premium') === 'true') {
+                    const el = scope.querySelector('.filter-checkbox[name="premium"]');
+                    if (el) el.checked = true;
                     selectedFilters.premium = true;
                 }
-            }
-
-            // Set most_rated
-            if (urlParams.get('most_rated') === 'true') {
-                const mostRatedCheckbox = document.querySelector('.filter-checkbox[name="most_rated"]');
-                if (mostRatedCheckbox) {
-                    mostRatedCheckbox.checked = true;
+                if (urlParams.get('most_rated') === 'true') {
+                    const el = scope.querySelector('.filter-checkbox[name="most_rated"]');
+                    if (el) el.checked = true;
                     selectedFilters.most_rated = true;
                 }
             }
+
+            // ✅ Apply to both desktop and mobile filters
+            activateCategoryAndSubcategory(desktopFilter);
+            activateCategoryAndSubcategory(mobileFilter);
+            activateFilters(desktopFilter);
+            activateFilters(mobileFilter);
+
+            // ✅ Activate correct sort button in mobile
+            if (selectedSort) {
+                const btn = document.querySelector(`.sort-btn[data-value="${selectedSort}"]`);
+                if (btn) btn.classList.add('active');
+            }
         });
+
+
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            // ❤️ Wishlist toggle (instant + stable)
+            $(document).on('click', '.wishlist-btn', function (e) {
+                e.preventDefault();
+
+                const btn = $(this);
+                const businessId = btn.data('business-id');
+
+                // Instant toggle on button (not icon)
+                btn.toggleClass('text-danger');
+
+                $.ajax({
+                    url: "{{ route('business.wishlist.toggle') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        business_listing_id: businessId
+                    },
+                    success: function (res) {
+                        // Set button color based on response
+                        if (res.status === 'added') {
+                            btn.addClass('text-danger');
+                        } else if (res.status === 'removed') {
+                            btn.removeClass('text-danger');
+                        }
+                    },
+                    error: function () {
+                        alert('Please login to use wishlist.');
+                        // Revert button state on error
+                        btn.toggleClass('text-danger');
+                    }
+                });
+            });
+
+            // 📤 Share button
+            $(document).on('click', '.share-btn', function () {
+                const companyId = $(this).data('id');
+                const name = $(this).data('name');
+                const shareUrl = "{{ url('/business-details') }}/" + companyId;
+
+                if (navigator.share) {
+                    navigator.share({
+                        title: name,
+                        text: `Check out ${name} on our directory!`,
+                        url: shareUrl
+                    }).catch(() => { });
+                } else {
+                    navigator.clipboard.writeText(shareUrl);
+                    Swal.fire('Link Copied!', 'URL copied to clipboard.', 'success');
+                }
+            });
+
+            // ⋯ More button → View details
+            $(document).on('click', '.more-btn', function () {
+                window.location.href = $(this).data('url');
+            });
+
+        });
+    </script>
+
+
+    <script>
+
+        const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+
+        function contactBusiness(businessId) {
+            document.getElementById('business_id').value = businessId;
+            document.getElementById('message').value = '';
+            document.querySelector('.step1').style.display = 'block';
+            document.querySelector('.step2').style.display = 'none';
+
+          $('#contactBusinessModal').modal('show');
+
+        }
+
+
+        // Step 1: Send enquiry (or trigger OTP for guests)
+        document.getElementById('sendEnquiryBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+
+            let formData = new FormData(document.getElementById('contactBusinessForm'));
+
+            // ✅ If logged in → directly submit enquiry
+            if (isAuthenticated) {
+                submitEnquiry(formData);
+                return;
+            }
+
+            // 🚀 Guest user → send OTP first
+            fetch("{{ route('business.sendOtp') }}", {
+                method: "POST",
+                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                body: formData
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'OTP Sent!',
+                            text: 'We have sent a 4-digit OTP to your mobile number.',
+                            confirmButtonColor: '#ffc107'
+                        });
+
+                        document.querySelector('.step1').style.display = 'none';
+                        document.querySelector('.step2').style.display = 'block';
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: data.message || 'Failed to send OTP. Try again.',
+                        });
+                    }
+                })
+                .catch(() => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Unable to send OTP. Please try again later.',
+                    });
+                });
+        });
+
+        // Step 2: Verify OTP (guests only)
+        document.getElementById('verifyOtpBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+
+            let formData = new FormData(document.getElementById('contactBusinessForm'));
+            formData.append('otp', document.getElementById('otp').value);
+
+            submitEnquiry(formData);
+        });
+
+        // ✅ Common function for submitting final enquiry
+        function submitEnquiry(formData) {
+            fetch("{{ route('business.enquiry') }}", {
+                method: "POST",
+                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                body: formData
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log('Response from server:', data);
+
+                    if (data.success === true || data.success === "true") {
+                        $('#contactBusinessModal').modal('hide');
+
+                        document.getElementById('contactBusinessForm').reset();
+                        document.querySelector('.step1').style.display = 'block';
+                        document.querySelector('.step2').style.display = 'none';
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Enquiry Sent!',
+                            text: 'Your enquiry has been sent successfully!',
+                            confirmButtonColor: '#ffc107'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Invalid OTP',
+                            text: data.message || 'Please enter the correct OTP.',
+                        });
+                    }
+                })
+                .catch(() => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error sending enquiry. Please try again later.',
+                    });
+                });
+        }
     </script>
 
 @endsection

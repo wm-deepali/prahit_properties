@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Category;
+use App\Models\BusinessEnquiry;
 use App\SubCategory;
 use App\SubSubCategory;
 use App\Http\Controllers\Controller;
@@ -325,5 +326,97 @@ class BusinessListingController extends Controller
             return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
         }
     }
+
+
+    public function sendEnquiryOtp(Request $request)
+    {
+        $otp = rand(1000, 9999);
+
+        // Store OTP temporarily (session or cache)
+        session(['otp' => $otp, 'otp_mobile' => $request->mobile]);
+
+        // Simulate sending SMS (replace with actual SMS API)
+        $message = "{$otp} is the One Time Password(OTP) to verify your MOB number at Web Mingo, This OTP is Usable only once and is valid for 10 min,PLS DO NOT SHARE THE OTP WITH ANYONE";
+        $response = $this->sendOtp($request->mobile, $message);
+        if (!$response) {
+            return response()->json(['success' => false, 'message' => 'SMS sending failed!'], 500);
+        }
+
+        return response()->json(['success' => true, 'message' => 'OTP sent successfully!']);
+    }
+
+    public function submitEnquiry(Request $request)
+    {
+        // If user is not logged in, verify OTP
+        if (!auth()->check()) {
+            if (session('otp') != $request->otp || session('otp_mobile') != $request->mobile) {
+                return response()->json(['success' => false, 'message' => 'Invalid OTP']);
+            }
+        }
+
+        // Save enquiry
+        BusinessEnquiry::create([
+            'business_id' => $request->business_id,
+            'name' => $request->name,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
+            'message' => $request->message,
+        ]);
+
+        // Clear OTP after success (only for guests)
+        if (!auth()->check()) {
+            session()->forget(['otp', 'otp_mobile']);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function sendOtp($mobile, $message)
+    {
+        // Fetch settings
+        $authKey = env('SMS_AUTH_KEY', '133780APe3PZcx5850ea44');
+        $sender = env('SMS_SENDER_ID', 'WMINGO');
+        $peId = env('SMS_PE_ID', '1301160576431389865');
+
+        $templateId = env('SMS_DLT_ID', '1307161465983326774');
+
+        $request_parameter = [
+            'authkey' => $authKey,
+            'mobiles' => $mobile,
+            'sender' => $sender,
+            'message' => urlencode($message),
+            'route' => '4',
+            'country' => '91',
+        ];
+
+        $url = "http://sms.webmingo.in/api/sendhttp.php?";
+        foreach ($request_parameter as $key => $val) {
+            $url .= $key . '=' . $val . '&';
+        }
+
+        if ($templateId) {
+            $url .= 'DLT_TE_ID=' . $templateId . '&';
+        }
+        if ($peId) {
+            $url .= 'PE_ID=' . $peId . '&';
+        }
+
+        $url = rtrim($url, "&");
+
+        try {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            $output = curl_exec($ch);
+            curl_close($ch);
+            return true;
+        } catch (\Exception $e) {
+            // dd($e->getMessage());
+            \Log::error('SMS sending failed: ' . $e->getMessage());
+            return false;
+        }
+    }
+
 
 }

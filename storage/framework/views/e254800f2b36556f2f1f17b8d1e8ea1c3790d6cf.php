@@ -92,10 +92,6 @@
         padding: 4px;
     }
 
-    .action-btn i {
-        color: #666;
-    }
-
     .listing-features {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
@@ -2015,6 +2011,68 @@
 
     </script>
 
+  <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            // ❤️ Wishlist toggle (instant + stable)
+            $(document).on('click', '.wishlist-btn', function (e) {
+                e.preventDefault();
+
+                const btn = $(this);
+                const propertyId = btn.data('property-id');
+
+                // Instant toggle on button (not icon)
+                btn.toggleClass('text-danger');
+
+                $.ajax({
+                    url: "<?php echo e(route('wishlist.toggle')); ?>",
+                    type: "POST",
+                    data: {
+                        _token: "<?php echo e(csrf_token()); ?>",
+                        property_id: propertyId
+                    },
+                    success: function (res) {
+                        // Set button color based on response
+                        console.log(res.added,res.added == true);
+                        
+                        if (res.added == true) {
+                            btn.addClass('text-danger');
+                        } else if (res.added == false) {
+                            btn.removeClass('text-danger');
+                        }
+                    },
+                    error: function () {
+                        alert('Please login to use wishlist.');
+                        // Revert button state on error
+                        btn.toggleClass('text-danger');
+                    }
+                });
+            });
+
+            // 📤 Share button
+            $(document).on('click', '.share-btn', function () {
+                const name = $(this).data('name');
+                const shareUrl = "<?php echo e(url('/property')); ?>/" + name;
+
+                if (navigator.share) {
+                    navigator.share({
+                        title: name,
+                        text: `Check out ${name} on our property!`,
+                        url: shareUrl
+                    }).catch(() => { });
+                } else {
+                    navigator.clipboard.writeText(shareUrl);
+                    Swal.fire('Link Copied!', 'URL copied to clipboard.', 'success');
+                }
+            });
+
+            // ⋯ More button → View details
+            $(document).on('click', '.more-btn', function () {
+                window.location.href = $(this).data('url');
+            });
+
+        });
+    </script>
 
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.front.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/listing-list.blade.php ENDPATH**/ ?>

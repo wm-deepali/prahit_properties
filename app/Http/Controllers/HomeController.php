@@ -529,6 +529,10 @@ class HomeController extends AppController
 		// Get all categories with subcategories for filter
 		$categories = \App\WebDirectoryCategory::with('subcategories')->get();
 
+		if ($request->ajax()) {
+			return view('front.partials.directory-items', compact('list'))->render();
+		}
+
 		return view('front.directory-listing', compact('list', 'categories'));
 	}
 
@@ -590,7 +594,12 @@ class HomeController extends AppController
 			'getCity'
 		])->where('slug', $slug)->first();
 		$property_detail = $property;
-		$amenities = Amenity::whereIn('id', explode(',', $property_detail->amenities))->get();
+		
+		if ($property_detail->amenities) {
+			$amenities = Amenity::whereIn('id', explode(',', $property_detail->amenities))->get();
+		} else {
+			$amenities = [];
+		}
 
 
 		// Log the view

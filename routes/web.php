@@ -11,6 +11,10 @@
 |
 */
 
+Route::post('/business/send-otp', [App\Http\Controllers\Admin\BusinessListingController::class, 'sendEnquiryOtp'])->name('business.sendOtp');
+Route::post('/business/enquiry', [App\Http\Controllers\Admin\BusinessListingController::class, 'submitEnquiry'])->name('business.enquiry');
+
+
 Route::get('/user/pricing', function () {
 	return view('front.user.pricing');
 })->name('pricing');
@@ -484,6 +488,9 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('user/verify/mobile', 'HomeController@userVerifyMobile')->name('user.userVerifyMobile');
 	Route::post('user/email-mobile/verify/otp', 'HomeController@emailMobileOtpVerification')->name('user.emailMobileOtpVerification');
 	Route::post('/wishlist/toggle', [App\Http\Controllers\WishlistController::class, 'toggle'])->name('wishlist.toggle');
+	Route::post('/business/wishlist/toggle', [App\Http\Controllers\BusinessWishlistController::class, 'toggle'])
+    ->name('business.wishlist.toggle');
+
 });
 
 //Enquery Routes 
