@@ -15,26 +15,18 @@ Route::post('/business/send-otp', [App\Http\Controllers\Admin\BusinessListingCon
 Route::post('/business/enquiry', [App\Http\Controllers\Admin\BusinessListingController::class, 'submitEnquiry'])->name('business.enquiry');
 
 
-Route::get('/user/pricing', function () {
-	return view('front.user.pricing');
-})->name('pricing');
+Route::get('/user/pricing', [App\Http\Controllers\PricingController::class, 'index'])->name('pricing');
+
 
 Route::get('/user/all-inquries', [App\Http\Controllers\User\UserController::class, 'allInquiries'])->name('all-inquries');
 Route::get('/user/my-wishlist', [App\Http\Controllers\WishlistController::class, 'myWishlist'])->name('my-wishlist');
 Route::get('/user/my-activities', [App\Http\Controllers\User\UserController::class, 'myActivities'])->name('my-activities');
 Route::get('user/sent-inquries', [App\Http\Controllers\User\UserController::class, 'sentEnquiries'])->name('user.sent-inquiries');
-
-
-Route::get('/user/payments-invoice', function () {
-	return view('front.user.invoice');
-})->name('payments-invoice');
-Route::get('/user/invoice-details', function () {
-	return view('front.user.invoice-details');
-})->name('invoice-details');
-
-Route::get('/user/current-subscriptions', function () {
-	return view('front.user.current-subscriptions');
-})->name('current-subscriptions');
+Route::get('/user/current-subscriptions', [App\Http\Controllers\PricingController::class, 'subscriptions'])->name('current-subscriptions');
+Route::get('/user/payments-invoice', [App\Http\Controllers\PricingController::class, 'invoices'])->name('payments-invoice');
+Route::get('/user/invoice-details/{subscription}', [App\Http\Controllers\PricingController::class, 'invoiceDetails'])->name('invoice-details');
+Route::get('/user/invoice/download/{subscription}', [App\Http\Controllers\PricingController::class, 'downloadInvoice'])
+    ->name('invoice.download');
 
 Route::get('/profile-page/{slug?}', function ($slug) {
 	return view('front.profile-page', compact('slug'));
@@ -429,6 +421,8 @@ Route::group(['middleware' => ['auth', 'admin.check']], function () {
 		Route::resource('/faq-categories', Admin\FaqCategoryController::class);
 		Route::resource('/faqs', Admin\FaqController::class);
 		Route::resource('/client-reels', Admin\ClientReelController::class);
+		Route::resource('packages', Admin\PackageController::class);
+
 	});
 
 
@@ -489,12 +483,15 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('user/email-mobile/verify/otp', 'HomeController@emailMobileOtpVerification')->name('user.emailMobileOtpVerification');
 	Route::post('/wishlist/toggle', [App\Http\Controllers\WishlistController::class, 'toggle'])->name('wishlist.toggle');
 	Route::post('/business/wishlist/toggle', [App\Http\Controllers\BusinessWishlistController::class, 'toggle'])
-    ->name('business.wishlist.toggle');
+		->name('business.wishlist.toggle');
+	Route::post('subscription/store', [App\Http\Controllers\PricingController::class, 'Store'])->name('subscription.store');
+
 
 });
 
 //Enquery Routes 
 Route::post('send/enquery', 'HomeController@agent_enquiry')->name('enquery.agent_enquiry');
+Route::post('agent/send-otp', 'HomeController@sendAgentEnquiryOtp')->name('agent.send-otp');
 
 Route::post('master/property/feedback/create', 'Admin\FeedbackController@createFeedback')->name('admin.createFeedback');
 

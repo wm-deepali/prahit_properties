@@ -1443,12 +1443,77 @@
         </div>
 
     </section>
+
+    <!-- Contact Business Modal -->
+    <div class="modal fade" id="contactOwnerModal" tabindex="-1" aria-labelledby="contactBusinessLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="contactBusinessLabel">Contact Business</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="contactOwnerForm">
+                        @csrf
+                        <input type="hidden" id="property_id" name="property_id">
+
+                        <!-- Step 1 -->
+                        <div class="step1">
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" name="name"
+                                    value="{{ auth()->user()->firstname ?? '' }}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    value="{{ auth()->user()->email ?? '' }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Mobile No.</label>
+                                <input type="text" class="form-control" id="mobile_number" name="mobile_number"
+                                    value="{{ auth()->user()->mobile_number ?? '' }}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Interested In</label>
+                                <select class="form-control" name="interested_in" id='interested_in' required>
+                                    <option value=""> Select </option>
+                                    <option value="1">Site Visit</option>
+                                    <option value="2">Immediate Purchase</option>
+                                    <option value="3">Home Loan</option>
+                                </select>
+                            </div>
+
+                            <button type="button" id="sendEnquiryBtn" class="btn btn-warning w-100">
+                                Send Enquiry <i class="fas fa-paper-plane ms-1"></i>
+                            </button>
+                        </div>
+
+                        <!-- Step 2: OTP Verification -->
+                        <div class="step2" style="display:none;">
+                            <div class="mb-3 text-center">
+                                <p class="fw-bold mb-2">Enter OTP sent to your mobile number</p>
+                                <input type="text" id="otp" class="form-control text-center" maxlength="4"
+                                    placeholder="Enter 4-digit OTP" required>
+                            </div>
+                            <button type="button" id="verifyOtpBtn" class="btn btn-success w-100">Verify & Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 @section('js')
     <script>
 
         document.addEventListener('DOMContentLoaded', () => {
-             // Select elements
+            // Select elements
             const locationContainerMobile = document.getElementById('locationsContainerMobile');
             const locationButtonsMobile = Array.from(locationContainerMobile.querySelectorAll('.location-btn'));
 
@@ -1600,8 +1665,8 @@
             if (offcanvas) {
                 offcanvas.addEventListener('shown.bs.offcanvas', restoreFilters);
             }
- 
-            
+
+
             // For sub-category buttons which are buttons with active class toggling
             document.querySelectorAll('.sub-category-mobile-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -2000,7 +2065,7 @@
 
     </script>
 
-  <script>
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
 
             // ❤️ Wishlist toggle (instant + stable)
@@ -2022,8 +2087,8 @@
                     },
                     success: function (res) {
                         // Set button color based on response
-                        console.log(res.added,res.added == true);
-                        
+                        console.log(res.added, res.added == true);
+
                         if (res.added == true) {
                             btn.addClass('text-danger');
                         } else if (res.added == false) {
@@ -2063,4 +2128,117 @@
         });
     </script>
 
+    <script>
+
+        const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+
+        function contactOwner(propertyId) {
+            document.getElementById('property_id').value = propertyId;
+            document.getElementById('interested_in').value = '';
+            document.querySelector('.step1').style.display = 'block';
+            document.querySelector('.step2').style.display = 'none';
+
+            $('#contactOwnerModal').modal('show');
+
+        }
+
+
+        // Step 1: Send enquiry (or trigger OTP for guests)
+        document.getElementById('sendEnquiryBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+
+            let formData = new FormData(document.getElementById('contactOwnerForm'));
+
+            // ✅ If logged in → directly submit enquiry
+            if (isAuthenticated) {
+                submitEnquiry(formData);
+                return;
+            }
+
+            // 🚀 Guest user → send OTP first
+            fetch("{{ route('agent.send-otp') }}", {
+                method: "POST",
+                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                body: formData
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'OTP Sent!',
+                            text: 'We have sent a 4-digit OTP to your mobile number.',
+                            confirmButtonColor: '#ffc107'
+                        });
+
+                        document.querySelector('.step1').style.display = 'none';
+                        document.querySelector('.step2').style.display = 'block';
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: data.message || 'Failed to send OTP. Try again.',
+                        });
+                    }
+                })
+                .catch(() => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Unable to send OTP. Please try again later.',
+                    });
+                });
+        });
+
+        // Step 2: Verify OTP (guests only)
+        document.getElementById('verifyOtpBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+
+            let formData = new FormData(document.getElementById('contactOwnerForm'));
+            formData.append('otp', document.getElementById('otp').value);
+
+            submitEnquiry(formData);
+        });
+
+        // ✅ Common function for submitting final enquiry
+        function submitEnquiry(formData) {
+            fetch("{{ route('enquery.agent_enquiry') }}", {
+                method: "POST",
+                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                body: formData
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log('Response from server:', data);
+
+                    if (data.success === true || data.success === "true") {
+                        $('#contactOwnerModal').modal('hide');
+
+                        document.getElementById('contactOwnerForm').reset();
+                        document.querySelector('.step1').style.display = 'block';
+                        document.querySelector('.step2').style.display = 'none';
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Enquiry Sent!',
+                            text: 'Your enquiry has been sent successfully!',
+                            confirmButtonColor: '#ffc107'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Invalid OTP',
+                            text: data.message || 'Please enter the correct OTP.',
+                        });
+                    }
+                })
+                .catch(() => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error sending enquiry. Please try again later.',
+                    });
+                });
+        }
+    </script>
 @endsection

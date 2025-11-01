@@ -122,10 +122,10 @@
 
             <div class="user-details">
               <h4>👤 Customer Details</h4>
-              <p><strong>Name:</strong> Rohan Sharma</p>
-              <p><strong>Email:</strong> rohan.sharma@example.com</p>
-              <p><strong>Mobile:</strong> +91-9123456789</p>
-              <p><strong>Address:</strong> Andheri West, Mumbai</p>
+              <p><strong>Name:</strong> {{ $user->firstname }} {{ $user->lastname }}</p>
+              <p><strong>Email:</strong> {{ $user->email }}</p>
+              <p><strong>Mobile:</strong> {{ $user->mobile_number }}</p>
+              <p><strong>Address:</strong> {{ $user->address ?? 'N/A' }}</p>
             </div>
           </div>
 
@@ -134,22 +134,29 @@
             <table class="invoice-table">
               <thead>
                 <tr>
-                  <th>Property ID</th>
-                  <th>Property Title</th>
-                  <th>Category</th>
-                  <th>Posted On</th>
+                  <th>Package</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Transaction ID</th>
                   <th>Amount</th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>#P-1023</td>
-                  <td>Luxury Apartment in Andheri</td>
-                  <td>Residential</td>
-                  <td>23 Oct 2025</td>
-                  <td>₹1,20,00,000</td>
-                  <td><span class="badge bg-success text-light">Paid</span></td>
+                  <td>{{ $subscription->package->name ?? 'N/A' }}</td>
+                  <td>{{ \Carbon\Carbon::parse($subscription->start_date)->format('d M Y') }}</td>
+                  <td>{{ \Carbon\Carbon::parse($subscription->end_date)->format('d M Y') }}</td>
+                  <td>{{ $subscription->payment->transaction_id ?? 'N/A' }}</td>
+                  <td>₹{{ number_format($subscription->amount, 2) }}</td>
+                  <td>
+                    @php
+                      $status = $subscription->payment_status ?? $subscription->payment->status ?? 'pending';
+                    @endphp
+                    <span class="badge bg-{{ $status == 'success' ? 'success' : ($status == 'pending' ? 'warning' : 'danger') }} text-light">
+                      {{ ucfirst($status) }}
+                    </span>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -157,12 +164,12 @@
 
           <!-- Total -->
           <div class="total-section">
-            Total Amount Paid: ₹1,20,00,000
+            Total Amount Paid: ₹{{ number_format($subscription->amount, 2) }}
           </div>
 
           <!-- Download Button -->
           <div class="text-end mt-4">
-            <a href="" class="btn-download">
+            <a href="#" class="btn-download">
               <i class="fas fa-file-pdf"></i> Download PDF
             </a>
           </div>

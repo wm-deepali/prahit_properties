@@ -1,11 +1,10 @@
 @extends('layouts.front.app')
 
 @section('title')
-<title>Pricing</title>
+  <title>Pricing</title>
 @endsection
 
 @section('content')
-
 <style>
 .pricing-section {
   text-align: center;
@@ -90,8 +89,54 @@
   <p>Compare features and choose the right plan for your business.</p>
 
   <div class="pricing-table">
+    @forelse ($packages as $package)
+      <div class="pricing-card">
+        <div class="header free">
+          <h3>{{ $package->name }}</h3>
+          <p class="price">₹{{ number_format($package->price, 2) }}
+            @if($package->duration && $package->duration_unit)
+              / {{ $package->duration }} {{ ucfirst($package->duration_unit) }}
+            @endif
+          </p>
+          <button class="btn btn-primary w-100 choose-plan-btn" 
+                  data-id="{{ $package->id }}" 
+                  data-name="{{ $package->name }}"
+                  data-price="{{ $package->price }}"
+                  data-description="{{ $package->description ?? 'Subscription Plan' }}">
+            Choose Plan
+          </button>
+        </div>
 
-    <!-- Free Plan -->
+        <table>
+          <tr><td>Business Listing</td><td>{{ $package->business_listing ? 'Yes' : 'No' }}</td></tr>
+          <tr><td>Total Services You Can List</td><td>{{ $package->service_limit ?? 'Unlimited' }}</td></tr>
+          <tr><td>Profile Page with Contact Form</td><td>{{ $package->profile_page_with_contact ? 'Yes' : 'No' }}</td></tr>
+          <tr><td>Business Logo & Banner</td><td>{{ $package->business_logo_banner ? 'Yes' : 'No' }}</td></tr>
+          <tr><td>Appear in Local Search Results</td><td>{{ $package->appear_in_search ?? '—' }}</td></tr>
+          <tr><td>Verified Badge</td><td>{{ $package->verified_badge ? 'Yes' : 'No' }}</td></tr>
+          <tr><td>Premium Badge</td><td>{{ $package->premium_badge ? 'Yes' : 'No' }}</td></tr>
+          <tr><td>Image Upload</td><td>{{ $package->image_upload_limit ?? '—' }}</td></tr>
+          <tr><td>Video Upload</td><td>{{ $package->video_upload ? 'Yes' : 'No' }}</td></tr>
+          <tr><td>Lead Enquiries</td><td>{{ $package->lead_enquiries ?? '—' }}</td></tr>
+          <tr><td>Response Rate</td><td>{{ $package->response_rate ?? '—' }}</td></tr>
+          <tr><td>Featured in “Top Service Providers”</td><td>{{ $package->featured_in_top ? 'Yes' : 'No' }}</td></tr>
+          <tr><td>Customer Support</td><td>{{ $package->customer_support ?? '—' }}</td></tr>
+          <tr><td>Lead Alerts via SMS/Email</td><td>{{ $package->lead_alerts ? 'Yes' : 'No' }}</td></tr>
+          <tr><td>Validity</td><td>
+            @if($package->duration && $package->duration_unit)
+              {{ $package->duration }} {{ ucfirst($package->duration_unit) }}
+            @else
+              —
+            @endif
+          </td></tr>
+        </table>
+      </div>
+    @empty
+      <p>No packages available at this time.</p>
+    @endforelse
+
+
+      <!-- Free Plan -->
     <div class="pricing-card">
       <div class="header free">
         <h3>Free</h3>
@@ -206,8 +251,189 @@
       <!--  <h5>Price: ₹9,999 / 12 Months</h5>-->
       <!--</div>-->
     </div>
-
+    
   </div>
 </section>
 
+<!-- Payment Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Complete Your Payment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center">
+        <input type="hidden" id="selected_package_id">
+        <input type="hidden" id="selected_package_name">
+        <input type="hidden" id="selected_package_amount">
+        <input type="hidden" id="selected_package_description">
+
+        <p>Choose your preferred payment method:</p>
+
+        <button class="btn btn-success w-100 my-2" id="payOnlineBtn">
+          <i class="fa fa-credit-card"></i> Pay with Razorpay
+        </button>
+
+        <button class="btn btn-secondary w-100 my-2" data-bs-dismiss="modal">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+@endsection
+
+@section('js')
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const isLoggedIn = @json(Auth::check());
+  const csrfToken = "{{ csrf_token() }}";
+  const redirectAfterPayment = "{{ route('user.dashboard') }}";
+
+  $('.choose-plan-btn').click(function() {
+      const packageId = $(this).data('id');
+      const name = $(this).data('name');
+      const price = $(this).data('price');
+      const description = $(this).data('description');
+
+      if (!isLoggedIn) {
+          Swal.fire({
+              icon: 'warning',
+              title: 'Login Required',
+              text: 'Please login to continue with your plan selection.',
+              showCancelButton: true,
+              confirmButtonText: 'Login / Signup',
+              cancelButtonText: 'Cancel'
+          }).then(result => {
+              if (result.isConfirmed) {
+                  $('#signin').modal('show');
+              }
+          });
+      } else {
+          $('#selected_package_id').val(packageId);
+          $('#selected_package_name').val(name);
+          $('#selected_package_amount').val(price);
+          $('#selected_package_description').val(description);
+          $('#paymentModal').modal('show');
+      }
+  });
+
+  $('#payOnlineBtn').click(function () {
+    const selectedPackage = {
+        id: $('#selected_package_id').val(),
+        name: $('#selected_package_name').val(),
+        amount: $('#selected_package_amount').val(),
+        description: $('#selected_package_description').val()
+    };
+
+    // ✅ Fake Payment Simulation
+    Swal.fire({
+        icon: 'info',
+        title: 'Testing Mode',
+        text: 'Simulating payment success...',
+        timer: 1500,
+        showConfirmButton: false,
+        willClose: () => {
+            // simulate a fake Razorpay payment ID
+            const fakeResponse = { razorpay_payment_id: 'test_payment_' + Date.now() };
+
+            fetch("{{ route('subscription.store') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    razorpay_payment_id: fakeResponse.razorpay_payment_id,
+                    package_id: selectedPackage.id,
+                    payment_method: "test" // ✅ mark this as test mode
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Subscription Activated!',
+                        text: 'Test subscription created successfully.'
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: data.message || 'Test subscription failed.'
+                    });
+                }
+            });
+        }
+    });
+});
+
+
+  // $('#payOnlineBtn').click(function () {
+  //     const selectedPackage = {
+  //         id: $('#selected_package_id').val(),
+  //         name: $('#selected_package_name').val(),
+  //         amount: $('#selected_package_amount').val() * 100, // in paise
+  //         description: $('#selected_package_description').val()
+  //     };
+
+  //     const options = {
+  //         key: "{{ config('services.razorpay.key') }}",
+  //         amount: selectedPackage.amount,
+  //         currency: "INR",
+  //         name: "Flippingo",
+  //         description: selectedPackage.description,
+  //         image: "{{ asset('logo.png') }}",
+  //         handler: function (response) {
+  //             fetch("{{ route('subscription.store') }}", {
+  //                 method: "POST",
+  //                 headers: {
+  //                     "Content-Type": "application/json",
+  //                     "X-CSRF-TOKEN": csrfToken
+  //                 },
+  //                 body: JSON.stringify({
+  //                     razorpay_payment_id: response.razorpay_payment_id,
+  //                     package_id: selectedPackage.id,
+  //                     payment_method: "razorpay"
+  //                 })
+  //             })
+  //             .then(res => res.json())
+  //             .then(data => {
+  //                 if (data.success) {
+  //                     Swal.fire({
+  //                         icon: 'success',
+  //                         title: 'Subscription Activated!',
+  //                         text: 'Your subscription has been activated successfully.'
+  //                     }).then(() => {
+  //                         window.location.href = redirectAfterPayment;
+  //                     });
+  //                 } else {
+  //                     Swal.fire({
+  //                         icon: 'error',
+  //                         title: 'Error!',
+  //                         text: data.message || 'Payment was successful but subscription failed.'
+  //                     });
+  //                 }
+  //             });
+  //         },
+  //         prefill: {
+  //             name: "{{ Auth::user()->name ?? '' }}",
+  //             email: "{{ Auth::user()->email ?? '' }}"
+  //         },
+  //         theme: {
+  //             color: "#0d1b3e"
+  //         }
+  //     };
+
+  //     const rzp = new Razorpay(options);
+  //     rzp.open();
+  // });
+});
+</script>
 @endsection

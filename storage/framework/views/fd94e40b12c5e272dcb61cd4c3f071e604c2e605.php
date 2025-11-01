@@ -161,16 +161,16 @@
 
 										<div class="property-featured-btn">
 											<ul>
-												<li>
-													<button class="btn btn-fill" type="button" data-toggle="modal"
-														data-target="#contact-agent"
-														onclick='window.active_listing_id = "<?php echo e($property_detail->id); ?>"'
-														<?php if(auth()->check() && $property_detail->user_id === auth()->id()): ?>
-														disabled <?php endif; ?>>
-														Contact Agent
-													</button>
+												<!-- <li>
+																<button class="btn btn-fill" type="button" data-toggle="modal"
+																	data-target="#contact-agent"
+																	onclick='window.active_listing_id = "<?php echo e($property_detail->id); ?>"'
+																	<?php if(auth()->check() && $property_detail->user_id === auth()->id()): ?>
+																	disabled <?php endif; ?>>
+																	Contact Agent
+																</button>
 
-												</li>
+															</li> -->
 												<li>
 													<button type="button" class="btn btn-outline"
 														onclick="claim('<?php echo e($property_detail->id); ?>')">
@@ -361,7 +361,7 @@
 							<h3>Contact Agent</h3>
 						</div>
 						<div class="property-contact">
-							<form method="post" action="<?php echo e(url('send/enquery')); ?>">
+							<form id="enquiryForm">
 								<?php echo csrf_field(); ?>
 								<div class="form-group row">
 									<div class="col-sm-12">
@@ -402,7 +402,7 @@
 
 								<div class="form-group row">
 									<div class="col-sm-12 text-center">
-										<button class="btn btn-submit" type="submit" <?php if(auth()->check() && $property_detail->user_id === auth()->id()): ?> disabled <?php endif; ?>>
+										<button type="submit" class="btn btn-submit" id="sendEnquiryBtn" <?php if(auth()->check() && $property_detail->user_id === auth()->id()): ?> disabled <?php endif; ?>>
 											Send Enquiry
 										</button>
 
@@ -532,6 +532,37 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- OTP Verification Modal -->
+	<div class="modal fade" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content p-4">
+				<div class="modal-header border-0">
+					<h5 class="modal-title" id="otpModalLabel">Verify Mobile Number</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+
+				<div class="modal-body">
+					<div id="otpStep1">
+						<label>Enter your mobile number</label>
+						<input type="number" id="otpMobile" class="form-control mb-3" placeholder="Enter mobile number">
+						<button type="button" id="sendOtpBtn" class="btn btn-primary w-100">Send OTP</button>
+					</div>
+
+					<div id="otpStep2" style="display: none;">
+						<label>Enter OTP</label>
+						<input type="number" id="otpCode" class="form-control mb-3" placeholder="Enter OTP">
+						<button type="button" id="verifyOtpBtn" class="btn btn-success w-100">Verify OTP</button>
+						<p class="text-center mt-2">
+							Didn’t receive OTP? <a href="#" id="resendOtp">Resend</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 <?php $__env->stopSection(); ?>
 
 
@@ -569,8 +600,8 @@
 			// Property has saved lat/lng; use those
 			createMap(<?php echo e($property_detail->latitude); ?>, <?php echo e($property_detail->longitude); ?>);
 		<?php else: ?>
-																	// Use browser geolocation or default
-																	if (navigator.geolocation) {
+																					// Use browser geolocation or default
+																					if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function (pos) {
 					createMap(pos.coords.latitude, pos.coords.longitude);
 				}, function () {
@@ -590,7 +621,13 @@
 					var submissionId = button.getAttribute('data-submission');
 
 					<?php if(!Auth::user()): ?>
-						alert('Please login to manage your wishlist.');
+						Swal.fire({
+							icon: 'info',
+							title: 'Login Required',
+							text: 'Please login to manage your wishlist.',
+							confirmButtonColor: '#3085d6',
+							confirmButtonText: 'OK'
+						});
 						return;
 					<?php endif; ?>
 
@@ -605,11 +642,30 @@
 						.then(data => {
 							if (data.added) {
 								button.textContent = '❤️ Added to Wishlist';
+								Swal.fire({
+									icon: 'success',
+									title: 'Added!',
+									text: 'Property added to your wishlist.',
+									timer: 1500,
+									showConfirmButton: false
+								});
 							} else {
 								button.textContent = '♡ Add to Wishlist';
+								Swal.fire({
+									icon: 'info',
+									title: 'Removed',
+									text: 'Property removed from your wishlist.',
+									timer: 1500,
+									showConfirmButton: false
+								});
 							}
 						}).catch(() => {
-							alert('Could not update wishlist. Please try again.');
+							Swal.fire({
+								icon: 'error',
+								title: 'Oops...',
+								text: 'Could not update wishlist. Please try again.',
+								confirmButtonColor: '#d33'
+							});
 						});
 				});
 			}
@@ -705,8 +761,134 @@
 			tmp.innerHTML = html;
 			return tmp.textContent || tmp.innerText || "";
 		}
+
+
+		document.addEventListener("DOMContentLoaded", function () {
+			const enquiryForm = document.querySelector(".property-contact form");
+			const sendEnquiryBtn = document.getElementById("sendEnquiryBtn");
+
+			// only trigger OTP if user not logged in
+			<?php if(!Auth::check()): ?>
+				sendEnquiryBtn.addEventListener("click", function (e) {
+					e.preventDefault(); // ✅ stops page reload
+					const mobile = enquiryForm.querySelector('input[name="mobile_number"]').value.trim();
+					if (!mobile) {
+						Swal.fire({
+							icon: 'warning',
+							title: 'Mobile Number Required',
+							text: 'Please enter your mobile number before continuing.',
+						});
+						return;
+					}
+					// open OTP modal
+					$('#otpModal').modal('show'); 
+					document.getElementById("otpMobile").value = mobile;
+
+				});
+			<?php else: ?>
+				// logged in → submit directly
+				sendEnquiryBtn.addEventListener("click", function () {
+					let formData = new FormData(enquiryForm); // ✅ use existing variable
+					submitEnquiry(formData);
+				});
+			<?php endif; ?>
+
+			// Send OTP
+			document.getElementById("sendOtpBtn").addEventListener("click", function () {
+				const mobile_number = document.getElementById("otpMobile").value.trim();
+				if (!mobile_number) {
+					Swal.fire({
+						icon: 'warning',
+						title: 'Missing Mobile Number',
+						text: 'Please enter a mobile number to send OTP.',
+					});
+					return;
+				}
+
+				fetch("<?php echo e(route('agent.send-otp')); ?>", {
+					method: "POST",
+					headers: {
+						"X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({ mobile_number })
+				})
+					.then(res => res.json())
+					.then(data => {
+						if (data.success) {
+							Swal.fire({
+								icon: 'info',
+								title: 'OTP Sent!',
+								text: 'We have sent a 4-digit OTP to your mobile number.',
+								confirmButtonColor: '#ffc107'
+							});
+							document.getElementById("otpStep1").style.display = "none";
+							document.getElementById("otpStep2").style.display = "block";
+						} else {
+							Swal.fire({
+								icon: 'error',
+								title: 'Failed to Send OTP',
+								text: data.message || "Failed to send OTP",
+							});
+						}
+					});
+			});
+
+			// Verify OTP
+			document.getElementById("verifyOtpBtn").addEventListener("click", function (e) {
+				e.preventDefault();
+
+				let formData = new FormData(document.getElementById('enquiryForm'));
+				formData.append('otp', document.getElementById('otpCode').value);
+
+				submitEnquiry(formData);
+			});
+			// Resend OTP
+			document.getElementById("resendOtp").addEventListener("click", function (e) {
+				e.preventDefault();
+				document.getElementById("sendOtpBtn").click();
+			});
+
+
+			// ✅ Common function for submitting final enquiry
+			function submitEnquiry(formData) {
+				fetch("<?php echo e(route('enquery.agent_enquiry')); ?>", {
+					method: "POST",
+					headers: { 'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>' },
+					body: formData
+				})
+					.then(res => res.json())
+					.then(data => {
+
+						if (data.success === true || data.success === "true") {
+							console.log('Response from server:', data);
+							$('#otpModal').modal('hide');
+
+							document.getElementById('enquiryForm').reset();
+
+							Swal.fire({
+								icon: 'success',
+								title: 'Enquiry Sent!',
+								text: 'Your enquiry has been sent successfully!',
+								confirmButtonColor: '#ffc107'
+							});
+						} else {
+							Swal.fire({
+								icon: 'error',
+								title: 'Invalid OTP',
+								text: data.message || 'Please enter the correct OTP.',
+							});
+						}
+					})
+					.catch(() => {
+						Swal.fire({
+							icon: 'error',
+							title: 'Error',
+							text: 'Error sending enquiry. Please try again later.',
+						});
+					});
+			}
+		});
 	</script>
-
-
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.front.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/property_detail.blade.php ENDPATH**/ ?>

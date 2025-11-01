@@ -194,6 +194,17 @@
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPackages" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-box"></i> Packages
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownPackages">
+                                    <a class="dropdown-item" href="{{ route('admin.packages.index') }}">Manage
+                                        Packages</a>
+                                </div>
+                            </li>
+
+                            <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-cogs"></i> Home Page Settings

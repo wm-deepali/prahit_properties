@@ -15,6 +15,7 @@
         "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
+        "razorpay/razorpay": "^2.9",
         "stevebauman/location": "^6.3",
         "symfony/polyfill-php72": "^1.31",
         "yajra/laravel-datatables-oracle": "^9.19"

@@ -1225,6 +1225,75 @@ class HomeController extends AppController
 		return 'Package Deleted Successfully.';
 	}
 
+
+	public function sendAgentEnquiryOtp(Request $request)
+	{
+		$otp = rand(1000, 9999);
+
+		// Store OTP temporarily
+		session([
+			'agent_otp' => $otp,
+			'agent_otp_mobile' => $request->mobile_number,
+		]);
+
+		// Simulate sending SMS (replace with actual SMS API)
+		$message = "{$otp} is the One Time Password(OTP) to verify your MOB number at Web Mingo, This OTP is Usable only once and is valid for 10 min,PLS DO NOT SHARE THE OTP WITH ANYONE";
+		$response = $this->sendOtp($request->mobile_number, $message);
+		if (!$response) {
+			return response()->json(['success' => false, 'message' => 'SMS sending failed!'], 500);
+		}
+
+		return response()->json(['success' => true, 'message' => 'OTP sent successfully!']);
+	}
+
+
+	public function sendOtp($mobile, $message)
+	{
+		// Fetch settings
+		$authKey = env('SMS_AUTH_KEY', '133780APe3PZcx5850ea44');
+		$sender = env('SMS_SENDER_ID', 'WMINGO');
+		$peId = env('SMS_PE_ID', '1301160576431389865');
+
+		$templateId = env('SMS_DLT_ID', '1307161465983326774');
+
+		$request_parameter = [
+			'authkey' => $authKey,
+			'mobiles' => $mobile,
+			'sender' => $sender,
+			'message' => urlencode($message),
+			'route' => '4',
+			'country' => '91',
+		];
+
+		$url = "http://sms.webmingo.in/api/sendhttp.php?";
+		foreach ($request_parameter as $key => $val) {
+			$url .= $key . '=' . $val . '&';
+		}
+
+		if ($templateId) {
+			$url .= 'DLT_TE_ID=' . $templateId . '&';
+		}
+		if ($peId) {
+			$url .= 'PE_ID=' . $peId . '&';
+		}
+
+		$url = rtrim($url, "&");
+
+		try {
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			$output = curl_exec($ch);
+			curl_close($ch);
+			return true;
+		} catch (\Exception $e) {
+			// dd($e->getMessage());
+			\Log::error('SMS sending failed: ' . $e->getMessage());
+			return false;
+		}
+	}
+
 	public function agent_enquiry(Request $request)
 	{
 		$rules = [
@@ -1232,17 +1301,34 @@ class HomeController extends AppController
 			"name" => "required",
 			"email" => "required|email",
 			"mobile_number" => "required|numeric",
-			"interested_in" => "required"
+			"interested_in" => "required",
 		];
 		$this->checkValidate($request, $rules);
+// dd($request->all());
+		// 🟡 For guests, verify OTP
+		if (!auth()->check()) {
+			if (
+				session('agent_otp') != $request->otp ||
+				session('agent_otp_mobile') != $request->mobile_number
+			) {
+				return response()->json(['success' => false, 'message' => 'Invalid OTP.']);
+			}
+		}
 
 		try {
-			$claim = AgentEnquiry::create($request->all());
-			return redirect()->back()->with('alert-success', 'Your Query Successfully Submitted.');
+			AgentEnquiry::create($request->all());
+
+			// ✅ Clear OTP after success (for guests)
+			if (!auth()->check()) {
+				session()->forget(['agent_otp', 'agent_otp_mobile']);
+			}
+
+			return response()->json(['success' => true, 'message' => 'Your enquiry has been submitted successfully.']);
 		} catch (\Exception $e) {
-			return redirect()->back()->with('alert-error', $e->getMessage());
+			return response()->json(['success' => false, 'message' => $e->getMessage()]);
 		}
 	}
+
 
 	public function aboutUs()
 	{

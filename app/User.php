@@ -10,23 +10,21 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'role','firstname', 'lastname', 'gender', 'address', 'email', 'mobile_number', 'state_id','city_id','avatar','auth_token','password','otp', 'status', 'company_name', 'mobile_verified', 'is_verified'
+        'role','firstname', 'lastname', 'gender', 'address', 'email', 'mobile_number', 
+        'state_id','city_id','avatar','auth_token','password','otp', 
+        'status', 'company_name', 'mobile_verified', 'is_verified'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    // ✅ Add this accessor for full name
+    public function getFullNameAttribute()
+    {
+        return trim("{$this->firstname} {$this->lastname}");
+    }
 
     public function StateCity() {
         return $this->hasOne('App\Cities', 'id', 'city_id');
@@ -41,13 +39,11 @@ class User extends Authenticatable
     }
 
     public function getPremiumProperties($id) {
-        $properties = Properties::where('user_id', $id)->where('listing_type', 'Paid')->get();
-        return $properties;
+        return Properties::where('user_id', $id)->where('listing_type', 'Paid')->get();
     }
 
     public function getFreeProperties($id) {
-        $properties = Properties::where('user_id', $id)->where('listing_type', 'Free')->get();
-        return $properties;
+        return Properties::where('user_id', $id)->where('listing_type', 'Free')->get();
     }
 
     public function getState() {
