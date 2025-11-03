@@ -18,6 +18,8 @@ class Subscription extends Model
         'payment_status',
         'transaction_id',
         'is_active',
+        'used_listings',
+        'used_services'
     ];
 
     public function user()

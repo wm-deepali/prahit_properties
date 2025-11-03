@@ -9,39 +9,71 @@ class Package extends Model
 {
     use HasFactory;
 
+    protected $table = 'packages';
+
     protected $fillable = [
+        // Common fields
+        'package_type',
         'name',
         'price',
-        'business_listing',
-        'profile_page_with_contact',
-        'business_logo_banner',
-        'service_limit',
-        'duration',
-        'duration_unit',
-        'image_upload_limit',
-        'video_upload',
-        'appear_in_search',
-        'verified_badge',
-        'premium_badge',
-        'lead_enquiries',
-        'response_rate',
-        'featured_in_top',
-        'customer_support',
-        'lead_alerts',
+        'validity',
         'description',
         'is_active',
+
+        // ===== PROPERTY PACKAGE FIELDS =====
+        'number_of_listing',
+        'photos_per_listing',
+        'video_upload',
+        'response_rate',
+        'property_visibility',
+        'verified_tag',
+        'premium_seller',
+        'profile_page',
+        'profile_visibility',
+        'profile_in_search_result',
+        'priority_in_search',
+        'customer_support',
+        'lead_alerts',
+
+        // ===== SERVICE PROVIDER PACKAGE FIELDS =====
+        'business_listing',
+        'total_services',
+        'profile_page_with_contact',
+        'business_logo_banner',
+        'appear_in_local_search',
+        'verified_badge',
+        'premium_badge',
+        'image_upload_limit',
+        'video_upload_service',
+        'lead_enquiries',
+        'response_rate_service',
+        'featured_in_top_provider',
+        'customer_support_service',
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
-        'business_listing' => 'boolean',
-        'profile_page_with_contact' => 'boolean',
-        'business_logo_banner' => 'boolean',
-        'video_upload' => 'boolean',
-        'verified_badge' => 'boolean',
-        'premium_badge' => 'boolean',
-        'featured_in_top' => 'boolean',
-        'lead_alerts' => 'boolean',
         'is_active' => 'boolean',
+        'number_of_listing' => 'integer',
+        'photos_per_listing' => 'integer',
+        'total_services' => 'integer',
+        'image_upload_limit' => 'integer',
     ];
+
+    /**
+     * Scope for active packages.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Get a short version of the package name.
+     */
+    public function getShortNameAttribute()
+    {
+        return strlen($this->name) > 20
+            ? substr($this->name, 0, 20) . '...'
+            : $this->name;
+    }
 }

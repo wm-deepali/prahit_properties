@@ -15,7 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('subscription_id')->nullable();
             $table->unsignedBigInteger('payment_id')->nullable();
             
-            $table->string('invoice_number')->unique(); // e.g. INV-2025-0001
+            $table->string('invoice_number')->unique(191); // e.g. INV-2025-0001
             $table->date('invoice_date');
             $table->decimal('amount', 10, 2)->default(0);
             $table->string('currency', 10)->default('INR');

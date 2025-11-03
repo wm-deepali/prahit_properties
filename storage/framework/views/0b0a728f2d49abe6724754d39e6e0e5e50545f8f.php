@@ -8,32 +8,25 @@
         background-color: #f8f9fa;
         padding: 15px;
     }
-
     .sidebar-menu .nav-link {
         color: #333;
         padding: 10px 15px;
     }
-
     .sidebar-menu .nav-link:hover {
         background-color: #007bff;
         color: #fff !important;
         border-radius: 5px;
     }
-
     .sidebar-menu .collapse ul {
         padding-left: 20px;
     }
-
     .sidebar-menu .collapse .nav-link {
         padding: 5px 15px;
         font-size: 0.9rem;
     }
-</style>
-<style>
     .mobile-sidebar {
         font-family: 'Segoe UI', sans-serif;
     }
-
     .sidebar-link {
         background: #fff;
         padding: 10px 15px;
@@ -44,25 +37,21 @@
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         transition: all 0.2s ease-in-out;
     }
-
     .sidebar-link:hover {
         background: #007bff;
         color: #fff !important;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     }
-
     .sidebar-link.active {
         background: #007bff;
         color: #fff !important;
     }
-
     .submenu {
         background: #f1f4f8;
         border-radius: 6px;
         margin-top: 6px;
         transition: all 0.3s;
     }
-
     .submenu-link {
         display: block;
         color: #555;
@@ -70,28 +59,25 @@
         padding: 6px 0;
         text-decoration: none;
     }
-
     .submenu-link:hover {
         color: #007bff;
         font-weight: 600;
     }
 </style>
+
 <section class="sidebar-section">
     <div class="row">
-
         <div class="profile-section">
             <div class="profile-image">
                 <div class="pro-user">
                     <?php
                         $avatar = "";
-
                         if (!file_exists(Auth::user()->avatar)) {
                             $avatar = asset('images/usr.png');
                         } else {
                             $avatar = url(Auth::user()->avatar);
                         }
                     ?>
-
                     <img src="<?php echo e($avatar); ?>" alt="Profile Picture" id="change_avatar" class="img-fluid">
                     <form id="avatar-form" name="avatar-form" enctype="multipart/form-data">
                         <div class="p-image">
@@ -103,23 +89,30 @@
                 </div>
             </div>
             <div class="user-info d-flex flex-column">
-                <p style="font-weight:600;"> <?php echo e(Auth::user()->firstname); ?> <?php echo e(Auth::user()->lastname); ?></p>
-                <p><?php echo e(Auth::user()->email); ?> <?php if(\Auth::user()->is_verified == 1): ?> <a class="verify-btn-s"><i
-                class="fa fa-check-circle"></i></a> <?php else: ?> <a style="cursor: pointer;"
-                                onclick="verifyEmail()" class="verify-btn-s"> <img src="<?php echo e(asset('images')); ?>/verify.png"
-                            alt="verified" width="15px;"></a> <?php endif; ?></p>
-                <p><?php echo e(Auth::user()->mobile_number); ?> <?php if(\Auth::user()->mobile_verified == 1): ?> <a class="verify-btn-s"><i
-                class="fa fa-check-circle"></i></a> <?php else: ?> <a style="cursor: pointer;"
-                                onclick="verifyMobileNumber()" class="verify-btn-s"> <img src="<?php echo e(asset('images')); ?>/verify.png"
-                            width="15px;" alt="verified"></a> <?php endif; ?></p>
+                <p style="font-weight:600;"><?php echo e(Auth::user()->firstname); ?> <?php echo e(Auth::user()->lastname); ?></p>
+                <p><?php echo e(Auth::user()->email); ?>
 
+                    <?php if(\Auth::user()->is_verified == 1): ?>
+                        <a class="verify-btn-s"><i class="fa fa-check-circle"></i></a>
+                    <?php else: ?>
+                        <a style="cursor: pointer;" onclick="verifyEmail()" class="verify-btn-s">
+                            <img src="<?php echo e(asset('images')); ?>/verify.png" alt="verified" width="15px;">
+                        </a>
+                    <?php endif; ?>
+                </p>
+                <p><?php echo e(Auth::user()->mobile_number); ?>
+
+                    <?php if(\Auth::user()->mobile_verified == 1): ?>
+                        <a class="verify-btn-s"><i class="fa fa-check-circle"></i></a>
+                    <?php else: ?>
+                        <a style="cursor: pointer;" onclick="verifyMobileNumber()" class="verify-btn-s">
+                            <img src="<?php echo e(asset('images')); ?>/verify.png" width="15px;" alt="verified">
+                        </a>
+                    <?php endif; ?>
+                </p>
             </div>
+        </div>
 
-        </div>
-        <div class="col-sm-12 d-flex ">
-            
-            
-        </div>
         <div class="col-sm-12 mt-3">
             <div class="sidebar-menu">
                 <nav class="navbar navbar-expand-lg navbar-sd-sidebar">
@@ -137,38 +130,28 @@
                                     Dashboard
                                 </a>
                             </li>
-                            <!-- Setting Menu -->
-                            <?php
-                                $isSettingActive = request()->is('user/profile')
-                                    || request()->is('user/my-activities')
-                                    || in_array(request('tab'), ['profile', 'security']);
-                            ?>
 
                             <li class="nav-item">
-                                <a class="nav-link <?php echo e($isSettingActive ? '' : 'collapsed'); ?>" href="#"
-                                    data-toggle="collapse" data-target="#settingMenu"
-                                    aria-expanded="<?php echo e($isSettingActive ? 'true' : 'false'); ?>"
-                                    aria-controls="settingMenu">
-                                    Setting
+                                <a class="nav-link <?php echo e(request()->is('user/profile') || request()->is('user/my-activities') || in_array(request('tab'), ['profile', 'security']) ? '' : 'collapsed'); ?>"
+                                   href="#" data-toggle="collapse" data-target="#settingMenu"
+                                   aria-expanded="<?php echo e(request()->is('user/profile') || request()->is('user/my-activities') || in_array(request('tab'), ['profile', 'security']) ? 'true' : 'false'); ?>"
+                                   aria-controls="settingMenu">
+                                   Settings
                                 </a>
-                                <div class="collapse <?php echo e($isSettingActive ? 'show' : ''); ?>" id="settingMenu">
+                                <div class="collapse <?php echo e(request()->is('user/profile') || request()->is('user/my-activities') || in_array(request('tab'), ['profile', 'security']) ? 'show' : ''); ?>" id="settingMenu">
                                     <ul class="nav flex-column ml-3">
                                         <li class="nav-item">
-                                            <a href="<?php echo e(url('user/profile?tab=profile')); ?>"
-                                                class="nav-link <?php echo e(request('tab') === 'profile' ? 'active' : ''); ?>">
+                                            <a href="<?php echo e(url('user/profile?tab=profile')); ?>" class="nav-link <?php echo e(request('tab') === 'profile' ? 'active' : ''); ?>">
                                                 Profile
                                             </a>
-
                                         </li>
                                         <li class="nav-item">
-                                            <a href="<?php echo e(url('user/profile?tab=security')); ?>"
-                                                class="nav-link <?php echo e(request('tab') === 'security' ? 'active' : ''); ?>">
+                                            <a href="<?php echo e(url('user/profile?tab=security')); ?>" class="nav-link <?php echo e(request('tab') === 'security' ? 'active' : ''); ?>">
                                                 Change Password
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="<?php echo e(url('user/my-activities')); ?>"
-                                                class="nav-link <?php echo e(Request::is('user/my-activities') ? 'active' : ''); ?>">
+                                            <a href="<?php echo e(url('user/my-activities')); ?>" class="nav-link <?php echo e(Request::is('user/my-activities') ? 'active' : ''); ?>">
                                                 My Activities
                                             </a>
                                         </li>
@@ -176,94 +159,18 @@
                                 </div>
                             </li>
 
-                            <!-- Property Menu -->
-                            <?php
-                                $isPropertyActive = Request::is('user/properties*') ||
-                                    Request::is('user/all-inquries') ||
-                                     Request::is('user/sent-inquries') ||
-                                    Request::is('user/my-wishlist');
-                            ?>
-                            <li class="nav-item">
-                                <a class="nav-link <?php echo e($isPropertyActive ? '' : 'collapsed'); ?>" href="#"
-                                    data-toggle="collapse" data-target="#propertyMenu"
-                                    aria-expanded="<?php echo e($isPropertyActive ? 'true' : 'false'); ?>"
-                                    aria-controls="propertyMenu">
-                                    Property
-                                </a>
-                                <div class="collapse <?php echo e($isPropertyActive ? 'show' : ''); ?>" id="propertyMenu">
-                                    <ul class="nav flex-column ml-3">
-                                        <li class="nav-item">
-                                            <a href="<?php echo e(url('user/properties')); ?>"
-                                                class="nav-link <?php echo e(Request::is('user/properties*') ? 'active' : ''); ?>">
-                                                My Properties
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?php echo e(url('user/all-inquries')); ?>"
-                                                class="nav-link <?php echo e(Request::is('user/all-inquries') ? 'active' : ''); ?>">
-                                                Received Inquiries
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?php echo e(url('user/sent-inquries')); ?>"
-                                                class="nav-link <?php echo e(Request::is('user/sent-inquries') ? 'active' : ''); ?>">
-                                                Sent Inquiries
-                                            </a>
-                                        </li>
+                            <!-- Property or Services menu will be rendered here -->
+                            <div id="dynamicMenu"></div>
 
-                                        <li class="nav-item">
-                                            <a href="<?php echo e(url('user/my-wishlist')); ?>"
-                                                class="nav-link <?php echo e(Request::is('user/my-wishlist') ? 'active' : ''); ?>">
-                                                My Wishlist
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-
-                            <!-- Price & Subscriptions Menu -->
-                            <?php
-                                $isPriceActive = Request::is('user/current-subscriptions') ||
-                                    Request::is('user/payments-invoice') ||
-                                    Request::is('user/pricing');
-                            ?>
-                            <li class="nav-item">
-                                <a class="nav-link <?php echo e($isPriceActive ? '' : 'collapsed'); ?>" href="#"
-                                    data-toggle="collapse" data-target="#priceMenu"
-                                    aria-expanded="<?php echo e($isPriceActive ? 'true' : 'false'); ?>" aria-controls="priceMenu">
-                                    Price & Subscriptions
-                                </a>
-                                <div class="collapse <?php echo e($isPriceActive ? 'show' : ''); ?>" id="priceMenu">
-                                    <ul class="nav flex-column ml-3">
-                                        <li class="nav-item">
-                                            <a href="<?php echo e(url('user/current-subscriptions')); ?>"
-                                                class="nav-link <?php echo e(Request::is('user/current-subscriptions') ? 'active' : ''); ?>">
-                                                Current Subscriptions
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?php echo e(url('user/payments-invoice')); ?>"
-                                                class="nav-link <?php echo e(Request::is('user/payments-invoice') ? 'active' : ''); ?>">
-                                                Payments & Invoice
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?php echo e(url('user/pricing')); ?>"
-                                                class="nav-link <?php echo e(Request::is('user/pricing') ? 'active' : ''); ?>">
-                                                Pricing
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
+                            <!-- Pricing & Subscriptions menu will be rendered here -->
+                            <div id="dynamicPricingMenu"></div>
 
                             <li class="nav-item">
                                 <a class="nav-link" href="#"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Logout
                                 </a>
-                                <form id="logout-form" action="<?php echo e(url('user/logout')); ?>" method="POST"
-                                    style="display: none;">
+                                <form id="logout-form" action="<?php echo e(url('user/logout')); ?>" method="POST" style="display: none;">
                                     <?php echo e(csrf_field()); ?>
 
                                 </form>
@@ -275,127 +182,124 @@
         </div>
     </div>
 
-    <div class="modal fade custom-modal" id="email-verify" tabindex="-1" role="dialog" aria-labelledby="email-verify"
-        aria-hidden="true">
-        <div class="modal-dialog w-450" role="document">
-            <div class="modal-content">
-                <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <div class="top-design">
-                    <img src="<?php echo e(asset('images/top-designs.png/')); ?>" class="img-fluid">
-                </div>
-                <form action="<?php echo e(url('user/email-mobile/verify/otp')); ?>?type=email" method="post">
-                    <?php echo csrf_field(); ?>
-                    <div class="modal-body">
-                        <div class="modal-main">
-                            <div class="row login-heads">
-                                <div class="col-sm-12">
-                                    <h3 class="heads-login">Email Verification</h3>
-                                    <span class="allrequired">All field are required</span>
-                                </div>
-                            </div>
-                            <?php if(session()->has('otp-success')): ?>
-                                <div class="alert alert-success">
-                                    <?php echo e(session()->get('otp-success')); ?>
-
-                                </div>
-                            <?php endif; ?>
-                            <div class="modal-form">
-                                <div class="form-group row">
-                                    <div class="col-sm-12">
-                                        <label class="label-control">Enter OTP</label>
-                                        <input type="number" name="otp" class="text-control" placeholder="Enter OTP"
-                                            required="">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12 text-center">
-                                        <button type="submit" class="btn btn-send w-100">Verify Now <i
-                                                class="fas fa-chevron-circle-right"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <div class="modal-foo text-center">
-                    <p>Not Received? <a href="#" data-target="#signin" data-toggle="modal" data-dismiss="modal">Resend
-                            OTP</a></p>
-                </div>
-            </div>
-        </div>
+    <!-- Email Verification Modal -->
+    <div class="modal fade custom-modal" id="email-verify" tabindex="-1" role="dialog" aria-labelledby="email-verify" aria-hidden="true">
+        <!-- modal content here -->
     </div>
 
-    <div class="modal fade custom-modal" id="mob-verify" tabindex="-1" role="dialog" aria-labelledby="mob-verify"
-        aria-hidden="true">
-        <div class="modal-dialog w-450" role="document">
-            <div class="modal-content">
-                <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <div class="top-design">
-                    <img src="<?php echo e(asset('images/top-designs.png/')); ?>" class="img-fluid">
-                </div>
-                <form action="<?php echo e(url('user/email-mobile/verify/otp')); ?>?type=mobile" method="post">
-                    <?php echo csrf_field(); ?>
-                    <div class="modal-body">
-                        <div class="modal-main">
-                            <div class="row login-heads">
-                                <div class="col-sm-12">
-                                    <h3 class="heads-login">Mobile No. Verification</h3>
-                                    <span class="allrequired">All field are required</span>
-                                </div>
-                            </div>
-                            <div class="modal-form">
-                                <div class="form-group row">
-                                    <div class="col-sm-12">
-                                        <label class="label-control">Enter OTP</label>
-                                        <input type="number" name="otp" class="text-control" placeholder="Enter OTP"
-                                            required="">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12 text-center">
-                                        <button type="submit" class="btn btn-send w-100">Verify Now <i
-                                                class="fas fa-chevron-circle-right"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <div class="modal-foo text-center">
-                    <p>Not Received? <a href="#" data-target="#signin" data-toggle="modal" data-dismiss="modal">Resend
-                            OTP</a></p>
-                </div>
-            </div>
-        </div>
+    <!-- Mobile Verification Modal -->
+    <div class="modal fade custom-modal" id="mob-verify" tabindex="-1" role="dialog" aria-labelledby="mob-verify" aria-hidden="true">
+        <!-- modal content here -->
     </div>
 </section>
 
-<script type="text/javascript">
+<script>
+    // Utility to get query param
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
 
-    $(document).ready(function () {
-        // Jab koi menu click ho
-        $('.nav-link[data-toggle="collapse"]').on('click', function (e) {
-            var $this = $(this);
-            var target = $this.data('target'); // target collapse ka ID
+    // Detect and store user_type
+    let userType = getQueryParam('type') || localStorage.getItem('user_type') || 'property';
+    if (getQueryParam('type')) {
+        localStorage.setItem('user_type', userType);
+    }
 
-            // Agar same menu already open hai
+    // Render Property or Services menu according to user_type
+    function renderSidebarMenu(userType) {
+        const sectionLabel = (userType === 'service') ? 'Services' : 'Property';
+
+        // Property/Services menu HTML
+        const dynamicMenuHtml = `
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#${sectionLabel.toLowerCase()}Menu" aria-expanded="false" aria-controls="${sectionLabel.toLowerCase()}Menu">
+                    ${sectionLabel}
+                </a>
+                <div class="collapse" id="${sectionLabel.toLowerCase()}Menu">
+                    <ul class="nav flex-column ml-3">
+                        ${userType === 'service' ? `
+                            <li class="nav-item"><a href="/user/services" class="nav-link">My Services</a></li>
+                            <li class="nav-item"><a href="/user/all-services-inquiries" class="nav-link">Received Service Inquiries</a></li>
+                            <li class="nav-item"><a href="/user/sent-services-inquiries" class="nav-link">Sent Service Inquiries</a></li>
+                            <li class="nav-item"><a href="/user/my-service-wishlist" class="nav-link">My Service Wishlist</a></li>
+                        ` : `
+                            <li class="nav-item"><a href="/user/properties" class="nav-link">My Properties</a></li>
+                            <li class="nav-item"><a href="/user/all-inquries" class="nav-link">Received Inquiries</a></li>
+                            <li class="nav-item"><a href="/user/sent-inquries" class="nav-link">Sent Inquiries</a></li>
+                            <li class="nav-item"><a href="/user/my-wishlist" class="nav-link">My Wishlist</a></li>
+                        `}
+                    </ul>
+                </div>
+            </li>
+        `;
+
+        // Append query param for Pricing & Subscriptions URLs
+        const queryParam = (userType === 'service') ? '?type=service' : '';
+
+        const pricingMenuHtml = `
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#priceMenu" aria-expanded="false" aria-controls="priceMenu">
+                    Pricing & Subscriptions
+                </a>
+                <div class="collapse" id="priceMenu">
+                    <ul class="nav flex-column ml-3">
+                        <li class="nav-item"><a href="/user/current-subscriptions${queryParam}" class="nav-link">Current Subscriptions</a></li>
+                        <li class="nav-item"><a href="/user/payments-invoice${queryParam}" class="nav-link">Payments & Invoice</a></li>
+                        <li class="nav-item"><a href="/user/pricing${queryParam}" class="nav-link">Pricing</a></li>
+                    </ul>
+                </div>
+            </li>
+        `;
+
+        document.getElementById('dynamicMenu').innerHTML = dynamicMenuHtml;
+        document.getElementById('dynamicPricingMenu').innerHTML = pricingMenuHtml;
+    }
+
+    // Highlight active nav links and expand the appropriate submenus
+    function setActiveAndCollapse() {
+        const currentUrl = window.location.pathname + window.location.search;
+
+        const navLinks = document.querySelectorAll('.navbar-nav a.nav-link');
+
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+
+            if (href && currentUrl.startsWith(href)) {
+                link.classList.add('active');
+
+                // Expand parent collapse div
+                const collapseDiv = link.closest('.collapse');
+                if (collapseDiv) {
+                    collapseDiv.classList.add('show');
+                    const toggleLink = document.querySelector(`a[data-toggle="collapse"][data-target="#${collapseDiv.id}"]`);
+                    if (toggleLink) {
+                        toggleLink.setAttribute('aria-expanded', 'true');
+                        toggleLink.classList.remove('collapsed');
+                    }
+                }
+            }
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        renderSidebarMenu(userType);
+
+        // Bootstrap collapse toggle handling
+        $('.nav-link[data-toggle="collapse"]').on('click', function () {
+            const target = $(this).data('target');
             if ($(target).hasClass('show')) {
-                $(target).collapse('hide'); // to close it
+                $(target).collapse('hide');
             } else {
-                // Baaki sab band kar do
                 $('.collapse.show').collapse('hide');
-                // aur ye wala open karo
                 $(target).collapse('show');
             }
         });
+
+        setActiveAndCollapse();
     });
 
-
-
+    // Email and mobile verification functions
     function verifyEmail() {
         swal({
             title: "Are you sure?",
@@ -403,21 +307,19 @@
             icon: "warning",
             buttons: true,
             dangerMode: true,
-        }).then((willDelete) => {
+        }).then(willDelete => {
             if (willDelete) {
                 $(".loading_2").show();
                 $(".btn-delete").attr('disabled', true);
                 $.ajax({
                     url: '<?php echo e(url('user/verify/email')); ?>',
                     method: "GET",
-                    success: function (response) {
+                    success: response => {
                         toastr.success(response);
                         $('#email-verify').modal('show');
                     },
-                    error: function () {
-                        toastr.error('An error occurred.');
-                    },
-                    complete: function () {
+                    error: () => toastr.error('An error occurred.'),
+                    complete: () => {
                         $(".loading_2").hide();
                         $(".btn-delete").attr('disabled', false);
                     }
@@ -425,7 +327,6 @@
             }
         });
     }
-
     function verifyMobileNumber() {
         swal({
             title: "Are you sure?",
@@ -433,21 +334,19 @@
             icon: "warning",
             buttons: true,
             dangerMode: true,
-        }).then((willDelete) => {
+        }).then(willDelete => {
             if (willDelete) {
                 $(".loading_2").show();
                 $(".btn-delete").attr('disabled', true);
                 $.ajax({
                     url: '<?php echo e(url('user/verify/mobile')); ?>',
                     method: "GET",
-                    success: function (response) {
+                    success: response => {
                         toastr.success(response);
                         $('#mob-verify').modal('show');
                     },
-                    error: function () {
-                        toastr.error('An error occurred.');
-                    },
-                    complete: function () {
+                    error: () => toastr.error('An error occurred.'),
+                    complete: () => {
                         $(".loading_2").hide();
                         $(".btn-delete").attr('disabled', false);
                     }
@@ -456,19 +355,4 @@
         });
     }
 </script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const collapses = document.querySelectorAll('[data-bs-toggle="collapse"]');
-        collapses.forEach(item => {
-            item.addEventListener("click", function () {
-                const target = document.querySelector(this.getAttribute("href"));
-                if (target.classList.contains("show")) {
-                    target.classList.remove("show");
-                } else {
-                    document.querySelectorAll(".submenu.show").forEach(openMenu => openMenu.classList.remove("show"));
-                    target.classList.add("show");
-                }
-            });
-        });
-    });
-</script><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/user/sidebar.blade.php ENDPATH**/ ?>
+<?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/user/sidebar.blade.php ENDPATH**/ ?>

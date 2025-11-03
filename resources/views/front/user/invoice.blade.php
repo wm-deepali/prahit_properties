@@ -1,10 +1,86 @@
 @extends('layouts.front.app')
 
 @section('title')
-  <title>My Properties</title>
+  <title>Invoice Details</title>
 @endsection
 
+<style>
+  .invoice-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+  }
 
+  .invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    border-bottom: 2px solid #eaeaea;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+
+  .invoice-header .company-details,
+  .invoice-header .user-details {
+    width: 48%;
+  }
+
+  .invoice-header h4 {
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .invoice-header p {
+    margin: 0;
+    font-size: 14px;
+    color: #444;
+  }
+
+  .invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+  }
+
+  .invoice-table th,
+  .invoice-table td {
+    border: 1px solid #ddd;
+    padding: 10px 12px;
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .invoice-table th {
+    background: #f4f6fb;
+    font-weight: 600;
+  }
+
+  .total-section {
+    text-align: right;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .btn-download {
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s ease;
+  }
+
+  .btn-download:hover {
+    background-color: #0056b3;
+    color: #fff;
+  }
+</style>
 
 @section('content')
 
@@ -12,12 +88,11 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h3>My Properties</h3>
+          <h3>Invoice Details</h3>
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a>
-              </li>
-              <li class="breadcrumb-item active" aria-current="page">My Properties</li>
+              <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Invoice Details</li>
             </ol>
           </nav>
         </div>
@@ -31,143 +106,79 @@
         <div class="col-sm-3">
           @include('front.user.sidebar')
         </div>
+
         <div class="col-sm-9">
+          <div class="invoice-card">
 
-          <!-- 🔷 Invoice Page Header -->
-          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
-            <h4 class="fw-bold m-0">Invoices</h4>
-            <button class="btn btn-primary btn-sm mt-2 mt-sm-0">
-              <i class="fas fa-download me-1"></i> Download All
-            </button>
-          </div>
+            <!-- Header Section -->
+            <div class="invoice-header">
+              <div class="company-details">
+                <h4>🏢 Tirkey Estates Pvt. Ltd.</h4>
+                <p>Plot No. 23, Tech Park Road</p>
+                <p>Bangalore - 560103</p>
+                <p>Email: support@tirkey.com</p>
+                <p>Phone: +91-9876543210</p>
+              </div>
 
-          <!-- 🔹 Invoice Table Card -->
-          <div class="card shadow-lg border-0 rounded-4">
-            <div class="card-body">
-              <h5 class="fw-semibold mb-3">Invoice History</h5>
-
-              <div class="table-responsive" style="overflow-x:auto; white-space:nowrap;">
-                <table class="table table-bordered table-striped align-middle text-center mb-0" style="min-width:1100px;">
-                  <thead class="table-light text-nowrap">
-                    <tr>
-                      <th>Date & Time</th>
-                      <th>Invoice Number</th>
-                      <th>Subscription Name</th>
-                      <th>Total Amount</th>
-                      <th>Paid Amount</th>
-                      <th>Payment Status</th>
-                      <th>Transaction ID</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @forelse($invoices as $invoice)
-                      <tr>
-                        <td>{{ $invoice->created_at->format('d M Y, h:i A') }}</td>
-                        <td>{{ $invoice->invoice_number }}</td>
-                        <td>{{ $invoice->subscription->package->name ?? 'N/A' }}</td>
-                        <td>₹{{ number_format($invoice->total_amount ?? $invoice->amount, 2) }}</td>
-                        <td>₹{{ number_format($invoice->amount, 2) }}</td>
-                        <td>
-                          <span class="badge bg-success text-white">
-                            {{ ucfirst($invoice->status ?? $invoice->payment_status) }}
-                          </span>
-                        </td>
-                        <td>{{ $invoice->subscription->transaction_id ?? '—' }}</td>
-                        <td>
-                          @if($invoice->subscription->is_active)
-                            <span class="badge bg-success text-white">Active</span>
-                          @else
-                            <span class="badge bg-secondary text-white">Expired</span>
-                          @endif
-                        </td>
-                        <td>
-                          <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                            data-bs-target="#viewInvoiceModal{{ $invoice->id }}">
-                            <i class="fas fa-file-invoice"></i> View
-                          </button>
-                        </td>
-                      </tr>
-                    @empty
-                      <tr>
-                        <td colspan="9" class="text-center text-muted">No invoices found.</td>
-                      </tr>
-                    @endforelse
-                  </tbody>
-
-                </table>
+              <div class="user-details">
+                <h4>👤 Customer Details</h4>
+                <p><strong>Name:</strong> {{ $user->firstname }} {{ $user->lastname }}</p>
+                <p><strong>Email:</strong> {{ $user->email }}</p>
+                <p><strong>Mobile:</strong> {{ $user->mobile_number }}</p>
+                <p><strong>Address:</strong> {{ $user->address ?? 'N/A' }}</p>
               </div>
             </div>
+
+            <!-- Invoice Details Table -->
+            <div class="table-responsive">
+              <table class="invoice-table">
+                <thead>
+                  <tr>
+                    <th>Package</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Transaction ID</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ $subscription->package->name ?? 'N/A' }}</td>
+                    <td>{{ \Carbon\Carbon::parse($subscription->start_date)->format('d M Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($subscription->end_date)->format('d M Y') }}</td>
+                    <td>{{ $subscription->payment->transaction_id ?? 'N/A' }}</td>
+                    <td>₹{{ number_format($subscription->amount, 2) }}</td>
+                    <td>
+                      @php
+                        $status = $subscription->payment_status ?? $subscription->payment->status ?? 'pending';
+                      @endphp
+                      <span
+                        class="badge bg-{{ $status == 'success' ? 'success' : ($status == 'pending' ? 'warning' : 'danger') }} text-light">
+                        {{ ucfirst($status) }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Total -->
+            <div class="total-section">
+              Total Amount Paid: ₹{{ number_format($subscription->amount, 2) }}
+            </div>
+
+            <!-- Download Button -->
+            <div class="text-end mt-4">
+              <a href="{{ route('invoice.download', $subscription->invoice->id) }}" class="btn-download">
+                <i class="fas fa-file-pdf"></i> Download PDF
+              </a>
+            </div>
+
           </div>
         </div>
       </div>
     </div>
-
-
-    <!-- 🔹 Invoice Modal -->
-    <div class="modal fade" id="viewInvoiceModal{{ $invoice->id }}" tabindex="-1"
-      aria-labelledby="viewInvoiceModalLabel{{ $invoice->id }}" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg rounded-4">
-          <div class="modal-header bg-primary text-white rounded-top-4">
-            <h5 class="modal-title fw-semibold" id="viewInvoiceModalLabel{{ $invoice->id }}">Invoice
-              Details</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <table class="table table-bordered mb-0">
-              <tbody>
-                <tr>
-                  <th>Invoice Number</th>
-                  <td>{{ $invoice->invoice_number }}</td>
-                </tr>
-                <tr>
-                  <th>Date & Time</th>
-                  <td>{{ $invoice->created_at->format('d M Y, h:i A') }}</td>
-                </tr>
-                <tr>
-                  <th>Subscription Name</th>
-                  <td>{{ $invoice->subscription->package->name ?? 'N/A' }}</td>
-                </tr>
-                <tr>
-                  <th>Total Amount</th>
-                  <td>₹{{ number_format($invoice->total_amount ?? $invoice->amount, 2) }}</td>
-                </tr>
-                <tr>
-                  <th>Paid Amount</th>
-                  <td>₹{{ number_format($invoice->amount, 2) }}</td>
-                </tr>
-                <tr>
-                  <th>Payment Status</th>
-                  <td><span class="badge bg-success">Paid</span></td>
-                </tr>
-                <tr>
-                  <th>Transaction ID</th>
-                  <td>{{ $invoice->subscription->transaction_id ?? '—' }}</td>
-                </tr>
-                <tr>
-                  <th>Current Status</th>
-                  <td>
-                    @if($invoice->subscription->is_active)
-                      <span class="badge bg-success">Active</span>
-                    @else
-                      <span class="badge bg-secondary">Expired</span>
-                    @endif
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="modal-footer">
-            <a href="#" class="btn btn-primary">
-              <i class="fas fa-download me-1"></i> Download Invoice
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </section>
 
 @endsection

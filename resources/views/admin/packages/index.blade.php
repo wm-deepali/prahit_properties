@@ -41,6 +41,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
+                                                    <th>Type</th> {{-- 👈 Added Package Type Column --}}
                                                     <th>Name</th>
                                                     <th>Price (₹)</th>
                                                     <th>Duration</th>
@@ -53,11 +54,20 @@
                                                 @forelse ($packages as $package)
                                                     <tr>
                                                         <td>{{ $loop->iteration }}</td>
+                                                        <td>
+                                                            @if($package->package_type == 'property')
+                                                                <span class="badge bg-info" style="color:white;">Property</span>
+                                                            @elseif($package->package_type == 'service')
+                                                                <span class="badge bg-success" style="color:white;">Service</span>
+                                                            @else
+                                                                <span class="badge bg-secondary">—</span>
+                                                            @endif
+                                                        </td>
                                                         <td>{{ $package->name }}</td>
                                                         <td>{{ number_format($package->price, 2) }}</td>
                                                         <td>
-                                                            @if($package->duration)
-                                                                {{ $package->duration }} {{ ucfirst($package->duration_unit) }}
+                                                            @if($package->validity)
+                                                                {{ $package->validity }}
                                                             @else
                                                                 —
                                                             @endif
@@ -98,7 +108,7 @@
                                                     </tr>
                                                 @empty
                                                     <tr>
-                                                        <td colspan="7" class="text-center">No packages found.</td>
+                                                        <td colspan="8" class="text-center">No packages found.</td>
                                                     </tr>
                                                 @endforelse
                                             </tbody>
@@ -119,6 +129,8 @@
 @endsection
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         function deletePackage(id) {
             Swal.fire({

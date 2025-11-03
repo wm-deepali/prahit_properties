@@ -25,18 +25,15 @@ class PackageController extends Controller
      */
     public function store(Request $request)
     {
+        // Validate common fields
         $validator = Validator::make($request->all(), [
+            'package_type' => 'required|in:property,service',
             'name' => 'required|string|max:255|unique:packages,name',
-            'price' => 'required|numeric|min:0',
-            'duration' => 'nullable|integer|min:1',
-            'duration_unit' => 'nullable|in:days,months,years',
-            'service_limit' => 'nullable|integer|min:0',
-            'image_upload_limit' => 'nullable|integer|min:0',
-            'appear_in_search' => 'nullable|string|max:50',
-            'lead_enquiries' => 'nullable|string|max:50',
-            'response_rate' => 'nullable|string|max:50',
-            'customer_support' => 'nullable|string|max:50',
+            'price' => 'required|string|max:255',
+            'validity_number' => 'required|integer|min:1',
+            'validity_unit' => 'required|in:Days,Months,Years',
             'description' => 'nullable|string',
+            'is_active' => 'nullable|boolean',
         ]);
 
         if ($validator->fails()) {
@@ -47,28 +44,61 @@ class PackageController extends Controller
         }
 
         try {
-            $package = Package::create([
+
+            // Combine validity data
+            $validityNumber = $request->input('validity_number');
+            $validityUnit = $request->input('validity_unit');
+            $validity = $validityNumber . ' ' . $validityUnit; // e.g., "30 Days"
+
+            $data = [
+                'package_type' => $request->package_type,
                 'name' => $request->name,
                 'price' => $request->price,
-                'business_listing' => $request->boolean('business_listing'),
-                'profile_page_with_contact' => $request->boolean('profile_page_with_contact'),
-                'business_logo_banner' => $request->boolean('business_logo_banner'),
-                'service_limit' => $request->service_limit,
-                'duration' => $request->duration,
-                'duration_unit' => $request->duration_unit,
-                'image_upload_limit' => $request->image_upload_limit,
-                'video_upload' => $request->boolean('video_upload'),
-                'appear_in_search' => $request->appear_in_search,
-                'verified_badge' => $request->boolean('verified_badge'),
-                'premium_badge' => $request->boolean('premium_badge'),
-                'lead_enquiries' => $request->lead_enquiries,
-                'response_rate' => $request->response_rate,
-                'featured_in_top' => $request->boolean('featured_in_top'),
-                'customer_support' => $request->customer_support,
-                'lead_alerts' => $request->boolean('lead_alerts'),
+                'validity' => $validity,
                 'description' => $request->description,
                 'is_active' => $request->boolean('is_active', true),
-            ]);
+            ];
+
+            // PROPERTY PACKAGE
+            if ($request->package_type === 'property') {
+                $data = array_merge($data, [
+                    'number_of_listing' => $request->number_of_listing,
+                    'photos_per_listing' => $request->photos_per_listing,
+                    'video_upload' => $request->video_upload,
+                    'response_rate' => $request->response_rate,
+                    'property_visibility' => $request->property_visibility,
+                    'verified_tag' => $request->verified_tag,
+                    'premium_seller' => $request->premium_seller,
+                    'profile_page' => $request->profile_page,
+                    'profile_visibility' => $request->profile_visibility,
+                    'profile_in_search_result' => $request->profile_in_search_result,
+                    'priority_in_search' => $request->priority_in_search,
+                    'customer_support' => $request->customer_support,
+                    'lead_alerts' => $request->lead_alerts,
+                ]);
+            }
+
+            // SERVICE PROVIDER PACKAGE
+            if ($request->package_type === 'service') {
+                $data = array_merge($data, [
+                    'business_listing' => $request->business_listing,
+                    'total_services' => $request->total_services,
+                    'profile_page_with_contact' => $request->profile_page_with_contact,
+                    'business_logo_banner' => $request->business_logo_banner,
+                    'appear_in_local_search' => $request->appear_in_local_search,
+                    'verified_badge' => $request->verified_badge,
+                    'premium_badge' => $request->premium_badge,
+                    'image_upload_limit' => $request->image_upload_limit,
+                    'video_upload_service' => $request->video_upload_service,
+                    'lead_enquiries' => $request->lead_enquiries,
+                    'response_rate_service' => $request->response_rate_service,
+                    'featured_in_top_provider' => $request->featured_in_top_provider,
+                    'customer_support_service' => $request->customer_support_service,
+                    'lead_alerts' => $request->lead_alerts,
+                ]);
+            }
+
+            $package = Package::create($data);
 
             return response()->json([
                 'success' => true,
@@ -87,6 +117,7 @@ class PackageController extends Controller
     }
 
 
+
     public function edit($id)
     {
         $package = Package::findOrFail($id);
@@ -96,61 +127,92 @@ class PackageController extends Controller
 
     public function update(Request $request, $id)
     {
-        try {
-            $package = Package::findOrFail($id);
+        $package = Package::findOrFail($id);
 
-            // ✅ Validation
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'price' => 'required|numeric|min:0',
-                'duration' => 'nullable|integer|min:1',
-                'duration_unit' => 'nullable|in:days,months,years',
-                'service_limit' => 'nullable|integer|min:0',
-                'image_upload_limit' => 'nullable|integer|min:0',
-                'appear_in_search' => 'nullable|string|max:50',
-                'lead_enquiries' => 'nullable|string|max:50',
-                'response_rate' => 'nullable|string|max:50',
-                'customer_support' => 'nullable|string|max:50',
-                'description' => 'nullable|string',
+        $rules = [
+            'package_type' => ['required', Rule::in(['property', 'service'])],
+            'name' => 'required|string|max:255',
+            'price' => 'required|string|max:100',
+            'validity_number' => 'required|integer|min:1',
+            'validity_unit' => 'required|in:Days,Months,Years',
+            'description' => 'nullable|string',
+            'is_active' => 'nullable|boolean',
+        ];
+
+        // Add type-specific validation
+        if ($request->package_type === 'property') {
+            $rules = array_merge($rules, [
+                'number_of_listing' => 'nullable|integer',
+                'photos_per_listing' => 'nullable|integer',
+                'video_upload' => 'nullable|string',
+                'response_rate' => 'nullable|string',
+                'property_visibility' => 'nullable|string',
+                'verified_tag' => 'nullable|string',
+                'premium_seller' => 'nullable|string',
+                'profile_page' => 'nullable|string',
+                'profile_visibility' => 'nullable|string',
+                'profile_in_search_result' => 'nullable|string',
+                'priority_in_search' => 'nullable|string',
+                'customer_support' => 'nullable|string',
+                'lead_alerts' => 'nullable|string',
             ]);
-
-            // ✅ Handle all boolean fields
-            $booleanFields = [
-                'business_listing',
-                'profile_page_with_contact',
-                'business_logo_banner',
-                'video_upload',
-                'verified_badge',
-                'premium_badge',
-                'featured_in_top',
-                'lead_alerts',
-                'is_active',
-            ];
-
-            foreach ($booleanFields as $field) {
-                $validated[$field] = $request->has($field) && $request->$field == 'on' ? true : false;
-            }
-
-            // ✅ Update record
-            $package->update($validated);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Package updated successfully!'
-            ], 200);
-
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Validation failed',
-                'errors' => $e->errors()
-            ], 422);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Something went wrong: ' . $e->getMessage()
-            ], 500);
+        } elseif ($request->package_type === 'service') {
+            $rules = array_merge($rules, [
+                'business_listing' => 'nullable|string',
+                'total_services' => 'nullable|integer',
+                'profile_page_with_contact' => 'nullable|string',
+                'business_logo_banner' => 'nullable|string',
+                'appear_in_local_search' => 'nullable|string',
+                'verified_badge' => 'nullable|string',
+                'premium_badge' => 'nullable|string',
+                'image_upload_limit' => 'nullable|integer',
+                'video_upload_service' => 'nullable|string',
+                'lead_enquiries' => 'nullable|string',
+                'response_rate_service' => 'nullable|string',
+                'featured_in_top_provider' => 'nullable|string',
+                'customer_support_service' => 'nullable|string',
+                'lead_alerts' => 'nullable|string',
+            ]);
         }
+
+        $validated = $request->validate($rules);
+        // Save combined validity
+        $validityNumber = $validated['validity_number'];
+        $validityUnit = $validated['validity_unit'];
+        $validated['validity'] = $validityNumber . ' ' . $validityUnit;
+
+        // Remove individual validity fields after merging
+        unset($validated['validity_number'], $validated['validity_unit']);
+
+        // ✅ Update package
+        $package->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Package updated successfully.',
+        ]);
+    }
+
+    /**
+     * Delete the specified package.
+     */
+    public function destroy($id)
+    {
+        $package = Package::find($id);
+
+        if (!$package) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Package not found.',
+            ], 404);
+        }
+
+        $package->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Package deleted successfully.',
+        ]);
     }
 
 }

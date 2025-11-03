@@ -54,7 +54,7 @@
                       <p class="mb-1"><strong>Subscription Name:</strong> <?php echo e($current->package->name ?? 'N/A'); ?></p>
                       <p class="mb-1">
                         <strong>Validity:</strong>
-                        <?php echo e($current->package->duration ?? '-'); ?> <?php echo e(ucfirst($current->package->duration_unit ?? 'months')); ?>
+                        <?php echo e($current->package->validity ?? '-'); ?>
 
                         (Till
                         <?php echo e($current->end_date ? \Carbon\Carbon::parse($current->end_date)->format('d M Y') : 'Ongoing'); ?>)
@@ -73,27 +73,51 @@
                     <h6 class="fw-bold text-uppercase mb-3">Account Summary</h6>
 
                     <div class="row text-center mb-3">
-                      <div class="col-4">
-                        <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
-                          <h5 class="fw-bold text-primary mb-0"><?php echo e($current->package->total_listings ?? 0); ?></h5>
-                          <small>Total Listing</small>
+                      <?php if($type === 'property'): ?>
+                        <div class="col-4">
+                          <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
+                            <h5 class="fw-bold text-primary mb-0"><?php echo e($current->package->number_of_listing ?? 0); ?></h5>
+                            <small>Total Listings</small>
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
-                          <h5 class="fw-bold text-success mb-0"><?php echo e($current->package->used_listings ?? 0); ?></h5>
-                          <small>Property Posted</small>
+                        <div class="col-4">
+                          <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
+                            <h5 class="fw-bold text-success mb-0"><?php echo e($current->used_listings ?? 0); ?></h5>
+                            <small>Properties Posted</small>
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
-                          <h5 class="fw-bold text-danger mb-0">
-                            <?php echo e(($current->package->total_listings ?? 0) - ($current->package->used_listings ?? 0)); ?>
+                        <div class="col-4">
+                          <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
+                            <h5 class="fw-bold text-danger mb-0">
+                              <?php echo e(($current->package->number_of_listing ?? 0) - ($current->used_listings ?? 0)); ?>
 
-                          </h5>
-                          <small>Remaining</small>
+                            </h5>
+                            <small>Remaining</small>
+                          </div>
                         </div>
-                      </div>
+                      <?php elseif($type === 'service'): ?>
+                        <div class="col-4">
+                          <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
+                            <h5 class="fw-bold text-primary mb-0"><?php echo e($current->package->total_services ?? 0); ?></h5>
+                            <small>Total Services</small>
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
+                            <h5 class="fw-bold text-success mb-0"><?php echo e($current->used_services ?? 0); ?></h5>
+                            <small>Services Posted</small>
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
+                            <h5 class="fw-bold text-danger mb-0">
+                              <?php echo e(($current->package->total_services ?? 0) - ($current->used_services ?? 0)); ?>
+
+                            </h5>
+                            <small>Remaining</small>
+                          </div>
+                        </div>
+                      <?php endif; ?>
                     </div>
 
                     <div class="d-flex gap-2 mt-3" style="gap:20px;">
@@ -106,6 +130,7 @@
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
           <?php else: ?>
@@ -132,7 +157,7 @@
                   <tr>
                     <td><?php echo e($history->created_at->format('d M Y, h:i A')); ?></td>
                     <td><?php echo e($history->package->name ?? 'N/A'); ?></td>
-                    <td><?php echo e($history->package->duration ?? '-'); ?> <?php echo e(ucfirst($history->package->duration_unit ?? '')); ?></td>
+                    <td><?php echo e($history->package->validity ?? '-'); ?></td>
                     <td>₹<?php echo e(number_format($history->amount, 2)); ?></td>
                     <td><?php echo e($history->invoice->invoice_number ?? 'N/A'); ?></td>
                     <td>

@@ -153,14 +153,14 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <h3 class="head-tit">Dashboard</h3>
                             <div class="switch-container">
-                                <span class="switch-label">Seller</span>
+                                <span class="switch-label">Properties</span>
 
                                 <label class="toggle-switch">
                                     <input type="checkbox" id="roleToggle">
                                     <span class="slider"></span>
                                 </label>
 
-                                <span class="switch-label">Buyer</span>
+                                <span class="switch-label">Services</span>
                             </div>
                         </div>
                         <hr>
@@ -310,8 +310,100 @@
             </div>
         </div>
     </section>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('js'); ?>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggle = document.getElementById("roleToggle");
+            console.log(toggle);
+
+            const currentUrl = new URL(window.location.href);
+            const currentType = localStorage.getItem("user_type") || "property"; // default to property
+
+            // === Set initial toggle state ===
+            toggle.checked = currentType === "service";
+
+            // === Update UI or reload page with param ===
+            function updateType(type) {
+                localStorage.setItem("user_type", type);
+                currentUrl.searchParams.set("type", type);
+                window.location.href = currentUrl.toString(); // reload with ?type=...
+            }
+
+            // === Listen for toggle change ===
+            toggle.addEventListener("change", function () {
+                const newType = this.checked ? "service" : "property";
+                updateType(newType);
+            });
+
+            // === Optional: Reflect active type visually ===
+            document.querySelectorAll(".switch-label").forEach(label => {
+                label.style.fontWeight = (label.textContent.toLowerCase().includes(currentType)) ? "bold" : "normal";
+            });
+        });
+    </script>
+    <script>
+        // Bar Chart for Property Types
+        const ctx1 = document.getElementById('propertyTypeChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Apartment', 'Villa', 'Plot', 'Commercial'],
+                datasets: [{
+                    label: 'Number of Properties',
+                    data: [12, 8, 5, 3],
+                    backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545'],
+                    borderColor: ['#0056b3', '#218838', '#e0a800', '#c82333'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Count'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Pie Chart for Property Status
+        const ctx2 = document.getElementById('propertyStatusChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: ['Active', 'Pending', 'Sold'],
+                datasets: [{
+                    data: [15, 8, 5],
+                    backgroundColor: ['#28a745', '#ffc107', '#6c757d'],
+                    borderColor: ['#218838', '#e0a800', '#5a6268'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
 
 
+    </script>
     <script type="text/javascript">
         function deleteProperty(id) {
             swal({
@@ -342,70 +434,6 @@
         }
 
     </script>
-
-    <?php $__env->startSection('scripts'); ?>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            // Bar Chart for Property Types
-            const ctx1 = document.getElementById('propertyTypeChart').getContext('2d');
-            new Chart(ctx1, {
-                type: 'bar',
-                data: {
-                    labels: ['Apartment', 'Villa', 'Plot', 'Commercial'],
-                    datasets: [{
-                        label: 'Number of Properties',
-                        data: [12, 8, 5, 3],
-                        backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545'],
-                        borderColor: ['#0056b3', '#218838', '#e0a800', '#c82333'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Count'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
-                }
-            });
-
-            // Pie Chart for Property Status
-            const ctx2 = document.getElementById('propertyStatusChart').getContext('2d');
-            new Chart(ctx2, {
-                type: 'pie',
-                data: {
-                    labels: ['Active', 'Pending', 'Sold'],
-                    datasets: [{
-                        data: [15, 8, 5],
-                        backgroundColor: ['#28a745', '#ffc107', '#6c757d'],
-                        borderColor: ['#218838', '#e0a800', '#5a6268'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
-
-
-        </script>
-
-    <?php $__env->stopSection(); ?>
 
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.front.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/user/dashboard.blade.php ENDPATH**/ ?>

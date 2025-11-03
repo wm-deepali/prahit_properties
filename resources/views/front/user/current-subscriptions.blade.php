@@ -54,7 +54,7 @@
                       <p class="mb-1"><strong>Subscription Name:</strong> {{ $current->package->name ?? 'N/A' }}</p>
                       <p class="mb-1">
                         <strong>Validity:</strong>
-                        {{ $current->package->duration ?? '-' }} {{ ucfirst($current->package->duration_unit ?? 'months') }}
+                        {{ $current->package->validity ?? '-' }}
                         (Till
                         {{ $current->end_date ? \Carbon\Carbon::parse($current->end_date)->format('d M Y') : 'Ongoing' }})
                       </p>
@@ -72,26 +72,49 @@
                     <h6 class="fw-bold text-uppercase mb-3">Account Summary</h6>
 
                     <div class="row text-center mb-3">
-                      <div class="col-4">
-                        <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
-                          <h5 class="fw-bold text-primary mb-0">{{ $current->package->total_listings ?? 0 }}</h5>
-                          <small>Total Listing</small>
+                      @if($type === 'property')
+                        <div class="col-4">
+                          <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
+                            <h5 class="fw-bold text-primary mb-0">{{ $current->package->number_of_listing ?? 0 }}</h5>
+                            <small>Total Listings</small>
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
-                          <h5 class="fw-bold text-success mb-0">{{ $current->package->used_listings ?? 0 }}</h5>
-                          <small>Property Posted</small>
+                        <div class="col-4">
+                          <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
+                            <h5 class="fw-bold text-success mb-0">{{ $current->used_listings ?? 0 }}</h5>
+                            <small>Properties Posted</small>
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-4">
-                        <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
-                          <h5 class="fw-bold text-danger mb-0">
-                            {{ ($current->package->total_listings ?? 0) - ($current->package->used_listings ?? 0) }}
-                          </h5>
-                          <small>Remaining</small>
+                        <div class="col-4">
+                          <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
+                            <h5 class="fw-bold text-danger mb-0">
+                              {{ ($current->package->number_of_listing ?? 0) - ($current->used_listings ?? 0) }}
+                            </h5>
+                            <small>Remaining</small>
+                          </div>
                         </div>
-                      </div>
+                      @elseif($type === 'service')
+                        <div class="col-4">
+                          <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
+                            <h5 class="fw-bold text-primary mb-0">{{ $current->package->total_services ?? 0 }}</h5>
+                            <small>Total Services</small>
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
+                            <h5 class="fw-bold text-success mb-0">{{ $current->used_services ?? 0 }}</h5>
+                            <small>Services Posted</small>
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="p-1 pt-3 pb-3 bg-light rounded shadow-sm">
+                            <h5 class="fw-bold text-danger mb-0">
+                              {{ ($current->package->total_services ?? 0) - ($current->used_services ?? 0) }}
+                            </h5>
+                            <small>Remaining</small>
+                          </div>
+                        </div>
+                      @endif
                     </div>
 
                     <div class="d-flex gap-2 mt-3" style="gap:20px;">
@@ -104,6 +127,7 @@
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
           @else
@@ -130,7 +154,7 @@
                   <tr>
                     <td>{{ $history->created_at->format('d M Y, h:i A') }}</td>
                     <td>{{ $history->package->name ?? 'N/A' }}</td>
-                    <td>{{ $history->package->duration ?? '-' }} {{ ucfirst($history->package->duration_unit ?? '') }}</td>
+                    <td>{{ $history->package->validity ?? '-' }}</td>
                     <td>₹{{ number_format($history->amount, 2) }}</td>
                     <td>{{ $history->invoice->invoice_number ?? 'N/A' }}</td>
                     <td>

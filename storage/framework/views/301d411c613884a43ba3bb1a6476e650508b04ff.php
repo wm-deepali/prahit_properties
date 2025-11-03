@@ -104,72 +104,43 @@
         </div>
       </div>
     </div>
+  </section>
 
-
-    <!-- 🔹 Invoice Modal -->
-    <div class="modal fade" id="viewInvoiceModal<?php echo e($invoice->id); ?>" tabindex="-1"
-      aria-labelledby="viewInvoiceModalLabel<?php echo e($invoice->id); ?>" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg rounded-4">
-          <div class="modal-header bg-primary text-white rounded-top-4">
-            <h5 class="modal-title fw-semibold" id="viewInvoiceModalLabel<?php echo e($invoice->id); ?>">Invoice
-              Details</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <table class="table table-bordered mb-0">
-              <tbody>
-                <tr>
-                  <th>Invoice Number</th>
-                  <td><?php echo e($invoice->invoice_number); ?></td>
-                </tr>
-                <tr>
-                  <th>Date & Time</th>
-                  <td><?php echo e($invoice->created_at->format('d M Y, h:i A')); ?></td>
-                </tr>
-                <tr>
-                  <th>Subscription Name</th>
-                  <td><?php echo e($invoice->subscription->package->name ?? 'N/A'); ?></td>
-                </tr>
-                <tr>
-                  <th>Total Amount</th>
-                  <td>₹<?php echo e(number_format($invoice->total_amount ?? $invoice->amount, 2)); ?></td>
-                </tr>
-                <tr>
-                  <th>Paid Amount</th>
-                  <td>₹<?php echo e(number_format($invoice->amount, 2)); ?></td>
-                </tr>
-                <tr>
-                  <th>Payment Status</th>
-                  <td><span class="badge bg-success">Paid</span></td>
-                </tr>
-                <tr>
-                  <th>Transaction ID</th>
-                  <td><?php echo e($invoice->subscription->transaction_id ?? '—'); ?></td>
-                </tr>
-                <tr>
-                  <th>Current Status</th>
-                  <td>
-                    <?php if($invoice->subscription->is_active): ?>
-                      <span class="badge bg-success">Active</span>
-                    <?php else: ?>
-                      <span class="badge bg-secondary">Expired</span>
-                    <?php endif; ?>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="modal-footer">
-            <a href="#" class="btn btn-primary">
-              <i class="fas fa-download me-1"></i> Download Invoice
-            </a>
-          </div>
+  <!-- Now render Modals outside the table -->
+<?php $__currentLoopData = $invoices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $invoice): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+  <div class="modal fade" id="viewInvoiceModal<?php echo e($invoice->id); ?>" tabindex="-1" aria-labelledby="viewInvoiceModalLabel<?php echo e($invoice->id); ?>" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg rounded-4">
+        <div class="modal-header bg-primary text-white rounded-top-4">
+          <h5 class="modal-title fw-semibold" id="viewInvoiceModalLabel<?php echo e($invoice->id); ?>">Invoice Details</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-bordered mb-0">
+            <tbody>
+              <tr><th>Invoice Number</th><td><?php echo e($invoice->invoice_number); ?></td></tr>
+              <tr><th>Date & Time</th><td><?php echo e($invoice->created_at->format('d M Y, h:i A')); ?></td></tr>
+              <tr><th>Subscription Name</th><td><?php echo e($invoice->subscription->package->name ?? 'N/A'); ?></td></tr>
+              <tr><th>Total Amount</th><td>₹<?php echo e(number_format($invoice->total_amount ?? $invoice->amount, 2)); ?></td></tr>
+              <tr><th>Paid Amount</th><td>₹<?php echo e(number_format($invoice->amount, 2)); ?></td></tr>
+              <tr><th>Payment Status</th><td><span class="badge bg-success">Paid</span></td></tr>
+              <tr><th>Transaction ID</th><td><?php echo e($invoice->subscription->transaction_id ?? '—'); ?></td></tr>
+              <tr><th>Current Status</th><td>
+                <?php if($invoice->subscription->is_active): ?>
+                  <span class="badge bg-success">Active</span>
+                <?php else: ?>
+                  <span class="badge bg-secondary">Expired</span>
+                <?php endif; ?>
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="btn btn-primary"><i class="fas fa-download me-1"></i> Download Invoice</a>
         </div>
       </div>
     </div>
-
-  </section>
-
+  </div>
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.front.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/user/invoice.blade.php ENDPATH**/ ?>

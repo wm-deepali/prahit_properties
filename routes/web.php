@@ -15,19 +15,6 @@ Route::post('/business/send-otp', [App\Http\Controllers\Admin\BusinessListingCon
 Route::post('/business/enquiry', [App\Http\Controllers\Admin\BusinessListingController::class, 'submitEnquiry'])->name('business.enquiry');
 
 
-Route::get('/user/pricing', [App\Http\Controllers\PricingController::class, 'index'])->name('pricing');
-
-
-Route::get('/user/all-inquries', [App\Http\Controllers\User\UserController::class, 'allInquiries'])->name('all-inquries');
-Route::get('/user/my-wishlist', [App\Http\Controllers\WishlistController::class, 'myWishlist'])->name('my-wishlist');
-Route::get('/user/my-activities', [App\Http\Controllers\User\UserController::class, 'myActivities'])->name('my-activities');
-Route::get('user/sent-inquries', [App\Http\Controllers\User\UserController::class, 'sentEnquiries'])->name('user.sent-inquiries');
-Route::get('/user/current-subscriptions', [App\Http\Controllers\PricingController::class, 'subscriptions'])->name('current-subscriptions');
-Route::get('/user/payments-invoice', [App\Http\Controllers\PricingController::class, 'invoices'])->name('payments-invoice');
-Route::get('/user/invoice-details/{subscription}', [App\Http\Controllers\PricingController::class, 'invoiceDetails'])->name('invoice-details');
-Route::get('/user/invoice/download/{subscription}', [App\Http\Controllers\PricingController::class, 'downloadInvoice'])
-    ->name('invoice.download');
-
 Route::get('/profile-page/{slug?}', function ($slug) {
 	return view('front.profile-page', compact('slug'));
 })->name('profile.page');
@@ -38,8 +25,6 @@ Route::get('/business-details/{id}', [App\Http\Controllers\HomeController::class
 
 Route::get('/listing-list', 'HomeController@list')->name('listing.list');
 Route::get('/directory-list', 'HomeController@directoryList')->name('directory.list');
-
-
 Route::get('login', 'AuthController@login');
 Route::post('login', 'AuthController@login');
 Route::post('login_ajax', 'User\UserController@login_ajax')->name('login_ajax');
@@ -484,9 +469,25 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('/wishlist/toggle', [App\Http\Controllers\WishlistController::class, 'toggle'])->name('wishlist.toggle');
 	Route::post('/business/wishlist/toggle', [App\Http\Controllers\BusinessWishlistController::class, 'toggle'])
 		->name('business.wishlist.toggle');
-	Route::post('subscription/store', [App\Http\Controllers\PricingController::class, 'Store'])->name('subscription.store');
 
+	Route::post('subscription/store', [App\Http\Controllers\User\PricingController::class, 'Store'])->name('subscription.store');
+	Route::get('/user/pricing', [App\Http\Controllers\User\PricingController::class, 'index'])->name('pricing');
+	Route::get('/user/all-inquries', [App\Http\Controllers\User\UserController::class, 'allInquiries'])->name('all-inquries');
+	Route::get('/user/my-wishlist', [App\Http\Controllers\WishlistController::class, 'myWishlist'])->name('my-wishlist');
+	Route::get('/user/my-activities', [App\Http\Controllers\User\UserController::class, 'myActivities'])->name('my-activities');
+	Route::get('user/sent-inquries', [App\Http\Controllers\User\UserController::class, 'sentEnquiries'])->name('user.sent-inquiries');
+	Route::get('/user/current-subscriptions', [App\Http\Controllers\User\PricingController::class, 'subscriptions'])->name('current-subscriptions');
+	Route::get('/user/payments-invoice', [App\Http\Controllers\User\PricingController::class, 'payments'])->name('payments-invoice');
+	Route::get('/user/invoice-details/{subscription}', [App\Http\Controllers\User\PricingController::class, 'invoiceDetails'])->name('invoice-details');
+	Route::get('/user/invoice/download/{id}', [App\Http\Controllers\User\PricingController::class, 'downloadInvoicePDF'])
+		->name('invoice.download');
+	Route::get('/user/invoices/download-all', [App\Http\Controllers\User\PricingController::class, 'downloadAllInvoices'])
+		->name('invoices.download_all');
 
+	Route::get('/user/services', [App\Http\Controllers\User\ServiceController::class, 'index'])->name('user.services');
+	Route::get('/user/all-services-inquiries', [App\Http\Controllers\User\ServiceController::class, 'receivedInquiries'])->name('user.services.inquiries.received');
+	Route::get('/user/sent-services-inquiries', [App\Http\Controllers\User\ServiceController::class, 'sentInquiries'])->name('user.services.inquiries.sent');
+	Route::get('/user/my-service-wishlist', [App\Http\Controllers\User\ServiceController::class, 'wishlist'])->name('user.service.wishlist');
 });
 
 //Enquery Routes 

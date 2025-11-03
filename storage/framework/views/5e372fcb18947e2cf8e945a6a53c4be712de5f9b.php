@@ -41,6 +41,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
+                                                    <th>Type</th> 
                                                     <th>Name</th>
                                                     <th>Price (₹)</th>
                                                     <th>Duration</th>
@@ -53,11 +54,20 @@
                                                 <?php $__empty_1 = true; $__currentLoopData = $packages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $package): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                                     <tr>
                                                         <td><?php echo e($loop->iteration); ?></td>
+                                                        <td>
+                                                            <?php if($package->package_type == 'property'): ?>
+                                                                <span class="badge bg-info" style="color:white;">Property</span>
+                                                            <?php elseif($package->package_type == 'service'): ?>
+                                                                <span class="badge bg-success" style="color:white;">Service</span>
+                                                            <?php else: ?>
+                                                                <span class="badge bg-secondary">—</span>
+                                                            <?php endif; ?>
+                                                        </td>
                                                         <td><?php echo e($package->name); ?></td>
                                                         <td><?php echo e(number_format($package->price, 2)); ?></td>
                                                         <td>
-                                                            <?php if($package->duration): ?>
-                                                                <?php echo e($package->duration); ?> <?php echo e(ucfirst($package->duration_unit)); ?>
+                                                            <?php if($package->validity): ?>
+                                                                <?php echo e($package->validity); ?>
 
                                                             <?php else: ?>
                                                                 —
@@ -99,7 +109,7 @@
                                                     </tr>
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                                     <tr>
-                                                        <td colspan="7" class="text-center">No packages found.</td>
+                                                        <td colspan="8" class="text-center">No packages found.</td>
                                                     </tr>
                                                 <?php endif; ?>
                                             </tbody>
@@ -121,6 +131,8 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('js'); ?>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         function deletePackage(id) {
             Swal.fire({
