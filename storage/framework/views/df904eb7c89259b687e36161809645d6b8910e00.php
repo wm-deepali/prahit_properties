@@ -1,6 +1,5 @@
 
 
-
 <?php $__env->startSection('title'); ?>
     <title>Profile</title>
 <?php $__env->stopSection(); ?>
@@ -107,12 +106,25 @@
             opacity: 0.9;
         }
 
-        .card1 { background: linear-gradient(135deg, #fbf4f5 0%, #fff5f2 100%); }
-        .card2 { background: linear-gradient(135deg, #e6efff 0%, #edf4f7 100%); }
-        .card3 { background: linear-gradient(135deg, #e4f1e4 0%, #d7e9d7 100%); }
-        .card4 { background: linear-gradient(135deg, #fffafa 0%, #f7e4bc 100%); }
+        .card1 {
+            background: linear-gradient(135deg, #fbf4f5 0%, #fff5f2 100%);
+        }
 
-        .services-section, .properties-section, .contact-section {
+        .card2 {
+            background: linear-gradient(135deg, #e6efff 0%, #edf4f7 100%);
+        }
+
+        .card3 {
+            background: linear-gradient(135deg, #e4f1e4 0%, #d7e9d7 100%);
+        }
+
+        .card4 {
+            background: linear-gradient(135deg, #fffafa 0%, #f7e4bc 100%);
+        }
+
+        .services-section,
+        .properties-section,
+        .contact-section {
             padding: 50px 0;
             background: white;
             border-radius: 12px;
@@ -120,7 +132,8 @@
             margin-bottom: 30px;
         }
 
-        .service-item, .property-card {
+        .service-item,
+        .property-card {
             padding: 20px;
             background: #f8f9fa;
             border-radius: 10px;
@@ -128,7 +141,8 @@
             transition: transform 0.3s ease;
         }
 
-        .service-item:hover, .property-card:hover {
+        .service-item:hover,
+        .property-card:hover {
             transform: translateY(-5px);
         }
 
@@ -202,7 +216,8 @@
             color: #888;
         }
 
-        .contact-card, .feedback-form {
+        .contact-card,
+        .feedback-form {
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -345,7 +360,10 @@
                 display: none;
             }
 
-            .col-md-3, .col-md-6, .col-md-8, .col-md-4 {
+            .col-md-3,
+            .col-md-6,
+            .col-md-8,
+            .col-md-4 {
                 flex: 0 0 100%;
                 max-width: 100%;
             }
@@ -354,11 +372,14 @@
                 margin-bottom: 15px;
             }
 
-            .services-section, .properties-section, .contact-section {
+            .services-section,
+            .properties-section,
+            .contact-section {
                 padding: 30px 0;
             }
 
-            .service-item, .property-card {
+            .service-item,
+            .property-card {
                 margin-bottom: 15px;
             }
 
@@ -366,7 +387,8 @@
                 padding: 20px;
             }
 
-            .contact-card, .feedback-form {
+            .contact-card,
+            .feedback-form {
                 padding: 20px;
             }
 
@@ -400,7 +422,8 @@
                 max-width: 50%;
             }
 
-            .col-md-8, .col-md-4 {
+            .col-md-8,
+            .col-md-4 {
                 flex: 0 0 100%;
                 max-width: 100%;
             }
@@ -409,6 +432,32 @@
                 position: relative;
                 top: 0;
                 margin-top: 20px;
+            }
+        }
+
+        .info-btn {
+            flex: 1;
+            min-width: 200px;
+            background: #f3f7ff;
+            border: 1px solid #d9e4ff;
+            border-radius: 10px;
+            padding: 12px 15px;
+            text-align: center;
+            font-size: 15px;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .info-btn:hover {
+            background: #e7f0ff;
+            transform: translateY(-2px);
+        }
+
+        @media(max-width: 768px) {
+            .info-btn {
+                flex: 100%;
             }
         }
     </style>
@@ -420,23 +469,41 @@
                 <div class="container">
                     <div class="row align-items-center">
                         <div class="col-md-3">
-                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Profile" class="profile-avatar">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+                                alt="Profile" class="profile-avatar">
                         </div>
                         <div class="col-md-9">
                             <div class="profil-data">
                                 <div class="profile-name-info">
-                                    <h2 class="m-0">Raju Kumar</h2>
+                                    <h2 class="m-0"><?php echo e($user->firstname ?? ''); ?> <?php echo e($user->lastname ?? ''); ?></h2>
                                     <p class="m-0"><strong>Gupta Properties</strong></p>
-                                    <p class="m-0">Operating since: 2015</p>
+                                    <!--<p class="m-0">Operating since: 2015</p>-->
+                                </div>
+                                <div class="rera-section my-4">
+                                    <div class="d-flex flex-wrap justify-content-between gap-3">
+                                        <button class="info-btn">
+                                            <strong>RERA Number:</strong> UP-RERA-12345
+                                        </button>
+                                        <button class="info-btn">
+                                            <strong>Operating Since:</strong> 2015
+                                        </button>
+                                        <button class="info-btn">
+                                            <strong>Membership:</strong>
+                                            <?php echo e($user->activeSubscription->package->name ?? 'Free'); ?>
+
+                                        </button>
+
+                                    </div>
                                 </div>
                                 <div class="hori-line">
-                                    <p><strong>22</strong><br>Properties For Sale</p>
+                                    <p><strong><?php echo e($sellCount); ?></strong><br>Properties For Sale</p>
                                     <div class="line"></div>
-                                    <p><strong>22</strong><br>Properties For Sale</p>
+                                    <p><strong><?php echo e($rentCount); ?></strong><br>Properties For Rent</p>
                                     <div class="line"></div>
-                                    <p><strong>22</strong><br>Properties For Sale</p>
+                                    <p><strong><?php echo e($pgHostelCount); ?></strong><br>Properties For PG/Hostel</p>
                                 </div>
-                                <p class="m-0 mt-3"><strong>Deals in</strong><br>Rent/Lease , Pre-launch , Original Booking , Resale , Others</p>
+                                <p class="m-0 mt-3"><strong>Deals in</strong><br>Rent/Lease , Pre-launch , Original Booking
+                                    , Resale , Others</p>
                             </div>
                         </div>
                     </div>
@@ -447,19 +514,19 @@
             <div class="row">
                 <div class="col-md-3 col-sm-6">
                     <div class="stats-card card1">
-                        <div class="stat-number">150+</div>
+                        <div class="stat-number"><?php echo e($totalProperties); ?></div>
                         <div class="stat-label">Total Properties</div>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="stats-card card2">
-                        <div class="stat-number">85</div>
+                        <div class="stat-number"><?php echo e($sellCount); ?></div>
                         <div class="stat-label">For Sale</div>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="stats-card card3">
-                        <div class="stat-number">65</div>
+                        <div class="stat-number"><?php echo e($rentCount); ?></div>
                         <div class="stat-label">For Rent</div>
                     </div>
                 </div>
@@ -479,25 +546,25 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="service-item">
-                                    <h5><i class="fas fa-home me-2 text-primary"></i>Residential Properties</h5>
+                                    <h5>Residential Properties</h5>
                                     <p>Apartments, Villas, Independent Houses</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="service-item">
-                                    <h5><i class="fas fa-building me-2 text-success"></i>Commercial Properties</h5>
+                                    <h5>Commercial Properties</h5>
                                     <p>Offices, Shops, Warehouses</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="service-item">
-                                    <h5><i class="fas fa-handshake me-2 text-info"></i>Property Valuation</h5>
+                                    <h5>Property Valuation</h5>
                                     <p>Free market value assessment</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="service-item">
-                                    <h5><i class="fas fa-file-contract me-2 text-warning"></i>Legal Assistance</h5>
+                                    <h5>Legal Assistance</h5>
                                     <p>Documentation & RERA compliance</p>
                                 </div>
                             </div>
@@ -507,91 +574,62 @@
                     <div class="introduction">
                         <h3>About John Doe</h3>
                         <p>
-                            With over a decade of experience in the real estate industry, John Doe has established himself as a trusted name in property consulting. Specializing in both residential and commercial properties, he has successfully closed over 500 deals and helped countless families find their dream homes.
+                            With over a decade of experience in the real estate industry, John Doe has established himself
+                            as a trusted name in property consulting. Specializing in both residential and commercial
+                            properties, he has successfully closed over 500 deals and helped countless families find their
+                            dream homes.
                         </p>
                         <p>
-                            John believes in transparency, integrity, and personalized service. His deep understanding of market trends and negotiation skills ensure the best deals for his clients. Whether you're buying, selling, or investing, John and his team at Doe Realty Solutions are committed to making your real estate journey seamless and rewarding.
+                            John believes in transparency, integrity, and personalized service. His deep understanding of
+                            market trends and negotiation skills ensure the best deals for his clients. Whether you're
+                            buying, selling, or investing, John and his team at Doe Realty Solutions are committed to making
+                            your real estate journey seamless and rewarding.
                         </p>
                     </div>
 
                     <div class="properties-section p-3">
                         <h3 class="mb-4">Featured Properties</h3>
                         <div class="row">
-                            <!-- Property Card 1 -->
-                            <div class="col-lg-6 mb-3">
-                                <div class="newdesign-project-main">
-                                    <div class="newdesign-image-proj">
-                                        <img src="https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;" class="img-fluid" alt="Property 1">
-                                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                                    </div>
-                                    <div class="newdesign-info-proj">
-                                        <div class="d-flex justify-content-between">
-                                            <h4 class="newdesign-proj-name">West Center Meridian Courts</h4>
-                                            <span class="newdesign-proj-category">Villa</span>
+                            <?php $__currentLoopData = $properties; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <!-- Property Card 1 -->
+                                <div class="col-lg-6 mb-3">
+                                    <div class="newdesign-project-main">
+                                        <div class="newdesign-image-proj">
+                                            <img src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;'); ?>"
+                                                class="img-fluid" alt="Property 1">
+                                            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i>
+                                                Verified</span>
                                         </div>
-                                        <span class="newdesign-apart-name">Presenting West Center Meridian Courts, a residential property located in the heart of Kandivali....</span>
-                                        <hr>
-                                        <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, Bandra West</span>
-                                        <div class="newdesign-proj-price">
-                                            <span><i class="fas fa-rupee-sign"></i>2.5 Cr - 4.8 Cr</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between">
-                                            <span class="newdesign-proj-owner"><strong>Builder:</strong><br> Green Homes Ltd.</span>
-                                            <span class="newdesign-proj-owner"><strong>Posted:</strong><br> 10 Oct 2027.</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Property Card 2 -->
-                            <div class="col-lg-6 mb-3">
-                                <div class="newdesign-project-main">
-                                    <div class="newdesign-image-proj">
-                                        <img src="https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;" class="img-fluid" alt="Property 2">
-                                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                                    </div>
-                                    <div class="newdesign-info-proj">
-                                        <div class="d-flex justify-content-between">
-                                            <h4 class="newdesign-proj-name">Origin Rock Highland</h4>
-                                            <span class="newdesign-proj-category">Apartment</span>
-                                        </div>
-                                        <span class="newdesign-apart-name">Presenting West Center Meridian Courts, a residential property located in the heart of Kandivali....</span>
-                                        <hr>
-                                        <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, Bandra West</span>
-                                        <div class="newdesign-proj-price">
-                                            <span><i class="fas fa-rupee-sign"></i>2.5 Cr - 4.8 Cr</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between">
-                                            <span class="newdesign-proj-owner"><strong>Builder:</strong><br> Green Homes Ltd.</span>
-                                            <span class="newdesign-proj-owner"><strong>Publish:</strong><br> 10 Oct 2027.</span>
+                                        <div class="newdesign-info-proj">
+                                            <div class="d-flex justify-content-between">
+                                                <h4 class="newdesign-proj-name"> <a
+                                                        href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>"><?php echo e($value->title); ?></a>
+                                                </h4>
+                                                <span class="newdesign-proj-category">Villa</span>
+                                            </div>
+                                            <span class="newdesign-apart-name">
+                                                <?php echo e(\Illuminate\Support\Str::limit($value->description, 100)); ?></span>
+                                            <hr>
+                                            <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i>
+                                                <?php echo e($value->getCity->name); ?>,
+                                                <?php echo e($value->getState->name); ?></span>
+                                            <div class="newdesign-proj-price">
+                                                <span><i
+                                                        class="fas fa-rupee-sign"></i><?php echo e(\App\Helpers\Helper::formatIndianPrice($value->price)); ?></span>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <span class="newdesign-proj-owner"><strong>Builder:</strong><br> <a
+                                                        href="<?php echo e(route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')])); ?>">
+                                                        <?php echo e($value->getUser->firstname ?? ''); ?>
+
+                                                    </a></span>
+                                                <span class="newdesign-proj-owner"><strong>Posted:</strong><br>
+                                                    <?php echo e(optional($value->created_at)->format('d M Y')); ?></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- Property Card 3 -->
-                            <div class="col-lg-6 mb-3">
-                                <div class="newdesign-project-main">
-                                    <div class="newdesign-image-proj">
-                                        <img src="https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;" class="img-fluid" alt="Property 3">
-                                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                                    </div>
-                                    <div class="newdesign-info-proj">
-                                        <div class="d-flex justify-content-between">
-                                            <h4 class="newdesign-proj-name">Greenfield Estate</h4>
-                                            <span class="newdesign-proj-category">Apartment</span>
-                                        </div>
-                                        <span class="newdesign-apart-name">Presenting West Center Meridian Courts, a residential property located in the heart of Kandivali....</span>
-                                        <hr>
-                                        <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra, Bandra West</span>
-                                        <div class="newdesign-proj-price">
-                                            <span><i class="fas fa-rupee-sign"></i>2.5 Cr - 4.8 Cr</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between">
-                                            <span class="newdesign-proj-owner"><strong>Builder:</strong><br> Green Homes Ltd.</span>
-                                            <span class="newdesign-proj-owner"><strong>Publish:</strong><br> 10 Oct 2027.</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
 
@@ -601,8 +639,15 @@
                                 <div class="contact-card">
                                     <h4 class="mb-3">Contact Information</h4>
                                     <div class="mb-3">
-                                        <i class="fas fa-map-marker-alt me-2 text-primary"></i>
-                                        <strong>Address:</strong> 123 Business Park, Sector 18, Noida - 201301
+                                        <div class="d-flex gap-2">
+                                            <div style="white-space:nowrap;">
+                                                <i class="fas fa-map-marker-alt me-2 text-primary"></i>
+                                                <strong>Address:</strong>
+                                            </div>
+
+
+                                            <div>123 Business Park, Sector 18, Noida - 201301</div>
+                                        </div>
                                     </div>
                                     <div class="mb-3">
                                         <i class="fas fa-phone me-2 text-success"></i>
@@ -612,6 +657,7 @@
                                         <i class="fas fa-envelope me-2 text-info"></i>
                                         <strong>Email:</strong> john@doerealtysolutions.com
                                     </div>
+                                    <hr>
                                     <div class="mb-4">
                                         <h5 class="mb-2">Working Hours</h5>
                                         <div class="timing-item">
@@ -627,12 +673,33 @@
                                             <span>Closed</span>
                                         </div>
                                     </div>
-                                    <a href="#" class="btn btn-success w-100 mb-2">
-                                        <i class="fas fa-phone me-2"></i>Call Now
-                                    </a>
-                                    <a href="#" class="btn btn-outline-primary w-100">
-                                        <i class="fas fa-envelope me-2"></i>Send Message
-                                    </a>
+                                    <div class="contact-now-section d-flex align-items-center my-4 p-3"
+                                        style="background:#f8f9fa; gap:10px; border-radius:10px;">
+                                        <h5 class="" style="white-space:nowrap;">Connect <i
+                                                class="fa-solid fa-hand-point-right" style="color:orange;"></i> </h5>
+                                        <div class="row g-2" style="gap:15px;padding:0px 15px;">
+                                            <div class="icon-button">
+                                                <a href="tel:+919451591515" class="btn btn-success w-100">
+                                                    <i class="fas fa-phone me-2"></i>
+                                                </a>
+                                            </div>
+                                            <div class="icon-button">
+                                                <a href="https://wa.me/919451591515" target="_blank"
+                                                    class="btn btn-success w-100"
+                                                    style="background:#25D366; border-color:#25D366;">
+                                                    <i class="fab fa-whatsapp me-2"></i>
+                                                </a>
+                                            </div>
+                                            <div class="icon-button">
+                                                <a href="mailto:example@email.com" class="btn btn-outline-primary w-100">
+                                                    <i class="fas fa-envelope me-2"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
                                 </div>
                             </div>
 
@@ -641,6 +708,22 @@
                                     <h4 class="mb-4">Leave a Review</h4>
                                     <form>
                                         <div class="mb-3">
+                                            <!--<label class="form-label">Rating</label>-->
+                                            <div class="star-rating mb-2">
+                                                <i class="far fa-star" data-rating="1"
+                                                    style="font-size:30px;color:orange;"></i>
+                                                <i class="far fa-star" data-rating="2"
+                                                    style="font-size:30px;color:orange;"></i>
+                                                <i class="far fa-star" data-rating="3"
+                                                    style="font-size:30px;color:orange;"></i>
+                                                <i class="far fa-star" data-rating="4"
+                                                    style="font-size:30px;color:orange;"></i>
+                                                <i class="far fa-star" data-rating="5"
+                                                    style="font-size:30px;color:orange;"></i>
+                                            </div>
+                                            <input type="hidden" name="rating" id="rating">
+                                        </div>
+                                        <div class="mb-3">
                                             <label class="form-label">Your Name</label>
                                             <input type="text" class="form-control" placeholder="Enter your name">
                                         </div>
@@ -648,20 +731,11 @@
                                             <label class="form-label">Email</label>
                                             <input type="email" class="form-control" placeholder="Enter your email">
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Rating</label>
-                                            <div class="star-rating mb-2">
-                                                <i class="far fa-star" data-rating="1"></i>
-                                                <i class="far fa-star" data-rating="2"></i>
-                                                <i class="far fa-star" data-rating="3"></i>
-                                                <i class="far fa-star" data-rating="4"></i>
-                                                <i class="far fa-star" data-rating="5"></i>
-                                            </div>
-                                            <input type="hidden" name="rating" id="rating">
-                                        </div>
+
                                         <div class="mb-3">
                                             <label class="form-label">Your Review</label>
-                                            <textarea class="form-control" rows="4" placeholder="Share your experience..."></textarea>
+                                            <textarea class="form-control" rows="4"
+                                                placeholder="Share your experience..."></textarea>
                                         </div>
                                         <button type="submit" class="btn btn-primary w-100">Submit Review</button>
                                     </form>
@@ -677,7 +751,8 @@
                         <h4 class="mb-4">Other Experts</h4>
                         <div class="agent-card mb-3 border">
                             <div class="newdesign-image-agent">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Agent" class="agent-avatar">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+                                    alt="Agent" class="agent-avatar">
                                 <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
                             </div>
                             <div class="newdesign-info-agent">
@@ -685,9 +760,11 @@
                                     <h4 class="newdesign-proj-name">Sarah Wilson</h4>
                                     <span class="newdesign-proj-category">Agent</span>
                                 </div>
-                                <span class="newdesign-apart-name">Specializes in residential properties and market analysis.</span>
+                                <span class="newdesign-apart-name">Specializes in residential properties and market
+                                    analysis.</span>
                                 <hr>
-                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Mumbai, Maharashtra</span>
+                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Mumbai,
+                                    Maharashtra</span>
                                 <div class="d-flex justify-content-between">
                                     <span class="newdesign-proj-owner"><strong>Company:</strong><br>Wilson Properties</span>
                                     <span class="newdesign-proj-owner"><strong>Rating:</strong><br>4.9 (89 reviews)</span>
@@ -697,7 +774,8 @@
                         </div>
                         <div class="agent-card mb-3 border">
                             <div class="newdesign-image-agent">
-                                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Agent" class="agent-avatar">
+                                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+                                    alt="Agent" class="agent-avatar">
                                 <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
                             </div>
                             <div class="newdesign-info-agent">
@@ -707,7 +785,8 @@
                                 </div>
                                 <span class="newdesign-apart-name">Expert in commercial real estate and leasing.</span>
                                 <hr>
-                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Delhi, India</span>
+                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Delhi,
+                                    India</span>
                                 <div class="d-flex justify-content-between">
                                     <span class="newdesign-proj-owner"><strong>Company:</strong><br>Chen Realty Group</span>
                                     <span class="newdesign-proj-owner"><strong>Rating:</strong><br>4.6 (156 reviews)</span>
@@ -717,7 +796,8 @@
                         </div>
                         <div class="agent-card mb-3 border">
                             <div class="newdesign-image-agent">
-                                <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Agent" class="agent-avatar">
+                                <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+                                    alt="Agent" class="agent-avatar">
                                 <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
                             </div>
                             <div class="newdesign-info-agent">
@@ -727,7 +807,8 @@
                                 </div>
                                 <span class="newdesign-apart-name">Focuses on luxury properties and investments.</span>
                                 <hr>
-                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Bangalore, Karnataka</span>
+                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Bangalore,
+                                    Karnataka</span>
                                 <div class="d-flex justify-content-between">
                                     <span class="newdesign-proj-owner"><strong>Company:</strong><br>Sharma Builders</span>
                                     <span class="newdesign-proj-owner"><strong>Rating:</strong><br>4.8 (234 reviews)</span>
@@ -737,7 +818,8 @@
                         </div>
                         <div class="agent-card mb-3 border">
                             <div class="newdesign-image-agent">
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Agent" class="agent-avatar">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+                                    alt="Agent" class="agent-avatar">
                                 <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
                             </div>
                             <div class="newdesign-info-agent">
@@ -747,7 +829,8 @@
                                 </div>
                                 <span class="newdesign-apart-name">Specializes in residential sales and rentals.</span>
                                 <hr>
-                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Pune, Maharashtra</span>
+                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Pune,
+                                    Maharashtra</span>
                                 <div class="d-flex justify-content-between">
                                     <span class="newdesign-proj-owner"><strong>Company:</strong><br>Patel Realty</span>
                                     <span class="newdesign-proj-owner"><strong>Rating:</strong><br>5.0 (67 reviews)</span>
@@ -762,25 +845,25 @@
     </section>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Star rating functionality
-            $('.star-rating i[data-rating]').click(function() {
+            $('.star-rating i[data-rating]').click(function () {
                 var rating = $(this).data('rating');
                 $('#rating').val(rating);
-                
+
                 $('.star-rating i[data-rating]').removeClass('fas fa-star').addClass('far fa-star');
-                for(var i = 1; i <= rating; i++) {
+                for (var i = 1; i <= rating; i++) {
                     $('.star-rating i[data-rating="' + i + '"]').removeClass('far fa-star').addClass('fas fa-star');
                 }
             });
 
             // Favorite button hover effect
             $('.property-favorite').hover(
-                function() { $(this).css('background', '#cc0000'); },
-                function() { $(this).css('background', '#ff4444'); }
+                function () { $(this).css('background', '#cc0000'); },
+                function () { $(this).css('background', '#ff4444'); }
             );
         });
     </script>
-<?php $__env->stopSection(); ?>
 
+<?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.front.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/profile-page.blade.php ENDPATH**/ ?>

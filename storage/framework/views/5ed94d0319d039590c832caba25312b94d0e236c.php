@@ -661,16 +661,8 @@
               <div class=" profile-content">
                 <h4 class="m-0">Welcome</h4>
                 <h6 class="m-0"><?php echo e(Auth::user()->firstname); ?> <?php echo e(Auth::user()->lastname); ?></h6>
-                <?php if(\Auth::user()->role == 'owner'): ?>
+                <?php if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder'])): ?>
                   <a href="<?php echo e(route('user.see_profile')); ?>">
-                    <p class="m-0">Manage Profile</p>
-                  </a>
-                <?php elseif(\Auth::user()->role == 'builder'): ?>
-                  <a href="<?php echo e(route('builder.seeBuilderProfile')); ?>">
-                    <p class="m-0">Manage Profile</p>
-                  </a>
-                <?php elseif(\Auth::user()->role == 'agent'): ?>
-                  <a href="<?php echo e(route('agent.seeAgentProfile')); ?>">
                     <p class="m-0">Manage Profile</p>
                   </a>
                 <?php endif; ?>
@@ -833,7 +825,7 @@
         <!---->
 
         <?php if(auth()->guard()->check()): ?>
-          <?php if(\Auth::user()->role == 'owner'): ?>
+          <?php if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder'])): ?>
             <li>
               <a href="<?php echo e(url('user/dashboard')); ?>" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown"
                 aria-expanded="false">
@@ -842,28 +834,6 @@
 
               </a>
             </li>
-          <?php elseif(\Auth::user()->role == 'builder'): ?>
-
-            <li>
-              <a href="<?php echo e(url('builder/dashboard')); ?>" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <i class="far fa-user-circle fs-4 me-1" style="font-size:18px;"></i>
-                <?php echo e(Auth::user()->firstname); ?> <?php echo e(Auth::user()->lastname); ?>
-
-              </a>
-            </li>
-
-          <?php elseif(\Auth::user()->role == 'agent'): ?>
-
-            <li>
-              <a href="<?php echo e(url('agent/dashboard')); ?>" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <i class="far fa-user-circle fs-4 me-1" style="font-size:18px;"></i>
-                <?php echo e(Auth::user()->firstname); ?> <?php echo e(Auth::user()->lastname); ?>
-
-              </a>
-            </li>
-
           <?php endif; ?>
 
         <?php endif; ?>
@@ -1912,7 +1882,7 @@
                         <ul class="list-unstyled">
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
-                          <li> <a href="<?php echo e(auth()->check() ? route('agent.agentDashboard') : 'javascript:void(0)'); ?>"
+                          <li> <a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
                               <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
                               Dashboard
                             </a></li>
@@ -1954,7 +1924,7 @@
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
                           <li> <a
-                              href="<?php echo e(auth()->check() ? route('builder.builderDashboard') : 'javascript:void(0)'); ?>"
+                              href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
                               <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
                               Dashboard
                             </a></li>
@@ -3173,14 +3143,6 @@
 
         <!-- Profile Button -->
         <?php if(auth()->guard()->check()): ?>
-          <?php
-            $profileRoute = match (Auth::user()->role) {
-              'owner' => route('user.see_profile'),
-              'builder' => route('builder.seeBuilderProfile'),
-              'agent' => route('agent.seeAgentProfile'),
-              default => route('user.see_profile')
-            };
-          ?>
           <a class="bottom-item" data-key="profile" data-bs-toggle="offcanvas" href="#offcanvasExample2" role="button">
         <?php else: ?>
             <a class="bottom-item" data-key="profile" href="#" onclick="event.preventDefault(); openSigninModal();">
@@ -3757,12 +3719,9 @@
           if (response.status === 200) {
             toastr.success(response.message)
             // $(".modal").modal('hide');
-            if (response.role === 'owner') {
+            if (['owner', 'agent', 'builder'].includes(response.role)) {
+              // ✅ Code runs if user role is owner, agent, or builder
               window.location = "<?php echo e(url('user/dashboard')); ?>"
-            } else if (response.role === 'builder') {
-              window.location = "<?php echo e(url('builder/dashboard')); ?>"
-            } else if (response.role === 'agent') {
-              window.location = "<?php echo e(url('agent/dashboard')); ?>"
             }
           } else if (response.status === 400) {
             toastr.error(response.message)

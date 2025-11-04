@@ -45,7 +45,11 @@
 
                     <h5 class="fw-bold mb-3">Subscription Details</h5>
                     <div class="mb-3">
-                      <p class="mb-1"><strong>Customer Name:</strong> <?php echo e($current->user->full_name ?? ''); ?></p>
+                      <p class="mb-1"><strong>Customer Name:</strong> <?php echo e($current->user->firstname ?? ''); ?>
+
+                        <?php echo e($current->user->lastname ?? ''); ?>
+
+                      </p>
                       <p class="mb-1"><strong>Mobile Number:</strong> <?php echo e($current->user->mobile_number ?? 'N/A'); ?></p>
                       <p class="mb-1"><strong>Email ID:</strong> <?php echo e($current->user->email ?? 'N/A'); ?></p>
                     </div>
@@ -121,10 +125,11 @@
                     </div>
 
                     <div class="d-flex gap-2 mt-3" style="gap:20px;">
-                      <button class="btn btn-primary btn-sm px-3">
+                      <button class="btn btn-primary btn-sm px-3 renew-subscription" data-id="<?php echo e($current->id); ?>">
                         <i class="fas fa-sync-alt me-1"></i> Renew Now
                       </button>
-                      <button class="btn btn-outline-primary btn-sm px-3">
+
+                      <button class="btn btn-outline-primary btn-sm px-3 upgrade-subscription" data-id="<?php echo e($current->id); ?>">
                         <i class="fas fa-arrow-up me-1"></i> Upgrade Now
                       </button>
                     </div>
@@ -187,5 +192,90 @@
     </div>
   </section>
 
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('js'); ?>
+  <script>
+    $(document).on('click', '.renew-subscription', function () {
+      const id = $(this).data('id');
+
+      Swal.fire({
+        title: 'Renew Subscription?',
+        text: 'Do you want to renew your current subscription?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Renew',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: "<?php echo e(route('user.subscription.renew')); ?>",
+            method: 'POST',
+            data: {
+              subscription_id: id,
+              payment_method: 'razorpay',
+              razorpay_payment_id: 'test_' + Math.random().toString(36).substr(2, 9), // fake test ID
+              _token: "<?php echo e(csrf_token()); ?>"
+            },
+            success: function (res) {
+              Swal.fire('Success', res.message, 'success')
+                .then(() => location.reload());
+            },
+            error: function (err) {
+              Swal.fire('Error', err.responseJSON.message || 'Something went wrong', 'error');
+            }
+          });
+        }
+      });
+    });
+  </script>
+  <script>
+$(document).on('click', '.upgrade-subscription', function () {
+  const currentId = $(this).data('id');
+
+  Swal.fire({
+    title: 'Upgrade Subscription',
+    html: `
+      <p>Select a higher plan to upgrade:</p>
+      <select id="new_package_id" class="form-select">
+        <?php $__currentLoopData = $availablePackages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pkg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <option value="<?php echo e($pkg->id); ?>"><?php echo e($pkg->name); ?> — ₹<?php echo e($pkg->price); ?></option>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+      </select>
+    `,
+    showCancelButton: true,
+    confirmButtonText: 'Upgrade Now',
+    cancelButtonText: 'Cancel',
+    preConfirm: () => {
+      const pkgId = $('#new_package_id').val();
+      if (!pkgId) {
+        Swal.showValidationMessage('Please select a package');
+      }
+      return pkgId;
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        url: "<?php echo e(route('user.subscription.upgrade')); ?>",
+        method: 'POST',
+        data: {
+          current_subscription_id: currentId,
+          new_package_id: result.value,
+          payment_method: 'razorpay',
+          razorpay_payment_id: 'test_' + Math.random().toString(36).substr(2, 9),
+          _token: "<?php echo e(csrf_token()); ?>"
+        },
+        success: function (res) {
+          Swal.fire('Success', res.message, 'success')
+            .then(() => location.reload());
+        },
+        error: function (err) {
+          Swal.fire('Error', err.responseJSON.message || 'Something went wrong', 'error');
+        }
+      });
+    }
+  });
+});
+</script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.front.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/user/current-subscriptions.blade.php ENDPATH**/ ?>

@@ -13,15 +13,8 @@
 
 Route::post('/business/send-otp', [App\Http\Controllers\Admin\BusinessListingController::class, 'sendEnquiryOtp'])->name('business.sendOtp');
 Route::post('/business/enquiry', [App\Http\Controllers\Admin\BusinessListingController::class, 'submitEnquiry'])->name('business.enquiry');
-
-
-Route::get('/profile-page/{slug?}', function ($slug) {
-	return view('front.profile-page', compact('slug'));
-})->name('profile.page');
-
-Route::get('/business-details/{id}', [App\Http\Controllers\HomeController::class, 'businessDetails'])
-	->name('business.details');
-
+Route::get('/business-details/{id}', [App\Http\Controllers\HomeController::class, 'businessDetails'])->name('business.details');
+Route::get('/profile-page/{slug?}', [App\Http\Controllers\HomeController::class, 'profilePage'])->name('profile.page');
 
 Route::get('/listing-list', 'HomeController@list')->name('listing.list');
 Route::get('/directory-list', 'HomeController@directoryList')->name('directory.list');
@@ -407,7 +400,7 @@ Route::group(['middleware' => ['auth', 'admin.check']], function () {
 		Route::resource('/faqs', Admin\FaqController::class);
 		Route::resource('/client-reels', Admin\ClientReelController::class);
 		Route::resource('packages', Admin\PackageController::class);
-
+		Route::resource('subscriptions', Admin\SubscriptionController::class);
 	});
 
 
@@ -418,36 +411,17 @@ Route::group(['middleware' => ['auth', 'admin.check']], function () {
 	Route::resource('manage/front/content', 'Admin\FrontSectionContentController');
 });
 
-Route::group(['middleware' => ['auth', 'owner.check']], function () {
+// User Login Routes
+Route::group(['middleware' => ['auth']], function () {
+
+	Route::post('user/upload_avatar', 'User\UserController@upload_avatar')->name('user.upload_avatar');
 	Route::get('user/dashboard', 'User\UserController@dashboard')->name('user.dashboard');
 	Route::get('user/properties', 'User\UserController@all_properties')->name('user.properties');
 	Route::get('user/profile', 'User\UserController@see_profile')->name('user.see_profile');
 	Route::post('user/update_profile', 'User\UserController@update_profile')->name('user.update_profile');
 	Route::post('user/update_password', 'User\UserController@update_password')->name('user.update_password');
 	Route::post('user/logout', 'User\UserController@userlogout')->name('user.userlogout');
-});
-Route::post('user/upload_avatar', 'User\UserController@upload_avatar')->name('user.upload_avatar');
 
-Route::group(['middleware' => ['auth', 'builder.check']], function () {
-	Route::get('builder/dashboard', 'User\UserController@builderDashboard')->name('builder.builderDashboard');
-	Route::get('builder/properties', 'User\UserController@builderAllProperties')->name('builder.builderAllProperties');
-	Route::get('builder/profile', 'User\UserController@seeBuilderProfile')->name('builder.seeBuilderProfile');
-	Route::post('builder/update_profile', 'User\UserController@update_profile')->name('builder.update_profile');
-	Route::post('builder/update_password', 'User\UserController@update_password')->name('builder.update_password');
-	Route::post('builder/logout', 'User\UserController@userlogout')->name('builder.userlogout');
-});
-
-Route::group(['middleware' => ['auth', 'agent.check']], function () {
-	Route::get('agent/dashboard', 'User\UserController@agentDashboard')->name('agent.agentDashboard');
-	Route::get('agent/properties', 'User\UserController@agentAllProperties')->name('agent.agentAllProperties');
-	Route::get('agent/profile', 'User\UserController@seeAgentProfile')->name('agent.seeAgentProfile');
-	Route::post('agent/update_profile', 'User\UserController@update_profile')->name('agent.update_profile');
-	Route::post('agent/update_password', 'User\UserController@update_password')->name('agent.update_password');
-	Route::post('agent/logout', 'User\UserController@userlogout')->name('agent.userlogout');
-});
-
-// After Login Common Routes
-Route::group(['middleware' => ['auth']], function () {
 	Route::get('update/property/{id}', 'HomeController@editPropertyView')->name('property.editPropertyView');
 	Route::get('user/property/preview/{id}', 'HomeController@userPreviewPropertyView')->name('property.userPreviewPropertyView');
 	Route::post('update/property', 'HomeController@updateProperty')->name('property.updateProperty');
@@ -467,27 +441,30 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('user/verify/mobile', 'HomeController@userVerifyMobile')->name('user.userVerifyMobile');
 	Route::post('user/email-mobile/verify/otp', 'HomeController@emailMobileOtpVerification')->name('user.emailMobileOtpVerification');
 	Route::post('/wishlist/toggle', [App\Http\Controllers\WishlistController::class, 'toggle'])->name('wishlist.toggle');
-	Route::post('/business/wishlist/toggle', [App\Http\Controllers\BusinessWishlistController::class, 'toggle'])
-		->name('business.wishlist.toggle');
-
-	Route::post('subscription/store', [App\Http\Controllers\User\PricingController::class, 'Store'])->name('subscription.store');
+	Route::post('/business/wishlist/toggle', [App\Http\Controllers\BusinessWishlistController::class, 'toggle'])->name('business.wishlist.toggle');
 	Route::get('/user/pricing', [App\Http\Controllers\User\PricingController::class, 'index'])->name('pricing');
 	Route::get('/user/all-inquries', [App\Http\Controllers\User\UserController::class, 'allInquiries'])->name('all-inquries');
 	Route::get('/user/my-wishlist', [App\Http\Controllers\WishlistController::class, 'myWishlist'])->name('my-wishlist');
 	Route::get('/user/my-activities', [App\Http\Controllers\User\UserController::class, 'myActivities'])->name('my-activities');
 	Route::get('user/sent-inquries', [App\Http\Controllers\User\UserController::class, 'sentEnquiries'])->name('user.sent-inquiries');
+
+	Route::post('subscription/store', [App\Http\Controllers\User\PricingController::class, 'Store'])->name('subscription.store');
 	Route::get('/user/current-subscriptions', [App\Http\Controllers\User\PricingController::class, 'subscriptions'])->name('current-subscriptions');
 	Route::get('/user/payments-invoice', [App\Http\Controllers\User\PricingController::class, 'payments'])->name('payments-invoice');
 	Route::get('/user/invoice-details/{subscription}', [App\Http\Controllers\User\PricingController::class, 'invoiceDetails'])->name('invoice-details');
-	Route::get('/user/invoice/download/{id}', [App\Http\Controllers\User\PricingController::class, 'downloadInvoicePDF'])
-		->name('invoice.download');
-	Route::get('/user/invoices/download-all', [App\Http\Controllers\User\PricingController::class, 'downloadAllInvoices'])
-		->name('invoices.download_all');
+	Route::get('/user/invoice/download/{id}', [App\Http\Controllers\User\PricingController::class, 'downloadInvoicePDF'])->name('invoice.download');
+	Route::get('/user/invoices/download-all', [App\Http\Controllers\User\PricingController::class, 'downloadAllInvoices'])->name('invoices.download_all');
+	Route::post('/user/subscription/renew', [App\Http\Controllers\User\PricingController::class, 'renew'])->name('user.subscription.renew');
+	Route::post('/subscription/upgrade', [App\Http\Controllers\User\PricingController::class, 'upgrade'])->name('user.subscription.upgrade');
+
 
 	Route::get('/user/services', [App\Http\Controllers\User\ServiceController::class, 'index'])->name('user.services');
 	Route::get('/user/all-services-inquiries', [App\Http\Controllers\User\ServiceController::class, 'receivedInquiries'])->name('user.services.inquiries.received');
 	Route::get('/user/sent-services-inquiries', [App\Http\Controllers\User\ServiceController::class, 'sentInquiries'])->name('user.services.inquiries.sent');
 	Route::get('/user/my-service-wishlist', [App\Http\Controllers\User\ServiceController::class, 'wishlist'])->name('user.service.wishlist');
+
+	
+
 });
 
 //Enquery Routes 

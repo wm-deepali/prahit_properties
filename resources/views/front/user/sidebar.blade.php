@@ -8,25 +8,31 @@
         background-color: #f8f9fa;
         padding: 15px;
     }
+
     .sidebar-menu .nav-link {
         color: #333;
         padding: 10px 15px;
     }
+
     .sidebar-menu .nav-link:hover {
         background-color: #007bff;
         color: #fff !important;
         border-radius: 5px;
     }
+
     .sidebar-menu .collapse ul {
         padding-left: 20px;
     }
+
     .sidebar-menu .collapse .nav-link {
         padding: 5px 15px;
         font-size: 0.9rem;
     }
+
     .mobile-sidebar {
         font-family: 'Segoe UI', sans-serif;
     }
+
     .sidebar-link {
         background: #fff;
         padding: 10px 15px;
@@ -37,21 +43,25 @@
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         transition: all 0.2s ease-in-out;
     }
+
     .sidebar-link:hover {
         background: #007bff;
         color: #fff !important;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     }
+
     .sidebar-link.active {
         background: #007bff;
         color: #fff !important;
     }
+
     .submenu {
         background: #f1f4f8;
         border-radius: 6px;
         margin-top: 6px;
         transition: all 0.3s;
     }
+
     .submenu-link {
         display: block;
         color: #555;
@@ -59,6 +69,7 @@
         padding: 6px 0;
         text-decoration: none;
     }
+
     .submenu-link:hover {
         color: #007bff;
         font-weight: 600;
@@ -130,32 +141,48 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link {{ request()->is('user/profile') || request()->is('user/my-activities') || in_array(request('tab'), ['profile', 'security']) ? '' : 'collapsed' }}"
-                                   href="#" data-toggle="collapse" data-target="#settingMenu"
-                                   aria-expanded="{{ request()->is('user/profile') || request()->is('user/my-activities') || in_array(request('tab'), ['profile', 'security']) ? 'true' : 'false' }}"
-                                   aria-controls="settingMenu">
-                                   Settings
+                                <a class="nav-link {{ request()->is('user/profile') || request()->is('user/my-activities') || request()->is('user/public-profile') || in_array(request('tab'), ['profile', 'security']) ? '' : 'collapsed' }}"
+                                    href="#" data-toggle="collapse" data-target="#settingMenu"
+                                    aria-expanded="{{ request()->is('user/profile') || request()->is('user/my-activities') || request()->is('user/public-profile') || in_array(request('tab'), ['profile', 'security']) ? 'true' : 'false' }}"
+                                    aria-controls="settingMenu">
+                                    Settings
                                 </a>
-                                <div class="collapse {{ request()->is('user/profile') || request()->is('user/my-activities') || in_array(request('tab'), ['profile', 'security']) ? 'show' : '' }}" id="settingMenu">
+                                <div class="collapse {{ request()->is('user/profile') || request()->is('user/my-activities') || request()->is('user/public-profile') || in_array(request('tab'), ['profile', 'security']) ? 'show' : '' }}"
+                                    id="settingMenu">
                                     <ul class="nav flex-column ml-3">
                                         <li class="nav-item">
-                                            <a href="{{ url('user/profile?tab=profile') }}" class="nav-link {{ request('tab') === 'profile' ? 'active' : '' }}">
+                                            <a href="{{ url('user/profile?tab=profile') }}"
+                                                class="nav-link {{ request('tab') === 'profile' ? 'active' : '' }}">
                                                 Profile
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{ url('user/profile?tab=security') }}" class="nav-link {{ request('tab') === 'security' ? 'active' : '' }}">
+                                            <a href="{{ url('user/profile?tab=security') }}"
+                                                class="nav-link {{ request('tab') === 'security' ? 'active' : '' }}">
                                                 Change Password
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{ url('user/my-activities') }}" class="nav-link {{ Request::is('user/my-activities') ? 'active' : '' }}">
+                                            <a href="{{ url('user/my-activities') }}"
+                                                class="nav-link {{ Request::is('user/my-activities') ? 'active' : '' }}">
                                                 My Activities
                                             </a>
                                         </li>
+
+                                        {{-- ✅ Show only if user is Agent or Builder --}}
+                                        @if(in_array(Auth::user()->role, ['agent', 'builder']))
+                                            <li class="nav-item">
+                                                <a href="#"
+                                                    target="_blank"
+                                                    class="nav-link">
+                                                    Public Profile
+                                                </a>
+                                            </li>
+                                        @endif
                                     </ul>
                                 </div>
                             </li>
+
 
                             <!-- Property or Services menu will be rendered here -->
                             <div id="dynamicMenu"></div>
@@ -168,7 +195,8 @@
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Logout
                                 </a>
-                                <form id="logout-form" action="{{ url('user/logout') }}" method="POST" style="display: none;">
+                                <form id="logout-form" action="{{ url('user/logout') }}" method="POST"
+                                    style="display: none;">
                                     {{ csrf_field() }}
                                 </form>
                             </li>
@@ -180,12 +208,14 @@
     </div>
 
     <!-- Email Verification Modal -->
-    <div class="modal fade custom-modal" id="email-verify" tabindex="-1" role="dialog" aria-labelledby="email-verify" aria-hidden="true">
+    <div class="modal fade custom-modal" id="email-verify" tabindex="-1" role="dialog" aria-labelledby="email-verify"
+        aria-hidden="true">
         <!-- modal content here -->
     </div>
 
     <!-- Mobile Verification Modal -->
-    <div class="modal fade custom-modal" id="mob-verify" tabindex="-1" role="dialog" aria-labelledby="mob-verify" aria-hidden="true">
+    <div class="modal fade custom-modal" id="mob-verify" tabindex="-1" role="dialog" aria-labelledby="mob-verify"
+        aria-hidden="true">
         <!-- modal content here -->
     </div>
 </section>
@@ -279,7 +309,7 @@
         });
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         renderSidebarMenu(userType);
 
         // Bootstrap collapse toggle handling

@@ -161,26 +161,6 @@ class UserController extends AppController
 
 
 
-	/*************
-	 **
-	 ** Builder Dashboard 
-	 **
-	 **/
-	public function builderDashboard()
-	{
-		return view('front.builder.dashboard');
-	}
-
-	/*************
-	 **
-	 ** Agent Dashboard 
-	 **
-	 **/
-	public function agentDashboard()
-	{
-		return view('front.agent.dashboard');
-	}
-
 	public function all_properties()
 	{
 		$userId = \Auth::id();
@@ -207,27 +187,6 @@ class UserController extends AppController
 	}
 
 
-	public function builderAllProperties()
-	{
-		$properties = Properties::with([
-			'PropertyTypes',
-			'PropertyGallery',
-			'Category',
-			'Category.SubCategory'
-		])->where('user_id', \Auth::id())->orderBy('id', 'DESC')->get();
-		return view('front.builder.properties', compact('properties'));
-	}
-
-	public function agentAllProperties()
-	{
-		$properties = Properties::with([
-			'PropertyTypes',
-			'PropertyGallery',
-			'Category',
-			'Category.SubCategory'
-		])->where('user_id', \Auth::id())->orderBy('id', 'DESC')->get();
-		return view('front.agent.properties', compact('properties'));
-	}
 
 	public function see_profile()
 	{
@@ -235,22 +194,6 @@ class UserController extends AppController
 		$user = User::with('StateCity')->find(Auth::user()->id);
 		// return $user;
 		return view('front.user.profile', compact('states', 'user'));
-	}
-
-	public function seeBuilderProfile()
-	{
-		$states = State::where('country_id', 101)->get();
-		$user = User::with('StateCity')->find(Auth::user()->id);
-		// return $user;
-		return view('front.builder.profile', compact('states', 'user'));
-	}
-
-	public function seeAgentProfile()
-	{
-		$states = State::where('country_id', 101)->get();
-		$user = User::with('StateCity')->find(Auth::user()->id);
-		// return $user;
-		return view('front.agent.profile', compact('states', 'user'));
 	}
 
 	public function update_profile(Request $request)
@@ -423,8 +366,9 @@ class UserController extends AppController
 
 		$totalCount = $enquiries->count();
 
-		return view('front.user.sent-enquiries', compact('enquiries','currentMonthCount', 'lastMonthCount', 'totalCount'));
+		return view('front.user.sent-enquiries', compact('enquiries', 'currentMonthCount', 'lastMonthCount', 'totalCount'));
 	}
+
 
 
 }

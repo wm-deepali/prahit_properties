@@ -201,8 +201,11 @@
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownPackages">
                                     <a class="dropdown-item" href="{{ route('admin.packages.index') }}">Manage
                                         Packages</a>
+                                    <a class="dropdown-item" href="{{ route('admin.subscriptions.index') }}">Manage
+                                        Subscriptions</a>
                                 </div>
                             </li>
+
 
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"

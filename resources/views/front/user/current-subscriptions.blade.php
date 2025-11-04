@@ -45,7 +45,9 @@
 
                     <h5 class="fw-bold mb-3">Subscription Details</h5>
                     <div class="mb-3">
-                      <p class="mb-1"><strong>Customer Name:</strong> {{ $current->user->full_name ?? '' }}</p>
+                      <p class="mb-1"><strong>Customer Name:</strong> {{ $current->user->firstname ?? '' }}
+                        {{ $current->user->lastname ?? '' }}
+                      </p>
                       <p class="mb-1"><strong>Mobile Number:</strong> {{ $current->user->mobile_number ?? 'N/A' }}</p>
                       <p class="mb-1"><strong>Email ID:</strong> {{ $current->user->email ?? 'N/A' }}</p>
                     </div>
@@ -118,10 +120,11 @@
                     </div>
 
                     <div class="d-flex gap-2 mt-3" style="gap:20px;">
-                      <button class="btn btn-primary btn-sm px-3">
+                      <button class="btn btn-primary btn-sm px-3 renew-subscription" data-id="{{ $current->id }}">
                         <i class="fas fa-sync-alt me-1"></i> Renew Now
                       </button>
-                      <button class="btn btn-outline-primary btn-sm px-3">
+
+                      <button class="btn btn-outline-primary btn-sm px-3 upgrade-subscription" data-id="{{ $current->id }}">
                         <i class="fas fa-arrow-up me-1"></i> Upgrade Now
                       </button>
                     </div>
@@ -184,4 +187,89 @@
     </div>
   </section>
 
+@endsection
+
+@section('js')
+  <script>
+    $(document).on('click', '.renew-subscription', function () {
+      const id = $(this).data('id');
+
+      Swal.fire({
+        title: 'Renew Subscription?',
+        text: 'Do you want to renew your current subscription?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Renew',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: "{{ route('user.subscription.renew') }}",
+            method: 'POST',
+            data: {
+              subscription_id: id,
+              payment_method: 'razorpay',
+              razorpay_payment_id: 'test_' + Math.random().toString(36).substr(2, 9), // fake test ID
+              _token: "{{ csrf_token() }}"
+            },
+            success: function (res) {
+              Swal.fire('Success', res.message, 'success')
+                .then(() => location.reload());
+            },
+            error: function (err) {
+              Swal.fire('Error', err.responseJSON.message || 'Something went wrong', 'error');
+            }
+          });
+        }
+      });
+    });
+  </script>
+  <script>
+$(document).on('click', '.upgrade-subscription', function () {
+  const currentId = $(this).data('id');
+
+  Swal.fire({
+    title: 'Upgrade Subscription',
+    html: `
+      <p>Select a higher plan to upgrade:</p>
+      <select id="new_package_id" class="form-select">
+        @foreach($availablePackages as $pkg)
+          <option value="{{ $pkg->id }}">{{ $pkg->name }} — ₹{{ $pkg->price }}</option>
+        @endforeach
+      </select>
+    `,
+    showCancelButton: true,
+    confirmButtonText: 'Upgrade Now',
+    cancelButtonText: 'Cancel',
+    preConfirm: () => {
+      const pkgId = $('#new_package_id').val();
+      if (!pkgId) {
+        Swal.showValidationMessage('Please select a package');
+      }
+      return pkgId;
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        url: "{{ route('user.subscription.upgrade') }}",
+        method: 'POST',
+        data: {
+          current_subscription_id: currentId,
+          new_package_id: result.value,
+          payment_method: 'razorpay',
+          razorpay_payment_id: 'test_' + Math.random().toString(36).substr(2, 9),
+          _token: "{{ csrf_token() }}"
+        },
+        success: function (res) {
+          Swal.fire('Success', res.message, 'success')
+            .then(() => location.reload());
+        },
+        error: function (err) {
+          Swal.fire('Error', err.responseJSON.message || 'Something went wrong', 'error');
+        }
+      });
+    }
+  });
+});
+</script>
 @endsection

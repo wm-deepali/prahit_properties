@@ -536,6 +536,54 @@ class HomeController extends AppController
 		return view('front.directory-listing', compact('list', 'categories'));
 	}
 
+
+	public function profilePage($slug = null)
+	{
+		// Find user by slug or fallback to logged-in user
+		if ($slug) {
+			$user = User::with('activeSubscription')->where('firstname', $slug)->first();
+		} else {
+			$user = auth()->check() ? auth()->user() : null;
+		}
+
+		if (!$user) {
+			abort(404, 'User not found.');
+		}
+
+		// 🔹 Get total and category-wise property counts
+		$totalProperties = Properties::where('user_id', $user->id)->count();
+
+		$sellCount = Properties::where('user_id', $user->id)
+			->where('category_id', 22)
+			->count();
+
+		$rentCount = Properties::where('user_id', $user->id)
+			->where('category_id', 21)
+			->count();
+
+		$pgHostelCount = Properties::where('user_id', $user->id)
+			->where('category_id', 20)
+			->count();
+
+		// 🔹 Fetch all properties of the user
+		$properties = Properties::where('user_id', $user->id)
+			->where('approval', 'Approved')
+			->where('publish_status', 'Publish')
+			->latest()
+			->get();
+
+		return view('front.profile-page', compact(
+			'user',
+			'slug',
+			'totalProperties',
+			'sellCount',
+			'rentCount',
+			'pgHostelCount',
+			'properties'
+		));
+	}
+
+
 	public function businessDetails($id)
 	{
 		$business = BusinessListing::with([
@@ -594,7 +642,7 @@ class HomeController extends AppController
 			'getCity'
 		])->where('slug', $slug)->first();
 		$property_detail = $property;
-		
+
 		if ($property_detail->amenities) {
 			$amenities = Amenity::whereIn('id', explode(',', $property_detail->amenities))->get();
 		} else {
@@ -1196,9 +1244,9 @@ class HomeController extends AppController
 			case 'owner':
 				return redirect('user/properties')->with('success', 'Property Content Updated Successfully.');
 			case 'builder':
-				return redirect('builder/properties')->with('success', 'Property Content Updated Successfully.');
+				return redirect('user/properties')->with('success', 'Property Content Updated Successfully.');
 			case 'agent':
-				return redirect('agent/properties')->with('success', 'Property Content Updated Successfully.');
+				return redirect('user/properties')->with('success', 'Property Content Updated Successfully.');
 		}
 	}
 
@@ -1304,7 +1352,7 @@ class HomeController extends AppController
 			"interested_in" => "required",
 		];
 		$this->checkValidate($request, $rules);
-// dd($request->all());
+		// dd($request->all());
 		// 🟡 For guests, verify OTP
 		if (!auth()->check()) {
 			if (

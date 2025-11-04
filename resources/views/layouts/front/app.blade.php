@@ -660,18 +660,11 @@
               <div class=" profile-content">
                 <h4 class="m-0">Welcome</h4>
                 <h6 class="m-0">{{Auth::user()->firstname}} {{Auth::user()->lastname}}</h6>
-                @if(\Auth::user()->role == 'owner')
+                @if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder']))
                   <a href="{{  route('user.see_profile') }}">
                     <p class="m-0">Manage Profile</p>
                   </a>
-                @elseif(\Auth::user()->role == 'builder')
-                  <a href="{{  route('builder.seeBuilderProfile') }}">
-                    <p class="m-0">Manage Profile</p>
-                  </a>
-                @elseif(\Auth::user()->role == 'agent')
-                  <a href="{{  route('agent.seeAgentProfile') }}">
-                    <p class="m-0">Manage Profile</p>
-                  </a>
+
                 @endif
               </div>
             </div>
@@ -866,28 +859,9 @@
         <!----}}-->
 
         @auth
-          @if(\Auth::user()->role == 'owner')
+          @if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder']))
             <li>
               <a href="{{url('user/dashboard')}}" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <i class="far fa-user-circle fs-4 me-1" style="font-size:18px;"></i>
-                {{Auth::user()->firstname}} {{Auth::user()->lastname}}
-              </a>
-            </li>
-          @elseif(\Auth::user()->role == 'builder')
-
-            <li>
-              <a href="{{url('builder/dashboard')}}" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <i class="far fa-user-circle fs-4 me-1" style="font-size:18px;"></i>
-                {{Auth::user()->firstname}} {{Auth::user()->lastname}}
-              </a>
-            </li>
-
-          @elseif(\Auth::user()->role == 'agent')
-
-            <li>
-              <a href="{{url('agent/dashboard')}}" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 <i class="far fa-user-circle fs-4 me-1" style="font-size:18px;"></i>
                 {{Auth::user()->firstname}} {{Auth::user()->lastname}}
@@ -1926,7 +1900,7 @@
                         <ul class="list-unstyled">
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
-                          <li> <a href="{{ auth()->check() ? route('agent.agentDashboard') : 'javascript:void(0)' }}"
+                          <li> <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
                               @unless(auth()->check()) onclick="openSigninModal()" @endunless>
                               Dashboard
                             </a></li>
@@ -1967,8 +1941,7 @@
                         <ul class="list-unstyled">
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
-                          <li> <a
-                              href="{{ auth()->check() ? route('builder.builderDashboard') : 'javascript:void(0)' }}"
+                          <li> <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
                               @unless(auth()->check()) onclick="openSigninModal()" @endunless>
                               Dashboard
                             </a></li>
@@ -3175,14 +3148,6 @@
 
         <!-- Profile Button -->
         @auth
-          @php
-            $profileRoute = match (Auth::user()->role) {
-              'owner' => route('user.see_profile'),
-              'builder' => route('builder.seeBuilderProfile'),
-              'agent' => route('agent.seeAgentProfile'),
-              default => route('user.see_profile')
-            };
-          @endphp
           <a class="bottom-item" data-key="profile" data-bs-toggle="offcanvas" href="#offcanvasExample2" role="button">
         @else
             <a class="bottom-item" data-key="profile" href="#" onclick="event.preventDefault(); openSigninModal();">
@@ -3756,12 +3721,9 @@
           if (response.status === 200) {
             toastr.success(response.message)
             // $(".modal").modal('hide');
-            if (response.role === 'owner') {
+            if (['owner', 'agent', 'builder'].includes(response.role)) {
+              // ✅ Code runs if user role is owner, agent, or builder
               window.location = "{{url('user/dashboard')}}"
-            } else if (response.role === 'builder') {
-              window.location = "{{url('builder/dashboard')}}"
-            } else if (response.role === 'agent') {
-              window.location = "{{url('agent/dashboard')}}"
             }
           } else if (response.status === 400) {
             toastr.error(response.message)

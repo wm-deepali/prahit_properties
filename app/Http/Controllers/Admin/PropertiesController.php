@@ -1729,9 +1729,9 @@ class PropertiesController extends AppController
 			if (\Auth::user()->role == 'owner') {
 				return redirect('user/properties')->with('success', 'Property Posted Successfully.');
 			} else if (\Auth::user()->role == 'builder') {
-				return redirect('builder/properties')->with('success', 'Property Posted Successfully.');
+				return redirect('user/properties')->with('success', 'Property Posted Successfully.');
 			} else if (\Auth::user()->role == 'agent') {
-				return redirect('agent/properties')->with('success', 'Property Posted Successfully.');
+				return redirect('user/properties')->with('success', 'Property Posted Successfully.');
 			}
 		}
 
