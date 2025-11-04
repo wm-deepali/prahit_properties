@@ -141,9 +141,9 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link {{ request()->is('user/profile') || request()->is('user/my-activities') || request()->is('user/public-profile') || in_array(request('tab'), ['profile', 'security']) ? '' : 'collapsed' }}"
+                                <a class="nav-link {{ request()->is('user/profile') || request()->is('user/my-activities') || request()->is('user/profile-section') || in_array(request('tab'), ['profile', 'security']) ? '' : 'collapsed' }}"
                                     href="#" data-toggle="collapse" data-target="#settingMenu"
-                                    aria-expanded="{{ request()->is('user/profile') || request()->is('user/my-activities') || request()->is('user/public-profile') || in_array(request('tab'), ['profile', 'security']) ? 'true' : 'false' }}"
+                                    aria-expanded="{{ request()->is('user/profile') || request()->is('user/my-activities') || request()->is('user/profile-section') || in_array(request('tab'), ['profile', 'security']) ? 'true' : 'false' }}"
                                     aria-controls="settingMenu">
                                     Settings
                                 </a>
@@ -172,13 +172,13 @@
                                         {{-- ✅ Show only if user is Agent or Builder --}}
                                         @if(in_array(Auth::user()->role, ['agent', 'builder']))
                                             <li class="nav-item">
-                                                <a href="#"
-                                                    target="_blank"
-                                                    class="nav-link">
-                                                    Public Profile
+                                                <a href="{{ url('user/profile-section') }}"
+                                                    class="nav-link {{ Request::is('user/profile-section') ? 'active' : '' }}">
+                                                    Profile Section
                                                 </a>
                                             </li>
                                         @endif
+
                                     </ul>
                                 </div>
                             </li>

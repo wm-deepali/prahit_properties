@@ -661,10 +661,11 @@
               <div class=" profile-content">
                 <h4 class="m-0">Welcome</h4>
                 <h6 class="m-0"><?php echo e(Auth::user()->firstname); ?> <?php echo e(Auth::user()->lastname); ?></h6>
-                <?php if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder'])): ?>
+                <?php if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder', 'user'])): ?>
                   <a href="<?php echo e(route('user.see_profile')); ?>">
                     <p class="m-0">Manage Profile</p>
                   </a>
+
                 <?php endif; ?>
               </div>
             </div>
@@ -825,7 +826,7 @@
         <!---->
 
         <?php if(auth()->guard()->check()): ?>
-          <?php if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder'])): ?>
+          <?php if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder', 'user'])): ?>
             <li>
               <a href="<?php echo e(url('user/dashboard')); ?>" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown"
                 aria-expanded="false">
@@ -834,6 +835,7 @@
 
               </a>
             </li>
+
           <?php endif; ?>
 
         <?php endif; ?>
@@ -1923,8 +1925,7 @@
                         <ul class="list-unstyled">
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
-                          <li> <a
-                              href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
+                          <li> <a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
                               <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
                               Dashboard
                             </a></li>

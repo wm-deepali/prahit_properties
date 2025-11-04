@@ -16,7 +16,7 @@ use App\Otp;
 use Hash;
 use Auth;
 use App\Models\UserLoginHistory;
-
+use App\Models\ProfileSection;
 class UserController extends AppController
 {
 	use GlobalTrait;
@@ -367,6 +367,88 @@ class UserController extends AppController
 		$totalCount = $enquiries->count();
 
 		return view('front.user.sent-enquiries', compact('enquiries', 'currentMonthCount', 'lastMonthCount', 'totalCount'));
+	}
+
+	public function profileSection()
+	{
+		$user = Auth::user();
+
+		if (!in_array($user->role, ['agent', 'builder'])) {
+			abort(403, 'Unauthorized access.');
+		}
+
+		// Fetch or create profile section for the logged-in user
+		$profileSection = ProfileSection::firstOrCreate(
+			['user_id' => $user->id],
+			[
+				'business_name' => null,
+				'rera_number' => null,
+				'operating_since' => null,
+				'years_experience' => null,
+				'deals_in' => null,
+				'description' => null,
+				'services' => [],
+				'address' => null,
+				'phone' => null,
+				'email' => null,
+				'working_hours' => null,
+				'logo' => null
+			]
+		);
+
+		return view('front.user.profile-section', compact('user', 'profileSection'));
+	}
+
+
+
+	public function updateProfileSection(Request $request)
+	{
+		$user = Auth::user();
+
+		if (!in_array($user->role, ['agent', 'builder'])) {
+			abort(403, 'Unauthorized access.');
+		}
+
+		$request->validate([
+			'business_name' => 'required|string|max:255',
+			'rera_number' => 'nullable|string|max:255',
+			'operating_since' => 'nullable|string|max:255',
+			'years_experience' => 'nullable|integer|min:0',
+			'deals_in' => 'nullable|string',
+			'description' => 'nullable|string',
+			'services' => 'nullable|array',
+			'services.*.title' => 'nullable|string|max:255',
+			'services.*.description' => 'nullable|string|max:500',
+			'address' => 'nullable|string|max:500',
+			'phone' => 'nullable|string|max:255',
+			'email' => 'nullable|email|max:255',
+			'working_hours' => 'nullable|array',
+			'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048', // ✅ added
+		]);
+
+		$data = $request->only([
+			'business_name',
+			'rera_number',
+			'operating_since',
+			'years_experience',
+			'deals_in',
+			'description',
+			'services',
+			'address',
+			'phone',
+			'email',
+			'working_hours'
+		]);
+
+		// ✅ Handle logo upload
+		if ($request->hasFile('logo')) {
+			$file = $request->file('logo');
+			$data['logo'] = $file->store('uploads/profile_logos', 'public');
+		}
+
+		ProfileSection::updateOrCreate(['user_id' => $user->id], $data);
+
+		return back()->with('success', 'Profile section updated successfully.');
 	}
 
 

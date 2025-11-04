@@ -143,9 +143,9 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link <?php echo e(request()->is('user/profile') || request()->is('user/my-activities') || request()->is('user/public-profile') || in_array(request('tab'), ['profile', 'security']) ? '' : 'collapsed'); ?>"
+                                <a class="nav-link <?php echo e(request()->is('user/profile') || request()->is('user/my-activities') || request()->is('user/profile-section') || in_array(request('tab'), ['profile', 'security']) ? '' : 'collapsed'); ?>"
                                     href="#" data-toggle="collapse" data-target="#settingMenu"
-                                    aria-expanded="<?php echo e(request()->is('user/profile') || request()->is('user/my-activities') || request()->is('user/public-profile') || in_array(request('tab'), ['profile', 'security']) ? 'true' : 'false'); ?>"
+                                    aria-expanded="<?php echo e(request()->is('user/profile') || request()->is('user/my-activities') || request()->is('user/profile-section') || in_array(request('tab'), ['profile', 'security']) ? 'true' : 'false'); ?>"
                                     aria-controls="settingMenu">
                                     Settings
                                 </a>
@@ -174,13 +174,13 @@
                                         
                                         <?php if(in_array(Auth::user()->role, ['agent', 'builder'])): ?>
                                             <li class="nav-item">
-                                                <a href="#"
-                                                    target="_blank"
-                                                    class="nav-link">
-                                                    Public Profile
+                                                <a href="<?php echo e(url('user/profile-section')); ?>"
+                                                    class="nav-link <?php echo e(Request::is('user/profile-section') ? 'active' : ''); ?>">
+                                                    Profile Section
                                                 </a>
                                             </li>
                                         <?php endif; ?>
+
                                     </ul>
                                 </div>
                             </li>

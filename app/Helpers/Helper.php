@@ -408,4 +408,50 @@ class Helper
         return $properties;
     }
 
+    public static function sendOtp($mobile, $message)
+    {
+        // Fetch settings
+        $authKey = env('SMS_AUTH_KEY', '133780APe3PZcx5850ea44');
+        $sender = env('SMS_SENDER_ID', 'WMINGO');
+        $peId = env('SMS_PE_ID', '1301160576431389865');
+
+        $templateId = env('SMS_DLT_ID', '1307161465983326774');
+
+        $request_parameter = [
+            'authkey' => $authKey,
+            'mobiles' => $mobile,
+            'sender' => $sender,
+            'message' => urlencode($message),
+            'route' => '4',
+            'country' => '91',
+        ];
+
+        $url = "http://sms.webmingo.in/api/sendhttp.php?";
+        foreach ($request_parameter as $key => $val) {
+            $url .= $key . '=' . $val . '&';
+        }
+
+        if ($templateId) {
+            $url .= 'DLT_TE_ID=' . $templateId . '&';
+        }
+        if ($peId) {
+            $url .= 'PE_ID=' . $peId . '&';
+        }
+
+        $url = rtrim($url, "&");
+
+        try {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            $output = curl_exec($ch);
+            curl_close($ch);
+            return true;
+        } catch (\Exception $e) {
+            // dd($e->getMessage());
+            \Log::error('SMS sending failed: ' . $e->getMessage());
+            return false;
+        }
+    }
 }

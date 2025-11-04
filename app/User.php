@@ -82,4 +82,8 @@ class User extends Authenticatable
         return $this->hasOne(\App\Models\Subscription::class, 'user_id')->where('is_active', 1)->latest();
     }
 
+    public function profileSection()
+    {
+        return $this->hasOne(\App\Models\ProfileSection::class, 'user_id');
+    }
 }

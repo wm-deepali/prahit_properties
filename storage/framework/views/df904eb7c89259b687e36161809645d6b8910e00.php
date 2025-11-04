@@ -469,23 +469,31 @@
                 <div class="container">
                     <div class="row align-items-center">
                         <div class="col-md-3">
-                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                alt="Profile" class="profile-avatar">
+                            <?php
+                                $logoUrl = $profileSection->logo
+                                    ? asset('storage/' . $profileSection->logo)
+                                    : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80';
+                            ?>
+
+                            <img src="<?php echo e($logoUrl); ?>" alt="Profile" class="profile-avatar">
                         </div>
                         <div class="col-md-9">
                             <div class="profil-data">
                                 <div class="profile-name-info">
                                     <h2 class="m-0"><?php echo e($user->firstname ?? ''); ?> <?php echo e($user->lastname ?? ''); ?></h2>
-                                    <p class="m-0"><strong>Gupta Properties</strong></p>
+                                    <p class="m-0"><strong><?php echo e($profileSection->business_name); ?></strong></p>
                                     <!--<p class="m-0">Operating since: 2015</p>-->
                                 </div>
                                 <div class="rera-section my-4">
                                     <div class="d-flex flex-wrap justify-content-between gap-3">
                                         <button class="info-btn">
-                                            <strong>RERA Number:</strong> UP-RERA-12345
+                                            <strong>RERA Number:</strong> <?php echo e($profileSection->rera_number ?? 'N/A'); ?>
+
                                         </button>
                                         <button class="info-btn">
-                                            <strong>Operating Since:</strong> 2015
+                                            <strong>Operating Since:</strong>
+                                            <?php echo e($profileSection->operating_since ?? 'N/A'); ?>
+
                                         </button>
                                         <button class="info-btn">
                                             <strong>Membership:</strong>
@@ -502,8 +510,9 @@
                                     <div class="line"></div>
                                     <p><strong><?php echo e($pgHostelCount); ?></strong><br>Properties For PG/Hostel</p>
                                 </div>
-                                <p class="m-0 mt-3"><strong>Deals in</strong><br>Rent/Lease , Pre-launch , Original Booking
-                                    , Resale , Others</p>
+                                <p class="m-0 mt-3"><strong>Deals in</strong><br><?php echo e($profileSection->deals_in ?? 'N/A'); ?>
+
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -532,7 +541,7 @@
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="stats-card card4">
-                        <div class="stat-number">10+</div>
+                        <div class="stat-number"><?php echo e($profileSection->years_experience); ?></div>
                         <div class="stat-label">Years Experience</div>
                     </div>
                 </div>
@@ -541,50 +550,26 @@
             <div class="row mt-5">
                 <!-- Main Content -->
                 <div class="col-md-8" style="padding-left:0px;">
-                    <div class="services-section p-3">
-                        <h3 class="mb-4">Services Offered</h3>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="service-item">
-                                    <h5>Residential Properties</h5>
-                                    <p>Apartments, Villas, Independent Houses</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="service-item">
-                                    <h5>Commercial Properties</h5>
-                                    <p>Offices, Shops, Warehouses</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="service-item">
-                                    <h5>Property Valuation</h5>
-                                    <p>Free market value assessment</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="service-item">
-                                    <h5>Legal Assistance</h5>
-                                    <p>Documentation & RERA compliance</p>
-                                </div>
+                    <?php if(!empty($profileSection->services)): ?>
+                        <div class="services-section p-3">
+                            <h3 class="mb-4">Services Offered</h3>
+                            <div class="row">
+                                <?php $__currentLoopData = $profileSection->services; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $service): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <div class="col-md-6">
+                                        <div class="service-item">
+                                            <h5><?php echo e($service['title'] ?? ''); ?></h5>
+                                            <p><?php echo e($service['description'] ?? ''); ?></p>
+                                        </div>
+                                    </div>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
 
                     <div class="introduction">
-                        <h3>About John Doe</h3>
-                        <p>
-                            With over a decade of experience in the real estate industry, John Doe has established himself
-                            as a trusted name in property consulting. Specializing in both residential and commercial
-                            properties, he has successfully closed over 500 deals and helped countless families find their
-                            dream homes.
-                        </p>
-                        <p>
-                            John believes in transparency, integrity, and personalized service. His deep understanding of
-                            market trends and negotiation skills ensure the best deals for his clients. Whether you're
-                            buying, selling, or investing, John and his team at Doe Realty Solutions are committed to making
-                            your real estate journey seamless and rewarding.
-                        </p>
+                        <h3>About <?php echo e($user->firstname ?? ''); ?> <?php echo e($user->lastname ?? ''); ?></h3>
+                        <?php echo $profileSection->description; ?>
+
                     </div>
 
                     <div class="properties-section p-3">
@@ -644,71 +629,112 @@
                                                 <i class="fas fa-map-marker-alt me-2 text-primary"></i>
                                                 <strong>Address:</strong>
                                             </div>
-
-
-                                            <div>123 Business Park, Sector 18, Noida - 201301</div>
+                                            <div><?php echo e($profileSection->address); ?></div>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <i class="fas fa-phone me-2 text-success"></i>
-                                        <strong>Phone:</strong> +91 98765 43210
+                                        <strong>Phone:</strong> <?php echo e($profileSection->phone); ?>
+
                                     </div>
                                     <div class="mb-3">
                                         <i class="fas fa-envelope me-2 text-info"></i>
-                                        <strong>Email:</strong> john@doerealtysolutions.com
+                                        <strong>Email:</strong> <?php echo e($profileSection->email); ?>
+
                                     </div>
                                     <hr>
                                     <div class="mb-4">
                                         <h5 class="mb-2">Working Hours</h5>
-                                        <div class="timing-item">
-                                            <span>Monday - Friday</span>
-                                            <span>9:00 AM - 7:00 PM</span>
-                                        </div>
-                                        <div class="timing-item">
-                                            <span>Saturday</span>
-                                            <span>10:00 AM - 5:00 PM</span>
-                                        </div>
-                                        <div class="timing-item">
-                                            <span>Sunday</span>
-                                            <span>Closed</span>
-                                        </div>
+
+                                        <?php if(!empty($profileSection->working_hours) && is_array($profileSection->working_hours)): ?>
+                                            <?php $__currentLoopData = $profileSection->working_hours; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $hours): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <div class="timing-item d-flex justify-content-between">
+                                                    <span><?php echo e($hours['day'] ?? '—'); ?></span>
+                                                    <?php if(isset($hours['closed']) && $hours['closed']): ?>
+                                                        <span>Closed</span>
+                                                    <?php else: ?>
+                                                        <span>
+                                                            <?php echo e($hours['start'] ?? '--:--'); ?> - <?php echo e($hours['end'] ?? '--:--'); ?>
+
+                                                        </span>
+                                                    <?php endif; ?>
+                                                </div>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php else: ?>
+                                            <p class="text-muted">No working hours added.</p>
+                                        <?php endif; ?>
                                     </div>
+
                                     <div class="contact-now-section d-flex align-items-center my-4 p-3"
                                         style="background:#f8f9fa; gap:10px; border-radius:10px;">
                                         <h5 class="" style="white-space:nowrap;">Connect <i
                                                 class="fa-solid fa-hand-point-right" style="color:orange;"></i> </h5>
                                         <div class="row g-2" style="gap:15px;padding:0px 15px;">
+                                            <?php
+                                                // Extract first phone number from comma-separated list
+                                                $whatsappNumber = null;
+
+                                                if (!empty($profileSection->phone)) {
+                                                    $numbers = array_map('trim', explode(',', $profileSection->phone));
+                                                    $whatsappNumber = $numbers[0] ?? null; // take the first number
+                                                }
+                                                $email = $profileSection->email ?? null;
+                                            ?>
                                             <div class="icon-button">
-                                                <a href="tel:+919451591515" class="btn btn-success w-100">
-                                                    <i class="fas fa-phone me-2"></i>
-                                                </a>
+                                                <?php if(!empty($whatsappNumber)): ?>
+                                                    <a href="tel:<?php echo e(preg_replace('/\D/', '', $whatsappNumber)); ?>"
+                                                        class="btn btn-success w-100">
+                                                        <i class="fas fa-phone me-2"></i>
+                                                    </a>
+                                                <?php else: ?>
+                                                    <button class="btn btn-success w-100" disabled>
+                                                        <i class="fas fa-phone me-2"></i>
+                                                    </button>
+                                                <?php endif; ?>
                                             </div>
                                             <div class="icon-button">
-                                                <a href="https://wa.me/919451591515" target="_blank"
-                                                    class="btn btn-success w-100"
-                                                    style="background:#25D366; border-color:#25D366;">
-                                                    <i class="fab fa-whatsapp me-2"></i>
-                                                </a>
+                                                <?php if(!empty($whatsappNumber)): ?>
+                                                    <a href="https://wa.me/<?php echo e(preg_replace('/\D/', '', $whatsappNumber)); ?>"
+                                                        target="_blank" class="btn btn-success w-100"
+                                                        style="background:#25D366; border-color:#25D366;">
+                                                        <i class="fab fa-whatsapp me-2"></i>
+                                                    </a>
+                                                <?php else: ?>
+                                                    <button class="btn btn-secondary w-100" disabled>
+                                                        <i class="fab fa-whatsapp me-2"></i>
+                                                    </button>
+                                                <?php endif; ?>
+
                                             </div>
                                             <div class="icon-button">
-                                                <a href="mailto:example@email.com" class="btn btn-outline-primary w-100">
-                                                    <i class="fas fa-envelope me-2"></i>
-                                                </a>
+                                                <?php if(!empty($email)): ?>
+                                                    <a href="mailto:<?php echo e($email); ?>" class="btn btn-outline-primary w-100">
+                                                        <i class="fas fa-envelope me-2"></i>
+                                                    </a>
+                                                <?php else: ?>
+                                                    <button class="btn btn-outline-primary w-100" disabled>
+                                                        <i class="fas fa-envelope me-2"></i>
+                                                    </button>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
-
-
-
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="feedback-form">
                                     <h4 class="mb-4">Leave a Review</h4>
-                                    <form>
+
+                                    <?php
+                                        $authUser = Auth::user();
+                                    ?>
+
+                                    <form id="reviewForm">
+                                        <?php echo csrf_field(); ?>
+
+                                        
                                         <div class="mb-3">
-                                            <!--<label class="form-label">Rating</label>-->
                                             <div class="star-rating mb-2">
                                                 <i class="far fa-star" data-rating="1"
                                                     style="font-size:30px;color:orange;"></i>
@@ -723,23 +749,53 @@
                                             </div>
                                             <input type="hidden" name="rating" id="rating">
                                         </div>
+
+                                        <input type="hidden" name="profile_section_id" id="profile_section_id" value="<?php echo e($profileSection->id); ?>">
+                                        
                                         <div class="mb-3">
                                             <label class="form-label">Your Name</label>
-                                            <input type="text" class="form-control" placeholder="Enter your name">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Email</label>
-                                            <input type="email" class="form-control" placeholder="Enter your email">
+                                            <input type="text" name="name" class="form-control"
+                                                placeholder="Enter your name"
+                                                value="<?php echo e($authUser->firstname ?? ''); ?> <?php echo e($authUser->lastname ?? ''); ?>" <?php echo e($authUser ? 'readonly' : ''); ?>>
                                         </div>
 
                                         <div class="mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" name="email" class="form-control"
+                                                placeholder="Enter your email" value="<?php echo e($authUser->email ?? ''); ?>" <?php echo e($authUser ? 'readonly' : ''); ?>>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Phone</label>
+                                            <input type="text" name="phone" class="form-control"
+                                                placeholder="Enter your phone" value="<?php echo e($authUser->mobile_number ?? ''); ?>" <?php echo e($authUser ? 'readonly' : ''); ?>>
+                                        </div>
+
+                                        
+                                        <?php if(auth()->guard()->guest()): ?>
+                                            <div id="otpSection" style="display: none;">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Enter OTP</label>
+                                                    <input type="text" id="otpInput" class="form-control"
+                                                        placeholder="Enter OTP">
+                                                </div>
+                                                <button type="button" id="verifyOtpBtn"
+                                                    class="btn btn-success w-100 mb-2">Verify OTP</button>
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <div class="mb-3">
                                             <label class="form-label">Your Review</label>
-                                            <textarea class="form-control" rows="4"
+                                            <textarea class="form-control" name="review" rows="4"
                                                 placeholder="Share your experience..."></textarea>
                                         </div>
-                                        <button type="submit" class="btn btn-primary w-100">Submit Review</button>
+
+                                        <button type="submit" class="btn btn-primary w-100" id="submitReviewBtn">
+                                            Submit Review
+                                        </button>
                                     </form>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -749,121 +805,162 @@
                 <div class="col-md-4" style="padding-right:0px;">
                     <div class="related-agents">
                         <h4 class="mb-4">Other Experts</h4>
-                        <div class="agent-card mb-3 border">
-                            <div class="newdesign-image-agent">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                    alt="Agent" class="agent-avatar">
-                                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                            </div>
-                            <div class="newdesign-info-agent">
-                                <div class="d-flex justify-content-between">
-                                    <h4 class="newdesign-proj-name">Sarah Wilson</h4>
-                                    <span class="newdesign-proj-category">Agent</span>
+
+                        <?php $__empty_1 = true; $__currentLoopData = $otherUsers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $other): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                            <?php
+                                $section = $other->profileSection;
+                                $logo = $section->logo
+                                    ? asset('storage/' . $section->logo)
+                                    : 'https://via.placeholder.com/300x200?text=No+Image';
+                            ?>
+
+                            <div class="agent-card mb-3 border">
+                                <div class="newdesign-image-agent">
+                                    <img src="<?php echo e($logo); ?>" alt="Agent" class="agent-avatar">
+                                    <span class="newdesign-verified-seal">
+                                        <i class="fas fa-check-circle"></i> Verified
+                                    </span>
                                 </div>
-                                <span class="newdesign-apart-name">Specializes in residential properties and market
-                                    analysis.</span>
-                                <hr>
-                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Mumbai,
-                                    Maharashtra</span>
-                                <div class="d-flex justify-content-between">
-                                    <span class="newdesign-proj-owner"><strong>Company:</strong><br>Wilson Properties</span>
-                                    <span class="newdesign-proj-owner"><strong>Rating:</strong><br>4.9 (89 reviews)</span>
+                                <div class="newdesign-info-agent">
+                                    <div class="d-flex justify-content-between">
+                                        <h4 class="newdesign-proj-name">
+                                            <?php echo e($other->firstname); ?> <?php echo e($other->lastname); ?>
+
+                                        </h4>
+                                        <span class="newdesign-proj-category">
+                                            <?php echo e($other->role ?? 'Agent'); ?>
+
+                                        </span>
+                                    </div>
+                                    <span class="newdesign-apart-name">
+                                        <?php echo Str::limit(preg_replace('/\s+/', ' ', trim(strip_tags(html_entity_decode($section->description ?? 'No description available')))), 100); ?>
+
+                                    </span>
+                                    <hr>
+                                    <span class="newdesign-apart-adress">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        <?php echo e($user->getCity->name ?? 'N/A'); ?>,
+                                        <?php echo e($user->getState->name ?? ''); ?>
+
+                                    </span>
+                                    <div class="d-flex justify-content-between">
+                                        <span
+                                            class="newdesign-proj-owner"><strong>Company:</strong><br><?php echo e($section->business_name ?? 'N/A'); ?></span>
+                                        <span
+                                            class="newdesign-proj-owner"><strong>Experience:</strong><br><?php echo e($section->years_experience ?? 0); ?>
+
+                                            yrs</span>
+                                    </div>
+                                    <a href="<?php echo e(route('profile.page', ['slug' => Str::slug($other->firstname)])); ?>"
+                                        class="view-profile-btn">
+                                        View Profile
+                                    </a>
                                 </div>
-                                <a href="#" class="view-profile-btn">View Profile</a>
                             </div>
-                        </div>
-                        <div class="agent-card mb-3 border">
-                            <div class="newdesign-image-agent">
-                                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                    alt="Agent" class="agent-avatar">
-                                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                            </div>
-                            <div class="newdesign-info-agent">
-                                <div class="d-flex justify-content-between">
-                                    <h4 class="newdesign-proj-name">Mike Chen</h4>
-                                    <span class="newdesign-proj-category">Agent</span>
-                                </div>
-                                <span class="newdesign-apart-name">Expert in commercial real estate and leasing.</span>
-                                <hr>
-                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Delhi,
-                                    India</span>
-                                <div class="d-flex justify-content-between">
-                                    <span class="newdesign-proj-owner"><strong>Company:</strong><br>Chen Realty Group</span>
-                                    <span class="newdesign-proj-owner"><strong>Rating:</strong><br>4.6 (156 reviews)</span>
-                                </div>
-                                <a href="#" class="view-profile-btn">View Profile</a>
-                            </div>
-                        </div>
-                        <div class="agent-card mb-3 border">
-                            <div class="newdesign-image-agent">
-                                <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                    alt="Agent" class="agent-avatar">
-                                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                            </div>
-                            <div class="newdesign-info-agent">
-                                <div class="d-flex justify-content-between">
-                                    <h4 class="newdesign-proj-name">Priya Sharma</h4>
-                                    <span class="newdesign-proj-category">Agent</span>
-                                </div>
-                                <span class="newdesign-apart-name">Focuses on luxury properties and investments.</span>
-                                <hr>
-                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Bangalore,
-                                    Karnataka</span>
-                                <div class="d-flex justify-content-between">
-                                    <span class="newdesign-proj-owner"><strong>Company:</strong><br>Sharma Builders</span>
-                                    <span class="newdesign-proj-owner"><strong>Rating:</strong><br>4.8 (234 reviews)</span>
-                                </div>
-                                <a href="#" class="view-profile-btn">View Profile</a>
-                            </div>
-                        </div>
-                        <div class="agent-card mb-3 border">
-                            <div class="newdesign-image-agent">
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                    alt="Agent" class="agent-avatar">
-                                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                            </div>
-                            <div class="newdesign-info-agent">
-                                <div class="d-flex justify-content-between">
-                                    <h4 class="newdesign-proj-name">David Patel</h4>
-                                    <span class="newdesign-proj-category">Agent</span>
-                                </div>
-                                <span class="newdesign-apart-name">Specializes in residential sales and rentals.</span>
-                                <hr>
-                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Pune,
-                                    Maharashtra</span>
-                                <div class="d-flex justify-content-between">
-                                    <span class="newdesign-proj-owner"><strong>Company:</strong><br>Patel Realty</span>
-                                    <span class="newdesign-proj-owner"><strong>Rating:</strong><br>5.0 (67 reviews)</span>
-                                </div>
-                                <a href="#" class="view-profile-btn">View Profile</a>
-                            </div>
-                        </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                            <p class="text-muted">No other experts available right now.</p>
+                        <?php endif; ?>
                     </div>
+
                 </div>
             </div>
         </div>
     </section>
 
-    <script>
-        $(document).ready(function () {
-            // Star rating functionality
-            $('.star-rating i[data-rating]').click(function () {
-                var rating = $(this).data('rating');
-                $('#rating').val(rating);
+<script>
+$(document).ready(function () {
+    let isOtpVerified = <?php echo e(Auth::check() ? 'true' : 'false'); ?>;
 
-                $('.star-rating i[data-rating]').removeClass('fas fa-star').addClass('far fa-star');
-                for (var i = 1; i <= rating; i++) {
-                    $('.star-rating i[data-rating="' + i + '"]').removeClass('far fa-star').addClass('fas fa-star');
+    // ⭐ Star Rating Selection
+    $('.star-rating i[data-rating]').click(function () {
+        let rating = $(this).data('rating');
+        $('#rating').val(rating);
+        $('.star-rating i[data-rating]').removeClass('fas fa-star').addClass('far fa-star');
+        for (let i = 1; i <= rating; i++) {
+            $('.star-rating i[data-rating="' + i + '"]').removeClass('far fa-star').addClass('fas fa-star');
+        }
+    });
+
+    /// 🔹 Send OTP for Guest Users
+$('#reviewForm input[name="phone"]').on('blur', function () {
+    if (!isOtpVerified && $(this).val().length >= 10) {
+        $.ajax({
+            url: '<?php echo e(route("send.review.otp")); ?>',
+            type: 'POST',
+            data: {
+                phone: $(this).val(),
+                _token: '<?php echo e(csrf_token()); ?>'
+            },
+            success: function (res) {
+                if (res.success) {
+                    $('#otpSection').show();
+                    swal("OTP Sent!", "We’ve sent an OTP to your phone.", "success");
+                } else {
+                    swal("Error", res.message || "Failed to send OTP.", "error");
                 }
-            });
-
-            // Favorite button hover effect
-            $('.property-favorite').hover(
-                function () { $(this).css('background', '#cc0000'); },
-                function () { $(this).css('background', '#ff4444'); }
-            );
+            },
+            error: function () {
+                swal("Error", "Something went wrong while sending OTP.", "error");
+            }
         });
-    </script>
+    }
+});
+
+// 🔹 Verify OTP
+$('#verifyOtpBtn').click(function () {
+    $.ajax({
+        url: '<?php echo e(route("verify.review.otp")); ?>',
+        type: 'POST',
+        data: {
+            phone: $('#reviewForm input[name="phone"]').val(),
+            otp: $('#otpInput').val(),
+            _token: '<?php echo e(csrf_token()); ?>'
+        },
+        success: function (res) {
+            if (res.success) {
+                isOtpVerified = true;
+                $('#otpSection').hide();
+                swal("Verified!", "OTP verified successfully.", "success");
+            } else {
+                swal("Invalid OTP", "Please check the OTP and try again.", "error");
+            }
+        },
+        error: function () {
+            swal("Error", "Unable to verify OTP.", "error");
+        }
+    });
+});
+
+// 🔹 Submit Review
+$('#reviewForm').submit(function (e) {
+    e.preventDefault();
+
+    if (!isOtpVerified) {
+        swal("Verify OTP", "Please verify your OTP before submitting.", "warning");
+        return;
+    }
+
+    $.ajax({
+        url: '<?php echo e(route("submit.review")); ?>',
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function (res) {
+            if (res.success) {
+                swal("Thank You!", "Your review has been submitted successfully.", "success");
+                $('#reviewForm')[0].reset();
+                $('.star-rating i').removeClass('fas').addClass('far');
+            } else {
+                swal("Error", res.message || "Failed to submit review.", "error");
+            }
+        },
+        error: function () {
+            swal("Error", "Something went wrong while submitting your review.", "error");
+        }
+    });
+});
+
+});
+</script>
 
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.front.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/profile-page.blade.php ENDPATH**/ ?>

@@ -1,5 +1,10 @@
 <?php
-
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Admin\BusinessListingController;
+use App\Http\Controllers\User\PricingController;
+use App\Http\Controllers\User\ServiceController;
+use App\Http\Controllers\User\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,11 +16,15 @@
 |
 */
 
-Route::post('/business/send-otp', [App\Http\Controllers\Admin\BusinessListingController::class, 'sendEnquiryOtp'])->name('business.sendOtp');
-Route::post('/business/enquiry', [App\Http\Controllers\Admin\BusinessListingController::class, 'submitEnquiry'])->name('business.enquiry');
-Route::get('/business-details/{id}', [App\Http\Controllers\HomeController::class, 'businessDetails'])->name('business.details');
-Route::get('/profile-page/{slug?}', [App\Http\Controllers\HomeController::class, 'profilePage'])->name('profile.page');
+Route::post('/review/send-otp', [ReviewController::class, 'sendOtp'])->name('send.review.otp');
+Route::post('/review/verify-otp', [ReviewController::class, 'verifyOtp'])->name('verify.review.otp');
+Route::post('/review/submit', [ReviewController::class, 'submitReview'])->name('submit.review');
 
+
+Route::post('/business/send-otp', [BusinessListingController::class, 'sendEnquiryOtp'])->name('business.sendOtp');
+Route::post('/business/enquiry', [BusinessListingController::class, 'submitEnquiry'])->name('business.enquiry');
+Route::get('/business-details/{id}', [HomeController::class, 'businessDetails'])->name('business.details');
+Route::get('/profile-page/{slug?}', [HomeController::class, 'profilePage'])->name('profile.page');
 Route::get('/listing-list', 'HomeController@list')->name('listing.list');
 Route::get('/directory-list', 'HomeController@directoryList')->name('directory.list');
 Route::get('login', 'AuthController@login');
@@ -421,6 +430,9 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('user/update_profile', 'User\UserController@update_profile')->name('user.update_profile');
 	Route::post('user/update_password', 'User\UserController@update_password')->name('user.update_password');
 	Route::post('user/logout', 'User\UserController@userlogout')->name('user.userlogout');
+	// ✅ Agent/Builder profile section
+	Route::get('user/profile-section', 'User\UserController@profileSection')->name('user.profile.section');
+	Route::post('user/profile-section/update', 'User\UserController@updateProfileSection')->name('user.profile.section.update');
 
 	Route::get('update/property/{id}', 'HomeController@editPropertyView')->name('property.editPropertyView');
 	Route::get('user/property/preview/{id}', 'HomeController@userPreviewPropertyView')->name('property.userPreviewPropertyView');
@@ -442,28 +454,28 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('user/email-mobile/verify/otp', 'HomeController@emailMobileOtpVerification')->name('user.emailMobileOtpVerification');
 	Route::post('/wishlist/toggle', [App\Http\Controllers\WishlistController::class, 'toggle'])->name('wishlist.toggle');
 	Route::post('/business/wishlist/toggle', [App\Http\Controllers\BusinessWishlistController::class, 'toggle'])->name('business.wishlist.toggle');
-	Route::get('/user/pricing', [App\Http\Controllers\User\PricingController::class, 'index'])->name('pricing');
-	Route::get('/user/all-inquries', [App\Http\Controllers\User\UserController::class, 'allInquiries'])->name('all-inquries');
+	Route::get('/user/pricing', [PricingController::class, 'index'])->name('pricing');
+	Route::get('/user/all-inquries', [UserController::class, 'allInquiries'])->name('all-inquries');
 	Route::get('/user/my-wishlist', [App\Http\Controllers\WishlistController::class, 'myWishlist'])->name('my-wishlist');
-	Route::get('/user/my-activities', [App\Http\Controllers\User\UserController::class, 'myActivities'])->name('my-activities');
-	Route::get('user/sent-inquries', [App\Http\Controllers\User\UserController::class, 'sentEnquiries'])->name('user.sent-inquiries');
+	Route::get('/user/my-activities', [UserController::class, 'myActivities'])->name('my-activities');
+	Route::get('user/sent-inquries', [UserController::class, 'sentEnquiries'])->name('user.sent-inquiries');
 
-	Route::post('subscription/store', [App\Http\Controllers\User\PricingController::class, 'Store'])->name('subscription.store');
-	Route::get('/user/current-subscriptions', [App\Http\Controllers\User\PricingController::class, 'subscriptions'])->name('current-subscriptions');
-	Route::get('/user/payments-invoice', [App\Http\Controllers\User\PricingController::class, 'payments'])->name('payments-invoice');
-	Route::get('/user/invoice-details/{subscription}', [App\Http\Controllers\User\PricingController::class, 'invoiceDetails'])->name('invoice-details');
-	Route::get('/user/invoice/download/{id}', [App\Http\Controllers\User\PricingController::class, 'downloadInvoicePDF'])->name('invoice.download');
-	Route::get('/user/invoices/download-all', [App\Http\Controllers\User\PricingController::class, 'downloadAllInvoices'])->name('invoices.download_all');
-	Route::post('/user/subscription/renew', [App\Http\Controllers\User\PricingController::class, 'renew'])->name('user.subscription.renew');
-	Route::post('/subscription/upgrade', [App\Http\Controllers\User\PricingController::class, 'upgrade'])->name('user.subscription.upgrade');
+	Route::post('subscription/store', [PricingController::class, 'Store'])->name('subscription.store');
+	Route::get('/user/current-subscriptions', [PricingController::class, 'subscriptions'])->name('current-subscriptions');
+	Route::get('/user/payments-invoice', [PricingController::class, 'payments'])->name('payments-invoice');
+	Route::get('/user/invoice-details/{subscription}', [PricingController::class, 'invoiceDetails'])->name('invoice-details');
+	Route::get('/user/invoice/download/{id}', [PricingController::class, 'downloadInvoicePDF'])->name('invoice.download');
+	Route::get('/user/invoices/download-all', [PricingController::class, 'downloadAllInvoices'])->name('invoices.download_all');
+	Route::post('/user/subscription/renew', [PricingController::class, 'renew'])->name('user.subscription.renew');
+	Route::post('/subscription/upgrade', [PricingController::class, 'upgrade'])->name('user.subscription.upgrade');
 
 
-	Route::get('/user/services', [App\Http\Controllers\User\ServiceController::class, 'index'])->name('user.services');
-	Route::get('/user/all-services-inquiries', [App\Http\Controllers\User\ServiceController::class, 'receivedInquiries'])->name('user.services.inquiries.received');
-	Route::get('/user/sent-services-inquiries', [App\Http\Controllers\User\ServiceController::class, 'sentInquiries'])->name('user.services.inquiries.sent');
-	Route::get('/user/my-service-wishlist', [App\Http\Controllers\User\ServiceController::class, 'wishlist'])->name('user.service.wishlist');
+	Route::get('/user/services', [ServiceController::class, 'index'])->name('user.services');
+	Route::get('/user/all-services-inquiries', [ServiceController::class, 'receivedInquiries'])->name('user.services.inquiries.received');
+	Route::get('/user/sent-services-inquiries', [ServiceController::class, 'sentInquiries'])->name('user.services.inquiries.sent');
+	Route::get('/user/my-service-wishlist', [ServiceController::class, 'wishlist'])->name('user.service.wishlist');
 
-	
+
 
 });
 

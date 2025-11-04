@@ -550,36 +550,39 @@ class HomeController extends AppController
 			abort(404, 'User not found.');
 		}
 
-		// 🔹 Get total and category-wise property counts
+		// Fetch Profile Section Data
+		$profileSection = \App\Models\ProfileSection::where('user_id', $user->id)->first();
+
+		// Property counts
 		$totalProperties = Properties::where('user_id', $user->id)->count();
+		$sellCount = Properties::where('user_id', $user->id)->where('category_id', 22)->count();
+		$rentCount = Properties::where('user_id', $user->id)->where('category_id', 21)->count();
+		$pgHostelCount = Properties::where('user_id', $user->id)->where('category_id', 20)->count();
 
-		$sellCount = Properties::where('user_id', $user->id)
-			->where('category_id', 22)
-			->count();
-
-		$rentCount = Properties::where('user_id', $user->id)
-			->where('category_id', 21)
-			->count();
-
-		$pgHostelCount = Properties::where('user_id', $user->id)
-			->where('category_id', 20)
-			->count();
-
-		// 🔹 Fetch all properties of the user
+		// Approved & published properties
 		$properties = Properties::where('user_id', $user->id)
 			->where('approval', 'Approved')
 			->where('publish_status', 'Publish')
 			->latest()
 			->get();
 
+		// 🟢 Other Agents/Builders (exclude current user)
+		$otherUsers = User::whereIn('role', ['agent', 'builder'])
+			->whereHas('profileSection')
+			->with('profileSection')
+			->take(3)
+			->get();
+
 		return view('front.profile-page', compact(
 			'user',
 			'slug',
+			'profileSection',
 			'totalProperties',
 			'sellCount',
 			'rentCount',
 			'pgHostelCount',
-			'properties'
+			'properties',
+			'otherUsers'
 		));
 	}
 

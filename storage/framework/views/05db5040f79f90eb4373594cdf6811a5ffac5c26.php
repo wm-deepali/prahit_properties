@@ -1,1 +1,0 @@
-<?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/user/public-profile.blade.php ENDPATH**/ ?>

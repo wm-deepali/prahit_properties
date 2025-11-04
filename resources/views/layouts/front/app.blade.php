@@ -660,7 +660,7 @@
               <div class=" profile-content">
                 <h4 class="m-0">Welcome</h4>
                 <h6 class="m-0">{{Auth::user()->firstname}} {{Auth::user()->lastname}}</h6>
-                @if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder']))
+                @if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder', 'user']))
                   <a href="{{  route('user.see_profile') }}">
                     <p class="m-0">Manage Profile</p>
                   </a>
@@ -859,7 +859,7 @@
         <!----}}-->
 
         @auth
-          @if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder']))
+          @if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder', 'user']))
             <li>
               <a href="{{url('user/dashboard')}}" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown"
                 aria-expanded="false">
@@ -3721,7 +3721,7 @@
           if (response.status === 200) {
             toastr.success(response.message)
             // $(".modal").modal('hide');
-            if (['owner', 'agent', 'builder'].includes(response.role)) {
+            if (['owner', 'agent', 'builder', 'user'].includes(response.role)) {
               // ✅ Code runs if user role is owner, agent, or builder
               window.location = "{{url('user/dashboard')}}"
             }
