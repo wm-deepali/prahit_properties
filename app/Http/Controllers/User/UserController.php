@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\User;
 
 use App\AgentEnquiry;
+use App\BusinessListing;
+use App\Models\BusinessEnquiry;
 use App\Models\Wishlist;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\AppController;
@@ -130,19 +132,14 @@ class UserController extends AppController
 	{
 		$userId = \Auth::id();
 
-		// All properties of this user
+		// Properties
 		$properties = Properties::where('user_id', $userId)->latest()->get();
-
-		// Counts
 		$totalProperties = $properties->count();
 		$publishedProperties = $properties->where('publish_status', 'Publish')->count();
-
-		// Enquired Properties (unique property IDs that have inquiries)
 		$enquiredPropertyIds = AgentEnquiry::whereIn('property_id', $properties->pluck('id'))->distinct('property_id')->count();
 
-		// Get the 'Exclusive Launch' category
+		// Exclusive Properties
 		$exclusiveCategory = Category::where('category_name', 'Exclusive Launch')->first();
-
 		$ExclusiveProperties = Properties::when($exclusiveCategory, function ($query) use ($exclusiveCategory) {
 			$query->where('category_id', $exclusiveCategory->id);
 		})
@@ -150,13 +147,24 @@ class UserController extends AppController
 			->take(3)
 			->get();
 
+		// Business Listings
+		$businessListings = BusinessListing::where('user_id', $userId)->latest()->get();
+		$totalBusiness = $businessListings->count();
+		$publishedBusiness = $businessListings->where('is_published', true)->count();
+		$enquiredBusiness = BusinessEnquiry::whereIn('business_id', $businessListings->pluck('id'))->distinct('business_id')->count();
+
 		return view('front.user.dashboard', compact(
 			'properties',
 			'ExclusiveProperties',
 			'totalProperties',
 			'publishedProperties',
-			'enquiredPropertyIds'
+			'enquiredPropertyIds',
+			'businessListings',
+			'totalBusiness',
+			'publishedBusiness',
+			'enquiredBusiness'
 		));
+
 	}
 
 

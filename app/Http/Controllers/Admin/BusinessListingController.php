@@ -11,6 +11,7 @@ use App\BusinessListing;
 use App\WebDirectoryCategory;
 use App\WebDirectorySubCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -18,8 +19,18 @@ class BusinessListingController extends Controller
 {
     public function index()
     {
-        $businesses = BusinessListing::with(['category', 'subCategories', 'propertyCategories'])->latest()->get(); // 🆕
-        return view('admin.business-listing.index', compact('businesses'));
+        // Load published and unpublished separately
+        $publishedBusinesses = BusinessListing::with(['category', 'subCategories', 'propertyCategories', 'user'])
+            ->where('is_published', true)
+            ->latest()
+            ->get();
+
+        $unpublishedBusinesses = BusinessListing::with(['category', 'subCategories', 'propertyCategories', 'user'])
+            ->where('is_published', false)
+            ->latest()
+            ->get();
+
+        return view('admin.business-listing.index', compact('publishedBusinesses', 'unpublishedBusinesses'));
     }
 
     public function create()
@@ -103,6 +114,10 @@ class BusinessListingController extends Controller
             if ($request->hasFile('banner_image')) {
                 $business->banner_image = $request->file('banner_image')->store('business/banner', 'public');
             }
+
+            // ✅ Add logged-in user ID
+            $business->user_id = Auth::user()->id;
+            $business->is_published = true;
 
             $business->save();
 
@@ -416,6 +431,18 @@ class BusinessListingController extends Controller
             \Log::error('SMS sending failed: ' . $e->getMessage());
             return false;
         }
+    }
+
+    public function toggleStatus(Request $request, $id)
+    {
+        $business = BusinessListing::findOrFail($id);
+        $business->is_published = $request->is_published === 'true' ? true : false;
+        $business->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Business status updated successfully!'
+        ]);
     }
 
 

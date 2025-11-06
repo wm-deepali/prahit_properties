@@ -3,7 +3,6 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\BusinessListingController;
 use App\Http\Controllers\User\PricingController;
-use App\Http\Controllers\User\ServiceController;
 use App\Http\Controllers\User\UserController;
 /*
 |--------------------------------------------------------------------------
@@ -138,7 +137,9 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin.check'], '
 
 		Route::resource('web-directory-category', 'WebDirectoryCategoryController');
 		Route::resource('web-directory-sub-category', 'WebDirectorySubCategoryController');
+		Route::post('business-listing/toggle-status/{id}', [BusinessListingController::class, 'toggleStatus'])->name('business-listing.toggleStatus');
 		Route::resource('business-listing', 'BusinessListingController');
+
 
 		Route::get('edit/sub-directory/{id}', 'WebDirectorySubCategoryController@editView');
 
@@ -423,6 +424,9 @@ Route::group(['middleware' => ['auth', 'admin.check']], function () {
 // User Login Routes
 Route::group(['middleware' => ['auth']], function () {
 
+	Route::get('/business-listing/create', [App\Http\Controllers\User\BusinessListingController::class, 'create'])->name('create_business_listing');
+	Route::post('/business-listing/submit', [App\Http\Controllers\User\BusinessListingController::class, 'store'])->name('submit_business_listing');
+
 	Route::post('user/upload_avatar', 'User\UserController@upload_avatar')->name('user.upload_avatar');
 	Route::get('user/dashboard', 'User\UserController@dashboard')->name('user.dashboard');
 	Route::get('user/properties', 'User\UserController@all_properties')->name('user.properties');
@@ -470,12 +474,13 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('/subscription/upgrade', [PricingController::class, 'upgrade'])->name('user.subscription.upgrade');
 
 
-	Route::get('/user/services', [ServiceController::class, 'index'])->name('user.services');
-	Route::get('/user/all-services-inquiries', [ServiceController::class, 'receivedInquiries'])->name('user.services.inquiries.received');
-	Route::get('/user/sent-services-inquiries', [ServiceController::class, 'sentInquiries'])->name('user.services.inquiries.sent');
-	Route::get('/user/my-service-wishlist', [ServiceController::class, 'wishlist'])->name('user.service.wishlist');
-
-
+	Route::get('/user/services', 'User\BusinessListingController@index')->name('user.services.index');
+	Route::get('/user/services/edit/{id}', 'User\BusinessListingController@edit')->name('user.services.edit');
+	Route::patch('/user/services/update/{id}', 'User\BusinessListingController@update')->name('user.services.update');
+	Route::delete('/user/services/delete/{id}', 'User\BusinessListingController@destroy')->name('user.services.delete');
+	Route::get('/user/all-services-inquiries', [App\Http\Controllers\User\BusinessListingController::class, 'receivedInquiries'])->name('user.services.inquiries.received');
+	Route::get('/user/sent-services-inquiries', [App\Http\Controllers\User\BusinessListingController::class, 'sentInquiries'])->name('user.services.inquiries.sent');
+	Route::get('/user/my-service-wishlist', [App\Http\Controllers\User\BusinessListingController::class, 'wishlist'])->name('user.service.wishlist');
 
 });
 

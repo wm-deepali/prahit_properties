@@ -36,92 +36,99 @@
           <div class="card">
             <div class="card-body">
               <div class="card-block">
-                <div class="table-responsive">
-                  <table class="table table-bordered table-fitems">
-                    <thead>
-                      <tr>
-                        <th>Sr. No.</th>
-                        <th>Date & Time</th>
-                        <th>Business Name</th>
-                        <th>Contact Detail</th>
-                        <th>Membership Type</th>
-                        <th>Category Info</th>
-                        <th>Property Category</th>
-                        <th>Property Subcategory</th>
-                        <th>Property Types</th>
-                        <th>Total Views</th>
-                        <th>Total Enquiries</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @if(isset($businesses) && count($businesses) > 0)
-                        @foreach($businesses as $c => $b)
-                          <tr id="{{ $b->id }}">
-                            <td>{{ $c + 1 }}</td>
-                            <td>{{ $b->created_at->format('d-m-Y H:i') }}</td>
-                            <td>{{ $b->business_name }}</td>
-                            <td>
-                              {{ $b->email }} <br>
-                              {{ $b->mobile_number }}
-                            </td>
-                            <td>{{ ucfirst($b->membership_type) }}</td>
-                            <td>
-                              {{ $b->category ? $b->category->category_name : '-' }} <br>
-                              @if($b->subCategories && count($b->subCategories) > 0)
-                                {{ implode(', ', $b->subCategories->pluck('sub_category_name')->toArray()) }}
-                              @endif
-                            </td>
-                            <td>
-                              @php
-                                $pc = $b->propertyCategories ?? collect();
-                                $psc = $b->propertySubCategories ?? collect();
-                                $pssc = $b->propertySubSubCategories ?? collect();
-                              @endphp
-                              @if($pc->count() === ($pc instanceof \Illuminate\Support\Collection ? $pc : collect($pc))->count() && $pc->count() > 0 && $pc->count() === \App\Category::count())
-                                All
+
+                <div class="card-body">
+                  <div class="card-block">
+
+                    {{-- Tabs --}}
+                    <ul class="nav nav-tabs" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#published" role="tab">Published</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#unpublished" role="tab">Unpublished</a>
+                      </li>
+                    </ul>
+
+                    <div class="tab-content mt-3">
+                      {{-- Published Tab --}}
+                      <div class="tab-pane fade show active" id="published" role="tabpanel">
+                        <div class="table-responsive">
+                          <table class="table table-bordered table-fitems">
+                            <thead>
+                              <tr>
+                                <th>Sr. No.</th>
+                                <th>Date & Time</th>
+                                <th>Business Name</th>
+                                <th>Contact Detail</th>
+                                <th>Membership Type</th>
+                                <th>Category Info</th>
+                                <th>Property Category</th>
+                                <th>Property Subcategory</th>
+                                <th>Property Types</th>
+                                <th>Total Views</th>
+                                <th>Total Enquiries</th>
+                                <th>Added By</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              @if(isset($publishedBusinesses) && count($publishedBusinesses) > 0)
+                                @foreach($publishedBusinesses as $c => $b)
+                                  @include('admin.business-listing.business-table', ['b' => $b, 'c' => $c])
+                                @endforeach
                               @else
-                                {{ $pc->count() ? $pc->pluck('category_name')->implode(', ') : '-' }}
+                                <tr>
+                                  <td colspan="13" class="text-center">No records found</td>
+                                </tr>
                               @endif
-                            </td>
-                            <td>
-                              @if($psc->count() && $pc->count() === 1 && $psc->count() === \App\SubCategory::where('category_id', $pc->first()->id)->count())
-                                All
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      {{-- Unpublished Tab --}}
+                      <div class="tab-pane fade" id="unpublished" role="tabpanel">
+                        <div class="table-responsive">
+                          <table class="table table-bordered table-fitems">
+                            <thead>
+                              <tr>
+                                <th>Sr. No.</th>
+                                <th>Date & Time</th>
+                                <th>Business Name</th>
+                                <th>Contact Detail</th>
+                                <th>Membership Type</th>
+                                <th>Category Info</th>
+                                <th>Property Category</th>
+                                <th>Property Subcategory</th>
+                                <th>Property Types</th>
+                                <th>Total Views</th>
+                                <th>Total Enquiries</th>
+                                <th>Added By</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              @if(isset($unpublishedBusinesses) && count($unpublishedBusinesses) > 0)
+                                @foreach($unpublishedBusinesses as $c => $b)
+                                  @include('admin.business-listing.business-table', ['b' => $b, 'c' => $c])
+                                @endforeach
                               @else
-                                {{ $psc->count() ? $psc->pluck('sub_category_name')->implode(', ') : '-' }}
+                                <tr>
+                                  <td colspan="13" class="text-center">No records found</td>
+                                </tr>
                               @endif
-                            </td>
-                            <td>
-                              {{ $pssc->count() ? $pssc->pluck('sub_sub_category_name')->implode(', ') : '-' }}
-                            </td>
-                            <td>{{ $b->total_views ?? 0 }}</td>
-                            <td>{{ $b->total_enquiries ?? 0 }}</td>
-                            <td>{{ $b->status == 'Active' ? 'Active' : 'Inactive' }}</td>
-                            <td>
-                              <ul class="action">
-                                <li><a href="{{ route('admin.business-listing.edit', $b->id) }}">
-                                    <i class="fas fa-pencil-alt"></i>
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#" data-toggle="modal" data-target="#delete-business"
-                                    onclick="$('#delete_business #id').val({{ $b->id }})">
-                                    <i class="fas fa-trash"></i>
-                                  </a>
-                                </li>
-                              </ul>
-                            </td>
-                          </tr>
-                        @endforeach
-                      @else
-                        <tr>
-                          <td colspan="10" class="text-center">No records found</td>
-                        </tr>
-                      @endif
-                    </tbody>
-                  </table>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
                 </div>
+
               </div>
             </div>
           </div>
@@ -197,5 +204,35 @@
         }
       })
     });
+
+    $(".btn-toggle-status").on('click', function (e) {
+      e.preventDefault();
+      var btn = $(this);
+      var id = btn.data('id');
+      var status = btn.data('status');
+
+      $.ajax({
+        url: '{{ route("admin.business-listing.toggleStatus", "") }}/' + id,
+        method: "POST",
+        data: {
+          is_published: status,
+          _token: '{{ csrf_token() }}'
+        },
+        success: function (response) {
+          if (response.status === 200) {
+            toastr.success(response.message);
+             location.reload();
+            // Optionally, update the button & status text dynamically
+          } else {
+            toastr.error(response.message);
+          }
+        },
+        error: function () {
+          toastr.error('An error occurred.');
+        }
+      });
+    });
+
+
   </script>
 @endsection

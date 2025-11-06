@@ -456,7 +456,7 @@ class HomeController extends AppController
 
 	public function directoryList(Request $request)
 	{
-		$query = BusinessListing::with(['category', 'subCategories'])->where('status', 'Active');
+		$query = BusinessListing::with(['category', 'subCategories'])->where('status', 'Active')->where('is_published', true);
 
 		// Filter by Web Directory Subcategory
 		if ($request->has('subcategory') && !empty($request->subcategory)) {
@@ -595,7 +595,8 @@ class HomeController extends AppController
 			'services',
 			'propertyCategories',
 			'propertySubCategories',
-			'propertySubSubCategories'
+			'propertySubSubCategories',
+			'user',
 		])->findOrFail($id);
 
 		// Increment views count

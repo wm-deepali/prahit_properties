@@ -10,6 +10,7 @@ class BusinessListing extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'membership_type',
         'verified_status',
         'category_id',
@@ -32,6 +33,7 @@ class BusinessListing extends Model
         'rating',
         'rating_count',
         'status',
+        'is_published', // ✅ new column
     ];
 
     // 🔹 Relationship: Category
@@ -52,19 +54,28 @@ class BusinessListing extends Model
         return $this->hasMany(BusinessService::class, 'business_listing_id');
     }
 
+    // 🔹 Relationship: Property Categories
     public function propertyCategories()
     {
         return $this->belongsToMany(Category::class, 'business_property_categories');
     }
 
+    // 🔹 Relationship: Property SubCategories
     public function propertySubCategories()
     {
         return $this->belongsToMany(SubCategory::class, 'business_property_subcategories');
     }
 
+    // 🔹 Relationship: Property Sub-SubCategories
     public function propertySubSubCategories()
     {
         return $this->belongsToMany(SubSubCategory::class, 'business_property_sub_subcategories');
+    }
+
+    // 🔹 Relationship: User
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
@@ -97,5 +108,4 @@ class BusinessListing extends Model
 
         return $html;
     }
-
 }

@@ -624,8 +624,6 @@
         style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;">
         <i class="fas fa-pencil-alt me-1"></i> Post Property <span class="badge bg-warning text-dark ms-1">Free</span>
       </a>
-
-
     </div>
 
 
@@ -660,7 +658,7 @@
               <div class=" profile-content">
                 <h4 class="m-0">Welcome</h4>
                 <h6 class="m-0">{{Auth::user()->firstname}} {{Auth::user()->lastname}}</h6>
-                @if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder', 'user']))
+                @if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder', 'user', 'service_provider']))
                   <a href="{{  route('user.see_profile') }}">
                     <p class="m-0">Manage Profile</p>
                   </a>
@@ -794,6 +792,16 @@
           <i class="fas fa-pencil-alt me-1"></i> Post Property <span class="badge bg-warning text-dark ms-1">Free</span>
         </a>
 
+
+        <a href="javascript:void(0);" class="btn fw-semibold px-3 py-1 rounded-3"
+          style="background:#fff; height:33px; border:1px solid #f9f9f9; font-size:13px;" @if(Auth::check())
+          onclick="window.location.href='{{ route('create_business_listing') }}'" @else
+          onclick=" openSigninModal('business-listing/create')" @endif>
+          <i class="fas fa-briefcase me-1"></i> Post Business
+          <span class="badge bg-warning text-dark ms-1">Free</span>
+        </a>
+
+
         <!-- ☎️ Support -->
         <div class="dropdown custom-dropdown support-dropdown">
           <a href="#" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown" aria-expanded="false"
@@ -859,7 +867,7 @@
         <!----}}-->
 
         @auth
-          @if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder', 'user']))
+          @if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder', 'user', 'service_provider']))
             <li>
               <a href="{{url('user/dashboard')}}" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown"
                 aria-expanded="false">
@@ -872,8 +880,8 @@
 
         @endauth
         @guest
-          <li style="list-style:none;"><a class="btn btn-outline-dark fw-semibold" href="#" data-target="#signin"
-              data-toggle="modal"><i class="far fa-user"></i> Sign In</a></li>
+          <li style="list-style:none;"><a class="btn btn-outline-dark fw-semibold" href="#" onclick="openSigninModal()"><i
+                class="far fa-user"></i> Sign In</a></li>
         @endguest
       </div>
     </div>
@@ -2750,8 +2758,8 @@
           </div>
         </div>
         <div class="modal-foo text-center">
-          <p>Don't have account? <a href="#" data-target="#register" data-toggle="modal" data-dismiss="modal">Create an
-              Account</a></p>
+          <p>Don't have account? <a href="#" class="create-account">Create an Account</a>
+          </p>
         </div>
       </div>
     </div>
@@ -2856,6 +2864,8 @@
                               Builder</label></li>
                           <li><label><input type="radio" name="owner_type" value="3">
                               Agent</label></li>
+                          <li><label><input type="radio" name="owner_type" value="4">
+                              Service Provider</label></li>
                         </ul>
                       </div>
                     </div>
@@ -2977,7 +2987,7 @@
   </div>
 
 
-  <div class="modal fade custom-modal" id="otpmodal" tabindex="-1" role="dialog" aria-labelledby="register"
+  <div class="modal fade custom-modal" id="otpModal" tabindex="-1" role="dialog" aria-labelledby="register"
     aria-hidden="true">
     <div class="modal-dialog w-450" role="document">
       <div class="modal-content">
@@ -3444,11 +3454,22 @@
 <script>
 
 
-  function openSigninModal() {
-    // Example: if using Bootstrap modal
+  let postLoginRedirect = null;
+
+  function openSigninModal(redirectUrl = null) {
+    if (redirectUrl) {
+      postLoginRedirect = redirectUrl;
+    }
     $('#signin').modal('show');
   }
 
+  $('.create-account').on('click', function (e) {
+    e.preventDefault();
+    $('#signin').modal('hide');
+    setTimeout(function () {
+      $('#register').modal('show');
+    }, 300);
+  });
 
   function toggleViewMoreExclusiveProperties(subCatId, element) {
     const moreItems = document.querySelectorAll('.more-properties-exclusive-' + subCatId);
@@ -3721,10 +3742,14 @@
           if (response.status === 200) {
             toastr.success(response.message)
             // $(".modal").modal('hide');
-            if (['owner', 'agent', 'builder', 'user'].includes(response.role)) {
-              // ✅ Code runs if user role is owner, agent, or builder
-              window.location = "{{url('user/dashboard')}}"
+            if (postLoginRedirect) {
+              window.location.href = postLoginRedirect;
+              postLoginRedirect = null;
+            } else {
+              window.location.href = '/user_dashboard';  // default redirect
             }
+        
+
           } else if (response.status === 400) {
             toastr.error(response.message)
             $("#login_form #password").val('');
@@ -3856,25 +3881,31 @@
         beforeSend: function () {
           $(".btn-send").attr('disabled', true);
           $(".modal_loading").css('display', 'block');
+          $('#register').modal('hide');
         },
         success: function (response) {
-          // console.log(response);
           // toastr.success('abc')
           // var response = JSON.parse(response);
-          if (response.responseCode === 200) {
-            toastr.success(response.message)
-            $(".modal").modal('hide');
-            $("#otpmodal").modal('show');
-            $("#otp_form .user_id").val(response.data.User.id);
-            // reloadPage();
+          if (response.status == true) {
+            console.log(response.data.id);
+            // toastr.success(response.message)
+            $('#otp_form .user_id').val(response.data.id);
+            $('#register').modal('hide');
+            setTimeout(function () {
+              $('#otpModal').modal('show');
+            }, 300);
+
+
           } else if (response.responseCode === 400) {
             toastr.error(response.message)
+            $('#register').modal('hide');
             $("#register_form").trigger('reset');
           }
         },
         error: function (xhr, status, error) {
           var response = JSON.parse(xhr.responseText);
           response.responseCode === 400 ? toastr.error(response.message) : toastr.error('An error occured');
+          $('#register').modal('hide');
         },
         complete: function () {
           $(".modal_loading").css('display', 'none');
@@ -3905,7 +3936,7 @@
           // console.log(response);
           // toastr.success('abc')
           // var response = JSON.parse(response);
-          if (response.responseCode === 200) {
+          if (response.staus == true) {
             toastr.success(response.message)
             $(".modal").modal('hide');
             // window.user_id = response.data.User.id;
@@ -3944,7 +3975,7 @@
       success: function (response) {
         // console.log(response);
         // var response = JSON.parse(response);
-        if (response.responseCode === 200) {
+        if (response.status == true) {
           var cities = response.data.Cities;
           console.log(cities);
           if (cities.length > 0) {
