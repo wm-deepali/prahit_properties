@@ -64,6 +64,15 @@
             display: block;
             margin-top: 5px;
         }
+        .portfolio-row img {
+            max-width: 100px;
+            display: block;
+            margin-top: 5px;
+        }
+        .timing-item input[type="text"],
+        .timing-item input[type="time"] {
+            width: 100%;
+        }
     </style>
 <?php $__env->stopSection(); ?>
 
@@ -99,6 +108,7 @@
                                     enctype="multipart/form-data">
                                     <?php echo csrf_field(); ?>
                                     <?php echo method_field('PATCH'); ?>
+
                                     <div class="form-row">
                                         <div class="form-group col-md-3">
                                             <label>Membership Type</label>
@@ -126,7 +136,8 @@
                                             <select name="category_id" id="category_id" class="form-control" required>
                                                 <option value="">Select Category</option>
                                                 <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                    <option value="<?php echo e($category->id); ?>" <?php echo e($business->category_id == $category->id ? 'selected' : ''); ?>>
+                                                    <option value="<?php echo e($category->id); ?>"
+                                                        <?php echo e($business->category_id == $category->id ? 'selected' : ''); ?>>
                                                         <?php echo e($category->category_name); ?>
 
                                                     </option>
@@ -136,10 +147,10 @@
 
                                         <div class="form-group col-md-3">
                                             <label>Sub Category</label>
-                                            <select name="sub_category_ids[]" id="sub_category_ids"
-                                                class="form-control select2-multiple" multiple required>
+                                            <select name="sub_category_ids[]" id="sub_category_ids" class="form-control select2-multiple" multiple required>
                                                 <?php $__currentLoopData = $subCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                    <option value="<?php echo e($sub->id); ?>" <?php echo e(in_array($sub->id, $business->subCategories->pluck('id')->toArray()) ? 'selected' : ''); ?>>
+                                                    <option value="<?php echo e($sub->id); ?>"
+                                                        <?php echo e(in_array($sub->id, $business->subCategories->pluck('id')->toArray()) ? 'selected' : ''); ?>>
                                                         <?php echo e($sub->sub_category_name); ?>
 
                                                     </option>
@@ -149,13 +160,11 @@
                                     </div>
 
                                     <h4 class="form-section-h">Assigned To Property Category</h4>
-
                                     <div class="form-group row">
                                         <div class="col-sm-4">
                                             <label class="label-control">Property Available For</label>
                                             <select class="text-control populate_categories" name="property_category_id"
-                                                id="property_category_id"
-                                                onchange="handlePropertyCategoryChange(this.value)" required>
+                                                id="property_category_id" onchange="handlePropertyCategoryChange(this.value)" required>
                                                 <option value="">Select Category</option>
                                                 <?php
                                                     $totalPropertyCategories = $property_categories->count();
@@ -166,7 +175,8 @@
                                                 <option value="all" <?php echo e($isAllCategories ? 'selected' : ''); ?>>Select All
                                                 </option>
                                                 <?php $__currentLoopData = $property_categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                    <option value="<?php echo e($v->id); ?>" <?php echo e((!$isAllCategories && $firstSelectedCategory == $v->id) ? 'selected' : ''); ?>>
+                                                    <option value="<?php echo e($v->id); ?>"
+                                                        <?php echo e((!$isAllCategories && $firstSelectedCategory == $v->id) ? 'selected' : ''); ?>>
                                                         <?php echo e($v->category_name); ?>
 
                                                     </option>
@@ -176,11 +186,10 @@
 
                                         <div class="col-sm-4" id="property_category_div">
                                             <label class="label-control">Property Category</label>
-                                            <select class="text-control populate_subcategories"
-                                                name="property_subcategory_id" id="property_subcategory_id"
-                                                onchange="handleSubCategoryChange(this.value)" required>
+                                            <select class="text-control populate_subcategories" name="property_subcategory_id"
+                                                id="property_subcategory_id" onchange="handleSubCategoryChange(this.value)" required>
                                                 <option value="">Select Sub Category</option>
-
+                                                
                                             </select>
                                         </div>
 
@@ -198,7 +207,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
 
                                     <div class="form-row">
@@ -232,43 +240,57 @@
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label>Established Year</label>
-                                            <input type="number" name="established_year" class="form-control" min="1800"
-                                                max="2099" value="<?php echo e($business->established_year); ?>">
+                                            <input type="number" name="established_year" class="form-control" min="1800" max="2099"
+                                                value="<?php echo e($business->established_year); ?>">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label>Registration Number</label>
+                                            <input type="text" name="registration_number" class="form-control" 
+                                                value="<?php echo e($business->registration_number); ?>">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Deals In</label>
+                                            <input type="text" name="deals_in" class="form-control"
+                                                value="<?php echo e($business->deals_in); ?>">
+                                            <small class="text-muted">Separate multiple values with commas.</small>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Satisfied Clients</label>
+                                            <input type="number" name="satisfied_clients" class="form-control" min="0"
+                                                value="<?php echo e($business->satisfied_clients); ?>">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Introduction</label>
-                                        <textarea name="introduction"
-                                            class="form-control"><?php echo e($business->introduction); ?></textarea>
+                                        <textarea name="introduction" class="form-control"><?php echo e($business->introduction); ?></textarea>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Detail</label>
-                                        <textarea name="detail" class="form-control"><?php echo e($business->detail); ?></textarea>
+                                        <textarea name="detail" class="form-control" id="detail"><?php echo e($business->detail); ?></textarea>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Full Address</label>
-                                        <textarea name="full_address"
-                                            class="form-control"><?php echo e($business->full_address); ?></textarea>
+                                        <textarea name="full_address" class="form-control"><?php echo e($business->full_address); ?></textarea>
                                     </div>
 
                                     <div class="form-row">
                                         <div class="form-group col-md-4">
                                             <label>State</label>
-                                            <input type="text" name="state" class="form-control"
-                                                value="<?php echo e($business->state); ?>">
+                                            <input type="text" name="state" class="form-control" value="<?php echo e($business->state); ?>">
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label>City</label>
-                                            <input type="text" name="city" class="form-control"
-                                                value="<?php echo e($business->city); ?>">
+                                            <input type="text" name="city" class="form-control" value="<?php echo e($business->city); ?>">
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label>Pin Code</label>
-                                            <input type="text" name="pin_code" class="form-control"
-                                                value="<?php echo e($business->pin_code); ?>">
+                                            <input type="text" name="pin_code" class="form-control" value="<?php echo e($business->pin_code); ?>">
                                         </div>
                                     </div>
 
@@ -277,14 +299,14 @@
                                             <label>Logo</label>
                                             <input type="file" name="logo" class="form-control-file">
                                             <?php if($business->logo): ?>
-                                                <img src="<?php echo e(asset('storage/' . $business->logo)); ?>" alt="Logo">
+                                                <img src="<?php echo e(asset('storage/' . $business->logo)); ?>" alt="Logo" style="max-width: 100px; display: block; margin-top: 5px;">
                                             <?php endif; ?>
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label>Banner Image</label>
                                             <input type="file" name="banner_image" class="form-control-file">
                                             <?php if($business->banner_image): ?>
-                                                <img src="<?php echo e(asset('storage/' . $business->banner_image)); ?>" alt="Banner">
+                                                <img src="<?php echo e(asset('storage/' . $business->banner_image)); ?>" alt="Banner" style="max-width: 100px; display: block; margin-top: 5px;">
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -294,17 +316,23 @@
                                     <div id="services-container">
                                         <?php $__currentLoopData = $business->services; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $service): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <div class="service-row row">
-                                                <input type="hidden" name="services[<?php echo e($index); ?>][id]"
-                                                    value="<?php echo e($service->id); ?>">
-                                                <div class="form-group col-md-5">
+                                                <input type="hidden" name="services[<?php echo e($index); ?>][id]" value="<?php echo e($service->id); ?>">
+                                                <div class="form-group col-md-3">
                                                     <input type="text" name="services[<?php echo e($index); ?>][name]" class="form-control"
                                                         value="<?php echo e($service->name); ?>" placeholder="Service Name">
                                                 </div>
-                                                <div class="form-group col-md-5">
-                                                    <input type="file" name="services[<?php echo e($index); ?>][image]"
-                                                        class="form-control-file">
+                                                <div class="form-group col-md-4">
+                                                    <input type="text" name="services[<?php echo e($index); ?>][description]" class="form-control"
+                                                        value="<?php echo e($service->description); ?>" placeholder="Description">
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <input type="number" name="services[<?php echo e($index); ?>][price]" class="form-control" min="0" step="0.01"
+                                                        value="<?php echo e($service->price); ?>" placeholder="Price">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <input type="file" name="services[<?php echo e($index); ?>][image]" class="form-control-file">
                                                     <?php if($service->image): ?>
-                                                        <img src="<?php echo e(asset('storage/' . $service->image)); ?>" alt="Service Image">
+                                                        <img src="<?php echo e(asset('storage/' . $service->image)); ?>" alt="Service Image" style="max-width: 100px; display: block; margin-top: 5px;">
                                                     <?php endif; ?>
                                                 </div>
                                                 <div class="form-group col-md-2">
@@ -313,11 +341,94 @@
                                             </div>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </div>
-
                                     <div class="form-group text-center mt-3">
                                         <button type="button" class="btn btn-success add-service">Add More</button>
-                                        <button type="submit" class="btn btn-primary">Update Business</button>
                                     </div>
+
+                                    <hr>
+                                    <h5>Portfolio</h5>
+                                    <div id="portfolio-container">
+                                        <?php $__currentLoopData = $business->portfolio; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $portfolio): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <div class="portfolio-row row mb-2">
+                                                <input type="hidden" name="portfolio[<?php echo e($index); ?>][id]" value="<?php echo e($portfolio->id); ?>">
+                                                <div class="form-group col-md-3">
+                                                    <input type="text" name="portfolio[<?php echo e($index); ?>][title]" class="form-control"
+                                                        value="<?php echo e($portfolio->title); ?>" placeholder="Title">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <input type="url" name="portfolio[<?php echo e($index); ?>][link]" class="form-control"
+                                                        value="<?php echo e($portfolio->link); ?>" placeholder="Link">
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                    <input type="file" name="portfolio[<?php echo e($index); ?>][image]" class="form-control-file">
+                                                    <?php if($portfolio->image): ?>
+                                                        <img src="<?php echo e(asset('storage/' . $portfolio->image)); ?>" alt="Portfolio Image"
+                                                            style="max-width: 100px; display: block; margin-top: 5px;">
+                                                    <?php endif; ?>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <button type="button" class="btn btn-danger remove-portfolio">Remove</button>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </div>
+                                    <div class="form-group text-center mb-4">
+                                        <button type="button" class="btn btn-success add-portfolio">Add More</button>
+                                    </div>
+
+                                    <hr>
+                                    <h5>Working Hours</h5>
+                                    <div id="working-hours-container">
+                                        <?php
+                                            $existingWH = $business->working_hours ?? [
+                                                ['day' => 'Monday - Friday', 'start' => '09:00', 'end' => '19:00', 'closed' => false],
+                                                ['day' => 'Saturday', 'start' => '10:00', 'end' => '17:00', 'closed' => false],
+                                                ['day' => 'Sunday', 'start' => '', 'end' => '', 'closed' => true],
+                                            ];
+                                        ?>
+                                        <?php $__currentLoopData = $existingWH; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $wh): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <div class="timing-item row align-items-center mb-2 gx-2" data-index="<?php echo e($index); ?>">
+                                                <div class="col-md-4">
+                                                    <input type="text" name="working_hours[<?php echo e($index); ?>][day]"
+                                                        class="form-control form-control-sm" value="<?php echo e($wh['day'] ?? ''); ?>"
+                                                        placeholder="Day or range (e.g. Monday - Friday)">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input type="time" name="working_hours[<?php echo e($index); ?>][start]"
+                                                        class="form-control form-control-sm start-time"
+                                                        value="<?php echo e($wh['start'] ?? ''); ?>" <?php if(!empty($wh['closed'])): ?> disabled <?php endif; ?>>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input type="time" name="working_hours[<?php echo e($index); ?>][end]"
+                                                        class="form-control form-control-sm end-time"
+                                                        value="<?php echo e($wh['end'] ?? ''); ?>" <?php if(!empty($wh['closed'])): ?> disabled <?php endif; ?>>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input closed-checkbox"
+                                                            name="working_hours[<?php echo e($index); ?>][closed]" value="1"
+                                                            id="closed_<?php echo e($index); ?>" <?php if(!empty($wh['closed'])): ?> checked <?php endif; ?>>
+                                                        <label class="form-check-label" for="closed_<?php echo e($index); ?>">Closed</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 text-end">
+                                                    <button type="button"
+                                                        class="btn btn-outline-danger btn-sm remove-working-hour"
+                                                        title="Remove">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </div>
+                                    <button type="button" id="add-working-hour" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-plus-circle"></i> Add Row
+                                    </button>
+
+                                    <div class="text-center mt-4">
+                                        <button type="submit" class="btn btn-primary btn-lg">Update Business</button>
+                                    </div>
+
                                 </form>
                             </div>
                         </div>
@@ -330,57 +441,163 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('js'); ?>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
-    <script src="https://cdn.ckeditor.com/4.20.2/standard/ckeditor.js"></script>
+       <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
 
     <script>
         CKEDITOR.replace('detail');
+        CKEDITOR.replace('introduction');
 
         var allSubCategories = <?php echo json_encode($subCategories, 15, 512) ?>;
 
-        $(document).ready(function () {
+        $(document).ready(function() {
 
-            // Dynamic subcategories based on category selection
-            $('#category_id').change(function () {
+            // Load subcategories dynamically on category change
+            $('#category_id').change(function() {
                 var categoryId = $(this).val();
                 $('#sub_category_ids').empty();
 
                 if (categoryId) {
-                    var filteredSubs = allSubCategories.filter(function (sub) {
+                    var filteredSubs = allSubCategories.filter(function(sub) {
                         return sub.category_id == categoryId;
                     });
 
-                    filteredSubs.forEach(function (sub) {
+                    filteredSubs.forEach(function(sub) {
                         $('#sub_category_ids').append('<option value="' + sub.id + '">' + sub.sub_category_name + '</option>');
                     });
+
+                    $('#sub_category_ids').trigger('change');
                 }
             });
 
             // Add More services dynamically
             var serviceIndex = <?php echo e($business->services->count()); ?>;
-            $(document).on('click', '.add-service', function () {
+            $(document).on('click', '.add-service', function() {
                 var row = `<div class="service-row row">
-                        <div class="form-group col-md-5">
-                          <input type="text" name="services[${serviceIndex}][name]" class="form-control" placeholder="Service Name">
-                        </div>
-                        <div class="form-group col-md-5">
-                          <input type="file" name="services[${serviceIndex}][image]" class="form-control-file">
-                        </div>
-                        <div class="form-group col-md-2">
-                          <button type="button" class="btn btn-danger remove-service">Remove</button>
-                        </div>
-                      </div>`;
+                                <div class="form-group col-md-3">
+                                     <input type="text" name="services[${serviceIndex}][name]" class="form-control" placeholder="Service Name">
+                                </div>
+                                <div class="form-group col-md-4">
+                                     <input type="text" name="services[${serviceIndex}][description]" class="form-control" placeholder="Description">
+                                </div>
+                                <div class="form-group col-md-2">
+                                     <input type="number" name="services[${serviceIndex}][price]" class="form-control" placeholder="Price" min="0" step="0.01">
+                                </div>
+                                <div class="form-group col-md-3">
+                                     <input type="file" name="services[${serviceIndex}][image]" class="form-control-file">
+                                </div>
+                                <div class="form-group col-md-2">
+                                     <button type="button" class="btn btn-danger remove-service">Remove</button>
+                                </div>
+                            </div>`;
                 $('#services-container').append(row);
                 serviceIndex++;
             });
 
-            $(document).on('click', '.remove-service', function () {
+            $(document).on('click', '.remove-service', function() {
                 $(this).closest('.service-row').remove();
             });
 
-        });
 
-        function fetch_subcategories(id, callback) {
+            // Add More portfolio dynamically
+            var portfolioIndex = <?php echo e($business->portfolio->count()); ?>;
+            $(document).on('click', '.add-portfolio', function() {
+                var row = `<div class="portfolio-row row mb-2">
+                                <div class="form-group col-md-3">
+                                    <input type="text" name="portfolio[${portfolioIndex}][title]" class="form-control" placeholder="Title">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <input type="url" name="portfolio[${portfolioIndex}][link]" class="form-control" placeholder="Link">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <input type="file" name="portfolio[${portfolioIndex}][image]" class="form-control-file">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button type="button" class="btn btn-danger remove-portfolio">Remove</button>
+                                </div>
+                            </div>`;
+                $('#portfolio-container').append(row);
+                portfolioIndex++;
+            });
+
+            $(document).on('click', '.remove-portfolio', function() {
+                $(this).closest('.portfolio-row').remove();
+            });
+
+
+            // Working Hours Add Row
+            $(document).on('click', '#add-working-hour', function() {
+                let container = $('#working-hours-container');
+                let index = container.find('.timing-item').length;
+                var row = `<div class="timing-item row align-items-center mb-2 gx-2" data-index="${index}">
+                               <div class="col-md-4">
+                                  <input type="text" class="form-control form-control-sm" name="working_hours[${index}][day]" placeholder="Day or range (e.g. Monday - Friday)">
+                               </div>
+                               <div class="col-md-2">
+                                  <input type="time" class="form-control form-control-sm start-time" name="working_hours[${index}][start]" value="">
+                               </div>
+                               <div class="col-md-2">
+                                  <input type="time" class="form-control form-control-sm end-time" name="working_hours[${index}][end]" value="">
+                               </div>
+                               <div class="col-md-2">
+                                  <div class="form-check">
+                                     <input class="form-check-input closed-checkbox" type="checkbox" name="working_hours[${index}][closed]" value="1" id="closed_${index}">
+                                     <label class="form-check-label" for="closed_${index}">Closed</label>
+                                  </div>
+                               </div>
+                               <div class="col-md-2 text-end">
+                                  <button type="button" class="btn btn-outline-danger btn-sm remove-working-hour" title="Remove">
+                                     <i class="fas fa-times"></i>
+                                  </button>
+                               </div>
+                            </div>`;
+                container.append(row);
+            });
+
+            // Remove working hour row
+            $(document).on('click', '.remove-working-hour', function() {
+                $(this).closest('.timing-item').remove();
+                reindexWorkingHours();
+            });
+
+            // Toggle time inputs when closed checked/unchecked (delegated)
+            $(document).on('change', '.closed-checkbox', function() {
+                let row = $(this).closest('.timing-item');
+                let start = row.find('.start-time');
+                let end = row.find('.end-time');
+                if ($(this).is(':checked')) {
+                    start.val('').prop('disabled', true);
+                    end.val('').prop('disabled', true);
+                } else {
+                    start.prop('disabled', false);
+                    end.prop('disabled', false);
+                }
+                reindexWorkingHours();
+            });
+
+            // Reindex working hour inputs for sequential names
+            function reindexWorkingHours() {
+                $('#working-hours-container .timing-item').each(function(i, el) {
+                    let row = $(el);
+                    row.attr('data-index', i);
+                    row.find('input[type="text"]').attr('name', `working_hours[${i}][day]`);
+                    row.find('.start-time').attr('name', `working_hours[${i}][start]`);
+                    row.find('.end-time').attr('name', `working_hours[${i}][end]`);
+                    row.find('.closed-checkbox').attr({
+                        'name': `working_hours[${i}][closed]`,
+                        'id': `closed_${i}`
+                    });
+                    row.find('label.form-check-label').attr('for', `closed_${i}`);
+                });
+            }
+
+            // Initial reindex on page load for working hours in case of server non-contiguous indices
+            reindexWorkingHours();
+
+            // Property category related scripts are assumed included here (same logic as in your previous JS)
+        });
+    
+    function fetch_subcategories(id, callback) {
             var route = "<?php echo e(config('app.api_url')); ?>/fetch_subcategories_by_cat_id/" + id;
 
             $.ajax({
@@ -601,4 +818,5 @@
         });
     </script>
 <?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layouts.front.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/user/services/edit.blade.php ENDPATH**/ ?>

@@ -187,8 +187,6 @@
 <div class="contact-section p-3 border rounded mb-4">
     <h5 class="mb-3">Contact Information</h5>
 
-    {{-- other contact fields above... --}}
-
     <div class="mb-4">
         <h5 class="mb-2">Working Hours</h5>
 

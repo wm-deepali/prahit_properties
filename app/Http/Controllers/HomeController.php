@@ -597,12 +597,20 @@ class HomeController extends AppController
 			'propertySubCategories',
 			'propertySubSubCategories',
 			'user',
+			'portfolio',
+			'workingHours',
 		])->findOrFail($id);
 
 		// Increment views count
 		$business->increment('total_views');
 
-		return view('front.business-details', compact('business'));
+		// Fetch other service providers (excluding current business owner)
+		$relatedProviders = BusinessListing::where('user_id', '!=', $business->user_id)
+			->with('user')
+			->limit(5) // limit number of related providers
+			->get();
+
+		return view('front.business-details', compact('business', 'relatedProviders'));
 	}
 
 	public function create_property()

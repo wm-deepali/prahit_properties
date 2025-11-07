@@ -525,60 +525,74 @@
                 <div class="container">
                     <div class="row align-items-center">
                         <div class="col-md-3">
-                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                alt="Profile" class="profile-avatar">
+                            <img src="{{ $business->logo ? asset('storage/' . $business->logo) : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' }}"
+                                alt="Logo" class="profile-avatar">
+
                         </div>
                         <div class="col-md-9">
                             <div class="profil-data">
                                 <div class="profile-name-info">
-                                    <h2 class="m-0">Raju Kumar</h2>
+                                    <h2 class="m-0">
+                                        {{ optional($business->user)->firstname ?? '' }}
+                                        {{ optional($business->user)->lastname ?? '' }}
+                                    </h2>
+
                                     <p class="m-0"><strong>{{ $business->business_name ?? ''}}</strong></p>
-                                    <p class="m-0">{{ isset($business->category->category_name)  ? $business->category->category_name : '' }}</p>
+                                    <p class="m-0">
+                                        {{ isset($business->category->category_name) ? $business->category->category_name : '' }}
+                                    </p>
                                 </div>
 
                                 <div class="hori-line">
-                                    <p><strong>Registration Number</strong><br>23456789</p>
+                                    <p><strong>Registration Number</strong><br>{{ $business->registration_number ?? '' }}
+                                    </p>
                                     <div class="line"></div>
                                     <p><strong>Operating Since</strong><br>{{ $business->established_year ?? '' }}</p>
                                     <div class="line"></div>
                                     <p><strong>Membership</strong><br> {{ $business->membership_type }}</p>
                                 </div>
-                                <p class="m-0 mt-3"><strong>Deals in</strong><br>Rent/Lease , Pre-launch , Original Booking
-                                    , Resale , Others</p>
+                                <p class="m-0 mt-3"><strong>Deals in</strong><br>{{ $business->deals_in ?? '' }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Stats Cards -->
             <div class="row">
                 <div class="col-md-3 col-sm-6">
                     <div class="stats-card card1">
-                        <div class="stat-number">150+</div>
+                        <div class="stat-number">{{ $business->services->count() }}</div>
                         <div class="stat-label">Services</div>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="stats-card card2">
-                        <div class="stat-number">85</div>
+                        <div class="stat-number">{{ $business->satisfied_clients ?? '0' }}</div>
                         <div class="stat-label">Satisfied Clients</div>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="stats-card card3">
-                        <div class="stat-number">65</div>
+                        @php
+                            $currentYear = date('Y');
+                            $establishedYear = $business->established_year ?? $currentYear;
+                            $experience = max(0, $currentYear - $establishedYear);
+                        @endphp
+                        <div class="stat-number">{{ $experience }} {{ $experience === 1 ? 'Year' : 'Years' }}</div>
                         <div class="stat-label">Experience</div>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="stats-card card4">
-                        <div class="stat-number">4.9 <i class="far fa-star" data-rating="5"
-                                style="font-size:30px;color:orange;"></i></div>
+                        <div class="stat-number">
+                            {{ $business->rating ?? '0' }}
+                            <i class="far fa-star" data-rating="5" style="font-size:30px;color:orange;"></i>
+                        </div>
                         <div class="stat-label">Rating</div>
                     </div>
                 </div>
             </div>
+
 
             <div class="row mt-5">
                 <!-- Main Content -->
@@ -587,178 +601,61 @@
                     <div class="services-section p-3">
                         <h3 class="mb-4">Services Offered</h3>
                         <div class="row">
-                            <div class="col-lg-6 mb-3">
-                                <div class="newdesign-project-main">
-                                    <div class="newdesign-image-proj">
-                                        <img src="https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;"
-                                            class="img-fluid" alt="Property 1">
-                                        <span class="newdesign-verified-seal"> Starts <i class="fas fa-rupee-sign"
-                                                style="margin-top:5px;"></i>2499/-</span>
-                                    </div>
-                                    <div class="newdesign-info-proj">
-                                        <div class="d-flex justify-content-between">
-                                            <h4 class="newdesign-proj-name">West Center Meridian Courts</h4>
-                                            <!--<span class="newdesign-proj-category">Villa</span>-->
+                            @foreach ($business->services as $service)
+                                <div class="col-lg-6 mb-3">
+                                    <div class="newdesign-project-main">
+                                        <div class="newdesign-image-proj">
+                                            <img src="{{ $service->image ? asset('storage/' . $service->image) : 'https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;' }}"
+                                                class="img-fluid" alt="{{ $service->name }}">
+                                            <span class="newdesign-verified-seal"> Starts <i class="fas fa-rupee-sign"
+                                                    style="margin-top:5px;"></i>{{ number_format($service->price, 2) ?? '' }}/-</span>
                                         </div>
-                                        <span class="newdesign-apart-name">Presenting West Center Meridian Courts, a
-                                            residential property located in the heart of Kandivali....</span>
+                                        <div class="newdesign-info-proj">
+                                            <div class="d-flex justify-content-between">
+                                                <h4 class="newdesign-proj-name">{{ $service->name }}</h4>
+                                                <!--<span class="newdesign-proj-category">Villa</span>-->
+                                            </div>
+                                            <span
+                                                class="newdesign-apart-name">{{ Str::limit($service->description, 100, '...') }}</span>
 
-                                        <div class="callback-section text-center my-4">
-                                            <button class="btn btn-callback">
-                                                <i class="fas fa-phone-volume me-2"></i> Get a Callback
-                                            </button>
+                                            <div class="callback-section text-center my-4">
+                                                <button class="btn btn-callback">
+                                                    <i class="fas fa-phone-volume me-2"></i> Get a Callback
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-6 mb-3">
-                                <div class="newdesign-project-main">
-                                    <div class="newdesign-image-proj">
-                                        <img src="https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;"
-                                            class="img-fluid" alt="Property 1">
-                                        <span class="newdesign-verified-seal"> Starts <i class="fas fa-rupee-sign"
-                                                style="margin-top:5px;"></i>2499/-</span>
-                                    </div>
-                                    <div class="newdesign-info-proj">
-                                        <div class="d-flex justify-content-between">
-                                            <h4 class="newdesign-proj-name">West Center Meridian Courts</h4>
-                                            <!--<span class="newdesign-proj-category">Villa</span>-->
-                                        </div>
-                                        <span class="newdesign-apart-name">Presenting West Center Meridian Courts, a
-                                            residential property located in the heart of Kandivali....</span>
+                            @endforeach
 
-                                        <div class="callback-section text-center my-4">
-                                            <button class="btn btn-callback">
-                                                <i class="fas fa-phone-volume me-2"></i> Get a Callback
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mb-3">
-                                <div class="newdesign-project-main">
-                                    <div class="newdesign-image-proj">
-                                        <img src="https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;"
-                                            class="img-fluid" alt="Property 1">
-                                        <span class="newdesign-verified-seal"> Starts <i class="fas fa-rupee-sign"
-                                                style="margin-top:5px;"></i>2499/-</span>
-                                    </div>
-                                    <div class="newdesign-info-proj">
-                                        <div class="d-flex justify-content-between">
-                                            <h4 class="newdesign-proj-name">West Center Meridian Courts</h4>
-                                            <!--<span class="newdesign-proj-category">Villa</span>-->
-                                        </div>
-                                        <span class="newdesign-apart-name">Presenting West Center Meridian Courts, a
-                                            residential property located in the heart of Kandivali....</span>
-
-                                        <div class="callback-section text-center my-4">
-                                            <button class="btn btn-callback">
-                                                <i class="fas fa-phone-volume me-2"></i> Get a Callback
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mb-3">
-                                <div class="newdesign-project-main">
-                                    <div class="newdesign-image-proj">
-                                        <img src="https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;"
-                                            class="img-fluid" alt="Property 1">
-                                        <span class="newdesign-verified-seal"> Starts <i class="fas fa-rupee-sign"
-                                                style="margin-top:5px;"></i>2499/-</span>
-                                    </div>
-                                    <div class="newdesign-info-proj">
-                                        <div class="d-flex justify-content-between">
-                                            <h4 class="newdesign-proj-name">West Center Meridian Courts</h4>
-                                            <!--<span class="newdesign-proj-category">Villa</span>-->
-                                        </div>
-                                        <span class="newdesign-apart-name">Presenting West Center Meridian Courts, a
-                                            residential property located in the heart of Kandivali....</span>
-
-                                        <div class="callback-section text-center my-4">
-                                            <button class="btn btn-callback">
-                                                <i class="fas fa-phone-volume me-2"></i> Get a Callback
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @if($business->services->isEmpty())
+                                <p class="text-muted">No services available.</p>
+                            @endif
                         </div>
                     </div>
+
                     <div class="introduction">
-                        <h3>Introduction John Doe</h3>
+                        <h3>Introduction {{ $business->user->firstname ?? '' }} {{ $business->user->lastname ?? '' }}</h3>
                         <p>
-                            With over a decade of experience in the real estate industry, John Doe has established himself
-                            as a trusted name in property consulting. Specializing in both residential and commercial
-                            properties, he has successfully closed over 500 deals and helped countless families find their
-                            dream homes.
+                            {!! $business->introduction !!}
                         </p>
-                        <p>
-                            John believes in transparency, integrity, and personalized service. His deep understanding of
-                            market trends and negotiation skills ensure the best deals for his clients. Whether you're
-                            buying, selling, or investing, John and his team at Doe Realty Solutions are committed to making
-                            your real estate journey seamless and rewarding.
-                        </p>
+
                     </div>
-
-
 
                     <div class="portfolio-section p-3 ">
                         <h3 class="mb-4 fw-semibold">Portfolio</h3>
                         <div class="row g-3">
-                            <!-- Portfolio Card 1 -->
-                            <div class="col-md-4 col-sm-6 mb-4">
-                                <div class="portfolio-card">
-                                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                        alt="Project 1" class="img-fluid rounded">
-                                    <h5 class="portfolio-title mt-2">Modern Skyline Towers</h5>
+                            @forelse ($business->portfolio as $item)
+                                <div class="col-md-4 col-sm-6 mb-4">
+                                    <div class="portfolio-card">
+                                        <img src="{{ $item->image ? asset('storage/' . $item->image) : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' }}"
+                                            alt="{{ $item->title }}" class="img-fluid rounded">
+                                        <h5 class="portfolio-title mt-2">{{ $item->title }}</h5>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <!-- Portfolio Card 2 -->
-                            <div class="col-md-4 col-sm-6">
-                                <div class="portfolio-card">
-                                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                        alt="Project 2" class="img-fluid rounded">
-                                    <h5 class="portfolio-title mt-2">Urban Nest Apartments</h5>
-                                </div>
-                            </div>
-
-                            <!-- Portfolio Card 3 -->
-                            <div class="col-md-4 col-sm-6">
-                                <div class="portfolio-card">
-                                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                        alt="Project 3" class="img-fluid rounded">
-                                    <h5 class="portfolio-title mt-2">Palm Residency Villas</h5>
-                                </div>
-                            </div>
-
-                            <!-- Portfolio Card 4 -->
-                            <div class="col-md-4 col-sm-6">
-                                <div class="portfolio-card">
-                                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                        alt="Project 4" class="img-fluid rounded">
-                                    <h5 class="portfolio-title mt-2">Hillview Homes</h5>
-                                </div>
-                            </div>
-
-                            <!-- Portfolio Card 5 -->
-                            <div class="col-md-4 col-sm-6">
-                                <div class="portfolio-card">
-                                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                        alt="Project 5" class="img-fluid rounded">
-                                    <h5 class="portfolio-title mt-2">Corporate Plaza</h5>
-                                </div>
-                            </div>
-
-                            <!-- Portfolio Card 6 -->
-                            <div class="col-md-4 col-sm-6">
-                                <div class="portfolio-card">
-                                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                        alt="Project 6" class="img-fluid rounded">
-                                    <h5 class="portfolio-title mt-2">Green Valley Heights</h5>
-                                </div>
-                            </div>
+                            @empty
+                                <p class="text-muted">No portfolio items available.</p>
+                            @endforelse
                         </div>
                     </div>
 
@@ -776,71 +673,92 @@
                                                 <i class="fas fa-map-marker-alt me-2 text-primary"></i>
                                                 <strong>Address:</strong>
                                             </div>
-
-
-                                            <div>123 Business Park, Sector 18, Noida - 201301</div>
+                                            <div>{{ $business->full_address ?? 'N/A' }}</div>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <i class="fas fa-phone me-2 text-success"></i>
-                                        <strong>Phone:</strong> +91 98765 43210
+                                        <strong>Phone:</strong> {{ $business->mobile_number ?? 'N/A' }}
                                     </div>
                                     <div class="mb-3">
                                         <i class="fas fa-envelope me-2 text-info"></i>
-                                        <strong>Email:</strong> john@doerealtysolutions.com
+                                        <strong>Email:</strong>
+                                        @if(!empty($business->email))
+                                            <a href="mailto:{{ $business->email }}">{{ $business->email }}</a>
+                                        @else
+                                            N/A
+                                        @endif
                                     </div>
                                     <hr>
                                     <div class="mb-4">
                                         <h5 class="mb-2">Working Hours</h5>
-                                        <div class="timing-item">
-                                            <span>Monday - Friday</span>
-                                            <span>9:00 AM - 7:00 PM</span>
-                                        </div>
-                                        <div class="timing-item">
-                                            <span>Saturday</span>
-                                            <span>10:00 AM - 5:00 PM</span>
-                                        </div>
-                                        <div class="timing-item">
-                                            <span>Sunday</span>
-                                            <span>Closed</span>
-                                        </div>
+                                        @forelse($business->workingHours as $wh)
+                                            <div class="timing-item d-flex justify-content-between">
+                                                <span>{{ $wh->day }}</span>
+                                                <span>
+                                                    @if(!empty($wh->closed) && $wh->closed)
+                                                        Closed
+                                                    @else
+                                                        {{ \Carbon\Carbon::parse($wh->start)->format('g:i A') }} -
+                                                        {{ \Carbon\Carbon::parse($wh->end)->format('g:i A') }}
+                                                    @endif
+                                                </span>
+                                            </div>
+                                        @empty
+                                            <div>No working hours available.</div>
+                                        @endforelse
                                     </div>
                                     <div class="contact-now-section d-flex align-items-center my-4 p-3"
                                         style="background:#f8f9fa; gap:10px; border-radius:10px;">
-                                        <h5 class="" style="white-space:nowrap;">Connect <i
-                                                class="fa-solid fa-hand-point-right" style="color:orange;"></i> </h5>
-                                        <div class="row g-2" style="gap:15px;padding:0px 15px;">
-                                            <div class="icon-button">
-                                                <a href="tel:+919451591515" class="btn btn-success w-100">
-                                                    <i class="fas fa-phone me-2"></i>
-                                                </a>
-                                            </div>
-                                            <div class="icon-button">
-                                                <a href="https://wa.me/919451591515" target="_blank"
-                                                    class="btn btn-success w-100"
-                                                    style="background:#25D366; border-color:#25D366;">
-                                                    <i class="fab fa-whatsapp me-2"></i>
-                                                </a>
-                                            </div>
-                                            <div class="icon-button">
-                                                <a href="mailto:example@email.com" class="btn btn-outline-primary w-100">
-                                                    <i class="fas fa-envelope me-2"></i>
-                                                </a>
-                                            </div>
+                                        <h5 style="white-space:nowrap;">Connect
+                                            <i class="fa-solid fa-hand-point-right" style="color:orange;"></i>
+                                        </h5>
+                                        <div class="row g-2" style="gap:15px; padding:0px 15px;">
+                                            @if(!empty($business->mobile_number))
+                                                <div class="icon-button">
+                                                    <a href="tel:{{ preg_replace('/\s+/', '', $business->mobile_number) }}"
+                                                        class="btn btn-success w-100">
+                                                        <i class="fas fa-phone me-2"></i>
+                                                    </a>
+                                                </div>
+                                            @endif
+
+                                            @if(!empty($business->whatsapp_number))
+                                                <div class="icon-button">
+                                                    <a href="https://wa.me/{{ preg_replace('/\D/', '', $business->whatsapp_number) }}"
+                                                        target="_blank" class="btn btn-success w-100"
+                                                        style="background:#25D366; border-color:#25D366;">
+                                                        <i class="fab fa-whatsapp me-2"></i>
+                                                    </a>
+                                                </div>
+                                            @endif
+
+                                            @if(!empty($business->email))
+                                                <div class="icon-button">
+                                                    <a href="mailto:{{ $business->email }}"
+                                                        class="btn btn-outline-primary w-100">
+                                                        <i class="fas fa-envelope me-2"></i>
+                                                    </a>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
-
-
-
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="feedback-form">
                                     <h4 class="mb-4">Leave a Review</h4>
-                                    <form>
+
+                                    @php
+                                        $authUser = Auth::user();
+                                    @endphp
+
+                                    <form id="reviewForm">
+                                        @csrf
+
+                                        {{-- Rating --}}
                                         <div class="mb-3">
-                                            <!--<label class="form-label">Rating</label>-->
                                             <div class="star-rating mb-2">
                                                 <i class="far fa-star" data-rating="1"
                                                     style="font-size:30px;color:orange;"></i>
@@ -855,146 +773,222 @@
                                             </div>
                                             <input type="hidden" name="rating" id="rating">
                                         </div>
+
+                                        <input type="hidden" name="business_listing_id" id="business_listing_id"
+                                            value="{{ $business->id }}">
+                                        {{-- Prefilled Fields for Authenticated User --}}
                                         <div class="mb-3">
                                             <label class="form-label">Your Name</label>
-                                            <input type="text" class="form-control" placeholder="Enter your name">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Email</label>
-                                            <input type="email" class="form-control" placeholder="Enter your email">
+                                            <input type="text" name="name" class="form-control"
+                                                placeholder="Enter your name"
+                                                value="{{ $authUser->firstname ?? '' }} {{ $authUser->lastname ?? '' }}" {{ $authUser ? 'readonly' : '' }}>
                                         </div>
 
                                         <div class="mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" name="email" class="form-control"
+                                                placeholder="Enter your email" value="{{ $authUser->email ?? '' }}" {{ $authUser ? 'readonly' : '' }}>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Phone</label>
+                                            <input type="text" name="phone" class="form-control"
+                                                placeholder="Enter your phone" value="{{ $authUser->mobile_number ?? '' }}"
+                                                {{ $authUser ? 'readonly' : '' }}>
+                                        </div>
+
+                                        {{-- OTP Section (only for guest users) --}}
+                                        @guest
+                                            <div id="otpSection" style="display: none;">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Enter OTP</label>
+                                                    <input type="text" id="otpInput" class="form-control"
+                                                        placeholder="Enter OTP">
+                                                </div>
+                                                <button type="button" id="verifyOtpBtn"
+                                                    class="btn btn-success w-100 mb-2">Verify OTP</button>
+                                            </div>
+                                        @endguest
+
+                                        <div class="mb-3">
                                             <label class="form-label">Your Review</label>
-                                            <textarea class="form-control" rows="4"
+                                            <textarea class="form-control" name="review" rows="4"
                                                 placeholder="Share your experience..."></textarea>
                                         </div>
-                                        <button type="submit" class="btn btn-primary w-100">Submit Review</button>
+
+                                        <button type="submit" class="btn btn-primary w-100" id="submitReviewBtn">
+                                            Submit Review
+                                        </button>
                                     </form>
                                 </div>
+
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <!-- Related Agents/Builders Sidebar -->
                 <div class="col-md-4" style="padding-right:0px;">
                     <div class="related-agents">
                         <h4 class="mb-4">Other Service Providers</h4>
-                        <div class="agent-card mb-3 border">
-                            <div class="newdesign-image-agent">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                    alt="Agent" class="agent-avatar">
-                                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                            </div>
-                            <div class="newdesign-info-agent">
-                                <div class="d-flex flex-column">
-                                    <h4 class="newdesign-proj-name">Priya Sharma</h4>
-                                    <span class="newdesign-proj-category">Category Name</span>
+                        @forelse ($relatedProviders as $provider)
+                            <div class="agent-card mb-3 border">
+                                <div class="newdesign-image-agent">
+                                    <img src="{{ $provider->banner_image ? asset('storage/' . $provider->banner_image) : 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' }}"
+                                        alt="Agent" class="agent-avatar">
+                                    <span class="newdesign-verified-seal">
+                                        <i class="fas fa-check-circle"></i> 'Verified'
+                                    </span>
                                 </div>
-                                <span class="newdesign-apart-name">Specializes in residential properties and market
-                                    analysis.</span>
-                                <hr>
-                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Mumbai,
-                                    Maharashtra</span>
-                                <div class="d-flex justify-content-between">
-                                    <span class="newdesign-proj-owner"><strong>Operating Since:</strong><br>2012</span>
-                                    <span class="newdesign-proj-owner"><strong>Member:</strong><br>Premium</span>
+                                <div class="newdesign-info-agent">
+                                    <div class="d-flex flex-column">
+                                        <h4 class="newdesign-proj-name"> {{ optional($provider->user)->firstname ?? '' }}
+                                            {{ optional($provider->user)->lastname ?? '' }}
+                                        </h4>
+                                        <span
+                                            class="newdesign-proj-category">{{ isset($provider->category->category_name) ? $provider->category->category_name : '' }}</span>
+                                    </div>
+                                    <span
+                                        class="newdesign-apart-name">{{ \Illuminate\Support\Str::limit($provider->detail ?? '', 100, '...') }}</span>
+                                    <hr>
+                                    <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i>
+                                        {{ $provider->city ?? '' }}, {{ $provider->state ?? '' }}</span>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="newdesign-proj-owner"><strong>Operating
+                                                Since:</strong><br>{{ $provider->established_year ?? '' }}</span>
+                                        <span
+                                            class="newdesign-proj-owner"><strong>Member:</strong><br>{{ $provider->membership_type ?? '' }}</span>
+                                    </div>
+                                    <a href="{{ route('business.details', $provider->id)}}" class="view-profile-btn">View
+                                        Profile</a>
                                 </div>
-                                <a href="#" class="view-profile-btn">View Profile</a>
                             </div>
-                        </div>
-                        <div class="agent-card mb-3 border">
-                            <div class="newdesign-image-agent">
-                                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                    alt="Agent" class="agent-avatar">
-                                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                            </div>
-                            <div class="newdesign-info-agent">
-                                <div class="d-flex flex-column">
-                                    <h4 class="newdesign-proj-name">Priya Sharma</h4>
-                                    <span class="newdesign-proj-category">Category Name</span>
-                                </div>
-                                <span class="newdesign-apart-name">Expert in commercial real estate and leasing.</span>
-                                <hr>
-                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Delhi,
-                                    India</span>
-                                <div class="d-flex justify-content-between">
-                                    <span class="newdesign-proj-owner"><strong>Operating Since:</strong><br>2012</span>
-                                    <span class="newdesign-proj-owner"><strong>Member:</strong><br>Premium</span>
-                                </div>
-                                <a href="#" class="view-profile-btn">View Profile</a>
-                            </div>
-                        </div>
-                        <div class="agent-card mb-3 border">
-                            <div class="newdesign-image-agent">
-                                <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                    alt="Agent" class="agent-avatar">
-                                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Premium</span>
-                            </div>
-                            <div class="newdesign-info-agent">
-                                <div class="d-flex flex-column">
-                                    <h4 class="newdesign-proj-name">Priya Sharma</h4>
-                                    <span class="newdesign-proj-category">Category Name</span>
-                                </div>
-                                <span class="newdesign-apart-name">Focuses on luxury properties and investments.</span>
-                                <hr>
-                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Bangalore,
-                                    Karnataka</span>
-                                <div class="d-flex justify-content-between">
-                                    <span class="newdesign-proj-owner"><strong>Operating Since:</strong><br>2012</span>
-                                    <span class="newdesign-proj-owner"><strong>Member:</strong><br>Verified</span>
-                                </div>
-                                <a href="#" class="view-profile-btn">View Profile</a>
-                            </div>
-                        </div>
-                        <div class="agent-card mb-3 border">
-                            <div class="newdesign-image-agent">
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-                                    alt="Agent" class="agent-avatar">
-                                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                            </div>
-                            <div class="newdesign-info-agent">
-                                <div class="d-flex flex-column">
-                                    <h4 class="newdesign-proj-name">Priya Sharma</h4>
-                                    <span class="newdesign-proj-category">Category Name</span>
-                                </div>
-                                <span class="newdesign-apart-name">Specializes in residential sales and rentals.</span>
-                                <hr>
-                                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> Pune,
-                                    Maharashtra</span>
-                                <div class="d-flex justify-content-between">
-                                    <span class="newdesign-proj-owner"><strong>Operating Since:</strong><br>2012</span>
-                                    <span class="newdesign-proj-owner"><strong>Member:</strong><br>Free</span>
-                                </div>
-                                <a href="#" class="view-profile-btn">View Profile</a>
-                            </div>
-                        </div>
+                        @empty
+                            <p>No other service providers found.</p>
+                        @endforelse
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
 
     <script>
         $(document).ready(function () {
-            // Star rating functionality
-            $('.star-rating i[data-rating]').click(function () {
-                var rating = $(this).data('rating');
-                $('#rating').val(rating);
+            let isOtpVerified = {{ Auth::check() ? 'true' : 'false' }};
 
+            // ⭐ Star Rating Selection
+            $('.star-rating i[data-rating]').click(function () {
+                let rating = $(this).data('rating');
+                $('#rating').val(rating);
                 $('.star-rating i[data-rating]').removeClass('fas fa-star').addClass('far fa-star');
-                for (var i = 1; i <= rating; i++) {
+                for (let i = 1; i <= rating; i++) {
                     $('.star-rating i[data-rating="' + i + '"]').removeClass('far fa-star').addClass('fas fa-star');
                 }
             });
 
-            // Favorite button hover effect
-            $('.property-favorite').hover(
-                function () { $(this).css('background', '#cc0000'); },
-                function () { $(this).css('background', '#ff4444'); }
-            );
+            /// 🔹 Send OTP for Guest Users
+            $('#reviewForm input[name="phone"]').on('blur', function () {
+                if (!isOtpVerified && $(this).val().length >= 10) {
+                    $.ajax({
+                        url: '{{ route("send.review.otp") }}',
+                        type: 'POST',
+                        data: {
+                            phone: $(this).val(),
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function (res) {
+                            if (res.success) {
+                                $('#otpSection').show();
+                                swal("OTP Sent!", "We’ve sent an OTP to your phone.", "success");
+                            } else {
+                                swal("Error", res.message || "Failed to send OTP.", "error");
+                            }
+                        },
+                        error: function () {
+                            swal("Error", "Something went wrong while sending OTP.", "error");
+                        }
+                    });
+                }
+            });
+
+            // 🔹 Verify OTP
+            $('#verifyOtpBtn').click(function () {
+                $.ajax({
+                    url: '{{ route("verify.review.otp") }}',
+                    type: 'POST',
+                    data: {
+                        phone: $('#reviewForm input[name="phone"]').val(),
+                        otp: $('#otpInput').val(),
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            isOtpVerified = true;
+                            $('#otpSection').hide();
+                            swal("Verified!", "OTP verified successfully.", "success");
+                        } else {
+                            swal("Invalid OTP", "Please check the OTP and try again.", "error");
+                        }
+                    },
+                    error: function () {
+                        swal("Error", "Unable to verify OTP.", "error");
+                    }
+                });
+            });
+
+            // 🔹 Submit Review
+            $('#reviewForm').submit(function (e) {
+                e.preventDefault();
+
+                if (!isOtpVerified) {
+                    swal("Verify OTP", "Please verify your OTP before submitting.", "warning");
+                    return;
+                }
+
+                $.ajax({
+                    url: '{{ route("business.submit.review") }}',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function (res) {
+                        if (res.success) {
+                            swal("Thank You!", "Your review has been submitted successfully.", "success");
+                            $('#reviewForm')[0].reset();
+                            $('.star-rating i').removeClass('fas').addClass('far');
+                        } else {
+                            swal("Error", res.message || "Failed to submit review.", "error");
+                        }
+                    },
+                    error: function () {
+                        swal("Error", "Something went wrong while submitting your review.", "error");
+                    }
+                });
+            });
+
         });
     </script>
+
+    <script>
+        // Star rating click handler
+        document.querySelectorAll('.star-rating .fa-star').forEach(star => {
+            star.addEventListener('click', function () {
+                const ratingValue = this.getAttribute('data-rating');
+                document.getElementById('rating').value = ratingValue;
+
+                // Reset stars
+                document.querySelectorAll('.star-rating .fa-star').forEach(s => s.classList.remove('fas'));
+                document.querySelectorAll('.star-rating .fa-star').forEach(s => s.classList.add('far'));
+
+                // Highlight selected stars
+                for (let i = 1; i <= ratingValue; i++) {
+                    const starToFill = document.querySelector(`.star-rating .fa-star[data-rating='${i}']`);
+                    starToFill.classList.remove('far');
+                    starToFill.classList.add('fas');
+                }
+            });
+        });
+    </script>
+
 
 @endsection

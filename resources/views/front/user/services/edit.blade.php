@@ -64,6 +64,15 @@
             display: block;
             margin-top: 5px;
         }
+        .portfolio-row img {
+            max-width: 100px;
+            display: block;
+            margin-top: 5px;
+        }
+        .timing-item input[type="text"],
+        .timing-item input[type="time"] {
+            width: 100%;
+        }
     </style>
 @endsection
 
@@ -99,6 +108,7 @@
                                     enctype="multipart/form-data">
                                     @csrf
                                     @method('PATCH')
+
                                     <div class="form-row">
                                         <div class="form-group col-md-3">
                                             <label>Membership Type</label>
@@ -126,7 +136,8 @@
                                             <select name="category_id" id="category_id" class="form-control" required>
                                                 <option value="">Select Category</option>
                                                 @foreach($categories as $category)
-                                                    <option value="{{ $category->id }}" {{ $business->category_id == $category->id ? 'selected' : '' }}>
+                                                    <option value="{{ $category->id }}"
+                                                        {{ $business->category_id == $category->id ? 'selected' : '' }}>
                                                         {{ $category->category_name }}
                                                     </option>
                                                 @endforeach
@@ -135,10 +146,10 @@
 
                                         <div class="form-group col-md-3">
                                             <label>Sub Category</label>
-                                            <select name="sub_category_ids[]" id="sub_category_ids"
-                                                class="form-control select2-multiple" multiple required>
+                                            <select name="sub_category_ids[]" id="sub_category_ids" class="form-control select2-multiple" multiple required>
                                                 @foreach($subCategories as $sub)
-                                                    <option value="{{ $sub->id }}" {{ in_array($sub->id, $business->subCategories->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                                    <option value="{{ $sub->id }}"
+                                                        {{ in_array($sub->id, $business->subCategories->pluck('id')->toArray()) ? 'selected' : '' }}>
                                                         {{ $sub->sub_category_name }}
                                                     </option>
                                                 @endforeach
@@ -147,13 +158,11 @@
                                     </div>
 
                                     <h4 class="form-section-h">Assigned To Property Category</h4>
-
                                     <div class="form-group row">
                                         <div class="col-sm-4">
                                             <label class="label-control">Property Available For</label>
                                             <select class="text-control populate_categories" name="property_category_id"
-                                                id="property_category_id"
-                                                onchange="handlePropertyCategoryChange(this.value)" required>
+                                                id="property_category_id" onchange="handlePropertyCategoryChange(this.value)" required>
                                                 <option value="">Select Category</option>
                                                 @php
                                                     $totalPropertyCategories = $property_categories->count();
@@ -164,8 +173,9 @@
                                                 <option value="all" {{ $isAllCategories ? 'selected' : '' }}>Select All
                                                 </option>
                                                 @foreach($property_categories as $v)
-                                                    <option value="{{$v->id}}" {{ (!$isAllCategories && $firstSelectedCategory == $v->id) ? 'selected' : '' }}>
-                                                        {{$v->category_name}}
+                                                    <option value="{{ $v->id }}"
+                                                        {{ (!$isAllCategories && $firstSelectedCategory == $v->id) ? 'selected' : '' }}>
+                                                        {{ $v->category_name }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -173,11 +183,10 @@
 
                                         <div class="col-sm-4" id="property_category_div">
                                             <label class="label-control">Property Category</label>
-                                            <select class="text-control populate_subcategories"
-                                                name="property_subcategory_id" id="property_subcategory_id"
-                                                onchange="handleSubCategoryChange(this.value)" required>
+                                            <select class="text-control populate_subcategories" name="property_subcategory_id"
+                                                id="property_subcategory_id" onchange="handleSubCategoryChange(this.value)" required>
                                                 <option value="">Select Sub Category</option>
-
+                                                {{-- Subcategories will be loaded dynamically --}}
                                             </select>
                                         </div>
 
@@ -195,7 +204,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
 
                                     <div class="form-row">
@@ -229,43 +237,57 @@
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label>Established Year</label>
-                                            <input type="number" name="established_year" class="form-control" min="1800"
-                                                max="2099" value="{{ $business->established_year }}">
+                                            <input type="number" name="established_year" class="form-control" min="1800" max="2099"
+                                                value="{{ $business->established_year }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label>Registration Number</label>
+                                            <input type="text" name="registration_number" class="form-control" 
+                                                value="{{ $business->registration_number }}">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Deals In</label>
+                                            <input type="text" name="deals_in" class="form-control"
+                                                value="{{ $business->deals_in }}">
+                                            <small class="text-muted">Separate multiple values with commas.</small>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Satisfied Clients</label>
+                                            <input type="number" name="satisfied_clients" class="form-control" min="0"
+                                                value="{{ $business->satisfied_clients }}">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Introduction</label>
-                                        <textarea name="introduction"
-                                            class="form-control">{{ $business->introduction }}</textarea>
+                                        <textarea name="introduction" class="form-control">{{ $business->introduction }}</textarea>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Detail</label>
-                                        <textarea name="detail" class="form-control">{{ $business->detail }}</textarea>
+                                        <textarea name="detail" class="form-control" id="detail">{{ $business->detail }}</textarea>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Full Address</label>
-                                        <textarea name="full_address"
-                                            class="form-control">{{ $business->full_address }}</textarea>
+                                        <textarea name="full_address" class="form-control">{{ $business->full_address }}</textarea>
                                     </div>
 
                                     <div class="form-row">
                                         <div class="form-group col-md-4">
                                             <label>State</label>
-                                            <input type="text" name="state" class="form-control"
-                                                value="{{ $business->state }}">
+                                            <input type="text" name="state" class="form-control" value="{{ $business->state }}">
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label>City</label>
-                                            <input type="text" name="city" class="form-control"
-                                                value="{{ $business->city }}">
+                                            <input type="text" name="city" class="form-control" value="{{ $business->city }}">
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label>Pin Code</label>
-                                            <input type="text" name="pin_code" class="form-control"
-                                                value="{{ $business->pin_code }}">
+                                            <input type="text" name="pin_code" class="form-control" value="{{ $business->pin_code }}">
                                         </div>
                                     </div>
 
@@ -274,14 +296,14 @@
                                             <label>Logo</label>
                                             <input type="file" name="logo" class="form-control-file">
                                             @if($business->logo)
-                                                <img src="{{ asset('storage/' . $business->logo) }}" alt="Logo">
+                                                <img src="{{ asset('storage/' . $business->logo) }}" alt="Logo" style="max-width: 100px; display: block; margin-top: 5px;">
                                             @endif
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label>Banner Image</label>
                                             <input type="file" name="banner_image" class="form-control-file">
                                             @if($business->banner_image)
-                                                <img src="{{ asset('storage/' . $business->banner_image) }}" alt="Banner">
+                                                <img src="{{ asset('storage/' . $business->banner_image) }}" alt="Banner" style="max-width: 100px; display: block; margin-top: 5px;">
                                             @endif
                                         </div>
                                     </div>
@@ -291,17 +313,23 @@
                                     <div id="services-container">
                                         @foreach($business->services as $index => $service)
                                             <div class="service-row row">
-                                                <input type="hidden" name="services[{{ $index }}][id]"
-                                                    value="{{ $service->id }}">
-                                                <div class="form-group col-md-5">
+                                                <input type="hidden" name="services[{{ $index }}][id]" value="{{ $service->id }}">
+                                                <div class="form-group col-md-3">
                                                     <input type="text" name="services[{{ $index }}][name]" class="form-control"
                                                         value="{{ $service->name }}" placeholder="Service Name">
                                                 </div>
-                                                <div class="form-group col-md-5">
-                                                    <input type="file" name="services[{{ $index }}][image]"
-                                                        class="form-control-file">
+                                                <div class="form-group col-md-4">
+                                                    <input type="text" name="services[{{ $index }}][description]" class="form-control"
+                                                        value="{{ $service->description }}" placeholder="Description">
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <input type="number" name="services[{{ $index }}][price]" class="form-control" min="0" step="0.01"
+                                                        value="{{ $service->price }}" placeholder="Price">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <input type="file" name="services[{{ $index }}][image]" class="form-control-file">
                                                     @if($service->image)
-                                                        <img src="{{ asset('storage/' . $service->image) }}" alt="Service Image">
+                                                        <img src="{{ asset('storage/' . $service->image) }}" alt="Service Image" style="max-width: 100px; display: block; margin-top: 5px;">
                                                     @endif
                                                 </div>
                                                 <div class="form-group col-md-2">
@@ -310,11 +338,94 @@
                                             </div>
                                         @endforeach
                                     </div>
-
                                     <div class="form-group text-center mt-3">
                                         <button type="button" class="btn btn-success add-service">Add More</button>
-                                        <button type="submit" class="btn btn-primary">Update Business</button>
                                     </div>
+
+                                    <hr>
+                                    <h5>Portfolio</h5>
+                                    <div id="portfolio-container">
+                                        @foreach($business->portfolio as $index => $portfolio)
+                                            <div class="portfolio-row row mb-2">
+                                                <input type="hidden" name="portfolio[{{ $index }}][id]" value="{{ $portfolio->id }}">
+                                                <div class="form-group col-md-3">
+                                                    <input type="text" name="portfolio[{{ $index }}][title]" class="form-control"
+                                                        value="{{ $portfolio->title }}" placeholder="Title">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <input type="url" name="portfolio[{{ $index }}][link]" class="form-control"
+                                                        value="{{ $portfolio->link }}" placeholder="Link">
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                    <input type="file" name="portfolio[{{ $index }}][image]" class="form-control-file">
+                                                    @if($portfolio->image)
+                                                        <img src="{{ asset('storage/' . $portfolio->image) }}" alt="Portfolio Image"
+                                                            style="max-width: 100px; display: block; margin-top: 5px;">
+                                                    @endif
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <button type="button" class="btn btn-danger remove-portfolio">Remove</button>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <div class="form-group text-center mb-4">
+                                        <button type="button" class="btn btn-success add-portfolio">Add More</button>
+                                    </div>
+
+                                    <hr>
+                                    <h5>Working Hours</h5>
+                                    <div id="working-hours-container">
+                                        @php
+                                            $existingWH = $business->working_hours ?? [
+                                                ['day' => 'Monday - Friday', 'start' => '09:00', 'end' => '19:00', 'closed' => false],
+                                                ['day' => 'Saturday', 'start' => '10:00', 'end' => '17:00', 'closed' => false],
+                                                ['day' => 'Sunday', 'start' => '', 'end' => '', 'closed' => true],
+                                            ];
+                                        @endphp
+                                        @foreach ($existingWH as $index => $wh)
+                                            <div class="timing-item row align-items-center mb-2 gx-2" data-index="{{ $index }}">
+                                                <div class="col-md-4">
+                                                    <input type="text" name="working_hours[{{ $index }}][day]"
+                                                        class="form-control form-control-sm" value="{{ $wh['day'] ?? '' }}"
+                                                        placeholder="Day or range (e.g. Monday - Friday)">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input type="time" name="working_hours[{{ $index }}][start]"
+                                                        class="form-control form-control-sm start-time"
+                                                        value="{{ $wh['start'] ?? '' }}" @if(!empty($wh['closed'])) disabled @endif>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input type="time" name="working_hours[{{ $index }}][end]"
+                                                        class="form-control form-control-sm end-time"
+                                                        value="{{ $wh['end'] ?? '' }}" @if(!empty($wh['closed'])) disabled @endif>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input closed-checkbox"
+                                                            name="working_hours[{{ $index }}][closed]" value="1"
+                                                            id="closed_{{ $index }}" @if(!empty($wh['closed'])) checked @endif>
+                                                        <label class="form-check-label" for="closed_{{ $index }}">Closed</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 text-end">
+                                                    <button type="button"
+                                                        class="btn btn-outline-danger btn-sm remove-working-hour"
+                                                        title="Remove">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <button type="button" id="add-working-hour" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-plus-circle"></i> Add Row
+                                    </button>
+
+                                    <div class="text-center mt-4">
+                                        <button type="submit" class="btn btn-primary btn-lg">Update Business</button>
+                                    </div>
+
                                 </form>
                             </div>
                         </div>
@@ -327,57 +438,163 @@
 @endsection
 
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
-    <script src="https://cdn.ckeditor.com/4.20.2/standard/ckeditor.js"></script>
+       <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
 
     <script>
         CKEDITOR.replace('detail');
+        CKEDITOR.replace('introduction');
 
         var allSubCategories = @json($subCategories);
 
-        $(document).ready(function () {
+        $(document).ready(function() {
 
-            // Dynamic subcategories based on category selection
-            $('#category_id').change(function () {
+            // Load subcategories dynamically on category change
+            $('#category_id').change(function() {
                 var categoryId = $(this).val();
                 $('#sub_category_ids').empty();
 
                 if (categoryId) {
-                    var filteredSubs = allSubCategories.filter(function (sub) {
+                    var filteredSubs = allSubCategories.filter(function(sub) {
                         return sub.category_id == categoryId;
                     });
 
-                    filteredSubs.forEach(function (sub) {
+                    filteredSubs.forEach(function(sub) {
                         $('#sub_category_ids').append('<option value="' + sub.id + '">' + sub.sub_category_name + '</option>');
                     });
+
+                    $('#sub_category_ids').trigger('change');
                 }
             });
 
             // Add More services dynamically
             var serviceIndex = {{ $business->services->count() }};
-            $(document).on('click', '.add-service', function () {
+            $(document).on('click', '.add-service', function() {
                 var row = `<div class="service-row row">
-                        <div class="form-group col-md-5">
-                          <input type="text" name="services[${serviceIndex}][name]" class="form-control" placeholder="Service Name">
-                        </div>
-                        <div class="form-group col-md-5">
-                          <input type="file" name="services[${serviceIndex}][image]" class="form-control-file">
-                        </div>
-                        <div class="form-group col-md-2">
-                          <button type="button" class="btn btn-danger remove-service">Remove</button>
-                        </div>
-                      </div>`;
+                                <div class="form-group col-md-3">
+                                     <input type="text" name="services[${serviceIndex}][name]" class="form-control" placeholder="Service Name">
+                                </div>
+                                <div class="form-group col-md-4">
+                                     <input type="text" name="services[${serviceIndex}][description]" class="form-control" placeholder="Description">
+                                </div>
+                                <div class="form-group col-md-2">
+                                     <input type="number" name="services[${serviceIndex}][price]" class="form-control" placeholder="Price" min="0" step="0.01">
+                                </div>
+                                <div class="form-group col-md-3">
+                                     <input type="file" name="services[${serviceIndex}][image]" class="form-control-file">
+                                </div>
+                                <div class="form-group col-md-2">
+                                     <button type="button" class="btn btn-danger remove-service">Remove</button>
+                                </div>
+                            </div>`;
                 $('#services-container').append(row);
                 serviceIndex++;
             });
 
-            $(document).on('click', '.remove-service', function () {
+            $(document).on('click', '.remove-service', function() {
                 $(this).closest('.service-row').remove();
             });
 
-        });
 
-        function fetch_subcategories(id, callback) {
+            // Add More portfolio dynamically
+            var portfolioIndex = {{ $business->portfolio->count() }};
+            $(document).on('click', '.add-portfolio', function() {
+                var row = `<div class="portfolio-row row mb-2">
+                                <div class="form-group col-md-3">
+                                    <input type="text" name="portfolio[${portfolioIndex}][title]" class="form-control" placeholder="Title">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <input type="url" name="portfolio[${portfolioIndex}][link]" class="form-control" placeholder="Link">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <input type="file" name="portfolio[${portfolioIndex}][image]" class="form-control-file">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button type="button" class="btn btn-danger remove-portfolio">Remove</button>
+                                </div>
+                            </div>`;
+                $('#portfolio-container').append(row);
+                portfolioIndex++;
+            });
+
+            $(document).on('click', '.remove-portfolio', function() {
+                $(this).closest('.portfolio-row').remove();
+            });
+
+
+            // Working Hours Add Row
+            $(document).on('click', '#add-working-hour', function() {
+                let container = $('#working-hours-container');
+                let index = container.find('.timing-item').length;
+                var row = `<div class="timing-item row align-items-center mb-2 gx-2" data-index="${index}">
+                               <div class="col-md-4">
+                                  <input type="text" class="form-control form-control-sm" name="working_hours[${index}][day]" placeholder="Day or range (e.g. Monday - Friday)">
+                               </div>
+                               <div class="col-md-2">
+                                  <input type="time" class="form-control form-control-sm start-time" name="working_hours[${index}][start]" value="">
+                               </div>
+                               <div class="col-md-2">
+                                  <input type="time" class="form-control form-control-sm end-time" name="working_hours[${index}][end]" value="">
+                               </div>
+                               <div class="col-md-2">
+                                  <div class="form-check">
+                                     <input class="form-check-input closed-checkbox" type="checkbox" name="working_hours[${index}][closed]" value="1" id="closed_${index}">
+                                     <label class="form-check-label" for="closed_${index}">Closed</label>
+                                  </div>
+                               </div>
+                               <div class="col-md-2 text-end">
+                                  <button type="button" class="btn btn-outline-danger btn-sm remove-working-hour" title="Remove">
+                                     <i class="fas fa-times"></i>
+                                  </button>
+                               </div>
+                            </div>`;
+                container.append(row);
+            });
+
+            // Remove working hour row
+            $(document).on('click', '.remove-working-hour', function() {
+                $(this).closest('.timing-item').remove();
+                reindexWorkingHours();
+            });
+
+            // Toggle time inputs when closed checked/unchecked (delegated)
+            $(document).on('change', '.closed-checkbox', function() {
+                let row = $(this).closest('.timing-item');
+                let start = row.find('.start-time');
+                let end = row.find('.end-time');
+                if ($(this).is(':checked')) {
+                    start.val('').prop('disabled', true);
+                    end.val('').prop('disabled', true);
+                } else {
+                    start.prop('disabled', false);
+                    end.prop('disabled', false);
+                }
+                reindexWorkingHours();
+            });
+
+            // Reindex working hour inputs for sequential names
+            function reindexWorkingHours() {
+                $('#working-hours-container .timing-item').each(function(i, el) {
+                    let row = $(el);
+                    row.attr('data-index', i);
+                    row.find('input[type="text"]').attr('name', `working_hours[${i}][day]`);
+                    row.find('.start-time').attr('name', `working_hours[${i}][start]`);
+                    row.find('.end-time').attr('name', `working_hours[${i}][end]`);
+                    row.find('.closed-checkbox').attr({
+                        'name': `working_hours[${i}][closed]`,
+                        'id': `closed_${i}`
+                    });
+                    row.find('label.form-check-label').attr('for', `closed_${i}`);
+                });
+            }
+
+            // Initial reindex on page load for working hours in case of server non-contiguous indices
+            reindexWorkingHours();
+
+            // Property category related scripts are assumed included here (same logic as in your previous JS)
+        });
+    
+    function fetch_subcategories(id, callback) {
             var route = "{{ config('app.api_url') }}/fetch_subcategories_by_cat_id/" + id;
 
             $.ajax({

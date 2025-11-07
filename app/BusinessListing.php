@@ -33,7 +33,10 @@ class BusinessListing extends Model
         'rating',
         'rating_count',
         'status',
-        'is_published', // ✅ new column
+        'is_published',
+        'registration_number',  
+        'deals_in',             
+        'satisfied_clients',    
     ];
 
     // 🔹 Relationship: Category
@@ -108,4 +111,17 @@ class BusinessListing extends Model
 
         return $html;
     }
+
+    // 🔹 Relationship: Portfolio
+    public function portfolio()
+    {
+        return $this->hasMany(\App\Models\BusinessPortfolio::class, 'business_listing_id');
+    }
+
+    // 🔹 Relationship: Working Hours
+    public function workingHours()
+    {
+        return $this->hasMany(\App\Models\BusinessWorkingHour::class, 'business_listing_id');
+    }
+
 }

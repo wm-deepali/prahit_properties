@@ -12,6 +12,8 @@ class BusinessService extends Model
     protected $fillable = [
         'business_listing_id',
         'name',
+        'description',  // added description
+        'price',        // added price
         'image',
     ];
 

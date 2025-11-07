@@ -18,7 +18,7 @@ use App\Http\Controllers\User\UserController;
 Route::post('/review/send-otp', [ReviewController::class, 'sendOtp'])->name('send.review.otp');
 Route::post('/review/verify-otp', [ReviewController::class, 'verifyOtp'])->name('verify.review.otp');
 Route::post('/review/submit', [ReviewController::class, 'submitReview'])->name('submit.review');
-
+Route::post('/business/review/submit', [ReviewController::class, 'submitBusinessListingReview'])->name('business.submit.review');
 
 Route::post('/business/send-otp', [BusinessListingController::class, 'sendEnquiryOtp'])->name('business.sendOtp');
 Route::post('/business/enquiry', [BusinessListingController::class, 'submitEnquiry'])->name('business.enquiry');

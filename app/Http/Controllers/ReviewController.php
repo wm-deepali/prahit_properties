@@ -130,5 +130,81 @@ class ReviewController extends Controller
         // }
     }
 
+    public function submitBusinessListingReview(Request $request)
+    {
+        // ✅ Step 1: Ensure OTP or user login is verified
+        if (!auth()->check() && !Session::get('review_verified')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'OTP not verified. Please verify your phone number before submitting a review.',
+            ]);
+        }
+
+        // ✅ Step 2: Validate input
+        $validated = $request->validate([
+            'business_listing_id' => 'required|exists:business_listings,id',
+            'name' => 'required|string|max:100',
+            'email' => 'nullable|email|max:100',
+            'phone' => 'nullable|string|max:20',
+            'rating' => 'required|numeric|min:1|max:5',
+            'review' => 'required|string|max:1000',
+        ]);
+
+        // If user not logged in, create or login user
+        if (!auth()->check()) {
+            $user = User::where('mobile_number', $validated['phone'])
+                ->orWhere('email', $validated['email'] ?? null)
+                ->first();
+
+            if (!$user) {
+                $user = User::create([
+                    'role' => 'user',
+                    'firstname' => $validated['name'],
+                    'lastname' => '',
+                    'email' => $validated['email'] ?? null,
+                    'mobile_number' => $validated['phone'],
+                    'password' => bcrypt('123456'), // default password
+                    'status' => 1,
+                    'mobile_verified' => 1,
+                    'is_verified' => 1,
+                ]);
+
+                $emailtemplate = EmailTemplate::where('id', 1)->first();
+                $ordertemplate = $emailtemplate->template;
+                $replacetemplate = [
+                    '#NAME' => $validated['name'],
+                    '#EMAIL' => $validated['email'],
+                    '#PASSWORD' => '123456',
+                ];
+                foreach ($replacetemplate as $key => $val) {
+                    $ordertemplate = str_replace($key, $val, $ordertemplate);
+                }
+                $user->notify(new WelcomeEmailNotification($ordertemplate, $emailtemplate->subject, $emailtemplate->image));
+            }
+
+            Auth::login($user);
+        }
+
+        // ✅ Step 3: Create the business listing review
+        $review = \App\Models\BusinessListingReview::create([
+            'business_listing_id' => $validated['business_listing_id'],
+            'user_id' => auth()->id(),
+            'name' => $validated['name'],
+            'email' => $validated['email'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+            'rating' => $validated['rating'],
+            'comment' => $validated['review'],
+        ]);
+
+        // ✅ Step 4: Clear OTP session
+        Session::forget('review_verified');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Review submitted successfully!',
+            'review' => $review,
+        ]);
+    }
+
 }
 

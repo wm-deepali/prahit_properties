@@ -53,6 +53,15 @@ class BusinessListingController extends Controller
 
     public function store(Request $request)
     {
+        $userId = Auth::id();
+
+        // Check if user already has a business listing
+        $existingBusiness = BusinessListing::where('user_id', $userId)->first();
+
+        if ($existingBusiness) {
+            return redirect()->back()->with('error', 'You already have a business listing and cannot create another.');
+        }
+
         $validator = Validator::make($request->all(), [
             'membership_type' => 'required|in:Free,Paid',
             'verified_status' => 'required|in:Verified,Unverified',
@@ -62,7 +71,7 @@ class BusinessListingController extends Controller
 
             // property single select
             'property_category_id' => 'nullable|string', // single id or 'all'
-            'property_subcategory_id' => 'nullable|string',     // single id or 'all'
+            'property_subcategory_id' => 'nullable|string', // single id or 'all'
             'sub_sub_category_ids' => 'nullable|array',
             'sub_sub_category_ids.*' => 'exists:sub_sub_categories,id',
 
@@ -78,13 +87,32 @@ class BusinessListingController extends Controller
             'state' => 'nullable|string|max:100',
             'city' => 'nullable|string|max:100',
             'pin_code' => 'nullable|string|max:10',
+            'registration_number' => 'nullable|string|max:255', // ✅ new
+            'deals_in' => 'nullable|string|max:500',           // ✅ new
+            'satisfied_clients' => 'nullable|integer|min:0',   // ✅ new
+
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'banner_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
 
             // Services
             'services' => 'nullable|array',
             'services.*.name' => 'required_with:services|string|max:255',
+            'services.*.description' => 'nullable|string|max:1000',
+            'services.*.price' => 'nullable|numeric|min:0',
             'services.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
+            // Portfolio
+            'portfolio' => 'nullable|array',
+            'portfolio.*.title' => 'required_with:portfolio|string|max:255',
+            'portfolio.*.link' => 'nullable|url|max:255',
+            'portfolio.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
+            // Working hours
+            'working_hours' => 'nullable|array',
+            'working_hours.*.day' => 'required_with:working_hours|string|max:50',
+            'working_hours.*.start' => 'nullable|required_without:working_hours.*.closed|date_format:H:i',
+            'working_hours.*.end' => 'nullable|required_without:working_hours.*.closed|date_format:H:i',
+            'working_hours.*.closed' => 'nullable|boolean',
         ]);
 
         if ($validator->fails()) {
@@ -108,13 +136,13 @@ class BusinessListingController extends Controller
                 'full_address',
                 'state',
                 'city',
-                'pin_code'
+                'pin_code',
+                'registration_number',   // ✅ new
+                'deals_in',              // ✅ new
+                'satisfied_clients',     // ✅ new
             ]));
 
-            // ✅ Add logged-in user ID
-            $business->user_id = Auth::user()->id;
-
-            // ✅ Default to unpublished
+            $business->user_id = Auth::id();
             $business->is_published = false;
 
             if ($request->hasFile('logo')) {
@@ -130,7 +158,7 @@ class BusinessListingController extends Controller
             // Sync main subcategories
             $business->subCategories()->sync($request->sub_category_ids);
 
-            // Property Category (single select or "all")
+            // Property Categories
             if ($request->property_category_id) {
                 if ($request->property_category_id === 'all') {
                     $allPropertyCategories = Category::pluck('id')->toArray();
@@ -140,7 +168,7 @@ class BusinessListingController extends Controller
                 }
             }
 
-            // Property SubCategory (single select or "all")
+            // Property Subcategories
             if ($request->property_subcategory_id) {
                 if ($request->property_subcategory_id === 'all') {
                     $allSubCategories = SubCategory::where('category_id', $request->property_category_id)->pluck('id')->toArray();
@@ -150,7 +178,7 @@ class BusinessListingController extends Controller
                 }
             }
 
-            // Property Sub-SubCategories (multiple)
+            // Property Sub-SubCategories
             if ($request->sub_sub_category_ids) {
                 $business->propertySubSubCategories()->sync($request->sub_sub_category_ids);
             }
@@ -160,12 +188,41 @@ class BusinessListingController extends Controller
                 foreach ($request->services as $service) {
                     $serviceModel = $business->services()->create([
                         'name' => $service['name'],
+                        'description' => $service['description'] ?? null,
+                        'price' => $service['price'] ?? null,
                     ]);
 
-                    if (isset($service['image']) && $service['image']) {
+                    if (!empty($service['image'])) {
                         $serviceModel->image = $service['image']->store('business/services', 'public');
                         $serviceModel->save();
                     }
+                }
+            }
+
+            // Portfolio
+            if ($request->portfolio) {
+                foreach ($request->portfolio as $portfolio) {
+                    $portfolioModel = $business->portfolio()->create([
+                        'title' => $portfolio['title'],
+                        'link' => $portfolio['link'] ?? null,
+                    ]);
+
+                    if (!empty($portfolio['image'])) {
+                        $portfolioModel->image = $portfolio['image']->store('business/portfolio', 'public');
+                        $portfolioModel->save();
+                    }
+                }
+            }
+
+            // Working Hours
+            if ($request->working_hours) {
+                foreach ($request->working_hours as $wh) {
+                    $business->workingHours()->create([
+                        'day' => $wh['day'],
+                        'start' => $wh['closed'] ?? false ? null : $wh['start'],
+                        'end' => $wh['closed'] ?? false ? null : $wh['end'],
+                        'closed' => !empty($wh['closed']) ? 1 : 0,
+                    ]);
                 }
             }
 
@@ -177,7 +234,6 @@ class BusinessListingController extends Controller
         }
     }
 
-
     public function edit($id)
     {
         $business = BusinessListing::with([
@@ -185,7 +241,9 @@ class BusinessListingController extends Controller
             'propertyCategories',
             'propertySubCategories',
             'propertySubSubCategories',
-            'services'
+            'services',
+            'portfolio',
+            'workingHours'
         ])->findOrFail($id);
 
         $categories = WebDirectoryCategory::all();
@@ -206,8 +264,9 @@ class BusinessListingController extends Controller
 
     public function update(Request $request, $id)
     {
-        $business = BusinessListing::with('services')->findOrFail($id);
+        $business = BusinessListing::with(['services', 'portfolio', 'workingHours'])->findOrFail($id);
 
+        // dd('here',$request->all());
         $validator = Validator::make($request->all(), [
             'membership_type' => 'required|in:Free,Paid',
             'verified_status' => 'required|in:Verified,Unverified',
@@ -215,7 +274,6 @@ class BusinessListingController extends Controller
             'sub_category_ids' => 'required|array',
             'sub_category_ids.*' => 'exists:web_directory_sub_categories,id',
 
-            // property single select or "all"
             'property_category_id' => 'nullable|string', // single id or 'all'
             'property_subcategory_id' => 'nullable|string', // single id or 'all'
             'sub_sub_category_ids' => 'nullable|array',
@@ -233,6 +291,9 @@ class BusinessListingController extends Controller
             'state' => 'nullable|string|max:100',
             'city' => 'nullable|string|max:100',
             'pin_code' => 'nullable|string|max:10',
+            'registration_number' => 'nullable|string|max:255', // ✅ new
+            'deals_in' => 'nullable|string|max:500',           // ✅ new
+            'satisfied_clients' => 'nullable|integer|min:0',   // ✅ new
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'banner_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
 
@@ -240,7 +301,24 @@ class BusinessListingController extends Controller
             'services' => 'nullable|array',
             'services.*.id' => 'nullable|exists:business_services,id',
             'services.*.name' => 'required_with:services|string|max:255',
+            'services.*.description' => 'nullable|string|max:1000',
+            'services.*.price' => 'nullable|numeric|min:0',
             'services.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
+            // Portfolio
+            'portfolio' => 'nullable|array',
+            'portfolio.*.id' => 'nullable|exists:business_portfolios,id',
+            'portfolio.*.title' => 'required_with:portfolio|string|max:255',
+            'portfolio.*.link' => 'nullable|url|max:255',
+            'portfolio.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
+            // Working hours
+            'working_hours' => 'nullable|array',
+            'working_hours.*.id' => 'nullable|exists:business_working_hours,id',
+            'working_hours.*.day' => 'required_with:working_hours|string|max:50',
+            'working_hours.*.start' => 'nullable|required_without:working_hours.*.closed|date_format:H:i',
+            'working_hours.*.end' => 'nullable|required_without:working_hours.*.closed|date_format:H:i',
+            'working_hours.*.closed' => 'nullable|boolean',
         ]);
 
         if ($validator->fails()) {
@@ -263,7 +341,10 @@ class BusinessListingController extends Controller
                 'full_address',
                 'state',
                 'city',
-                'pin_code'
+                'pin_code',
+                'registration_number',   // ✅ new
+                'deals_in',              // ✅ new
+                'satisfied_clients',     // ✅ new
             ]));
 
             if ($request->hasFile('logo')) {
@@ -283,7 +364,7 @@ class BusinessListingController extends Controller
             // Sync main subcategories
             $business->subCategories()->sync($request->sub_category_ids);
 
-            // Property Category (single select or all)
+            // Property Categories
             if ($request->property_category_id) {
                 if ($request->property_category_id === 'all') {
                     $allPropertyCategories = Category::pluck('id')->toArray();
@@ -295,7 +376,7 @@ class BusinessListingController extends Controller
                 $business->propertyCategories()->detach();
             }
 
-            // Property SubCategory (single select or all)
+            // Property SubCategories
             if ($request->property_subcategory_id) {
                 if ($request->property_subcategory_id === 'all') {
                     $allSubCategories = SubCategory::where('category_id', $request->property_category_id)->pluck('id')->toArray();
@@ -313,31 +394,80 @@ class BusinessListingController extends Controller
             // Services
             $existingServiceIds = $business->services->pluck('id')->toArray();
             $submittedServiceIds = collect($request->services ?? [])->pluck('id')->filter()->toArray();
-
-            // Remove deleted services
             $toDelete = array_diff($existingServiceIds, $submittedServiceIds);
             if ($toDelete) {
                 $business->services()->whereIn('id', $toDelete)->delete();
             }
-
             if ($request->services) {
                 foreach ($request->services as $serviceData) {
                     if (!empty($serviceData['id'])) {
-                        // Update existing
                         $service = $business->services()->find($serviceData['id']);
                         $service->name = $serviceData['name'];
+                        $service->description = $serviceData['description'] ?? null;
+                        $service->price = $serviceData['price'] ?? null;
                     } else {
-                        // New service
                         $service = $business->services()->create([
                             'name' => $serviceData['name'],
+                            'description' => $serviceData['description'] ?? null,
+                            'price' => $serviceData['price'] ?? null,
                         ]);
                     }
-
                     if (isset($serviceData['image']) && $serviceData['image']) {
                         $service->image = $serviceData['image']->store('business/services', 'public');
                     }
-
                     $service->save();
+                }
+            }
+
+            // Portfolio
+            $existingPortfolioIds = $business->portfolio->pluck('id')->toArray();
+            $submittedPortfolioIds = collect($request->portfolio ?? [])->pluck('id')->filter()->toArray();
+            $toDeletePortfolio = array_diff($existingPortfolioIds, $submittedPortfolioIds);
+            if ($toDeletePortfolio) {
+                $business->portfolio()->whereIn('id', $toDeletePortfolio)->delete();
+            }
+            if ($request->portfolio) {
+                foreach ($request->portfolio as $portfolioData) {
+                    if (!empty($portfolioData['id'])) {
+                        $portfolio = $business->portfolio()->find($portfolioData['id']);
+                        $portfolio->title = $portfolioData['title'];
+                        $portfolio->link = $portfolioData['link'] ?? null;
+                    } else {
+                        $portfolio = $business->portfolio()->create([
+                            'title' => $portfolioData['title'],
+                            'link' => $portfolioData['link'] ?? null,
+                        ]);
+                    }
+                    if (isset($portfolioData['image']) && $portfolioData['image']) {
+                        $portfolio->image = $portfolioData['image']->store('business/portfolio', 'public');
+                    }
+                    $portfolio->save();
+                }
+            }
+
+            // Working Hours
+            $existingWHIds = $business->workingHours->pluck('id')->toArray();
+            $submittedWHIds = collect($request->working_hours ?? [])->pluck('id')->filter()->toArray();
+            $toDeleteWH = array_diff($existingWHIds, $submittedWHIds);
+            if ($toDeleteWH) {
+                $business->workingHours()->whereIn('id', $toDeleteWH)->delete();
+            }
+            if ($request->working_hours) {
+                foreach ($request->working_hours as $whData) {
+                    if (!empty($whData['id'])) {
+                        $wh = $business->workingHours()->find($whData['id']);
+                        $wh->day = $whData['day'];
+                        $wh->start = $whData['closed'] ?? false ? null : $whData['start'];
+                        $wh->end = $whData['closed'] ?? false ? null : $whData['end'];
+                        $wh->closed = !empty($whData['closed']) ? 1 : 0;
+                    } else {
+                        $business->workingHours()->create([
+                            'day' => $whData['day'],
+                            'start' => $whData['closed'] ?? false ? null : $whData['start'],
+                            'end' => $whData['closed'] ?? false ? null : $whData['end'],
+                            'closed' => !empty($whData['closed']) ? 1 : 0,
+                        ]);
+                    }
                 }
             }
 
@@ -348,6 +478,7 @@ class BusinessListingController extends Controller
             return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
         }
     }
+
 
     public function destroy($id)
     {
