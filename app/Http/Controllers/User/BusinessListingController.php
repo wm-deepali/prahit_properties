@@ -39,17 +39,57 @@ class BusinessListingController extends Controller
 
     public function create()
     {
+        $user = auth()->user();
 
+        // 🧩 Load user's active subscription with its package
+        $activeSubscription = $user->activeSubscription()
+            ->with('package')
+            ->first();
+
+        // Store current URL for redirect (in case of failure)
+        $redirectUrl = urlencode(url()->current());
+
+        // 🚫 No active subscription
+        if (!$activeSubscription) {
+            return redirect()->to(url("/user/pricing?type=service&redirect_url={$redirectUrl}"))
+                ->with('error', 'You must have an active subscription to post your business listing.');
+        }
+
+        $package = $activeSubscription->package;
+
+        // 🚫 Subscription exists but package missing or not Service type
+        if (!$package || $package->package_type !== 'service') {
+            return redirect()->to(url("/user/pricing?type=service&redirect_url={$redirectUrl}"))
+                ->with('error', 'You must have an active Service package to post your business listing.');
+        }
+
+        // 🚫 Package does not allow Business Listing
+        if (empty($package->business_listing) || strtolower($package->business_listing) !== 'yes') {
+            return redirect()->to(url("/user/pricing?type=service&redirect_url={$redirectUrl}"))
+                ->with('error', 'Your current package does not include Business Listing.');
+        }
+
+        // ✅ All checks passed — allow access
         $categories = WebDirectoryCategory::all();
         $subCategories = WebDirectorySubCategory::all();
+        $property_categories = Category::latest()->get();
 
-        $property_categories = Category::latest()->get(); // 🆕
+        // 🟩 Extract required package limits
+        $total_services = $package->total_services ?? 0;
+        $business_logo_banner = $package->business_logo_banner ?? 'No';
+
         return view('front.create_business_listing', compact(
             'categories',
             'subCategories',
             'property_categories',
+            'package',
+            'total_services',
+            'business_logo_banner'
         ));
     }
+
+
+
 
     public function store(Request $request)
     {

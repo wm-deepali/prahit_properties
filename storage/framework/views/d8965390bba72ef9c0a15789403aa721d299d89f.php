@@ -59,21 +59,21 @@
 
                             <!-- Membership & Category -->
                             <div class="row mb-3">
-                                <div class="col-md-3">
+                                <!-- <div class="col-md-3">
                                     <label>Membership Type</label>
                                     <select name="membership_type" class="form-control" required>
                                         <option value="Free">Free</option>
                                         <option value="Paid">Paid</option>
                                     </select>
-                                </div>
-                                <div class="col-md-3">
+                                </div> -->
+                                <div class="col-md-4">
                                     <label>Verified Status</label>
                                     <select name="verified_status" class="form-control" required>
                                         <option value="Verified">Verified</option>
                                         <option value="Unverified">Unverified</option>
                                     </select>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label>Category</label>
                                     <select name="category_id" id="category_id" class="form-control" required>
                                         <option value="">Select Category</option>
@@ -82,7 +82,7 @@
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label>Sub Category</label>
                                     <select name="sub_category_ids[]" id="sub_category_ids"
                                         class="form-control select2-multiple" multiple required></select>
@@ -211,16 +211,26 @@
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
-                                <div class="col-md-4">
-                                    <label>Logo</label>
-                                    <input type="file" name="logo" class="form-control-file">
-                                </div>
-                                <div class="col-md-4">
-                                    <label>Banner Image</label>
-                                    <input type="file" name="banner_image" class="form-control-file">
-                                </div>
-                            </div>
+                           
+<?php if( $business_logo_banner === 'Yes'): ?>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Business Logo</label>
+            <input type="file" name="logo" class="form-control">
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Banner Image</label>
+            <input type="file" name="banner_image" class="form-control">
+        </div>
+    </div>
+<?php else: ?>
+    <div class="alert alert-info mt-3">
+        <i class="fa fa-info-circle"></i> 
+        Your current plan does not include Business Logo & Banner uploads.
+    </div>
+<?php endif; ?>
+
 
                             <!-- Services -->
                              <div class="service-section p-3 border rounded mb-4">
@@ -373,34 +383,47 @@
             });
 
 
-            // Add More services dynamically
-            // Add More services dynamically
-            var serviceIndex = 1;
-            $(document).on('click', '.add-service', function () {
-                var row = `<div class="service-row row">
-                                    <div class="form-group col-md-2">
-                                      <input type="text" name="services[${serviceIndex}][name]" class="form-control" placeholder="Service Name">
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                      <input type="text" name="services[${serviceIndex}][description]" class="form-control" placeholder="Description">
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                      <input type="number" name="services[${serviceIndex}][price]" class="form-control" placeholder="Price" min="0" step="0.01">
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                      <input type="file" name="services[${serviceIndex}][image]" class="form-control-file">
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                      <button type="button" class="btn btn-danger remove-service">Remove</button>
-                                    </div>
-                                </div>`;
-                $('#services-container').append(row);
-                serviceIndex++;
-            });
+           // Add More services dynamically with limit
+var serviceIndex = 1;
+var serviceLimit = <?php echo e($total_services ?? 5); ?>; // 👈 dynamic from backend
 
-            $(document).on('click', '.remove-service', function () {
-                $(this).closest('.service-row').remove();
-            });
+$(document).on('click', '.add-service', function () {
+    var totalServices = $('#services-container .service-row').length;
+
+    if (totalServices >= serviceLimit) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Limit Reached',
+            text: 'You can add a maximum of ' + serviceLimit + ' services as per your plan.'
+        });
+        return;
+    }
+
+    var row = `<div class="service-row row mb-2">
+                    <div class="form-group col-md-2">
+                      <input type="text" name="services[${serviceIndex}][name]" class="form-control" placeholder="Service Name">
+                    </div>
+                    <div class="form-group col-md-3">
+                      <input type="text" name="services[${serviceIndex}][description]" class="form-control" placeholder="Description">
+                    </div>
+                    <div class="form-group col-md-2">
+                      <input type="number" name="services[${serviceIndex}][price]" class="form-control" placeholder="Price" min="0" step="0.01">
+                    </div>
+                    <div class="form-group col-md-3">
+                      <input type="file" name="services[${serviceIndex}][image]" class="form-control-file">
+                    </div>
+                    <div class="form-group col-md-2">
+                      <button type="button" class="btn btn-danger remove-service">Remove</button>
+                    </div>
+                </div>`;
+    $('#services-container').append(row);
+    serviceIndex++;
+});
+
+$(document).on('click', '.remove-service', function () {
+    $(this).closest('.service-row').remove();
+});
+
 
         });
 

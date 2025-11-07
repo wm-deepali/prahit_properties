@@ -3746,7 +3746,7 @@
               window.location.href = postLoginRedirect;
               postLoginRedirect = null;
             } else {
-              window.location.href = '/user_dashboard';  // default redirect
+              window.location.href = '/user/dashboard';  // default redirect
             }
         
 

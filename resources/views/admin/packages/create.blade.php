@@ -219,7 +219,7 @@
                                                     <div class="col-md-4 mb-3">
                                                         <label>Total Services You Can List</label>
                                                         <input type="number" name="total_services" class="form-control"
-                                                            placeholder="e.g., 1, 3, 5, Unlimited">
+                                                            placeholder="e.g., 1, 3, 5, 10000">
                                                     </div>
 
                                                     <div class="col-md-4 mb-3">

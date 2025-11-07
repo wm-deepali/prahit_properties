@@ -154,16 +154,37 @@
                                     <i class="fas fa-pencil-alt"></i> Enquiries
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{route('admin.manage-enquiries.index')}}"> Property
-                                        Enquiries</a>
-                                    <a class="dropdown-item" href="{{url('master/property/feedback')}}"> Feedbacks</a>
-                                    <a class="dropdown-item" href="{{route('admin.manage-complaints.index')}}"> Property
-                                        Complaints</a>
-                                    <a class="dropdown-item" href="{{route('admin.manageSupportQuery')}}"> Support
-                                        Center</a>
-                                    <a class="dropdown-item" href="{{route('admin.manageComplaints')}}"> Complaints</a>
+                                    <a class="dropdown-item" href="{{ route('admin.manage-enquiries.index') }}">
+                                        Property Enquiries
+                                    </a>
+                                    <a class="dropdown-item" href="{{ url('master/property/feedback') }}">
+                                        Feedbacks
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('admin.manage-complaints.index') }}">
+                                        Property Complaints
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('admin.manageSupportQuery') }}">
+                                        Support Center
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('admin.manageComplaints') }}">
+                                        Complaints
+                                    </a>
+
+                                    <div class="dropdown-divider"></div> <!-- 🔹 Optional visual separator -->
+
+                                    {{-- 🆕 New Links --}}
+                                <a class="dropdown-item" href="{{ route('admin.directory-enquiries.index') }}">
+                                        Directory Enquiries
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('admin.agent-profile-reviews.index') }}">
+                                        Agent Profile Reviews
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('admin.business-listing-reviews.index') }}">
+                                        Business Listing Reviews
+                                    </a>
                                 </div>
                             </li>
+
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

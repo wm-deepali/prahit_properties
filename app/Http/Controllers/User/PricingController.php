@@ -25,8 +25,8 @@ class PricingController extends Controller
     {
         $packageType = $request->query('type', 'property');  // default to property
         $packages = Package::where('is_active', true)
-            ->where('package_type', $packageType)
-            ->orderBy('price', 'asc')->get();
+        ->where('package_type', $packageType)
+        ->orderBy('price', 'asc')->get();
 
         return view('front.user.pricing', compact('packages', 'packageType'));
     }

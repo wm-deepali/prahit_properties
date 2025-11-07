@@ -185,6 +185,36 @@
                                 </div>
                             </li>
 
+                            <li class="nav-item">
+                                <a class="nav-link collapsed <?php echo e(Request::is('user/agent-profile-reviews') || Request::is('user/sent-reviews') ? '' : 'collapsed'); ?>"
+                                    href="#" data-toggle="collapse" data-target="#reviewsMenu"
+                                    aria-expanded="<?php echo e(Request::is('user/agent-profile-reviews') || Request::is('user/sent-reviews') ? 'true' : 'false'); ?>"
+                                    aria-controls="reviewsMenu">
+                                    Reviews
+                                </a>
+                                <div class="collapse <?php echo e(Request::is('user/agent-profile-reviews') || Request::is('user/sent-reviews') ? 'show' : ''); ?>"
+                                    id="reviewsMenu">
+                                    <ul class="nav flex-column ml-3">
+                                        
+                                        <?php if(in_array(Auth::user()->role, ['agent', 'builder'])): ?>
+                                            <li class="nav-item">
+                                                <a href="<?php echo e(url('user/agent-profile-reviews')); ?>"
+                                                    class="nav-link <?php echo e(Request::is('user/agent-profile-reviews') ? 'active' : ''); ?>">
+                                                    Agent Profile Reviews
+                                                </a>
+                                            </li>
+                                        <?php endif; ?>
+
+                                        <li class="nav-item">
+                                            <a href="<?php echo e(url('user/sent-reviews')); ?>"
+                                                class="nav-link <?php echo e(Request::is('user/sent-reviews') ? 'active' : ''); ?>">
+                                                My Sent Reviews
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
 
                             <!-- Property or Services menu will be rendered here -->
                             <div id="dynamicMenu"></div>
@@ -238,52 +268,56 @@
 
     // Render Property or Services menu according to user_type
     function renderSidebarMenu(userType) {
-        const sectionLabel = (userType === 'service') ? 'Services' : 'Property';
+        const sectionLabel = (userType === 'service') ? 'Business' : 'Property';
 
         // Property/Services menu HTML
         const dynamicMenuHtml = `
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#${sectionLabel.toLowerCase()}Menu" aria-expanded="false" aria-controls="${sectionLabel.toLowerCase()}Menu">
-                    ${sectionLabel}
-                </a>
-                <div class="collapse" id="${sectionLabel.toLowerCase()}Menu">
-                    <ul class="nav flex-column ml-3">
-                        ${userType === 'service' ? `
-                            <li class="nav-item"><a href="/user/services" class="nav-link">My Services</a></li>
-                            <li class="nav-item"><a href="/user/all-services-inquiries" class="nav-link">Received Service Inquiries</a></li>
-                            <li class="nav-item"><a href="/user/sent-services-inquiries" class="nav-link">Sent Service Inquiries</a></li>
-                            <li class="nav-item"><a href="/user/my-service-wishlist" class="nav-link">My Service Wishlist</a></li>
-                        ` : `
-                            <li class="nav-item"><a href="/user/properties" class="nav-link">My Properties</a></li>
-                            <li class="nav-item"><a href="/user/all-inquries" class="nav-link">Received Inquiries</a></li>
-                            <li class="nav-item"><a href="/user/sent-inquries" class="nav-link">Sent Inquiries</a></li>
-                            <li class="nav-item"><a href="/user/my-wishlist" class="nav-link">My Wishlist</a></li>
-                        `}
-                    </ul>
-                </div>
-            </li>
-        `;
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#${sectionLabel.toLowerCase()}Menu" aria-expanded="false" aria-controls="${sectionLabel.toLowerCase()}Menu">
+                ${sectionLabel}
+            </a>
+            <div class="collapse" id="${sectionLabel.toLowerCase()}Menu">
+                <ul class="nav flex-column ml-3">
+                    ${userType === 'service' ? `
+                        <li class="nav-item"><a href="/user/services" class="nav-link">My Business Listing</a></li>
+                        <li class="nav-item"><a href="/user/all-services-inquiries" class="nav-link">Received Business Inquiries</a></li>
+                        <li class="nav-item"><a href="/user/sent-services-inquiries" class="nav-link">Sent Business Inquiries</a></li>
+                        <li class="nav-item"><a href="/user/my-service-wishlist" class="nav-link">My Business Wishlist</a></li>
+                        <!-- ✅ Added Business Listing Reviews -->
+                        <li class="nav-item"><a href="/user/business-listing-reviews" class="nav-link">Business Listing Reviews</a></li>
+                        
+                    ` : `
+                        <li class="nav-item"><a href="/user/properties" class="nav-link">My Properties</a></li>
+                        <li class="nav-item"><a href="/user/all-inquries" class="nav-link">Received Inquiries</a></li>
+                        <li class="nav-item"><a href="/user/sent-inquries" class="nav-link">Sent Inquiries</a></li>
+                        <li class="nav-item"><a href="/user/my-wishlist" class="nav-link">My Wishlist</a></li>
+                    `}
+                </ul>
+            </div>
+        </li>
+    `;
 
         // Append query param for Pricing & Subscriptions URLs
         const queryParam = (userType === 'service') ? '?type=service' : '';
 
         const pricingMenuHtml = `
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#priceMenu" aria-expanded="false" aria-controls="priceMenu">
-                    Pricing & Subscriptions
-                </a>
-                <div class="collapse" id="priceMenu">
-                    <ul class="nav flex-column ml-3">
-                        <li class="nav-item"><a href="/user/current-subscriptions${queryParam}" class="nav-link">Current Subscriptions</a></li>
-                        <li class="nav-item"><a href="/user/payments-invoice${queryParam}" class="nav-link">Payments & Invoice</a></li>
-                        <li class="nav-item"><a href="/user/pricing${queryParam}" class="nav-link">Pricing</a></li>
-                    </ul>
-                </div>
-            </li>
-        `;
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#priceMenu" aria-expanded="false" aria-controls="priceMenu">
+                Pricing & Subscriptions
+            </a>
+            <div class="collapse" id="priceMenu">
+                <ul class="nav flex-column ml-3">
+                    <li class="nav-item"><a href="/user/current-subscriptions${queryParam}" class="nav-link">Current Subscriptions</a></li>
+                    <li class="nav-item"><a href="/user/payments-invoice${queryParam}" class="nav-link">Payments & Invoice</a></li>
+                    <li class="nav-item"><a href="/user/pricing${queryParam}" class="nav-link">Pricing</a></li>
+                </ul>
+            </div>
+        </li>
+    `;
 
         document.getElementById('dynamicMenu').innerHTML = dynamicMenuHtml;
         document.getElementById('dynamicPricingMenu').innerHTML = pricingMenuHtml;
+
     }
 
     // Highlight active nav links and expand the appropriate submenus

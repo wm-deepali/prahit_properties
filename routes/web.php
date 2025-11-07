@@ -1,9 +1,10 @@
 <?php
-use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\BusinessListingController;
 use App\Http\Controllers\User\PricingController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Admin\BusinessListingReviewController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -138,6 +139,8 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin.check'], '
 		Route::resource('web-directory-category', 'WebDirectoryCategoryController');
 		Route::resource('web-directory-sub-category', 'WebDirectorySubCategoryController');
 		Route::post('business-listing/toggle-status/{id}', [BusinessListingController::class, 'toggleStatus'])->name('business-listing.toggleStatus');
+		// Custom AJAX Delete
+		Route::post('business-listing/delete/{id}', [BusinessListingController::class, 'ajaxDelete'])->name('business-listing.ajaxDelete');
 		Route::resource('business-listing', 'BusinessListingController');
 
 
@@ -157,6 +160,10 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin.check'], '
 		Route::resource('manage-complaints', 'FeedbackController');
 		Route::resource('manage-ads', 'Ads\AdsManagementController');
 		Route::resource('manage-audience', 'Ads\AudienceController');
+		Route::resource('directory-enquiries', 'DirectoryEnquiryController');
+		Route::resource('agent-profile-reviews', 'ReviewController');
+		Route::resource('business-listing-reviews', 'BusinessListingReviewController');
+		;
 
 		Route::group(['as' => 'complaints.'], function () {
 			Route::get('apply_filters', 'FeedbackController@apply_filters')->name('apply_filters');
@@ -426,6 +433,10 @@ Route::group(['middleware' => ['auth']], function () {
 
 	Route::get('/business-listing/create', [App\Http\Controllers\User\BusinessListingController::class, 'create'])->name('create_business_listing');
 	Route::post('/business-listing/submit', [App\Http\Controllers\User\BusinessListingController::class, 'store'])->name('submit_business_listing');
+	Route::get('user/business-listing-reviews', [App\Http\Controllers\Admin\BusinessListingReviewController::class, 'userIndex'])->name('user.business-listing-reviews.index');
+	Route::get('user/agent-profile-reviews', [App\Http\Controllers\Admin\ReviewController::class, 'userIndex'])->name('user.agent-profile-reviews.index');
+	Route::get('user/sent-reviews', [App\Http\Controllers\Admin\ReviewController::class, 'sentReviews'])
+		->name('user.sent-reviews');
 
 	Route::post('user/upload_avatar', 'User\UserController@upload_avatar')->name('user.upload_avatar');
 	Route::get('user/dashboard', 'User\UserController@dashboard')->name('user.dashboard');

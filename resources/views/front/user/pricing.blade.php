@@ -249,7 +249,7 @@
             <tr>
               <td>Validity</td>
               <td>
-                  {{ $package->validity }}
+                {{ $package->validity }}
               </td>
             </tr>
           </table>
@@ -257,7 +257,7 @@
       @empty
         <p>No packages available at this time.</p>
       @endforelse
-     </div>
+    </div>
   </section>
 
 
@@ -364,11 +364,23 @@
                   Swal.fire({
                     icon: 'success',
                     title: 'Subscription Activated!',
-                    text: 'Test subscription created successfully.'
+                    text: 'Your subscription has been successfully activated.'
                   }).then(() => {
-                    window.location.reload();
+                    // ✅ Check if redirect_url is present in the query string
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirectUrl = urlParams.get('redirect_url');
+
+                    if (redirectUrl) {
+                      // Go back to the page the user came from
+                      window.location.href = redirectUrl;
+                    } else {
+                      // Otherwise, reload current page or redirect to dashboard
+                      window.location.reload();
+                      // OR window.location.href = '/user/dashboard';
+                    }
                   });
-                } else {
+                }
+                else {
                   Swal.fire({
                     icon: 'error',
                     title: 'Error!',

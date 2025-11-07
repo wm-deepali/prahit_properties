@@ -173,68 +173,72 @@
   </div>
 
 <?php $__env->stopSection(); ?>
-
 <?php $__env->startSection('js'); ?>
-  <script type="text/javascript">
-    $(".btn-delete").on('click', function (e) {
-      e.preventDefault();
-      $(".loading_2").css('display', 'block');
-      $(".btn-delete").attr('disabled', true);
+<script type="text/javascript">
+$(document).ready(function() {
 
-      var id = $("#delete_business #id").val();
-      $.ajax({
-        url: '<?php echo e(url('admin/business-listing')); ?>/' + id,
-        method: "DELETE",
-        data: $("#delete_business").serialize(),
-        success: function (response) {
-          var response = JSON.parse(response);
-          if (response.status === 200) {
-            toastr.success(response.message)
-            $("#delete-business").modal('hide');
-            $("#" + id).remove();
-          } else {
-            toastr.error(response.message)
-          }
-        },
-        error: function (response) {
-          toastr.error('An error occured.')
-        },
-        complete: function () {
-          $(".loading_2").css('display', 'none');
-          $(".btn-delete").attr('disabled', false);
-        }
-      })
-    });
+   $(".btn-delete").on('click', function (e) {
+    e.preventDefault();
+    $(".loading_2").show();
+    $(".btn-delete").prop('disabled', true);
 
-    $(".btn-toggle-status").on('click', function (e) {
-      e.preventDefault();
-      var btn = $(this);
-      var id = btn.data('id');
-      var status = btn.data('status');
+    var id = $("#delete_business #id").val();
 
-      $.ajax({
-        url: '<?php echo e(route("admin.business-listing.toggleStatus", "")); ?>/' + id,
-        method: "POST",
+    $.ajax({
+        url: '<?php echo e(route("admin.business-listing.ajaxDelete", ":id")); ?>'.replace(':id', id),
+        type: 'POST',
         data: {
-          is_published: status,
-          _token: '<?php echo e(csrf_token()); ?>'
+            _token: '<?php echo e(csrf_token()); ?>'
         },
-        success: function (response) {
-          if (response.status === 200) {
-            toastr.success(response.message);
-             location.reload();
-            // Optionally, update the button & status text dynamically
-          } else {
-            toastr.error(response.message);
-          }
+        success: function(response) {
+            if (response.status === 200) {
+                toastr.success(response.message);
+                $("#delete-business").modal('hide');
+                $("#" + id).remove();
+            } else {
+                toastr.error(response.message);
+            }
         },
-        error: function () {
-          toastr.error('An error occurred.');
+        error: function() {
+            toastr.error('An error occurred.');
+        },
+        complete: function() {
+            $(".loading_2").hide();
+            $(".btn-delete").prop('disabled', false);
         }
-      });
+    });
+});
+
+    // Toggle business status
+    $(".btn-toggle-status").on('click', function (e) {
+        e.preventDefault();
+        var btn = $(this);
+        var id = btn.data('id');
+        var status = btn.data('status');
+
+        $.ajax({
+            url: '/admin/business-listing/toggle-status/' + id, // Custom POST route
+            method: "POST",
+            data: {
+                is_published: status,
+                _token: '<?php echo e(csrf_token()); ?>'
+            },
+            success: function(response) {
+                if (response.status === 200) {
+                    toastr.success(response.message);
+                    location.reload(); // reload table
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function() {
+                toastr.error('An error occurred.');
+            }
+        });
     });
 
-
-  </script>
+});
+</script>
 <?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/admin/business-listing/index.blade.php ENDPATH**/ ?>
