@@ -3,6 +3,15 @@
         <div class="logo-section">
             <img src="<?php echo e(isset($company->logo) ? asset('storage/' . $company->logo) : 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=150&q=80'); ?>"
                 alt="Company Logo" class="company-logo">
+            
+            <div class="badge-wrapper">
+                <?php if($company->badge_type == 'premium'): ?>
+                    <span class="premium-badge">Premium</span>
+                <?php elseif($company->badge_type == 'verified'): ?>
+                    <span class="verified-badge">Verified</span>
+                <?php endif; ?>
+            </div>
+
         </div>
         <div class="content-section">
             <div>
@@ -14,12 +23,12 @@
                                 class="fas fa-heart <?php echo e(auth()->check() && \App\Models\BusinessWishlist::where('user_id', auth()->id())->where('business_listing_id', $company->id)->exists() ? 'text-danger' : ''); ?>"></i>
                         </button>
 
-                       <button class="action-btn share-btn" data-id="<?php echo e($company->id); ?>"
+                        <button class="action-btn share-btn" data-id="<?php echo e($company->id); ?>"
                             data-name="<?php echo e($company->business_name); ?>" title="Share">
                             <i class="fas fa-share"></i>
                         </button>
 
-                       <button class="action-btn more-btn" data-url="<?php echo e(route('business.details', $company->id)); ?>"
+                        <button class="action-btn more-btn" data-url="<?php echo e(route('business.details', $company->id)); ?>"
                             title="View Details">
                             <i class="fas fa-ellipsis-h"></i>
                         </button>
@@ -63,6 +72,4 @@
 <div class="mt-4">
     <?php echo e($list->links()); ?>
 
-</div>
-
-<?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/partials/directory-items.blade.php ENDPATH**/ ?>
+</div><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/partials/directory-items.blade.php ENDPATH**/ ?>

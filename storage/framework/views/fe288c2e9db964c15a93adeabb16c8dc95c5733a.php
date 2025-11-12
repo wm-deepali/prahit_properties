@@ -539,6 +539,13 @@
 
                                     </h2>
 
+                                    
+                                    <?php if($business->badge_type == 'premium'): ?>
+                                        <span class="premium-badge" style="margin-left:10px;">Premium</span>
+                                    <?php elseif($business->badge_type == 'verified'): ?>
+                                        <span class="verified-badge" style="margin-left:10px;">Verified</span>
+                                    <?php endif; ?>
+
                                     <p class="m-0"><strong><?php echo e($business->business_name ?? ''); ?></strong></p>
                                     <p class="m-0">
                                         <?php echo e(isset($business->category->category_name) ? $business->category->category_name : ''); ?>
@@ -845,9 +852,17 @@
                                 <div class="newdesign-image-agent">
                                     <img src="<?php echo e($provider->banner_image ? asset('storage/' . $provider->banner_image) : 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); ?>"
                                         alt="Agent" class="agent-avatar">
-                                    <span class="newdesign-verified-seal">
-                                        <i class="fas fa-check-circle"></i> 'Verified'
+                                    
+                                    
+                                    <?php if($business->badge_type == 'premium'): ?>
+                                       <span class="newdesign-verified-seal">
+                                        <i class="fas fa-check-circle"></i> Premium
                                     </span>
+                                    <?php elseif($business->badge_type == 'verified'): ?>
+                                        <span class="newdesign-verified-seal">
+                                        <i class="fas fa-check-circle"></i> Verified
+                                    </span>
+                                    <?php endif; ?>
                                 </div>
                                 <div class="newdesign-info-agent">
                                     <div class="d-flex flex-column">

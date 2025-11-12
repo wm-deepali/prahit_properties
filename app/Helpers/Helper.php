@@ -9,6 +9,7 @@ use App\SubSubCategory;
 use App\Properties;
 use App\BusinessListing;
 use App\Models\FurnishingStatus;
+use Carbon\Carbon;
 
 class Helper
 {
@@ -165,10 +166,32 @@ class Helper
     /**
      * Get all active business listings.
      */
+
     public static function getAllBusinessListings(): \Illuminate\Support\Collection
     {
-        return BusinessListing::where('Status', 'Active')->get();
+        // Get all active business listings and eager load user + subscription + package
+        $listings = BusinessListing::where('Status', 'Active')
+            ->with(['user.activeSubscription.package']) // eager load user subscription and package
+            ->get();
+
+        // Map badge info
+        return $listings->map(function ($listing) {
+            $subscription = $listing->user->activeSubscription ?? null;
+            $isValid = false;
+
+            if ($subscription) {
+                // Consider subscription valid if it's active and end_date is in the future
+                $isValid = $subscription->is_active && Carbon::parse($subscription->end_date)->gte(Carbon::now());
+            }
+
+            $listing->verified_badge = $isValid && $subscription->package ? ($subscription->package->verified_badge == 'Yes' ? true : false) : false;
+            $listing->premium_badge = $isValid && $subscription->package ? ($subscription->package->premium_badge == 'Yes' ? true : false) : false;
+
+            // dd($listing->toArray());
+            return $listing;
+        });
     }
+
 
     /**
      * Get trending projects by city.
@@ -373,7 +396,7 @@ class Helper
         }
 
         $query->where(function ($q) use ($businessType) {
-    
+
             // If a business type (tab) is provided, filter by that only
             if (!empty($businessType)) {
                 $q->Where(function ($subQ) use ($businessType) {

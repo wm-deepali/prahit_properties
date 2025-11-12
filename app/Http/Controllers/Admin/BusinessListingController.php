@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use App\User;
 
 class BusinessListingController extends Controller
 {
@@ -31,6 +32,17 @@ class BusinessListingController extends Controller
             ->get();
 
         return view('admin.business-listing.index', compact('publishedBusinesses', 'unpublishedBusinesses'));
+    }
+
+    public function listByUser($user_id)
+    {
+        $user = User::with('businessListing.category')->findOrFail($user_id);
+
+        $businessListings = $user->businessListing()
+            ->with(['category', 'subCategories', 'propertyCategories', 'user'])
+            ->get();
+
+        return view('admin.business-listing.list_by_user', compact('user', 'businessListings'));
     }
 
     public function create()
@@ -503,6 +515,10 @@ class BusinessListingController extends Controller
             'message' => $request->message,
         ]);
 
+        // ✅ Increment total enquiries count for this business
+        BusinessListing::where('id', $request->business_id)
+            ->increment('total_enquiries');
+
         // Clear OTP after success (only for guests)
         if (!auth()->check()) {
             session()->forget(['otp', 'otp_mobile']);
@@ -510,6 +526,7 @@ class BusinessListingController extends Controller
 
         return response()->json(['success' => true]);
     }
+
 
     public function sendOtp($mobile, $message)
     {

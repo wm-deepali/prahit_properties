@@ -130,8 +130,11 @@
                                     <a class="dropdown-item" href="<?php echo e(route('admin.owners.index')); ?>">All Owners</a>
                                     <a class="dropdown-item" href="<?php echo e(url('master/manage/builders')); ?>">All Builders</a>
                                     <a class="dropdown-item" href="<?php echo e(url('master/manage/agent')); ?>">All Agents</a>
+                                    <a class="dropdown-item" href="<?php echo e(url('master/manage/service-providers')); ?>">All
+                                        Service Providers</a>
                                 </div>
                             </li>
+
 
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -175,7 +178,7 @@
                                     <div class="dropdown-divider"></div> <!-- 🔹 Optional visual separator -->
 
                                     
-                                <a class="dropdown-item" href="<?php echo e(route('admin.directory-enquiries.index')); ?>">
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.directory-enquiries.index')); ?>">
                                         Directory Enquiries
                                     </a>
                                     <a class="dropdown-item" href="<?php echo e(route('admin.agent-profile-reviews.index')); ?>">

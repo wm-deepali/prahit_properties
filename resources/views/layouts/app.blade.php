@@ -125,11 +125,14 @@
                                     <i class="fas fa-users"></i> Users
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{route('admin.owners.index')}}">All Owners</a>
-                                    <a class="dropdown-item" href="{{url('master/manage/builders')}}">All Builders</a>
-                                    <a class="dropdown-item" href="{{url('master/manage/agent')}}">All Agents</a>
+                                    <a class="dropdown-item" href="{{ route('admin.owners.index') }}">All Owners</a>
+                                    <a class="dropdown-item" href="{{ url('master/manage/builders') }}">All Builders</a>
+                                    <a class="dropdown-item" href="{{ url('master/manage/agent') }}">All Agents</a>
+                                    <a class="dropdown-item" href="{{ url('master/manage/service-providers') }}">All
+                                        Service Providers</a>
                                 </div>
                             </li>
+
 
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -173,7 +176,7 @@
                                     <div class="dropdown-divider"></div> <!-- 🔹 Optional visual separator -->
 
                                     {{-- 🆕 New Links --}}
-                                <a class="dropdown-item" href="{{ route('admin.directory-enquiries.index') }}">
+                                    <a class="dropdown-item" href="{{ route('admin.directory-enquiries.index') }}">
                                         Directory Enquiries
                                     </a>
                                     <a class="dropdown-item" href="{{ route('admin.agent-profile-reviews.index') }}">

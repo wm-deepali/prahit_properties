@@ -293,7 +293,8 @@
                                             <input type="text" name="pin_code" class="form-control" value="<?php echo e($business->pin_code); ?>">
                                         </div>
                                     </div>
-
+                           
+<?php if( $business_logo_banner === 'Yes'): ?>
                                     <div class="form-row">
                                         <div class="form-group col-md-4">
                                             <label>Logo</label>
@@ -310,6 +311,12 @@
                                             <?php endif; ?>
                                         </div>
                                     </div>
+<?php else: ?>
+    <div class="alert alert-info mt-3">
+        <i class="fa fa-info-circle"></i> 
+        Your current plan does not include Business Logo & Banner uploads.
+    </div>
+<?php endif; ?>
 
                                     <hr>
                                     <h5>Services</h5>
@@ -452,6 +459,20 @@
 
         $(document).ready(function() {
 
+              var serviceIndex = <?php echo e($business->services->count()); ?>;
+    var totalServicesAllowed = <?php echo e($total_services); ?>;
+
+    function updateAddServiceButton() {
+        if ($('#services-container .service-row').length >= totalServicesAllowed) {
+            $('.add-service').prop('disabled', true);
+        } else {
+            $('.add-service').prop('disabled', false);
+        }
+    }
+
+    // Initial check on page load
+    updateAddServiceButton();
+
             // Load subcategories dynamically on category change
             $('#category_id').change(function() {
                 var categoryId = $(this).val();
@@ -472,31 +493,37 @@
 
             // Add More services dynamically
             var serviceIndex = <?php echo e($business->services->count()); ?>;
-            $(document).on('click', '.add-service', function() {
-                var row = `<div class="service-row row">
-                                <div class="form-group col-md-3">
-                                     <input type="text" name="services[${serviceIndex}][name]" class="form-control" placeholder="Service Name">
-                                </div>
-                                <div class="form-group col-md-4">
-                                     <input type="text" name="services[${serviceIndex}][description]" class="form-control" placeholder="Description">
-                                </div>
-                                <div class="form-group col-md-2">
-                                     <input type="number" name="services[${serviceIndex}][price]" class="form-control" placeholder="Price" min="0" step="0.01">
-                                </div>
-                                <div class="form-group col-md-3">
-                                     <input type="file" name="services[${serviceIndex}][image]" class="form-control-file">
-                                </div>
-                                <div class="form-group col-md-2">
-                                     <button type="button" class="btn btn-danger remove-service">Remove</button>
-                                </div>
-                            </div>`;
-                $('#services-container').append(row);
-                serviceIndex++;
-            });
+          $(document).on('click', '.add-service', function() {
+        if ($('#services-container .service-row').length < totalServicesAllowed) {
+            var row = `<div class="service-row row">
+                            <div class="form-group col-md-3">
+                                 <input type="text" name="services[${serviceIndex}][name]" class="form-control" placeholder="Service Name">
+                            </div>
+                            <div class="form-group col-md-4">
+                                 <input type="text" name="services[${serviceIndex}][description]" class="form-control" placeholder="Description">
+                            </div>
+                            <div class="form-group col-md-2">
+                                 <input type="number" name="services[${serviceIndex}][price]" class="form-control" placeholder="Price" min="0" step="0.01">
+                            </div>
+                            <div class="form-group col-md-3">
+                                 <input type="file" name="services[${serviceIndex}][image]" class="form-control-file">
+                            </div>
+                            <div class="form-group col-md-2">
+                                 <button type="button" class="btn btn-danger remove-service">Remove</button>
+                            </div>
+                        </div>`;
+            $('#services-container').append(row);
+            serviceIndex++;
+            updateAddServiceButton();
+        } else {
+            alert('You have reached the maximum number of services allowed by your plan.');
+        }
+    });
 
-            $(document).on('click', '.remove-service', function() {
-                $(this).closest('.service-row').remove();
-            });
+    $(document).on('click', '.remove-service', function() {
+        $(this).closest('.service-row').remove();
+        updateAddServiceButton();
+    });
 
 
             // Add More portfolio dynamically

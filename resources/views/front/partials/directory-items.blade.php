@@ -3,6 +3,15 @@
         <div class="logo-section">
             <img src="{{ isset($company->logo) ? asset('storage/' . $company->logo) : 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=150&q=80' }}"
                 alt="Company Logo" class="company-logo">
+            {{-- Badge overlay --}}
+            <div class="badge-wrapper">
+                @if($company->badge_type == 'premium')
+                    <span class="premium-badge">Premium</span>
+                @elseif($company->badge_type == 'verified')
+                    <span class="verified-badge">Verified</span>
+                @endif
+            </div>
+
         </div>
         <div class="content-section">
             <div>
@@ -14,12 +23,12 @@
                                 class="fas fa-heart {{ auth()->check() && \App\Models\BusinessWishlist::where('user_id', auth()->id())->where('business_listing_id', $company->id)->exists() ? 'text-danger' : '' }}"></i>
                         </button>
 
-                       <button class="action-btn share-btn" data-id="{{ $company->id }}"
+                        <button class="action-btn share-btn" data-id="{{ $company->id }}"
                             data-name="{{ $company->business_name }}" title="Share">
                             <i class="fas fa-share"></i>
                         </button>
 
-                       <button class="action-btn more-btn" data-url="{{ route('business.details', $company->id) }}"
+                        <button class="action-btn more-btn" data-url="{{ route('business.details', $company->id) }}"
                             title="View Details">
                             <i class="fas fa-ellipsis-h"></i>
                         </button>
@@ -62,4 +71,3 @@
 <div class="mt-4">
     {{ $list->links() }}
 </div>
-

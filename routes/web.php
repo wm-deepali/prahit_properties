@@ -141,6 +141,9 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin.check'], '
 		Route::post('business-listing/toggle-status/{id}', [BusinessListingController::class, 'toggleStatus'])->name('business-listing.toggleStatus');
 		// Custom AJAX Delete
 		Route::post('business-listing/delete/{id}', [BusinessListingController::class, 'ajaxDelete'])->name('business-listing.ajaxDelete');
+		Route::get('business-listings/{user_id}', [BusinessListingController::class, 'listByUser'])
+			->name('business.list.by.user');
+
 		Route::resource('business-listing', 'BusinessListingController');
 
 
@@ -191,6 +194,12 @@ Route::group(['middleware' => ['auth', 'admin.check']], function () {
 	Route::get('master/manage/agent', 'Admin\AgentController@index')->name('agent.index');
 	Route::post('master/create/agent', 'Admin\AgentController@create')->name('agent.create');
 	Route::get('master/update/agent/{id}', 'Admin\AgentController@updateview')->name('agent.updateview');
+	Route::get('master/agent/edit/{id}', 'Admin\AgentController@edit')->name('agent.edit');
+	Route::post('master/agent/update-profile/{id}', 'Admin\AgentController@update')->name('agent.update');
+
+	// Service Provider User Routes 
+	Route::get('master/manage/service-providers', 'Admin\ServiceProviderController@index')->name('service-providers.index');
+	Route::post('master/create/service-providers', 'Admin\ServiceProviderController@create')->name('service-providers.create');
 
 	// User Common Routes
 	Route::post('master/update/user/profile', 'Admin\UserController@updateUserProfileCommon')->name('user.updateUserProfileCommon');

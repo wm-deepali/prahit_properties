@@ -569,9 +569,22 @@ $(document).on('click', '.remove-service', function () {
         });
 
 
-    // Add More portfolio dynamically
+// Add More portfolio dynamically with limit
 var portfolioIndex = 1;
+var portfolioLimit = {{ $image_upload_limit ?? 5 }}; // 👈 dynamic from backend
+
 $(document).on('click', '.add-portfolio', function () {
+    var totalPortfolio = $('#portfolio-container .portfolio-row').length;
+
+    if (totalPortfolio >= portfolioLimit) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Limit Reached',
+            text: 'You can add a maximum of ' + portfolioLimit + ' portfolio items as per your plan.'
+        });
+        return;
+    }
+
     var row = `<div class="portfolio-row row mb-2">
                     <div class="form-group col-md-3">
                         <input type="text" name="portfolio[${portfolioIndex}][title]" class="form-control" placeholder="Title">
@@ -594,6 +607,7 @@ $(document).on('click', '.add-portfolio', function () {
 $(document).on('click', '.remove-portfolio', function () {
     $(this).closest('.portfolio-row').remove();
 });
+
 
 
 document.addEventListener('click', function (e) {

@@ -78,17 +78,19 @@ class BusinessListingController extends Controller
         $total_services = $package->total_services ?? 0;
         $business_logo_banner = $package->business_logo_banner ?? 'No';
 
+        // 🟩 Extract image upload limits from package (if available)
+        $image_upload_limit = $package->image_upload_limit ?? 5;
+
         return view('front.create_business_listing', compact(
             'categories',
             'subCategories',
             'property_categories',
             'package',
             'total_services',
-            'business_logo_banner'
+            'business_logo_banner',
+            'image_upload_limit'
         ));
     }
-
-
 
 
     public function store(Request $request)
@@ -292,15 +294,44 @@ class BusinessListingController extends Controller
         $property_subcategories = SubCategory::latest()->get();
         $property_subsubcategories = SubSubCategory::latest()->get();
 
+        $user = auth()->user();
+        $activeSubscription = $user->activeSubscription()->with('package')->first();
+
+        // If no active subscription, redirect to pricing page
+        if (!$activeSubscription) {
+            $redirectUrl = urlencode(url()->current());
+            return redirect()->to(url("/user/pricing?type=service&redirect_url={$redirectUrl}"))
+                ->with('error', 'You must have an active subscription to edit your business listing.');
+        }
+
+        $package = $activeSubscription->package;
+
+        // If package missing or not service type
+        if (!$package || $package->package_type !== 'service') {
+            $redirectUrl = urlencode(url()->current());
+            return redirect()->to(url("/user/pricing?type=service&redirect_url={$redirectUrl}"))
+                ->with('error', 'You must have an active Service package to edit your business listing.');
+        }
+
+        $total_services = $package->total_services ?? 0;
+        $business_logo_banner = $package->business_logo_banner ?? 'No';
+        // 🟩 Extract image upload limits from package (if available)
+        $image_upload_limit = $package->image_upload_limit ?? 5;
+
         return view('front.user.services.edit', compact(
             'business',
             'categories',
             'subCategories',
             'property_categories',
             'property_subcategories',
-            'property_subsubcategories'
+            'property_subsubcategories',
+            'total_services',
+            'business_logo_banner',
+            'image_upload_limit'
         ));
     }
+
+
 
     public function update(Request $request, $id)
     {

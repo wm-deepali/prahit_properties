@@ -50,6 +50,8 @@ use App\Models\Faq;
 use App\Models\FaqCategory;
 use App\Models\Wishlist;
 use App\Models\PropertyView;
+use Carbon\Carbon;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class HomeController extends AppController
 {
@@ -456,44 +458,39 @@ class HomeController extends AppController
 
 	public function directoryList(Request $request)
 	{
-		$query = BusinessListing::with(['category', 'subCategories'])->where('status', 'Active')->where('is_published', true);
+		$query = BusinessListing::with(['category', 'subCategories', 'user.activeSubscription.package'])
+			->where('status', 'Active')
+			->where('is_published', true);
 
-		// Filter by Web Directory Subcategory
+		// --- Existing filters ---
 		if ($request->has('subcategory') && !empty($request->subcategory)) {
 			$subcategoryId = $request->subcategory;
-
 			$query->whereHas('subCategories', function ($q) use ($subcategoryId) {
 				$q->where('web_directory_sub_categories.id', $subcategoryId);
 			});
 		}
 
-		// Filter by Category
 		if ($request->has('category') && !empty($request->category)) {
 			$query->where('category_id', $request->category);
 		}
 
-		// Filter by Rating
 		if ($request->has('rating') && !empty($request->rating)) {
 			$query->where('rating', '>=', $request->rating);
 		}
 
-		// Filter by Verification Status
 		if ($request->has('verified') && $request->verified == 'true') {
 			$query->where('verified_status', 'Verified');
 		}
 
-		// Filter by Membership Type (Premium)
 		if ($request->has('premium') && $request->premium == 'true') {
 			$query->where('membership_type', 'Paid');
 		}
 
-		// ✅ Filter by Most Rated (businesses with rating_count > 0, sorted by rating_count)
 		if ($request->has('most_rated') && $request->most_rated == 'true') {
 			$query->where('rating_count', '>', 0)
 				->orderBy('rating_count', 'desc');
 		}
 
-		// Search functionality
 		if ($request->has('search') && !empty($request->search)) {
 			$searchTerm = $request->search;
 			$query->where(function ($q) use ($searchTerm) {
@@ -503,7 +500,6 @@ class HomeController extends AppController
 			});
 		}
 
-		// Sorting (only if most_rated is not active)
 		if (!$request->has('most_rated') || $request->most_rated != 'true') {
 			$sortBy = $request->get('sort', 'default');
 			switch ($sortBy) {
@@ -524,16 +520,51 @@ class HomeController extends AppController
 			}
 		}
 
-		$list = $query->paginate(10);
+		// --- Get results without pagination first ---
+		$list = $query->get();
 
-		// Get all categories with subcategories for filter
+		// --- Sort by featured_in_top_provider (Yes first) ---
+		$list = $list->sortByDesc(function ($listing) {
+			$package = $listing->user->activeSubscription?->package;
+			return $package?->featured_in_top_provider === 'Yes' ? 1 : 0;
+		});
+
+		// --- Paginate manually ---
+		$perPage = 10;
+		$currentPage = LengthAwarePaginator::resolveCurrentPage();
+		$currentItems = $list->slice(($currentPage - 1) * $perPage, $perPage)->values();
+		$paginatedList = new \Illuminate\Pagination\LengthAwarePaginator(
+			$currentItems,
+			$list->count(),
+			$perPage,
+			$currentPage,
+			['path' => $request->url(), 'query' => $request->query()]
+		);
+
+		// --- Add badge info to each listing ---
+		$paginatedList->getCollection()->transform(function ($listing) {
+			$subscription = $listing->user->activeSubscription ?? null;
+			$isValid = $subscription && $subscription->is_active && Carbon::parse($subscription->end_date)->gte(now());
+			$package = $subscription?->package;
+
+			if ($isValid && $package?->premium_badge === 'Yes') {
+				$listing->badge_type = 'premium';
+			} elseif ($isValid && $package?->verified_badge === 'Yes') {
+				$listing->badge_type = 'verified';
+			} else {
+				$listing->badge_type = null;
+			}
+
+			return $listing;
+		});
+
 		$categories = \App\WebDirectoryCategory::with('subcategories')->get();
 
 		if ($request->ajax()) {
-			return view('front.partials.directory-items', compact('list'))->render();
+			return view('front.partials.directory-items', ['list' => $paginatedList])->render();
 		}
 
-		return view('front.directory-listing', compact('list', 'categories'));
+		return view('front.directory-listing', ['list' => $paginatedList, 'categories' => $categories]);
 	}
 
 
@@ -596,7 +627,7 @@ class HomeController extends AppController
 			'propertyCategories',
 			'propertySubCategories',
 			'propertySubSubCategories',
-			'user',
+			'user.activeSubscription.package', // eager load subscription + package
 			'portfolio',
 			'workingHours',
 		])->findOrFail($id);
@@ -604,14 +635,43 @@ class HomeController extends AppController
 		// Increment views count
 		$business->increment('total_views');
 
+		// Add badge info
+		$subscription = $business->user->activeSubscription ?? null;
+		$isValid = $subscription && $subscription->is_active && Carbon::parse($subscription->end_date)->gte(now());
+		$package = $subscription?->package;
+
+		if ($isValid && $package?->premium_badge === 'Yes') {
+			$business->badge_type = 'premium';
+		} elseif ($isValid && $package?->verified_badge === 'Yes') {
+			$business->badge_type = 'verified';
+		} else {
+			$business->badge_type = null;
+		}
+
 		// Fetch other service providers (excluding current business owner)
 		$relatedProviders = BusinessListing::where('user_id', '!=', $business->user_id)
-			->with('user')
-			->limit(5) // limit number of related providers
-			->get();
+			->with('user.activeSubscription.package') // also include badge info for related providers
+			->limit(5)
+			->get()
+			->map(function ($listing) {
+				$subscription = $listing->user->activeSubscription ?? null;
+				$isValid = $subscription && $subscription->is_active && Carbon::parse($subscription->end_date)->gte(now());
+				$package = $subscription?->package;
+
+				if ($isValid && $package?->premium_badge === 'Yes') {
+					$listing->badge_type = 'premium';
+				} elseif ($isValid && $package?->verified_badge === 'Yes') {
+					$listing->badge_type = 'verified';
+				} else {
+					$listing->badge_type = null;
+				}
+
+				return $listing;
+			});
 
 		return view('front.business-details', compact('business', 'relatedProviders'));
 	}
+
 
 	public function create_property()
 	{

@@ -86,4 +86,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\ProfileSection::class, 'user_id');
     }
+
+    public function businessListing()
+    {
+        return $this->hasOne(\App\BusinessListing::class, 'user_id');
+    }
+
 }
