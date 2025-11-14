@@ -1049,9 +1049,9 @@
 
                     <div class="verified-seal">
                       <div class="top-veri">
-                        <?php if($list->premium_badge): ?>
+                        <?php if($list->premium_badge === "Yes"): ?>
                           <span class="premium-list">Premium</span>
-                        <?php elseif($list->verified_badge): ?>
+                        <?php elseif($list->verified_badge === "Yes"): ?>
                           <img src="<?php echo e(asset('images/verify.png')); ?>" alt="verified">
                         <?php endif; ?>
 

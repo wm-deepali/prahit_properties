@@ -470,7 +470,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-3">
                             @php
-                                $logoUrl = $profileSection->logo
+                                $logoUrl = isset($profileSection->logo)
                                     ? asset('storage/' . $profileSection->logo)
                                     : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80';
                             @endphp
@@ -480,8 +480,14 @@
                         <div class="col-md-9">
                             <div class="profil-data">
                                 <div class="profile-name-info">
-                                    <h2 class="m-0">{{ $user->firstname ?? '' }} {{ $user->lastname ?? '' }}</h2>
-                                    <p class="m-0"><strong>{{ $profileSection->business_name }}</strong></p>
+                                    <h2 class="m-0">{{ $user->firstname ?? '' }} {{ $user->lastname ?? '' }}
+                                        @if($user->premium_seller == 'Yes')
+                                            <span class="badge bg-success text-light" style="font-size: 14px;">
+                                                Premium
+                                            </span>
+                                        @endif
+                                    </h2>
+                                    <p class="m-0"><strong>{{ $profileSection->business_name ?? 'N/A' }}</strong></p>
                                     <!--<p class="m-0">Operating since: 2015</p>-->
                                 </div>
                                 <div class="rera-section my-4">
@@ -537,7 +543,7 @@
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="stats-card card4">
-                        <div class="stat-number">{{ $profileSection->years_experience }}</div>
+                        <div class="stat-number">{{ $profileSection->years_experience ?? 'N/A' }}</div>
                         <div class="stat-label">Years Experience</div>
                     </div>
                 </div>
@@ -564,7 +570,7 @@
 
                     <div class="introduction">
                         <h3>About {{ $user->firstname ?? '' }} {{ $user->lastname ?? '' }}</h3>
-                        {!! $profileSection->description !!}
+                        {!! $profileSection->description ?? "N/A"!!}
                     </div>
 
                     <div class="properties-section p-3">
@@ -577,8 +583,10 @@
                                         <div class="newdesign-image-proj">
                                             <img src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;'}}"
                                                 class="img-fluid" alt="Property 1">
-                                            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i>
-                                                Verified</span>
+                                            @if($value->verified_tag === 'Yes')
+                                                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i>
+                                                    Verified</span>
+                                            @endif
                                         </div>
                                         <div class="newdesign-info-proj">
                                             <div class="d-flex justify-content-between">
@@ -623,16 +631,16 @@
                                                 <i class="fas fa-map-marker-alt me-2 text-primary"></i>
                                                 <strong>Address:</strong>
                                             </div>
-                                            <div>{{ $profileSection->address }}</div>
+                                            <div>{{ $profileSection->address ?? 'N/A'}}</div>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <i class="fas fa-phone me-2 text-success"></i>
-                                        <strong>Phone:</strong> {{ $profileSection->phone }}
+                                        <strong>Phone:</strong> {{ $profileSection->phone ?? 'N/A'}}
                                     </div>
                                     <div class="mb-3">
                                         <i class="fas fa-envelope me-2 text-info"></i>
-                                        <strong>Email:</strong> {{ $profileSection->email }}
+                                        <strong>Email:</strong> {{ $profileSection->email ?? 'N/A'}}
                                     </div>
                                     <hr>
                                     <div class="mb-4">
@@ -741,7 +749,8 @@
                                             <input type="hidden" name="rating" id="rating">
                                         </div>
 
-                                        <input type="hidden" name="profile_section_id" id="profile_section_id" value="{{ $profileSection->id }}">
+                                        <input type="hidden" name="profile_section_id" id="profile_section_id"
+                                            value="{{ $profileSection->id ?? 0}}">
                                         {{-- Prefilled Fields for Authenticated User --}}
                                         <div class="mb-3">
                                             <label class="form-label">Your Name</label>
@@ -759,7 +768,8 @@
                                         <div class="mb-3">
                                             <label class="form-label">Phone</label>
                                             <input type="text" name="phone" class="form-control"
-                                                placeholder="Enter your phone" value="{{ $authUser->mobile_number ?? '' }}" {{ $authUser ? 'readonly' : '' }}>
+                                                placeholder="Enter your phone" value="{{ $authUser->mobile_number ?? '' }}"
+                                                {{ $authUser ? 'readonly' : '' }}>
                                         </div>
 
                                         {{-- OTP Section (only for guest users) --}}
@@ -808,8 +818,12 @@
                             <div class="agent-card mb-3 border">
                                 <div class="newdesign-image-agent">
                                     <img src="{{ $logo }}" alt="Agent" class="agent-avatar">
-                                    <span class="newdesign-verified-seal">
-                                        <i class="fas fa-check-circle"></i> Verified
+                                    <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i>
+                                        @if($other->premium_seller === 'Yes')
+                                            Premium
+                                        @else
+                                            Verified
+                                        @endif
                                     </span>
                                 </div>
                                 <div class="newdesign-info-agent">
@@ -853,99 +867,99 @@
         </div>
     </section>
 
-<script>
-$(document).ready(function () {
-    let isOtpVerified = {{ Auth::check() ? 'true' : 'false' }};
+    <script>
+        $(document).ready(function () {
+            let isOtpVerified = {{ Auth::check() ? 'true' : 'false' }};
 
-    // ⭐ Star Rating Selection
-    $('.star-rating i[data-rating]').click(function () {
-        let rating = $(this).data('rating');
-        $('#rating').val(rating);
-        $('.star-rating i[data-rating]').removeClass('fas fa-star').addClass('far fa-star');
-        for (let i = 1; i <= rating; i++) {
-            $('.star-rating i[data-rating="' + i + '"]').removeClass('far fa-star').addClass('fas fa-star');
-        }
-    });
-
-    /// 🔹 Send OTP for Guest Users
-$('#reviewForm input[name="phone"]').on('blur', function () {
-    if (!isOtpVerified && $(this).val().length >= 10) {
-        $.ajax({
-            url: '{{ route("send.review.otp") }}',
-            type: 'POST',
-            data: {
-                phone: $(this).val(),
-                _token: '{{ csrf_token() }}'
-            },
-            success: function (res) {
-                if (res.success) {
-                    $('#otpSection').show();
-                    swal("OTP Sent!", "We’ve sent an OTP to your phone.", "success");
-                } else {
-                    swal("Error", res.message || "Failed to send OTP.", "error");
+            // ⭐ Star Rating Selection
+            $('.star-rating i[data-rating]').click(function () {
+                let rating = $(this).data('rating');
+                $('#rating').val(rating);
+                $('.star-rating i[data-rating]').removeClass('fas fa-star').addClass('far fa-star');
+                for (let i = 1; i <= rating; i++) {
+                    $('.star-rating i[data-rating="' + i + '"]').removeClass('far fa-star').addClass('fas fa-star');
                 }
-            },
-            error: function () {
-                swal("Error", "Something went wrong while sending OTP.", "error");
-            }
+            });
+
+            /// 🔹 Send OTP for Guest Users
+            $('#reviewForm input[name="phone"]').on('blur', function () {
+                if (!isOtpVerified && $(this).val().length >= 10) {
+                    $.ajax({
+                        url: '{{ route("send.review.otp") }}',
+                        type: 'POST',
+                        data: {
+                            phone: $(this).val(),
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function (res) {
+                            if (res.success) {
+                                $('#otpSection').show();
+                                swal("OTP Sent!", "We’ve sent an OTP to your phone.", "success");
+                            } else {
+                                swal("Error", res.message || "Failed to send OTP.", "error");
+                            }
+                        },
+                        error: function () {
+                            swal("Error", "Something went wrong while sending OTP.", "error");
+                        }
+                    });
+                }
+            });
+
+            // 🔹 Verify OTP
+            $('#verifyOtpBtn').click(function () {
+                $.ajax({
+                    url: '{{ route("verify.review.otp") }}',
+                    type: 'POST',
+                    data: {
+                        phone: $('#reviewForm input[name="phone"]').val(),
+                        otp: $('#otpInput').val(),
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            isOtpVerified = true;
+                            $('#otpSection').hide();
+                            swal("Verified!", "OTP verified successfully.", "success");
+                        } else {
+                            swal("Invalid OTP", "Please check the OTP and try again.", "error");
+                        }
+                    },
+                    error: function () {
+                        swal("Error", "Unable to verify OTP.", "error");
+                    }
+                });
+            });
+
+            // 🔹 Submit Review
+            $('#reviewForm').submit(function (e) {
+                e.preventDefault();
+
+                if (!isOtpVerified) {
+                    swal("Verify OTP", "Please verify your OTP before submitting.", "warning");
+                    return;
+                }
+
+                $.ajax({
+                    url: '{{ route("submit.review") }}',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function (res) {
+                        if (res.success) {
+                            swal("Thank You!", "Your review has been submitted successfully.", "success");
+                            $('#reviewForm')[0].reset();
+                            $('.star-rating i').removeClass('fas').addClass('far');
+                        } else {
+                            swal("Error", res.message || "Failed to submit review.", "error");
+                        }
+                    },
+                    error: function () {
+                        swal("Error", "Something went wrong while submitting your review.", "error");
+                    }
+                });
+            });
+
         });
-    }
-});
-
-// 🔹 Verify OTP
-$('#verifyOtpBtn').click(function () {
-    $.ajax({
-        url: '{{ route("verify.review.otp") }}',
-        type: 'POST',
-        data: {
-            phone: $('#reviewForm input[name="phone"]').val(),
-            otp: $('#otpInput').val(),
-            _token: '{{ csrf_token() }}'
-        },
-        success: function (res) {
-            if (res.success) {
-                isOtpVerified = true;
-                $('#otpSection').hide();
-                swal("Verified!", "OTP verified successfully.", "success");
-            } else {
-                swal("Invalid OTP", "Please check the OTP and try again.", "error");
-            }
-        },
-        error: function () {
-            swal("Error", "Unable to verify OTP.", "error");
-        }
-    });
-});
-
-// 🔹 Submit Review
-$('#reviewForm').submit(function (e) {
-    e.preventDefault();
-
-    if (!isOtpVerified) {
-        swal("Verify OTP", "Please verify your OTP before submitting.", "warning");
-        return;
-    }
-
-    $.ajax({
-        url: '{{ route("submit.review") }}',
-        type: 'POST',
-        data: $(this).serialize(),
-        success: function (res) {
-            if (res.success) {
-                swal("Thank You!", "Your review has been submitted successfully.", "success");
-                $('#reviewForm')[0].reset();
-                $('.star-rating i').removeClass('fas').addClass('far');
-            } else {
-                swal("Error", res.message || "Failed to submit review.", "error");
-            }
-        },
-        error: function () {
-            swal("Error", "Something went wrong while submitting your review.", "error");
-        }
-    });
-});
-
-});
-</script>
+    </script>
 
 @endsection

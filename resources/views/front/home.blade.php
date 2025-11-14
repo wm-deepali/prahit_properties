@@ -1035,9 +1035,9 @@
 
                     <div class="verified-seal">
                       <div class="top-veri">
-                        @if($list->premium_badge)
+                        @if($list->premium_badge === "Yes")
                           <span class="premium-list">Premium</span>
-                        @elseif($list->verified_badge)
+                        @elseif($list->verified_badge === "Yes")
                           <img src="{{ asset('images/verify.png') }}" alt="verified">
                         @endif
 

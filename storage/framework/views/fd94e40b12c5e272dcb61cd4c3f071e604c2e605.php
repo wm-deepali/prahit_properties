@@ -41,7 +41,7 @@
 											<?php echo e($property_detail->title); ?>
 
 
-											<?php if($verified_tag === 'Yes'): ?>
+											<?php if($property_detail->verified_tag === 'Yes'): ?>
 												<span class="badge bg-success ms-2">
 													<i class="bi bi-patch-check-fill"></i> Verified
 												</span>
@@ -386,7 +386,7 @@
 						<div class="property-title">
 							<h3>
 								Contact
-								<?php if($preminum_seller === 'Yes'): ?>
+								<?php if($property_user->premium_seller === 'Yes'): ?>
 									<span class="badge bg-success ms-2">
 										<i class="bi bi-patch-check-fill"></i> Preminum Seller
 									</span>

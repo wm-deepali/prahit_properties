@@ -35,7 +35,20 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected $appends = ['full_name'];
+    protected $appends = ['full_name', 'premium_seller'];
+
+    public function getPremiumSellerAttribute()
+    {
+        // If the user exists and role is admin → always yes
+        if ($this->role === 'admin') {
+            return "Yes";
+        }
+
+        if ($this->activeSubscription && $this->activeSubscription->package) {
+            return $this->activeSubscription->package->premium_seller;
+        }
+        return 'no';
+    }
 
     // Accessor for full name
     public function getFullNameAttribute()

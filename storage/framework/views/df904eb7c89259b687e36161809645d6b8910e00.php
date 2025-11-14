@@ -460,7 +460,6 @@
                 flex: 100%;
             }
         }
-        
     </style>
 
     <section class="profile-section1" style="100%">
@@ -471,7 +470,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-3">
                             <?php
-                                $logoUrl = $profileSection->logo
+                                $logoUrl = isset($profileSection->logo)
                                     ? asset('storage/' . $profileSection->logo)
                                     : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80';
                             ?>
@@ -489,7 +488,7 @@
                                             </span>
                                         <?php endif; ?>
                                     </h2>
-                                    <p class="m-0"><strong><?php echo e($profileSection->business_name); ?></strong></p>
+                                    <p class="m-0"><strong><?php echo e($profileSection->business_name ?? 'N/A'); ?></strong></p>
                                     <!--<p class="m-0">Operating since: 2015</p>-->
                                 </div>
                                 <div class="rera-section my-4">
@@ -549,7 +548,7 @@
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="stats-card card4">
-                        <div class="stat-number"><?php echo e($profileSection->years_experience); ?></div>
+                        <div class="stat-number"><?php echo e($profileSection->years_experience ?? 'N/A'); ?></div>
                         <div class="stat-label">Years Experience</div>
                     </div>
                 </div>
@@ -576,7 +575,7 @@
 
                     <div class="introduction">
                         <h3>About <?php echo e($user->firstname ?? ''); ?> <?php echo e($user->lastname ?? ''); ?></h3>
-                        <?php echo $profileSection->description; ?>
+                        <?php echo $profileSection->description ?? "N/A"; ?>
 
                     </div>
 
@@ -639,17 +638,17 @@
                                                 <i class="fas fa-map-marker-alt me-2 text-primary"></i>
                                                 <strong>Address:</strong>
                                             </div>
-                                            <div><?php echo e($profileSection->address); ?></div>
+                                            <div><?php echo e($profileSection->address ?? 'N/A'); ?></div>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <i class="fas fa-phone me-2 text-success"></i>
-                                        <strong>Phone:</strong> <?php echo e($profileSection->phone); ?>
+                                        <strong>Phone:</strong> <?php echo e($profileSection->phone ?? 'N/A'); ?>
 
                                     </div>
                                     <div class="mb-3">
                                         <i class="fas fa-envelope me-2 text-info"></i>
-                                        <strong>Email:</strong> <?php echo e($profileSection->email); ?>
+                                        <strong>Email:</strong> <?php echo e($profileSection->email ?? 'N/A'); ?>
 
                                     </div>
                                     <hr>
@@ -761,7 +760,7 @@
                                         </div>
 
                                         <input type="hidden" name="profile_section_id" id="profile_section_id"
-                                            value="<?php echo e($profileSection->id); ?>">
+                                            value="<?php echo e($profileSection->id ?? 0); ?>">
                                         
                                         <div class="mb-3">
                                             <label class="form-label">Your Name</label>

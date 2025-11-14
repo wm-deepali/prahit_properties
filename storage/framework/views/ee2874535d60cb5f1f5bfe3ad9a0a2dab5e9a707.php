@@ -358,10 +358,10 @@
           const div = document.createElement('div');
           div.style.position = 'relative';
           div.innerHTML = `
-                          <img src="${e.target.result}" class="rounded border" width="100" height="100">
-                          <button type="button" class="btn btn-sm btn-danger" style="position:absolute;top:0;right:0;"
-                            onclick="removeImage(${index})">&times;</button>
-                        `;
+                            <img src="${e.target.result}" class="rounded border" width="100" height="100">
+                            <button type="button" class="btn btn-sm btn-danger" style="position:absolute;top:0;right:0;"
+                              onclick="removeImage(${index})">&times;</button>
+                          `;
           container.appendChild(div);
         };
         reader.readAsDataURL(file);
@@ -510,6 +510,9 @@
 
         // Create FormData here
         var formData = new FormData(form);
+        selectedFiles.forEach(file => {
+          formData.append('gallery_images_file[]', file);
+        });
 
         $.ajax({
           url: "<?php echo e(config('app.api_url')); ?>/property",

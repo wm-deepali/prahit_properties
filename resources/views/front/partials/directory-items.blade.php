@@ -5,9 +5,9 @@
                 alt="Company Logo" class="company-logo">
             {{-- Badge overlay --}}
             <div class="badge-wrapper">
-                @if($company->badge_type == 'premium')
+                @if($company->premium_badge == 'Yes')
                     <span class="premium-badge">Premium</span>
-                @elseif($company->badge_type == 'verified')
+                @elseif($company->verified_badge == 'Yes')
                     <span class="verified-badge">Verified</span>
                 @endif
             </div>

@@ -540,9 +540,9 @@
                                     </h2>
 
                                     
-                                    <?php if($business->badge_type == 'premium'): ?>
+                                    <?php if($business->premium_badge == 'Yes'): ?>
                                         <span class="premium-badge" style="margin-left:10px;">Premium</span>
-                                    <?php elseif($business->badge_type == 'verified'): ?>
+                                    <?php elseif($business->verified_badge == 'Yes'): ?>
                                         <span class="verified-badge" style="margin-left:10px;">Verified</span>
                                     <?php endif; ?>
 
@@ -596,7 +596,7 @@
                 <div class="col-md-3 col-sm-6">
                     <div class="stats-card card4">
                         <div class="stat-number">
-                            <?php echo e($business->rating ?? '0'); ?>
+                            <?php echo e($business->average_rating ?? '0'); ?>
 
                             <i class="far fa-star" data-rating="5" style="font-size:30px;color:orange;"></i>
                         </div>
@@ -854,11 +854,11 @@
                                         alt="Agent" class="agent-avatar">
                                     
                                     
-                                    <?php if($business->badge_type == 'premium'): ?>
+                                    <?php if($business->premium_badge == 'Yes'): ?>
                                        <span class="newdesign-verified-seal">
                                         <i class="fas fa-check-circle"></i> Premium
                                     </span>
-                                    <?php elseif($business->badge_type == 'verified'): ?>
+                                    <?php elseif($business->verified_badge == 'Yes'): ?>
                                         <span class="newdesign-verified-seal">
                                         <i class="fas fa-check-circle"></i> Verified
                                     </span>

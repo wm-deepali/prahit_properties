@@ -30,14 +30,65 @@ class BusinessListing extends Model
         'banner_image',
         'total_views',
         'total_enquiries',
-        'rating',
-        'rating_count',
+        // 'rating',
+        // 'rating_count',
         'status',
         'is_published',
-        'registration_number',  
-        'deals_in',             
-        'satisfied_clients',    
+        'registration_number',
+        'deals_in',
+        'satisfied_clients',
     ];
+
+    protected $appends = [
+        'average_rating',
+        'rating_count',
+        'rating_stars',
+        'verified_badge',
+        'premium_badge'
+    ];
+
+
+    public function getVerifiedBadgeAttribute()
+    {
+        // If the user exists and role is admin → always yes
+        if ($this->user && $this->user->role === 'admin') {
+            return 'Yes';
+        }
+
+        // If user has active subscription and package has verified_tag
+        if (
+            $this->user &&
+            $this->user->activeSubscription &&
+            $this->user->activeSubscription->package
+        ) {
+
+            return $this->user->activeSubscription->package->verified_badge ?? 'no';
+        }
+
+        // Default
+        return 'no';
+    }
+
+     public function getPremiumBadgeAttribute()
+    {
+        // If the user exists and role is admin → always yes
+        if ($this->user && $this->user->role === 'admin') {
+            return "Yes";
+        }
+
+        // If user has active subscription and package has verified_tag
+        if (
+            $this->user &&
+            $this->user->activeSubscription &&
+            $this->user->activeSubscription->package
+        ) {
+
+            return $this->user->activeSubscription->package->premium_badge ?? 'no';
+        }
+
+        // Default
+        return 'no';
+    }
 
     // 🔹 Relationship: Category
     public function category()
@@ -81,36 +132,6 @@ class BusinessListing extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * Get average rating formatted
-     */
-    public function getAverageRatingAttribute()
-    {
-        return number_format($this->rating, 1);
-    }
-
-    /**
-     * Get rating stars HTML
-     */
-    public function getRatingStarsAttribute()
-    {
-        $fullStars = floor($this->rating);
-        $halfStar = ($this->rating - $fullStars) >= 0.5;
-        $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
-
-        $html = '';
-        for ($i = 0; $i < $fullStars; $i++) {
-            $html .= '<i class="fas fa-star"></i>';
-        }
-        if ($halfStar) {
-            $html .= '<i class="fas fa-star-half-alt"></i>';
-        }
-        for ($i = 0; $i < $emptyStars; $i++) {
-            $html .= '<i class="far fa-star"></i>';
-        }
-
-        return $html;
-    }
 
     // 🔹 Relationship: Portfolio
     public function portfolio()
@@ -122,6 +143,44 @@ class BusinessListing extends Model
     public function workingHours()
     {
         return $this->hasMany(\App\Models\BusinessWorkingHour::class, 'business_listing_id');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(\App\Models\BusinessListingReview::class, 'business_listing_id');
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        return number_format($this->reviews()->avg('rating') ?? 0, 1);
+    }
+
+
+    public function getRatingCountAttribute()
+    {
+        return $this->reviews()->count();
+    }
+
+    public function getRatingStarsAttribute()
+    {
+        $rating = $this->reviews()->avg('rating') ?? 0;
+
+        $fullStars = floor($rating);
+        $halfStar = ($rating - $fullStars) >= 0.5;
+        $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
+
+        $html = '';
+        for ($i = 0; $i < $fullStars; $i++) {
+            $html .= '<i class="fas fa-star text-warning"></i>';
+        }
+        if ($halfStar) {
+            $html .= '<i class="fas fa-star-half-alt text-warning"></i>';
+        }
+        for ($i = 0; $i < $emptyStars; $i++) {
+            $html .= '<i class="far fa-star text-warning"></i>';
+        }
+
+        return $html;
     }
 
 }

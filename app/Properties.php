@@ -147,14 +147,25 @@ class Properties extends Model
 
     public function getVerifiedTagAttribute()
     {
-        if ($this->getUser && $this->getUser->activeSubscription && $this->getUser->activeSubscription->package) {
-            return $this->getUser->activeSubscription->package->verified_tag;
+        // If the user exists and role is admin → always yes
+        if ($this->getUser && $this->getUser->role === 'admin') {
+            return 'Yes';
         }
 
+        // If user has active subscription and package has verified_tag
+        if (
+            $this->getUser &&
+            $this->getUser->activeSubscription &&
+            $this->getUser->activeSubscription->package
+        ) {
+
+            return $this->getUser->activeSubscription->package->verified_tag ?? 'no';
+        }
+
+        // Default
         return 'no';
     }
 
-    protected $appends = ['verified_tag'];
 
 
 

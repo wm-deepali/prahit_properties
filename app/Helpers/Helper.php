@@ -183,11 +183,6 @@ class Helper
                 // Consider subscription valid if it's active and end_date is in the future
                 $isValid = $subscription->is_active && Carbon::parse($subscription->end_date)->gte(Carbon::now());
             }
-
-            $listing->verified_badge = $isValid && $subscription->package ? ($subscription->package->verified_badge == 'Yes' ? true : false) : false;
-            $listing->premium_badge = $isValid && $subscription->package ? ($subscription->package->premium_badge == 'Yes' ? true : false) : false;
-
-            // dd($listing->toArray());
             return $listing;
         });
     }

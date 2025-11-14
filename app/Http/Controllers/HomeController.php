@@ -235,9 +235,16 @@ class HomeController extends AppController
 			}
 		}
 
-		// Filter by verified property
 		if ($request->boolean('verified_property')) {
-			$query->where('verified', 'yes');
+			$query->where(function ($q) {
+				// Case 1: properties.verified = yes
+				$q->where('verified', 'yes')
+
+					// Case 2: verified_tag = yes from subscription package
+					->orWhereHas('getUser.activeSubscription.package', function ($q2) {
+						$q2->where('verified_tag', 'Yes');
+					});
+			});
 		}
 
 		// Only show properties that have at least one gallery image or a featured image
@@ -461,38 +468,43 @@ class HomeController extends AppController
 	{
 		$query = BusinessListing::with(['category', 'subCategories', 'user.activeSubscription.package'])
 			->where('status', 'Active')
-			->where('is_published', true);
+			->where('is_published', true)
+			->withAvg('reviews as average_rating', 'rating')      // ⭐ load avg rating
+			->withCount('reviews as rating_count');               // ⭐ load total reviews
 
-		// --- Existing filters ---
-		if ($request->has('subcategory') && !empty($request->subcategory)) {
+		// --- Filters ---
+
+		if ($request->filled('subcategory')) {
 			$subcategoryId = $request->subcategory;
 			$query->whereHas('subCategories', function ($q) use ($subcategoryId) {
 				$q->where('web_directory_sub_categories.id', $subcategoryId);
 			});
 		}
 
-		if ($request->has('category') && !empty($request->category)) {
+		if ($request->filled('category')) {
 			$query->where('category_id', $request->category);
 		}
 
-		if ($request->has('rating') && !empty($request->rating)) {
-			$query->where('rating', '>=', $request->rating);
+		// ⭐ Filter by minimum rating (derived from reviews)
+		if ($request->filled('rating')) {
+			$query->having('average_rating', '>=', $request->rating);
 		}
 
-		if ($request->has('verified') && $request->verified == 'true') {
+		if ($request->verified == 'true') {
 			$query->where('verified_status', 'Verified');
 		}
 
-		if ($request->has('premium') && $request->premium == 'true') {
+		if ($request->premium == 'true') {
 			$query->where('membership_type', 'Paid');
 		}
 
-		if ($request->has('most_rated') && $request->most_rated == 'true') {
-			$query->where('rating_count', '>', 0)
-				->orderBy('rating_count', 'desc');
+		// ⭐ Sort by most rated (review count)
+		if ($request->most_rated == 'true') {
+			$query->orderBy('rating_count', 'desc');
 		}
 
-		if ($request->has('search') && !empty($request->search)) {
+		// Search
+		if ($request->filled('search')) {
 			$searchTerm = $request->search;
 			$query->where(function ($q) use ($searchTerm) {
 				$q->where('business_name', 'LIKE', "%{$searchTerm}%")
@@ -501,39 +513,46 @@ class HomeController extends AppController
 			});
 		}
 
+		// ⭐ Sorting
 		if (!$request->has('most_rated') || $request->most_rated != 'true') {
 			$sortBy = $request->get('sort', 'default');
+
 			switch ($sortBy) {
 				case 'rating-high':
-					$query->orderBy('rating', 'desc');
+					$query->orderBy('average_rating', 'desc'); // ⭐ correct sorting
 					break;
+
 				case 'views-high':
 					$query->orderBy('total_views', 'desc');
 					break;
+
 				case 'established-old':
 					$query->orderBy('established_year', 'asc');
 					break;
+
 				case 'member-old':
 					$query->orderBy('created_at', 'asc');
 					break;
+
 				default:
 					$query->orderBy('id', 'desc');
 			}
 		}
 
-		// --- Get results without pagination first ---
+		// --- Fetch all results ---
 		$list = $query->get();
 
-		// --- Sort by featured_in_top_provider (Yes first) ---
+		// --- Sort by featured_in_top_provider (premium first) ---
 		$list = $list->sortByDesc(function ($listing) {
 			$package = $listing->user->activeSubscription?->package;
 			return $package?->featured_in_top_provider === 'Yes' ? 1 : 0;
 		});
 
-		// --- Paginate manually ---
+		// --- Manual Pagination ---
 		$perPage = 10;
 		$currentPage = LengthAwarePaginator::resolveCurrentPage();
 		$currentItems = $list->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
 		$paginatedList = new \Illuminate\Pagination\LengthAwarePaginator(
 			$currentItems,
 			$list->count(),
@@ -541,23 +560,6 @@ class HomeController extends AppController
 			$currentPage,
 			['path' => $request->url(), 'query' => $request->query()]
 		);
-
-		// --- Add badge info to each listing ---
-		$paginatedList->getCollection()->transform(function ($listing) {
-			$subscription = $listing->user->activeSubscription ?? null;
-			$isValid = $subscription && $subscription->is_active && Carbon::parse($subscription->end_date)->gte(now());
-			$package = $subscription?->package;
-
-			if ($isValid && $package?->premium_badge === 'Yes') {
-				$listing->badge_type = 'premium';
-			} elseif ($isValid && $package?->verified_badge === 'Yes') {
-				$listing->badge_type = 'verified';
-			} else {
-				$listing->badge_type = null;
-			}
-
-			return $listing;
-		});
 
 		$categories = \App\WebDirectoryCategory::with('subcategories')->get();
 
@@ -567,6 +569,7 @@ class HomeController extends AppController
 
 		return view('front.directory-listing', ['list' => $paginatedList, 'categories' => $categories]);
 	}
+
 
 
 	public function profilePage($slug = null)
@@ -600,6 +603,7 @@ class HomeController extends AppController
 
 		// 🟢 Other Agents/Builders (exclude current user)
 		$otherUsers = User::whereIn('role', ['agent', 'builder'])
+			->where('id', "!=", $user->id)
 			->whereHas('profileSection')
 			->with('profileSection')
 			->take(3)
@@ -636,39 +640,11 @@ class HomeController extends AppController
 		// Increment views count
 		$business->increment('total_views');
 
-		// Add badge info
-		$subscription = $business->user->activeSubscription ?? null;
-		$isValid = $subscription && $subscription->is_active && Carbon::parse($subscription->end_date)->gte(now());
-		$package = $subscription?->package;
-
-		if ($isValid && $package?->premium_badge === 'Yes') {
-			$business->badge_type = 'premium';
-		} elseif ($isValid && $package?->verified_badge === 'Yes') {
-			$business->badge_type = 'verified';
-		} else {
-			$business->badge_type = null;
-		}
-
 		// Fetch other service providers (excluding current business owner)
 		$relatedProviders = BusinessListing::where('user_id', '!=', $business->user_id)
 			->with('user.activeSubscription.package') // also include badge info for related providers
 			->limit(5)
-			->get()
-			->map(function ($listing) {
-				$subscription = $listing->user->activeSubscription ?? null;
-				$isValid = $subscription && $subscription->is_active && Carbon::parse($subscription->end_date)->gte(now());
-				$package = $subscription?->package;
-
-				if ($isValid && $package?->premium_badge === 'Yes') {
-					$listing->badge_type = 'premium';
-				} elseif ($isValid && $package?->verified_badge === 'Yes') {
-					$listing->badge_type = 'verified';
-				} else {
-					$listing->badge_type = null;
-				}
-
-				return $listing;
-			});
+			->get();
 
 		return view('front.business-details', compact('business', 'relatedProviders'));
 	}
@@ -755,9 +731,11 @@ class HomeController extends AppController
 			'PropertyTypes',
 			'getState',
 			'getCity',
-			'getUser.activeSubscription.package' // 👈 added
+			'getUser',
 		])->where('slug', $slug)->first();
 		$property_detail = $property;
+
+		$property_user = User::find($property->user_id);
 
 		if ($property_detail->amenities) {
 			$amenities = Amenity::whereIn('id', explode(',', $property_detail->amenities))->get();
@@ -782,11 +760,7 @@ class HomeController extends AppController
 				->exists();
 		}
 
-		// dd($property_detail->additional_info );
-		$verified_tag = optional($property->getUser->activeSubscription->package)->verified_tag ;
-		$preminum_seller = optional($property->getUser->activeSubscription->package)->premium_seller ;
-
-		return view('front.property_detail', compact('property_detail', 'amenities', 'isInWishlist', 'verified_tag', 'preminum_seller'));
+		return view('front.property_detail', compact('property_detail', 'amenities', 'isInWishlist', 'property_user'));
 	}
 
 	public function search_property(Request $request)

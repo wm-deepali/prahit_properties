@@ -5,9 +5,9 @@
                 alt="Company Logo" class="company-logo">
             
             <div class="badge-wrapper">
-                <?php if($company->badge_type == 'premium'): ?>
+                <?php if($company->premium_badge == 'Yes'): ?>
                     <span class="premium-badge">Premium</span>
-                <?php elseif($company->badge_type == 'verified'): ?>
+                <?php elseif($company->verified_badge == 'Yes'): ?>
                     <span class="verified-badge">Verified</span>
                 <?php endif; ?>
             </div>
