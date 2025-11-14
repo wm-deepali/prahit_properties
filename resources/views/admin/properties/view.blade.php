@@ -62,9 +62,9 @@
             </div>
             <div class="row mb-3">
               <!-- <div class="col-sm-4">
-                <label class="content-label">Property Type</label>
-                <h5 class="content-h">{{ $data->PropertyTypes ? $data->PropertyTypes->type : 'N/A' }}</h5>
-              </div> -->
+                  <label class="content-label">Property Type</label>
+                  <h5 class="content-h">{{ $data->PropertyTypes ? $data->PropertyTypes->type : 'N/A' }}</h5>
+                </div> -->
               <div class="col-sm-4">
                 <label class="content-label">Price</label>
                 <h5 class="content-h">₹{{\App\Helpers\Helper::formatIndianPrice($data->price)}}</h5>
@@ -127,19 +127,19 @@
               </div>
 
               <!-- <div class="col-sm-4">
-                <label class="content-label">Price Label</label>
-                <h5 class="content-h">
-                  @if(in_array(1, explode(',', $data->price_label)))
-                  All Inclusive Price,
-                  @endif
-                  @if(in_array(2, explode(',', $data->price_label)))
-                  Tax Charges Included,
-                  @endif
-                  @if(in_array(3, explode(',', $data->price_label)))
-                  Price Negotiable
-                  @endif
-                  </h5>
-                </div> -->
+                  <label class="content-label">Price Label</label>
+                  <h5 class="content-h">
+                    @if(in_array(1, explode(',', $data->price_label)))
+                    All Inclusive Price,
+                    @endif
+                    @if(in_array(2, explode(',', $data->price_label)))
+                    Tax Charges Included,
+                    @endif
+                    @if(in_array(3, explode(',', $data->price_label)))
+                    Price Negotiable
+                    @endif
+                    </h5>
+                  </div> -->
             </div>
             <h4 class="form-section-h">Property Location</h4>
 
@@ -167,7 +167,7 @@
               <div class="col-sm-4">
                 <label class="content-label">Sub Location</label>
                 <h5 class="content-h">
-                  {{ $data->sub_location_name  ?? 'N/A' }}
+                  {{ $data->sub_location_name ?? 'N/A' }}
                 </h5>
               </div>
             </div>
@@ -199,8 +199,8 @@
               @if(count($data->PropertyGallery) > 0)
                 @foreach($data->PropertyGallery as $value)
                   <div class="col-sm-3">
-                    <a href="{{ asset('') }}/{{ $value->image_path }}" target="_blank">
-                      <img src="{{ asset('') }}/{{ $value->image_path }}" alt="Property Images" class="img-fluid"
+                    <a src="{{url('/') . '/' . $value->image_path}}" target="_blank">
+                      <img src="{{url('/') . '/' . $value->image_path}}" alt="Property Images" class="img-fluid"
                         style="height: 100px;"></a>
                   </div>
                 @endforeach
@@ -208,6 +208,16 @@
                 <h5 style="color: red;">No Any Images Found.</h5>
               @endif
             </div>
+
+            @if(!empty($data->property_video))
+              <h3 class="mt-4">Property Video</h3>
+              <div class="form-group">
+                <video width="320" height="240" controls>
+                  <source src="{{ url($data->property_video) }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            @endif
 
             <h4 class="form-section-h">Property Additional Information</h4>
             <input type="hidden" name="save_json" id="save_json" value="{{ $data->additional_info }}">

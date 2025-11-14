@@ -460,6 +460,7 @@
                 flex: 100%;
             }
         }
+        
     </style>
 
     <section class="profile-section1" style="100%">
@@ -480,7 +481,14 @@
                         <div class="col-md-9">
                             <div class="profil-data">
                                 <div class="profile-name-info">
-                                    <h2 class="m-0"><?php echo e($user->firstname ?? ''); ?> <?php echo e($user->lastname ?? ''); ?></h2>
+                                    <h2 class="m-0"><?php echo e($user->firstname ?? ''); ?> <?php echo e($user->lastname ?? ''); ?>
+
+                                        <?php if($user->premium_seller == 'Yes'): ?>
+                                            <span class="badge bg-success text-light" style="font-size: 14px;">
+                                                Premium
+                                            </span>
+                                        <?php endif; ?>
+                                    </h2>
                                     <p class="m-0"><strong><?php echo e($profileSection->business_name); ?></strong></p>
                                     <!--<p class="m-0">Operating since: 2015</p>-->
                                 </div>
@@ -582,8 +590,10 @@
                                         <div class="newdesign-image-proj">
                                             <img src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;'); ?>"
                                                 class="img-fluid" alt="Property 1">
-                                            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i>
-                                                Verified</span>
+                                            <?php if($value->verified_tag === 'Yes'): ?>
+                                                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i>
+                                                    Verified</span>
+                                            <?php endif; ?>
                                         </div>
                                         <div class="newdesign-info-proj">
                                             <div class="d-flex justify-content-between">
@@ -750,7 +760,8 @@
                                             <input type="hidden" name="rating" id="rating">
                                         </div>
 
-                                        <input type="hidden" name="profile_section_id" id="profile_section_id" value="<?php echo e($profileSection->id); ?>">
+                                        <input type="hidden" name="profile_section_id" id="profile_section_id"
+                                            value="<?php echo e($profileSection->id); ?>">
                                         
                                         <div class="mb-3">
                                             <label class="form-label">Your Name</label>
@@ -768,7 +779,8 @@
                                         <div class="mb-3">
                                             <label class="form-label">Phone</label>
                                             <input type="text" name="phone" class="form-control"
-                                                placeholder="Enter your phone" value="<?php echo e($authUser->mobile_number ?? ''); ?>" <?php echo e($authUser ? 'readonly' : ''); ?>>
+                                                placeholder="Enter your phone" value="<?php echo e($authUser->mobile_number ?? ''); ?>"
+                                                <?php echo e($authUser ? 'readonly' : ''); ?>>
                                         </div>
 
                                         
@@ -817,8 +829,12 @@
                             <div class="agent-card mb-3 border">
                                 <div class="newdesign-image-agent">
                                     <img src="<?php echo e($logo); ?>" alt="Agent" class="agent-avatar">
-                                    <span class="newdesign-verified-seal">
-                                        <i class="fas fa-check-circle"></i> Verified
+                                    <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i>
+                                        <?php if($other->premium_seller === 'Yes'): ?>
+                                            Premium
+                                        <?php else: ?>
+                                            Verified
+                                        <?php endif; ?>
                                     </span>
                                 </div>
                                 <div class="newdesign-info-agent">
@@ -867,100 +883,100 @@
         </div>
     </section>
 
-<script>
-$(document).ready(function () {
-    let isOtpVerified = <?php echo e(Auth::check() ? 'true' : 'false'); ?>;
+    <script>
+        $(document).ready(function () {
+            let isOtpVerified = <?php echo e(Auth::check() ? 'true' : 'false'); ?>;
 
-    // ⭐ Star Rating Selection
-    $('.star-rating i[data-rating]').click(function () {
-        let rating = $(this).data('rating');
-        $('#rating').val(rating);
-        $('.star-rating i[data-rating]').removeClass('fas fa-star').addClass('far fa-star');
-        for (let i = 1; i <= rating; i++) {
-            $('.star-rating i[data-rating="' + i + '"]').removeClass('far fa-star').addClass('fas fa-star');
-        }
-    });
-
-    /// 🔹 Send OTP for Guest Users
-$('#reviewForm input[name="phone"]').on('blur', function () {
-    if (!isOtpVerified && $(this).val().length >= 10) {
-        $.ajax({
-            url: '<?php echo e(route("send.review.otp")); ?>',
-            type: 'POST',
-            data: {
-                phone: $(this).val(),
-                _token: '<?php echo e(csrf_token()); ?>'
-            },
-            success: function (res) {
-                if (res.success) {
-                    $('#otpSection').show();
-                    swal("OTP Sent!", "We’ve sent an OTP to your phone.", "success");
-                } else {
-                    swal("Error", res.message || "Failed to send OTP.", "error");
+            // ⭐ Star Rating Selection
+            $('.star-rating i[data-rating]').click(function () {
+                let rating = $(this).data('rating');
+                $('#rating').val(rating);
+                $('.star-rating i[data-rating]').removeClass('fas fa-star').addClass('far fa-star');
+                for (let i = 1; i <= rating; i++) {
+                    $('.star-rating i[data-rating="' + i + '"]').removeClass('far fa-star').addClass('fas fa-star');
                 }
-            },
-            error: function () {
-                swal("Error", "Something went wrong while sending OTP.", "error");
-            }
+            });
+
+            /// 🔹 Send OTP for Guest Users
+            $('#reviewForm input[name="phone"]').on('blur', function () {
+                if (!isOtpVerified && $(this).val().length >= 10) {
+                    $.ajax({
+                        url: '<?php echo e(route("send.review.otp")); ?>',
+                        type: 'POST',
+                        data: {
+                            phone: $(this).val(),
+                            _token: '<?php echo e(csrf_token()); ?>'
+                        },
+                        success: function (res) {
+                            if (res.success) {
+                                $('#otpSection').show();
+                                swal("OTP Sent!", "We’ve sent an OTP to your phone.", "success");
+                            } else {
+                                swal("Error", res.message || "Failed to send OTP.", "error");
+                            }
+                        },
+                        error: function () {
+                            swal("Error", "Something went wrong while sending OTP.", "error");
+                        }
+                    });
+                }
+            });
+
+            // 🔹 Verify OTP
+            $('#verifyOtpBtn').click(function () {
+                $.ajax({
+                    url: '<?php echo e(route("verify.review.otp")); ?>',
+                    type: 'POST',
+                    data: {
+                        phone: $('#reviewForm input[name="phone"]').val(),
+                        otp: $('#otpInput').val(),
+                        _token: '<?php echo e(csrf_token()); ?>'
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            isOtpVerified = true;
+                            $('#otpSection').hide();
+                            swal("Verified!", "OTP verified successfully.", "success");
+                        } else {
+                            swal("Invalid OTP", "Please check the OTP and try again.", "error");
+                        }
+                    },
+                    error: function () {
+                        swal("Error", "Unable to verify OTP.", "error");
+                    }
+                });
+            });
+
+            // 🔹 Submit Review
+            $('#reviewForm').submit(function (e) {
+                e.preventDefault();
+
+                if (!isOtpVerified) {
+                    swal("Verify OTP", "Please verify your OTP before submitting.", "warning");
+                    return;
+                }
+
+                $.ajax({
+                    url: '<?php echo e(route("submit.review")); ?>',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function (res) {
+                        if (res.success) {
+                            swal("Thank You!", "Your review has been submitted successfully.", "success");
+                            $('#reviewForm')[0].reset();
+                            $('.star-rating i').removeClass('fas').addClass('far');
+                        } else {
+                            swal("Error", res.message || "Failed to submit review.", "error");
+                        }
+                    },
+                    error: function () {
+                        swal("Error", "Something went wrong while submitting your review.", "error");
+                    }
+                });
+            });
+
         });
-    }
-});
-
-// 🔹 Verify OTP
-$('#verifyOtpBtn').click(function () {
-    $.ajax({
-        url: '<?php echo e(route("verify.review.otp")); ?>',
-        type: 'POST',
-        data: {
-            phone: $('#reviewForm input[name="phone"]').val(),
-            otp: $('#otpInput').val(),
-            _token: '<?php echo e(csrf_token()); ?>'
-        },
-        success: function (res) {
-            if (res.success) {
-                isOtpVerified = true;
-                $('#otpSection').hide();
-                swal("Verified!", "OTP verified successfully.", "success");
-            } else {
-                swal("Invalid OTP", "Please check the OTP and try again.", "error");
-            }
-        },
-        error: function () {
-            swal("Error", "Unable to verify OTP.", "error");
-        }
-    });
-});
-
-// 🔹 Submit Review
-$('#reviewForm').submit(function (e) {
-    e.preventDefault();
-
-    if (!isOtpVerified) {
-        swal("Verify OTP", "Please verify your OTP before submitting.", "warning");
-        return;
-    }
-
-    $.ajax({
-        url: '<?php echo e(route("submit.review")); ?>',
-        type: 'POST',
-        data: $(this).serialize(),
-        success: function (res) {
-            if (res.success) {
-                swal("Thank You!", "Your review has been submitted successfully.", "success");
-                $('#reviewForm')[0].reset();
-                $('.star-rating i').removeClass('fas').addClass('far');
-            } else {
-                swal("Error", res.message || "Failed to submit review.", "error");
-            }
-        },
-        error: function () {
-            swal("Error", "Something went wrong while submitting your review.", "error");
-        }
-    });
-});
-
-});
-</script>
+    </script>
 
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.front.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/profile-page.blade.php ENDPATH**/ ?>

@@ -33,7 +33,6 @@ class Properties extends Model
         'sub_location_id',
         'sub_location_name',
         'featured_image',
-        'gallery_images',
         'status',
         'additional_info',
         'approval',
@@ -55,6 +54,7 @@ class Properties extends Model
         'furnishing_status_second',
         'latitude',
         'longitude',
+        'property_video'
     ];
 
     // protected static function boot() {
@@ -144,6 +144,18 @@ class Properties extends Model
     {
         return Amenity::whereIn('id', explode(',', $ids))->get();
     }
+
+    public function getVerifiedTagAttribute()
+    {
+        if ($this->getUser && $this->getUser->activeSubscription && $this->getUser->activeSubscription->package) {
+            return $this->getUser->activeSubscription->package->verified_tag;
+        }
+
+        return 'no';
+    }
+
+    protected $appends = ['verified_tag'];
+
 
 
     public function getPriceLabels($ids)

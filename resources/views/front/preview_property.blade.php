@@ -283,9 +283,6 @@
 
 								<h3>Uploaded Photos</h3>
 								<div class="form-group dropzone row">
-									<!-- <div class="loading_4">
-											<img src="{{url('/') . '/images/loading.gif'}}" alt="Loading.." class="loading_4" />
-										</div> -->
 									@foreach($property_images as $k => $v)
 										<div class="col-sm-2">
 											<img src="{{url('/') . '/' . $v->image_path}}" style="height: 100px;"
@@ -293,11 +290,17 @@
 										</div>
 									@endforeach
 								</div>
-								<h4 class="form-section-h">Property Additional Information</h4>
+								@if(!empty($property->property_video))
+									<h3 class="mt-4">Property Video</h3>
+									<div class="form-group">
+										<video width="320" height="240" controls>
+											<source src="{{ url($property->property_video) }}" type="video/mp4">
+											Your browser does not support the video tag.
+										</video>
+									</div>
+								@endif
 
-								<!-- <center class="loading">
-										<img src="{{url('images/loading.gif')}}" alt="Loading.." class="loading" />
-									</center> -->
+								<h4 class="form-section-h">Property Additional Information</h4>
 								<div id="fb-render"></div>
 							</div>
 						</div>
@@ -331,12 +334,12 @@
 	<script type="text/javascript">
 
 		@if(!empty($property->latitude) && !empty($property->longitude))
-	
+
 			// Initialize map with property coordinates
 			createMap({{ $property->latitude }}, {{ $property->longitude }});
 		@else
-					// Otherwise use browser geolocation or default
-					if (navigator.geolocation) {
+							// Otherwise use browser geolocation or default
+							if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function (pos) {
 					createMap(pos.coords.latitude, pos.coords.longitude);
 				}, function () {
@@ -375,10 +378,8 @@
 		$(function () {
 			fetch_subcategories('{{$property->category_id}}', function () {
 				$(".populate_subcategories").val('{{$property->sub_category_id}}');
-				fetch_form_type();
 				fetch_subsubcategories('{{$property->sub_category_id}}', function () {
 					$(".populate_subsubcategories").val('{{$property->sub_sub_category_id}}');
-					fetch_form_type();
 				});
 			});
 
@@ -411,7 +412,6 @@
 				beforeSend: function () {
 					$(".addproperty").attr('disabled', true);
 					$(".add_formtype").empty();
-					$(".loading").css('display', 'block');
 				},
 				success: function (response) {
 					// var response = JSON.parse(response);
@@ -445,8 +445,7 @@
 					toastr.error('An error occured while fetching subcategories');
 				},
 				complete: function () {
-					$(".loading").css('display', 'none');
-					// $(".addproperty").attr('disabled', false);
+					;
 				}
 			})
 		}
@@ -536,156 +535,6 @@
 			} else {
 				$('#amenitiesField').hide();
 			}
-		}
-
-
-
-		function fetch_form_type() {
-
-			var cat = $(".populate_categories option:selected").val();
-			var subcat = $(".populate_subcategories option:selected").val();
-			var listing_id = $("#id").val();
-
-			if (cat == "") {
-				clearFormType(true);
-				return true;
-			}
-
-
-			// var route = "{{route('admin.fetch_form_type')}}/?cat="+cat+"&subcat="+subcat+"&edit=0&listing_id="+listing_id;
-			var route = "{{config('app.api_url')}}/fetch_form_type/?cat=" + cat + "&subcat=" + subcat + "&edit=0&listing_id=" + listing_id;
-			$.ajax({
-				url: route,
-				method: 'get',
-				beforeSend: function () {
-					// $(".updateproperty").attr('disabled', true);
-					$(".loading").css('display', 'block');
-				},
-				success: function (response) {
-					// var response = JSON.parse(response);
-					$("#formtype_id").val('')
-					if (response.responseCode === 200) {
-						var responseData = response.data.FormType;
-						var listing = response.data.Property;
-						var property_subfeatures = [];
-						if (responseData.length > 0) {
-							clearFormType();
-							// form type
-							$.each(responseData, function (x, y) {
-								// console.log(y)
-								// console.log('formtype_id=>',y.formtype_id)
-								$("#formtype_id").val(y.formtype_id)
-
-
-								switch (y.input_type) {
-									case "1":
-										// console.log('sub_feature_enabled =>', b.sub_feature_enabled, 'sub_features =>', sub_features.id)
-										// console.log('sub_f_id =>',y.sub_f_id);
-										$(".add_formtype").append(
-											`
-										  <div class='form-group col-sm-4'>
-										  <label> 
-										  <input type='checkbox' class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} value="checked"  name=${y.sub_feature_slug}  />
-										  ${y.sub_feature_name} 
-										  </label>
-										  </div>
-										  `
-										);
-										break;
-
-									case "2":
-										$(".add_formtype").append(
-											`
-										  <div class='form-group col-sm-4'>
-										  <label> 
-										  <input type='text'  class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} name=${y.sub_feature_slug}   />
-										  ${y.sub_feature_name} 
-										  </label>
-										  </div>
-										  `
-										);
-										break;
-
-									case "3":
-										$(".add_formtype").append(
-											`
-										  <div class='form-group col-sm-4'>
-										  <label> 
-										  <input type='radio'  class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} value='on' name='radio[]'  />
-										  ${y.sub_feature_name} 
-										  </label>
-										  </div>
-										  `
-										);
-										break;
-
-									case "4":
-										$(".add_formtype").append(
-											`
-										  <div class='form-group col-sm-4'>
-										  <label> 
-										  <textarea class='dynamic_forms' data-sub-feature-id=${y.sub_f_id} data-input-type=${y.input_type} name=${y.sub_feature_slug}></textarea>
-										  ${y.sub_feature_name} 
-										  </label>
-										  </div>
-										  `
-										);
-										break;
-
-									case "5":
-										$(".add_formtype").append(
-											`
-										  <div class='form-group col-sm-4'>
-										  <label> 
-										  ${y.sub_feature_name} 
-										  <select>
-										  <option value='' class='form-control dynamic_forms' data-sub-feature-id=${y.sub_f_id} name=${y.sub_feature_slug} data-input-type=${y.input_type}>
-										  Select
-										  </option>
-										  </select>
-										  </label>
-										  </div>
-										  `
-										);
-										break;
-
-
-								}
-
-							}); // end $.each
-
-							$.each(listing, function (c, d) {
-								// property_subfeatures.push(y.sub_feature_id);
-
-								console.log(d);
-								$(".dynamic_forms").each(function (a, b) {
-									var input_val = Number($(this).attr('data-sub-feature-id'));
-									if (input_val == d.sub_feature_id) {
-										$(this).attr('checked', true);
-										$(this).val(d.feature_value)
-									}
-									// if(property_subfeatures.includes(input_val)) {
-									//  $(this).attr('checked', true);
-									// }
-								});
-
-							});
-
-
-
-						} else {
-							clearFormType(true);
-						}
-					}
-				},
-				error: function (response) {
-					toastr.error('An error occured');
-				},
-				complete: function () {
-					$(".loading").css('display', 'none');
-					$(".updateproperty").attr('disabled', false);
-				}
-			})
 		}
 
 

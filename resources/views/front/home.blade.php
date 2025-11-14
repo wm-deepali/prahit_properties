@@ -587,11 +587,11 @@
           </select>
 
           <!-- <select class="newupdateDropdown" id="sub_sub_category_id"  multiple>
-                                                    <option value="">Property Type</option>
-                                                    @foreach ($exclusiveFilters['types'] as $type)
-                                                      <option value="{{ $type->id }}">{{ $type->sub_sub_category_name }}</option>
-                                                    @endforeach
-                                                  </select> -->
+                                                      <option value="">Property Type</option>
+                                                      @foreach ($exclusiveFilters['types'] as $type)
+                                                        <option value="{{ $type->id }}">{{ $type->sub_sub_category_name }}</option>
+                                                      @endforeach
+                                                    </select> -->
 
           <select class="newupdateDropdown" id="budget">
             <option value="">Budget</option>
@@ -766,7 +766,9 @@
                                 src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
                                 alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
                             </a>
-                            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                            @if($value->verified_tag === 'Yes')
+                              <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                            @endif
                           </div>
                           <div class="newdesign-info-proj p-3">
                             <div class="d-flex justify-content-between align-items-start">
@@ -855,7 +857,9 @@
                     src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;'}}"
                     class="img-fluid" alt="Property 1">
                 </a>
-                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                @if($value->verified_tag === 'Yes')
+                  <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                @endif
               </div>
               <div class="newdesign-info-proj">
                 <div class="d-flex justify-content-between">
@@ -934,7 +938,9 @@
                             src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
                         </a>
-                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                        @if($value->verified_tag === 'Yes')
+                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                        @endif
                       </div>
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
@@ -1138,7 +1144,9 @@
                             src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
                         </a>
-                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                        @if($value->verified_tag === 'Yes')
+                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                        @endif
                       </div>
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
@@ -1238,7 +1246,9 @@
                             src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
                         </a>
-                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                        @if($value->verified_tag === 'Yes')
+                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                        @endif
                       </div>
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
@@ -1339,7 +1349,9 @@
                             src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
                         </a>
-                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                        @if($value->verified_tag === 'Yes')
+                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                        @endif
                       </div>
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
@@ -1472,7 +1484,9 @@
                 : 'https://static.squareyards.com/resources/images/mumbai/project-image/default.jpg' }}"
                               class="img-fluid" alt="Property 1">
                           </a>
-                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                          @if($value->verified_tag === 'Yes')
+                            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                          @endif
                         </div>
                         <div class="newdesign-info-proj">
 
@@ -1613,7 +1627,9 @@
                               src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
                               alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
                           </a>
-                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                          @if($value->verified_tag === 'Yes')
+                            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                          @endif
                         </div>
                         <div class="newdesign-info-proj p-3">
                           <div class="d-flex justify-content-between align-items-start">
@@ -1719,7 +1735,9 @@
                             src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
                         </a>
-                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                        @if($value->verified_tag === 'Yes')
+                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                        @endif
                       </div>
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
@@ -1806,7 +1824,9 @@
                               src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
                               alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
                           </a>
-                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                          @if($value->verified_tag === 'Yes')
+                            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                          @endif
                         </div>
                         <div class="newdesign-info-proj p-3">
                           <div class="d-flex justify-content-between align-items-start">
@@ -2153,227 +2173,227 @@
         switch (tabType) {
           case 'buy':
             mobileFilterContent.innerHTML = `
-                                  <!-- Property Category -->
-                                  <div class="filter-item border-bottom py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Property Category</h6>
-                                      <select class="form-select sub_category_items" id="mobile_sub_category_id">
-                                          <option value="">Select Category</option>
-                                          @foreach ($buyFilters['categories'] as $cat)
-                                            <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
+                                    <!-- Property Category -->
+                                    <div class="filter-item border-bottom py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Property Category</h6>
+                                        <select class="form-select sub_category_items" id="mobile_sub_category_id">
+                                            <option value="">Select Category</option>
+                                            @foreach ($buyFilters['categories'] as $cat)
+                                              <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                  <!-- Property Type -->
-                                  <div class="filter-item border-bottom py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Property Type</h6>
-                                      <div class="property-type-checkboxes" style="max-height:150px; overflow-y:auto;">
-                                          @foreach($buyFilters['types'] as $type)
-                                            <div class="form-check" data-category="{{ $type->sub_category_id }}">
-                                                <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
-                                                       name="mobile_sub_sub_category_ids[]"
-                                                       id="mobile_subsub_{{ $type->id }}" value="{{ $type->id }}">
-                                                <label class="form-check-label" for="mobile_subsub_{{ $type->id }}">
-                                                    {{ $type->sub_sub_category_name }}
-                                                </label>
-                                            </div>
-                                          @endforeach
-                                      </div>
-                                  </div>
+                                    <!-- Property Type -->
+                                    <div class="filter-item border-bottom py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Property Type</h6>
+                                        <div class="property-type-checkboxes" style="max-height:150px; overflow-y:auto;">
+                                            @foreach($buyFilters['types'] as $type)
+                                              <div class="form-check" data-category="{{ $type->sub_category_id }}">
+                                                  <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
+                                                         name="mobile_sub_sub_category_ids[]"
+                                                         id="mobile_subsub_{{ $type->id }}" value="{{ $type->id }}">
+                                                  <label class="form-check-label" for="mobile_subsub_{{ $type->id }}">
+                                                      {{ $type->sub_sub_category_name }}
+                                                  </label>
+                                              </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
 
-                                  <!-- Budget -->
-                                  <div class="filter-item border-bottom py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Budget</h6>
-                                      <select class="form-select" id="mobile_budget">
-                                          <option value="">Select Budget</option>
-                                          @foreach ($buyFilters['budgets'] as $budget)
-                                            <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
+                                    <!-- Budget -->
+                                    <div class="filter-item border-bottom py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Budget</h6>
+                                        <select class="form-select" id="mobile_budget">
+                                            <option value="">Select Budget</option>
+                                            @foreach ($buyFilters['budgets'] as $budget)
+                                              <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                  <!-- Posted By -->
-                                  <div class="filter-item py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Posted By</h6>
-                                      <select class="form-select" id="mobile_user_role">
-                                          <option value="">Select</option>
-                                          @foreach ($buyFilters['posted_by'] as $poster)
-                                            <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
-                              `;
+                                    <!-- Posted By -->
+                                    <div class="filter-item py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Posted By</h6>
+                                        <select class="form-select" id="mobile_user_role">
+                                            <option value="">Select</option>
+                                            @foreach ($buyFilters['posted_by'] as $poster)
+                                              <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                `;
             break;
 
           case 'rental':
             mobileFilterContent.innerHTML = `
-                                  <!-- Property Category -->
-                                  <div class="filter-item border-bottom py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Property Category</h6>
-                                      <select class="form-select sub_category_items" id="mobile_sub_category_id">
-                                          <option value="">Select Category</option>
-                                          @foreach ($rentalFilters['categories'] as $cat)
-                                            <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
+                                    <!-- Property Category -->
+                                    <div class="filter-item border-bottom py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Property Category</h6>
+                                        <select class="form-select sub_category_items" id="mobile_sub_category_id">
+                                            <option value="">Select Category</option>
+                                            @foreach ($rentalFilters['categories'] as $cat)
+                                              <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                  <!-- Property Type -->
-                                  <div class="filter-item border-bottom py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Property Type</h6>
-                                      <div class="property-type-checkboxes" style="max-height:150px; overflow-y:auto;">
-                                          @foreach($rentalFilters['types'] as $v)
-                                            <div class="form-check" data-category="{{ $v->sub_category_id }}">
-                                                <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
-                                                       name="mobile_sub_sub_category_ids[]"
-                                                       id="mobile_subsub_{{ $v->id }}" value="{{ $v->id }}">
-                                                <label class="form-check-label" for="mobile_subsub_{{ $v->id }}">
-                                                    {{ $v->sub_sub_category_name }}
-                                                </label>
-                                            </div>
-                                          @endforeach
-                                      </div>
-                                  </div>
+                                    <!-- Property Type -->
+                                    <div class="filter-item border-bottom py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Property Type</h6>
+                                        <div class="property-type-checkboxes" style="max-height:150px; overflow-y:auto;">
+                                            @foreach($rentalFilters['types'] as $v)
+                                              <div class="form-check" data-category="{{ $v->sub_category_id }}">
+                                                  <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
+                                                         name="mobile_sub_sub_category_ids[]"
+                                                         id="mobile_subsub_{{ $v->id }}" value="{{ $v->id }}">
+                                                  <label class="form-check-label" for="mobile_subsub_{{ $v->id }}">
+                                                      {{ $v->sub_sub_category_name }}
+                                                  </label>
+                                              </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
 
-                                  <!-- Budget -->
-                                  <div class="filter-item border-bottom py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Budget</h6>
-                                      <select class="form-select" id="mobile_budget">
-                                          <option value="">Select Budget</option>
-                                          @foreach ($rentalFilters['budgets'] as $budget)
-                                            <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
+                                    <!-- Budget -->
+                                    <div class="filter-item border-bottom py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Budget</h6>
+                                        <select class="form-select" id="mobile_budget">
+                                            <option value="">Select Budget</option>
+                                            @foreach ($rentalFilters['budgets'] as $budget)
+                                              <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                  <!-- Posted By -->
-                                  <div class="filter-item py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Posted By</h6>
-                                      <select class="form-select" id="mobile_user_role">
-                                          <option value="">Select</option>
-                                          @foreach ($rentalFilters['posted_by'] as $poster)
-                                            <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
-                              `;
+                                    <!-- Posted By -->
+                                    <div class="filter-item py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Posted By</h6>
+                                        <select class="form-select" id="mobile_user_role">
+                                            <option value="">Select</option>
+                                            @foreach ($rentalFilters['posted_by'] as $poster)
+                                              <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                `;
             break;
 
           case 'pg-hostels':
             mobileFilterContent.innerHTML = `
-                                  <!-- Budget -->
-                                  <div class="filter-item border-bottom py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Budget</h6>
-                                      <select class="form-select" id="mobile_budget">
-                                          <option value="">Select Budget</option>
-                                          @foreach ($pgFilters['budgets'] as $budget)
-                                            <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
+                                    <!-- Budget -->
+                                    <div class="filter-item border-bottom py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Budget</h6>
+                                        <select class="form-select" id="mobile_budget">
+                                            <option value="">Select Budget</option>
+                                            @foreach ($pgFilters['budgets'] as $budget)
+                                              <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                  <!-- Available For -->
-                                  <div class="filter-item border-bottom py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Available For</h6>
-                                      <select class="form-select" id="mobile_pg_availavle_for">
-                                          <option value="">Select</option>
-                                          @foreach ($pgFilters['available_for'] as $option)
-                                            <option value="{{ strtolower($option) }}">{{ $option }}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
+                                    <!-- Available For -->
+                                    <div class="filter-item border-bottom py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Available For</h6>
+                                        <select class="form-select" id="mobile_pg_availavle_for">
+                                            <option value="">Select</option>
+                                            @foreach ($pgFilters['available_for'] as $option)
+                                              <option value="{{ strtolower($option) }}">{{ $option }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                  <!-- Posted By -->
-                                  <div class="filter-item py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Posted By</h6>
-                                      <select class="form-select" id="mobile_user_role">
-                                          <option value="">Select</option>
-                                          @foreach ($pgFilters['posted_by'] as $poster)
-                                            <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
-                              `;
+                                    <!-- Posted By -->
+                                    <div class="filter-item py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Posted By</h6>
+                                        <select class="form-select" id="mobile_user_role">
+                                            <option value="">Select</option>
+                                            @foreach ($pgFilters['posted_by'] as $poster)
+                                              <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                `;
             break;
 
           case 'exculsive-launch':
             mobileFilterContent.innerHTML = `
-                                  <!-- Sub Category -->
-                                  <div class="filter-item border-bottom py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Sub Category</h6>
-                                      <select class="form-select sub_category_items" id="mobile_sub_category_id">
-                                          <option value="">Select Category</option>
-                                          @foreach ($exclusiveFilters['categories'] as $cat)
-                                            <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
+                                    <!-- Sub Category -->
+                                    <div class="filter-item border-bottom py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Sub Category</h6>
+                                        <select class="form-select sub_category_items" id="mobile_sub_category_id">
+                                            <option value="">Select Category</option>
+                                            @foreach ($exclusiveFilters['categories'] as $cat)
+                                              <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                  <!-- Budget -->
-                                  <div class="filter-item border-bottom py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Budget</h6>
-                                      <select class="form-select" id="mobile_budget">
-                                          <option value="">Select Budget</option>
-                                          @foreach ($exclusiveFilters['budgets'] as $budget)
-                                            <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
+                                    <!-- Budget -->
+                                    <div class="filter-item border-bottom py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Budget</h6>
+                                        <select class="form-select" id="mobile_budget">
+                                            <option value="">Select Budget</option>
+                                            @foreach ($exclusiveFilters['budgets'] as $budget)
+                                              <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                  <!-- Posted By -->
-                                  <div class="filter-item py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Posted By</h6>
-                                      <select class="form-select" id="mobile_user_role">
-                                          <option value="">Select</option>
-                                          @foreach ($exclusiveFilters['posted_by'] as $poster)
-                                            <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
-                              `;
+                                    <!-- Posted By -->
+                                    <div class="filter-item py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Posted By</h6>
+                                        <select class="form-select" id="mobile_user_role">
+                                            <option value="">Select</option>
+                                            @foreach ($exclusiveFilters['posted_by'] as $poster)
+                                              <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                `;
             break;
 
           case 'plot-land':
             mobileFilterContent.innerHTML = `
-                                  <!-- Property Type -->
-                                  <div class="filter-item border-bottom py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Property Type</h6>
-                                      <div class="property-type-checkboxes" style="max-height:150px; overflow-y:auto;">
-                                          @foreach($plotFilters['types'] as $v)
-                                            <div class="form-check">
-                                                <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
-                                                       name="mobile_sub_sub_category_ids[]"
-                                                       id="mobile_subsub_{{ $v->id }}" value="{{ $v->id }}">
-                                                <label class="form-check-label" for="mobile_subsub_{{ $v->id }}">
-                                                    {{ $v->sub_sub_category_name }}
-                                                </label>
-                                            </div>
-                                          @endforeach
-                                      </div>
-                                  </div>
+                                    <!-- Property Type -->
+                                    <div class="filter-item border-bottom py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Property Type</h6>
+                                        <div class="property-type-checkboxes" style="max-height:150px; overflow-y:auto;">
+                                            @foreach($plotFilters['types'] as $v)
+                                              <div class="form-check">
+                                                  <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
+                                                         name="mobile_sub_sub_category_ids[]"
+                                                         id="mobile_subsub_{{ $v->id }}" value="{{ $v->id }}">
+                                                  <label class="form-check-label" for="mobile_subsub_{{ $v->id }}">
+                                                      {{ $v->sub_sub_category_name }}
+                                                  </label>
+                                              </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
 
-                                  <!-- Budget -->
-                                  <div class="filter-item border-bottom py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Budget</h6>
-                                      <select class="form-select" id="mobile_budget">
-                                          <option value="">Select Budget</option>
-                                          @foreach ($plotFilters['budgets'] as $budget)
-                                            <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
+                                    <!-- Budget -->
+                                    <div class="filter-item border-bottom py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Budget</h6>
+                                        <select class="form-select" id="mobile_budget">
+                                            <option value="">Select Budget</option>
+                                            @foreach ($plotFilters['budgets'] as $budget)
+                                              <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                  <!-- Posted By -->
-                                  <div class="filter-item py-2 mb-3">
-                                      <h6 class="fw-semibold mb-2">Posted By</h6>
-                                      <select class="form-select" id="mobile_user_role">
-                                          <option value="">Select</option>
-                                          @foreach ($plotFilters['posted_by'] as $poster)
-                                            <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
-                              `;
+                                    <!-- Posted By -->
+                                    <div class="filter-item py-2 mb-3">
+                                        <h6 class="fw-semibold mb-2">Posted By</h6>
+                                        <select class="form-select" id="mobile_user_role">
+                                            <option value="">Select</option>
+                                            @foreach ($plotFilters['posted_by'] as $poster)
+                                              <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                `;
             break;
         }
 

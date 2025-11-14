@@ -787,8 +787,10 @@
         </div>
 
         <!-- 🏗️ Post Property -->
-        <a href="{{ route('create_property') }}" class="btn text-white fw-semibold px-3 py-1 rounded-3"
-          style="background:#e38e32; height:38px;">
+        <a href="javascript:void(0);" class="btn text-white fw-semibold px-3 py-1 rounded-3"
+          style="background:#e38e32; height:38px;" @if(Auth::check())
+          onclick="window.location.href='{{ route('create_property') }}'" @else
+          onclick=" openSigninModal('post-property')" @endif>
           <i class="fas fa-pencil-alt me-1"></i> Post Property <span class="badge bg-warning text-dark ms-1">Free</span>
         </a>
 

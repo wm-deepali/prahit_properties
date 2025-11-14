@@ -1231,7 +1231,6 @@ class PropertiesController extends AppController
 
 	public function update(Request $request)
 	{
-		// dd($request->all());
 		try {
 			// ✅ Validation
 			$request->validate([
@@ -1249,8 +1248,10 @@ class PropertiesController extends AppController
 				'sub_location_id' => 'nullable|array',
 				'sub_location_id.*' => 'nullable|string',
 				"gallery_images_file.*" => 'nullable|mimes:jpg,png,jpeg',
-				"feature_image_file" => 'nullable|mimes:jpg,png,jpeg'
+				"feature_image_file" => 'nullable|mimes:jpg,png,jpeg',
+				"property_video' => 'nullable|mimes:mp4,mov,avi,wmv|max:100000',"
 			]);
+
 
 			$properties = Properties::findOrFail($request->id);
 
@@ -1362,6 +1363,22 @@ class PropertiesController extends AppController
 				'latitude' => $request->latitude,
 				'longitude' => $request->longitude,
 			]);
+
+			// ✅ Handle Property Video
+			if ($request->hasFile('property_video')) {
+				if ($properties->property_video && file_exists(public_path($properties->property_video))) {
+					@unlink(public_path($properties->property_video));
+				}
+
+				$video = $request->file('property_video');
+				$videoName = time() . '_' . preg_replace('/\s+/', '_', $video->getClientOriginalName());
+				$videoPath = 'uploads/properties/videos/';
+				$video->move(public_path($videoPath), $videoName);
+
+				$properties->property_video = $videoPath . $videoName;
+				$properties->save();
+			}
+
 
 			// ✅ Handle gallery images upload
 			if ($request->has('gallery_images_file')) {
@@ -1710,7 +1727,19 @@ class PropertiesController extends AppController
 	public function postPropertyFinalView($id)
 	{
 		$id = base64_decode($id);
-		return view('property_final', compact('id'));
+		$picked = Properties::find($id);
+		$approval = \Auth::user()->role == 'admin' ? 'Approved' : 'Pending';
+		$picked->update(
+			[
+				'listing_type' => 'Paid',
+				'approval' => $approval
+			]
+		);
+		if (\Auth::user()->role == 'admin') {
+			return redirect('manage/approved/properties')->with('success', 'Property Posted Successfully.');
+		} else {
+			return redirect('user/properties')->with('success', 'Property Posted Successfully.');
+		}
 	}
 
 	public function postPropertyFinal(Request $request)

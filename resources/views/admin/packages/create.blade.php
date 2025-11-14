@@ -74,7 +74,7 @@
                                             </div>
                                             <div class="col-md-2 mb-3">
                                                 <label class="form-label">Unit</label>
-                                                <select name="validity_unit" class="form-select" required>
+                                                <select name="validity_unit" class="form-control" required>
                                                     <option value="Days">Days</option>
                                                     <option value="Months">Months</option>
                                                     <option value="Years">Years</option>

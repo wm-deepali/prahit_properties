@@ -90,7 +90,7 @@
                                             </div>
                                             <div class="col-md-2 mb-3">
                                                 <label class="form-label">Unit</label>
-                                                <select name="validity_unit" class="form-select" required>
+                                                <select name="validity_unit" class="form-control" required>
                                                     <option value="Days" {{ (old('validity_unit', $validityUnit) == 'Days') ? 'selected' : '' }}>Days</option>
                                                     <option value="Months" {{ (old('validity_unit', $validityUnit) == 'Months') ? 'selected' : '' }}>Months</option>
                                                     <option value="Years" {{ (old('validity_unit', $validityUnit) == 'Years') ? 'selected' : '' }}>Years</option>

@@ -333,9 +333,6 @@
 
 								<h3>Uploaded Photos</h3>
 								<div class="form-group dropzone row">
-									<div class="loading_4">
-										<img src="{{url('/') . '/images/loading.gif'}}" alt="Loading.." class="loading_4" />
-									</div>
 									@foreach($property_images as $k => $v)
 										<div class="col-sm-2">
 											<img src="{{url('') . '/' . $v->image_path}}" style="height: 100px;"
@@ -349,20 +346,36 @@
 										</div>
 									@endforeach
 								</div>
+
 								<h3>Property Photos</h3>
-								<div class="form-group row">
-									<div class="form-group col-sm-12">
+								<div class="row">
+									<div class="form-group col-sm-12 ">
 										<div class="dropzone">
-											<input type="file" id="file" name="gallery_images_file[]" multiple />
+											<input type="file" id="fileInput" multiple accept="image/*">
+											<div id="previewContainer" class="mt-2 d-flex flex-wrap gap-2"></div>
 										</div>
+										<small class="text-muted">Max allowed photos: {{ $photos_per_listing }}</small>
+
 									</div>
 								</div>
 
-								<h4 class="form-section-h">Property Additional Information</h4>
+								@if($video_upload === 'Yes')
+									<h3>Property Video</h3>
+									<div class="form-group row">
+										<div class="form-group col-sm-12">
+											@if(!empty($property->property_video))
+												<video width="100%" height="240" controls style="margin-bottom: 10px;">
+													<source src="{{ url($property->property_video) }}" type="video/mp4">
+													Your browser does not support the video tag.
+												</video>
+												<br>
+											@endif
+											<input type="file" name="property_video" accept="video/*" class="form-control">
+										</div>
+									</div>
+								@endif
 
-								<center class="loading">
-									<img src="{{ asset('images/loading.gif')}}" alt="Loading.." class="loading" />
-								</center>
+								<h4 class="form-section-h">Property Additional Information</h4>
 								<div id="fb-render"></div>
 							</div>
 						</div>
@@ -370,9 +383,6 @@
 					<div class="form-group col-sm-4">
 						<div class="card property-right-widgets">
 							<div class="form-sep">
-								<center class="loading_2">
-									<img src="{{ asset('images/loading.gif')}}" alt="Loading.." class="loading_2" />
-								</center>
 								<h3>Contact Information</h3>
 
 								<div class="form-group row">
@@ -415,9 +425,6 @@
 										</div>
 									</div>
 								</div>
-								<div class="loading_3">
-									<img src="{{url('/') . '/images/loading.gif'}}" alt="Loading.." class="loading_3" />
-								</div>
 							</div>
 							<input type="hidden" name="form_json" id="form_json">
 							<input type="hidden" name="save_json" id="save_json" value="{{ $property->additional_info }}">
@@ -447,14 +454,63 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 	<script type="text/javascript">
+		let selectedFiles = []; // new files user selects
+		const maxPhotos = {{ $photos_per_listing ?? 10 }}; // from backend (limit)
+		const existingPhotos = {{ $property_images->count() }}; // current photos already uploaded
+
+		document.getElementById('fileInput').addEventListener('change', function (event) {
+			const newFiles = Array.from(event.target.files);
+
+			// 🧩 Calculate total count including already uploaded ones
+			const totalUploaded = existingPhotos + selectedFiles.length + newFiles.length;
+
+			if (maxPhotos > 0 && totalUploaded > maxPhotos) {
+				const remaining = maxPhotos - (existingPhotos + selectedFiles.length);
+				alert(`You can only upload ${remaining > 0 ? remaining : 0} more photo(s).`);
+				event.target.value = ''; // reset input
+				return;
+			}
+
+			selectedFiles.push(...newFiles);
+			renderPreviews();
+
+			// reset input so same file can be reselected later
+			event.target.value = '';
+		});
+
+		function renderPreviews() {
+			const container = document.getElementById('previewContainer');
+			container.innerHTML = '';
+
+			selectedFiles.forEach((file, index) => {
+				const reader = new FileReader();
+				reader.onload = (e) => {
+					const div = document.createElement('div');
+					div.classList.add('position-relative', 'm-1');
+					div.innerHTML = `
+								<img src="${e.target.result}" class="rounded border" width="100" height="100">
+								<button type="button" class="btn btn-sm btn-danger" 
+									style="position:absolute;top:0;right:0;" 
+									onclick="removeImage(${index})">&times;</button>
+							`;
+					container.appendChild(div);
+				};
+				reader.readAsDataURL(file);
+			});
+		}
+
+		function removeImage(index) {
+			selectedFiles.splice(index, 1);
+			renderPreviews();
+		}
 
 		@if(!empty($property->latitude) && !empty($property->longitude))
 
 			// Initialize map with property coordinates
 			createMap({{ $property->latitude }}, {{ $property->longitude }});
 		@else
-															// Otherwise use browser geolocation or default
-															if (navigator.geolocation) {
+																									// Otherwise use browser geolocation or default
+																									if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function (pos) {
 					createMap(pos.coords.latitude, pos.coords.longitude);
 				}, function () {
@@ -490,10 +546,6 @@
 		}
 
 		$(function () {
-			$(".loading_2").css('display', 'none');
-			$(".loading_3").css('display', 'none');
-			$(".loading_4").css('display', 'none');
-
 			$(".populate_categories,  .populate_locations").change();
 
 			$(".add_formtype").empty().append(
@@ -567,7 +619,6 @@
 			})
 				.then((willDelete) => {
 					if (willDelete) {
-						$(".loading_4").css('display', 'block');
 						$(".btn-delete").attr('disabled', true);
 						$.ajax({
 							url: '{{ url('delete/property/images') }}',
@@ -586,7 +637,6 @@
 								toastr.error('An error occured.')
 							},
 							complete: function () {
-								$(".loading_4").css('display', 'none');
 								$(".btn-delete").attr('disabled', false);
 							}
 						})
@@ -776,7 +826,6 @@
 				beforeSend: function () {
 					$(".addproperty").attr('disabled', true);
 					$(".add_formtype").empty();
-					$(".loading").css('display', 'block');
 				},
 				success: function (response) {
 					if (response != 0) {
@@ -807,7 +856,6 @@
 					toastr.error('An error occured');
 				},
 				complete: function () {
-					$(".loading").css('display', 'none');
 					$(".addproperty").attr('disabled', false);
 				}
 			})
@@ -886,7 +934,7 @@
 					// reselect existing values from property
 					var selectedIds = "{{ $property->sub_location_id ?? '' }}";
 					console.log(selectedIds, 'ids');
-					
+
 					if (selectedIds) {
 						var arr = selectedIds.split(',');
 						$('#sub_location_id').val(arr).trigger('change');
@@ -993,8 +1041,8 @@
 					formData.append('is_visitor', true);
 				@endguest
 
-																						// console.log(obj)
-																						if (jQuery.isEmptyObject(obj)) {
+																											// console.log(obj)
+																											if (jQuery.isEmptyObject(obj)) {
 					returnIfInvalid();
 				}
 
@@ -1010,11 +1058,10 @@
 						processData: false,
 						beforeSend: function (request) {
 							$(".addproperty").attr('disabled', true);
-							$(".loading_4").css('display', 'block');
 							@auth
 								request.setRequestHeader('auth-token', '{{Auth::user()->auth_token}}');
 							@endauth
-																									},
+																														},
 						success: function (response) {
 							// var response = JSON.parse(response);
 							if (response.responseCode === 200) {
@@ -1025,7 +1072,7 @@
 									// window.location.href = "{{route('admin.properties.index')}}";
 									//          	}, 1000);
 								@endguest
-																										} else if (response.responseCode === 400) {
+																															} else if (response.responseCode === 400) {
 								toastr.error(response.message)
 							} else {
 								toastr.error('An error occured')
@@ -1037,7 +1084,6 @@
 						},
 						complete: function () {
 							formData = {};
-							$(".loading_4").css('display', 'none');
 							// $(".addproperty").attr('disabled', false);
 						}
 					})
@@ -1057,6 +1103,7 @@
 				false
 			);
 		});
+
 
 		function createProperty() {
 			var title = $('#title').val();
@@ -1133,7 +1180,32 @@
 				toastr.error('Additional details form must be required, please select another category or contact to admin.');
 			} else {
 				document.getElementById('form_json').value = JSON.stringify(data);
-				document.getElementById('create-property').submit();
+				const form = document.getElementById('create-property');
+				const formData = new FormData(form);
+
+				// Append all selected images
+				selectedFiles.forEach((file, i) => {
+					formData.append('gallery_images_file[]', file);
+				});
+
+				// Example AJAX submit (replace with your actual logic)
+				fetch("{{ url('update/property') }}", {
+					method: "POST",
+					body: formData
+				})
+					.then(res => res.json())
+					.then(response => {
+						if (response.success) {
+							toastr.success(response.message);
+							// Redirect to preview page after short delay
+							setTimeout(() => {
+								window.location.href = response.redirect_url;
+							}, 1000);
+						} else {
+							toastr.error(response.message || 'Something went wrong.');
+						}
+					})
+					.catch(err => toastr.error('Server error!'));
 			}
 		}
 	</script>

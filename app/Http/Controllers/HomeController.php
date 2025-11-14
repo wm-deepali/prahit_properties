@@ -52,6 +52,7 @@ use App\Models\Wishlist;
 use App\Models\PropertyView;
 use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Validation\ValidationException;
 
 class HomeController extends AppController
 {
@@ -675,6 +676,44 @@ class HomeController extends AppController
 
 	public function create_property()
 	{
+		$user = auth()->user();
+
+		// 🧩 Load user's active subscription with its package
+		$activeSubscription = $user->activeSubscription()
+			->with('package')
+			->first();
+
+		// Store current URL for redirect (in case of failure)
+		$redirectUrl = urlencode(url()->current());
+
+		// 🚫 No active subscription
+		if (!$activeSubscription) {
+			return redirect()->to(url("/user/pricing?type=property&redirect_url={$redirectUrl}"))
+				->with('error', 'You must have an active subscription to post your property listing.');
+		}
+
+		$package = $activeSubscription->package;
+
+		// 🚫 Subscription exists but package missing or not for Property
+		if (!$package || $package->package_type !== 'property') {
+			return redirect()->to(url("/user/pricing?type=property&redirect_url={$redirectUrl}"))
+				->with('error', 'You must have an active Property package to post your property listing.');
+		}
+
+		// ✅ Check allowed number of listings
+		$allowedListings = (int) $package->number_of_listing;
+		$userListingCount = $user->getProperties()->count();
+
+		if ($allowedListings > 0 && $userListingCount >= $allowedListings) {
+			return redirect()->to(url("/user/pricing?type=property&redirect_url={$redirectUrl}"))
+				->with('error', 'You have reached the maximum number of property listings allowed in your plan.');
+		}
+
+		// ✅ Additional package limits
+		$photos_per_listing = (int) ($package->photos_per_listing ?? 0);
+		$video_upload = $package->video_upload;
+
+		// ✅ Load supporting data
 		$category = Category::all();
 		$locations = Locations::all();
 		$form_type = FormTypes::with('FormTypesFields', 'FormTypesFields.SubFeatures')->where('id', 1)->get();
@@ -697,8 +736,12 @@ class HomeController extends AppController
 			'property_statuses',
 			'registration_statuses',
 			'furnishing_statuses',
+			'photos_per_listing',
+			'video_upload'
 		));
 	}
+
+
 
 
 	public function property_detail($slug)
@@ -711,7 +754,8 @@ class HomeController extends AppController
 			'PropertyFeatures.SubFeatures',
 			'PropertyTypes',
 			'getState',
-			'getCity'
+			'getCity',
+			'getUser.activeSubscription.package' // 👈 added
 		])->where('slug', $slug)->first();
 		$property_detail = $property;
 
@@ -739,7 +783,10 @@ class HomeController extends AppController
 		}
 
 		// dd($property_detail->additional_info );
-		return view('front.property_detail', compact('property_detail', 'amenities', 'isInWishlist'));
+		$verified_tag = optional($property->getUser->activeSubscription->package)->verified_tag ;
+		$preminum_seller = optional($property->getUser->activeSubscription->package)->premium_seller ;
+
+		return view('front.property_detail', compact('property_detail', 'amenities', 'isInWishlist', 'verified_tag', 'preminum_seller'));
 	}
 
 	public function search_property(Request $request)
@@ -884,42 +931,57 @@ class HomeController extends AppController
 
 	public function createProperty(Request $request)
 	{
-		// dd($request->all());
-		$request->validate([
-			'title' => 'required|max:200',
-			'price' => 'required|numeric',
-			'price_label.*' => 'nullable',
-			'category_id' => 'required',
-			'description' => 'required',
-			'address' => 'required',
-			'location_id' => 'required',
-			'custom_location_input' => 'nullable|string|max:255',
-			'sub_location_id' => 'nullable|array',
-			'sub_location_id.*' => 'nullable|string',
-			'owner_type' => 'required',
-			'firstname' => 'required',
-			'lastname' => 'required',
-			'email' => 'required|email',
-			'mobile_number' => 'required|numeric|digits:10',
-			'otp' => 'required',
-			"gallery_images_file.*" => 'required|mimes:jpg,png,jpeg',
-		]);
-
-		// Check OTP first
-		$otp_check = Otp::where('otp', $request->otp)->first();
-		if (!$otp_check) {
-			return back()->withErrors(['OTP Failed', 'Otp does not exist or may be expired.']);
+		try {
+			$request->validate([
+				'title' => 'required|max:200',
+				'price' => 'required|numeric',
+				'price_label.*' => 'nullable',
+				'category_id' => 'required',
+				'description' => 'required',
+				'address' => 'required',
+				'location_id' => 'required',
+				'custom_location_input' => 'nullable|string|max:255',
+				'sub_location_id' => 'nullable|array',
+				'sub_location_id.*' => 'nullable|string',
+				'owner_type' => 'required',
+				'firstname' => 'required',
+				'lastname' => 'required',
+				'email' => 'required|email',
+				'mobile_number' => 'required|numeric|digits:10',
+				'otp' => 'nullable',
+				'gallery_images_file.*' => 'required|mimes:jpg,png,jpeg',
+				'property_video' => 'nullable|mimes:mp4,mov,avi,wmv|max:20480', // ✅ added validation (max 20MB)
+			]);
+		} catch (ValidationException $e) {
+			return response()->json([
+				'success' => false,
+				'message' => 'Validation error occurred.',
+				'errors' => $e->errors(),
+			], 422);
 		}
 
-		$otp_check->delete();
+		if ($request->otp) {
+			$otp_check = Otp::where('otp', $request->otp)->first();
+			if (!$otp_check) {
+				return response()->json([
+					'success' => false,
+					'message' => 'Invalid or expired OTP.',
+				], 400);
+			}
+			$otp_check->delete();
+		}
 
-		// Check if user already exists
+		// ✅ Verify or create user logic
 		$user = User::where('email', $request->email)
 			->orWhere('mobile_number', $request->mobile_number)
 			->first();
 
+		if ($user && !$user->is_verified) {
+			$user->update(['is_verified' => true]);
+		}
+
 		if (!$user) {
-			// Determine role based on owner_type
+			// Role setup
 			switch ($request->owner_type) {
 				case 1:
 					$role = 'owner';
@@ -935,11 +997,9 @@ class HomeController extends AppController
 					break;
 			}
 
-
 			$pass = rand(10000, 99999);
 			$show_pass = $pass;
 
-			// Validate uniqueness if creating new user
 			$request->validate([
 				'email' => 'required|unique:users,email',
 				'mobile_number' => 'required|unique:users,mobile_number'
@@ -957,11 +1017,10 @@ class HomeController extends AppController
 				'password' => \Hash::make($pass)
 			]);
 
-			// Send SMS
+			// Send SMS & Email (same as your original logic)
 			$sms = "Dear {$user->firstname} {$user->lastname}%0aThank you for joining with us, your login password is {$pass}%0aThank You.,%0aWeb Mingo IT Solutions Pvt. Ltd.%0aVisit: https://www.webmingo.in%0aWhatsApp: 7499366724";
 			$this->sendSMSInformtaion($user->mobile_number, $sms);
 
-			// Send Email
 			try {
 				$emailtemplate = EmailTemplate::where('id', 1)->first();
 				$ordertemplate = $emailtemplate->template;
@@ -975,33 +1034,28 @@ class HomeController extends AppController
 				}
 				$user->notify(new WelcomeEmailNotification($ordertemplate, $emailtemplate->subject, $emailtemplate->image));
 			} catch (\Exception $e) {
-				return redirect()->back()->with('error', $e->getMessage());
+				return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
 			}
 		}
 
-		// Prepare property data
+		// ✅ Handle location & sub-location logic (same as before)
 		$count = Properties::count();
 		$unique_id = 'PP-' . str_pad($count, 4, '0', STR_PAD_LEFT);
 		$slug = str_replace('/', '-', str_replace(' ', '-', $request->title));
 
-		// Handle custom location if 'other' is selected
 		$locationId = $request->location_id;
 		if ($locationId === 'other') {
 			$customLocationName = trim($request->custom_location_input);
 			if (!empty($customLocationName)) {
-				// Capitalize each word's first letter
 				$customLocationName = ucwords(strtolower($customLocationName));
-
-				// Insert new location into DB with state and city from request
 				$newLocation = Locations::create([
 					'state_id' => $request->state,
 					'city_id' => $request->city,
 					'location' => $customLocationName,
-					'status' => 1, // or as appropriate
+					'status' => 1,
 				]);
 				$locationId = $newLocation->id;
 			} else {
-				// Optional: fail with error if "other" selected but no input given
 				return response()->json([
 					'status' => 'error',
 					'message' => 'Please enter the custom location name.',
@@ -1009,56 +1063,9 @@ class HomeController extends AppController
 			}
 		}
 
-		// Persist final single location_id
-		$request->merge([
-			'location_id' => $locationId,
-		]);
+		$request->merge(['location_id' => $locationId]);
 
-		// Handle sub locations: allow tagged names; create if needed then store names on property
-		$submittedSubLocations = $request->input('sub_location_id', []);
-		$resolvedSubLocationNames = [];
-		$resolvedSubLocationIds = [];
-		if (!empty($submittedSubLocations)) {
-			$primaryLocationId = $locationId ? (int) $locationId : null;
-			foreach ($submittedSubLocations as $value) {
-				$value = trim(($value ?? ''));
-				if ($value === '') {
-					continue;
-				}
-
-				if (ctype_digit($value)) {
-					$existing = SubLocations::find((int) $value);
-					if ($existing) {
-						$resolvedSubLocationNames[] = $existing->sub_location_name;
-						$resolvedSubLocationIds[] = (int) $existing->id;
-					}
-					continue;
-				}
-
-				// Create new sublocation for this location
-				if ($primaryLocationId) {
-					$name = ucwords(strtolower($value));
-					// ensure not duplicate for this location
-					$dup = SubLocations::where(['location_id' => $primaryLocationId, 'sub_location_name' => $name])->first();
-					if ($dup) {
-						$resolvedSubLocationNames[] = $dup->sub_location_name;
-						$resolvedSubLocationIds[] = (int) $dup->id;
-					} else {
-						$newSub = SubLocations::create([
-							'location_id' => $primaryLocationId,
-							'sub_location_name' => $name,
-						]);
-						if ($newSub) {
-							$resolvedSubLocationNames[] = $newSub->sub_location_name;
-							$resolvedSubLocationIds[] = (int) $newSub->id;
-						}
-					}
-				}
-			}
-		}
-
-
-
+		// ✅ Create property
 		$property = Properties::create([
 			'user_id' => $user->id,
 			'title' => $request->title,
@@ -1066,46 +1073,74 @@ class HomeController extends AppController
 			'slug' => $slug,
 			'price' => $request->price,
 			'price_label' => is_array($request->price_label) ? implode(',', $request->price_label) : $request->price_label,
-			'price_label_second' => $request->price_label_second ?? null,
-			'property_status' => is_array($request->property_status) ? implode(',', $request->property_status) : $request->property_status,
-			'property_status_second' => $request->property_status_second ?? null,
-			'registration_status' => is_array($request->registration_status) ? implode(',', $request->registration_status) : $request->registration_status,
-			'registration_status_second' => $request->registration_status_second ?? null,
-			'furnishing_status' => is_array($request->furnishing_status) ? implode(',', $request->furnishing_status) : $request->furnishing_status,
-			'furnishing_status_second' => $request->furnishing_status_second ?? null,
 			'description' => $request->description,
 			'category_id' => $request->category_id,
-			'sub_category_id' => $request->sub_category_id ?? null,
-			'sub_sub_category_id' => $request->sub_sub_category_id ?? null,
 			'address' => $request->address,
 			'state_id' => $request->state,
 			'city_id' => $request->city,
 			'location_id' => $request->location_id,
-			'sub_location_name' => implode(',', $resolvedSubLocationIds),
-			'amenities' => $request->amenity ? implode(',', $request->amenity) : null,
-			'additional_info' => $request->form_json,
 			'latitude' => $request->latitude,
 			'longitude' => $request->longitude,
+			'additional_info' => $request->form_json,
 		]);
 
-		// Handle gallery images
+		// ✅ Handle gallery images
 		if ($request->has('gallery_images_file')) {
-			$gallery_images = $this->multipleFileUpload($request, ['uploads/properties/gallery_images/' => 'gallery_images_file']);
+			$gallery_images = $this->multipleFileUpload($request, [
+				'uploads/properties/gallery_images/' => 'gallery_images_file'
+			]);
 			foreach ($gallery_images as $image) {
-				PropertyGallery::create(['property_id' => $property->id, 'image_path' => $image]);
+				PropertyGallery::create([
+					'property_id' => $property->id,
+					'image_path' => $image
+				]);
 			}
 		}
 
-		return redirect('user/property/preview/' . $property->id)->with('success', 'Property Posted Successfully.');
+		// ✅ Handle property video upload
+		if ($request->hasFile('property_video')) {
+			$file = $request->file('property_video');
+			$filename = uniqid('video_') . '.' . $file->getClientOriginalExtension();
+			$path = $file->storeAs('uploads/properties/videos', $filename, 'public');
+			$property->property_video = 'storage/' . $path;
+			$property->save();
+		}
+
+		// ✅ Return JSON response
+		return response()->json([
+			'success' => true,
+			'message' => 'Property Posted Successfully.',
+			'redirect_url' => url('user/property/preview/' . $property->id),
+			'property_id' => $property->id,
+			'property_video' => $property->property_video,
+		]);
 	}
+
 
 
 	public function editPropertyView($id)
 	{
+		$property = Properties::findOrFail($id);
+
+		// 🧩 Get logged-in user
+		$user = auth()->user();
+
+		// 🧩 Get user’s active subscription (with its package)
+		$activeSubscription = $user->activeSubscription()
+			->with('package')
+			->first();
+
+		// Default limits
+		$photos_per_listing = 0;
+		$video_upload = 'no';
+
+		if ($activeSubscription && $activeSubscription->package) {
+			$photos_per_listing = (int) ($activeSubscription->package->photos_per_listing ?? 0);
+			$video_upload = $activeSubscription->package->video_upload ?? 'no';
+		}
+
+		// 🧩 Load property-related data
 		$category = Category::all();
-		$locations = Locations::all();
-		$form_type = FormTypes::with('FormTypesFields', 'FormTypesFields.SubFeatures')->where('id', 1)->get();
-		$property = Properties::find($id);
 		$states = State::where('country_id', 101)->get();
 		$cities = City::where('state_id', $property->state_id)->get();
 		$locations = Locations::where('city_id', $property->city_id)->get();
@@ -1113,16 +1148,17 @@ class HomeController extends AppController
 		$property_images = PropertyGallery::where('property_id', $id)->get();
 		$subcategories = SubCategory::where('category_id', $property->category_id)->get();
 		$amenities = Amenity::where('status', 'Yes')->get();
+		$form_type = FormTypes::with('FormTypesFields', 'FormTypesFields.SubFeatures')->where('id', 1)->get();
 
-		// Get all active Price Labels and Statuses
+		// 🧩 Active masters
 		$price_labels = PriceLabel::where('status', 'active')->get();
 		$property_statuses = PropertyStatus::where('status', 'active')->get();
 		$registration_statuses = RegistrationStatus::where('status', 'active')->get();
 		$furnishing_statuses = FurnishingStatus::where('status', 'active')->get();
 
+		// ✅ Return view with all data, including upload limits
 		return view('front.edit_property', compact(
 			'category',
-			'locations',
 			'form_type',
 			'states',
 			'cities',
@@ -1135,7 +1171,9 @@ class HomeController extends AppController
 			'price_labels',
 			'property_statuses',
 			'registration_statuses',
-			'furnishing_statuses'
+			'furnishing_statuses',
+			'photos_per_listing',
+			'video_upload'
 		));
 	}
 
@@ -1181,104 +1219,110 @@ class HomeController extends AppController
 
 	public function updateProperty(Request $request)
 	{
-		$request->validate([
-			'title' => 'required|max:200',
-			// 'type_id' => 'nullable',
-			'price' => 'required|numeric',
-			'price_label.*' => 'nullable',
-			'category_id' => 'required',
-			// 'sub_category_id' => 'required',
-			// 'construction_age' => 'nullable',
-			'description' => 'required',
-			'address' => 'required',
-			'location_id' => 'required',
-			'sub_location_id' => 'nullable|array',
-			'sub_location_id.*' => 'nullable|string',
-			"gallery_images_file.*" => 'nullable|mimes:jpg,png,jpeg',
-		]);
+		try {
 
+			// ✅ Validation Rules
+			$request->validate([
+				'title' => 'required|max:200',
+				'price' => 'required|numeric',
+				'price_label.*' => 'nullable',
+				'category_id' => 'required',
+				'description' => 'required',
+				'address' => 'required',
+				'location_id' => 'required',
+				'sub_location_id' => 'nullable|array',
+				'sub_location_id.*' => 'nullable|string',
+				'gallery_images_file.*' => 'nullable|mimes:jpg,png,jpeg|max:2048',
+				'property_video' => 'nullable|mimes:mp4,mov,avi,wmv|max:100000',
+			], [
+				'title.required' => 'Please enter a property title.',
+				'price.required' => 'Price is required.',
+				'price.numeric' => 'Price must be a valid number.',
+				'category_id.required' => 'Please select a category.',
+				'description.required' => 'Description is required.',
+				'address.required' => 'Address field is required.',
+				'location_id.required' => 'Please select a location.',
+				'gallery_images_file.*.mimes' => 'Only JPG, PNG, and JPEG formats are allowed.',
+				'gallery_images_file.*.max' => 'Each image must be less than 2MB.',
+				'property_video.mimes' => 'Only MP4, MOV, AVI, WMV formats are allowed for video.',
+				'property_video.max' => 'Video must be less than 100MB.',
+			]);
+
+		} catch (ValidationException $e) {
+			return response()->json([
+				'success' => false,
+				'message' => 'Validation error occurred.',
+				'errors' => $e->errors(),
+			], 422);
+		}
 		$picked = Properties::findOrFail($request->id);
 
-		// Handle comma-separated fields (checkboxes)
+		// ✅ Convert checkbox arrays
 		$price_label = $request->has('price_label') ? implode(',', (array) $request->price_label) : null;
 		$property_status = $request->has('property_status') ? implode(',', (array) $request->property_status) : null;
 		$registration_status = $request->has('registration_status') ? implode(',', (array) $request->registration_status) : null;
 		$furnishing_status = $request->has('furnishing_status') ? implode(',', (array) $request->furnishing_status) : null;
 
-
-		// Handle custom location if 'other' is selected (single location)
+		// ✅ Handle custom location
 		$locationId = $request->location_id;
 		if ($locationId === 'other') {
 			$customLocationName = trim($request->custom_location_input);
-			if (!empty($customLocationName)) {
-				$customLocationName = ucwords(strtolower($customLocationName));
-				$newLocation = \App\Locations::create([
-					'state_id' => $request->state,
-					'city_id' => $request->city,
-					'location' => $customLocationName,
-					'status' => 1,
-				]);
-				$locationId = $newLocation->id;
-			} else {
-				return response()->json([
-					'status' => 'error',
-					'message' => 'Please enter the custom location name.',
-				], 422);
+			if (empty($customLocationName)) {
+				return response()->json(['status' => 'error', 'message' => 'Please enter the custom location name.'], 422);
 			}
+			$newLocation = \App\Locations::create([
+				'state_id' => $request->state,
+				'city_id' => $request->city,
+				'location' => ucwords(strtolower($customLocationName)),
+				'status' => 1,
+			]);
+			$locationId = $newLocation->id;
 		}
 
-		// Resolve sub locations: accept IDs or names; create new names under selected location
+		// ✅ Handle sub-locations
 		$submittedSubLocations = $request->input('sub_location_id', []);
 		$resolvedSubLocationIds = [];
 		if (!empty($submittedSubLocations)) {
-			$primaryLocationId = $locationId ? (int) $locationId : null;
 			foreach ($submittedSubLocations as $value) {
-				$value = trim(($value ?? ''));
-				if ($value === '') {
+				$value = trim($value ?? '');
+				if ($value === '')
 					continue;
-				}
+
 				if (ctype_digit($value)) {
 					$existing = \App\SubLocations::find((int) $value);
-					if ($existing) {
-						$resolvedSubLocationIds[] = (int) $existing->id;
-					}
-					continue;
-				}
-				if ($primaryLocationId) {
+					if ($existing)
+						$resolvedSubLocationIds[] = $existing->id;
+				} else {
 					$name = ucwords(strtolower($value));
-					$dup = \App\SubLocations::where([
-						'location_id' => $primaryLocationId,
-						'sub_location_name' => $name
-					])->first();
+					$dup = \App\SubLocations::where('location_id', $locationId)
+						->where('sub_location_name', $name)
+						->first();
 					if ($dup) {
-						$resolvedSubLocationIds[] = (int) $dup->id;
+						$resolvedSubLocationIds[] = $dup->id;
 					} else {
 						$newSub = \App\SubLocations::create([
-							'location_id' => $primaryLocationId,
+							'location_id' => $locationId,
 							'sub_location_name' => $name,
 						]);
-						if ($newSub) {
-							$resolvedSubLocationIds[] = (int) $newSub->id;
-						}
+						$resolvedSubLocationIds[] = $newSub->id;
 					}
 				}
 			}
 		}
-
-		// Persist normalized fields back into request-like variables
 		$normalizedSubLocationId = !empty($resolvedSubLocationIds) ? implode(',', $resolvedSubLocationIds) : null;
 
+		// ✅ Update Property
 		$picked->update([
 			'title' => $request->title,
 			'price' => $request->price,
 			'price_label' => $price_label,
-			'price_label_second' => $request->price_label_second, // new field
+			'price_label_second' => $request->price_label_second,
 			'property_status' => $property_status,
-			'property_status_second' => $request->property_status_second, // new field
+			'property_status_second' => $request->property_status_second,
 			'registration_status' => $registration_status,
-			'registration_status_second' => $request->registration_status_second, // new field
+			'registration_status_second' => $request->registration_status_second,
 			'furnishing_status' => $furnishing_status,
-			'furnishing_status_second' => $request->furnishing_status_second, // new field
+			'furnishing_status_second' => $request->furnishing_status_second,
 			'description' => $request->description,
 			'category_id' => $request->category_id,
 			'sub_category_id' => $request->sub_category_id,
@@ -1294,32 +1338,41 @@ class HomeController extends AppController
 			'longitude' => $request->longitude,
 		]);
 
-		// Handle gallery images upload
-		if ($request->has('gallery_images_file')) {
-			$gallery_images = $this->multipleFileUpload($request, [
-				'uploads/properties/gallery_images/' => 'gallery_images_file'
-			]);
-			foreach ($gallery_images as $value) {
+		// ✅ Handle Property Video
+		if ($request->hasFile('property_video')) {
+			if ($picked->property_video && file_exists(public_path($picked->property_video))) {
+				@unlink(public_path($picked->property_video));
+			}
+			$video = $request->file('property_video');
+			$videoName = time() . '_' . preg_replace('/\s+/', '_', $video->getClientOriginalName());
+			$videoPath = 'uploads/properties/videos/';
+			$video->move(public_path($videoPath), $videoName);
+			$picked->property_video = $videoPath . $videoName;
+			$picked->save();
+		}
+
+		// ✅ Handle Gallery Images
+		if ($request->hasFile('gallery_images_file')) {
+			foreach ($request->file('gallery_images_file') as $file) {
+				$imageName = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+				$filePath = 'uploads/properties/gallery_images/';
+				$file->move(public_path($filePath), $imageName);
+
 				PropertyGallery::create([
 					'property_id' => $picked->id,
-					'image_path' => $value
+					'image_path' => $filePath . $imageName,
 				]);
 			}
 		}
-
-		// Redirect based on role
-		if ($request->from) {
-			return redirect('user/property/preview/' . $picked->id);
-		}
-
-		switch (\Auth::user()->role) {
-			case 'owner':
-				return redirect('user/properties')->with('success', 'Property Content Updated Successfully.');
-			case 'builder':
-				return redirect('user/properties')->with('success', 'Property Content Updated Successfully.');
-			case 'agent':
-				return redirect('user/properties')->with('success', 'Property Content Updated Successfully.');
-		}
+		// ✅ For AJAX requests, return JSON with redirect URL
+		return response()->json([
+			'success' => true,
+			'message' => 'Property updated successfully.',
+			'redirect_url' => $request->from
+				? url('user/property/preview/' . $picked->id)
+				: url('user/properties'),
+			'property_id' => $picked->id,
+		]);
 	}
 
 

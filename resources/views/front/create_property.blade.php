@@ -309,16 +309,27 @@
 								<div class="row">
 									<div class="form-group col-sm-12 ">
 										<div class="dropzone">
-											<input type="file" id="file" name="gallery_images_file[]" multiple required />
+											<input type="file" id="fileInput" multiple accept="image/*">
+											<div id="previewContainer" class="mt-2 d-flex flex-wrap gap-2"></div>
 										</div>
+										<small class="text-muted">Max allowed photos: {{ $photos_per_listing }}</small>
+
 									</div>
 								</div>
 
-								<h4 class="form-section-h">Property Additional Information</h4>
+								@if($video_upload === 'Yes')
+									<h3>Property Video</h3>
+									<div class="row">
+										<div class="form-group col-sm-12">
+											<label class="label-control">Upload Video</label>
+											<input type="file" class="form-control" name="property_video" accept="video/*">
+											<small class="text-muted">You can upload one property video (optional).</small>
+										</div>
+									</div>
+								@endif
 
-								<center class="loading">
-									<img src="{{ asset('images/loading.gif')}}" alt="Loading.." class="loading" />
-								</center>
+
+								<h4 class="form-section-h">Property Additional Information</h4>
 								<div id="fb-render"></div>
 							</div>
 						</div>
@@ -326,9 +337,6 @@
 					<div class="form-group col-sm-4">
 						<div class="card property-right-widgets">
 							<div class="form-sep">
-								<center class="loading_2">
-									<img src="{{ asset('images/loading.gif')}}" alt="Loading.." class="loading_2" />
-								</center>
 								<h3>Contact Information</h3>
 								<div class="form-group mb-0 row">
 									<div class="form-group col-sm-12 ">
@@ -439,9 +447,6 @@
 											name="otp" value="{{ old('otp') }}" required />
 									</div>
 								</div>
-								<div class="loading_3">
-									<img src="{{url('/') . '/images/loading.gif'}}" alt="Loading.." class="loading_3" />
-								</div>
 								@if(!\Auth::user())
 									<div class="row">
 										<div class="form-group col-sm-6">
@@ -474,9 +479,6 @@
 
 
 					<div class="form-group col-sm-12  mt-4 text-center">
-						<div class="loading_4">
-							<img src="{{url('/') . '/images/loading.gif'}}" alt="Loading.." class="loading_4" />
-						</div>
 						<button class="btn btn-postproperty" type="button" onclick="createProperty()">Post Property <i
 								class="fas fa-chevron-circle-right"></i></button>
 					</div>
@@ -494,8 +496,53 @@
 	<script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-	</script>
+
 	<script type="text/javascript">
+
+		let selectedFiles = []; // store selected files
+		const maxPhotos = {{ $photos_per_listing ?? 0 }};
+
+		document.getElementById('fileInput').addEventListener('change', function (event) {
+			const newFiles = Array.from(event.target.files);
+
+			// Merge old + new files, but limit total
+			const totalFiles = selectedFiles.length + newFiles.length;
+			if (maxPhotos > 0 && totalFiles > maxPhotos) {
+				alert(`You can upload a maximum of ${maxPhotos} photos.`);
+				return;
+			}
+
+			selectedFiles.push(...newFiles);
+			renderPreviews();
+
+			// clear file input so same file can be reselected later
+			event.target.value = '';
+		});
+
+		function renderPreviews() {
+			const container = document.getElementById('previewContainer');
+			container.innerHTML = '';
+
+			selectedFiles.forEach((file, index) => {
+				const reader = new FileReader();
+				reader.onload = (e) => {
+					const div = document.createElement('div');
+					div.style.position = 'relative';
+					div.innerHTML = `
+												<img src="${e.target.result}" class="rounded border" width="100" height="100">
+												<button type="button" class="btn btn-sm btn-danger" style="position:absolute;top:0;right:0;"
+													onclick="removeImage(${index})">&times;</button>
+											`;
+					container.appendChild(div);
+				};
+				reader.readAsDataURL(file);
+			});
+		}
+
+		function removeImage(index) {
+			selectedFiles.splice(index, 1);
+			renderPreviews();
+		}
 
 		// Center at user's current location if available
 		if (navigator.geolocation) {
@@ -507,7 +554,6 @@
 		} else {
 			createMap(28.6139, 77.2090);
 		}
-
 		function createMap(lat, lng) {
 			var map = L.map('propertyMap').setView([lat, lng], 16);
 			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -531,15 +577,9 @@
 			});
 		}
 
-
-
 		$(function () {
 			// Initialize on ready
 			initSubLocationSelect2();
-
-			$(".loading_2").css('display', 'none');
-			$(".loading_3").css('display', 'none');
-			$(".loading_4").css('display', 'none');
 			$(".populate_categories,  .populate_locations").change();
 
 			$(".add_formtype").empty().append(
@@ -636,7 +676,6 @@
 					"email": email
 				},
 				beforeSend: function () {
-					$(".loading_2").css('display', 'block');
 					$(element).addClass('disabled');
 				},
 				success: function (response) {
@@ -647,7 +686,6 @@
 					response.responseCode === 400 ? toastr.error(response.message) : toastr.error('An error occured');
 				},
 				complete: function () {
-					$(".loading_2").css('display', 'none');
 					$(element).removeClass('disabled');
 				}
 
@@ -664,7 +702,6 @@
 				beforeSend: function () {
 					$(".addproperty").attr('disabled', true);
 					$(".add_formtype").empty();
-					$(".loading").css('display', 'block');
 				},
 				success: function (response) {
 					// var response = JSON.parse(response);
@@ -692,8 +729,6 @@
 					toastr.error('An error occured while fetching subcategories');
 				},
 				complete: function () {
-					$(".loading").css('display', 'none');
-					// $(".addproperty").attr('disabled', false);
 				}
 			})
 		}
@@ -746,7 +781,6 @@
 				beforeSend: function () {
 					$(".addproperty").attr('disabled', true);
 					$(".add_formtype").empty();
-					$(".loading").css('display', 'block');
 				},
 				success: function (response) {
 					if (response != 0) {
@@ -763,7 +797,6 @@
 					toastr.error('An error occured');
 				},
 				complete: function () {
-					$(".loading").css('display', 'none');
 					$(".addproperty").attr('disabled', false);
 				}
 			})
@@ -939,133 +972,36 @@
 			};
 		}, 'Special characters not allowed. Please try again.');
 
-		// $(this).validate();
-		$("#create_property_form").validate({
-			rules: {
-				title: {
-					restrict_special_chars: true
-				},
-				price: {
-					minlength: 1,
-					maxlength: 10
-				}
-			},
-
-			submitHandler: function (e) {
-				var formData = new FormData(document.getElementById("create_property_form"));
-				var obj = {};
-				var isValid = false;
-				$(".input").each(function (x, y) {
-					if ($(this).attr('data-input-type')) {
-						var input_type = $(this).attr('data-input-type');
-						let objKey = $(this).attr('data-sub-feature-id').replace(/\ /g, '');
-						let objVal = $(this).val();
-						if (input_type == "1") {
-							if ($(this).is(':checked')) {
-								obj[objKey] = objVal;
-								isValid = true;
-							}
-						} else if (input_type == "3") {
-							if ($(this).is(':checked')) {
-								if (objVal != "") {
-									obj[objKey] = objVal;
-									isValid = true;
-								}
-							}
-						} else if (input_type == "2") {
-							if (objVal != "") {
-								obj[objKey] = objVal;
-								isValid = true;
-							}
-						} else {
-							obj[objKey] = objVal;
-						}
-					}
-				});
-				formData.append('listing_features', JSON.stringify(obj));
-				@guest
-					formData.append('is_visitor', true);
-				@endguest
-																																		if (jQuery.isEmptyObject(obj)) {
-					returnIfInvalid();
-				}
-
-				// console.log(isValid);
-				if (isValid) {
-					$.ajax({
-						url: "{{config('app.api_url') . '/property'}}",
-						method: "POST",
-						data: formData,
-						datatype: 'json',
-						cache: false,
-						contentType: false,
-						processData: false,
-						beforeSend: function (request) {
-							$(".addproperty").attr('disabled', true);
-							$(".loading_4").css('display', 'block');
-							@auth
-								request.setRequestHeader('auth-token', '{{Auth::user()->auth_token}}');
-							@endauth
-																																					},
-						success: function (response) {
-							// var response = JSON.parse(response);
-							if (response.responseCode === 200) {
-								toastr.success(response.message)
-								$("#create_property_form").trigger('reset');
-								@guest
-									//          	setTimeout(function() {
-									// window.location.href = "{{route('admin.properties.index')}}";
-									//          	}, 1000);
-								@endguest
-																																							} else if (response.responseCode === 400) {
-								toastr.error(response.message)
-							} else {
-								toastr.error('An error occured')
-							}
-						},
-						error: function (xhr) {
-							var response = JSON.parse(xhr.responseText);
-							response.responseCode === 400 ? toastr.error(response.message) : toastr.error('An error occured');
-						},
-						complete: function () {
-							formData = {};
-							$(".loading_4").css('display', 'none');
-							// $(".addproperty").attr('disabled', false);
-						}
-					})
-				}
-
-				return false;
-
-			}
-		});
 
 
 		function createProperty() {
 			var title = $('#title').val();
-			// var type = $('#type_id').val();
 			var price = $('#price').val();
+			var description = $('#description').val();
+			var address = $('#address').val();
+			var location_id = $('#location_id').val();
+			var sub_location_id = $('#sub_location_id').val();
+			var firstname = $('#firstname').val();
+			var lastname = $('#lastname').val();
+			var email = $('#email').val();
+			var mobile_number = $('#mobile_number').val();
+			var contact_otp = $('#contact_otp').val();
+			var state_id = $('#state_id').val();
+			var register_page_city_id = $('#register_page_city_id').val();
+			var file = $('#file').val();
+			const isVerified = @json(Auth::check() ? Auth::user()->is_verified : false);
+
 			if (title == '') {
 				$('#title').focus();
 				toastr.warning('Title field must be required.')
 				return false;
 			}
-			// if (type == '') {
-			// 	$('#type_id').focus();
-			// 	toastr.warning('Type field must be required.')
-			// 	return false;
-			// }
 			if (price == '') {
 				$('#price').focus();
 				toastr.warning('Price field must be required.')
 				return false;
 			}
-			var label = $("input[name=price_label]").val();
-			// if(!label) {
-			// 	$('#price_label').focus();
-			// 	toastr.warning('Price label field must be required.')
-			// 	return false;
-			// }
+
 			var category = $('#category_id').val();
 			var status = $('#status').val();
 			if (category == '') {
@@ -1078,11 +1014,7 @@
 				toastr.warning('Status field must be required.')
 				return false;
 			}
-			var description = $('#description').val();
-			var address = $('#address').val();
-			var location_id = $('#location_id').val();
-			var sub_location_id = $('#sub_location_id').val();
-			var file = $('#file').val();
+
 			if (description == '') {
 				$('#description').focus();
 				toastr.warning('Description field must be required.')
@@ -1113,13 +1045,7 @@
 				toastr.warning('Qwnership type field must be required.')
 				return false;
 			}
-			var firstname = $('#firstname').val();
-			var lastname = $('#lastname').val();
-			var email = $('#email').val();
-			var mobile_number = $('#mobile_number').val();
-			var contact_otp = $('#contact_otp').val();
-			var state_id = $('#state_id').val();
-			var register_page_city_id = $('#register_page_city_id').val();
+
 			if (firstname == '') {
 				$('#firstname').focus();
 				toastr.warning('First name field must be required.')
@@ -1140,11 +1066,14 @@
 				toastr.warning('Mobile Number field must be required.')
 				return false;
 			}
-			if (contact_otp == '') {
-				$('#contact_otp').focus();
-				toastr.warning('Otp field must be required.')
-				return false;
+			if (!isVerified) {
+				if (contact_otp == '') {
+					$('#contact_otp').focus();
+					toastr.warning('OTP field is required for unverified users.');
+					return false;
+				}
 			}
+
 			if (state_id == '') {
 				$('#state_id').focus();
 				toastr.warning('State field must be required.')
@@ -1160,7 +1089,37 @@
 				toastr.error('Additional details form must be required, please select another category or contact to admin.');
 			} else {
 				document.getElementById('form_json').value = JSON.stringify(data);
-				document.getElementById('create-property').submit();
+
+				const form = document.getElementById('create-property');
+				const formData = new FormData(form);
+
+				// ✅ Append all selected files to FormData
+				selectedFiles.forEach(file => {
+					formData.append('gallery_images_file[]', file);
+				});
+
+				// ✅ Submit via fetch (AJAX)
+				fetch(form.action, {
+					method: 'POST',
+					body: formData,
+				})
+					.then(res => res.json())
+					.then(data => {
+						if (data.success) {
+							toastr.success(data.message);
+							// Redirect to preview page after short delay
+							setTimeout(() => {
+								window.location.href = data.redirect_url;
+							}, 1000);
+						} else {
+							toastr.error(data.message || 'Something went wrong.');
+						}
+					})
+					.catch(err => {
+						console.error(err);
+						toastr.error('Failed to submit property.');
+					});
+
 			}
 		}
 

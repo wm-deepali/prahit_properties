@@ -90,7 +90,7 @@
                                             </div>
                                             <div class="col-md-2 mb-3">
                                                 <label class="form-label">Unit</label>
-                                                <select name="validity_unit" class="form-select" required>
+                                                <select name="validity_unit" class="form-control" required>
                                                     <option value="Days" <?php echo e((old('validity_unit', $validityUnit) == 'Days') ? 'selected' : ''); ?>>Days</option>
                                                     <option value="Months" <?php echo e((old('validity_unit', $validityUnit) == 'Months') ? 'selected' : ''); ?>>Months</option>
                                                     <option value="Years" <?php echo e((old('validity_unit', $validityUnit) == 'Years') ? 'selected' : ''); ?>>Years</option>

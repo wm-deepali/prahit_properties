@@ -276,16 +276,22 @@
                   <input type="hidden" name="longitude" id="longitude">
 
 
-                  <h4 class="form-section-h">Property Images</h4>
-
-                  <div class="form-group-f row">
-                    <div class="col-sm-6">
-                      <label class="label-control">Featured Image </label>
-                      <input type="file" class="text-control" name="feature_image_file" required />
+                  <h3>Property Photos</h3>
+                  <div class="row">
+                    <div class="form-group col-sm-12 ">
+                      <div class="dropzone">
+                        <input type="file" id="fileInput" multiple accept="image/*">
+                        <div id="previewContainer" class="mt-2 d-flex flex-wrap gap-2"></div>
+                      </div>
                     </div>
-                    <div class="col-sm-6">
-                      <label class="label-control">Gallery Images (Multiple) </label>
-                      <input type="file" class="text-control" name="gallery_images_file[]" multiple />
+                  </div>
+
+                  <h3>Property Video</h3>
+                  <div class="row">
+                    <div class="form-group col-sm-12">
+                      <label class="label-control">Upload Video</label>
+                      <input type="file" class="form-control" name="property_video" accept="video/*">
+                      <small class="text-muted">You can upload one property video (optional).</small>
                     </div>
                   </div>
 
@@ -322,6 +328,43 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
   <script type="text/javascript">
+
+    let selectedFiles = []; // store selected files
+
+    document.getElementById('fileInput').addEventListener('change', function (event) {
+      const newFiles = Array.from(event.target.files);
+      selectedFiles.push(...newFiles);
+      renderPreviews();
+
+      // clear file input so same file can be reselected later
+      event.target.value = '';
+    });
+
+    function renderPreviews() {
+      const container = document.getElementById('previewContainer');
+      container.innerHTML = '';
+
+      selectedFiles.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const div = document.createElement('div');
+          div.style.position = 'relative';
+          div.innerHTML = `
+                            <img src="${e.target.result}" class="rounded border" width="100" height="100">
+                            <button type="button" class="btn btn-sm btn-danger" style="position:absolute;top:0;right:0;"
+                              onclick="removeImage(${index})">&times;</button>
+                          `;
+          container.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function removeImage(index) {
+      selectedFiles.splice(index, 1);
+      renderPreviews();
+    }
+
 
     // Center at user's current location if available
     if (navigator.geolocation) {
@@ -459,6 +502,9 @@
 
         // Create FormData here
         var formData = new FormData(form);
+        selectedFiles.forEach(file => {
+          formData.append('gallery_images_file[]', file);
+        });
 
         $.ajax({
           url: "{{config('app.api_url')}}/property",

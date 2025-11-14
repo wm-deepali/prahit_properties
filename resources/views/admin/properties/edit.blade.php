@@ -314,32 +314,46 @@
                   <input type="hidden" name="latitude" id="latitude">
                   <input type="hidden" name="longitude" id="longitude">
 
-                  <h4 class="form-section-h">Property Images</h4>
-                  <div class="form-group-f row">
-                    <div class="col-sm-6">
-                      <label class="label-control">Featured Image </label>
-                      <input type="file" class="text-control" name="feature_image_file" />
-                    </div>
-                    <div class="col-sm-6">
-                      <label class="label-control">Gallery Images (Multiple) </label>
-                      <input type="file" class="text-control" name="gallery_images_file[]" />
+                  <h3>Uploaded Photos</h3>
+                  <div class="form-group dropzone row">
+                    @foreach($property->PropertyGallery as $k => $v)
+                      <div class="col-sm-2">
+                        <img src="{{url('') . '/' . $v->image_path}}" style="height: 100px;" class="img-fluid">
+                        <br>
+                        <center>
+                          <i class="fa fa-trash" aria-hidden="true" style="cursor: pointer;color: red;font-size: 15px;"
+                            onclick="deleteGalleryPhoto('{{ $v->id }}')"></i>
+                        </center>
+                      </div>
+                    @endforeach
+                  </div>
+
+                  <h3>Property Photos</h3>
+                  <div class="row">
+                    <div class="form-group col-sm-12 ">
+                      <div class="dropzone">
+                        <input type="file" id="fileInput" multiple accept="image/*">
+                        <div id="previewContainer" class="mt-2 d-flex flex-wrap gap-2"></div>
+                      </div>
                     </div>
                   </div>
-                  <div class="row form-group-f">
-                    @if(count($property->PropertyGallery) > 0)
-                      @foreach($property->PropertyGallery as $value)
-                        <div class="col-sm-2">
-                          <div class="prop-img-d">
-                            <a href="{{ asset('') }}/{{ $value->image_path }}" target="_blank"><img
-                                src="{{ asset('') }}/{{ $value->image_path }}" alt="Property Images" class="img-fluid"></a>
-                            <span onclick="deleteGalleryPhoto('{{ $value->id }}')"><i class="fa fa-trash"
-                                aria-hidden="true"></i></span>
-                          </div>
-                        </div>
-                      @endforeach
-                    @else
-                      <h5 style="color: brown;">No Any Images Found.</h5>
-                    @endif
+
+
+
+                  <h3>Property Video</h3>
+                  <div class="form-group row">
+                    <div class="form-group col-sm-12">
+                      @if(!empty($property->property_video))
+                        <video width="240" height="240" controls style="margin-bottom: 10px;">
+                          <source src="{{ url($property->property_video) }}" type="video/mp4">
+                          Your browser does not support the video tag.
+                        </video>
+                        <br>
+                      @endif
+                      <input type="file" name="property_video" accept="video/*" class="form-control">
+                    </div>
+                  </div>
+
                   </div>
                   <h4 class="form-section-h">Property Additional Information</h4>
 
@@ -379,13 +393,52 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
   <script type="text/javascript">
 
+
+let selectedFiles = []; // new files user selects
+
+		document.getElementById('fileInput').addEventListener('change', function (event) {
+			const newFiles = Array.from(event.target.files);
+
+			selectedFiles.push(...newFiles);
+			renderPreviews();
+
+			// reset input so same file can be reselected later
+			event.target.value = '';
+		});
+
+		function renderPreviews() {
+			const container = document.getElementById('previewContainer');
+			container.innerHTML = '';
+
+			selectedFiles.forEach((file, index) => {
+				const reader = new FileReader();
+				reader.onload = (e) => {
+					const div = document.createElement('div');
+					div.classList.add('position-relative', 'm-1');
+					div.innerHTML = `
+								<img src="${e.target.result}" class="rounded border" width="100" height="100">
+								<button type="button" class="btn btn-sm btn-danger" 
+									style="position:absolute;top:0;right:0;" 
+									onclick="removeImage(${index})">&times;</button>
+							`;
+					container.appendChild(div);
+				};
+				reader.readAsDataURL(file);
+			});
+		}
+
+		function removeImage(index) {
+			selectedFiles.splice(index, 1);
+			renderPreviews();
+		}
+
     @if(!empty($property->latitude) && !empty($property->longitude))
 
       // Initialize map with property coordinates
       createMap({{ $property->latitude }}, {{ $property->longitude }});
     @else
-                                      // Otherwise use browser geolocation or default
-      if (navigator.geolocation) {
+                                          // Otherwise use browser geolocation or default
+          if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (pos) {
           createMap(pos.coords.latitude, pos.coords.longitude);
         }, function () {
@@ -492,6 +545,11 @@
         }
         var formData = new FormData(form);
 
+        // Append all selected images
+				selectedFiles.forEach((file, i) => {
+					formData.append('gallery_images_file[]', file);
+				});
+        
         $.ajax({
           url: "{{route('admin.properties.update_property')}}",
           method: "POST",

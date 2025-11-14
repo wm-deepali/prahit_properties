@@ -130,6 +130,7 @@ class PropertyController extends BaseApiController
 			"gallery_images_file.*" => 'required|mimes:jpg,png,jpeg',
 			'sub_location_id' => 'nullable|array',
 			'sub_location_id.*' => 'nullable|string',
+			'property_video' => 'nullable|mimes:mp4,mov,avi,wmv|max:20480', // ✅ added validation (max 20MB)
 		];
 
 		$validator = \Validator::make($request->all(), $rules);
@@ -306,14 +307,17 @@ class PropertyController extends BaseApiController
 			$request['amenities'] = $request->has('amenity') ? implode(',', $request->amenity) : null;
 
 			$listing = Properties::create($request->all());
+
+			// ✅ Handle property video upload
+			if ($request->hasFile('property_video')) {
+				$file = $request->file('property_video');
+				$filename = uniqid('video_') . '.' . $file->getClientOriginalExtension();
+				$path = $file->storeAs('uploads/properties/videos', $filename, 'public');
+				$listing->property_video = 'storage/' . $path;
+				$listing->save();
+			}
+
 			if ($listing->exists()) {
-				// $listing_features = json_decode($request->listing_features, true);
-				// $propertiesFields;
-				// foreach ($listing_features as $key => $value) {
-				// 	if(strlen($value) > 1) {
-				// 			$propertiesFields = PropertiesFields::create(['property_id' => $listing->id, 'formtype_id' => $request->formtype_id, 'sub_feature_id' => $key, 'feature_value' => $value]);
-				// 	}
-				// }
 
 				if ($request->has('gallery_images_file')) {
 					$gallery_images = $this->multipleFileUpload($request, ['uploads/properties/gallery_images/' => 'gallery_images_file']);

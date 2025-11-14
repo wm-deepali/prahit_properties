@@ -37,7 +37,16 @@
 							<div class="property-top">
 								<div class="row">
 									<div class="col-sm-7">
-										<h3> {{$property_detail->title}}</h3>
+										<h3 class="property-title">
+											{{ $property_detail->title }}
+
+											@if($verified_tag === 'Yes')
+												<span class="badge bg-success ms-2">
+													<i class="bi bi-patch-check-fill"></i> Verified
+												</span>
+											@endif
+										</h3>
+
 										<div class="loc-id-detail">
 											<ul>
 												{{-- Remove location/sub-location from here - showing in featured details
@@ -153,15 +162,15 @@
 										<div class="property-featured-btn">
 											<ul>
 												<!-- <li>
-																<button class="btn btn-fill" type="button" data-toggle="modal"
-																	data-target="#contact-agent"
-																	onclick='window.active_listing_id = "{{$property_detail->id}}"'
-																	@if(auth()->check() && $property_detail->user_id === auth()->id())
-																	disabled @endif>
-																	Contact Agent
-																</button>
+																							<button class="btn btn-fill" type="button" data-toggle="modal"
+																								data-target="#contact-agent"
+																								onclick='window.active_listing_id = "{{$property_detail->id}}"'
+																								@if(auth()->check() && $property_detail->user_id === auth()->id())
+																								disabled @endif>
+																								Contact Agent
+																							</button>
 
-															</li> -->
+																						</li> -->
 												<li>
 													<button type="button" class="btn btn-outline"
 														onclick="claim('{{ $property_detail->id }}')">
@@ -210,6 +219,22 @@
 							</div>
 						</div>
 					</div>
+
+					@if(!empty($property_detail->property_video))
+						<div class="card property-widgets">
+							<div class="property-title">
+								<h3>Property Video</h3>
+							</div>
+							<div class="property-gallery">
+								<div class="row">
+									<video class="w-100" controls>
+										<source src="{{ url($property_detail->property_video) }}" type="video/mp4">
+										Your browser does not support the video tag.
+									</video>
+								</div>
+							</div>
+						</div>
+					@endif
 
 					<div class="card property-widgets">
 						<div class="property-title">
@@ -344,7 +369,14 @@
 				<div class="col-sm-4">
 					<div class="card property-widgets">
 						<div class="property-title">
-							<h3>Contact Agent</h3>
+							<h3>
+								Contact
+								@if($preminum_seller === 'Yes')
+									<span class="badge bg-success ms-2">
+										<i class="bi bi-patch-check-fill"></i> Preminum Seller
+									</span>
+								@endif
+							</h3>
 						</div>
 						<div class="property-contact">
 							<form id="enquiryForm">
@@ -586,8 +618,8 @@
 			// Property has saved lat/lng; use those
 			createMap({{ $property_detail->latitude }}, {{ $property_detail->longitude }});
 		@else
-																					// Use browser geolocation or default
-																					if (navigator.geolocation) {
+																																			// Use browser geolocation or default
+																																			if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function (pos) {
 					createMap(pos.coords.latitude, pos.coords.longitude);
 				}, function () {
@@ -767,7 +799,7 @@
 						return;
 					}
 					// open OTP modal
-					$('#otpModal').modal('show'); 
+					$('#otpModal').modal('show');
 					document.getElementById("otpMobile").value = mobile;
 
 				});
