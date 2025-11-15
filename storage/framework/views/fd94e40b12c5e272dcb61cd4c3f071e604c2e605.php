@@ -903,7 +903,7 @@
 			// Property has saved lat/lng; use those
 			createMap(<?php echo e($property_detail->latitude); ?>, <?php echo e($property_detail->longitude); ?>);
 		<?php else: ?>
-																																																																																	if (navigator.geolocation) {
+																																																																																			if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function (pos) {
 					createMap(pos.coords.latitude, pos.coords.longitude);
 				}, function () {
@@ -1009,7 +1009,9 @@
 						"built-up area": "built-up area unit",
 						"carpet area": "carpet area unit",
 						"super area": "super area unit",
-						"plot area": "plot area unit"
+						"plot area": "plot area unit",
+						"from": "from unit",
+						"to" : "to unit"
 					};
 
 					var tempUnitValues = {};
@@ -1049,9 +1051,19 @@
 									var selectedValue = field.userData[0];
 									if (field.values) {
 										var selectedOption = field.values.find(function (v) {
-											return v.value === selectedValue;
+											return v.value === selectedValue || v.label === selectedValue;
 										});
-										value = selectedOption ? selectedOption.label : selectedValue;
+
+										if (selectedOption) {
+											// Check if label is like "--Select--" (case-insensitive) or value is empty
+											if (!selectedOption.value || selectedOption.label.trim().toLowerCase() === '--select--') {
+												value = "N/A"; // or '' if you want empty
+											} else {
+												value = selectedOption.label;
+											}
+										} else {
+											value = selectedValue || "N/A";
+										}
 									}
 								} else if (field.type === 'checkbox-group') {
 									value = field.userData.join(", ");

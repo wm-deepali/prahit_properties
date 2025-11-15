@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\FormFeatureSetting;
 use App\SubSubCategory;
 use Illuminate\Http\Request;
 use App\SubCategory;
@@ -192,5 +193,148 @@ class CustomFormController extends Controller
 
 		return $picked ? $picked : 0;
 	}
+
+	public function manageFeatures($id)
+	{
+		$form = Form::findOrFail($id);
+
+		// decode JSON safely
+		$rawFields = json_decode($form->form_data ?? '[]', true);
+
+		$normalized = [];
+
+		foreach ($rawFields as $idx => $f) {
+			// skip headers/paragraphs unless you want them listed
+			if (in_array($f['type'] ?? '', ['header', 'paragraph'])) {
+				continue;
+			}
+
+			// Prefer the `name` attribute as a stable key; fall back to slugified label + index
+			$key = $f['name'] ?? null;
+			if (!$key) {
+				$labelForKey = isset($f['label']) ? strip_tags($f['label']) : 'field_' . $idx;
+				$key = \Str::slug($labelForKey) . '-' . $idx;
+			}
+
+			$label = isset($f['label']) ? strip_tags($f['label']) : $key;
+			$type = $f['type'] ?? 'text';
+
+			// Determine preview value from userData OR values[].selected OR empty
+			$preview = '';
+
+			// userData can be array or single
+			if (isset($f['userData'])) {
+				$ud = $f['userData'];
+				if (is_array($ud)) {
+					// multiple values or single inside array
+					$preview = implode(', ', array_filter($ud, function ($v) {
+						return $v !== null && $v !== '';
+					}));
+				} else {
+					$preview = (string) $ud;
+				}
+			} elseif (isset($f['values']) && is_array($f['values'])) {
+				// look for selected flags in values array
+				$selected = [];
+				foreach ($f['values'] as $val) {
+					if (!empty($val['selected']) || (isset($val['value']) && isset($val['selected']) && $val['selected'])) {
+						$selected[] = $val['label'] ?? $val['value'];
+					}
+				}
+				$preview = implode(', ', $selected);
+			}
+
+			// For checkbox-group when values present, preview any selected values
+			if ($type === 'checkbox-group' && isset($f['values']) && is_array($f['values'])) {
+				$selected = [];
+				foreach ($f['values'] as $v) {
+					if (!empty($v['selected']))
+						$selected[] = $v['label'] ?? $v['value'];
+				}
+				$preview = implode(', ', $selected);
+			}
+
+			// For radio-group map selected value->label if userData holds value
+			if ($type === 'radio-group' && isset($f['userData'][0]) && isset($f['values'])) {
+				$udv = $f['userData'][0];
+				foreach ($f['values'] as $v) {
+					if (isset($v['value']) && $v['value'] == $udv) {
+						$preview = $v['label'] ?? $udv;
+						break;
+					}
+				}
+			}
+
+			$normalized[] = [
+				'key' => $key,
+				'type' => $type,
+				'label' => trim($label),
+				'preview' => $preview,
+				'raw' => $f,
+			];
+		}
+
+		// load saved settings keyed by field_key
+		$saved = FormFeatureSetting::where('form_id', $id)->get()->keyBy('field_key');
+
+		return view('admin.formtype.manage-features', [
+			'form' => $form,
+			'fields' => $normalized,
+			'saved' => $saved,
+		]);
+	}
+
+	public function saveFeatures(Request $request)
+	{
+		$formId = $request->form_id;
+
+		// get submitted keys
+		$submittedKeys = array_keys($request->label ?? []);
+
+		// fetch existing saved rows
+		$existing = FormFeatureSetting::where('form_id', $formId)->get()->keyBy('field_key');
+
+		foreach ($submittedKeys as $key) {
+
+			// skip storing fields that have show_in_front unchecked
+			if (!isset($request->show[$key])) {
+
+				// if it exists in DB, delete it
+				if ($existing->has($key)) {
+					$existing[$key]->delete();
+				}
+
+				continue;
+			}
+
+			// Prepare data to save
+			$data = [
+				'label_to_show' => $request->label[$key] ?? null,
+				'icon_class' => $request->icon[$key] ?? null,
+				'sort_order' => $request->sort[$key] ?? 0,
+				'show_in_front' => 1, // only visible fields stored
+			];
+
+			// update or insert
+			FormFeatureSetting::updateOrCreate(
+				['form_id' => $formId, 'field_key' => $key],
+				$data
+			);
+
+			// remove from existing list so we know it's handled
+			if ($existing->has($key)) {
+				unset($existing[$key]);
+			}
+		}
+
+		// delete any leftover settings for fields that no longer exist
+		if ($existing->isNotEmpty()) {
+			FormFeatureSetting::whereIn('id', $existing->pluck('id'))->delete();
+		}
+
+		return redirect()->back()->with('success', 'Features updated successfully!');
+	}
+
+
 
 }

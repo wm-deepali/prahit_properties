@@ -1449,12 +1449,13 @@
                 <div class="bb-tab-pane {{ $index == 0 ? 'active' : '' }}" id="tab{{ $category->id }}">
                   <div class="tab-content-top-header">
                     @php
-                      // Split subcategories into chunks of 5 per column
-                      $subChunks = $category->subcategories->chunk(5);
+                      // Split into exactly 2 columns
+                      $totalSubs = $category->subcategories->count();
+                      $subChunks = $category->subcategories->chunk(ceil($totalSubs / 2));
                     @endphp
+
                     @foreach($subChunks as $chunk)
                       <div class="tab-content-section">
-                        <h4 class="tab-titles">Sub Categories</h4>
                         <div class="d-flex flex-column">
                           @foreach($chunk as $sub)
                             <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
@@ -2236,7 +2237,7 @@
 
                         @if($allSubs->count() > 0)
                           <div class="sub-sub-section section-properties">
-                            <h5><i class="fas fa-list"></i> Sub Categories</h5>
+                            <h5><i class="fas fa-list"></i> </h5>
                             <ul class="list-unstyled">
                               @foreach($allSubs->take($showLimit) as $sub)
                                 <li>
@@ -3750,7 +3751,7 @@
             } else {
               window.location.href = '/user/dashboard';  // default redirect
             }
-        
+
 
           } else if (response.status === 400) {
             toastr.error(response.message)

@@ -765,7 +765,9 @@
                       <div class=" property-card" data-type="office">
                         <div class="newdesign-project-main shadow-sm">
                           <div class="newdesign-image-proj position-relative">
-                            <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
+                            <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+">
                               <img
                                 src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'); ?>"
                                 alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -777,7 +779,9 @@
                           <div class="newdesign-info-proj p-3">
                             <div class="d-flex justify-content-between align-items-start">
                               <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
-                                  href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>"><?php echo e($value->title); ?></a>
+                                  href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+"><?php echo e($value->title); ?></a>
                               </h5>
 
                             </div>
@@ -860,7 +864,9 @@
             <div class="newdesign-project-main">
               <!--<a href="#">-->
               <div class="newdesign-image-proj">
-                <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
+                <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+">
                   <img
                     src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;'); ?>"
                     class="img-fluid" alt="Property 1">
@@ -872,7 +878,9 @@
               <div class="newdesign-info-proj">
                 <div class="d-flex justify-content-between">
                   <h4 class="newdesign-proj-name"> <a
-                      href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>"><?php echo e($value->title); ?></a></h4>
+                      href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+"><?php echo e($value->title); ?></a></h4>
                   <!--<span class="newdesign-proj-category">Villa</span>-->
                 </div>
                 <hr class="" style="margin-bottom:10px; margin-top:10px;">
@@ -943,7 +951,9 @@
                   <div class=" property-card" data-type="<?php echo e($value->getCategoryHierarchyName()); ?>">
                     <div class="newdesign-project-main shadow-sm">
                       <div class="newdesign-image-proj position-relative">
-                        <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
+                        <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+">
                           <img
                             src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'); ?>"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -955,7 +965,9 @@
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
                           <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
-                              href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>"><?php echo e($value->title); ?></a>
+                              href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+"><?php echo e($value->title); ?></a>
                           </h5>
 
                         </div>
@@ -1040,7 +1052,7 @@
                 <div class="swiper-slide">
                   <div class="directory-card-main d-flex flex-column">
                     <div class="directory-logo">
-                      <a href="<?php echo e(route('business.details', $list->id)); ?>">
+                      <a href="<?php echo e(route('business.details', ['id' => $list->id, 'slug' => $list->slug])); ?>">
                         <img
                           src="<?php echo e(isset($list->logo) ? asset('storage/' . $list->logo) : "https://mir-s3-cdn-cf.behance.net/project_modules/fs/3ede59114115331.603532078a563.jpg"); ?>"
                           class="img-fluid" alt="Company Logo 1">
@@ -1064,7 +1076,7 @@
                     <div class="directory-info">
 
                       <h4 class="directory-company-name"><a
-                          href="<?php echo e(route('business.details', $list->id)); ?>"><?php echo e($list->business_name); ?></a></h4>
+                          href="<?php echo e(route('business.details', ['id' => $list->id, 'slug' => $list->slug])); ?>"><?php echo e($list->business_name); ?></a></h4>
                       <hr>
 
 
@@ -1154,7 +1166,9 @@
                   <div class=" property-card" data-type="<?php echo e($value->getCategoryHierarchyName()); ?>">
                     <div class="newdesign-project-main shadow-sm">
                       <div class="newdesign-image-proj position-relative">
-                        <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
+                        <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+">
                           <img
                             src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'); ?>"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1166,7 +1180,9 @@
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
                           <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
-                              href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>"><?php echo e($value->title); ?></a>
+                              href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+"><?php echo e($value->title); ?></a>
                           </h5>
 
                         </div>
@@ -1260,7 +1276,9 @@
                   <div class=" property-card" data-type="<?php echo e($value->getCategoryHierarchyName()); ?>">
                     <div class="newdesign-project-main shadow-sm">
                       <div class="newdesign-image-proj position-relative">
-                        <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
+                        <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+">
                           <img
                             src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'); ?>"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1272,7 +1290,9 @@
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
                           <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
-                              href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>"><?php echo e($value->title); ?></a>
+                              href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+"><?php echo e($value->title); ?></a>
                           </h5>
 
                         </div>
@@ -1368,7 +1388,9 @@
                   <div class=" property-card" data-type="<?php echo e($value->getCategoryHierarchyName()); ?>">
                     <div class="newdesign-project-main shadow-sm">
                       <div class="newdesign-image-proj position-relative">
-                        <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
+                        <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+">
                           <img
                             src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'); ?>"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1380,7 +1402,9 @@
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
                           <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
-                              href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>"><?php echo e($value->title); ?></a>
+                              href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+"><?php echo e($value->title); ?></a>
                           </h5>
 
                         </div>
@@ -1505,7 +1529,7 @@
                     <div class="new-slide">
                       <div class="newdesign-project-main">
                         <div class="newdesign-image-proj">
-                          <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
+                          <a href="<?php echo e(route('property_detail', ['id' => $value->id,'slug' => $value->slug])); ?>">
                             <img src="<?php echo e(isset($value->PropertyGallery[0]->image_path)
                 ? asset($value->PropertyGallery[0]->image_path)
                 : 'https://static.squareyards.com/resources/images/mumbai/project-image/default.jpg'); ?>"
@@ -1519,7 +1543,7 @@
 
                           <div class="d-flex justify-content-between">
                             <h4 class="newdesign-proj-name">
-                              <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
+                              <a href="<?php echo e(route('property_detail', ['id' => $value->id,'slug' => $value->slug])); ?>">
                                 <?php echo e($value->title); ?>
 
                               </a>
@@ -1655,7 +1679,9 @@
                     <div class=" property-card">
                       <div class="newdesign-project-main shadow-sm">
                         <div class="newdesign-image-proj position-relative">
-                          <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
+                          <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+">
                             <img
                               src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'); ?>"
                               alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1667,7 +1693,9 @@
                         <div class="newdesign-info-proj p-3">
                           <div class="d-flex justify-content-between align-items-start">
                             <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
-                                href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>"><?php echo e($value->title); ?></a>
+                                href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+"><?php echo e($value->title); ?></a>
                             </h5>
 
                           </div>
@@ -1766,7 +1794,9 @@
                   <div class=" property-card">
                     <div class="newdesign-project-main shadow-sm">
                       <div class="newdesign-image-proj position-relative">
-                        <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
+                        <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+">
                           <img
                             src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'); ?>"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1778,7 +1808,9 @@
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
                           <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
-                              href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>"><?php echo e($value->title); ?></a>
+                              href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+"><?php echo e($value->title); ?></a>
                           </h5>
 
                         </div>
@@ -1859,7 +1891,9 @@
                     <div class=" property-card">
                       <div class="newdesign-project-main shadow-sm">
                         <div class="newdesign-image-proj position-relative">
-                          <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>">
+                          <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+">
                             <img
                               src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'); ?>"
                               alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1871,7 +1905,9 @@
                         <div class="newdesign-info-proj p-3">
                           <div class="d-flex justify-content-between align-items-start">
                             <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
-                                href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>"><?php echo e($value->title); ?></a>
+                                href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+"><?php echo e($value->title); ?></a>
                             </h5>
 
                           </div>

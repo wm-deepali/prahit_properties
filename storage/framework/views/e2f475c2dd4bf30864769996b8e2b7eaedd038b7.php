@@ -14,7 +14,7 @@
                 <div>
                     <div class="listing-header">
                         <h1 class="listing-title">
-                            <a href="<?php echo e(route('property_detail', ['title' => $property->slug])); ?>"
+                            <a href="<?php echo e(route('property_detail', ['id' => $property->id, 'slug' => $property->slug])); ?>"
                                 style="text-decoration: none; color: inherit;">
                                 <?php echo e($property->title ?? ''); ?>
 
@@ -31,39 +31,28 @@
                                 <i class="fas fa-share"></i>
                             </button>
 
-                            <button class="action-btn more-btn" data-url="<?php echo e(route('property_detail', ['title' => $property->slug])); ?>"
+                            <button class="action-btn more-btn"
+                                data-url="<?php echo e(route('property_detail', ['id' => $property->id, 'slug' => $property->slug])); ?>"
                                 title="View Details">
                                 <i class="fas fa-ellipsis-h"></i>
                             </button>
                         </div>
                     </div>
+                    <?php
+
+                        $features = \App\Helpers\Helper::getPropertyFeatureData($property);
+                    ?>
+
                     <div class="listing-features">
-                        <div class="feature-item">
-                            <i class="fas fa-home feature-icon"></i>
-                            <span class="feature-value">Unfurnished</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-bath feature-icon"></i>
-                            <span class="feature-value">2</span>
-                            <span class="feature-label">Bathrooms</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-calendar-check feature-icon"></i>
-                            <span class="feature-value">Immediately</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-expand-arrows-alt feature-icon"></i>
-                            <span class="feature-value">950 sqft</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-layer-group feature-icon"></i>
-                            <span class="feature-value">1 out of 1</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-user-friends feature-icon"></i>
-                            <span class="feature-value">Bachelors</span>
-                        </div>
+                        <?php $__currentLoopData = $features; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $f): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="feature-item">
+                                <i class="feature-icon <?php echo e($f['icon']); ?>"></i>
+                                <span class="feature-value"><?php echo e($f['value']); ?></span>
+                                <span class="feature-label"><?php echo e($f['label']); ?></span>
+                            </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
+
                     <div class="listing-description">
                         <?php echo e(\Illuminate\Support\Str::limit($property->description, 50)); ?>
 

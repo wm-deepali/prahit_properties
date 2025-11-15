@@ -215,6 +215,8 @@ Route::group(['middleware' => ['auth', 'admin.check']], function () {
 	Route::post('master/custom/form/update', 'Admin\CustomFormController@customFormUpdate')->name('customform.customFormUpdate');
 	Route::post('master/custom/form/delete', 'Admin\CustomFormController@deleteCustomForm')->name('customform.deleteCustomForm');
 	Route::post('master/custom/form/change-status', 'Admin\CustomFormController@formChangeStatus')->name('customform.formChangeStatus');
+	Route::get('master/custom/form/features/{id}', 'Admin\CustomFormController@manageFeatures');
+	Route::post('master/custom/form/features/save', 'Admin\CustomFormController@saveFeatures');
 
 	// Manage About Us Content
 	Route::get('manage/about-us', 'Admin\ContentController@manageAboutContent')->name('manageAboutContent');

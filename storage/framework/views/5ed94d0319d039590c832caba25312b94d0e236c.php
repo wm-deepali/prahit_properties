@@ -1427,12 +1427,13 @@
                 <div class="bb-tab-pane <?php echo e($index == 0 ? 'active' : ''); ?>" id="tab<?php echo e($category->id); ?>">
                   <div class="tab-content-top-header">
                     <?php
-                      // Split subcategories into chunks of 5 per column
-                      $subChunks = $category->subcategories->chunk(5);
+                      // Split into exactly 2 columns
+                      $totalSubs = $category->subcategories->count();
+                      $subChunks = $category->subcategories->chunk(ceil($totalSubs / 2));
                     ?>
+
                     <?php $__currentLoopData = $subChunks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $chunk): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                       <div class="tab-content-section">
-                        <h4 class="tab-titles">Sub Categories</h4>
                         <div class="d-flex flex-column">
                           <?php $__currentLoopData = $chunk; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <a href="<?php echo e(route('directory.list', ['subcategory' => $sub->id])); ?>">
@@ -2223,7 +2224,7 @@
 
                         <?php if($allSubs->count() > 0): ?>
                           <div class="sub-sub-section section-properties">
-                            <h5><i class="fas fa-list"></i> Sub Categories</h5>
+                            <h5><i class="fas fa-list"></i> </h5>
                             <ul class="list-unstyled">
                               <?php $__currentLoopData = $allSubs->take($showLimit); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li>
@@ -3749,7 +3750,7 @@
             } else {
               window.location.href = '/user/dashboard';  // default redirect
             }
-        
+
 
           } else if (response.status === 400) {
             toastr.error(response.message)

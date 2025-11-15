@@ -63,20 +63,25 @@
                             </td>
                             <td>
                               <ul class="action">
-                                <li><a href="<?php echo e(url('master/custom/form/view/')); ?>/<?php echo e($v->id); ?>"><i class="fa fa-eye"
-                                      aria-hidden="true"></i></a></li>
+                                <li><a href="<?php echo e(url('master/custom/form/view/')); ?>/<?php echo e($v->id); ?>"><i class="fa fa-eye"></i></a>
+                                </li>
+
                                 <?php if($v->status == "No"): ?>
-                                  <li><a style="cursor: pointer;" onclick="changeStatus('<?php echo e($v->id); ?>')"><i
-                                        class="fa fa-check-circle" aria-hidden="true"></i></a></li>
+                                  <li><a onclick="changeStatus('<?php echo e($v->id); ?>')"><i class="fa fa-check-circle"></i></a></li>
                                 <?php else: ?>
-                                  <li><a style="cursor: pointer;" onclick="changeStatus('<?php echo e($v->id); ?>')"><i
-                                        class="fa fa-times-circle" aria-hidden="true"></i></a></li>
+                                  <li><a onclick="changeStatus('<?php echo e($v->id); ?>')"><i class="fa fa-times-circle"></i></a></li>
                                 <?php endif; ?>
+
                                 <li><a href="<?php echo e(url('master/custom/form/edit/')); ?>/<?php echo e($v->id); ?>"><i
                                       class="fas fa-pencil-alt"></i></a></li>
-                                <li><a style="cursor: pointer;" onclick="deleteForm('<?php echo e($v->id); ?>')"><i class="fa fa-trash"
-                                      aria-hidden="true"></i></a></li>
+
+                                <!-- ⭐ NEW BUTTON -->
+                                <li><a href="<?php echo e(url('master/custom/form/features/')); ?>/<?php echo e($v->id); ?>"><i
+                                      class="fa fa-star"></i></a></li>
+
+                                <li><a onclick="deleteForm('<?php echo e($v->id); ?>')"><i class="fa fa-trash"></i></a></li>
                               </ul>
+
                             </td>
                           </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

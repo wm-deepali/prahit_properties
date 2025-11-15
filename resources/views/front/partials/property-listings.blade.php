@@ -30,39 +30,28 @@
                                 <i class="fas fa-share"></i>
                             </button>
 
-                            <button class="action-btn more-btn" data-url="{{ route('property_detail', ['id' => $property->id, 'slug' => $property->slug]) }}"
+                            <button class="action-btn more-btn"
+                                data-url="{{ route('property_detail', ['id' => $property->id, 'slug' => $property->slug]) }}"
                                 title="View Details">
                                 <i class="fas fa-ellipsis-h"></i>
                             </button>
                         </div>
                     </div>
+                    @php
+
+                        $features = \App\Helpers\Helper::getPropertyFeatureData($property);
+                    @endphp
+
                     <div class="listing-features">
-                        <div class="feature-item">
-                            <i class="fas fa-home feature-icon"></i>
-                            <span class="feature-value">Unfurnished</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-bath feature-icon"></i>
-                            <span class="feature-value">2</span>
-                            <span class="feature-label">Bathrooms</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-calendar-check feature-icon"></i>
-                            <span class="feature-value">Immediately</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-expand-arrows-alt feature-icon"></i>
-                            <span class="feature-value">950 sqft</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-layer-group feature-icon"></i>
-                            <span class="feature-value">1 out of 1</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-user-friends feature-icon"></i>
-                            <span class="feature-value">Bachelors</span>
-                        </div>
+                        @foreach($features as $f)
+                            <div class="feature-item">
+                                <i class="feature-icon {{ $f['icon'] }}"></i>
+                                <span class="feature-value">{{ $f['value'] }}</span>
+                                <span class="feature-label">{{ $f['label'] }}</span>
+                            </div>
+                        @endforeach
                     </div>
+
                     <div class="listing-description">
                         {{ \Illuminate\Support\Str::limit($property->description, 50) }}
                     </div>

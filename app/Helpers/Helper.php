@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Category;
+use App\Models\FormFeatureSetting;
 use App\Models\PropertyStatus;
 use App\SubCategory;
 use App\SubSubCategory;
@@ -10,6 +11,7 @@ use App\Properties;
 use App\BusinessListing;
 use App\Models\FurnishingStatus;
 use Carbon\Carbon;
+use App\Form;
 
 class Helper
 {
@@ -472,4 +474,167 @@ class Helper
             return false;
         }
     }
+
+    /**
+     * Get Form ID based on property's category → subcategory → sub-subcategory
+     */
+    public static function getFormIdByProperty($property)
+    {
+        // 1️⃣ Match Sub-Sub-Category
+        if ($property->sub_sub_category_id) {
+            $form = Form::whereRaw("FIND_IN_SET(?, sub_sub_category_id)", [$property->sub_sub_category_id])->first();
+            if ($form)
+                return $form->id;
+        }
+
+        // 2️⃣ Match Sub-Category
+        if ($property->sub_category_id) {
+            $form = Form::whereRaw("FIND_IN_SET(?, sub_category_id)", [$property->sub_category_id])->first();
+            if ($form)
+                return $form->id;
+        }
+
+        // 3️⃣ Match Category
+        if ($property->category_id) {
+            $form = Form::whereRaw("FIND_IN_SET(?, category_id)", [$property->category_id])->first();
+            if ($form)
+                return $form->id;
+        }
+
+        return null;
+    }
+
+
+    /**
+     * Get only filtered + sorted features with values
+     */
+    public static function getPropertyFeatureData($property)
+    {
+        $formId = self::getFormIdByProperty($property);
+
+        if (!$formId) {
+            return [];
+        }
+
+        // Load selected features
+        $settings = FormFeatureSetting::where('form_id', $formId)
+            ->where('show_in_front', 1)
+            ->orderBy('sort_order')
+            ->get()
+            ->keyBy('field_key');
+
+        $info = json_decode($property->additional_info ?? '[]', true);
+
+        // -----------------------------------------
+        // 1️⃣ FALLBACK WHEN ADMIN HAS NOT SET ANY FEATURES
+        // -----------------------------------------
+        if ($settings->isEmpty()) {
+
+            $iconMap = [
+                'Bedroom' => 'fas fa-bed',
+                'Balconies' => 'fas fa-sun',
+                'Bathrooms' => 'fas fa-bath',
+                'Furnished Status' => 'fas fa-couch',
+                'Total Floors' => 'fas fa-layer-group',
+                'Floors allowed for construction' => 'fas fa-layer-group',
+                'No of open sides' => 'fas fa-door-open',
+                'Carpet Area' => 'fas fa-expand',
+                'Super Area' => 'fas fa-expand-arrows-alt',
+                'Plot Area' => 'fas fa-border-all',
+                'Plot Length' => 'fas fa-ruler-horizontal',
+                'Plot Breadth' => 'fas fa-ruler-combined',
+                'Is this a corner plot?' => 'fas fa-map',
+                'Width of road facing the plot' => 'fas fa-road',
+            ];
+
+            $fallback = [];
+            $count = 0;
+
+            foreach ($info as $field) {
+
+                if ($count >= 6)
+                    break;
+
+                if (!isset($field['type']) || !isset($field['label']))
+                    continue;
+
+                // clean label
+                $label = strip_tags($field['label']);
+                $label = preg_replace('/\s*\([^)]*\)/', '', $label);
+                $label = trim($label);
+
+                // skip headers / paragraphs
+                if (in_array($field['type'], ['header', 'paragraph']))
+                    continue;
+
+                $value = $field['userData'][0] ?? '';
+                if ($value === '')
+                    continue;
+
+                // convert radio-group values
+                if ($field['type'] === 'radio-group' && isset($field['values'])) {
+                    foreach ($field['values'] as $v) {
+                        if ($v['value'] == $value) {
+                            $value = $v['label'];
+                            break;
+                        }
+                    }
+                }
+
+                // match icon
+                $icon = $iconMap[$label] ?? 'fas fa-info-circle';
+
+                $fallback[] = [
+                    'label' => $label,
+                    'value' => $value,
+                    'icon' => $icon
+                ];
+
+                $count++;
+            }
+
+            return $fallback;
+        }
+
+        // -----------------------------------------
+        // 2️⃣ ADMIN-SELECTED FEATURES
+        // -----------------------------------------
+        $final = [];
+
+        foreach ($info as $field) {
+
+            $key = $field['name'] ?? $field['label'] ?? null;
+            if (!$key)
+                continue;
+
+            if (!isset($settings[$key]))
+                continue;
+
+            $setting = $settings[$key];
+
+            $label = preg_replace('/\s*\([^)]*\)/', '', strip_tags($setting->label_to_show));
+            $value = $field['userData'][0] ?? '';
+
+            if ($value === '')
+                continue;
+
+            if ($field['type'] === 'radio-group' && isset($field['values'])) {
+                foreach ($field['values'] as $v) {
+                    if ($v['value'] == $value) {
+                        $value = $v['label'];
+                        break;
+                    }
+                }
+            }
+
+            $final[] = [
+                'label' => $label,
+                'value' => $value,
+                'icon' => $setting->icon_class ?? 'fas fa-info-circle'
+            ];
+        }
+
+        return $final;
+    }
+
 }
