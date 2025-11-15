@@ -526,31 +526,49 @@
     });
 
 
-            // Add More portfolio dynamically
-            var portfolioIndex = <?php echo e($business->portfolio->count()); ?>;
-            $(document).on('click', '.add-portfolio', function() {
-                var row = `<div class="portfolio-row row mb-2">
-                                <div class="form-group col-md-3">
-                                    <input type="text" name="portfolio[${portfolioIndex}][title]" class="form-control" placeholder="Title">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <input type="url" name="portfolio[${portfolioIndex}][link]" class="form-control" placeholder="Link">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <input type="file" name="portfolio[${portfolioIndex}][image]" class="form-control-file">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <button type="button" class="btn btn-danger remove-portfolio">Remove</button>
-                                </div>
-                            </div>`;
-                $('#portfolio-container').append(row);
-                portfolioIndex++;
-            });
+           // Existing portfolio code
+    var portfolioIndex = <?php echo e($business->portfolio->count()); ?>;
+    var totalPortfolioAllowed = <?php echo e($image_upload_limit); ?>; // Pass this from your controller
 
-            $(document).on('click', '.remove-portfolio', function() {
-                $(this).closest('.portfolio-row').remove();
-            });
+    function updateAddPortfolioButton() {
+        if ($('#portfolio-container .portfolio-row').length >= totalPortfolioAllowed) {
+            $('.add-portfolio').prop('disabled', true);
+        } else {
+            $('.add-portfolio').prop('disabled', false);
+        }
+    }
 
+    // Initial check
+    updateAddPortfolioButton();
+
+    $(document).on('click', '.add-portfolio', function() {
+        if ($('#portfolio-container .portfolio-row').length < totalPortfolioAllowed) {
+            var row = `<div class="portfolio-row row mb-2">
+                            <div class="form-group col-md-3">
+                                <input type="text" name="portfolio[${portfolioIndex}][title]" class="form-control" placeholder="Title">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <input type="url" name="portfolio[${portfolioIndex}][link]" class="form-control" placeholder="Link">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="file" name="portfolio[${portfolioIndex}][image]" class="form-control-file">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button type="button" class="btn btn-danger remove-portfolio">Remove</button>
+                            </div>
+                        </div>`;
+            $('#portfolio-container').append(row);
+            portfolioIndex++;
+            updateAddPortfolioButton();
+        } else {
+            alert('You have reached the maximum number of portfolio items allowed by your plan.');
+        }
+    });
+
+    $(document).on('click', '.remove-portfolio', function() {
+        $(this).closest('.portfolio-row').remove();
+        updateAddPortfolioButton();
+    });
 
             // Working Hours Add Row
             $(document).on('click', '#add-working-hour', function() {

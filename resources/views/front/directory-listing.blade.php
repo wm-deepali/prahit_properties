@@ -604,40 +604,38 @@
             </div>
             <div class="ver-line"></div>
             <div class="filter-text">
-                <p class="m-0" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"><i
+                <p class="m-0" data-bs-toggle="offcanvas" href="#offcanvasMobileFilters" role="button"><i
                         class="fa-solid fa-sliders"></i> Filter</p>
             </div>
         </div>
 
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="filterMenuLabel"
+        <!-- Mobile Filters Offcanvas -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMobileFilters" aria-labelledby="mobileFilterLabel"
             style="width: 320px;">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title fw-semibold" id="filterMenuLabel"></h5>
+                <h5 class="offcanvas-title fw-semibold" id="mobileFilterLabel">Filters</h5>
                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-
-            <div class="offcanvas-body" style="background:#f9f9f9; text-align: left;">
+            <div class="offcanvas-body" style="background: #f9f9f9; text-align: left;">
                 <div class="directory-filter">
-                    <div class="reset-btn d-flex justify-content-between align-items-center">
-                        <h2 style="font-size:20px;">Filters</h2>
-                        <button onclick="resetFilters()">Reset</button>
-                    </div>
-                    <hr>
+
+                    <!-- Categories -->
                     <div class="category-group">
-                        <h2>Categories</h2>
+                        <h2 id="mobile-category-label">Categories</h2>
                         <hr>
-                        <div class="category-list">
+                        <div class="category-list" id="mobile-category-list">
                             @foreach($categories as $category)
                                 <div class="category-wrapper">
-                                    <p class="category-item" data-category-id="{{ $category->id }}"
-                                        onclick="toggleCategory(this, '{{ $category->category_name }}', {{ $category->id }})">
+                                    <p class="category-item" id="mobile-category-{{ $category->id }}"
+                                        data-category-id="{{ $category->id }}"
+                                        onclick="toggleCategoryMobile(this, {{ $category->id }})">
                                         {{ $category->category_name }}
                                     </p>
-                                    <div class="subcategory-section" style="display: none;">
+                                    <div class="subcategory-section" style="display:none;">
                                         <div class="subcategory-list">
                                             @foreach($category->subcategories as $subCat)
                                                 <p data-subcategory-id="{{ $subCat->id }}"
-                                                    onclick="selectSubCategory(this, {{ $category->id }}, {{ $subCat->id }})">
+                                                    onclick="selectSubCategoryMobile(this, {{ $category->id }}, {{ $subCat->id }})">
                                                     {{ $subCat->sub_category_name }}
                                                 </p>
                                             @endforeach
@@ -648,47 +646,59 @@
                         </div>
                     </div>
                     <hr>
+
+                    <!-- Ratings -->
                     <div class="rating-group">
-                        <h2>Ratings</h2>
+                        <h2 id="mobile-rating-label">Ratings</h2>
                         <div class="rating-button">
                             <button>
-                                <input type="checkbox" class="filter-checkbox" name="rating" value="5">
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i> 5 Stars
+                                <input type="checkbox" class="filter-checkbox" id="mobile-rating-5" name="rating" value="5">
+                                <label for="mobile-rating-5">5 Stars</label>
                             </button>
                             <button>
-                                <input type="checkbox" class="filter-checkbox" name="rating" value="4">
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i><i class="far fa-star"></i> 4 Stars & Above
+                                <input type="checkbox" class="filter-checkbox" id="mobile-rating-4" name="rating" value="4">
+                                <label for="mobile-rating-4">4 Stars & Above</label>
                             </button>
                             <button>
-                                <input type="checkbox" class="filter-checkbox" name="rating" value="3">
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                <i class="far fa-star"></i><i class="far fa-star"></i> 3 Stars & Above
+                                <input type="checkbox" class="filter-checkbox" id="mobile-rating-3" name="rating" value="3">
+                                <label for="mobile-rating-3">3 Stars & Above</label>
                             </button>
                         </div>
                     </div>
                     <hr>
+
+                    <!-- Other Filters -->
                     <div class="category-group">
-                        <h2>Apply Filter</h2>
+                        <h2>Apply Filters</h2>
                         <div class="category-button">
                             <button>
-                                <input type="checkbox" class="filter-checkbox" name="verified" value="true">
-                                Verified Sellers
+                                <input type="checkbox" class="filter-checkbox" id="mobile-verified" name="verified"
+                                    value="true">
+                                <label for="mobile-verified">Verified Sellers</label>
                             </button>
                             <button>
-                                <input type="checkbox" class="filter-checkbox" name="premium" value="true">
-                                Premium Sellers
+                                <input type="checkbox" class="filter-checkbox" id="mobile-premium" name="premium"
+                                    value="true">
+                                <label for="mobile-premium">Premium Sellers</label>
                             </button>
                             <button>
-                                <input type="checkbox" class="filter-checkbox" name="most_rated" value="true">
-                                Most Rated
+                                <input type="checkbox" class="filter-checkbox" id="mobile-mostrated" name="mostrated"
+                                    value="true">
+                                <label for="mobile-mostrated">Most Rated</label>
                             </button>
                         </div>
+                    </div>
+
+                    <!-- Apply Filters Button -->
+                    <div class="d-grid gap-2 mt-4">
+                        <button class="btn btn-warning w-100" id="applyMobileFiltersBtn" type="button">
+                            Apply Filters
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+
 
 
         <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
@@ -881,11 +891,6 @@
             </div>
         </div>
     </div>
-
-
-
-
-
 @endsection
 
 @section('js')
@@ -1010,6 +1015,86 @@
                 applyFilters();
             });
         });
+
+
+        // Mobile selections stored globally for example
+        let selectedCategoryMobile = null;
+        let selectedSubCategoryMobile = null;
+        let selectedRatingMobile = null;
+        let selectedFiltersMobile = {
+            verified: false,
+            premium: false,
+            mostrated: false,
+        };
+
+        // Toggle category mobile handler example
+        function toggleCategoryMobile(element, categoryId) {
+            // Toggle category active and show subcategories
+            document.querySelectorAll('#mobile-category-list .category-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            selectedCategoryMobile = categoryId;
+
+            // Show subcategory section for this category only
+            document.querySelectorAll('#mobile-category-list .subcategory-section').forEach(section => section.style.display = 'none');
+            const subcategorySection = element.nextElementSibling;
+            if (subcategorySection) subcategorySection.style.display = 'block';
+        }
+
+        // Select subcategory mobile handler example
+        function selectSubCategoryMobile(element, categoryId, subCategoryId) {
+            document.querySelectorAll('#mobile-category-list .subcategory-list p').forEach(p => p.classList.remove('active'));
+            element.classList.add('active');
+            selectedSubCategoryMobile = subCategoryId;
+        }
+
+        // Listen to rating checkboxes mobile
+        document.querySelectorAll('input.filter-checkbox[name="rating"]').forEach(cb => {
+            cb.addEventListener('change', function () {
+                if (this.checked) {
+                    selectedRatingMobile = this.value;
+                    // Uncheck other ratings since only one rating filter selected at a time
+                    document.querySelectorAll('input.filter-checkbox[name="rating"]').forEach(otherCb => {
+                        if (otherCb !== this) otherCb.checked = false;
+                    });
+                } else {
+                    selectedRatingMobile = null;
+                }
+            });
+        });
+
+        // Listen to other filter checkboxes mobile
+        document.querySelectorAll('input.filter-checkbox[name="verified"], input.filter-checkbox[name="premium"], input.filter-checkbox[name="mostrated"]').forEach(cb => {
+            cb.addEventListener('change', function () {
+                selectedFiltersMobile.verified = document.getElementById('mobile-verified').checked;
+                selectedFiltersMobile.premium = document.getElementById('mobile-premium').checked;
+                selectedFiltersMobile.mostrated = document.getElementById('mobile-mostrated').checked;
+            });
+        });
+
+        // Apply Filters Button click handler
+        document.getElementById('applyMobileFiltersBtn').addEventListener('click', function () {
+            applyFiltersMobile();
+        });
+
+        // Central mobile apply filters function (adjust your existing applyFilters logic here)
+        function applyFiltersMobile(pageUrl = "{{ route('directory.list') }}") {
+            // Build query params and call your AJAX or reload logic with selectedCategoryMobile, selectedSubCategoryMobile, etc.
+            const params = new URLSearchParams();
+
+            if (selectedCategoryMobile) params.append('category', selectedCategoryMobile);
+            if (selectedSubCategoryMobile) params.append('subcategory', selectedSubCategoryMobile);
+            if (selectedRatingMobile) params.append('rating', selectedRatingMobile);
+
+            if (selectedFiltersMobile.verified) params.append('verified', true);
+            if (selectedFiltersMobile.premium) params.append('premium', true);
+            if (selectedFiltersMobile.mostrated) params.append('mostrated', true);
+
+            // Fetch or reload filter results with URL parameters or AJAX call
+            fetchDirectoryResults(pageUrl + "?" + params.toString()); // Adjust URL as per your app
+
+            // Optionally update UI or reset states as necessary
+        }
+
 
         // ✅ Central function to apply filters (AJAX)
         function applyFilters(pageUrl = "{{ route('directory.list') }}") {
@@ -1209,7 +1294,7 @@
             document.querySelector('.step1').style.display = 'block';
             document.querySelector('.step2').style.display = 'none';
 
-          $('#contactBusinessModal').modal('show');
+            $('#contactBusinessModal').modal('show');
 
         }
 

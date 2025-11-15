@@ -9,8 +9,102 @@
 	</style>
 @endsection
 
-@section('content')
+<style>
+	.related-agents {
+		position: sticky;
+		top: 20px;
+		padding: 20px;
+		background: white;
+		border-radius: 12px;
+		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+	}
 
+
+	.agent-card {
+		border: none;
+		overflow: hidden;
+		transition: transform 0.3s ease;
+		margin-bottom: 20px;
+	}
+
+	.agent-card:hover {
+		transform: translateY(-5px);
+	}
+
+	.newdesign-image-agent {
+		position: relative;
+	}
+
+	.newdesign-image-agent img {
+		width: 100%;
+		height: 200px;
+		object-fit: cover;
+	}
+
+	.newdesign-verified-seal {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		background: #28a745;
+		color: white;
+		padding: 5px 10px;
+		border-radius: 10px;
+		font-size: 0.9rem;
+	}
+
+	.newdesign-info-agent {
+		padding: 15px;
+	}
+
+	.newdesign-info-agent .newdesign-proj-name {
+		font-size: 1.3rem;
+		margin-bottom: 5px;
+		font-family: 'Arial', sans-serif;
+	}
+
+	.newdesign-info-agent .newdesign-apart-name {
+		font-size: 0.95rem;
+		color: #666;
+		margin-bottom: 10px;
+	}
+
+	.newdesign-info-agent hr {
+		margin: 10px 0;
+		border: 0;
+		border-top: 1px solid #eee;
+	}
+
+	.newdesign-info-agent .newdesign-apart-adress {
+		font-size: 0.9rem;
+		color: #888;
+		display: block;
+		margin-bottom: 10px;
+	}
+
+	.newdesign-info-agent .newdesign-proj-owner {
+		font-size: 0.9rem;
+		color: #666;
+	}
+
+	.newdesign-info-agent .view-profile-btn {
+		background: #007bff;
+		color: white;
+		border: none;
+		padding: 8px 15px;
+		border-radius: 20px;
+		font-size: 0.9rem;
+		display: block;
+		width: 100%;
+		text-align: center;
+		margin-top: 10px;
+		transition: background 0.3s ease;
+	}
+
+	.newdesign-info-agent .view-profile-btn:hover {
+		background: #0056b3;
+	}
+</style>
+@section('content')
 	<section class="breadcrumb-section">
 		<div class="container">
 			<div class="row">
@@ -27,7 +121,6 @@
 			</div>
 		</div>
 	</section>
-
 	<section class="property-detail-section">
 		<div class="container">
 			<div class="row">
@@ -39,18 +132,14 @@
 									<div class="col-sm-7">
 										<h3 class="property-title">
 											{{ $property_detail->title }}
-
 											@if($property_detail->verified_tag === 'Yes')
 												<span class="badge bg-success ms-2">
 													<i class="bi bi-patch-check-fill"></i> Verified
 												</span>
 											@endif
 										</h3>
-
 										<div class="loc-id-detail">
 											<ul>
-												{{-- Remove location/sub-location from here - showing in featured details
-												below --}}
 												<li>
 													<i class="fas fa-map-marker-alt"></i>
 													{{ $property_detail->getCity ? $property_detail->getCity->name : '' }}{{ $property_detail->getState ? ', ' . $property_detail->getState->name : '' }}
@@ -63,8 +152,7 @@
 											<h3><i class="fas fa-rupee-sign"></i> <span class="property_price">
 													{{isset($property_detail->price) ? \App\Helpers\Helper::formatIndianPrice($property_detail->price) : ''}}
 												</span> </h3>
-											<a href="#property-othercharges"><i class="fas fa-info-circle"></i> Other
-												Charges</a>
+											<span id="price-negotiable"></span>
 										</div>
 									</div>
 								</div>
@@ -78,11 +166,9 @@
 												class="img-fluid">
 										</div>
 									</div>
-
 									<div class="col-sm-8">
 										<div class="property-featured-det">
 											<div class="row">
-
 												<!-- Category -->
 												@if($property_detail->Category)
 													<div class="col-sm-6 col-md-6 col-xs-6">
@@ -92,7 +178,6 @@
 														</div>
 													</div>
 												@endif
-
 												<!-- Sub Category -->
 												@if($property_detail->SubCategory)
 													<div class="col-sm-6 col-md-6 col-xs-6">
@@ -102,7 +187,6 @@
 														</div>
 													</div>
 												@endif
-
 												<!-- Sub Sub Category -->
 												@if($property_detail->SubSubCategory)
 													<div class="col-sm-6 col-md-6 col-xs-6">
@@ -112,7 +196,6 @@
 														</div>
 													</div>
 												@endif
-
 												<!-- State -->
 												<div class="col-sm-6 col-md-6 col-xs-6">
 													<div class="detail-field-label">State</div>
@@ -120,7 +203,6 @@
 														{{ $property_detail->getState ? $property_detail->getState->name : 'N/A' }}
 													</div>
 												</div>
-
 												<!-- City -->
 												<div class="col-sm-6 col-md-6 col-xs-6">
 													<div class="detail-field-label">City</div>
@@ -128,7 +210,6 @@
 														{{ $property_detail->getCity ? $property_detail->getCity->name : 'N/A' }}
 													</div>
 												</div>
-
 												<!-- Location -->
 												@if($property_detail->Location)
 													<div class="col-sm-6 col-md-6 col-xs-6">
@@ -138,7 +219,6 @@
 														</div>
 													</div>
 												@endif
-
 												<!-- Sub Location -->
 												@if($property_detail->sub_location_id)
 													<div class="col-sm-6 col-md-6 col-xs-6">
@@ -148,29 +228,36 @@
 														</div>
 													</div>
 												@endif
-
-												<!-- Address -->
+												{{-- Posted By --}}
+												@if($property_user)
+													<div class="col-sm-6 col-md-6 col-xs-6">
+														<div class="detail-field-label">Posted By</div>
+														<div class="detail-field-value">
+															{{ $property_user->firstname }}
+															{{ $property_user->lastname }}
+															({{ ucfirst($property_user->role ?? 'User') }})
+														</div>
+													</div>
+												@endif
+												{{-- Published Date --}}
 												<div class="col-sm-6 col-md-6 col-xs-6">
-													<div class="detail-field-label">Address</div>
-													<div class="detail-field-value">{{ $property_detail->address ?? 'N/A' }}
+													<div class="detail-field-label">Published Date</div>
+													<div class="detail-field-value">
+														{{ $property_detail->published_date ?? 'Not Published' }}
 													</div>
 												</div>
-
+												<!-- Total Views -->
+												<div class="col-sm-6 col-md-6 col-xs-6">
+													<div class="detail-field-label">Total Views</div>
+													<div class="detail-field-value">
+														{{ number_format($property_detail->total_views) }}
+													</div>
+												</div>
 											</div>
 										</div>
 
 										<div class="property-featured-btn">
 											<ul>
-												<!-- <li>
-																							<button class="btn btn-fill" type="button" data-toggle="modal"
-																								data-target="#contact-agent"
-																								onclick='window.active_listing_id = "{{$property_detail->id}}"'
-																								@if(auth()->check() && $property_detail->user_id === auth()->id())
-																								disabled @endif>
-																								Contact Agent
-																							</button>
-
-																						</li> -->
 												<li>
 													<button type="button" class="btn btn-outline"
 														onclick="claim('{{ $property_detail->id }}')">
@@ -190,7 +277,6 @@
 														{!! $isInWishlist ? '❤️ Added to Wishlist' : '♡ Add to Wishlist' !!}
 													</button>
 												</li>
-
 											</ul>
 										</div>
 									</div>
@@ -207,8 +293,11 @@
 						<div class="property-title">
 							<h3>Property Gallery</h3>
 						</div>
+
 						<div class="property-gallery">
 							<div class="row">
+
+								{{-- Show all images --}}
 								@foreach($property_detail->PropertyGallery as $k => $v)
 									<div class="col-sm-3">
 										<a href="#">
@@ -216,25 +305,24 @@
 										</a>
 									</div>
 								@endforeach
+
+								{{-- 👇 JUST ADDED: Show video inside same box, after images --}}
+								@if(!empty($property_detail->property_video))
+									<div class="col-sm-12 mt-3">
+										<video class="w-100" controls>
+											<source src="{{ url($property_detail->property_video) }}" type="video/mp4">
+											Your browser does not support the video tag.
+										</video>
+									</div>
+								@endif
+
 							</div>
 						</div>
 					</div>
 
-					@if(!empty($property_detail->property_video))
-						<div class="card property-widgets">
-							<div class="property-title">
-								<h3>Property Video</h3>
-							</div>
-							<div class="property-gallery">
-								<div class="row">
-									<video class="w-100" controls>
-										<source src="{{ url($property_detail->property_video) }}" type="video/mp4">
-										Your browser does not support the video tag.
-									</video>
-								</div>
-							</div>
-						</div>
-					@endif
+					{{-- ❌ Removed second card completely (UI stays same; video moved above) --}}
+
+
 
 					<div class="card property-widgets">
 						<div class="property-title">
@@ -371,11 +459,6 @@
 						<div class="property-title">
 							<h3>
 								Contact
-								@if($property_user->premium_seller === 'Yes')
-									<span class="badge bg-success ms-2">
-										<i class="bi bi-patch-check-fill"></i> Preminum Seller
-									</span>
-								@endif
 							</h3>
 						</div>
 						<div class="property-contact">
@@ -430,7 +513,63 @@
 							</form>
 						</div>
 					</div>
+
+					<div class="related-agents">
+						<div class="agent-card mb-3 border">
+							<div class="newdesign-image-agent">
+								@php
+									$section = $property_user->profileSection;
+									$logo = isset($section->logo)
+										? asset('storage/' . $section->logo)
+										: $property_user->avatar;
+								@endphp
+								<img src="{{ $logo }}" alt="Agent" class="agent-avatar">
+								<span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i>
+									@if($property_user->premium_seller === 'Yes')
+										Premium
+									@else
+										Verified
+									@endif
+								</span>
+							</div>
+							<div class="newdesign-info-agent">
+								<div class="d-flex justify-content-between">
+									<h4 class="newdesign-proj-name">
+										{{ $property_user->firstname }} {{ $property_user->lastname }}
+									</h4>
+									<span class="newdesign-proj-category">
+										{{ $property_user->role ?? 'Agent' }}
+									</span>
+								</div>
+								<span class="newdesign-apart-name">
+									{!! Str::limit(
+		preg_replace('/\s+/', ' ', trim(strip_tags(html_entity_decode(optional($property_user->profileSection)->description ?? 'No description available')))),
+		100
+	) !!}
+								</span>
+								<hr>
+								<span class="newdesign-apart-adress">
+									<i class="fa-solid fa-location-dot"></i>
+									{{ $property_user->getCity->name ?? 'N/A' }},
+									{{ $property_user->getState->name ?? '' }}
+								</span>
+								<div class="d-flex justify-content-between">
+									<span
+										class="newdesign-proj-owner"><strong>Company:</strong><br>{{ optional($property_user->profileSection)->business_name ?? 'N/A' }}</span>
+									<span
+										class="newdesign-proj-owner"><strong>Experience:</strong><br>{{ optional($property_user->profileSection)->years_experience ?? 0 }}
+										yrs</span>
+								</div>
+								<a href="{{ route('profile.page', ['slug' => Str::slug($property_user->firstname)]) }}"
+									class="view-profile-btn">
+									View Profile
+								</a>
+							</div>
+						</div>
+					</div>
+
 				</div>
+
 			</div>
 		</div>
 	</section>
@@ -583,7 +722,6 @@
 
 @endsection
 
-
 @section('js')
 	<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
@@ -618,8 +756,7 @@
 			// Property has saved lat/lng; use those
 			createMap({{ $property_detail->latitude }}, {{ $property_detail->longitude }});
 		@else
-																																			// Use browser geolocation or default
-																																			if (navigator.geolocation) {
+																																																																													if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function (pos) {
 					createMap(pos.coords.latitude, pos.coords.longitude);
 				}, function () {
@@ -692,16 +829,58 @@
 
 		$(".loading").css('display', 'none');
 
+
 		$(document).ready(function () {
 			var formData = $('#form-json').val();
+			
+			function formatIndianPriceJS(num) {
+				num = parseFloat(num);
+				if (isNaN(num)) return num;
+	
+				return num.toLocaleString('en-IN');
+			}
+			// Helper function to strip HTML tags from labels
+			function stripHtml(html) {
+				var tmp = document.createElement("DIV");
+				tmp.innerHTML = html;
+				return tmp.textContent || tmp.innerText || "";
+			}
+
+			// Normalize label for matching keys consistently
+			function normalizeLabel(label) {
+				return label.toLowerCase().replace(/\s+/g, ' ').trim();
+			}
 
 			if (formData) {
 				try {
 					var json_data = JSON.parse(formData);
 					var outputHTML = '<div class="row">';
+					var priceNegotiableValue = null;
 
+					// Map for normalized area labels to their unit fields
+					var areaUnitMap = {
+						"built-up area": "built-up area unit",
+						"carpet area": "carpet area unit",
+						"super area": "super area unit",
+						"plot area": "plot area unit"
+					};
+
+					var tempUnitValues = {};
+
+					// First pass: store units in tempUnitValues
 					json_data.forEach(function (field) {
-						// Skip headers and paragraphs (but show them as section titles)
+						var label = field.label ? stripHtml(field.label) : '';
+						var normalizedLabel = normalizeLabel(label);
+
+						if (Object.values(areaUnitMap).includes(normalizedLabel)) {
+							if (field.userData && field.userData.length > 0) {
+								tempUnitValues[normalizedLabel] = field.userData[0];
+							}
+						}
+					});
+
+					// Second pass: render fields appending unit to area fields
+					json_data.forEach(function (field) {
 						if (field.type === 'header' || field.type === 'paragraph') {
 							if (field.label) {
 								outputHTML += '<div class="col-sm-12 mb-3"><h4 style="color: #333; font-size: 18px; font-weight: 600; margin-bottom: 10px; border-bottom: 2px solid #e38e32; padding-bottom: 8px;">' + stripHtml(field.label) + '</h4></div>';
@@ -709,55 +888,57 @@
 							return;
 						}
 
-						var label = field.label ? stripHtml(field.label) : 'N/A';
-						var value = 'Not Provided';
+						var originalLabel = field.label ? stripHtml(field.label) : 'N/A';
+						var label = originalLabel;
+						var value = 'N/A';
 
-						// Get userData (selected/entered values)
 						if (field.userData && field.userData.length > 0) {
-							// Check if userData has actual values
 							var hasValue = field.userData.some(function (item) {
 								return item !== '' && item !== null && item !== undefined;
 							});
 
 							if (hasValue) {
 								if (field.type === 'radio-group' || field.type === 'select') {
-									// Find the label for selected value
 									var selectedValue = field.userData[0];
 									if (field.values) {
 										var selectedOption = field.values.find(function (v) {
-											return v.value === selectedValue || v.selected === true;
+											return v.value === selectedValue;
 										});
 										value = selectedOption ? selectedOption.label : selectedValue;
 									}
 								} else if (field.type === 'checkbox-group') {
-									// ✅ Handle multiple checkbox values
-									var selectedValues = [];
-									field.userData.forEach(function (userValue) {
-										if (userValue !== '' && userValue !== null) {
-											// Find label for each checked value
-											if (field.values) {
-												var option = field.values.find(function (v) {
-													return v.value === userValue;
-												});
-												selectedValues.push(option ? option.label : userValue);
-											} else {
-												selectedValues.push(userValue);
-											}
-										}
-									});
-									// Join with bullets or commas
-									value = selectedValues.length > 0 ? selectedValues.join(', ') : 'Not Provided';
+									value = field.userData.join(", ");
 								} else {
-									// ✅ Handle text/number with potential multiple values
-									var filteredValues = field.userData.filter(function (item) {
-										return item !== '' && item !== null && item !== undefined;
-									});
-									value = filteredValues.length > 0 ? filteredValues.join(', ') : 'Not Provided';
+									value = field.userData.join(", ");
 								}
 							}
 						}
 
-						// Display ALL fields
+						var key = normalizeLabel(label);
+
+						// Append unit for area fields using saved unit value
+						if (areaUnitMap[key]) {
+							var unitKey = areaUnitMap[key];
+							if (tempUnitValues[unitKey]) {
+								value += " " + tempUnitValues[unitKey];
+							}
+						}
+
+						// Skip rendering fields that are the UNIT labels
+						if (Object.values(areaUnitMap).includes(key)) {
+							return; // skip unit fields from output
+						}
+
+						// Handle price negotiable separately
+						if (key === "price negotiable") {
+							priceNegotiableValue = value;
+						}
+
+						// Format expected price display
+						if (key === "expected price") {
+							value = formatIndianPriceJS(value);
+						}
+
 						outputHTML += '<div class="col-sm-6 col-md-6 mb-3">';
 						outputHTML += '  <div class="detail-field-label">' + label + '</div>';
 						outputHTML += '  <div class="detail-field-value">' + value + '</div>';
@@ -766,20 +947,19 @@
 
 					outputHTML += '</div>';
 					$('#additional-info').html(outputHTML);
+
+					var finalText = "";
+					if (priceNegotiableValue && priceNegotiableValue.toLowerCase() !== "no") {
+						finalText = "Price Negotiable : " + priceNegotiableValue;
+					}
+					$("#price-negotiable").text(finalText);
+
 				} catch (e) {
 					console.error('Error parsing JSON:', e);
 					$('#additional-info').html('<p style="color: #999;">Additional information not available</p>');
 				}
 			}
 		});
-
-		// Helper function to strip HTML tags
-		function stripHtml(html) {
-			var tmp = document.createElement("DIV");
-			tmp.innerHTML = html;
-			return tmp.textContent || tmp.innerText || "";
-		}
-
 
 		document.addEventListener("DOMContentLoaded", function () {
 			const enquiryForm = document.querySelector(".property-contact form");

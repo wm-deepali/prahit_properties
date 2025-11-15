@@ -258,11 +258,7 @@ class HomeController extends AppController
 
 		// Filter by properties with videos
 		if ($request->boolean('with_videos')) {
-			$query->where(function ($q) {
-				$q->whereNotNull('featured_image')
-					->where('featured_image', '!=', '')
-					->orWhereHas('PropertyGallery');
-			});
+			$query->whereNotNull('property_video');
 		}
 
 		// Search query for title or location
@@ -489,13 +485,18 @@ class HomeController extends AppController
 		if ($request->filled('rating')) {
 			$query->having('average_rating', '>=', $request->rating);
 		}
-
+		// Filter by Verified (Package verified_badge)
 		if ($request->verified == 'true') {
-			$query->where('verified_status', 'Verified');
+			$query->whereHas('user.activeSubscription.package', function ($q) {
+				$q->where('verified_badge', 'Yes');
+			});
 		}
 
+		// Filter by Premium (Package premium_badge)
 		if ($request->premium == 'true') {
-			$query->where('membership_type', 'Paid');
+			$query->whereHas('user.activeSubscription.package', function ($q) {
+				$q->where('premium_badge', 'Yes');
+			});
 		}
 
 		// ⭐ Sort by most rated (review count)
@@ -751,6 +752,8 @@ class HomeController extends AppController
 			'ip_address' => request()->ip(),
 		]);
 
+		// Increment views count
+		$property->increment('total_views');
 
 		$isInWishlist = false;
 		$user = Auth::user();
@@ -759,6 +762,7 @@ class HomeController extends AppController
 				->where('property_id', $property_detail->id)
 				->exists();
 		}
+		// dd($property_detail->additional_info);
 
 		return view('front.property_detail', compact('property_detail', 'amenities', 'isInWishlist', 'property_user'));
 	}

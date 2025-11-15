@@ -9,8 +9,102 @@
 	</style>
 <?php $__env->stopSection(); ?>
 
-<?php $__env->startSection('content'); ?>
+<style>
+	.related-agents {
+		position: sticky;
+		top: 20px;
+		padding: 20px;
+		background: white;
+		border-radius: 12px;
+		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+	}
 
+
+	.agent-card {
+		border: none;
+		overflow: hidden;
+		transition: transform 0.3s ease;
+		margin-bottom: 20px;
+	}
+
+	.agent-card:hover {
+		transform: translateY(-5px);
+	}
+
+	.newdesign-image-agent {
+		position: relative;
+	}
+
+	.newdesign-image-agent img {
+		width: 100%;
+		height: 200px;
+		object-fit: cover;
+	}
+
+	.newdesign-verified-seal {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		background: #28a745;
+		color: white;
+		padding: 5px 10px;
+		border-radius: 10px;
+		font-size: 0.9rem;
+	}
+
+	.newdesign-info-agent {
+		padding: 15px;
+	}
+
+	.newdesign-info-agent .newdesign-proj-name {
+		font-size: 1.3rem;
+		margin-bottom: 5px;
+		font-family: 'Arial', sans-serif;
+	}
+
+	.newdesign-info-agent .newdesign-apart-name {
+		font-size: 0.95rem;
+		color: #666;
+		margin-bottom: 10px;
+	}
+
+	.newdesign-info-agent hr {
+		margin: 10px 0;
+		border: 0;
+		border-top: 1px solid #eee;
+	}
+
+	.newdesign-info-agent .newdesign-apart-adress {
+		font-size: 0.9rem;
+		color: #888;
+		display: block;
+		margin-bottom: 10px;
+	}
+
+	.newdesign-info-agent .newdesign-proj-owner {
+		font-size: 0.9rem;
+		color: #666;
+	}
+
+	.newdesign-info-agent .view-profile-btn {
+		background: #007bff;
+		color: white;
+		border: none;
+		padding: 8px 15px;
+		border-radius: 20px;
+		font-size: 0.9rem;
+		display: block;
+		width: 100%;
+		text-align: center;
+		margin-top: 10px;
+		transition: background 0.3s ease;
+	}
+
+	.newdesign-info-agent .view-profile-btn:hover {
+		background: #0056b3;
+	}
+</style>
+<?php $__env->startSection('content'); ?>
 	<section class="breadcrumb-section">
 		<div class="container">
 			<div class="row">
@@ -27,7 +121,6 @@
 			</div>
 		</div>
 	</section>
-
 	<section class="property-detail-section">
 		<div class="container">
 			<div class="row">
@@ -40,17 +133,14 @@
 										<h3 class="property-title">
 											<?php echo e($property_detail->title); ?>
 
-
 											<?php if($property_detail->verified_tag === 'Yes'): ?>
 												<span class="badge bg-success ms-2">
 													<i class="bi bi-patch-check-fill"></i> Verified
 												</span>
 											<?php endif; ?>
 										</h3>
-
 										<div class="loc-id-detail">
 											<ul>
-												
 												<li>
 													<i class="fas fa-map-marker-alt"></i>
 													<?php echo e($property_detail->getCity ? $property_detail->getCity->name : ''); ?><?php echo e($property_detail->getState ? ', ' . $property_detail->getState->name : ''); ?>
@@ -65,8 +155,7 @@
 													<?php echo e(isset($property_detail->price) ? \App\Helpers\Helper::formatIndianPrice($property_detail->price) : ''); ?>
 
 												</span> </h3>
-											<a href="#property-othercharges"><i class="fas fa-info-circle"></i> Other
-												Charges</a>
+											<span id="price-negotiable"></span>
 										</div>
 									</div>
 								</div>
@@ -80,11 +169,9 @@
 												class="img-fluid">
 										</div>
 									</div>
-
 									<div class="col-sm-8">
 										<div class="property-featured-det">
 											<div class="row">
-
 												<!-- Category -->
 												<?php if($property_detail->Category): ?>
 													<div class="col-sm-6 col-md-6 col-xs-6">
@@ -95,7 +182,6 @@
 														</div>
 													</div>
 												<?php endif; ?>
-
 												<!-- Sub Category -->
 												<?php if($property_detail->SubCategory): ?>
 													<div class="col-sm-6 col-md-6 col-xs-6">
@@ -106,7 +192,6 @@
 														</div>
 													</div>
 												<?php endif; ?>
-
 												<!-- Sub Sub Category -->
 												<?php if($property_detail->SubSubCategory): ?>
 													<div class="col-sm-6 col-md-6 col-xs-6">
@@ -117,7 +202,6 @@
 														</div>
 													</div>
 												<?php endif; ?>
-
 												<!-- State -->
 												<div class="col-sm-6 col-md-6 col-xs-6">
 													<div class="detail-field-label">State</div>
@@ -126,7 +210,6 @@
 
 													</div>
 												</div>
-
 												<!-- City -->
 												<div class="col-sm-6 col-md-6 col-xs-6">
 													<div class="detail-field-label">City</div>
@@ -135,7 +218,6 @@
 
 													</div>
 												</div>
-
 												<!-- Location -->
 												<?php if($property_detail->Location): ?>
 													<div class="col-sm-6 col-md-6 col-xs-6">
@@ -146,7 +228,6 @@
 														</div>
 													</div>
 												<?php endif; ?>
-
 												<!-- Sub Location -->
 												<?php if($property_detail->sub_location_id): ?>
 													<div class="col-sm-6 col-md-6 col-xs-6">
@@ -157,30 +238,40 @@
 														</div>
 													</div>
 												<?php endif; ?>
+												
+												<?php if($property_user): ?>
+													<div class="col-sm-6 col-md-6 col-xs-6">
+														<div class="detail-field-label">Posted By</div>
+														<div class="detail-field-value">
+															<?php echo e($property_user->firstname); ?>
 
-												<!-- Address -->
+															<?php echo e($property_user->lastname); ?>
+
+															(<?php echo e(ucfirst($property_user->role ?? 'User')); ?>)
+														</div>
+													</div>
+												<?php endif; ?>
+												
 												<div class="col-sm-6 col-md-6 col-xs-6">
-													<div class="detail-field-label">Address</div>
-													<div class="detail-field-value"><?php echo e($property_detail->address ?? 'N/A'); ?>
+													<div class="detail-field-label">Published Date</div>
+													<div class="detail-field-value">
+														<?php echo e($property_detail->published_date ?? 'Not Published'); ?>
 
 													</div>
 												</div>
+												<!-- Total Views -->
+												<div class="col-sm-6 col-md-6 col-xs-6">
+													<div class="detail-field-label">Total Views</div>
+													<div class="detail-field-value">
+														<?php echo e(number_format($property_detail->total_views)); ?>
 
+													</div>
+												</div>
 											</div>
 										</div>
 
 										<div class="property-featured-btn">
 											<ul>
-												<!-- <li>
-																							<button class="btn btn-fill" type="button" data-toggle="modal"
-																								data-target="#contact-agent"
-																								onclick='window.active_listing_id = "<?php echo e($property_detail->id); ?>"'
-																								<?php if(auth()->check() && $property_detail->user_id === auth()->id()): ?>
-																								disabled <?php endif; ?>>
-																								Contact Agent
-																							</button>
-
-																						</li> -->
 												<li>
 													<button type="button" class="btn btn-outline"
 														onclick="claim('<?php echo e($property_detail->id); ?>')">
@@ -201,7 +292,6 @@
 
 													</button>
 												</li>
-
 											</ul>
 										</div>
 									</div>
@@ -218,8 +308,11 @@
 						<div class="property-title">
 							<h3>Property Gallery</h3>
 						</div>
+
 						<div class="property-gallery">
 							<div class="row">
+
+								
 								<?php $__currentLoopData = $property_detail->PropertyGallery; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 									<div class="col-sm-3">
 										<a href="#">
@@ -227,25 +320,24 @@
 										</a>
 									</div>
 								<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+								
+								<?php if(!empty($property_detail->property_video)): ?>
+									<div class="col-sm-12 mt-3">
+										<video class="w-100" controls>
+											<source src="<?php echo e(url($property_detail->property_video)); ?>" type="video/mp4">
+											Your browser does not support the video tag.
+										</video>
+									</div>
+								<?php endif; ?>
+
 							</div>
 						</div>
 					</div>
 
-					<?php if(!empty($property_detail->property_video)): ?>
-						<div class="card property-widgets">
-							<div class="property-title">
-								<h3>Property Video</h3>
-							</div>
-							<div class="property-gallery">
-								<div class="row">
-									<video class="w-100" controls>
-										<source src="<?php echo e(url($property_detail->property_video)); ?>" type="video/mp4">
-										Your browser does not support the video tag.
-									</video>
-								</div>
-							</div>
-						</div>
-					<?php endif; ?>
+					
+
+
 
 					<div class="card property-widgets">
 						<div class="property-title">
@@ -386,11 +478,6 @@
 						<div class="property-title">
 							<h3>
 								Contact
-								<?php if($property_user->premium_seller === 'Yes'): ?>
-									<span class="badge bg-success ms-2">
-										<i class="bi bi-patch-check-fill"></i> Preminum Seller
-									</span>
-								<?php endif; ?>
 							</h3>
 						</div>
 						<div class="property-contact">
@@ -445,7 +532,68 @@
 							</form>
 						</div>
 					</div>
+
+					<div class="related-agents">
+						<div class="agent-card mb-3 border">
+							<div class="newdesign-image-agent">
+								<?php
+									$section = $property_user->profileSection;
+									$logo = isset($section->logo)
+										? asset('storage/' . $section->logo)
+										: $property_user->avatar;
+								?>
+								<img src="<?php echo e($logo); ?>" alt="Agent" class="agent-avatar">
+								<span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i>
+									<?php if($property_user->premium_seller === 'Yes'): ?>
+										Premium
+									<?php else: ?>
+										Verified
+									<?php endif; ?>
+								</span>
+							</div>
+							<div class="newdesign-info-agent">
+								<div class="d-flex justify-content-between">
+									<h4 class="newdesign-proj-name">
+										<?php echo e($property_user->firstname); ?> <?php echo e($property_user->lastname); ?>
+
+									</h4>
+									<span class="newdesign-proj-category">
+										<?php echo e($property_user->role ?? 'Agent'); ?>
+
+									</span>
+								</div>
+								<span class="newdesign-apart-name">
+									<?php echo Str::limit(
+		preg_replace('/\s+/', ' ', trim(strip_tags(html_entity_decode(optional($property_user->profileSection)->description ?? 'No description available')))),
+		100
+	); ?>
+
+								</span>
+								<hr>
+								<span class="newdesign-apart-adress">
+									<i class="fa-solid fa-location-dot"></i>
+									<?php echo e($property_user->getCity->name ?? 'N/A'); ?>,
+									<?php echo e($property_user->getState->name ?? ''); ?>
+
+								</span>
+								<div class="d-flex justify-content-between">
+									<span
+										class="newdesign-proj-owner"><strong>Company:</strong><br><?php echo e(optional($property_user->profileSection)->business_name ?? 'N/A'); ?></span>
+									<span
+										class="newdesign-proj-owner"><strong>Experience:</strong><br><?php echo e(optional($property_user->profileSection)->years_experience ?? 0); ?>
+
+										yrs</span>
+								</div>
+								<a href="<?php echo e(route('profile.page', ['slug' => Str::slug($property_user->firstname)])); ?>"
+									class="view-profile-btn">
+									View Profile
+								</a>
+							</div>
+						</div>
+					</div>
+
 				</div>
+
 			</div>
 		</div>
 	</section>
@@ -598,7 +746,6 @@
 
 <?php $__env->stopSection(); ?>
 
-
 <?php $__env->startSection('js'); ?>
 	<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
@@ -633,8 +780,7 @@
 			// Property has saved lat/lng; use those
 			createMap(<?php echo e($property_detail->latitude); ?>, <?php echo e($property_detail->longitude); ?>);
 		<?php else: ?>
-																																			// Use browser geolocation or default
-																																			if (navigator.geolocation) {
+																																																																													if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function (pos) {
 					createMap(pos.coords.latitude, pos.coords.longitude);
 				}, function () {
@@ -707,86 +853,22 @@
 
 		$(".loading").css('display', 'none');
 
-		$(document).ready(function () {
-			var formData = $('#form-json').val();
+		function normalizeLabel(label) {
+			return label
+				.replace(/&nbsp;/g, ' ')
+				.replace(/\s+/g, ' ')
+				.replace(/-/g, ' ')
+				.replace(/_/g, ' ')
+				.trim()
+				.toLowerCase();
+		}
 
-			if (formData) {
-				try {
-					var json_data = JSON.parse(formData);
-					var outputHTML = '<div class="row">';
+		function formatIndianPriceJS(num) {
+			num = parseFloat(num);
+			if (isNaN(num)) return num;
 
-					json_data.forEach(function (field) {
-						// Skip headers and paragraphs (but show them as section titles)
-						if (field.type === 'header' || field.type === 'paragraph') {
-							if (field.label) {
-								outputHTML += '<div class="col-sm-12 mb-3"><h4 style="color: #333; font-size: 18px; font-weight: 600; margin-bottom: 10px; border-bottom: 2px solid #e38e32; padding-bottom: 8px;">' + stripHtml(field.label) + '</h4></div>';
-							}
-							return;
-						}
-
-						var label = field.label ? stripHtml(field.label) : 'N/A';
-						var value = 'Not Provided';
-
-						// Get userData (selected/entered values)
-						if (field.userData && field.userData.length > 0) {
-							// Check if userData has actual values
-							var hasValue = field.userData.some(function (item) {
-								return item !== '' && item !== null && item !== undefined;
-							});
-
-							if (hasValue) {
-								if (field.type === 'radio-group' || field.type === 'select') {
-									// Find the label for selected value
-									var selectedValue = field.userData[0];
-									if (field.values) {
-										var selectedOption = field.values.find(function (v) {
-											return v.value === selectedValue || v.selected === true;
-										});
-										value = selectedOption ? selectedOption.label : selectedValue;
-									}
-								} else if (field.type === 'checkbox-group') {
-									// ✅ Handle multiple checkbox values
-									var selectedValues = [];
-									field.userData.forEach(function (userValue) {
-										if (userValue !== '' && userValue !== null) {
-											// Find label for each checked value
-											if (field.values) {
-												var option = field.values.find(function (v) {
-													return v.value === userValue;
-												});
-												selectedValues.push(option ? option.label : userValue);
-											} else {
-												selectedValues.push(userValue);
-											}
-										}
-									});
-									// Join with bullets or commas
-									value = selectedValues.length > 0 ? selectedValues.join(', ') : 'Not Provided';
-								} else {
-									// ✅ Handle text/number with potential multiple values
-									var filteredValues = field.userData.filter(function (item) {
-										return item !== '' && item !== null && item !== undefined;
-									});
-									value = filteredValues.length > 0 ? filteredValues.join(', ') : 'Not Provided';
-								}
-							}
-						}
-
-						// Display ALL fields
-						outputHTML += '<div class="col-sm-6 col-md-6 mb-3">';
-						outputHTML += '  <div class="detail-field-label">' + label + '</div>';
-						outputHTML += '  <div class="detail-field-value">' + value + '</div>';
-						outputHTML += '</div>';
-					});
-
-					outputHTML += '</div>';
-					$('#additional-info').html(outputHTML);
-				} catch (e) {
-					console.error('Error parsing JSON:', e);
-					$('#additional-info').html('<p style="color: #999;">Additional information not available</p>');
-				}
-			}
-		});
+			return num.toLocaleString('en-IN');
+		}
 
 		// Helper function to strip HTML tags
 		function stripHtml(html) {
@@ -795,6 +877,136 @@
 			return tmp.textContent || tmp.innerText || "";
 		}
 
+		$(document).ready(function () {
+			var formData = $('#form-json').val();
+
+			// Helper function to strip HTML tags from labels
+			function stripHtml(html) {
+				var tmp = document.createElement("DIV");
+				tmp.innerHTML = html;
+				return tmp.textContent || tmp.innerText || "";
+			}
+
+			// Normalize label for matching keys consistently
+			function normalizeLabel(label) {
+				return label.toLowerCase().replace(/\s+/g, ' ').trim();
+			}
+
+			// Format Indian price display function example placeholder
+			function formatIndianPriceJS(value) {
+				// Add your formatting logic here, e.g. commas for thousands
+				return value;
+			}
+
+			if (formData) {
+				try {
+					var json_data = JSON.parse(formData);
+					var outputHTML = '<div class="row">';
+					var priceNegotiableValue = null;
+
+					// Map for normalized area labels to their unit fields
+					var areaUnitMap = {
+						"built-up area": "built-up area unit",
+						"carpet area": "carpet area unit",
+						"super area": "super area unit",
+						"plot area": "plot area unit"
+					};
+
+					var tempUnitValues = {};
+
+					// First pass: store units in tempUnitValues
+					json_data.forEach(function (field) {
+						var label = field.label ? stripHtml(field.label) : '';
+						var normalizedLabel = normalizeLabel(label);
+
+						if (Object.values(areaUnitMap).includes(normalizedLabel)) {
+							if (field.userData && field.userData.length > 0) {
+								tempUnitValues[normalizedLabel] = field.userData[0];
+							}
+						}
+					});
+
+					// Second pass: render fields appending unit to area fields
+					json_data.forEach(function (field) {
+						if (field.type === 'header' || field.type === 'paragraph') {
+							if (field.label) {
+								outputHTML += '<div class="col-sm-12 mb-3"><h4 style="color: #333; font-size: 18px; font-weight: 600; margin-bottom: 10px; border-bottom: 2px solid #e38e32; padding-bottom: 8px;">' + stripHtml(field.label) + '</h4></div>';
+							}
+							return;
+						}
+
+						var originalLabel = field.label ? stripHtml(field.label) : 'N/A';
+						var label = originalLabel;
+						var value = 'N/A';
+
+						if (field.userData && field.userData.length > 0) {
+							var hasValue = field.userData.some(function (item) {
+								return item !== '' && item !== null && item !== undefined;
+							});
+
+							if (hasValue) {
+								if (field.type === 'radio-group' || field.type === 'select') {
+									var selectedValue = field.userData[0];
+									if (field.values) {
+										var selectedOption = field.values.find(function (v) {
+											return v.value === selectedValue;
+										});
+										value = selectedOption ? selectedOption.label : selectedValue;
+									}
+								} else if (field.type === 'checkbox-group') {
+									value = field.userData.join(", ");
+								} else {
+									value = field.userData.join(", ");
+								}
+							}
+						}
+
+						var key = normalizeLabel(label);
+
+						// Append unit for area fields using saved unit value
+						if (areaUnitMap[key]) {
+							var unitKey = areaUnitMap[key];
+							if (tempUnitValues[unitKey]) {
+								value += " " + tempUnitValues[unitKey];
+							}
+						}
+
+						// Skip rendering fields that are the UNIT labels
+						if (Object.values(areaUnitMap).includes(key)) {
+							return; // skip unit fields from output
+						}
+
+						// Handle price negotiable separately
+						if (key === "price negotiable") {
+							priceNegotiableValue = value;
+						}
+
+						// Format expected price display
+						if (key === "expected price") {
+							value = formatIndianPriceJS(value);
+						}
+
+						outputHTML += '<div class="col-sm-6 col-md-6 mb-3">';
+						outputHTML += '  <div class="detail-field-label">' + label + '</div>';
+						outputHTML += '  <div class="detail-field-value">' + value + '</div>';
+						outputHTML += '</div>';
+					});
+
+					outputHTML += '</div>';
+					$('#additional-info').html(outputHTML);
+
+					var finalText = "";
+					if (priceNegotiableValue && priceNegotiableValue.toLowerCase() !== "no") {
+						finalText = "Price Negotiable : " + priceNegotiableValue;
+					}
+					$("#price-negotiable").text(finalText);
+
+				} catch (e) {
+					console.error('Error parsing JSON:', e);
+					$('#additional-info').html('<p style="color: #999;">Additional information not available</p>');
+				}
+			}
+		});
 
 		document.addEventListener("DOMContentLoaded", function () {
 			const enquiryForm = document.querySelector(".property-contact form");

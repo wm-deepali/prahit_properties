@@ -54,7 +54,8 @@ class Properties extends Model
         'furnishing_status_second',
         'latitude',
         'longitude',
-        'property_video'
+        'property_video',
+        'total_views'
     ];
 
     // protected static function boot() {

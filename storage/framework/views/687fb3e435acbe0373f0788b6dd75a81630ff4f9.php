@@ -225,12 +225,20 @@
                                     <i class="fas fa-box"></i> Packages
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownPackages">
-                                    <a class="dropdown-item" href="<?php echo e(route('admin.packages.index')); ?>">Manage
-                                        Packages</a>
-                                    <a class="dropdown-item" href="<?php echo e(route('admin.subscriptions.index')); ?>">Manage
-                                        Subscriptions</a>
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.packages.index')); ?>">
+                                        Manage Packages
+                                    </a>
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.subscriptions.index')); ?>">
+                                        Manage Subscriptions
+                                    </a>
+
+                                    <!-- ✅ New Payments Menu -->
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.payments.index')); ?>">
+                                        Manage Payments
+                                    </a>
                                 </div>
                             </li>
+
 
 
                             <li class="nav-item dropdown">

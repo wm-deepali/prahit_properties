@@ -810,7 +810,7 @@
                         @forelse($otherUsers as $other)
                             @php
                                 $section = $other->profileSection;
-                                $logo = $section->logo
+                                $logo = isset($section->logo)
                                     ? asset('storage/' . $section->logo)
                                     : 'https://via.placeholder.com/300x200?text=No+Image';
                             @endphp

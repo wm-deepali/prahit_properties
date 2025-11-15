@@ -427,6 +427,10 @@ Route::group(['middleware' => ['auth', 'admin.check']], function () {
 		Route::resource('/client-reels', Admin\ClientReelController::class);
 		Route::resource('packages', Admin\PackageController::class);
 		Route::resource('subscriptions', Admin\SubscriptionController::class);
+		Route::get('payments', 'Admin\SubscriptionController@payments')->name('payments.index');
+		Route::get('payments/{id}', 'Admin\SubscriptionController@paymentShow')->name('payments.show');
+		Route::get('payments/{id}/invoice', 'Admin\SubscriptionController@showInvoice')->name('payments.invoice');
+
 	});
 
 

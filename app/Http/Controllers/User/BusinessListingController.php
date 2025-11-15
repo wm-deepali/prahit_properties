@@ -268,6 +268,17 @@ class BusinessListingController extends Controller
                 }
             }
 
+            // --- UPDATE SERVICES COUNT IN ACTIVE SUBSCRIPTION ---
+            $serviceCount = $business->services()->count();
+
+            $activeSubscription = $business->user->activeSubscription;
+
+            if ($activeSubscription) {
+                $activeSubscription->used_services = $serviceCount;
+                $activeSubscription->save();
+            }
+
+
             return redirect()->route('create_business_listing')
                 ->with('success', 'Business created successfully.');
 
@@ -540,6 +551,15 @@ class BusinessListingController extends Controller
                         ]);
                     }
                 }
+            }
+
+            // --- UPDATE SERVICES COUNT IN ACTIVE SUBSCRIPTION ---
+            $serviceCount = $business->services()->count();
+            
+            $activeSubscription = $business->user->activeSubscription;
+            if ($activeSubscription) {
+                $activeSubscription->used_services = $serviceCount;
+                $activeSubscription->save();
             }
 
             return redirect()->route('user.services.index')
