@@ -1,15 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
-use DevDr\ApiCrudGenerator\Controllers\BaseApiController;
 use App\Http\Controllers\Concern\GlobalTrait;
-use App\Events\PropertyFileDownloadEvent;
 use App\Http\Controllers\AppController;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\PropertiesFields;
-use App\FormTypesFields;
 use App\PropertyGallery;
 use App\PropertyTypes;
 use App\ClaimListing;
@@ -28,12 +24,13 @@ use App\Amenity;
 use App\State;
 use App\City;
 use App\User;
-use App\Otp;
 use File;
 use App\Models\PriceLabel;
 use App\Models\PropertyStatus;
 use App\Models\FurnishingStatus;
 use App\Models\RegistrationStatus;
+use App\EmailTemplate;
+use App\Notifications\WelcomeEmailNotification;
 
 class PropertiesController extends AppController
 {
@@ -218,7 +215,7 @@ class PropertiesController extends AppController
 				}
 
 			}
-			return DataTables::of($datas)
+			return \Yajra\DataTables\DataTables::of($datas)
 				->addColumn('date_time', function ($datas) {
 					$dt = new \DateTime($datas->created_at);
 					$tz = new \DateTimeZone('Asia/Kolkata');
@@ -1851,94 +1848,108 @@ class PropertiesController extends AppController
 	{
 		$check_property = Properties::find($id);
 		if (empty($check_property)) {
-			$data['message'] = 'Invalid Listing Data, Please After Some Time.';
-			$data['responseCode'] = 200;
-			$data['status'] = true;
-			return $data;
+			return [
+				'message' => 'Invalid Listing Data, Please Try After Some Time.',
+				'responseCode' => 200,
+				'status' => true
+			];
 		}
+
 		try {
 			$type = $this->checkValidDatatype($request->key);
 			$otp = rand(100000, 999999);
+			$user = null;
+
 			if ($type == 'email') {
 				$user = User::where('email', $request->key)->first();
 				if (!$user) {
-					$data['message'] = 'No account exists with this email id.';
-					$data['responseCode'] = 400;
-					$data['status'] = true;
-					return $data;
+					// ✅ Create guest user with email
+					$user = User::create([
+						'firstname' => 'Guest',
+						'lastname' => 'User',
+						'email' => $request->key,
+						'password' => bcrypt('123456'), // default password
+						'role' => 'user',
+						'status' => 1,
+						'is_verified' => 1,
+					]);
+
 				}
-				$picked = ClaimListing::where('property_id', $id)->where('user_id', $user->id)->first();
-				if ($picked) {
-					if ($picked->otp_verify == 'No') {
-						$data['message'] = 'Your Claim Already Exist For This Property. Please Verify Your Claim, If You Already Verified, Ignore This Notification.';
-						$data['responseCode'] = 200;
-						$data['status'] = true;
-						return $data;
-					} else {
-						$data['message'] = 'Your Claim Already Exist For This Property.';
-						$data['responseCode'] = 400;
-						$data['status'] = true;
-						return $data;
-					}
-				}
-				$emailOTPtemplate = EmailTemplate::where('id', 7)->first();
-				$replaceOTPtemplate = array(
-					'#NAME' => $user->firstname . ' ' . $user->lastname,
-					'#OTP' => $otp
-				);
-				$this->__sendEmail($user, $emailOTPtemplate->template, $emailOTPtemplate->subject, $emailOTPtemplate->image, $replaceOTPtemplate);
-			} else {
+			} else { // mobile
 				$user = User::where('mobile_number', $request->key)->first();
 				if (!$user) {
-					$data['message'] = 'No account exists with this email id.';
-					$data['responseCode'] = 400;
-					$data['status'] = true;
-					return $data;
+					// ✅ Create guest user with mobile
+					$user = User::create([
+						'firstname' => 'Guest',
+						'lastname' => 'User',
+						'mobile_number' => $request->key,
+						'password' => bcrypt('123456'), // default password
+						'role' => 'user',
+						'status' => 1,
+						'mobile_verified' => 1,
+						'is_verified' => 1,
+					]);
 				}
-				$picked = ClaimListing::where('property_id', $id)->where('user_id', $user->id)->first();
-				if ($picked) {
-					if ($picked->otp_verify == 'No') {
-						$data['message'] = 'Your Claim Already Exist For This Property. Please Verify Your Claim, If You Already Verified, Ignore This Notification.';
-						$data['responseCode'] = 200;
-						$data['status'] = true;
-						return $data;
-					} else {
-						$data['message'] = 'Your Claim Already Exist For This Property.';
-						$data['responseCode'] = 400;
-						$data['status'] = true;
-						return $data;
-					}
-				}
-				$message = "Your one time password is  " . $otp . " %0aThank You.,%0aWeb Mingo IT Solutions Pvt. Ltd.%0aVisit: https://www.webmingo.in%0aWhatsApp: 7499366724";
-				$this->sendGlobalSMS($user->mobile_number, $message);
-			}
-			if ($user) {
-				$data = ClaimListing::create(
-					[
-						'property_id' => $id,
-						'user_id' => $user->id,
-						'otp' => $otp
-					]
-				);
-				\Session::put('claim_id', $data->id);
-				$data['message'] = 'Please Verify OTP & Complete Your Claim Process.';
-				$data['responseCode'] = 200;
-				$data['status'] = true;
-				return $data;
-			} else {
-				$data['message'] = 'Something Happned Wrong.';
-				$data['responseCode'] = 400;
-				$data['status'] = true;
-				return $data;
 			}
 
+			// Check if claim already exists
+			$picked = ClaimListing::where('property_id', $id)->where('user_id', $user->id)->first();
+			if ($picked) {
+				if ($picked->otp_verify == 'No') {
+					return [
+						'message' => 'Your Claim Already Exists For This Property. Please Verify Your Claim, If Already Verified, Ignore This Notification.',
+						'responseCode' => 200,
+						'status' => true
+					];
+				} else {
+					return [
+						'message' => 'Your Claim Already Exists For This Property.',
+						'responseCode' => 400,
+						'status' => true
+					];
+				}
+			}
+
+			// Send OTP
+			if ($type == 'email') {
+				$emailOTPtemplate = EmailTemplate::where('id', 7)->first();
+				$replaceOTPtemplate = [
+					'#NAME' => $user->firstname . ' ' . $user->lastname,
+					'#OTP' => $otp
+				];
+				$this->__sendEmail($user, $emailOTPtemplate->template, $emailOTPtemplate->subject, $emailOTPtemplate->image, $replaceOTPtemplate);
+			} else {
+				// Simulate sending SMS (replace with actual SMS API)
+				$message = "{$otp} is the One Time Password(OTP) to verify your MOB number at Web Mingo. This OTP is usable only once and is valid for 10 min. PLS DO NOT SHARE THE OTP WITH ANYONE.";
+				$response = \App\Helpers\Helper::sendOtp($request->key, $message);
+				if (!$response) {
+					return response()->json(['success' => false, 'message' => 'SMS sending failed!'], 500);
+				}
+			}
+
+			// Save claim
+			$data = ClaimListing::create([
+				'property_id' => $id,
+				'user_id' => $user->id,
+				'otp' => $otp
+			]);
+			\Session::put('claim_id', $data->id);
+
+			return [
+				'message' => 'Please Verify OTP & Complete Your Claim Process.',
+				'responseCode' => 200,
+				'status' => true
+			];
+
 		} catch (\Exception $e) {
-			$data['message'] = $e->getMessage();
-			$data['responseCode'] = 500;
-			$data['status'] = false;
-			return $data;
+			return [
+				'message' => $e->getMessage(),
+				'responseCode' => 500,
+				'status' => false
+			];
 		}
 	}
+
 
 	public function verifyClaim(Request $request)
 	{
@@ -2039,11 +2050,19 @@ class PropertiesController extends AppController
 				->addColumn('claim_by', function ($row) {
 					$u = User::find($row->user_id);
 					if ($u) {
-						return '<span style="color:blue;cursor:pointer;" onclick="showOwnerInfo(' . $u->id . ')">' . ucfirst($u->firstname . ' ' . $u->lastname) . '</span>';
+						$name = ucfirst($u->firstname . ' ' . $u->lastname);
+						$mobile = $u->mobile_number ?? 'N/A';
+						$email = $u->email ?? 'N/A';
+
+						return '<span style="color:blue; cursor:pointer;" onclick="showOwnerInfo(' . $u->id . ')">'
+							. $name . '</span><br>'
+							. '<small>Mobile: ' . $mobile . '</small><br>'
+							. '<small>Email: ' . $email . '</small>';
 					} else {
 						return 'N/A';
 					}
 				})
+
 				->addColumn('action', function ($row) {
 					if ($row->approval_status == 'Assigned') {
 						return '';

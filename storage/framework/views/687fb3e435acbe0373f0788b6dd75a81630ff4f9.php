@@ -163,21 +163,11 @@
                                         Property Enquiries
                                     </a>
                                     <a class="dropdown-item" href="<?php echo e(url('master/property/feedback')); ?>">
-                                        Feedbacks
+                                        Property Feedbacks
                                     </a>
                                     <a class="dropdown-item" href="<?php echo e(route('admin.manage-complaints.index')); ?>">
                                         Property Complaints
                                     </a>
-                                    <a class="dropdown-item" href="<?php echo e(route('admin.manageSupportQuery')); ?>">
-                                        Support Center
-                                    </a>
-                                    <a class="dropdown-item" href="<?php echo e(route('admin.manageComplaints')); ?>">
-                                        Complaints
-                                    </a>
-
-                                    <div class="dropdown-divider"></div> <!-- 🔹 Optional visual separator -->
-
-                                    
                                     <a class="dropdown-item" href="<?php echo e(route('admin.directory-enquiries.index')); ?>">
                                         Directory Enquiries
                                     </a>
@@ -186,6 +176,12 @@
                                     </a>
                                     <a class="dropdown-item" href="<?php echo e(route('admin.business-listing-reviews.index')); ?>">
                                         Business Listing Reviews
+                                    </a>
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.manageSupportQuery')); ?>">
+                                        Support Center
+                                    </a>
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.manageComplaints')); ?>">
+                                        Complaints
                                     </a>
                                 </div>
                             </li>

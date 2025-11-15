@@ -23,7 +23,8 @@ Route::post('/business/review/submit', [ReviewController::class, 'submitBusiness
 
 Route::post('/business/send-otp', [BusinessListingController::class, 'sendEnquiryOtp'])->name('business.sendOtp');
 Route::post('/business/enquiry', [BusinessListingController::class, 'submitEnquiry'])->name('business.enquiry');
-Route::get('/business-details/{id}', [HomeController::class, 'businessDetails'])->name('business.details');
+Route::get('/business-details/{id}/{slug}', [HomeController::class, 'businessDetails'])->name('business.details');
+
 Route::get('/profile-page/{slug?}', [HomeController::class, 'profilePage'])->name('profile.page');
 Route::get('/listing-list', 'HomeController@list')->name('listing.list');
 Route::get('/directory-list', 'HomeController@directoryList')->name('directory.list');
@@ -34,7 +35,7 @@ Route::post('forgot-password', 'AppController@forgot_password')->name('forgot_pa
 Route::post('send-otp', 'AppController@visitor_otp')->name('send_otp');
 
 Route::get('post-property', 'HomeController@create_property')->name('create_property');
-Route::get('property/{title}', 'HomeController@property_detail')->name('property_detail');
+Route::get('property/{id}/{slug}', 'HomeController@property_detail')->name('property_detail');
 Route::get('search/', 'HomeController@search_property')->name('search_property');
 Route::get('search/grid/', 'HomeController@searchPropertyGrid')->name('grid.search_property');
 Route::get('/{city?}', 'HomeController@home')->name('home');
@@ -430,7 +431,7 @@ Route::group(['middleware' => ['auth', 'admin.check']], function () {
 		Route::get('payments', 'Admin\SubscriptionController@payments')->name('payments.index');
 		Route::get('payments/{id}', 'Admin\SubscriptionController@paymentShow')->name('payments.show');
 		Route::get('payments/{id}/invoice', 'Admin\SubscriptionController@showInvoice')->name('payments.invoice');
-
+		Route::get('/payments/invoice/download/{id}', 'Admin\SubscriptionController@downloadInvoice')->name('payments.invoice.download');
 	});
 
 
@@ -513,6 +514,8 @@ Route::post('send/enquery', 'HomeController@agent_enquiry')->name('enquery.agent
 Route::post('agent/send-otp', 'HomeController@sendAgentEnquiryOtp')->name('agent.send-otp');
 
 Route::post('master/property/feedback/create', 'Admin\FeedbackController@createFeedback')->name('admin.createFeedback');
+Route::post('/feedback/send-otp', 'Admin\FeedbackController@sendOtp')->name('feedback.send-otp');
+Route::post('/feedback/verify-otp', 'Admin\FeedbackController@verifyOtp')->name('feedback.verify-otp');
 
 Route::post('contactus/send/query', 'Admin\ContentController@sendUserQuery')->name('contactus.sendUserQuery');
 Route::post('get/categories', 'Admin\CategoryController@getAllCategories')->name('getAllCategories');

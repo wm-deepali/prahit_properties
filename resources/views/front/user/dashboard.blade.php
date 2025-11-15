@@ -299,7 +299,8 @@
                                                     <p class="card-text text-primary fw-bold">₹
                                                         {{\App\Helpers\Helper::formatIndianPrice($value->price)}}
                                                     </p>
-                                                    <a href="{{route('property_detail', ['title' => $value->slug])}}"
+                                                    <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+"
                                                         class="btn btn-primary btn-sm">View Details</a>
                                                 </div>
                                             </div>

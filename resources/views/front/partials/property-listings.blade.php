@@ -14,7 +14,7 @@
                 <div>
                     <div class="listing-header">
                         <h1 class="listing-title">
-                            <a href="{{ route('property_detail', ['title' => $property->slug]) }}"
+                            <a href="{{ route('property_detail', ['id' => $property->id, 'slug' => $property->slug]) }}"
                                 style="text-decoration: none; color: inherit;">
                                 {{ $property->title ?? '' }}
                             </a>
@@ -30,7 +30,7 @@
                                 <i class="fas fa-share"></i>
                             </button>
 
-                            <button class="action-btn more-btn" data-url="{{ route('property_detail', ['title' => $property->slug]) }}"
+                            <button class="action-btn more-btn" data-url="{{ route('property_detail', ['id' => $property->id, 'slug' => $property->slug]) }}"
                                 title="View Details">
                                 <i class="fas fa-ellipsis-h"></i>
                             </button>

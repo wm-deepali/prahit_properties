@@ -53,8 +53,15 @@ class SubscriptionController extends Controller
         return view('admin.payments.show', compact('payment'));
     }
 
-
     public function showInvoice($id)
+    {
+        $payment = Payment::with(['invoice', 'user', 'subscription'])->findOrFail($id);
+
+        return view('admin.payments.invoice', compact('payment'))->with('invoice', $payment->invoice);
+    }
+
+
+    public function downloadInvoice($id)
     {
         // Load payment with invoice and user details
         $payment = Payment::with(['invoice', 'user', 'subscription'])

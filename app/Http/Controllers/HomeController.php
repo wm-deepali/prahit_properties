@@ -721,29 +721,38 @@ class HomeController extends AppController
 
 
 
-	public function property_detail($slug)
+	public function property_detail($id, $slug)
 	{
+		// Load the property with relationships
 		$property = Properties::with([
 			'Location',
 			'PropertyGallery',
-			'PropertyFeatures',
 			'PropertyFeatures',
 			'PropertyFeatures.SubFeatures',
 			'PropertyTypes',
 			'getState',
 			'getCity',
 			'getUser',
-		])->where('slug', $slug)->first();
-		$property_detail = $property;
+		])->where('slug', $slug)
+			->where('id', $id)
+			->first();
 
-		$property_user = User::find($property->user_id);
-
-		if ($property_detail->amenities) {
-			$amenities = Amenity::whereIn('id', explode(',', $property_detail->amenities))->get();
-		} else {
-			$amenities = [];
+		// Check if property exists
+		if (!$property) {
+			abort(404, 'Property not found.');
+			// Alternatively, you can redirect with a session message:
+			// return redirect()->back()->with('error', 'Property not found.');
 		}
 
+		$property_detail = $property;
+
+		// Get property owner
+		$property_user = User::find($property->user_id);
+
+		// Get amenities if any
+		$amenities = $property_detail->amenities
+			? Amenity::whereIn('id', explode(',', $property_detail->amenities))->get()
+			: collect(); // empty collection instead of array for consistency
 
 		// Log the view
 		PropertyView::firstOrCreate([
@@ -755,6 +764,7 @@ class HomeController extends AppController
 		// Increment views count
 		$property->increment('total_views');
 
+		// Check if property is in user's wishlist
 		$isInWishlist = false;
 		$user = Auth::user();
 		if ($user) {
@@ -762,9 +772,13 @@ class HomeController extends AppController
 				->where('property_id', $property_detail->id)
 				->exists();
 		}
-		// dd($property_detail->additional_info);
 
-		return view('front.property_detail', compact('property_detail', 'amenities', 'isInWishlist', 'property_user'));
+		return view('front.property_detail', compact(
+			'property_detail',
+			'amenities',
+			'isInWishlist',
+			'property_user'
+		));
 	}
 
 	public function search_property(Request $request)

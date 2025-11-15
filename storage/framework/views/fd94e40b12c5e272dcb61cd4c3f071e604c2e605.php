@@ -599,29 +599,13 @@
 	</section>
 	<input type="hidden" id="form-json" value="<?php echo e($property_detail->additional_info); ?>">
 	<!-- Modal -->
-	<div id="viewCategoryInfo" class="modal fade" role="dialog">
-		<div class="modal-dialog">
-			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Modal Header</h4>
-				</div>
-				<div class="modal-body">
-					<p>Some text in the modal.</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
 
-	<div class="modal fade custom-modal" id="feedback-complaint" tabindex="-1" role="dialog" aria-labelledby="register"
+	<!-- Feedback / Complaint Modal -->
+	<div class="modal fade custom-modal" id="feedback-complaint" tabindex="-1" role="dialog" aria-labelledby="feedbackModal"
 		aria-hidden="true">
 		<div class="modal-dialog w-450" role="document">
 			<div class="modal-content">
-				<button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+				<button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 
@@ -629,22 +613,52 @@
 					<img src="<?php echo e(url('/public/images/top-designs.png')); ?>" class="img-fluid">
 				</div>
 
-				<center class="loading">
-					<img src="<?php echo e(url('/images/loading.gif')); ?>" alt="Loading.." style="height: 30px;" class="loading" />
-				</center>
-
 				<div class="modal-body">
 					<div class="modal-main">
 						<div class="row login-heads">
 							<div class="col-sm-12">
 								<h3 class="heads-login">Feedback / Complaint</h3>
-								<span class="allrequired">All field are required</span>
+								<span class="allrequired">All fields are required</span>
 							</div>
 						</div>
+
 						<div class="modal-form">
-							<form method="post" action="<?php echo e(url('master/property/feedback/create')); ?>">
+							<form id="feedbackForm" method="post" action="<?php echo e(url('master/property/feedback/create')); ?>">
 								<?php echo csrf_field(); ?>
 								<input type="hidden" name="property_id" value="<?php echo e($property_detail->id); ?>">
+								<input type="hidden" name="otp_verified" id="otpVerified" value="0">
+
+								<!-- Mobile Number -->
+								<div class="form-group row">
+									<div class="col-sm-12">
+										<label class="label-control">Mobile Number</label>
+										<input type="text" name="mobile_number" id="feedbackMobile" class="text-control"
+											placeholder="Enter mobile number" required>
+										<button type="button" id="feedbackSendOtp" class="btn btn-sm btn-warning mt-2">Send
+											OTP</button>
+									</div>
+								</div>
+								<!-- OTP Input -->
+								<div class="form-group row" id="feedbackOtpDiv" style="display:none;">
+									<div class="col-sm-12">
+										<label class="label-control">Enter OTP</label>
+										<input type="text" id="feedbackOtpCode" class="text-control"
+											placeholder="Enter OTP">
+										<button type="button" id="feedbackVerifyOtp"
+											class="btn btn-sm btn-success mt-2">Verify OTP</button>
+										<p class="mt-1"><a href="#" id="feedbackResendOtp">Resend OTP</a></p>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<div class="col-sm-12">
+										<label class="label-control">Email (Optional)</label>
+										<input type="email" name="email" id="feedbackEmail" class="text-control"
+											placeholder="Enter your email">
+									</div>
+								</div>
+
+								<!-- Listing correctness -->
 								<div class="form-group row">
 									<div class="col-sm-12">
 										<label class="label-control">Are the details of the listing correct?</label>
@@ -657,10 +671,11 @@
 									</div>
 								</div>
 
+								<!-- Incorrect listing -->
 								<div class="form-group row fakelisting" style="display: none;">
 									<div class="col-sm-12">
 										<label class="label-control">Ohh!! What wasn't correct in the listing?</label>
-										<ul class="no_listfeed" name="feedback">
+										<ul class="no_listfeed">
 											<li><label><input type="checkbox" name="complaint[]" value="1"> Property
 													Sold/Rented Out</label></li>
 											<li><label><input type="checkbox" name="complaint[]" value="2"> Fake/Incorrect
@@ -677,6 +692,7 @@
 									</div>
 								</div>
 
+								<!-- Not reachable -->
 								<div class="form-group row notreachable" style="display: none;">
 									<div class="col-sm-12">
 										<label class="label-control">Uh_Oh! What was wrong?</label>
@@ -689,14 +705,16 @@
 									</div>
 								</div>
 
+								<!-- Feedback textarea -->
 								<div class="form-group row">
 									<div class="col-sm-12">
-										<label class="label-control">That's Good! How about sharing your experience with
-											us.</label>
-										<textarea cols="4" rows="2" class="text-control" name="feedback"></textarea>
+										<label class="label-control">Share your experience</label>
+										<textarea cols="4" rows="2" class="text-control" name="feedback"
+											required></textarea>
 									</div>
 								</div>
 
+								<!-- Submit -->
 								<div class="form-group row">
 									<div class="col-sm-12 text-center">
 										<button type="submit" class="btn btn-send w-100">Submit <i
@@ -707,12 +725,15 @@
 						</div>
 					</div>
 				</div>
+
 				<div class="modal-foo text-center">
 					<p>By sending a request, you accept our Terms of Use and Privacy Policy</p>
 				</div>
 			</div>
 		</div>
 	</div>
+
+
 
 	<!-- OTP Verification Modal -->
 	<div class="modal fade" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true">
@@ -743,7 +764,6 @@
 		</div>
 	</div>
 
-
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('js'); ?>
@@ -751,6 +771,109 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 	<script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
 	<script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
+
+	<script>
+		$(document).ready(function () {
+			// Show/hide listing options
+			$('#listingcorrect').change(function () {
+				const val = $(this).val();
+				$('.fakelisting, .notreachable').hide();
+				if (val === '2') $('.fakelisting').show();
+				if (val === '3') $('.notreachable').show();
+			});
+
+			// Send OTP
+			$('#feedbackSendOtp').click(function () {
+				const mobile = $('#feedbackMobile').val().trim();
+				if (!mobile) {
+					Swal.fire('Warning', 'Please enter mobile number', 'warning');
+					return;
+				}
+
+				fetch("<?php echo e(route('feedback.send-otp')); ?>", {
+					method: "POST",
+					headers: { "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>", "Content-Type": "application/json" },
+					body: JSON.stringify({ mobile_number: mobile })
+				})
+					.then(res => res.json())
+					.then(data => {
+						if (data.success) {
+							Swal.fire('OTP Sent', 'OTP sent to your mobile number', 'info');
+							$('#feedbackOtpDiv').show();
+						} else {
+							Swal.fire('Error', data.message || 'Failed to send OTP', 'error');
+						}
+					});
+			});
+
+			// Verify OTP
+			$('#feedbackVerifyOtp').click(function () {
+				const mobile = $('#feedbackMobile').val().trim();
+				const otp = $('#feedbackOtpCode').val().trim();
+
+				if (!otp) {
+					Swal.fire('Warning', 'Please enter OTP', 'warning');
+					return;
+				}
+
+				fetch("<?php echo e(route('feedback.verify-otp')); ?>", {
+					method: "POST",
+					headers: { "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>", "Content-Type": "application/json" },
+					body: JSON.stringify({ mobile_number: mobile, otp: otp })
+				})
+					.then(res => res.json())
+					.then(data => {
+						if (data.success) {
+							Swal.fire('Verified', 'OTP verified successfully', 'success');
+							$('#otpVerified').val('1'); // mark OTP as verified
+						} else {
+							Swal.fire('Error', data.message || 'Invalid OTP', 'error');
+						}
+					});
+			});
+
+			$('#feedbackResendOtp').click(function (e) {
+				e.preventDefault();
+				$('#feedbackSendOtp').click();
+			});
+
+			// Feedback Submission
+			$('#feedbackForm').submit(function (e) {
+				e.preventDefault();
+
+				if ($('#otpVerified').val() != '1') {
+					Swal.fire('Warning', 'Please verify your mobile number via OTP', 'warning');
+					return;
+				}
+
+				const form = $(this);
+				const formData = new FormData(this);
+
+				fetch(form.attr('action'), {
+					method: 'POST',
+					headers: { 'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>' },
+					body: formData
+				})
+					.then(res => res.json())
+					.then(data => {
+						if (data.success) {
+							Swal.fire('Success', 'Feedback submitted successfully', 'success');
+							form[0].reset();
+							$('#feedbackOtpDiv').hide();
+							$('#otpVerified').val('0');
+							$('.fakelisting, .notreachable').hide();
+							$('#feedback-complaint').modal('hide');
+						} else {
+							Swal.fire('Error', data.message || 'Failed to submit feedback', 'error');
+						}
+					})
+					.catch(() => Swal.fire('Error', 'Something went wrong', 'error'));
+			});
+		});
+	</script>
+
+
+
 	<script type="text/javascript">
 
 		function createMap(lat, lng) {
@@ -780,7 +903,7 @@
 			// Property has saved lat/lng; use those
 			createMap(<?php echo e($property_detail->latitude); ?>, <?php echo e($property_detail->longitude); ?>);
 		<?php else: ?>
-																																																																													if (navigator.geolocation) {
+																																																																																	if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function (pos) {
 					createMap(pos.coords.latitude, pos.coords.longitude);
 				}, function () {
@@ -853,33 +976,16 @@
 
 		$(".loading").css('display', 'none');
 
-		function normalizeLabel(label) {
-			return label
-				.replace(/&nbsp;/g, ' ')
-				.replace(/\s+/g, ' ')
-				.replace(/-/g, ' ')
-				.replace(/_/g, ' ')
-				.trim()
-				.toLowerCase();
-		}
-
-		function formatIndianPriceJS(num) {
-			num = parseFloat(num);
-			if (isNaN(num)) return num;
-
-			return num.toLocaleString('en-IN');
-		}
-
-		// Helper function to strip HTML tags
-		function stripHtml(html) {
-			var tmp = document.createElement("DIV");
-			tmp.innerHTML = html;
-			return tmp.textContent || tmp.innerText || "";
-		}
 
 		$(document).ready(function () {
 			var formData = $('#form-json').val();
 
+			function formatIndianPriceJS(num) {
+				num = parseFloat(num);
+				if (isNaN(num)) return num;
+
+				return num.toLocaleString('en-IN');
+			}
 			// Helper function to strip HTML tags from labels
 			function stripHtml(html) {
 				var tmp = document.createElement("DIV");
@@ -890,12 +996,6 @@
 			// Normalize label for matching keys consistently
 			function normalizeLabel(label) {
 				return label.toLowerCase().replace(/\s+/g, ' ').trim();
-			}
-
-			// Format Indian price display function example placeholder
-			function formatIndianPriceJS(value) {
-				// Add your formatting logic here, e.g. commas for thousands
-				return value;
 			}
 
 			if (formData) {
@@ -1135,5 +1235,6 @@
 			}
 		});
 	</script>
+
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.front.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/property_detail.blade.php ENDPATH**/ ?>

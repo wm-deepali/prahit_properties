@@ -28,7 +28,7 @@
                             <i class="fas fa-share"></i>
                         </button>
 
-                        <button class="action-btn more-btn" data-url="{{ route('business.details', $company->id) }}"
+                        <button class="action-btn more-btn" data-url="{{ route('business.details', ['id' => $company->id, 'slug' => $company->slug]) }}"
                             title="View Details">
                             <i class="fas fa-ellipsis-h"></i>
                         </button>
@@ -59,7 +59,7 @@
             <div class="directory-buttons">
                 <button class="contact-btn" onclick="contactBusiness({{ $company->id }})">Contact Now</button>
 
-                <a href="{{ route('business.details', $company->id) }}" class="detail-btn">View Detail</a>
+                <a href="{{ route('business.details', ['id' => $company->id, 'slug' => $company->slug]) }}" class="detail-btn">View Detail</a>
             </div>
         </div>
     </div>

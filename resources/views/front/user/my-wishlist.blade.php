@@ -94,12 +94,12 @@
                   <img src="{{ asset($p->PropertyGallery[0]->image_path ?? 'front/images/no-image.jpg') }}"
                        alt="{{ $p->title }}">
                   <div class="wishlist-info">
-                    <h5><a href="{{ route('property_detail', ['title' => $p->slug]) }}">{{ $p->title }}</a></h5>
+                    <h5><a href="{{ route('property_detail', ['id' => $p->id, 'slug' => $p->slug]) }}">{{ $p->title }}</a></h5>
                     <p><strong>Price:</strong> ₹{{ \App\Helpers\Helper::formatIndianPrice($p->price) }}</p>
                     <p><strong>Location:</strong> {{ $p->getCity->name ?? 'N/A' }}, {{ $p->getState->name ?? 'N/A' }}</p>
                     <p><strong>Category:</strong> {{ $p->Category->category_name ?? '-' }}</p>
                     <div class="property-actions">
-                      <a href="{{ route('property_detail', ['title' => $p->slug]) }}"
+                      <a href="{{ route('property_detail', ['id' => $p->id, 'slug' => $p->slug]) }}"
                          class="btn btn-sm btn-outline-info">
                         <i class="fas fa-eye"></i> View
                       </a>

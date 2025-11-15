@@ -14,6 +14,7 @@ class BusinessListing extends Model
         'membership_type',
         'verified_status',
         'category_id',
+        'slug',
         'business_name',
         'email',
         'mobile_number',

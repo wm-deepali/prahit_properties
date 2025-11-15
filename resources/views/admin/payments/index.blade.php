@@ -93,17 +93,31 @@
 
                                                         <td>{{ $payment->created_at->format('Y-m-d H:i') }}</td>
 
-                                                         <td class="text-center">
-    <a href="{{ route('admin.payments.show', $payment->id) }}"
-       class="btn btn-sm btn-primary" title="View Details">
-        <i class="fas fa-eye"></i>
-    </a>
+       <td class="text-center">
+    <div class="btn-group" role="group">
 
-    <a href="{{ route('admin.payments.invoice', $payment->id) }}"
-       class="btn btn-sm btn-info" title="View Invoice">
-        <i class="fas fa-file-invoice"></i>
-    </a>
+        {{-- View Details --}}
+        <a href="{{ route('admin.payments.show', $payment->id) }}"
+           class="btn btn-sm btn-primary" title="View Details">
+            <i class="fas fa-eye"></i>
+        </a>
+
+        {{-- View Invoice --}}
+        <a href="{{ route('admin.payments.invoice', $payment->id) }}"
+           class="btn btn-sm btn-info" title="View Invoice">
+            <i class="fas fa-file-invoice"></i>
+        </a>
+
+        {{-- Download Invoice --}}
+        <a href="{{ route('admin.payments.invoice.download', $payment->id) }}"
+           class="btn btn-sm btn-danger" title="Download Invoice" target="_blank">
+            <i class="fas fa-file-download"></i>
+        </a>
+
+    </div>
 </td>
+
+
                                                     </tr>
                                                 @empty
                                                     <tr>

@@ -7,7 +7,7 @@
     <div class="col-md-8">
       <div class="card-body">
         <h5 class="card-title property-title">
-          <a href="{{ route('property_detail', ['title' => $v->slug]) }}">{{ $v->title }}</a>
+          <a href="{{ route('property_detail', ['id' => $v->id, 'slug' => $v->slug]) }}">{{ $v->title }}</a>
         </h5>
 
         <p class="card-text"><strong>Price:</strong> <i class="fas fa-rupee-sign"></i>
@@ -27,7 +27,7 @@
               </a>
             </li>
             <li class="list-inline-item">
-              <a href="{{ route('property_detail', ['title' => $v->slug]) }}" class="btn btn-sm btn-outline-info"
+              <a href="{{ route('property_detail', ['id' => $v->id, 'slug' => $v->slug]) }}" class="btn btn-sm btn-outline-info"
                 title="View Property">
                 <i class="fas fa-eye"></i>
               </a>

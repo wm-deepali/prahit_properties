@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\User;
+use Illuminate\Support\Str;
+
 
 class BusinessListingController extends Controller
 {
@@ -140,6 +142,8 @@ class BusinessListingController extends Controller
                 'deals_in',              // ✅ new
                 'satisfied_clients',     // ✅ new
             ]));
+
+            $business->slug = Str::slug($request->business_name);
 
             // ✅ Add logged-in user ID
             $business->user_id = Auth::user()->id;
@@ -358,7 +362,7 @@ class BusinessListingController extends Controller
                     Storage::disk('public')->delete($business->banner_image);
                 $business->banner_image = $request->file('banner_image')->store('business/banner', 'public');
             }
-
+            $business->slug = Str::slug($request->business_name);
             $business->save();
 
             // Sync main subcategories

@@ -41,14 +41,14 @@
 											<div class="media">
 												<img class="mr-3 img-fluid" src="{{ asset('') }}{{ $v->PropertyGallery[0]->image_path }}" alt="Title">
 												<div class="media-body">
-													<h1 class="property-title"><a href="{{route('property_detail', ['title' => $v->slug])}}">{{$v->title}}</a></h1>
+													<h1 class="property-title"><a href="{{ route('property_detail', ['id' => $v->id, 'slug' => $v->slug]) }}">{{$v->title}}</a></h1>
 													<h3 class="property-price"><i class="fas fa-rupee-sign"></i> {{$v->price}}</h3>
 													<h3 class="property-listed">Listing in <a href="#">{{$v->category->category_name}}</a> </h3>
 													<div class="property-buttons">
 														<ul>
 															<li><a href="{{ url('update/property') }}/{{ $v->id }}" title="Edit Property"><i class="fas fa-pencil-alt"></i></a>
 															</li>
-															<li><a  href="{{route('property_detail', ['title' => $v->slug])}}" title="View Property"><i class="fas fa-eye"></i></a>
+															<li><a  href="{{ route('property_detail', parameters: ['id' => $v->id, 'slug' => $v->slug]) }}" title="View Property"><i class="fas fa-eye"></i></a>
 															</li>
 															<li><a style="cursor: pointer;" title="Delete Property" onclick="deleteProperty('{{ $v->id }}')"><i class="fas fa-trash"></i></a>
 															</li>

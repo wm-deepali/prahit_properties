@@ -591,7 +591,8 @@
                                         <div class="newdesign-info-proj">
                                             <div class="d-flex justify-content-between">
                                                 <h4 class="newdesign-proj-name"> <a
-                                                        href="{{route('property_detail', ['title' => $value->slug])}}">{{$value->title}}</a>
+                                                        href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+">{{$value->title}}</a>
                                                 </h4>
                                                 <span class="newdesign-proj-category">Villa</span>
                                             </div>

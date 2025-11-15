@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use App\Models\BusinessEnquiry;
 use App\Models\BusinessWishlist;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class BusinessListingController extends Controller
 {
@@ -194,7 +195,7 @@ class BusinessListingController extends Controller
             if ($request->hasFile('banner_image')) {
                 $business->banner_image = $request->file('banner_image')->store('business/banner', 'public');
             }
-
+            $business->slug = Str::slug($request->business_name);
             $business->save();
 
             // Sync main subcategories
@@ -440,6 +441,7 @@ class BusinessListingController extends Controller
                     Storage::disk('public')->delete($business->banner_image);
                 $business->banner_image = $request->file('banner_image')->store('business/banner', 'public');
             }
+            $business->slug = Str::slug($request->business_name);
 
             $business->save();
 
@@ -555,7 +557,7 @@ class BusinessListingController extends Controller
 
             // --- UPDATE SERVICES COUNT IN ACTIVE SUBSCRIPTION ---
             $serviceCount = $business->services()->count();
-            
+
             $activeSubscription = $business->user->activeSubscription;
             if ($activeSubscription) {
                 $activeSubscription->used_services = $serviceCount;

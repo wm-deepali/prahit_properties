@@ -2,146 +2,137 @@
 <html>
 
 <head>
-    <title>Izharson Perfumers - Order Invoice</title>
+    <title>Invoice - {{ $invoice->invoice_number ?? '' }}</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Start here SEO Part -->
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <meta name="author" content="">
-    <!-- End here SEO Part -->
-    <!--start here favicon-->
-    <link rel="shortcut icon" href="" alt="Signo Elevators">
-
-    <!--end here favicon-->
-    <!--start here css file-->
-    <style type="text/css">
-        @page {
-            size: 8in 10.25in;
-            margin: 10mm 10mm 10mm 10mm;
-            mso-header-margin: .5in;
-            mso-footer-margin: .5in;
-            mso-paper-source: 0;
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
         }
+
+        .invoice-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            font-size: 12px;
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .no-border td {
+            border: none !important;
+        }
+
+        .header-table td {
+            border: none !important;
+        }
+
+        .heading-row {
+            background-color: #ddd;
+            font-weight: bold;
+        }
+
+        .note {
+            margin-top: 40px;
+            color: red;
+            font-size: 16px;
+        }
+
     </style>
 </head>
 
-<body style="font-family: 'Poppins', sans-serif;">
-    <div style="border: 1px solid #ddd; padding-left: 15px;">
- 
-        <div class="inovice-view">
+<body>
 
-            <table style="width:100%">
+    <div class="invoice-container">
 
-                <tr style="border-bottom: 1px solid #ddd; ">
-                    <td colspan="4">
-                        <div style="max-width:290px;">
-                            <div style="max-width:290px;">
-                                
-                            </div>
-                        </div>
+        <table class="header-table">
+            <tr>
+                <td colspan="4">
+                    <img src="{{ asset('images/logoicon.png') }}" style="height: 50px;">
+                </td>
+
+                <td colspan="3" style="text-align:right;">
+                    <h3 style="margin:0;">Invoice</h3>
+                    <p>Company Name: <strong>ABC</strong></p>
+                    <p>Address: <strong>ABC</strong></p>
+                    <p>Tax Number: <strong>ABC</strong></p>
+                </td>
+            </tr>
+        </table>
+
+        <table class="no-border">
+            <tr>
+                <td colspan="4">
+                    <h4>Invoice To</h4>
+                    <p><strong>Name:</strong> {{ $payment->user->firstname }} {{ $payment->user->lastname }}</p>
+                    <p><strong>Address:</strong>
+                        {{ $payment->user->address }},
+                        {{ $payment->user->getCity->name ?? '' }},
+                        {{ $payment->user->getState->name ?? '' }}
+                    </p>
+                    <p><strong>Phone:</strong> {{ $payment->user->mobile_number }}</p>
+                    <p><strong>Email:</strong> {{ $payment->user->email }}</p>
+                </td>
+
+                <td colspan="3" style="text-align:right;">
+                    <h4>Payment Details</h4>
+                    <p><strong>Invoice Number:</strong> {{ $invoice->invoice_number }}</p>
+                    <p><strong>Order Date:</strong> {{ $invoice->created_at }}</p>
+                    <p><strong>Status:</strong> {{ ucfirst($payment->status) }}</p>
+                </td>
+            </tr>
+        </table>
+
+        <table>
+            <tr class="heading-row">
+                <th>#</th>
+                <th>Product Name</th>
+                <th>MRP (Per QTY)</th>
+                <th>Quantity</th>
+                <th>Product Cost</th>
+            </tr>
+
+            @if(isset($payment->subscription))
+                <tr>
+                    <td>1</td>
+                    <td>
+                        {{ $payment->subscription->package->name }}
+                        <br>
+                        <small>Validity: {{ $payment->subscription->package->validity }}</small>
                     </td>
-                    <td colspan="3" style="text-align: right;">
-                        <h6 style="margin-bottom: 5px; font-size: 15px; font-weight: bold;text-transform:uppercase">
-                            Invoice</h6>
-                        <p style="margin-bottom: 0px; font-size: 12px; font-weight: bold; ">Company Name - <span
-                                style="font-weight: normal;">ABC </span></p>
-                        <p style="margin-bottom: 0; font-size: 12px; font-weight: bold; ">Address - <span
-                                style="font-weight: normal;">ABC</span></p>
-                        <p style="margin-bottom: 0px; font-size: 12px; font-weight: bold; ">Tax Number - <span
-                                style="font-weight: normal;">ABC</span></p>
-                    </td>
+                    <td>{{ $payment->subscription->amount }}</td>
+                    <td>1</td>
+                    <td>{{ $payment->amount }}</td>
                 </tr>
+            @endif
 
-                <tr style="border-bottom: 1px solid #ddd; ">
-                    <td colspan="4">
-                        <div style="max-width:290px;margin-bottom:15px">
-                            <h6 style="margin-bottom: 10px; font-size: 12px; font-weight: bold;">Invoice To </h6>
-                            <p style="font-size: 12px;margin-bottom: 0px;"> <strong>Name </strong> :
-                                <span>{{ $payment->user->firstname ?? '' }} {{ $payment->user->lastname ?? '' }} </span>
-                            </p>
-                            <p style="font-size: 12px;"><strong>Address </strong> : {{ $payment->user->address ?? '' }},
-                                {{ $payment->user->getCity->name ?? '' }}, {{ $payment->user->getState->name ?? '' }}
-                            </p>
-                            <p style="font-size: 12px;margin-bottom: 0px;"> <strong>Phone Number </strong> :
-                                <span>{{ $payment->user->mobile_number ?? '' }} </span>
-                            </p>
-                            <p style="font-size: 12px;margin-bottom: 0px;"> <strong>Email Id </strong> :
-                                <span>{{ $payment->user->email ?? ''}}</span>
-                            </p>
+            <tr>
+                <td colspan="4" style="text-align:right;"><strong>Sub Total</strong></td>
+                <td>Rs {{ $payment->subscription->amount }}</td>
+            </tr>
 
-                        </div>
-                    </td>
-                    <td colspan="3" style="text-align: right;">
-                        <h6 style="margin-bottom: 10px; font-size: 12px; font-weight: bold;">Payment Details </h6>
-                        <p style="font-size: 12px;margin-bottom: 0px;"> <strong>Invoice Number </strong> :
-                            <span>{{ $invoice->invoice_number ?? ''}}</span>
-                        </p>
-                        <p style="font-size: 12px;margin-bottom: 0px;"> <strong>Order Date </strong> :
-                            <span>{{ $invoice->created_at ?? ''}}</span>
-                        </p>
-                        <p style="font-size: 12px;margin-bottom: 0px;"> <strong>Payment Status </strong> :
-                            <span>{{ $payment->status ?? ''}}</span>
-                        </p>
-                    </td>
-                </tr>
+            <tr>
+                <td colspan="4" style="text-align:right;"><strong>Grand Total</strong></td>
+                <td><strong>Rs {{ $payment->amount }}</strong></td>
+            </tr>
+        </table>
 
-                <tr style="background-color: #ddd;font-weight: normal;">
-                    <th style="padding:6px; font-size: 12px;"> # </th>
-                    <th style="padding:6px; font-size: 12px;"> Product Image </th>
-                    <th style="padding:6px; font-size: 12px;"> Product Name </th>
-                    <th style="padding:6px; font-size: 12px;"> MRP (Per QTY)</th>
-                    <th style="padding:6px; font-size: 12px;"> Quantity (Per QTY)</th>
-                    <th style="padding:6px; font-size: 12px;"> Pre-Discount </th>
-                    <th style="padding:6px; font-size: 12px;"> Product Cost </th>
-                </tr>
-                @if (isset($payment->subscription))
-                    <tr style=" font-size: 14px; font-weight: normal;">
-                        <td style="padding:10px; border:1px solid #ddd; ">1</td>
-                        <td style="padding:10px; border:1px solid #ddd; ">
-                            <a href="javascript:void(0)">
-                                <img src="{{ URL::asset('front/images/no_image.jpg') }}" class="img-fluid">
-                            </a>
-                        </td>
-                        <td style="padding:10px; border:1px solid #ddd; ">
-                            {{ $payment->subscription->package->name }}
-                            <span style="font-size:11px; font-weight:400">
-                                validity {{ $payment->subscription->package->validity }}
-                            </span>
-                        </td>
+        <p class="note">
+            Note: All prices include applicable taxes.
+        </p>
 
-                        <td style="padding:10px; border:1px solid #ddd; ">{{ $payment->subscription->amount }}</td>
-                        <td style="padding:10px; border:1px solid #ddd; ">1</td>
-                        <td style="padding:10px; border:1px solid #ddd; ">0
-                        </td>
-                        <td style="padding:10px; border:1px solid #ddd; ">{{ $payment->amount }}</td>
-
-                    </tr>
-                @endif
-                <tr style=" font-size: 14px; font-weight: normal;">
-                    <td colspan="6" style="text-align: right"> <strong style="padding: 0px 10px"> Sub Total </strong>
-                    </td>
-                    <td style="padding:10px; border:1px solid #ddd; "> Rs {{  $payment->subscription->amount }}
-                    </td>
-                </tr>
-                <tr style=" font-size: 14px; font-weight: normal;">
-                    <td colspan="6" style="text-align: right;"> <strong style="padding: 0px 10px"> Grand Total </strong>
-                    </td>
-                    <td style="padding:10px; border:1px solid #ddd; "> <strong> Rs
-                            {{$payment->amount  }} </strong> </td>
-                </tr>
-                <tr style=" font-size: 14px; font-weight: normal;color:red">
-                    <td colspan="8" style="text-align: left; border-top: 1px solid #ddd; padding: 0px 10px;">
-                        <h4 style="margin-bottom: 2px; font-size: 18px; margin-top: 200px; margin-bottom: 15px;"> Note:-
-                            All prices are including applicable taxes </h4>
-
-                    </td>
-                </tr>
-            </table>
-        </div>
     </div>
+
 </body>
 
 </html>

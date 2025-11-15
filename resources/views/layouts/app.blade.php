@@ -161,21 +161,11 @@
                                         Property Enquiries
                                     </a>
                                     <a class="dropdown-item" href="{{ url('master/property/feedback') }}">
-                                        Feedbacks
+                                        Property Feedbacks
                                     </a>
                                     <a class="dropdown-item" href="{{ route('admin.manage-complaints.index') }}">
                                         Property Complaints
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('admin.manageSupportQuery') }}">
-                                        Support Center
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('admin.manageComplaints') }}">
-                                        Complaints
-                                    </a>
-
-                                    <div class="dropdown-divider"></div> <!-- 🔹 Optional visual separator -->
-
-                                    {{-- 🆕 New Links --}}
                                     <a class="dropdown-item" href="{{ route('admin.directory-enquiries.index') }}">
                                         Directory Enquiries
                                     </a>
@@ -184,6 +174,12 @@
                                     </a>
                                     <a class="dropdown-item" href="{{ route('admin.business-listing-reviews.index') }}">
                                         Business Listing Reviews
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('admin.manageSupportQuery') }}">
+                                        Support Center
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('admin.manageComplaints') }}">
+                                        Complaints
                                     </a>
                                 </div>
                             </li>

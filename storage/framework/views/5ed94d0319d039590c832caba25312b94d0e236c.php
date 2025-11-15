@@ -2507,7 +2507,7 @@
     aria-hidden="true">
     <div class="modal-dialog w-450" role="document">
       <div class="modal-content">
-        <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
 

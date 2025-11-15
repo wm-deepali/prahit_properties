@@ -875,7 +875,7 @@
                                         <span
                                             class="newdesign-proj-owner"><strong>Member:</strong><br>{{ $provider->membership_type ?? '' }}</span>
                                     </div>
-                                    <a href="{{ route('business.details', $provider->id)}}" class="view-profile-btn">View
+                                    <a href="{{ route('business.details', ['id' => $provider->id, 'slug' => $provider->slug]) }}" class="view-profile-btn">View
                                         Profile</a>
                                 </div>
                             </div>

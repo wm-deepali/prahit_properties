@@ -105,13 +105,13 @@
                                             alt="{{ $company->business_name }}">
                                         <div class="wishlist-info">
                                             <h5><a
-                                                    href="{{ route('business.details', $company->id) }}">{{ $company->business_name }}</a>
+                                                    href="{{ route('business.details', ['id' => $company->id, 'slug' => $company->slug]) }}">{{ $company->business_name }}</a>
                                             </h5>
                                             <p><strong>Location:</strong> {{ $company->city ?? 'N/A' }},
                                                 {{ $company->state ?? 'N/A' }}</p>
                                             <p><strong>Category:</strong> {{ $company->Category->category_name ?? '-' }}</p>
                                             <div class="property-actions">
-                                                <a href="{{ route('business.details', $company->id) }}"
+                                                <a href="{{ route('business.details', ['id' => $company->id, 'slug' => $company->slug]) }}"
                                                     class="btn btn-sm btn-outline-info">
                                                     <i class="fas fa-eye"></i> View
                                                 </a>
