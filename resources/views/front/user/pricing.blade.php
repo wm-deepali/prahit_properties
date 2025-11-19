@@ -302,7 +302,7 @@
       $('.choose-plan-btn').click(function () {
         const packageId = $(this).data('id');
         const name = $(this).data('name');
-        const price = $(this).data('price');
+        const price = parseFloat($(this).data('price'));
         const description = $(this).data('description');
 
         if (!isLoggedIn) {
@@ -318,14 +318,69 @@
               $('#signin').modal('show');
             }
           });
-        } else {
-          $('#selected_package_id').val(packageId);
-          $('#selected_package_name').val(name);
-          $('#selected_package_amount').val(price);
-          $('#selected_package_description').val(description);
-          $('#paymentModal').modal('show');
+          return;
         }
+
+        // ✅ FREE PACKAGE → DIRECT SUBSCRIPTION
+        if (price === 0) {
+          Swal.fire({
+            icon: "info",
+            title: "Activating Free Plan...",
+            text: "Please wait...",
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            timer: 1200
+          });
+
+          fetch("{{ route('subscription.store') }}", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({
+              razorpay_payment_id: 'test_payment_' + Date.now(),
+              package_id: packageId,
+              payment_method: "free"
+            })
+          })
+            .then(res => res.json())
+            .then(data => {
+              if (data.success) {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Subscription Activated!',
+                  text: 'Your free plan is now active.'
+                }).then(() => {
+                  const urlParams = new URLSearchParams(window.location.search);
+                  const redirectUrl = urlParams.get('redirect_url');
+
+                  if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                  } else {
+                    window.location.reload();
+                  }
+                });
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error!',
+                  text: data.message || 'Something went wrong.'
+                });
+              }
+            });
+
+          return; // ⛔ STOP here, do not show payment modal
+        }
+
+        // ❗ PAID PACKAGE → Show Payment Modal
+        $('#selected_package_id').val(packageId);
+        $('#selected_package_name').val(name);
+        $('#selected_package_amount').val(price);
+        $('#selected_package_description').val(description);
+        $('#paymentModal').modal('show');
       });
+
 
       $('#payOnlineBtn').click(function () {
         const selectedPackage = {

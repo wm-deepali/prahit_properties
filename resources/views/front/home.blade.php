@@ -14,7 +14,7 @@
 <style>
   .newupdateContainer {
     text-align: center;
-    padding: 70px 60px;
+    padding: 50px 60px;
     /*max-width: 900px;*/
     width: 100%;
     min-height: 650px;
@@ -46,7 +46,7 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     color: #333;
-    width: 60%;
+    width: 70%;
 
   }
 
@@ -357,7 +357,7 @@
         </div>
 
         <input type="text" placeholder="Search by Project, Locality, or Builder" class="newupdateSearchInput">
-        <button class="newupdateSearchIcon"><i class="fa-solid fa-location-crosshairs"></i></button>
+        <button class="newupdateSearchBtn">Search</button>
 
 
         <!--<i class="fa-solid fa-filter"></i>-->
@@ -442,7 +442,7 @@
       {{-- BUY FILTERS --}}
       <div class="newupdateFilters" data-type="buy">
         <div class="row">
-          <div class="col-sm-3">
+          <div class="col-sm-3" style="padding-left:5px;padding-right:5px;">
             <select class="newupdateDropdown w-100 sub_category_items" id="sub_category_id">
               <option value="">Property Category</option>
               @foreach ($buyFilters['categories'] as $cat)
@@ -451,7 +451,7 @@
             </select>
           </div>
 
-          <div class="col-sm-3">
+          <div class="col-sm-3" style="padding-left:5px;padding-right:5px;">
             <div class="newupdateFilterOptions property-type-checkbox-group border rounded p-2"
               style="max-height:150px; overflow-y:auto;">
               <label class="text-left mb-1" id="propertyTypeLabelBuy">Property Type</label>
@@ -470,7 +470,7 @@
           </div>
 
 
-          <div class="col-sm-3">
+          <div class="col-sm-3" style="padding-left:5px;padding-right:5px;">
             <select class="newupdateDropdown w-100" id="budget">
               <option value="">Budget</option>
               @foreach ($buyFilters['budgets'] as $budget)
@@ -478,7 +478,7 @@
               @endforeach
             </select>
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-3" style="padding-left:5px;padding-right:5px;">
             <select class="newupdateDropdown w-100" id="user_role">
               <option value="">Posted By</option>
               @foreach ($buyFilters['posted_by'] as $poster)
@@ -489,7 +489,7 @@
         </div>
 
 
-        <button class="newupdateSearchBtn mt-2">Search</button>
+        <!--<button class="newupdateSearchBtn mt-4">Search</button>-->
       </div>
 
 
@@ -497,7 +497,7 @@
       <div class="newupdateFilters" data-type="rental" style="display:none;">
         <div class="row">
 
-          <div class="col-sm-3">
+          <div class="col-sm-3" style="padding-left:5px;padding-right:5px;">
             <select class="newupdateDropdown w-100 sub_category_items" id="sub_category_id">
               <option value="">Property Category</option>
               @foreach ($rentalFilters['categories'] as $cat)
@@ -506,7 +506,7 @@
             </select>
           </div>
 
-          <div class="col-sm-3">
+          <div class="col-sm-3" style="padding-left:5px;padding-right:5px;">
             <div class="newupdateFilterOptions property-type-checkbox-group border rounded p-2"
               style="max-height:150px; overflow-y:auto;">
               <label class="text-left mb-1" id="propertyTypeLabelRental">Property Type</label>
@@ -526,7 +526,7 @@
 
           {{-- ✅ Property Type as Checkboxes --}}
 
-          <div class="col-sm-3">
+          <div class="col-sm-3" style="padding-left:5px;padding-right:5px;">
             <select class="newupdateDropdown w-100" id="budget">
               <option value="">Budget</option>
               @foreach ($rentalFilters['budgets'] as $budget)
@@ -535,7 +535,7 @@
             </select>
           </div>
 
-          <div class="col-sm-3">
+          <div class="col-sm-3" style="padding-left:5px;padding-right:5px;">
             <select class="newupdateDropdown w-100" id="user_role">
               <option value="">Posted By</option>
               @foreach ($rentalFilters['posted_by'] as $poster)
@@ -546,7 +546,7 @@
         </div>
 
 
-        <button class="newupdateSearchBtn mt-2">Search</button>
+        <!--<button class="newupdateSearchBtn mt-2">Search</button>-->
       </div>
 
       {{-- PG / HOSTELS FILTERS --}}
@@ -573,7 +573,7 @@
             @endforeach
           </select>
         </div>
-        <button class="newupdateSearchBtn mt-2">Search</button>
+        <!--<button class="newupdateSearchBtn mt-2">Search</button>-->
       </div>
 
       {{-- EXCLUSIVE LAUNCH FILTERS --}}
@@ -587,11 +587,11 @@
           </select>
 
           <!-- <select class="newupdateDropdown" id="sub_sub_category_id"  multiple>
-                                                      <option value="">Property Type</option>
-                                                      @foreach ($exclusiveFilters['types'] as $type)
-                                                        <option value="{{ $type->id }}">{{ $type->sub_sub_category_name }}</option>
-                                                      @endforeach
-                                                    </select> -->
+                                                        <option value="">Property Type</option>
+                                                        @foreach ($exclusiveFilters['types'] as $type)
+                                                          <option value="{{ $type->id }}">{{ $type->sub_sub_category_name }}</option>
+                                                        @endforeach
+                                                      </select> -->
 
           <select class="newupdateDropdown" id="budget">
             <option value="">Budget</option>
@@ -609,7 +609,7 @@
             @endforeach
           </select>
         </div>
-        <button class="newupdateSearchBtn mt-2">Search</button>
+        <!--<button class="newupdateSearchBtn mt-2">Search</button>-->
       </div>
 
       <div class="newupdateFilters" data-type="plot-land" style="display:none;">
@@ -655,7 +655,7 @@
         </div>
 
 
-        <button class="newupdateSearchBtn mt-2">Search</button>
+        <!--<button class="newupdateSearchBtn mt-2">Search</button>-->
       </div>
 
     </div>
@@ -700,11 +700,12 @@
   @php
     $city_id = Cache::get('location-id');
 
-    $propertiesSellCommercial = Helper::getPropertiesByCategoryAndSubcategory('Sell', 'ALL COMMERCIAL', $city_id);
-    $propertiesSellResidential = Helper::getPropertiesByCategoryAndSubcategory('Sell', 'ALL RESIDENTIAL', $city_id);
+    $propertiesSellCommercial = Helper::getPropertiesByCategoryAndSubcategory('Sell', 35, $city_id);
+    $propertiesSellResidential = Helper::getPropertiesByCategoryAndSubcategory('Sell', 34, $city_id);
 
-    $propertiesRentCommercial = Helper::getPropertiesByCategoryAndSubcategory('Rent', 'ALL COMMERCIAL', $city_id);
-    $propertiesRentResidential = Helper::getPropertiesByCategoryAndSubcategory('Rent', 'ALL RESIDENTIAL', $city_id);
+    $propertiesRentCommercial = Helper::getPropertiesByCategoryAndSubcategory('Rent', 37, $city_id);
+    $propertiesRentResidential = Helper::getPropertiesByCategoryAndSubcategory('Rent', 38, $city_id);
+
 
     $exculsiveProperties = Helper::getPropertiesByCategory('Exclusive Launch', $city_id);
     $business_list = Helper::getAllBusinessListings();
@@ -757,70 +758,69 @@
               @if(isset($listings))
                 @foreach($listings as $key => $value)
                   @if(in_array($value->id, explode(',', $hand_picked->ids)))
-                    <div class="swiper-slide">
-                      <div class=" property-card" data-type="office">
-                        <div class="newdesign-project-main shadow-sm">
-                          <div class="newdesign-image-proj position-relative">
-                            <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">
-                              <img
-                                src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
-                                alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
-                            </a>
-                            @if($value->verified_tag === 'Yes')
-                              <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                            @endif
-                          </div>
-                          <div class="newdesign-info-proj p-3">
-                            <div class="d-flex justify-content-between align-items-start">
-                              <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
-                                  href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">{{$value->title}}</a>
-                              </h5>
+                                <div class="swiper-slide">
+                                  <div class=" property-card" data-type="office">
+                                    <div class="newdesign-project-main shadow-sm">
+                                      <div class="newdesign-image-proj position-relative">
+                                        <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                    ">
+                                          <img
+                                            src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
+                                            alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
+                                        </a>
+                                        @if($value->verified_tag === 'Yes')
+                                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                                        @endif
+                                      </div>
+                                      <div class="newdesign-info-proj p-3">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                    ">{{$value->title}}</a>
+                                          </h5>
 
-                            </div>
-                            <hr class="" style="margin-bottom:10px; margin-top:10px;">
-                            <div class="d-flex justify-content-between align-items-center">
-                              <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                                style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
-                              <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                              <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                                        </div>
+                                        <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                          <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                                            style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
+                                          <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
-                            </div>
+                                        </div>
 
-                            <div class="horizontal-line mt-2"></div>
-                            <div class="d-flex justify-content-between align-items-center">
+                                        <div class="horizontal-line mt-2"></div>
+                                        <div class="d-flex justify-content-between align-items-center">
 
-                              <p class="small text-secondary mb-2 mt-2">
-                                <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
-                                {{ $value->getState->name }}
-                              </p>
-                              <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
-                            </div>
+                                          <p class="small text-secondary mb-2 mt-2">
+                                            <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
+                                            {{ $value->getState->name }}
+                                          </p>
+                                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                                        </div>
 
-                            <div class="horizontal-line"></div>
-                            <p class="small text-muted mb-2 mt-2">
-                              {{ \Illuminate\Support\Str::limit($value->description, 85) }}
-                            </p>
+                                        <div class="horizontal-line"></div>
+                                        <p class="small text-muted mb-2 mt-2">
+                                          {{ \Illuminate\Support\Str::limit($value->description, 85) }}
+                                        </p>
 
-                            <div class="d-flex justify-content-between">
-                              <p class="m-0 small"> <strong>Owner:</strong><br> <a
-                                  href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
-                                  {{ $value->getUser->firstname ?? '' }} </a> </p>
-                              <p class="m-0 small">
-                                <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
-                              </p>
-                            </div>
-                            <hr>
-                            <div class="d-flex justify-content-between">
-                              <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                                {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
-                              <button class="btn btn-sm btn-primary">Contact Now</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                          <p class="m-0 small"> <strong>Owner:</strong><br> <a
+                                              href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
+                                              {{ $value->getUser->firstname ?? '' }} </a> </p>
+                                          <p class="m-0 small">
+                                            <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
+                                          </p>
+                                        </div>
+                                        <hr>
+                                        <div class="d-flex justify-content-between">
+                                          <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
+                                            {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
+                                          <button class="btn btn-sm btn-primary">Contact Now</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
 
                   @endif
                 @endforeach
@@ -849,58 +849,57 @@
       </div>
       <div class="row">
         @foreach($exculsiveProperties as $key => $value)
-          <!-- Property Card 1 -->
-          <div class="col-lg-4 mb-3">
-            <div class="newdesign-project-main">
-              <!--<a href="#">-->
-              <div class="newdesign-image-proj">
-                <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">
-                  <img
-                    src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;'}}"
-                    class="img-fluid" alt="Property 1">
-                </a>
-                @if($value->verified_tag === 'Yes')
-                  <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                @endif
-              </div>
-              <div class="newdesign-info-proj">
-                <div class="d-flex justify-content-between">
-                  <h4 class="newdesign-proj-name"> <a
-                      href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">{{$value->title}}</a></h4>
-                  <!--<span class="newdesign-proj-category">Villa</span>-->
-                </div>
-                <hr class="" style="margin-bottom:10px; margin-top:10px;">
-                <div class="d-flex justify-content-between align-items-center">
-                  <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                    style=" height:30px;">Villa</p>
-                  <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                  <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                <!-- Property Card 1 -->
+                <div class="col-lg-4 mb-3">
+                  <div class="newdesign-project-main">
+                    <!--<a href="#">-->
+                    <div class="newdesign-image-proj">
+                      <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+          ">
+                        <img
+                          src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;'}}"
+                          class="img-fluid" alt="Property 1">
+                      </a>
+                      @if($value->verified_tag === 'Yes')
+                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                      @endif
+                    </div>
+                    <div class="newdesign-info-proj">
+                      <div class="d-flex justify-content-between">
+                        <h4 class="newdesign-proj-name"> <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+          ">{{$value->title}}</a></h4>
+                        <!--<span class="newdesign-proj-category">Villa</span>-->
+                      </div>
+                      <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                          style=" height:30px;">Villa</p>
+                        <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                        <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
-                </div>
-                <div class="horizontal-line mt-2 mb-2"></div>
-                <span class="newdesign-apart-name"> {{ \Illuminate\Support\Str::limit($value->description, 100) }}</span>
-                <hr>
-                <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> {{ $value->getCity->name }},
-                  {{ $value->getState->name }}</span>
+                      </div>
+                      <div class="horizontal-line mt-2 mb-2"></div>
+                      <span class="newdesign-apart-name"> {{ \Illuminate\Support\Str::limit($value->description, 100) }}</span>
+                      <hr>
+                      <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i> {{ $value->getCity->name }},
+                        {{ $value->getState->name }}</span>
 
-                <div class="newdesign-proj-price">
-                  <span><i class="fas fa-rupee-sign"></i>{{\App\Helpers\Helper::formatIndianPrice($value->price)}}</span>
+                      <div class="newdesign-proj-price">
+                        <span><i class="fas fa-rupee-sign"></i>{{\App\Helpers\Helper::formatIndianPrice($value->price)}}</span>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <span class="newdesign-proj-owner"><strong>Builder:</strong><br>
+                          <a href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
+                            {{ $value->getUser->firstname ?? '' }}
+                          </a>
+                        </span>
+                        <span class="newdesign-proj-owner"><strong>Posted:</strong><br>
+                          {{ optional($value->created_at)->format('d M Y') }}</span>
+                      </div>
+                    </div>
+                    <!--</a>-->
+                  </div>
                 </div>
-                <div class="d-flex justify-content-between">
-                  <span class="newdesign-proj-owner"><strong>Builder:</strong><br>
-                    <a href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
-                      {{ $value->getUser->firstname ?? '' }}
-                    </a>
-                  </span>
-                  <span class="newdesign-proj-owner"><strong>Posted:</strong><br>
-                    {{ optional($value->created_at)->format('d M Y') }}</span>
-                </div>
-              </div>
-              <!--</a>-->
-            </div>
-          </div>
         @endforeach
       </div>
     </div>
@@ -933,70 +932,69 @@
             <div class="swiper-wrapper">
               <!-- Directory Card 1 -->
               @foreach($propertiesSellCommercial as $key => $value)
-                <div class="swiper-slide">
-                  <div class=" property-card" data-type="{{ $value->getCategoryHierarchyName() }}">
-                    <div class="newdesign-project-main shadow-sm">
-                      <div class="newdesign-image-proj position-relative">
-                        <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">
-                          <img
-                            src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
-                            alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
-                        </a>
-                        @if($value->verified_tag === 'Yes')
-                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                        @endif
-                      </div>
-                      <div class="newdesign-info-proj p-3">
-                        <div class="d-flex justify-content-between align-items-start">
-                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
-                              href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">{{$value->title}}</a>
-                          </h5>
+                            <div class="swiper-slide">
+                              <div class=" property-card" data-type="{{ $value->getCategoryHierarchyName() }}">
+                                <div class="newdesign-project-main shadow-sm">
+                                  <div class="newdesign-image-proj position-relative">
+                                    <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                ">
+                                      <img
+                                        src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
+                                        alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
+                                    </a>
+                                    @if($value->verified_tag === 'Yes')
+                                      <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                                    @endif
+                                  </div>
+                                  <div class="newdesign-info-proj p-3">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                      <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                ">{{$value->title}}</a>
+                                      </h5>
 
-                        </div>
-                        <hr class="" style="margin-bottom:10px; margin-top:10px;">
-                        <div class="d-flex justify-content-between align-items-center">
-                          <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                            style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
-                          <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                                    </div>
+                                    <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                      <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                                        style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
+                                      <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                                      <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
-                        </div>
+                                    </div>
 
-                        <div class="horizontal-line mt-2"></div>
-                        <div class="d-flex justify-content-between align-items-center">
+                                    <div class="horizontal-line mt-2"></div>
+                                    <div class="d-flex justify-content-between align-items-center">
 
-                          <p class="small text-secondary mb-2 mt-2">
-                            <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
-                            {{ $value->getState->name }}
-                          </p>
-                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
-                        </div>
+                                      <p class="small text-secondary mb-2 mt-2">
+                                        <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
+                                        {{ $value->getState->name }}
+                                      </p>
+                                      <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                                    </div>
 
-                        <div class="horizontal-line"></div>
-                        <p class="small text-muted mb-2 mt-2">
-                          {{ \Illuminate\Support\Str::limit($value->description, 85) }}
-                        </p>
+                                    <div class="horizontal-line"></div>
+                                    <p class="small text-muted mb-2 mt-2">
+                                      {{ \Illuminate\Support\Str::limit($value->description, 85) }}
+                                    </p>
 
-                        <div class="d-flex justify-content-between">
-                          <p class="m-0 small"> <strong>Owner:</strong><br> <a
-                              href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
-                              {{ $value->getUser->firstname ?? '' }} </a> </p>
-                          <p class="m-0 small">
-                            <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
-                          </p>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between">
-                          <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                            {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
-                          <button class="btn btn-sm btn-primary">Contact Now</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                                    <div class="d-flex justify-content-between">
+                                      <p class="m-0 small"> <strong>Owner:</strong><br> <a
+                                          href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
+                                          {{ $value->getUser->firstname ?? '' }} </a> </p>
+                                      <p class="m-0 small">
+                                        <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
+                                      </p>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-between">
+                                      <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
+                                        {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
+                                      <button class="btn btn-sm btn-primary">Contact Now</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
               @endforeach
 
               <!-- Add more slides as needed -->
@@ -1056,7 +1054,8 @@
                     <div class="directory-info">
 
                       <h4 class="directory-company-name"><a
-                          href="{{ route('business.details', ['id' => $list->id, 'slug' => $list->slug]) }}">{{ $list->business_name }}</a></h4>
+                          href="{{ route('business.details', ['id' => $list->id, 'slug' => $list->slug]) }}"
+                          style="font-size:20px;text-align:center;white-space:wrap;">{{ $list->business_name }}</a></h4>
                       <hr>
 
 
@@ -1070,15 +1069,15 @@
                         <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
                       </div>
                       <div class="horizontal-line"></div>
-                      <div class="d-flex justify-content-between">
+                      <div class="d-flex justify-content-between align-items-center p-2">
                         <div class="dir-left">
-                          <h5>Established Year</h5>
-                          <p>{{  $list->established_year }}</p>
+                          <h5 class="m-0">Established Year</h5>
+                          <p class="m-0">{{  $list->established_year }}</p>
                         </div>
                         <div class="ver-line"></div>
                         <div class="dir-left">
-                          <h5>Location</h5>
-                          <p>{{ $list->city }}, {{ $list->state }}</p>
+                          <h5 class="m-0">Location</h5>
+                          <p class="m-0">{{ $list->city }}, {{ $list->state }}</p>
                         </div>
                       </div>
 
@@ -1141,70 +1140,69 @@
             <div class="swiper-wrapper">
               <!-- Directory Card 1 -->
               @foreach($propertiesSellResidential as $key => $value)
-                <div class="swiper-slide">
-                  <div class=" property-card" data-type="{{ $value->getCategoryHierarchyName() }}">
-                    <div class="newdesign-project-main shadow-sm">
-                      <div class="newdesign-image-proj position-relative">
-                        <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">
-                          <img
-                            src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
-                            alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
-                        </a>
-                        @if($value->verified_tag === 'Yes')
-                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                        @endif
-                      </div>
-                      <div class="newdesign-info-proj p-3">
-                        <div class="d-flex justify-content-between align-items-start">
-                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
-                              href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">{{$value->title}}</a>
-                          </h5>
+                            <div class="swiper-slide">
+                              <div class=" property-card" data-type="{{ $value->getCategoryHierarchyName() }}">
+                                <div class="newdesign-project-main shadow-sm">
+                                  <div class="newdesign-image-proj position-relative">
+                                    <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                ">
+                                      <img
+                                        src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
+                                        alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
+                                    </a>
+                                    @if($value->verified_tag === 'Yes')
+                                      <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                                    @endif
+                                  </div>
+                                  <div class="newdesign-info-proj p-3">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                      <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                ">{{$value->title}}</a>
+                                      </h5>
 
-                        </div>
-                        <hr class="" style="margin-bottom:10px; margin-top:10px;">
-                        <div class="d-flex justify-content-between align-items-center">
-                          <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                            style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
-                          <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                                    </div>
+                                    <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                      <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                                        style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
+                                      <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                                      <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
-                        </div>
+                                    </div>
 
-                        <div class="horizontal-line mt-2"></div>
-                        <div class="d-flex justify-content-between align-items-center">
+                                    <div class="horizontal-line mt-2"></div>
+                                    <div class="d-flex justify-content-between align-items-center">
 
-                          <p class="small text-secondary mb-2 mt-2">
-                            <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
-                            {{ $value->getState->name }}
-                          </p>
-                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
-                        </div>
+                                      <p class="small text-secondary mb-2 mt-2">
+                                        <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
+                                        {{ $value->getState->name }}
+                                      </p>
+                                      <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                                    </div>
 
-                        <div class="horizontal-line"></div>
-                        <p class="small text-muted mb-2 mt-2">
-                          {{ \Illuminate\Support\Str::limit($value->description, 85) }}
-                        </p>
+                                    <div class="horizontal-line"></div>
+                                    <p class="small text-muted mb-2 mt-2">
+                                      {{ \Illuminate\Support\Str::limit($value->description, 85) }}
+                                    </p>
 
-                        <div class="d-flex justify-content-between">
-                          <p class="m-0 small"> <strong>Owner:</strong><br> <a
-                              href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
-                              {{ $value->getUser->firstname ?? '' }} </a> </p>
-                          <p class="m-0 small">
-                            <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
-                          </p>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between">
-                          <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                            {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
-                          <button class="btn btn-sm btn-primary">Contact Now</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                                    <div class="d-flex justify-content-between">
+                                      <p class="m-0 small"> <strong>Owner:</strong><br> <a
+                                          href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
+                                          {{ $value->getUser->firstname ?? '' }} </a> </p>
+                                      <p class="m-0 small">
+                                        <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
+                                      </p>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-between">
+                                      <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
+                                        {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
+                                      <button class="btn btn-sm btn-primary">Contact Now</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
               @endforeach
 
               <!-- Add more slides as needed -->
@@ -1245,70 +1243,69 @@
             <div class="swiper-wrapper">
               <!-- Directory Card 1 -->
               @foreach($propertiesRentCommercial as $key => $value)
-                <div class="swiper-slide">
-                  <div class=" property-card" data-type="{{ $value->getCategoryHierarchyName() }}">
-                    <div class="newdesign-project-main shadow-sm">
-                      <div class="newdesign-image-proj position-relative">
-                        <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">
-                          <img
-                            src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
-                            alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
-                        </a>
-                        @if($value->verified_tag === 'Yes')
-                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                        @endif
-                      </div>
-                      <div class="newdesign-info-proj p-3">
-                        <div class="d-flex justify-content-between align-items-start">
-                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
-                              href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">{{$value->title}}</a>
-                          </h5>
+                            <div class="swiper-slide">
+                              <div class=" property-card" data-type="{{ $value->getCategoryHierarchyName() }}">
+                                <div class="newdesign-project-main shadow-sm">
+                                  <div class="newdesign-image-proj position-relative">
+                                    <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                ">
+                                      <img
+                                        src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
+                                        alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
+                                    </a>
+                                    @if($value->verified_tag === 'Yes')
+                                      <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                                    @endif
+                                  </div>
+                                  <div class="newdesign-info-proj p-3">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                      <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                ">{{$value->title}}</a>
+                                      </h5>
 
-                        </div>
-                        <hr class="" style="margin-bottom:10px; margin-top:10px;">
-                        <div class="d-flex justify-content-between align-items-center">
-                          <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                            style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
-                          <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                                    </div>
+                                    <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                      <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                                        style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
+                                      <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                                      <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
-                        </div>
+                                    </div>
 
-                        <div class="horizontal-line mt-2"></div>
-                        <div class="d-flex justify-content-between align-items-center">
+                                    <div class="horizontal-line mt-2"></div>
+                                    <div class="d-flex justify-content-between align-items-center">
 
-                          <p class="small text-secondary mb-2 mt-2">
-                            <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
-                            {{ $value->getState->name }}
-                          </p>
-                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
-                        </div>
+                                      <p class="small text-secondary mb-2 mt-2">
+                                        <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
+                                        {{ $value->getState->name }}
+                                      </p>
+                                      <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                                    </div>
 
-                        <div class="horizontal-line"></div>
-                        <p class="small text-muted mb-2 mt-2">
-                          {{ \Illuminate\Support\Str::limit($value->description, 85) }}
-                        </p>
+                                    <div class="horizontal-line"></div>
+                                    <p class="small text-muted mb-2 mt-2">
+                                      {{ \Illuminate\Support\Str::limit($value->description, 85) }}
+                                    </p>
 
-                        <div class="d-flex justify-content-between">
-                          <p class="m-0 small"> <strong>Owner:</strong><br> <a
-                              href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
-                              {{ $value->getUser->firstname ?? '' }} </a> </p>
-                          <p class="m-0 small">
-                            <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
-                          </p>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between">
-                          <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                            {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
-                          <button class="btn btn-sm btn-primary">Contact Now</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                                    <div class="d-flex justify-content-between">
+                                      <p class="m-0 small"> <strong>Owner:</strong><br> <a
+                                          href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
+                                          {{ $value->getUser->firstname ?? '' }} </a> </p>
+                                      <p class="m-0 small">
+                                        <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
+                                      </p>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-between">
+                                      <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
+                                        {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
+                                      <button class="btn btn-sm btn-primary">Contact Now</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
               @endforeach
 
               <!-- Add more slides as needed -->
@@ -1350,70 +1347,69 @@
             <div class="swiper-wrapper">
               <!-- Directory Card 1 -->
               @foreach($propertiesRentResidential as $key => $value)
-                <div class="swiper-slide">
-                  <div class=" property-card" data-type="{{ $value->getCategoryHierarchyName() }}">
-                    <div class="newdesign-project-main shadow-sm">
-                      <div class="newdesign-image-proj position-relative">
-                        <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">
-                          <img
-                            src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
-                            alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
-                        </a>
-                        @if($value->verified_tag === 'Yes')
-                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                        @endif
-                      </div>
-                      <div class="newdesign-info-proj p-3">
-                        <div class="d-flex justify-content-between align-items-start">
-                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
-                              href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">{{$value->title}}</a>
-                          </h5>
+                            <div class="swiper-slide">
+                              <div class=" property-card" data-type="{{ $value->getCategoryHierarchyName() }}">
+                                <div class="newdesign-project-main shadow-sm">
+                                  <div class="newdesign-image-proj position-relative">
+                                    <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                ">
+                                      <img
+                                        src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
+                                        alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
+                                    </a>
+                                    @if($value->verified_tag === 'Yes')
+                                      <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                                    @endif
+                                  </div>
+                                  <div class="newdesign-info-proj p-3">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                      <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                ">{{$value->title}}</a>
+                                      </h5>
 
-                        </div>
-                        <hr class="" style="margin-bottom:10px; margin-top:10px;">
-                        <div class="d-flex justify-content-between align-items-center">
-                          <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                            style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
-                          <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                                    </div>
+                                    <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                      <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                                        style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
+                                      <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                                      <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
-                        </div>
+                                    </div>
 
-                        <div class="horizontal-line mt-2"></div>
-                        <div class="d-flex justify-content-between align-items-center">
+                                    <div class="horizontal-line mt-2"></div>
+                                    <div class="d-flex justify-content-between align-items-center">
 
-                          <p class="small text-secondary mb-2 mt-2">
-                            <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
-                            {{ $value->getState->name }}
-                          </p>
-                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
-                        </div>
+                                      <p class="small text-secondary mb-2 mt-2">
+                                        <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
+                                        {{ $value->getState->name }}
+                                      </p>
+                                      <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                                    </div>
 
-                        <div class="horizontal-line"></div>
-                        <p class="small text-muted mb-2 mt-2">
-                          {{ \Illuminate\Support\Str::limit($value->description, 85) }}
-                        </p>
+                                    <div class="horizontal-line"></div>
+                                    <p class="small text-muted mb-2 mt-2">
+                                      {{ \Illuminate\Support\Str::limit($value->description, 85) }}
+                                    </p>
 
-                        <div class="d-flex justify-content-between">
-                          <p class="m-0 small"> <strong>Owner:</strong><br> <a
-                              href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
-                              {{ $value->getUser->firstname ?? '' }} </a> </p>
-                          <p class="m-0 small">
-                            <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
-                          </p>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between">
-                          <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                            {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
-                          <button class="btn btn-sm btn-primary">Contact Now</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                                    <div class="d-flex justify-content-between">
+                                      <p class="m-0 small"> <strong>Owner:</strong><br> <a
+                                          href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
+                                          {{ $value->getUser->firstname ?? '' }} </a> </p>
+                                      <p class="m-0 small">
+                                        <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
+                                      </p>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-between">
+                                      <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
+                                        {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
+                                      <button class="btn btn-sm btn-primary">Contact Now</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
               @endforeach
 
               <!-- Add more slides as needed -->
@@ -1490,7 +1486,7 @@
                     <div class="new-slide">
                       <div class="newdesign-project-main">
                         <div class="newdesign-image-proj">
-                          <a href="{{ route('property_detail', ['id' => $value->id,'slug' => $value->slug]) }}">
+                          <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}">
                             <img src="{{ isset($value->PropertyGallery[0]->image_path)
                 ? asset($value->PropertyGallery[0]->image_path)
                 : 'https://static.squareyards.com/resources/images/mumbai/project-image/default.jpg' }}"
@@ -1504,7 +1500,7 @@
 
                           <div class="d-flex justify-content-between">
                             <h4 class="newdesign-proj-name">
-                              <a href="{{ route('property_detail', ['id' => $value->id,'slug' => $value->slug]) }}">
+                              <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}">
                                 {{ $value->title }}
                               </a>
                             </h4>
@@ -1630,70 +1626,69 @@
               <div class="swiper-wrapper">
                 <!-- Directory Card 1 -->
                 @foreach($projects as $key => $value)
-                  <div class="swiper-slide">
-                    <div class=" property-card">
-                      <div class="newdesign-project-main shadow-sm">
-                        <div class="newdesign-image-proj position-relative">
-                          <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">
-                            <img
-                              src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
-                              alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
-                          </a>
-                          @if($value->verified_tag === 'Yes')
-                            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                          @endif
-                        </div>
-                        <div class="newdesign-info-proj p-3">
-                          <div class="d-flex justify-content-between align-items-start">
-                            <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
-                                href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">{{$value->title}}</a>
-                            </h5>
+                              <div class="swiper-slide">
+                                <div class=" property-card">
+                                  <div class="newdesign-project-main shadow-sm">
+                                    <div class="newdesign-image-proj position-relative">
+                                      <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                  ">
+                                        <img
+                                          src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
+                                          alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
+                                      </a>
+                                      @if($value->verified_tag === 'Yes')
+                                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                                      @endif
+                                    </div>
+                                    <div class="newdesign-info-proj p-3">
+                                      <div class="d-flex justify-content-between align-items-start">
+                                        <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                  ">{{$value->title}}</a>
+                                        </h5>
 
-                          </div>
-                          <hr class="" style="margin-bottom:10px; margin-top:10px;">
-                          <div class="d-flex justify-content-between align-items-center">
-                            <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                              style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
-                            <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                            <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                                      </div>
+                                      <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                                      <div class="d-flex justify-content-between align-items-center">
+                                        <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                                          style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
+                                        <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                                        <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
-                          </div>
+                                      </div>
 
-                          <div class="horizontal-line mt-2"></div>
-                          <div class="d-flex justify-content-between align-items-center">
+                                      <div class="horizontal-line mt-2"></div>
+                                      <div class="d-flex justify-content-between align-items-center">
 
-                            <p class="small text-secondary mb-2 mt-2">
-                              <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
-                              {{ $value->getState->name }}
-                            </p>
-                            <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
-                          </div>
+                                        <p class="small text-secondary mb-2 mt-2">
+                                          <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
+                                          {{ $value->getState->name }}
+                                        </p>
+                                        <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                                      </div>
 
-                          <div class="horizontal-line"></div>
-                          <p class="small text-muted mb-2 mt-2">
-                            {{ \Illuminate\Support\Str::limit($value->description, 85) }}
-                          </p>
+                                      <div class="horizontal-line"></div>
+                                      <p class="small text-muted mb-2 mt-2">
+                                        {{ \Illuminate\Support\Str::limit($value->description, 85) }}
+                                      </p>
 
-                          <div class="d-flex justify-content-between">
-                            <p class="m-0 small"> <strong>Owner:</strong><br> <a
-                                href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
-                                {{ $value->getUser->firstname ?? '' }} </a> </p>
-                            <p class="m-0 small">
-                              <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
-                            </p>
-                          </div>
-                          <hr>
-                          <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                              {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                                      <div class="d-flex justify-content-between">
+                                        <p class="m-0 small"> <strong>Owner:</strong><br> <a
+                                            href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
+                                            {{ $value->getUser->firstname ?? '' }} </a> </p>
+                                        <p class="m-0 small">
+                                          <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
+                                        </p>
+                                      </div>
+                                      <hr>
+                                      <div class="d-flex justify-content-between">
+                                        <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
+                                          {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
+                                        <button class="btn btn-sm btn-primary">Contact Now</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                 @endforeach
               </div>
 
@@ -1740,68 +1735,67 @@
             <div class="swiper-wrapper">
               <!-- Directory Card 1 -->
               @foreach($listings as $key => $value)
-                <div class="swiper-slide">
-                  <div class=" property-card">
-                    <div class="newdesign-project-main shadow-sm">
-                      <div class="newdesign-image-proj position-relative">
-                        <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">
-                          <img
-                            src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
-                            alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
-                        </a>
-                        @if($value->verified_tag === 'Yes')
-                          <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                        @endif
-                      </div>
-                      <div class="newdesign-info-proj p-3">
-                        <div class="d-flex justify-content-between align-items-start">
-                          <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
-                              href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">{{$value->title}}</a>
-                          </h5>
+                            <div class="swiper-slide">
+                              <div class=" property-card">
+                                <div class="newdesign-project-main shadow-sm">
+                                  <div class="newdesign-image-proj position-relative">
+                                    <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                ">
+                                      <img
+                                        src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
+                                        alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
+                                    </a>
+                                    @if($value->verified_tag === 'Yes')
+                                      <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                                    @endif
+                                  </div>
+                                  <div class="newdesign-info-proj p-3">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                      <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                ">{{$value->title}}</a>
+                                      </h5>
 
-                        </div>
-                        <hr class="" style="margin-bottom:10px; margin-top:10px;">
-                        <div class="d-flex justify-content-between align-items-center">
-                          <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                            style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
-                          <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                                    </div>
+                                    <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                      <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                                        style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
+                                      <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                                      <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
-                        </div>
+                                    </div>
 
-                        <div class="horizontal-line mt-2"></div>
-                        <div class="d-flex justify-content-between align-items-center">
+                                    <div class="horizontal-line mt-2"></div>
+                                    <div class="d-flex justify-content-between align-items-center">
 
-                          <p class="small text-secondary mb-2 mt-2">
-                            <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
-                            {{ $value->getState->name }}
-                          </p>
-                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
-                        </div>
+                                      <p class="small text-secondary mb-2 mt-2">
+                                        <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
+                                        {{ $value->getState->name }}
+                                      </p>
+                                      <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                                    </div>
 
-                        <div class="horizontal-line"></div>
-                        <p class="small text-muted mb-2 mt-2">
-                          {{ \Illuminate\Support\Str::limit($value->description, 85) }}
-                        </p>
+                                    <div class="horizontal-line"></div>
+                                    <p class="small text-muted mb-2 mt-2">
+                                      {{ \Illuminate\Support\Str::limit($value->description, 85) }}
+                                    </p>
 
-                        <div class="d-flex justify-content-between">
-                          <p class="m-0 small"><strong>Owner:</strong><br>{{ $value->getUser->firstname ?? ''}}</p>
-                          <p class="m-0 small">
-                            <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
-                          </p>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between">
-                          <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                            {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
-                          <button class="btn btn-sm btn-primary">Contact Now</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                                    <div class="d-flex justify-content-between">
+                                      <p class="m-0 small"><strong>Owner:</strong><br>{{ $value->getUser->firstname ?? ''}}</p>
+                                      <p class="m-0 small">
+                                        <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
+                                      </p>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-between">
+                                      <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
+                                        {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
+                                      <button class="btn btn-sm btn-primary">Contact Now</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
               @endforeach
             </div>
 
@@ -1831,70 +1825,69 @@
               <div class="swiper-wrapper">
                 <!-- Directory Card 1 -->
                 @foreach($featured_projects as $key => $value)
-                  <div class="swiper-slide">
-                    <div class=" property-card">
-                      <div class="newdesign-project-main shadow-sm">
-                        <div class="newdesign-image-proj position-relative">
-                          <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">
-                            <img
-                              src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
-                              alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
-                          </a>
-                          @if($value->verified_tag === 'Yes')
-                            <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
-                          @endif
-                        </div>
-                        <div class="newdesign-info-proj p-3">
-                          <div class="d-flex justify-content-between align-items-start">
-                            <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a
-                                href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">{{$value->title}}</a>
-                            </h5>
+                              <div class="swiper-slide">
+                                <div class=" property-card">
+                                  <div class="newdesign-project-main shadow-sm">
+                                    <div class="newdesign-image-proj position-relative">
+                                      <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                  ">
+                                        <img
+                                          src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
+                                          alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
+                                      </a>
+                                      @if($value->verified_tag === 'Yes')
+                                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i> Verified</span>
+                                      @endif
+                                    </div>
+                                    <div class="newdesign-info-proj p-3">
+                                      <div class="d-flex justify-content-between align-items-start">
+                                        <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                  ">{{$value->title}}</a>
+                                        </h5>
 
-                          </div>
-                          <hr class="" style="margin-bottom:10px; margin-top:10px;">
-                          <div class="d-flex justify-content-between align-items-center">
-                            <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
-                              style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
-                            <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                            <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                                      </div>
+                                      <hr class="" style="margin-bottom:10px; margin-top:10px;">
+                                      <div class="d-flex justify-content-between align-items-center">
+                                        <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
+                                          style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
+                                        <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
+                                        <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
 
-                          </div>
+                                      </div>
 
-                          <div class="horizontal-line mt-2"></div>
-                          <div class="d-flex justify-content-between align-items-center">
+                                      <div class="horizontal-line mt-2"></div>
+                                      <div class="d-flex justify-content-between align-items-center">
 
-                            <p class="small text-secondary mb-2 mt-2">
-                              <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
-                              {{ $value->getState->name }}
-                            </p>
-                            <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
-                          </div>
+                                        <p class="small text-secondary mb-2 mt-2">
+                                          <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
+                                          {{ $value->getState->name }}
+                                        </p>
+                                        <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                                      </div>
 
-                          <div class="horizontal-line"></div>
-                          <p class="small text-muted mb-2 mt-2">
-                            {{ \Illuminate\Support\Str::limit($value->description, 85) }}
-                          </p>
+                                      <div class="horizontal-line"></div>
+                                      <p class="small text-muted mb-2 mt-2">
+                                        {{ \Illuminate\Support\Str::limit($value->description, 85) }}
+                                      </p>
 
-                          <div class="d-flex justify-content-between">
-                            <p class="m-0 small"> <strong>Owner:</strong><br> <a
-                                href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
-                                {{ $value->getUser->firstname ?? '' }} </a> </p>
-                            <p class="m-0 small">
-                              <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
-                            </p>
-                          </div>
-                          <hr>
-                          <div class="d-flex justify-content-between">
-                            <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
-                              {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                                      <div class="d-flex justify-content-between">
+                                        <p class="m-0 small"> <strong>Owner:</strong><br> <a
+                                            href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
+                                            {{ $value->getUser->firstname ?? '' }} </a> </p>
+                                        <p class="m-0 small">
+                                          <strong>Posted:</strong><br>{{ optional($value->created_at)->format('d M Y') }}
+                                        </p>
+                                      </div>
+                                      <hr>
+                                      <div class="d-flex justify-content-between">
+                                        <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
+                                          {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
+                                        <button class="btn btn-sm btn-primary">Contact Now</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                 @endforeach
               </div>
 
@@ -2191,227 +2184,227 @@
         switch (tabType) {
           case 'buy':
             mobileFilterContent.innerHTML = `
-                                    <!-- Property Category -->
-                                    <div class="filter-item border-bottom py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Property Category</h6>
-                                        <select class="form-select sub_category_items" id="mobile_sub_category_id">
-                                            <option value="">Select Category</option>
-                                            @foreach ($buyFilters['categories'] as $cat)
-                                              <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                      <!-- Property Category -->
+                                      <div class="filter-item border-bottom py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Property Category</h6>
+                                          <select class="form-select sub_category_items" id="mobile_sub_category_id">
+                                              <option value="">Select Category</option>
+                                              @foreach ($buyFilters['categories'] as $cat)
+                                                <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
 
-                                    <!-- Property Type -->
-                                    <div class="filter-item border-bottom py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Property Type</h6>
-                                        <div class="property-type-checkboxes" style="max-height:150px; overflow-y:auto;">
-                                            @foreach($buyFilters['types'] as $type)
-                                              <div class="form-check" data-category="{{ $type->sub_category_id }}">
-                                                  <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
-                                                         name="mobile_sub_sub_category_ids[]"
-                                                         id="mobile_subsub_{{ $type->id }}" value="{{ $type->id }}">
-                                                  <label class="form-check-label" for="mobile_subsub_{{ $type->id }}">
-                                                      {{ $type->sub_sub_category_name }}
-                                                  </label>
-                                              </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
+                                      <!-- Property Type -->
+                                      <div class="filter-item border-bottom py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Property Type</h6>
+                                          <div class="property-type-checkboxes" style="max-height:150px; padding-left:10px; overflow-y:auto;">
+                                              @foreach($buyFilters['types'] as $type)
+                                                <div class="form-check" data-category="{{ $type->sub_category_id }}">
+                                                    <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
+                                                           name="mobile_sub_sub_category_ids[]"
+                                                           id="mobile_subsub_{{ $type->id }}" value="{{ $type->id }}">
+                                                    <label class="form-check-label" for="mobile_subsub_{{ $type->id }}">
+                                                        {{ $type->sub_sub_category_name }}
+                                                    </label>
+                                                </div>
+                                              @endforeach
+                                          </div>
+                                      </div>
 
-                                    <!-- Budget -->
-                                    <div class="filter-item border-bottom py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Budget</h6>
-                                        <select class="form-select" id="mobile_budget">
-                                            <option value="">Select Budget</option>
-                                            @foreach ($buyFilters['budgets'] as $budget)
-                                              <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                      <!-- Budget -->
+                                      <div class="filter-item border-bottom py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Budget</h6>
+                                          <select class="form-select" id="mobile_budget">
+                                              <option value="">Select Budget</option>
+                                              @foreach ($buyFilters['budgets'] as $budget)
+                                                <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
 
-                                    <!-- Posted By -->
-                                    <div class="filter-item py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Posted By</h6>
-                                        <select class="form-select" id="mobile_user_role">
-                                            <option value="">Select</option>
-                                            @foreach ($buyFilters['posted_by'] as $poster)
-                                              <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                `;
+                                      <!-- Posted By -->
+                                      <div class="filter-item py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Posted By</h6>
+                                          <select class="form-select" id="mobile_user_role">
+                                              <option value="">Select</option>
+                                              @foreach ($buyFilters['posted_by'] as $poster)
+                                                <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
+                                  `;
             break;
 
           case 'rental':
             mobileFilterContent.innerHTML = `
-                                    <!-- Property Category -->
-                                    <div class="filter-item border-bottom py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Property Category</h6>
-                                        <select class="form-select sub_category_items" id="mobile_sub_category_id">
-                                            <option value="">Select Category</option>
-                                            @foreach ($rentalFilters['categories'] as $cat)
-                                              <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                      <!-- Property Category -->
+                                      <div class="filter-item border-bottom py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Property Category</h6>
+                                          <select class="form-select sub_category_items" id="mobile_sub_category_id">
+                                              <option value="">Select Category</option>
+                                              @foreach ($rentalFilters['categories'] as $cat)
+                                                <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
 
-                                    <!-- Property Type -->
-                                    <div class="filter-item border-bottom py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Property Type</h6>
-                                        <div class="property-type-checkboxes" style="max-height:150px; overflow-y:auto;">
-                                            @foreach($rentalFilters['types'] as $v)
-                                              <div class="form-check" data-category="{{ $v->sub_category_id }}">
-                                                  <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
-                                                         name="mobile_sub_sub_category_ids[]"
-                                                         id="mobile_subsub_{{ $v->id }}" value="{{ $v->id }}">
-                                                  <label class="form-check-label" for="mobile_subsub_{{ $v->id }}">
-                                                      {{ $v->sub_sub_category_name }}
-                                                  </label>
-                                              </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
+                                      <!-- Property Type -->
+                                      <div class="filter-item border-bottom py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Property Type</h6>
+                                          <div class="property-type-checkboxes" style="max-height:150px;padding-left:10px; overflow-y:auto;">
+                                              @foreach($rentalFilters['types'] as $v)
+                                                <div class="form-check" data-category="{{ $v->sub_category_id }}">
+                                                    <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
+                                                           name="mobile_sub_sub_category_ids[]"
+                                                           id="mobile_subsub_{{ $v->id }}" value="{{ $v->id }}">
+                                                    <label class="form-check-label" for="mobile_subsub_{{ $v->id }}">
+                                                        {{ $v->sub_sub_category_name }}
+                                                    </label>
+                                                </div>
+                                              @endforeach
+                                          </div>
+                                      </div>
 
-                                    <!-- Budget -->
-                                    <div class="filter-item border-bottom py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Budget</h6>
-                                        <select class="form-select" id="mobile_budget">
-                                            <option value="">Select Budget</option>
-                                            @foreach ($rentalFilters['budgets'] as $budget)
-                                              <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                      <!-- Budget -->
+                                      <div class="filter-item border-bottom py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Budget</h6>
+                                          <select class="form-select" id="mobile_budget">
+                                              <option value="">Select Budget</option>
+                                              @foreach ($rentalFilters['budgets'] as $budget)
+                                                <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
 
-                                    <!-- Posted By -->
-                                    <div class="filter-item py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Posted By</h6>
-                                        <select class="form-select" id="mobile_user_role">
-                                            <option value="">Select</option>
-                                            @foreach ($rentalFilters['posted_by'] as $poster)
-                                              <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                `;
+                                      <!-- Posted By -->
+                                      <div class="filter-item py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Posted By</h6>
+                                          <select class="form-select" id="mobile_user_role">
+                                              <option value="">Select</option>
+                                              @foreach ($rentalFilters['posted_by'] as $poster)
+                                                <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
+                                  `;
             break;
 
           case 'pg-hostels':
             mobileFilterContent.innerHTML = `
-                                    <!-- Budget -->
-                                    <div class="filter-item border-bottom py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Budget</h6>
-                                        <select class="form-select" id="mobile_budget">
-                                            <option value="">Select Budget</option>
-                                            @foreach ($pgFilters['budgets'] as $budget)
-                                              <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                      <!-- Budget -->
+                                      <div class="filter-item border-bottom py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Budget</h6>
+                                          <select class="form-select" id="mobile_budget">
+                                              <option value="">Select Budget</option>
+                                              @foreach ($pgFilters['budgets'] as $budget)
+                                                <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
 
-                                    <!-- Available For -->
-                                    <div class="filter-item border-bottom py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Available For</h6>
-                                        <select class="form-select" id="mobile_pg_availavle_for">
-                                            <option value="">Select</option>
-                                            @foreach ($pgFilters['available_for'] as $option)
-                                              <option value="{{ strtolower($option) }}">{{ $option }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                      <!-- Available For -->
+                                      <div class="filter-item border-bottom py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Available For</h6>
+                                          <select class="form-select" id="mobile_pg_availavle_for">
+                                              <option value="">Select</option>
+                                              @foreach ($pgFilters['available_for'] as $option)
+                                                <option value="{{ strtolower($option) }}">{{ $option }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
 
-                                    <!-- Posted By -->
-                                    <div class="filter-item py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Posted By</h6>
-                                        <select class="form-select" id="mobile_user_role">
-                                            <option value="">Select</option>
-                                            @foreach ($pgFilters['posted_by'] as $poster)
-                                              <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                `;
+                                      <!-- Posted By -->
+                                      <div class="filter-item py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Posted By</h6>
+                                          <select class="form-select" id="mobile_user_role">
+                                              <option value="">Select</option>
+                                              @foreach ($pgFilters['posted_by'] as $poster)
+                                                <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
+                                  `;
             break;
 
           case 'exculsive-launch':
             mobileFilterContent.innerHTML = `
-                                    <!-- Sub Category -->
-                                    <div class="filter-item border-bottom py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Sub Category</h6>
-                                        <select class="form-select sub_category_items" id="mobile_sub_category_id">
-                                            <option value="">Select Category</option>
-                                            @foreach ($exclusiveFilters['categories'] as $cat)
-                                              <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                      <!-- Sub Category -->
+                                      <div class="filter-item border-bottom py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Sub Category</h6>
+                                          <select class="form-select sub_category_items" id="mobile_sub_category_id">
+                                              <option value="">Select Category</option>
+                                              @foreach ($exclusiveFilters['categories'] as $cat)
+                                                <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
 
-                                    <!-- Budget -->
-                                    <div class="filter-item border-bottom py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Budget</h6>
-                                        <select class="form-select" id="mobile_budget">
-                                            <option value="">Select Budget</option>
-                                            @foreach ($exclusiveFilters['budgets'] as $budget)
-                                              <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                      <!-- Budget -->
+                                      <div class="filter-item border-bottom py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Budget</h6>
+                                          <select class="form-select" id="mobile_budget">
+                                              <option value="">Select Budget</option>
+                                              @foreach ($exclusiveFilters['budgets'] as $budget)
+                                                <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
 
-                                    <!-- Posted By -->
-                                    <div class="filter-item py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Posted By</h6>
-                                        <select class="form-select" id="mobile_user_role">
-                                            <option value="">Select</option>
-                                            @foreach ($exclusiveFilters['posted_by'] as $poster)
-                                              <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                `;
+                                      <!-- Posted By -->
+                                      <div class="filter-item py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Posted By</h6>
+                                          <select class="form-select" id="mobile_user_role">
+                                              <option value="">Select</option>
+                                              @foreach ($exclusiveFilters['posted_by'] as $poster)
+                                                <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
+                                  `;
             break;
 
           case 'plot-land':
             mobileFilterContent.innerHTML = `
-                                    <!-- Property Type -->
-                                    <div class="filter-item border-bottom py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Property Type</h6>
-                                        <div class="property-type-checkboxes" style="max-height:150px; overflow-y:auto;">
-                                            @foreach($plotFilters['types'] as $v)
-                                              <div class="form-check">
-                                                  <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
-                                                         name="mobile_sub_sub_category_ids[]"
-                                                         id="mobile_subsub_{{ $v->id }}" value="{{ $v->id }}">
-                                                  <label class="form-check-label" for="mobile_subsub_{{ $v->id }}">
-                                                      {{ $v->sub_sub_category_name }}
-                                                  </label>
-                                              </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
+                                      <!-- Property Type -->
+                                      <div class="filter-item border-bottom py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Property Type</h6>
+                                          <div class="property-type-checkboxes" style="max-height:150px;padding-left:10px; overflow-y:auto;">
+                                              @foreach($plotFilters['types'] as $v)
+                                                <div class="form-check">
+                                                    <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
+                                                           name="mobile_sub_sub_category_ids[]"
+                                                           id="mobile_subsub_{{ $v->id }}" value="{{ $v->id }}">
+                                                    <label class="form-check-label" for="mobile_subsub_{{ $v->id }}">
+                                                        {{ $v->sub_sub_category_name }}
+                                                    </label>
+                                                </div>
+                                              @endforeach
+                                          </div>
+                                      </div>
 
-                                    <!-- Budget -->
-                                    <div class="filter-item border-bottom py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Budget</h6>
-                                        <select class="form-select" id="mobile_budget">
-                                            <option value="">Select Budget</option>
-                                            @foreach ($plotFilters['budgets'] as $budget)
-                                              <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                      <!-- Budget -->
+                                      <div class="filter-item border-bottom py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Budget</h6>
+                                          <select class="form-select" id="mobile_budget">
+                                              <option value="">Select Budget</option>
+                                              @foreach ($plotFilters['budgets'] as $budget)
+                                                <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
 
-                                    <!-- Posted By -->
-                                    <div class="filter-item py-2 mb-3">
-                                        <h6 class="fw-semibold mb-2">Posted By</h6>
-                                        <select class="form-select" id="mobile_user_role">
-                                            <option value="">Select</option>
-                                            @foreach ($plotFilters['posted_by'] as $poster)
-                                              <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                `;
+                                      <!-- Posted By -->
+                                      <div class="filter-item py-2 mb-3">
+                                          <h6 class="fw-semibold mb-2">Posted By</h6>
+                                          <select class="form-select" id="mobile_user_role">
+                                              <option value="">Select</option>
+                                              @foreach ($plotFilters['posted_by'] as $poster)
+                                                <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
+                                  `;
             break;
         }
 

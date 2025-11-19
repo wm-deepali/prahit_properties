@@ -508,15 +508,6 @@
 
 	<script type="text/javascript">
 
-		function limitPhotoUpload(event) {
-			const input = event.target;
-			const maxPhotos = <?php echo e($photos_per_listing ?? 0); ?>;
-			if (maxPhotos > 0 && input.files.length > maxPhotos) {
-				alert(`You can upload a maximum of ${maxPhotos} photos.`);
-				input.value = ''; // Clear selected files
-			}
-		}
-
 		let selectedFiles = []; // store selected files
 		const maxPhotos = <?php echo e($photos_per_listing ?? 0); ?>;
 

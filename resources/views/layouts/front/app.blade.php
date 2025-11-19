@@ -132,7 +132,7 @@
     .bb-dropdown {
       position: absolute;
       top: 100%;
-      min-width: 750px;
+      width: 750px;
       background: #fff;
       border: 1px solid #ddd;
       border-radius: 8px;
@@ -174,7 +174,7 @@
 
     /* ======= Left Tabs ======= */
     .bb-tabs {
-      width: 190px;
+      width: 250px !important;
       height: 350;
       overflow-y: scroll;
       border-right: 1px solid #eee;
@@ -796,10 +796,10 @@
 
 
         <a href="javascript:void(0);" class="btn fw-semibold px-3 py-1 rounded-3"
-          style="background:#fff; height:33px; border:1px solid #f9f9f9; font-size:13px;" @if(Auth::check())
+          style="background:#fff; height:38px; border:1px solid #343a40; font-size:1rem;" @if(Auth::check())
           onclick="window.location.href='{{ route('create_business_listing') }}'" @else
           onclick=" openSigninModal('business-listing/create')" @endif>
-          <i class="fas fa-briefcase me-1"></i> Post Business
+          <i class="fas fa-briefcase me-1"></i> Post Services
           <span class="badge bg-warning text-dark ms-1">Free</span>
         </a>
 
@@ -831,60 +831,51 @@
         </div>
 
 
-        <!--{{-- -->
-        <div class="dropdown custom-dropdown user-dropdown">
-          <a href="#" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="far fa-user-circle fs-4 me-1" style="font-size:18px;"></i>
-            Janmejay
-          </a>
-          <ul class="dropdown-menu" style="left:-100px;">
-            <li><a class="dropdown-item" href="#">Recently Searched</a></li>
-            <li><a class="dropdown-item" href="#">Shortlisted</a></li>
-            <li><a class="dropdown-item" href="#">Recently Viewed</a></li>
-            <li><a class="dropdown-item" href="#">Contacted Properties</a></li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li>
-              <a href="{{ url('user/dashboard') }}" class="dropdown-item btn w-100 text-center">
-                My Dashboard
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li>
-
-              <a class="dropdown-item text-danger" href="{{ route('logout') }}">Logout</a>
-
-
-
-            </li>
-          </ul>
-        </div>
-
-        <a href="#" class="btn btn-outline-dark fw-semibold" data-bs-toggle="modal" data-bs-target="#signin">
-          <i class="far fa-user me-1"></i> Login / Signup
-        </a>
-        <!----}}-->
-
         @auth
           @if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder', 'user', 'service_provider']))
-            <li>
-              <a href="{{url('user/dashboard')}}" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown"
-                aria-expanded="false">
+
+
+            <div class="dropdown custom-dropdown user-dropdown">
+              <a href="#" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="far fa-user-circle fs-4 me-1" style="font-size:18px;"></i>
                 {{Auth::user()->firstname}} {{Auth::user()->lastname}}
               </a>
-            </li>
+              <ul class="dropdown-menu" style="left:-100px;">
+                <li><a class="dropdown-item" href="#">Recently Searched</a></li>
+                <li><a class="dropdown-item" href="#">Shortlisted</a></li>
+                <li><a class="dropdown-item" href="#">Recently Viewed</a></li>
+                <li><a class="dropdown-item" href="#">Contacted Properties</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li>
+                  <a href="{{url('user/dashboard')}}" class="dropdown-item btn w-100 text-center">
+                    My Dashboard
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li>
 
+                  <a class="dropdown-item text-danger" href="#"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit()" ;>Logout</a>
+                  <form id=" logout-form" action="{{ url('user/logout') }}" method="POST" style="display: none;">
+                    {{ csrf_field() }}
+                  </form>
+                </li>
+              </ul>
+            </div>
           @endif
 
         @endauth
         @guest
-          <li style="list-style:none;"><a class="btn btn-outline-dark fw-semibold" href="#" onclick="openSigninModal()"><i
-                class="far fa-user"></i> Sign In</a></li>
+          <a href="#" onclick="openSigninModal()" class="btn btn-outline-dark fw-semibold" data-bs-toggle="modal"
+            data-bs-target="#signin">
+            <i class="far fa-user me-1"></i> Login / Signup
+          </a>
         @endguest
+
       </div>
     </div>
 
@@ -965,11 +956,16 @@
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Properties</h4>
                     <div class="d-flex flex-column">
-                      @foreach ($sellResidentil as $subSubcat)
+                      @foreach ($sellResidentil as $key => $subSubcat)
                         <a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
                           {{ $subSubcat->sub_sub_category_name }}
                         </a>
+
+                        @if ($key < count($sellResidentil) - 1)
+                          <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
+                        @endif
                       @endforeach
+
                     </div>
                   </div>
 
@@ -979,6 +975,9 @@
                       @foreach ($sellBudgets as $budget)
                         <a
                           href="{{ route('listing.list', array_merge(['sub_category_id' => 34], $budget['query'])) }}">{{ $budget['label'] }}</a>
+
+                        <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
+
                       @endforeach
                     </div>
                   </div>
@@ -987,19 +986,25 @@
                     <div class="d-flex flex-column">
                       <a href="{{ route('listing.list', ['sub_category_id' => 34, 'user_role' => 'owner'])}}">Owner
                         Properties</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="{{ route('listing.list', ['sub_category_id' => 34, 'status' => 'verified'])}}">Verified
                         Properties</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
                         href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move'])}}">Ready
                         to
                         Move</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
                         href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon'])}}">Possession
                         Soon</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Immediate Available</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
                         href="{{ route('listing.list', ['sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])}}">Full
                         Furnished</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="{{ route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch'])}}">New
                         Launch</a>
                     </div>
@@ -1015,11 +1020,16 @@
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Properties</h4>
                     <div class="d-flex flex-column">
-                      @foreach ($sellCommercial as $subSubcat)
+                      @foreach ($sellCommercial as $key => $subSubcat)
                         <a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
                           {{ $subSubcat->sub_sub_category_name }}
                         </a>
+
+                        @if ($key < count($sellCommercial) - 1)
+                          <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
+                        @endif
                       @endforeach
+
                     </div>
                   </div>
                   <div class="tab-content-section">
@@ -1028,6 +1038,9 @@
                       @foreach ($sellBudgets as $budget)
                         <a
                           href="{{ route('listing.list', array_merge(['sub_category_id' => 35], $budget['query'])) }}">{{ $budget['label'] }}</a>
+
+                        <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
+
                       @endforeach
                     </div>
                   </div>
@@ -1037,19 +1050,25 @@
                     <div class="d-flex flex-column">
                       <a href="{{ route('listing.list', ['sub_category_id' => 35, 'user_role' => 'owner'])}}">Owner
                         Properties</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="{{ route('listing.list', ['sub_category_id' => 35, 'status' => 'verified'])}}">Verified
                         Properties</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
                         href="{{ route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Ready to Move'])}}">Ready
                         to
                         Move</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
                         href="{{ route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Possession Soon'])}}">Possession
                         Soon</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Immediate Available</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
                         href="{{ route('listing.list', ['sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])}}">Fully
                         Furnished</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="{{ route('listing.list', ['sub_category_id' => 35, 'sort' => 'new-launch'])}}">New
                         Launch</a>
                     </div>
@@ -1066,7 +1085,9 @@
                     <h4 class="tab-titles">New Launch</h4>
                     <div class="d-flex flex-column">
                       <a href="{{ route('listing.list', ['sub_category_id' => 34])}}">Residential Projects</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="{{ route('listing.list', ['sub_category_id' => 35])}}">Commercial Projects</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="{{ route('listing.list', ['sub_sub_category_id' => '18,25,27']) }}">Land & Plots</a>
                     </div>
                   </div>
@@ -1076,6 +1097,7 @@
                       @foreach ($sellBudgets as $budget)
                         <a
                           href="{{ route('listing.list', array_merge(['category_id' => 22], $budget['query'])) }}">{{ $budget['label'] }}</a>
+                        <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       @endforeach
                     </div>
                   </div>
@@ -1085,17 +1107,22 @@
                     <div class="d-flex flex-column">
                       <a href="{{ route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch'])}}">New
                         Launch</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
                         href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Under Construction'])}}">Under
                         Construction</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
                         href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move'])}}">Ready
                         to
                         Move</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
                         href="{{ route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon'])}}">Possession
                         Soon</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">OC Received</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">RERA Registered</a>
                     </div>
                   </div>
@@ -1123,6 +1150,7 @@
                             <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
                               {{ $sub->sub_category_name }}
                             </a>
+                            <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                           @endforeach
 
                           @if($popularSubs->count() > $showLimit)
@@ -1171,11 +1199,14 @@
                     <div class="d-flex flex-column">
                       <!--<a href="{{ route('create_property') }}">Post Property</a> -->
                       <a href="#">Post Property</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Join BB Prime</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
                         @unless(auth()->check()) onclick="openSigninModal()" @endunless>
                         Dashboard
                       </a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Enquiries</a>
                     </div>
                   </div>
@@ -1183,6 +1214,7 @@
                     <h4 class="tab-titles">Important Links</h4>
                     <div class="d-flex flex-column">
                       <a href="{{ route('front.faq') }}">FAQ</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="{{ route('front.blog') }}">Articles & Blogs</a>
                     </div>
                   </div>
@@ -1214,6 +1246,7 @@
                     <h4 class="tab-titles">Important Links</h4>
                     <div class="d-flex flex-column">
                       <a href="{{ route('front.faq') }}">FAQ</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="{{ route('front.blog') }}">Articles & Blogs</a>
                     </div>
                   </div>
@@ -1232,8 +1265,11 @@
                     <div class="d-flex flex-column">
                       <!--<a href="{{ route('create_property') }}">Post Property</a> -->
                       <a href="#">Post Property</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Join BB Prime</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="">Dashboard</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Enquiries</a>
                     </div>
                   </div>
@@ -1241,6 +1277,7 @@
                     <h4 class="tab-titles">Important Links</h4>
                     <div class="d-flex flex-column">
                       <a href="{{ route('front.faq') }}">FAQ</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="{{ route('front.blog') }}">Articles & Blogs</a>
                     </div>
                   </div>
@@ -1258,12 +1295,16 @@
                     <h4 class="tab-titles">Start Selling</h4>
                     <div class="d-flex flex-column">
                       <a href="#">List Your Service</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
                         @unless(auth()->check()) onclick="openSigninModal()" @endunless>
                         Dashboard
                       </a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
+
 
                       <a href="#">Check Enquiries</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Join BB Prime</a>
                     </div>
                   </div>
@@ -1271,6 +1312,7 @@
                     <h4 class="tab-titles">Important Links</h4>
                     <div class="d-flex flex-column">
                       <a href="{{ route('front.faq') }}">FAQ</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="{{ route('front.blog') }}">Articles & Blogs</a>
                     </div>
                   </div>
@@ -1304,6 +1346,7 @@
                         <a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
                           {{ $subSubcat->sub_sub_category_name }}
                         </a>
+                        <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       @endforeach
                     </div>
                   </div>
@@ -1313,6 +1356,7 @@
                       @foreach ($rentBudgets as $budget)
                         <a
                           href="{{ route('listing.list', array_merge(['sub_category_id' => 38], $budget['query'])) }}">{{ $budget['label'] }}</a>
+                        <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       @endforeach
                     </div>
                   </div>
@@ -1321,13 +1365,17 @@
                     <div class="d-flex flex-column">
                       <a href="{{ route('listing.list', ['sub_category_id' => 38, 'user_role' => 'owner'])}}">Owner
                         Properties</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="{{ route('listing.list', ['sub_category_id' => 38, 'status' => 'verified'])}}">Verified
                         Properties</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
                         href="{{ route('listing.list', ['sub_category_id' => 38, 'property_status' => 'Ready to Move'])}}">Ready
                         to
                         Move</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Immediate Available</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
                         href="{{ route('listing.list', ['sub_category_id' => 38, 'furnishing_status' => 'Full Furnished'])}}">Full
                         Furnished</a>
@@ -1347,6 +1395,7 @@
                         <a href="{{ route('listing.list', ['sub_sub_category_id' => $subSubcat->id]) }}">
                           {{ $subSubcat->sub_sub_category_name }}
                         </a>
+                        <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       @endforeach
                     </div>
                   </div>
@@ -1359,6 +1408,7 @@
                         <a href="{{ route('listing.list', array_merge(['sub_category_id' => 37], $budget['query'])) }}">
                           {{ $budget['label'] }}
                         </a>
+                        <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       @endforeach
                     </div>
 
@@ -1368,13 +1418,17 @@
                     <div class="d-flex flex-column">
                       <a href="{{ route('listing.list', ['sub_category_id' => 37, 'user_role' => 'owner'])}}">Owner
                         Properties</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="{{ route('listing.list', ['sub_category_id' => 37, 'status' => 'verified'])}}">Verified
                         Properties</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
                         href="{{ route('listing.list', ['sub_category_id' => 37, 'property_status' => 'Ready to Move'])}}">Ready
                         to
                         Move</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Immediate Available</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
                         href="{{ route('listing.list', ['sub_category_id' => 37, 'furnishing_status' => 'Full Furnished'])}}">Full
                         Furnished</a>
@@ -1403,6 +1457,7 @@
                             <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
                               {{ $sub->sub_category_name }}
                             </a>
+                            <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                           @endforeach
 
                           @if($popularSubs->count() > $showLimit)
@@ -1411,6 +1466,7 @@
                                 <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
                                   {{ $sub->sub_category_name }}
                                 </a>
+                                <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                               @endforeach
                             </div>
                             <a href="javascript:void(0);" class="view-more"
@@ -1461,6 +1517,7 @@
                             <a href="{{ route('directory.list', ['subcategory' => $sub->id]) }}">
                               {{ $sub->sub_category_name }}
                             </a>
+                            <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                           @endforeach
                         </div>
                       </div>
@@ -1509,6 +1566,7 @@
                             <a href="{{ route('property.show', $property->id) }}">
                               {{ $property->title }}
                             </a>
+                            <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                           @empty
                             <span class="text-muted">No properties available</span>
                           @endforelse
@@ -1523,6 +1581,7 @@
                               href="{{ route('listing.list', array_merge(['sub_category_id' => $subCat->id], $budget['query'])) }}">
                               {{ $budget['label'] }}
                             </a>
+                            <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                           @endforeach
                         </div>
                       </div>

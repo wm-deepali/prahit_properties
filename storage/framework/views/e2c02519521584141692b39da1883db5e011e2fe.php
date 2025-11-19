@@ -301,7 +301,9 @@
                                                         <?php echo e(\App\Helpers\Helper::formatIndianPrice($value->price)); ?>
 
                                                     </p>
-                                                    <a href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>"
+                                                    <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
+
+"
                                                         class="btn btn-primary btn-sm">View Details</a>
                                                 </div>
                                             </div>

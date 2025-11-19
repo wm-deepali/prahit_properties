@@ -64,11 +64,11 @@ class Helper
         $category = Category::where('category_name', $categoryName)->first();
 
         if ($category) {
-            $residentialSubcat = Subcategory::where('sub_category_name', 'ALL RESIDENTIAL')
+            $residentialSubcat = Subcategory::where('sub_category_name', 'RESIDENTIAL')
                 ->where('category_id', $category->id)
                 ->first();
 
-            $commercialSubcat = Subcategory::where('sub_category_name', 'ALL COMMERCIAL')
+            $commercialSubcat = Subcategory::where('sub_category_name', 'COMMERCIAL')
                 ->where('category_id', $category->id)
                 ->first();
 
@@ -90,14 +90,14 @@ class Helper
     /**
      * Get properties by category and subcategory, fallback to random if none found.
      */
-    public static function getPropertiesByCategoryAndSubcategory(string $categoryName, string $subCategoryName, $city_id = null, $limit = 6): \Illuminate\Support\Collection
+    public static function getPropertiesByCategoryAndSubcategory(string $categoryName, string $subCategoryId, $city_id = null, $limit = 6): \Illuminate\Support\Collection
     {
         $category = Category::where('category_name', $categoryName)->first();
         if (!$category) {
             return collect();
         }
 
-        $subcategory = Subcategory::where('sub_category_name', $subCategoryName)
+        $subcategory = Subcategory::where('id', $subCategoryId)
             ->where('category_id', $category->id)
             ->first();
 

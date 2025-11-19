@@ -12,6 +12,8 @@ use App\User;
 use App\LoginLogs;
 use App\Category;
 use App\SubCategory;
+use Illuminate\Validation\Rule;
+
 
 class SubCategoryController extends AppController
 {
@@ -68,38 +70,48 @@ class SubCategoryController extends AppController
 		$this->JsonResponse(200, 'Sub Category found successfully', ['SubCategory' => $subcategory]);
 	}
 
+
 	public function update(Request $request, $id)
 	{
 		$rules = [
 			'category_id' => 'required',
-			'sub_category_name' => 'required|unique:sub_categories,sub_category_name,' . $request->sub_category_id,
-			// 'sub_category_slug' => 'required',
+			'sub_category_name' => [
+				'required',
+				Rule::unique('sub_categories', 'sub_category_name')
+					->ignore($request->sub_category_id)
+					->where(function ($query) use ($request) {
+						return $query->where('category_id', $request->category_id);
+					}),
+			],
 			'sub_category_meta_title' => 'required',
 			'sub_category_meta_description' => 'required',
-			'sub_category_keywords' => 'required'
+			'sub_category_keywords' => 'required',
 		];
+
 		$isValid = $this->checkValidate($request, $rules);
 		if ($isValid) {
-			$this->JsonResponse(400, $isValid);
+			return $this->JsonResponse(400, $isValid);
 		}
 
 		try {
 			if ($request->sub_category_slug == "") {
 				$request['sub_category_slug'] = str_replace(" ", "-", $request->sub_category_name);
 			}
-			$subcategory = SubCategory::find($request->sub_category_id)->update($request->all());
-			if ($subcategory) {
-				$this->JsonResponse(200, 'Sub Category updated successfully', ['SubCategory' => $subcategory]);
-			} else {
 
-				$this->JsonResponse(400, 'An error occured');
+			$subcategory = SubCategory::find($request->sub_category_id)
+				->update($request->all());
+
+			if ($subcategory) {
+				return $this->JsonResponse(200, 'Sub Category updated successfully', ['SubCategory' => $subcategory]);
+			} else {
+				return $this->JsonResponse(400, 'An error occured');
 			}
 		} catch (\Exception $e) {
 			echo $e->getMessage();
 			exit;
 		}
-
 	}
+
 
 	public function destroy($id)
 	{
