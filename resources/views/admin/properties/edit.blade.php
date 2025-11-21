@@ -354,32 +354,32 @@
                     </div>
                   </div>
 
-                  </div>
-                  <h4 class="form-section-h">Property Additional Information</h4>
-
-                  <center class="loading">
-                    <img src="{{ asset('images/loading.gif')}}" alt="Loading.." class="loading" />
-                  </center>
-                  <div id="fb-render"></div>
-                  <div class="row">
-                    <input type="hidden" name="save_json" id="save_json" value="{{ $property->additional_info }}">
-                    <input type="hidden" name="additional_info" id="form_json">
-                  </div>
-                  <div class="form-group-f row">
-                    <div class="col-sm-12 text-center">
-                      <button class="btn btn-primary updateproperty" type="submit">Update Property</button>
-                    </div>
-                  </div>
-
-                  <input type="hidden" id="id" name="id" value="{{$property->id}}" />
-                  <input type="hidden" id="formtype_id" name="formtype_id" value="{{$property->formtype_id}}" />
-                  {{csrf_field()}}
-                </form>
               </div>
+              <h4 class="form-section-h">Property Additional Information</h4>
+
+              <center class="loading">
+                <img src="{{ asset('images/loading.gif')}}" alt="Loading.." class="loading" />
+              </center>
+              <div id="fb-render"></div>
+              <div class="row">
+                <input type="hidden" name="save_json" id="save_json" value="{{ $property->additional_info }}">
+                <input type="hidden" name="additional_info" id="form_json">
+              </div>
+              <div class="form-group-f row">
+                <div class="col-sm-12 text-center">
+                  <button class="btn btn-primary updateproperty" type="submit">Update Property</button>
+                </div>
+              </div>
+
+              <input type="hidden" id="id" name="id" value="{{$property->id}}" />
+              <input type="hidden" id="formtype_id" name="formtype_id" value="{{$property->formtype_id}}" />
+              {{csrf_field()}}
+              </form>
             </div>
           </div>
         </div>
       </div>
+    </div>
     </div>
   </section>
 
@@ -394,58 +394,70 @@
   <script type="text/javascript">
 
 
-let selectedFiles = []; // new files user selects
+    let selectedFiles = []; // new files user selects
 
-		document.getElementById('fileInput').addEventListener('change', function (event) {
-			const newFiles = Array.from(event.target.files);
+    document.getElementById('fileInput').addEventListener('change', function (event) {
+      const newFiles = Array.from(event.target.files);
 
-			selectedFiles.push(...newFiles);
-			renderPreviews();
+      selectedFiles.push(...newFiles);
+      renderPreviews();
 
-			// reset input so same file can be reselected later
-			event.target.value = '';
-		});
+      // reset input so same file can be reselected later
+      event.target.value = '';
+    });
 
-		function renderPreviews() {
-			const container = document.getElementById('previewContainer');
-			container.innerHTML = '';
+    function renderPreviews() {
+      const container = document.getElementById('previewContainer');
+      container.innerHTML = '';
 
-			selectedFiles.forEach((file, index) => {
-				const reader = new FileReader();
-				reader.onload = (e) => {
-					const div = document.createElement('div');
-					div.classList.add('position-relative', 'm-1');
-					div.innerHTML = `
-								<img src="${e.target.result}" class="rounded border" width="100" height="100">
-								<button type="button" class="btn btn-sm btn-danger" 
-									style="position:absolute;top:0;right:0;" 
-									onclick="removeImage(${index})">&times;</button>
-							`;
-					container.appendChild(div);
-				};
-				reader.readAsDataURL(file);
-			});
-		}
+      selectedFiles.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const div = document.createElement('div');
+          div.classList.add('position-relative', 'm-1');
+          div.innerHTML = `
+                  <img src="${e.target.result}" class="rounded border" width="100" height="100">
+                  <button type="button" class="btn btn-sm btn-danger" 
+                    style="position:absolute;top:0;right:0;" 
+                    onclick="removeImage(${index})">&times;</button>
+                `;
+          container.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
 
-		function removeImage(index) {
-			selectedFiles.splice(index, 1);
-			renderPreviews();
-		}
+    function removeImage(index) {
+      selectedFiles.splice(index, 1);
+      renderPreviews();
+    }
 
     @if(!empty($property->latitude) && !empty($property->longitude))
-
-      // Initialize map with property coordinates
       createMap({{ $property->latitude }}, {{ $property->longitude }});
     @else
-                                          // Otherwise use browser geolocation or default
-          if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (pos) {
-          createMap(pos.coords.latitude, pos.coords.longitude);
-        }, function () {
-          createMap(28.6139, 77.2090); // fallback Delhi
-        });
+      // Construct address string from state, city, location
+      let address = '';
+      @if(!empty($property->location)) address += '{{ $property->location->location }}'; @endif
+      @if(!empty($property->city)) address += ', {{ $property->city->name }}'; @endif
+      @if(!empty($property->state)) address += ', {{ $property->state->name }}'; @endif
+
+      if (address) {
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.length > 0) {
+              let lat = data[0].lat;
+              let lng = data[0].lon;
+              createMap(lat, lng);
+            } else {
+              // fallback if geocoding fails
+              createMap(28.6139, 77.2090); // Delhi
+            }
+          }).catch(() => {
+            createMap(28.6139, 77.2090);
+          });
       } else {
-        createMap(28.6139, 77.2090);
+        createMap(28.6139, 77.2090); // fallback
       }
     @endif
 
@@ -546,10 +558,10 @@ let selectedFiles = []; // new files user selects
         var formData = new FormData(form);
 
         // Append all selected images
-				selectedFiles.forEach((file, i) => {
-					formData.append('gallery_images_file[]', file);
-				});
-        
+        selectedFiles.forEach((file, i) => {
+          formData.append('gallery_images_file[]', file);
+        });
+
         $.ajax({
           url: "{{route('admin.properties.update_property')}}",
           method: "POST",

@@ -488,11 +488,11 @@
 					const div = document.createElement('div');
 					div.classList.add('position-relative', 'm-1');
 					div.innerHTML = `
-								<img src="${e.target.result}" class="rounded border" width="100" height="100">
-								<button type="button" class="btn btn-sm btn-danger" 
-									style="position:absolute;top:0;right:0;" 
-									onclick="removeImage(${index})">&times;</button>
-							`;
+									<img src="${e.target.result}" class="rounded border" width="100" height="100">
+									<button type="button" class="btn btn-sm btn-danger" 
+										style="position:absolute;top:0;right:0;" 
+										onclick="removeImage(${index})">&times;</button>
+								`;
 					container.appendChild(div);
 				};
 				reader.readAsDataURL(file);
@@ -505,19 +505,31 @@
 		}
 
 		@if(!empty($property->latitude) && !empty($property->longitude))
-
-			// Initialize map with property coordinates
 			createMap({{ $property->latitude }}, {{ $property->longitude }});
 		@else
-																									// Otherwise use browser geolocation or default
-																									if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(function (pos) {
-					createMap(pos.coords.latitude, pos.coords.longitude);
-				}, function () {
-					createMap(28.6139, 77.2090); // fallback Delhi
-				});
+			// Construct address string from state, city, location
+			let address = '';
+			  @if(!empty($property->location)) address += '{{ $property->location->location }}'; @endif
+			@if(!empty($property->city)) address += ', {{ $property->city->name }}'; @endif
+			@if(!empty($property->state)) address += ', {{ $property->state->name }}'; @endif
+
+			  if (address) {
+				fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+					.then(res => res.json())
+					.then(data => {
+						if (data.length > 0) {
+							let lat = data[0].lat;
+							let lng = data[0].lon;
+							createMap(lat, lng);
+						} else {
+							// fallback if geocoding fails
+							createMap(28.6139, 77.2090); // Delhi
+						}
+					}).catch(() => {
+						createMap(28.6139, 77.2090);
+					});
 			} else {
-				createMap(28.6139, 77.2090);
+				createMap(28.6139, 77.2090); // fallback
 			}
 		@endif
 
@@ -1041,8 +1053,8 @@
 					formData.append('is_visitor', true);
 				@endguest
 
-																											// console.log(obj)
-																											if (jQuery.isEmptyObject(obj)) {
+																												// console.log(obj)
+																												if (jQuery.isEmptyObject(obj)) {
 					returnIfInvalid();
 				}
 
@@ -1061,7 +1073,7 @@
 							@auth
 								request.setRequestHeader('auth-token', '{{Auth::user()->auth_token}}');
 							@endauth
-																														},
+																															},
 						success: function (response) {
 							// var response = JSON.parse(response);
 							if (response.responseCode === 200) {
@@ -1072,7 +1084,7 @@
 									// window.location.href = "{{route('admin.properties.index')}}";
 									//          	}, 1000);
 								@endguest
-																															} else if (response.responseCode === 400) {
+																																} else if (response.responseCode === 400) {
 								toastr.error(response.message)
 							} else {
 								toastr.error('An error occured')

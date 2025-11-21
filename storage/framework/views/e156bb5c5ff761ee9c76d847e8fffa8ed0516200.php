@@ -445,21 +445,33 @@ let selectedFiles = []; // new files user selects
 		}
 
     <?php if(!empty($property->latitude) && !empty($property->longitude)): ?>
+  createMap(<?php echo e($property->latitude); ?>, <?php echo e($property->longitude); ?>);
+<?php else: ?>
+  // Construct address string from state, city, location
+  let address = '';
+  <?php if(!empty($property->location)): ?> address += '<?php echo e($property->location->location); ?>'; <?php endif; ?>
+  <?php if(!empty($property->city)): ?> address += ', <?php echo e($property->city->name); ?>'; <?php endif; ?>
+  <?php if(!empty($property->state)): ?> address += ', <?php echo e($property->state->name); ?>'; <?php endif; ?>
 
-      // Initialize map with property coordinates
-      createMap(<?php echo e($property->latitude); ?>, <?php echo e($property->longitude); ?>);
-    <?php else: ?>
-                                          // Otherwise use browser geolocation or default
-          if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (pos) {
-          createMap(pos.coords.latitude, pos.coords.longitude);
-        }, function () {
-          createMap(28.6139, 77.2090); // fallback Delhi
-        });
-      } else {
+  if(address) {
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+      .then(res => res.json())
+      .then(data => {
+        if(data.length > 0) {
+          let lat = data[0].lat;
+          let lng = data[0].lon;
+          createMap(lat, lng);
+        } else {
+          // fallback if geocoding fails
+          createMap(28.6139, 77.2090); // Delhi
+        }
+      }).catch(() => {
         createMap(28.6139, 77.2090);
-      }
-    <?php endif; ?>
+      });
+  } else {
+    createMap(28.6139, 77.2090); // fallback
+  }
+<?php endif; ?>
 
 
     function createMap(lat, lng) {

@@ -529,10 +529,10 @@
 					const div = document.createElement('div');
 					div.style.position = 'relative';
 					div.innerHTML = `
-												<img src="${e.target.result}" class="rounded border" width="100" height="100">
-												<button type="button" class="btn btn-sm btn-danger" style="position:absolute;top:0;right:0;"
-													onclick="removeImage(${index})">&times;</button>
-											`;
+													<img src="${e.target.result}" class="rounded border" width="100" height="100">
+													<button type="button" class="btn btn-sm btn-danger" style="position:absolute;top:0;right:0;"
+														onclick="removeImage(${index})">&times;</button>
+												`;
 					container.appendChild(div);
 				};
 				reader.readAsDataURL(file);
@@ -545,37 +545,84 @@
 		}
 
 		// Center at user's current location if available
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function (pos) {
-				createMap(pos.coords.latitude, pos.coords.longitude);
-			}, function () {
-				createMap(28.6139, 77.2090); // fallback: Delhi
-			});
-		} else {
-			createMap(28.6139, 77.2090);
-		}
+		let map, marker;
+
 		function createMap(lat, lng) {
-			var map = L.map('propertyMap').setView([lat, lng], 16);
-			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-				attribution: '&copy; OpenStreetMap contributors'
-			}).addTo(map);
+			if (!map) {
+				map = L.map('propertyMap').setView([lat, lng], 16);
+				L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+					attribution: '&copy; OpenStreetMap contributors'
+				}).addTo(map);
 
-			var marker = L.marker([lat, lng], { draggable: true }).addTo(map);
-			document.getElementById('latitude').value = lat;
-			document.getElementById('longitude').value = lng;
+				marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+				marker.on('dragend', function (e) {
+					let p = e.target.getLatLng();
+					$('#latitude').val(p.lat);
+					$('#longitude').val(p.lng);
+				});
 
-			marker.on('dragend', function (e) {
-				var p = e.target.getLatLng();
-				document.getElementById('latitude').value = p.lat;
-				document.getElementById('longitude').value = p.lng;
-			});
+				map.on('click', function (e) {
+					marker.setLatLng(e.latlng);
+					$('#latitude').val(e.latlng.lat);
+					$('#longitude').val(e.latlng.lng);
+				});
+			} else {
+				map.setView([lat, lng], 16);
+				marker.setLatLng([lat, lng]);
+			}
 
-			map.on('click', function (e) {
-				marker.setLatLng(e.latlng);
-				document.getElementById('latitude').value = e.latlng.lat;
-				document.getElementById('longitude').value = e.latlng.lng;
-			});
+			$('#latitude').val(lat);
+			$('#longitude').val(lng);
 		}
+
+		function initializePropertyMap() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function (pos) {
+					createMap(pos.coords.latitude, pos.coords.longitude);
+				}, function () {
+					geocodeSelectedAddress();
+				});
+			} else {
+				geocodeSelectedAddress();
+			}
+		}
+
+		function geocodeSelectedAddress() {
+			let state = $('#state option:selected').text();
+			let city = $('#city option:selected').text();
+			let location = $('#location_id option:selected').text();
+
+			let addressParts = [];
+			if (location && location !== 'Select Location') addressParts.push(location);
+			if (city && city !== 'Select City') addressParts.push(city);
+			if (state && state !== 'Select State') addressParts.push(state);
+
+			let address = addressParts.join(', ');
+
+			if (address) {
+				fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+					.then(res => res.json())
+					.then(data => {
+						if (data.length > 0) {
+							createMap(data[0].lat, data[0].lon);
+						} else {
+							createMap(28.6139, 77.2090); // fallback: Delhi
+						}
+					}).catch(() => {
+						createMap(28.6139, 77.2090);
+					});
+			} else {
+				createMap(28.6139, 77.2090);
+			}
+		}
+
+		// Call on page load
+		initializePropertyMap();
+
+		// Update map if selects change
+		$('#state, #city, #location_id').on('change', function () {
+			geocodeSelectedAddress();
+		});
 
 		$(function () {
 			// Initialize on ready

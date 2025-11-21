@@ -261,60 +261,22 @@ class HomeController extends AppController
 			$query->whereNotNull('property_video');
 		}
 
-		// Search query for title or location
 		if ($request->filled('search')) {
-			$search = $request->search;
-			$terms = explode(' ', $search); // split search by spaces
+    $search = trim($request->search);
 
-			$query->where(function ($q) use ($terms) {
-				foreach ($terms as $term) {
-					$q->orWhere(function ($inner) use ($term) {
-						// Direct property fields
-						$inner->where('title', 'like', "%{$term}%")
-							->orWhere('description', 'like', "%{$term}%")
-							->orWhere('address', 'like', "%{$term}%")
-							->orWhere('price_label', 'like', "%{$term}%")
-							->orWhere('price_label_second', 'like', "%{$term}%");
-
-						// Category name
-						$inner->orWhereHas('Category', function ($cat) use ($term) {
-							$cat->where('category_name', 'like', "%{$term}%");
-						});
-
-						// Subcategory name
-						$inner->orWhereHas('SubCategory', function ($sub) use ($term) {
-							$sub->where('sub_category_name', 'like', "%{$term}%");
-						});
-
-						// Sub-Sub-Category name
-						$inner->orWhereHas('SubSubCategory', function ($subsub) use ($term) {
-							$subsub->where('sub_sub_category_name', 'like', "%{$term}%");
-						});
-
-						// Location
-						$inner->orWhereHas('Location', function ($loc) use ($term) {
-							$loc->where('location', 'like', "%{$term}%");
-						});
-
-						// City
-						$inner->orWhereHas('getCity', function ($city) use ($term) {
-							$city->where('name', 'like', "%{$term}%");
-						});
-
-						// State
-						$inner->orWhereHas('getState', function ($state) use ($term) {
-							$state->where('name', 'like', "%{$term}%");
-						});
-
-						// Owner (User)
-						$inner->orWhereHas('getUser', function ($user) use ($term) {
-							$user->where('firstname', 'like', "%{$term}%")
-								->orWhere('lastname', 'like', "%{$term}%");
-						});
-					});
-				}
-			});
-		}
+    $query->where(function ($q) use ($search) {
+        // Search only in more relevant columns to improve speed and relevance
+        $q->where('title', 'like', "%{$search}%")
+          ->orWhere('description', 'like', "%{$search}%")
+          ->orWhere('address', 'like', "%{$search}%")
+          ->orWhereHas('Category', function ($cat) use ($search) {
+              $cat->where('category_name', 'like', "%{$search}%");
+          })
+          ->orWhereHas('getCity', function ($city) use ($search) {
+              $city->where('name', 'like', "%{$search}%");
+          });
+    });
+}
 
 
 		if ($request->filled('city')) {
@@ -448,9 +410,31 @@ class HomeController extends AppController
 			);
 		}
 
+		// Stepwise radius fallback search based on lat/lng
+		if ($request->filled('latitude') && $request->filled('longitude')) {
+			$lat = $request->latitude;
+			$lng = $request->longitude;
+			$radii = [5, 10, 25, 50, 200, 500];
+			$foundProperties = null;
+
+			foreach ($radii as $radius) {
+				$tempQuery = clone $query;
+
+				$haversine = "(6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude))))";
+
+				$tempQuery->whereRaw("$haversine < ?", [$lat, $lng, $lat, $radius]);
+
+				$foundProperties = $tempQuery->paginate(10);
+
+				if ($foundProperties->count() > 0) {
+					$query = $tempQuery;
+					break;
+				}
+			}
+		}
+
 		// Pagination
 		$properties = $query->paginate(10)->withQueryString();
-
 		if ($request->ajax()) {
 			// Return only the listing partial view (HTML of properties)
 			return view('front.partials.property-listings', compact('properties'))->render();
