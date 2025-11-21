@@ -153,6 +153,33 @@ class UserController extends AppController
 		$publishedBusiness = $businessListings->where('is_published', true)->count();
 		$enquiredBusiness = BusinessEnquiry::whereIn('business_id', $businessListings->pluck('id'))->distinct('business_id')->count();
 
+		/* -------------------------------------
+	PROPERTY TYPE (SUB SUB CATEGORY)
+--------------------------------------*/
+		$propertyTypes = Properties::where('user_id', $userId)
+			->with(['SubSubCategory', 'SubCategory', 'Category'])
+			->selectRaw('sub_sub_category_id, sub_category_id, category_id, COUNT(*) as total')
+			->groupBy('sub_sub_category_id', 'sub_category_id', 'category_id')
+			->get()
+			->mapWithKeys(function ($item) {
+				$name = $item->getCategoryHierarchyName() ?? 'Unknown';
+				return [$name => $item->total];
+			});
+
+		$statusData = [
+			'Pending' => Properties::where('user_id', $userId)
+				->where('approval', 'Pending')
+				->count(),
+
+			'Approved' => Properties::where('user_id', $userId)
+				->where('approval', 'Approved')
+				->where('publish_status','Unpublish')
+				->count(),
+
+			'Published' => Properties::where('user_id', $userId)
+				->where('publish_status', 'Publish')
+				->count(),
+		];
 		return view('front.user.dashboard', compact(
 			'properties',
 			'ExclusiveProperties',
@@ -162,7 +189,9 @@ class UserController extends AppController
 			'businessListings',
 			'totalBusiness',
 			'publishedBusiness',
-			'enquiredBusiness'
+			'enquiredBusiness',
+			'propertyTypes',
+			'statusData'
 		));
 
 	}
@@ -181,7 +210,7 @@ class UserController extends AppController
 			'SubCategory',
 			'SubSubCategory',
 		])
-			// ->where('user_id', $userId)
+			->where('user_id', $userId)
 			->orderBy('id', 'DESC')
 			->get();
 

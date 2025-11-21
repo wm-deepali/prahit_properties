@@ -303,8 +303,7 @@
                                                     </p>
                                                     <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-"
-                                                        class="btn btn-primary btn-sm">View Details</a>
+                                                " class="btn btn-primary btn-sm">View Details</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -349,7 +348,7 @@
                                         </div>
                                     </div>
                                 </div>
-                               
+
 
                                 <!-- Business Listings Table -->
                                 <div class="card shadow-sm border-1 mb-4">
@@ -448,59 +447,43 @@
 
         // Bar Chart for Property Types
         const ctx1 = document.getElementById('propertyTypeChart').getContext('2d');
+
         new Chart(ctx1, {
             type: 'bar',
             data: {
-                labels: ['Apartment', 'Villa', 'Plot', 'Commercial'],
+                labels: <?php echo json_encode($propertyTypes->keys()); ?>,
                 datasets: [{
                     label: 'Number of Properties',
-                    data: [12, 8, 5, 3],
+                    data: <?php echo json_encode($propertyTypes->values()); ?>,
                     backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545'],
-                    borderColor: ['#0056b3', '#218838', '#e0a800', '#c82333'],
+                    borderWidth: 1
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Pie Chart for Property Status
+        // Pie Chart for Property Status
+        const ctx2 = document.getElementById('propertyStatusChart').getContext('2d');
+
+        new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: <?php echo json_encode(array_keys($statusData)); ?>,
+                datasets: [{
+                    data: <?php echo json_encode(array_values($statusData)); ?>,
+                    backgroundColor: ['#28a745', '#ffc107', '#007bff'],
                     borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Count'
-                        }
-                    }
-                },
                 plugins: {
-                    legend: {
-                        display: false
-                    }
+                    legend: { position: 'bottom' }
                 }
             }
         });
 
-        // Pie Chart for Property Status
-        const ctx2 = document.getElementById('propertyStatusChart').getContext('2d');
-        new Chart(ctx2, {
-            type: 'pie',
-            data: {
-                labels: ['Active', 'Pending', 'Sold'],
-                datasets: [{
-                    data: [15, 8, 5],
-                    backgroundColor: ['#28a745', '#ffc107', '#6c757d'],
-                    borderColor: ['#218838', '#e0a800', '#5a6268'],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }
-        });
 
 
         function deleteProperty(id) {
