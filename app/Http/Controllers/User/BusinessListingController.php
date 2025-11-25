@@ -43,7 +43,7 @@ class BusinessListingController extends Controller
         $user = auth()->user();
 
         // 🧩 Load user's active subscription with its package
-        $activeSubscription = $user->activeSubscription()
+        $activeBusinessSubscription = $user->activeBusinessSubscription()
             ->with('package')
             ->first();
 
@@ -51,12 +51,12 @@ class BusinessListingController extends Controller
         $redirectUrl = urlencode(url()->current());
 
         // 🚫 No active subscription
-        if (!$activeSubscription) {
+        if (!$activeBusinessSubscription) {
             return redirect()->to(url("/user/pricing?type=service&redirect_url={$redirectUrl}"))
                 ->with('error', 'You must have an active subscription to post your business listing.');
         }
 
-        $package = $activeSubscription->package;
+        $package = $activeBusinessSubscription->package;
 
         // 🚫 Subscription exists but package missing or not Service type
         if (!$package || $package->package_type !== 'service') {
@@ -272,11 +272,11 @@ class BusinessListingController extends Controller
             // --- UPDATE SERVICES COUNT IN ACTIVE SUBSCRIPTION ---
             $serviceCount = $business->services()->count();
 
-            $activeSubscription = $business->user->activeSubscription;
+            $activeBusinessSubscription = $business->user->activeBusinessSubscription;
 
-            if ($activeSubscription) {
-                $activeSubscription->used_services = $serviceCount;
-                $activeSubscription->save();
+            if ($activeBusinessSubscription) {
+                $activeBusinessSubscription->used_services = $serviceCount;
+                $activeBusinessSubscription->save();
             }
 
 
@@ -307,16 +307,16 @@ class BusinessListingController extends Controller
         $property_subsubcategories = SubSubCategory::latest()->get();
 
         $user = auth()->user();
-        $activeSubscription = $user->activeSubscription()->with('package')->first();
+        $activeBusinessSubscription = $user->activeBusinessSubscription()->with('package')->first();
 
         // If no active subscription, redirect to pricing page
-        if (!$activeSubscription) {
+        if (!$activeBusinessSubscription) {
             $redirectUrl = urlencode(url()->current());
             return redirect()->to(url("/user/pricing?type=service&redirect_url={$redirectUrl}"))
                 ->with('error', 'You must have an active subscription to edit your business listing.');
         }
 
-        $package = $activeSubscription->package;
+        $package = $activeBusinessSubscription->package;
 
         // If package missing or not service type
         if (!$package || $package->package_type !== 'service') {
@@ -558,10 +558,10 @@ class BusinessListingController extends Controller
             // --- UPDATE SERVICES COUNT IN ACTIVE SUBSCRIPTION ---
             $serviceCount = $business->services()->count();
 
-            $activeSubscription = $business->user->activeSubscription;
-            if ($activeSubscription) {
-                $activeSubscription->used_services = $serviceCount;
-                $activeSubscription->save();
+            $activeBusinessSubscription = $business->user->activeBusinessSubscription;
+            if ($activeBusinessSubscription) {
+                $activeBusinessSubscription->used_services = $serviceCount;
+                $activeBusinessSubscription->save();
             }
 
             return redirect()->route('user.services.index')

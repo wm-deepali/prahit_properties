@@ -488,6 +488,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/user/pricing', [PricingController::class, 'index'])->name('pricing');
 	Route::get('/user/all-inquries', [UserController::class, 'allInquiries'])->name('all-inquries');
 	Route::get('/user/my-wishlist', [App\Http\Controllers\WishlistController::class, 'myWishlist'])->name('my-wishlist');
+	Route::get('user/recent-viewed-properties', [UserController::class, 'recentViewedProperties']);
 	Route::get('/user/my-activities', [UserController::class, 'myActivities'])->name('my-activities');
 	Route::get('user/sent-inquries', [UserController::class, 'sentEnquiries'])->name('user.sent-inquiries');
 

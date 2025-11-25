@@ -414,17 +414,16 @@
 								<div class="form-group row">
 									<div class="form-group col-sm-6">
 										<label class="label-control">First Name</label>
-										<input type="text" class="text-control " placeholder="Enter First Name"
+										<input type="text" class="text-control" placeholder="Enter First Name"
 											id="firstname" name="firstname"
-											value="<?php if(\Auth::user()): ?><?php echo e(\Auth::user()->firstname); ?><?php else: ?><?php echo e(old('firstname')); ?><?php endif; ?>"
-											required="" readonly="" />
+											value="<?php echo e($property->owner_firstname ?? Auth::user()->firstname); ?>" required />
 									</div>
+
 									<div class="form-group col-sm-6">
 										<label class="label-control">Last Name</label>
-										<input type="text" class="text-control " placeholder="Enter Last Name" id="lastname"
+										<input type="text" class="text-control" placeholder="Enter Last Name" id="lastname"
 											name="lastname"
-											value="<?php if(\Auth::user()): ?><?php echo e(\Auth::user()->lastname); ?><?php else: ?><?php echo e(old('lastname')); ?><?php endif; ?>"
-											required="" readonly="" />
+											value="<?php echo e($property->owner_lastname ?? Auth::user()->lastname); ?>" required />
 									</div>
 								</div>
 
@@ -432,30 +431,45 @@
 									<div class="form-group col-sm-12">
 										<label class="label-control">Email</label>
 										<input type="email" class="text-control email" placeholder="Enter Email" id="email"
-											name="email"
-											value="<?php if(\Auth::user()): ?><?php echo e(\Auth::user()->email); ?><?php else: ?><?php echo e(old('email')); ?><?php endif; ?>"
-											required="" readonly="" />
+											name="email" value="<?php echo e($property->owner_email ?? Auth::user()->email); ?>"
+											required />
 									</div>
 								</div>
 
 								<div class="form-group row">
 									<div class="col-sm-8">
 										<label class="label-control">Mobile No.</label>
-										<div class="d-flex">
-											<div>
-												<input type="number" class="text-control mobile_number"
-													placeholder="Enter Mobile No."
-													value="<?php if(\Auth::user()): ?><?php echo e(\Auth::user()->mobile_number); ?><?php else: ?><?php echo e(old('mobile_number')); ?><?php endif; ?>"
-													id="mobile_number" name="mobile_number" required readonly="" />
-											</div>
+										<div class="d-flex" style="gap:10px;">
+
+											<input type="number" class="text-control mobile_number"
+												placeholder="Enter Mobile No." id="mobile_number" name="mobile_number"
+												value="<?php echo e($property->owner_mobile ?? Auth::user()->mobile_number); ?>"
+												data-original="<?php echo e($property->owner_mobile ?? Auth::user()->mobile_number); ?>"
+												required />
+
+											<!-- OTP Button -->
+											<button type="button" id="otp_btn" class="btn btn-primary"
+												style="display:none;white-space:nowrap;">Send OTP</button>
+
 										</div>
+
+										<!-- OTP Input (Hidden Initially) -->
+										<div id="otp_input_wrapper" style="margin-top:10px; display:none;">
+											<input type="text" id="otp_input" name="otp_code" class="text-control"
+												placeholder="Enter OTP" />
+										</div>
+
 									</div>
 								</div>
+
+
 							</div>
+
 							<input type="hidden" name="form_json" id="form_json">
 							<input type="hidden" name="save_json" id="save_json" value="<?php echo e($property->additional_info); ?>">
 						</div>
 					</div>
+
 
 
 					<div class="form-group col-sm-12 mt-4 text-center">
@@ -479,16 +493,59 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			const mobileInput = document.getElementById("mobile_number");
+			const otpBtn = document.getElementById("otp_btn");
+			const otpInputWrapper = document.getElementById("otp_input_wrapper");
+
+			const originalNumber = mobileInput.dataset.original ?? "";
+
+			otpBtn.style.display = "none";
+			otpInputWrapper.style.display = "none";
+
+			mobileInput.addEventListener("input", function () {
+				const current = mobileInput.value;
+
+				// Case 1: Number unchanged → hide OTP
+				if (current === originalNumber) {
+					otpBtn.style.display = "none";
+					otpInputWrapper.style.display = "none";
+					return;
+				}
+
+				// Case 2: Less than 10 digits → hide OTP
+				if (current.length < 10) {
+					otpBtn.style.display = "none";
+					otpInputWrapper.style.display = "none";
+					return;
+				}
+
+				// Case 3: Valid 10-digit AND changed → show button
+				if (current.length === 10) {
+					otpBtn.style.display = "inline-block";
+				}
+			});
+
+			// Show OTP Input when button clicked
+			otpBtn.addEventListener("click", function () {
+				otpInputWrapper.style.display = "block";
+			});
+		});
+	</script>
+
+
 	<script type="text/javascript">
 
-	$(function () {
-    fetch_form_type();
+		$(function () {
+			fetch_form_type();
 
-    <?php if(!empty($property->SubSubCategory)): ?>
-        console.log('here');
-        toggleSubSubCategoryFields(<?php echo json_encode($property->SubSubCategory, 15, 512) ?>);
-    <?php endif; ?>
-});
+			<?php if(!empty($property->SubSubCategory)): ?>
+				console.log('here');
+				toggleSubSubCategoryFields(<?php echo json_encode($property->SubSubCategory, 15, 512) ?>);
+			<?php endif; ?>
+					});
 
 
 		let selectedFiles = []; // new files user selects
@@ -525,11 +582,11 @@
 					const div = document.createElement('div');
 					div.classList.add('position-relative', 'm-1');
 					div.innerHTML = `
-															<img src="${e.target.result}" class="rounded border" width="100" height="100">
-															<button type="button" class="btn btn-sm btn-danger" 
-																style="position:absolute;top:0;right:0;" 
-																onclick="removeImage(${index})">&times;</button>
-														`;
+																				<img src="${e.target.result}" class="rounded border" width="100" height="100">
+																				<button type="button" class="btn btn-sm btn-danger" 
+																					style="position:absolute;top:0;right:0;" 
+																					onclick="removeImage(${index})">&times;</button>
+																			`;
 					container.appendChild(div);
 				};
 				reader.readAsDataURL(file);
@@ -546,11 +603,11 @@
 		<?php else: ?>
 			// Construct address string from state, city, location
 			let address = '';
-															  <?php if(!empty($property->location)): ?> address += '<?php echo e($property->location->location); ?>'; <?php endif; ?>
+																									  <?php if(!empty($property->location)): ?> address += '<?php echo e($property->location->location); ?>'; <?php endif; ?>
 			<?php if(!empty($property->city)): ?> address += ', <?php echo e($property->city->name); ?>'; <?php endif; ?>
 			<?php if(!empty($property->state)): ?> address += ', <?php echo e($property->state->name); ?>'; <?php endif; ?>
 
-															  if (address) {
+																									  if (address) {
 				fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
 					.then(res => res.json())
 					.then(data => {
@@ -1071,8 +1128,8 @@
 					formData.append('is_visitor', true);
 				<?php endif; ?>
 
-																																		// console.log(obj)
-																																		if (jQuery.isEmptyObject(obj)) {
+																																							// console.log(obj)
+																																							if (jQuery.isEmptyObject(obj)) {
 					returnIfInvalid();
 				}
 
@@ -1091,7 +1148,7 @@
 							<?php if(auth()->guard()->check()): ?>
 								request.setRequestHeader('auth-token', '<?php echo e(Auth::user()->auth_token); ?>');
 							<?php endif; ?>
-																																					},
+																																										},
 						success: function (response) {
 							// var response = JSON.parse(response);
 							if (response.responseCode === 200) {
@@ -1102,7 +1159,7 @@
 									// window.location.href = "<?php echo e(route('admin.properties.index')); ?>";
 									//          	}, 1000);
 								<?php endif; ?>
-																																						} else if (response.responseCode === 400) {
+																																											} else if (response.responseCode === 400) {
 								toastr.error(response.message)
 							} else {
 								toastr.error('An error occured')
@@ -1136,108 +1193,137 @@
 
 
 		function createProperty() {
-			var title = $('#title').val();
-			// var type = $('#type_id').val();
-			var price = $('#price').val();
+
+			// Basic Field Validations
+			let title = $('#title').val();
+			let price = $('#price').val();
+			let category = $('#category_id').val();
+			let sub_category = $('#sub_category_id').val();
+			let status = $('#status').val();
+			let description = $('#description').val();
+			let address = $('#address').val();
+			let location_id = $('#location_id').val();
+			let sub_location_id = $('#sub_location_id').val();
+
 			if (title == '') {
 				$('#title').focus();
-				toastr.warning('Title field must be required.')
+				toastr.warning('Title field must be required.');
 				return false;
 			}
-			// if (type == '') {
-			// 	$('#type_id').focus();
-			// 	toastr.warning('Type field must be required.')
-			// 	return false;
-			// }
+
 			if (price == '') {
 				$('#price').focus();
-				toastr.warning('Price field must be required.')
+				toastr.warning('Price field must be required.');
 				return false;
 			}
-			var label = $("input[name=price_label]").val();
-			console.log(label);
-			// if(!label) {
-			// 	$('#price_label').focus();
-			// 	toastr.warning('Price label field must be required.')
-			// 	return false;
-			// }
-			var category = $('#category_id').val();
-			var sub_category = $('#sub_category_id').val();
-			var status = $('#status').val();
+
 			if (category == '') {
 				$('#category_id').focus();
-				toastr.warning('Property Available For field must be required.')
+				toastr.warning('Property Available For field must be required.');
 				return false;
 			}
+
 			if (sub_category == '') {
 				$('#sub_category_id').focus();
-				toastr.warning('Category field must be required.')
+				toastr.warning('Category field must be required.');
 				return false;
 			}
+
 			if (status == '') {
 				$('#status').focus();
-				toastr.warning('Status field must be required.')
+				toastr.warning('Status field must be required.');
 				return false;
 			}
-			var description = $('#description').val();
-			var address = $('#address').val();
-			var location_id = $('#location_id').val();
-			var sub_location_id = $('#sub_location_id').val();
-			var file = $('#file').val();
+
 			if (description == '') {
 				$('#description').focus();
-				toastr.warning('Description field must be required.')
+				toastr.warning('Description field must be required.');
 				return false;
 			}
+
 			if (address == '') {
 				$('#address').focus();
-				toastr.warning('Address field must be required.')
+				toastr.warning('Address field must be required.');
 				return false;
 			}
+
 			if (location_id == '') {
 				$('#location_id').focus();
-				toastr.warning('Location id field must be required.')
+				toastr.warning('Location id field must be required.');
 				return false;
 			}
+
 			if (sub_location_id == '') {
 				$('#sub_location_id').focus();
-				toastr.warning('Sub Location id field must be required.')
+				toastr.warning('Sub Location id field must be required.');
 				return false;
 			}
 
-			var data = $('#add').formRender('userData');
-			if (!data) {
-				toastr.error('Additional details form must be required, please select another category or contact to admin.');
-			} else {
-				document.getElementById('form_json').value = JSON.stringify(data);
-				const form = document.getElementById('create-property');
-				const formData = new FormData(form);
 
-				// Append all selected images
-				selectedFiles.forEach((file, i) => {
-					formData.append('gallery_images_file[]', file);
-				});
+			// ✔️ OTP Validation
+			let mobileInput = document.getElementById("mobile_number");
+			let originalMobile = mobileInput.dataset.original ?? "";
+			let currentMobile = mobileInput.value;
+			let otpBoxVisible = $("#otp_input_wrapper").is(":visible");
+			let otpCode = $("#otp_input").val();
 
-				// Example AJAX submit (replace with your actual logic)
-				fetch("<?php echo e(url('update/property')); ?>", {
-					method: "POST",
-					body: formData
-				})
-					.then(res => res.json())
-					.then(response => {
-						if (response.success) {
-							toastr.success(response.message);
-							// Redirect to preview page after short delay
-							setTimeout(() => {
-								window.location.href = response.redirect_url;
-							}, 1000);
-						} else {
-							toastr.error(response.message || 'Something went wrong.');
-						}
-					})
-					.catch(err => toastr.error('Server error!'));
+			// If mobile changed → OTP must be entered
+			if (currentMobile != originalMobile) {
+
+				if (currentMobile.length < 10) {
+					toastr.error("Enter valid 10-digit mobile number.");
+					return false;
+				}
+
+				if (!otpBoxVisible) {
+					toastr.error("Please click Send OTP.");
+					return false;
+				}
+
+				if (otpCode === "" || otpCode.length < 4) {
+					toastr.error("Please enter valid OTP.");
+					return false;
+				}
 			}
+
+
+			// ✔️ Dynamic form data (additional info form_json)
+			let data = $('#add').formRender('userData');
+			if (!data) {
+				toastr.error('Additional details form must be required. Contact admin.');
+				return false;
+			}
+
+			$("#form_json").val(JSON.stringify(data));
+
+
+			// ✔️ Submit Form Using Fetch + FormData
+			const form = document.getElementById('create-property');
+			const formData = new FormData(form);
+
+			// Add Gallery Images
+			selectedFiles.forEach((file, i) => {
+				formData.append('gallery_images_file[]', file);
+			});
+
+			fetch("<?php echo e(url('update/property')); ?>", {
+				method: "POST",
+				body: formData
+			})
+				.then(res => res.json())
+				.then(response => {
+					if (response.success) {
+						toastr.success(response.message);
+						setTimeout(() => {
+							window.location.href = response.redirect_url;
+						}, 1000);
+					} else {
+						toastr.error(response.message || 'Something went wrong.');
+					}
+				})
+				.catch(err => toastr.error('Server error!'));
 		}
+
 	</script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.front.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/edit_property.blade.php ENDPATH**/ ?>

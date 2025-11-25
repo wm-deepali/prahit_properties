@@ -17,6 +17,11 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <style>
+    .custom-modal .modal-body {
+      max-height: 75vh;
+      overflow-y: auto;
+    }
+
     .toast-container>div {
       opacity: 1 !important;
       color: #fff !important;
@@ -43,6 +48,10 @@
     .toast-info {
       background-color: #17a2b8 !important;
       /* Blue */
+    }
+
+    .text-inherit {
+      color: inherit !important;
     }
   </style>
 
@@ -730,15 +739,17 @@
 
           <div class="rec-act">
             <h2 class="m-0"><i class="fa-solid fa-sort"></i></h2>
-            <p class="m-0">Shortlisted</p>
-
+            <p class="m-0">
+              <a href="/user/my-wishlist" class="text-decoration-none text-inherit">Shortlisted</a>
+            </p>
           </div>
           <div class="recent-activity-line">
 
           </div>
           <div class="rec-act">
             <h2 class="m-0"><i class="fa-solid fa-eye"></i></h2>
-            <p class="m-0">Viewed</p>
+            <p class="m-0"><a href="/user/recent-viewed-properties" class="text-decoration-none text-inherit">Viewed</a>
+            </p>
           </div>
 
         </div>
@@ -746,11 +757,10 @@
 
           <div class="rec-act" style="width:100%;overflow:hidden;border-radius: 7px;">
             <h2 class="m-0"><i class="fa-solid fa-phone-volume"></i></h2>
-            <p class="m-0">Contacted</p>
-
+            <p class="m-0">
+              <a class="text-decoration-none text-inherit" href="/user/sent-inquiries">Contacted</a>
+            </p>
           </div>
-
-
         </div>
 
         <div class="post-property-card">
@@ -758,7 +768,6 @@
             <br><span>Email, Contact number and WhatsApp Number</span>
           </h3>
           <img src="{{ asset('images/technical-support.png') }}" alt="">
-
         </div>
 
       </div>
@@ -841,10 +850,13 @@
                 {{Auth::user()->firstname}} {{Auth::user()->lastname}}
               </a>
               <ul class="dropdown-menu" style="left:-100px;">
-                <li><a class="dropdown-item" href="#">Recently Searched</a></li>
-                <li><a class="dropdown-item" href="#">Shortlisted</a></li>
-                <li><a class="dropdown-item" href="#">Recently Viewed</a></li>
-                <li><a class="dropdown-item" href="#">Contacted Properties</a></li>
+                <li>
+                  <a class="dropdown-item" href="/user/my-wishlist">Shortlisted</a>
+                </li>
+                <li><a class="dropdown-item" href="/user/recent-viewed-properties">Recently Viewed</a></li>
+                <li>
+                  <a class="dropdown-item" href="/user/sent-inquries">Contacted Properties</a>
+                </li>
                 <li>
                   <hr class="dropdown-divider">
                 </li>
@@ -2703,7 +2715,7 @@
     aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
-        <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
 
@@ -2883,7 +2895,7 @@
     aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
-        <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
 
@@ -3191,7 +3203,8 @@
             <path d="M5 3h2v16H5zM11 8h2v11h-2zM17 13h2v6h-2z" />
           </svg>
         </span>
-        <span class="bottom-badge">Wishlist</span>
+        <span class="bottom-badge"><a href="/user/my-wishlist"
+            class="text-decoration-none text-inherit">Wishlist</a></span>
       </a>
 
       @auth
@@ -3995,15 +4008,15 @@
           $(".modal_loading").css('display', 'block');
         },
         success: function (response) {
-          // console.log(response);
+          console.log(response,response.status == true);
           // toastr.success('abc')
           // var response = JSON.parse(response);
-          if (response.staus == true) {
+          if (response.status == true) {
             toastr.success(response.message)
             $(".modal").modal('hide');
+            openSigninModal();
             // window.user_id = response.data.User.id;
             // console.log(response.data.User.id);
-            reloadPage();
           } else if (response.responseCode === 400) {
             toastr.error(response.message)
             $("#otp_form").trigger('reset');

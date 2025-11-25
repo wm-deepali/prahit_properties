@@ -44,8 +44,8 @@ class User extends Authenticatable
             return "Yes";
         }
 
-        if ($this->activeSubscription && $this->activeSubscription->package) {
-            return $this->activeSubscription->package->premium_seller;
+        if ($this->activePropertySubscription && $this->activePropertySubscription->package) {
+            return $this->activePropertySubscription->package->premium_seller;
         }
         return 'no';
     }
@@ -90,10 +90,26 @@ class User extends Authenticatable
         return $this->belongsTo(City::class, 'city_id', 'id');
     }
 
-    public function activeSubscription()
+    public function activePropertySubscription()
     {
-        return $this->hasOne(\App\Models\Subscription::class, 'user_id')->where('is_active', 1)->latest();
+        return $this->hasOne(\App\Models\Subscription::class, 'user_id')
+            ->where('is_active', 1)
+            ->whereHas('package', function ($q) {
+                $q->where('package_type', 'property');
+            })
+            ->latest();
     }
+
+    public function activeBusinessSubscription()
+    {
+        return $this->hasOne(\App\Models\Subscription::class, 'user_id')
+            ->where('is_active', 1)
+            ->whereHas('package', function ($q) {
+                $q->where('package_type', 'business');
+            })
+            ->latest();
+    }
+
 
     public function profileSection()
     {

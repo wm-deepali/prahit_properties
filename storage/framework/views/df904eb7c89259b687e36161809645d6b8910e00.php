@@ -504,7 +504,7 @@
                                         </button>
                                         <button class="info-btn">
                                             <strong>Membership:</strong>
-                                            <?php echo e($user->activeSubscription->package->name ?? 'Free'); ?>
+                                            <?php echo e($user->activePropertySubscription->package->name ?? 'Free'); ?>
 
                                         </button>
 
@@ -583,46 +583,47 @@
                         <h3 class="mb-4">Featured Properties</h3>
                         <div class="row">
                             <?php $__currentLoopData = $properties; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <!-- Property Card 1 -->
-                                <div class="col-lg-6 mb-3">
-                                    <div class="newdesign-project-main">
-                                        <div class="newdesign-image-proj">
-                                            <img src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;'); ?>"
-                                                class="img-fluid" alt="Property 1">
-                                            <?php if($value->verified_tag === 'Yes'): ?>
-                                                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i>
-                                                    Verified</span>
-                                            <?php endif; ?>
-                                        </div>
-                                        <div class="newdesign-info-proj">
-                                            <div class="d-flex justify-content-between">
-                                                <h4 class="newdesign-proj-name"> <a
-                                                        href="<?php echo e(route('property_detail', ['title' => $value->slug])); ?>"><?php echo e($value->title); ?></a>
-                                                </h4>
-                                                <span class="newdesign-proj-category">Villa</span>
-                                            </div>
-                                            <span class="newdesign-apart-name">
-                                                <?php echo e(\Illuminate\Support\Str::limit($value->description, 100)); ?></span>
-                                            <hr>
-                                            <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i>
-                                                <?php echo e($value->getCity->name); ?>,
-                                                <?php echo e($value->getState->name); ?></span>
-                                            <div class="newdesign-proj-price">
-                                                <span><i
-                                                        class="fas fa-rupee-sign"></i><?php echo e(\App\Helpers\Helper::formatIndianPrice($value->price)); ?></span>
-                                            </div>
-                                            <div class="d-flex justify-content-between">
-                                                <span class="newdesign-proj-owner"><strong>Builder:</strong><br> <a
-                                                        href="<?php echo e(route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')])); ?>">
-                                                        <?php echo e($value->getUser->firstname ?? ''); ?>
+                                                        <!-- Property Card 1 -->
+                                                        <div class="col-lg-6 mb-3">
+                                                            <div class="newdesign-project-main">
+                                                                <div class="newdesign-image-proj">
+                                                                    <img src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;'); ?>"
+                                                                        class="img-fluid" alt="Property 1">
+                                                                    <?php if($value->verified_tag === 'Yes'): ?>
+                                                                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i>
+                                                                            Verified</span>
+                                                                    <?php endif; ?>
+                                                                </div>
+                                                                <div class="newdesign-info-proj">
+                                                                    <div class="d-flex justify-content-between">
+                                                                        <h4 class="newdesign-proj-name"> <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                                    </a></span>
-                                                <span class="newdesign-proj-owner"><strong>Posted:</strong><br>
-                                                    <?php echo e(optional($value->created_at)->format('d M Y')); ?></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                "><?php echo e($value->title); ?></a>
+                                                                        </h4>
+                                                                        <span class="newdesign-proj-category">Villa</span>
+                                                                    </div>
+                                                                    <span class="newdesign-apart-name">
+                                                                        <?php echo e(\Illuminate\Support\Str::limit($value->description, 100)); ?></span>
+                                                                    <hr>
+                                                                    <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i>
+                                                                        <?php echo e($value->getCity->name); ?>,
+                                                                        <?php echo e($value->getState->name); ?></span>
+                                                                    <div class="newdesign-proj-price">
+                                                                        <span><i
+                                                                                class="fas fa-rupee-sign"></i><?php echo e(\App\Helpers\Helper::formatIndianPrice($value->price)); ?></span>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-between">
+                                                                        <span class="newdesign-proj-owner"><strong>Builder:</strong><br> <a
+                                                                                href="<?php echo e(route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')])); ?>">
+                                                                                <?php echo e($value->getUser->firstname ?? ''); ?>
+
+                                                                            </a></span>
+                                                                        <span class="newdesign-proj-owner"><strong>Posted:</strong><br>
+                                                                            <?php echo e(optional($value->created_at)->format('d M Y')); ?></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
@@ -820,7 +821,7 @@
                         <?php $__empty_1 = true; $__currentLoopData = $otherUsers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $other): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <?php
                                 $section = $other->profileSection;
-                                $logo = $section->logo
+                                $logo = isset($section->logo)
                                     ? asset('storage/' . $section->logo)
                                     : 'https://via.placeholder.com/300x200?text=No+Image';
                             ?>

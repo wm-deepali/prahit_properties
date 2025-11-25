@@ -173,12 +173,12 @@ class Helper
     {
         // Get all active business listings and eager load user + subscription + package
         $listings = BusinessListing::where('Status', 'Active')
-            ->with(['user.activeSubscription.package']) // eager load user subscription and package
+            ->with(['user.activeBusinessSubscription.package']) // eager load user subscription and package
             ->get();
 
         // Map badge info
         return $listings->map(function ($listing) {
-            $subscription = $listing->user->activeSubscription ?? null;
+            $subscription = $listing->user->activeBusinessSubscription ?? null;
             $isValid = false;
 
             if ($subscription) {

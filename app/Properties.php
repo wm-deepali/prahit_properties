@@ -55,7 +55,11 @@ class Properties extends Model
         'latitude',
         'longitude',
         'property_video',
-        'total_views'
+        'total_views',
+        'owner_firstname',
+        'owner_lastname',
+        'owner_email',
+        'owner_mobile'
     ];
 
     // protected static function boot() {
@@ -156,11 +160,11 @@ class Properties extends Model
         // If user has active subscription and package has verified_tag
         if (
             $this->getUser &&
-            $this->getUser->activeSubscription &&
-            $this->getUser->activeSubscription->package
+            $this->getUser->activePropertySubscription &&
+            $this->getUser->activePropertySubscription->package
         ) {
 
-            return $this->getUser->activeSubscription->package->verified_tag ?? 'no';
+            return $this->getUser->activePropertySubscription->package->verified_tag ?? 'no';
         }
 
         // Default

@@ -501,7 +501,7 @@
                                         </button>
                                         <button class="info-btn">
                                             <strong>Membership:</strong>
-                                            {{ $user->activeSubscription->package->name ?? 'Free' }}
+                                            {{ $user->activePropertySubscription->package->name ?? 'Free' }}
                                         </button>
 
                                     </div>
@@ -577,46 +577,45 @@
                         <h3 class="mb-4">Featured Properties</h3>
                         <div class="row">
                             @foreach($properties as $key => $value)
-                                <!-- Property Card 1 -->
-                                <div class="col-lg-6 mb-3">
-                                    <div class="newdesign-project-main">
-                                        <div class="newdesign-image-proj">
-                                            <img src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;'}}"
-                                                class="img-fluid" alt="Property 1">
-                                            @if($value->verified_tag === 'Yes')
-                                                <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i>
-                                                    Verified</span>
-                                            @endif
-                                        </div>
-                                        <div class="newdesign-info-proj">
-                                            <div class="d-flex justify-content-between">
-                                                <h4 class="newdesign-proj-name"> <a
-                                                        href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-">{{$value->title}}</a>
-                                                </h4>
-                                                <span class="newdesign-proj-category">Villa</span>
-                                            </div>
-                                            <span class="newdesign-apart-name">
-                                                {{ \Illuminate\Support\Str::limit($value->description, 100) }}</span>
-                                            <hr>
-                                            <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i>
-                                                {{ $value->getCity->name }},
-                                                {{ $value->getState->name }}</span>
-                                            <div class="newdesign-proj-price">
-                                                <span><i
-                                                        class="fas fa-rupee-sign"></i>{{\App\Helpers\Helper::formatIndianPrice($value->price)}}</span>
-                                            </div>
-                                            <div class="d-flex justify-content-between">
-                                                <span class="newdesign-proj-owner"><strong>Builder:</strong><br> <a
-                                                        href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
-                                                        {{ $value->getUser->firstname ?? '' }}
-                                                    </a></span>
-                                                <span class="newdesign-proj-owner"><strong>Posted:</strong><br>
-                                                    {{ optional($value->created_at)->format('d M Y') }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                                        <!-- Property Card 1 -->
+                                                        <div class="col-lg-6 mb-3">
+                                                            <div class="newdesign-project-main">
+                                                                <div class="newdesign-image-proj">
+                                                                    <img src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;'}}"
+                                                                        class="img-fluid" alt="Property 1">
+                                                                    @if($value->verified_tag === 'Yes')
+                                                                        <span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i>
+                                                                            Verified</span>
+                                                                    @endif
+                                                                </div>
+                                                                <div class="newdesign-info-proj">
+                                                                    <div class="d-flex justify-content-between">
+                                                                        <h4 class="newdesign-proj-name"> <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
+                                ">{{$value->title}}</a>
+                                                                        </h4>
+                                                                        <span class="newdesign-proj-category">Villa</span>
+                                                                    </div>
+                                                                    <span class="newdesign-apart-name">
+                                                                        {{ \Illuminate\Support\Str::limit($value->description, 100) }}</span>
+                                                                    <hr>
+                                                                    <span class="newdesign-apart-adress"><i class="fa-solid fa-location-dot"></i>
+                                                                        {{ $value->getCity->name }},
+                                                                        {{ $value->getState->name }}</span>
+                                                                    <div class="newdesign-proj-price">
+                                                                        <span><i
+                                                                                class="fas fa-rupee-sign"></i>{{\App\Helpers\Helper::formatIndianPrice($value->price)}}</span>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-between">
+                                                                        <span class="newdesign-proj-owner"><strong>Builder:</strong><br> <a
+                                                                                href="{{ route('profile.page', ['slug' => Str::slug($value->getUser->firstname ?? '')]) }}">
+                                                                                {{ $value->getUser->firstname ?? '' }}
+                                                                            </a></span>
+                                                                        <span class="newdesign-proj-owner"><strong>Posted:</strong><br>
+                                                                            {{ optional($value->created_at)->format('d M Y') }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                             @endforeach
                         </div>
                     </div>

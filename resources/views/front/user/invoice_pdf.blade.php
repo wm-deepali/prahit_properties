@@ -43,7 +43,7 @@
         </tr>
         <tr>
             <th>Total Amount</th>
-            <td>₹{{ number_format($invoice->total_amount ?? $invoice->amount, 2) }}</td>
+            <td>₹{{ number_format($invoice->amount, 2) }}</td>
         </tr>
         <tr>
             <th>Paid Amount</th>

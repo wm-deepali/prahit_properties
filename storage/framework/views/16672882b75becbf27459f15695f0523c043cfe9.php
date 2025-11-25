@@ -3,7 +3,7 @@
 <?php $__env->startSection('title'); ?>
 	<title>Preview Property</title>
 <?php $__env->stopSection(); ?>
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <?php $__env->startSection('content'); ?>
 
 	<section class="breadcrumb-section">
@@ -38,8 +38,7 @@
 								<div class="row">
 									<div class="form-group col-sm-4">
 										<label class="label-control">Property Available For</label>
-										<select class="form-control populate_categories" name="category_id"
-											onchange="fetch_subcategories(this.value, fetch_form_type);" disabled="">
+										<select class="form-control populate_categories" name="category_id" disabled="">
 											<?php $__currentLoopData = $category; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 												<option value="<?php echo e($v->id); ?>" <?php echo e($property->category_id == $v->id ? "selected" : ""); ?>>
 													<?php echo e($v->category_name); ?>
@@ -51,17 +50,27 @@
 									<div class="form-group col-sm-4">
 										<label class="label-control">Category</label>
 										<select class="form-control populate_subcategories" id="sub_category_id"
-											name="sub_category_id"
-											onchange="fetch_subsubcategories(this.value, fetch_form_type);" required
-											disabled="">
+											name="sub_category_id" required disabled="">
 											<option value="">Select Category</option>
+											<?php $__currentLoopData = $sub_categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+												<option value="<?php echo e($v->id); ?>" <?php echo e($property->sub_category_id == $v->id ? "selected" : ""); ?>>
+													<?php echo e($v->sub_category_name); ?>
+
+												</option>
+											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 										</select>
 									</div>
 									<div class="form-group col-sm-4">
 										<label class="label-control">Property Type</label>
 										<select class="form-control populate_subsubcategories" name="sub_sub_category_id"
-											id="sub_sub_category_id" onchange="fetch_form_type();" disabled="">
+											disabled="">
 											<option value="">Select Property Type</option>
+											<?php $__currentLoopData = $sub_sub_categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+												<option value="<?php echo e($v->id); ?>" <?php echo e($property->sub_sub_category_id == $v->id ? "selected" : ""); ?>>
+													<?php echo e($v->sub_sub_category_name); ?>
+
+												</option>
+											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 										</select>
 									</div>
 
@@ -348,8 +357,8 @@
 			// Initialize map with property coordinates
 			createMap(<?php echo e($property->latitude); ?>, <?php echo e($property->longitude); ?>);
 		<?php else: ?>
-							// Otherwise use browser geolocation or default
-							if (navigator.geolocation) {
+													// Otherwise use browser geolocation or default
+													if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function (pos) {
 					createMap(pos.coords.latitude, pos.coords.longitude);
 				}, function () {
@@ -386,14 +395,10 @@
 
 
 		$(function () {
-			fetch_subcategories('<?php echo e($property->category_id); ?>', function () {
-				$(".populate_subcategories").val('<?php echo e($property->sub_category_id); ?>');
-				fetch_subsubcategories('<?php echo e($property->sub_category_id); ?>', function () {
-					$(".populate_subsubcategories").val('<?php echo e($property->sub_sub_category_id); ?>');
-				});
-			});
 
-			$(".property_use_for").hide();
+			<?php if(!empty($property->SubSubCategory)): ?>
+				toggleSubSubCategoryFields(<?php echo json_encode($property->SubSubCategory, 15, 512) ?>);
+			<?php endif; ?>
 
 			setTimeout(function () {
 				document.getElementById('fb-render').innerHTML = '';
@@ -414,107 +419,8 @@
 
 
 
-		function fetch_subcategories(id, callback) {
-			var route = "<?php echo e(url('get/sub-categories')); ?>/" + id
-			$.ajax({
-				url: route,
-				method: 'get',
-				beforeSend: function () {
-					$(".addproperty").attr('disabled', true);
-					$(".add_formtype").empty();
-				},
-				success: function (response) {
-					// var response = JSON.parse(response);
-					if (response.status === 200) {
-						$(".populate_subcategories").empty();
-						var subcategories = response.subcategories;
-						if (subcategories.length > 0) {
-							console.log('here');
-
-							$.each(subcategories, function (x, y) {
-								if ('<?php echo e($property->sub_category_id ?? 0); ?>' == y.id)
-									$(".populate_subcategories").append(
-										`<option value=${y.id} selected> ${y.sub_category_name} </option>`
-									);
-								else
-									$(".populate_subcategories").append(
-										`<option value=${y.id}> ${y.sub_category_name} </option>`
-									);
-							});
-						} else {
-							$(".populate_subcategories").append(
-								`<option value=''> Please add a sub category </option>`
-							);
-						}
-						if (callback) {
-							callback();
-						}
-					}
-				},
-				error: function (response) {
-					toastr.error('An error occured while fetching subcategories');
-				},
-				complete: function () {
-					;
-				}
-			})
-		}
-
-		var cachedSubSubCategories = {}; // Object to store sub sub categories keyed by subcategory ID
-
-		function fetch_subsubcategories(id, callback) {
-			$('#sub_sub_category_id').html('<option value="">Loading...</option>');
-			var route = "<?php echo e(url('get/sub-sub-categories')); ?>/" + id;
-
-			$.ajax({
-				url: route,
-				method: 'GET',
-				success: function (response) {
-					$('#sub_sub_category_id').empty().append('<option value="">Select Property Type</option>');
-					if (response.subsubcategories && response.subsubcategories.length) {
-						cachedSubSubCategories = response.subsubcategories;
-
-						$.each(response.subsubcategories, function (i, subsub) {
-							let selected = (<?php echo e($property->sub_category_id ?? 0); ?> == subsub.id) ? "selected" : "";
-							$('#sub_sub_category_id').append(
-								'<option value="' + subsub.id + '" ' + selected + '>' + subsub.sub_sub_category_name + '</option>'
-							);
-						});
-
-					} else {
-						$('#sub_sub_category_id').append('<option value="">No property type found</option>');
-					}
-
-					if (callback) {
-						callback();
-					}
-
-				},
-				error: function () {
-					$('#sub_sub_category_id').html('<option value="">Error loading</option>');
-				}
-			});
-		}
-
-
-		// 🔹 Auto-load on page load if editing
-		$(document).ready(function () {
-			let preselectedSubCategory = "<?php echo e($property->sub_category_id); ?>";
-			let preselectedSubSubCategory = "<?php echo e($property->sub_sub_category_id); ?>";
-
-			if (preselectedSubCategory) {
-				fetch_subsubcategories(preselectedSubCategory, preselectedSubSubCategory);
-			}
-
-		});
-
-
 		// This function is called when subsubcategory changes or after loading toggles
-		function toggleSubSubCategoryFields(selectedId) {
-
-			var selectedData = cachedSubSubCategories.find(function (subsub) {
-				return subsub.id == selectedId;
-			});
+		function toggleSubSubCategoryFields(selectedData) {
 
 			if (selectedData.price_label_toggle == 'yes') {
 				$('#priceLabelField').show();

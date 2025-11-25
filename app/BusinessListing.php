@@ -59,11 +59,11 @@ class BusinessListing extends Model
         // If user has active subscription and package has verified_tag
         if (
             $this->user &&
-            $this->user->activeSubscription &&
-            $this->user->activeSubscription->package
+            $this->user->activeBusinessSubscription &&
+            $this->user->activeBusinessSubscription->package
         ) {
 
-            return $this->user->activeSubscription->package->verified_badge ?? 'no';
+            return $this->user->activeBusinessSubscription->package->verified_badge ?? 'no';
         }
 
         // Default
@@ -80,11 +80,11 @@ class BusinessListing extends Model
         // If user has active subscription and package has verified_tag
         if (
             $this->user &&
-            $this->user->activeSubscription &&
-            $this->user->activeSubscription->package
+            $this->user->activeBusinessSubscription &&
+            $this->user->activeBusinessSubscription->package
         ) {
 
-            return $this->user->activeSubscription->package->premium_badge ?? 'no';
+            return $this->user->activeBusinessSubscription->package->premium_badge ?? 'no';
         }
 
         // Default

@@ -65,10 +65,10 @@
                   <tbody>
                     <?php $__empty_1 = true; $__currentLoopData = $invoices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $invoice): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                       <tr>
-                        <td><?php echo e($invoice->created_at->format('d M Y, h:i A')); ?></td>
+                      <td><?php echo e($invoice->created_at->timezone('Asia/Kolkata')->format('d M Y, h:i A')); ?></td>
                         <td><?php echo e($invoice->invoice_number); ?></td>
                         <td><?php echo e($invoice->subscription->package->name ?? 'N/A'); ?></td>
-                        <td>₹<?php echo e(number_format($invoice->total_amount ?? $invoice->amount, 2)); ?></td>
+                        <td>₹<?php echo e(number_format($invoice->amount, 2)); ?></td>
                         <td>₹<?php echo e(number_format($invoice->amount, 2)); ?></td>
                         <td>
                           <span class="badge bg-success text-white">
@@ -126,7 +126,8 @@
                 </tr>
                 <tr>
                   <th>Date & Time</th>
-                  <td><?php echo e($invoice->created_at->format('d M Y, h:i A')); ?></td>
+                  <td><?php echo e($invoice->created_at->timezone('Asia/Kolkata')->format('d M Y, h:i A')); ?></td>
+
                 </tr>
                 <tr>
                   <th>Subscription Name</th>
@@ -134,7 +135,7 @@
                 </tr>
                 <tr>
                   <th>Total Amount</th>
-                  <td>₹<?php echo e(number_format($invoice->total_amount ?? $invoice->amount, 2)); ?></td>
+                  <td>₹<?php echo e(number_format($invoice->amount, 2)); ?></td>
                 </tr>
                 <tr>
                   <th>Paid Amount</th>

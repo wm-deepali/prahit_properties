@@ -65,10 +65,10 @@
                   <tbody>
                     @forelse($invoices as $invoice)
                       <tr>
-                        <td>{{ $invoice->created_at->format('d M Y, h:i A') }}</td>
+                      <td>{{ $invoice->created_at->timezone('Asia/Kolkata')->format('d M Y, h:i A') }}</td>
                         <td>{{ $invoice->invoice_number }}</td>
                         <td>{{ $invoice->subscription->package->name ?? 'N/A' }}</td>
-                        <td>₹{{ number_format($invoice->total_amount ?? $invoice->amount, 2) }}</td>
+                        <td>₹{{ number_format($invoice->amount, 2) }}</td>
                         <td>₹{{ number_format($invoice->amount, 2) }}</td>
                         <td>
                           <span class="badge bg-success text-white">
@@ -125,7 +125,8 @@
                 </tr>
                 <tr>
                   <th>Date & Time</th>
-                  <td>{{ $invoice->created_at->format('d M Y, h:i A') }}</td>
+                  <td>{{ $invoice->created_at->timezone('Asia/Kolkata')->format('d M Y, h:i A') }}</td>
+
                 </tr>
                 <tr>
                   <th>Subscription Name</th>
@@ -133,7 +134,7 @@
                 </tr>
                 <tr>
                   <th>Total Amount</th>
-                  <td>₹{{ number_format($invoice->total_amount ?? $invoice->amount, 2) }}</td>
+                  <td>₹{{ number_format($invoice->amount, 2) }}</td>
                 </tr>
                 <tr>
                   <th>Paid Amount</th>

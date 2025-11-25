@@ -82,13 +82,17 @@
             <div class="profile-image">
                 <div class="pro-user">
                     @php
-                        $avatar = "";
-                        if (!file_exists(Auth::user()->avatar)) {
-                            $avatar = asset('images/usr.png');
+                        $avatar = Auth::user()->avatar;
+
+                        if ($avatar && Storage::disk('public')->exists($avatar)) {
+                            // If file exists in storage
+                            $avatar = asset('storage/' . $avatar);
                         } else {
-                            $avatar = url(Auth::user()->avatar);
+                            // Default image
+                            $avatar = asset('images/usr.png');
                         }
                     @endphp
+
                     <img src="{{$avatar}}" alt="Profile Picture" id="change_avatar" class="img-fluid">
                     <form id="avatar-form" name="avatar-form" enctype="multipart/form-data">
                         <div class="p-image">
@@ -288,6 +292,7 @@
                         <li class="nav-item"><a href="/user/all-inquries" class="nav-link">Received Inquiries</a></li>
                         <li class="nav-item"><a href="/user/sent-inquries" class="nav-link">Sent Inquiries</a></li>
                         <li class="nav-item"><a href="/user/my-wishlist" class="nav-link">My Wishlist</a></li>
+                        <li class="nav-item"><a href="/user/recent-viewed-properties" class="nav-link">Recently Viewed</a></li>
                     `}
                 </ul>
             </div>

@@ -7,7 +7,7 @@
     <div class="col-md-8">
       <div class="card-body">
         <h5 class="card-title property-title">
-          <a href="<?php echo e(route('business.details', $company->id)); ?>"><?php echo e($company->business_name); ?></a>
+          <a href="<?php echo e(route('business.details', ['id' => $company->id, 'slug' => $company->slug])); ?>"><?php echo e($company->business_name); ?></a>
         </h5>
 
         <!-- <p class="card-text"><strong>Price:</strong> <i class="fas fa-rupee-sign"></i> -->
@@ -28,7 +28,7 @@
               </a>
             </li>
             <li class="list-inline-item">
-              <a href="<?php echo e(route('business.details', $company->id)); ?>" class="btn btn-sm btn-outline-info"
+              <a href="<?php echo e(route('business.details', ['id' => $company->id, 'slug' => $company->slug])); ?>" class="btn btn-sm btn-outline-info"
                 title="View Business Listing">
                 <i class="fas fa-eye"></i>
               </a>

@@ -173,7 +173,7 @@ class UserController extends AppController
 
 			'Approved' => Properties::where('user_id', $userId)
 				->where('approval', 'Approved')
-				->where('publish_status','Unpublish')
+				->where('publish_status', 'Unpublish')
 				->count(),
 
 			'Published' => Properties::where('user_id', $userId)
@@ -274,30 +274,40 @@ class UserController extends AppController
 
 	public function upload_avatar(Request $request)
 	{
-		$rules = [
-			"avatar_file" => "required"
-		];
-		$isValid = $this->checkValidate($request, $rules);
-		if ($isValid) {
-			return response()->json(['status' => 400, 'message' => $isValid]);
-		}
+		// Validate request
+		$request->validate([
+			'user_id' => 'required|exists:users,id',
+			'avatar_file' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048'
+		]);
 
 		try {
-			$file = $this->fileUpload($request, ['uploads/avatar/' => 'avatar_file']);
-			if (isset($file[0])) {
-				$user = User::find($request->user_id);
-				$user->avatar = $file[0];
-				if ($user->save()) {
-					return response()->json(['status' => 200, 'avatar_file' => $file[0]]);
-				} else {
-					return response()->json(['status' => 400]);
-				}
-			}
-		} catch (\Exception $e) {
-			return response()->json(['status' => 500]);
-		}
+			$user = User::find($request->user_id);
 
+			// Delete old avatar if exists
+			if ($user->avatar && \Storage::disk('public')->exists($user->avatar)) {
+				\Storage::disk('public')->delete($user->avatar);
+			}
+
+			// Store new avatar
+			$path = $request->file('avatar_file')->store('uploads/avatar', 'public');
+
+			// Save file path in DB
+			$user->avatar = $path;
+			$user->save();
+
+			return response()->json([
+				'status' => 200,
+				'avatar_file' => asset('storage/' . $path)
+			]);
+
+		} catch (\Exception $e) {
+			return response()->json([
+				'status' => 500,
+				'message' => $e->getMessage()
+			]);
+		}
 	}
+
 
 	public function userlogout(Request $request)
 	{
@@ -374,6 +384,22 @@ class UserController extends AppController
 			'lastSuccessfulLogin' => $lastSuccessfulLogin,
 			'lastUnsuccessfulLogin' => $lastUnsuccessfulLogin,
 		]);
+	}
+
+
+	public function recentViewedProperties()
+	{
+		$user = auth()->user();
+
+		// Get last 20 viewed properties
+		$recentViews = \App\Models\PropertyView::with('property')
+			->where('user_id', $user->id)
+			->orderBy('created_at', 'DESC')
+			->limit(20)
+			->get()
+			->unique('property_id'); // Remove duplicates (only last view per property)
+
+		return view('front.user.recent-viewed-properties', compact('recentViews'));
 	}
 
 

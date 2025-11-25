@@ -3,6 +3,30 @@
 @section('title')
 	<title>Post Property</title>
 @endsection
+<style>
+	#otp_btn {
+		min-width: 100px;
+		font-size: 13px;
+		font-weight: 600;
+		border-radius: 4px;
+	}
+
+	.input-group .form-control {
+		border-right: 0 !important;
+	}
+
+	.input-group-append .btn {
+		border-radius: 0 4px 4px 0 !important;
+	}
+
+	#otp_btn {
+		display: none;
+	}
+
+	#otp_input_wrapper {
+		display: none;
+	}
+</style>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 @section('content')
 	<section class="breadcrumb-section">
@@ -322,10 +346,29 @@
 									<div class="row">
 										<div class="form-group col-sm-12">
 											<label class="label-control">Upload Video</label>
-											<input type="file" class="form-control" name="property_video" accept="video/*">
-											<small class="text-muted">You can upload one property video (optional).</small>
+											<input type="file" class="form-control" name="property_video" accept="video/*"
+												id="property_video_input">
+											<small class="text-muted">You can upload one property video (optional). Max size:
+												20MB</small>
+											<div id="video_error" class="text-danger mt-1"></div>
 										</div>
 									</div>
+
+									<script>
+										document.getElementById('property_video_input').addEventListener('change', function (e) {
+											const file = e.target.files[0];
+											const maxSizeMB = 20; // 20MB
+											const maxSizeBytes = maxSizeMB * 1024 * 1024;
+											const errorDiv = document.getElementById('video_error');
+
+											if (file && file.size > maxSizeBytes) {
+												errorDiv.textContent = `Video size exceeds ${maxSizeMB}MB. Please select a smaller file.`;
+												e.target.value = ''; // Clear the input
+											} else {
+												errorDiv.textContent = '';
+											}
+										});
+									</script>
 								@endif
 
 
@@ -338,145 +381,67 @@
 						<div class="card property-right-widgets">
 							<div class="form-sep">
 								<h3>Contact Information</h3>
-								<div class="form-group mb-0 row">
-									<div class="form-group col-sm-12 ">
-										<label class="label-control">Ownership Type</label>
-										<ul class="ownertype">
-											@if(\Auth::user())
-												@if(\Auth::user()->role == 'owner')
-													<li><label><input type="radio" name="owner_type" value="1" checked="" />
-															Owner</label></li>
-													<li><label><input type="radio" name="owner_type" value="2" /> Builder</label>
-													</li>
-													<li><label><input type="radio" name="owner_type" value="3" /> Agent</label></li>
-												@elseif(\Auth::user()->role == 'builder')
-													<li><label><input type="radio" name="owner_type" value="1" /> Owner</label></li>
-													<li><label><input type="radio" name="owner_type" value="2" checked="" />
-															Builder</label></li>
-													<li><label><input type="radio" name="owner_type" value="3" /> Agent</label></li>
-												@elseif(\Auth::user()->role == 'agent')
-													<li><label><input type="radio" name="owner_type" value="1" /> Owner</label></li>
-													<li><label><input type="radio" name="owner_type" value="2" /> Builder</label>
-													</li>
-													<li><label><input type="radio" name="owner_type" value="3" checked="" />
-															Agent</label></li>
-												@else
-													<li><label><input type="radio" name="owner_type" value="1" checked="" />
-															Owner</label></li>
-													<li><label><input type="radio" name="owner_type" value="2" /> Builder</label>
-													</li>
-													<li><label><input type="radio" name="owner_type" value="3" /> Agent</label></li>
-												@endif
-											@else
-												@if(old('owner_type') == 1)
-													<li><label><input type="radio" name="owner_type" value="1" checked="" />
-															Owner</label></li>
-													<li><label><input type="radio" name="owner_type" value="2" /> Builder</label>
-													</li>
-													<li><label><input type="radio" name="owner_type" value="3" /> Agent</label></li>
-												@elseif(old('owner_type') == 2)
-													<li><label><input type="radio" name="owner_type" value="1" /> Owner</label></li>
-													<li><label><input type="radio" name="owner_type" value="2" checked="" />
-															Builder</label></li>
-													<li><label><input type="radio" name="owner_type" value="3" /> Agent</label></li>
-												@elseif(old('owner_type') == 3)
-													<li><label><input type="radio" name="owner_type" value="1" /> Owner</label></li>
-													<li><label><input type="radio" name="owner_type" value="2" /> Builder</label>
-													</li>
-													<li><label><input type="radio" name="owner_type" value="3" checked="" />
-															Agent</label></li>
-												@else
-													<li><label><input type="radio" name="owner_type" value="1" checked="" />
-															Owner</label></li>
-													<li><label><input type="radio" name="owner_type" value="2" /> Builder</label>
-													</li>
-													<li><label><input type="radio" name="owner_type" value="3" /> Agent</label></li>
-												@endif
-											@endif
-										</ul>
-									</div>
-								</div>
+
+								<!-- First + Last Name -->
 								<div class="row">
 									<div class="form-group col-sm-6">
 										<label class="label-control">First Name</label>
-										<input type="text" class="text-control " placeholder="Enter First Name"
+										<input type="text" class="text-control" placeholder="Enter First Name"
 											id="firstname" name="firstname"
-											value="@if(\Auth::user()){{ \Auth::user()->firstname }}@else{{ old('firstname') }}@endif"
-											required="" />
+											value="{{ Auth::user()->firstname ?? old('firstname') }}" required />
 									</div>
 									<div class="form-group col-sm-6">
 										<label class="label-control">Last Name</label>
-										<input type="text" class="text-control " placeholder="Enter Last Name" id="lastname"
-											name="lastname"
-											value="@if(\Auth::user()){{ \Auth::user()->lastname }}@else{{ old('lastname') }}@endif"
-											required="" />
+										<input type="text" class="text-control" placeholder="Enter Last Name" id="lastname"
+											name="lastname" value="{{ Auth::user()->lastname ?? old('lastname') }}"
+											required />
 									</div>
 								</div>
 
+								<!-- Email -->
 								<div class="row">
 									<div class="form-group col-sm-12">
 										<label class="label-control">Email</label>
 										<input type="email" class="text-control email" placeholder="Enter Email" id="email"
-											name="email"
-											value="@if(\Auth::user()){{ \Auth::user()->email }}@else{{ old('email') }}@endif"
-											required="" />
+											name="email" value="{{ Auth::user()->email ?? old('email') }}" required />
 									</div>
 								</div>
 
 								<div class="row">
+
+									<!-- Mobile Number -->
 									<div class="form-group col-sm-8">
 										<label class="label-control">Mobile No.</label>
-										<div class="d-flex">
-											<div>
-												<input type="number" class="text-control mobile_number"
-													placeholder="Enter Mobile No."
-													value="@if(\Auth::user()){{ \Auth::user()->mobile_number }}@else{{ old('mobile_number') }}@endif"
-													id="mobile_number" name="mobile_number" required />
-											</div>
-											&nbsp;
-											<div style="align-self: center;">
-												<button type="button" class="btn btn-sm btn-success"
-													onclick="send_otp(this);"><i class="fas fa-check"></i></button>
-											</div>
-										</div>
-										<span>You'll receive an OTP.</span>
+
+										<input type="number" class="form-control mobile_number"
+											placeholder="Enter Mobile No." id="mobile_number" name="mobile_number" required
+											value="{{ Auth::user()->mobile_number ?? old('mobile_number') }}"
+											data-original="{{ Auth::user()->mobile_number ?? '' }}">
+
+										<!-- OTP Button (SEPARATE, NOT APPENDED) -->
+										<button type="button" id="otp_btn" class="btn btn-success mt-2"
+											onclick="send_otp(this);" style="width: 100px; display:none;">
+											Send OTP
+										</button>
 									</div>
-									<div class="form-group col-sm-4">
+
+									<!-- OTP Input -->
+									<div class="form-group col-sm-4" id="otp_input_wrapper" style="display:none;">
 										<label class="label-control">OTP</label>
-										<input type="text" class="text-control" placeholder="Enter OTP" id="contact_otp"
-											name="otp" value="{{ old('otp') }}" required />
+										<input type="text" class="form-control" placeholder="Enter OTP" id="contact_otp"
+											name="otp" value="{{ old('otp') }}">
 									</div>
+
 								</div>
-								@if(!\Auth::user())
-									<div class="row">
-										<div class="form-group col-sm-6">
-											<label class="label-control">State</label>
-											<select class="form-control" name="state_id" id="state_id"
-												onchange="loadCities(this.value, 'register_page_city_id');" required="">
-												<option value="">Select</option>
-												@if(count($states) < 1)
-													<option value="">No records found</option>
-												@else
-													@foreach($states as $k => $v)
-														<option value="{{$v->id}}">{{$v->name}}</option>
-													@endforeach
-												@endif
-											</select>
-										</div>
-										<div class="form-group col-sm-6">
-											<label class="label-control">City</label>
-											<select class="form-control populate_cities" id="register_page_city_id"
-												name="city_id" required="">
-												<option>Select City</option>
-											</select>
-										</div>
-									</div>
-								@endif
+
+
+
+
 							</div>
+
 							<input type="hidden" name="form_json" id="form_json">
 						</div>
 					</div>
-
 
 					<div class="form-group col-sm-12  mt-4 text-center">
 						<button class="btn btn-postproperty" type="button" onclick="createProperty()">Post Property <i
@@ -490,6 +455,54 @@
 @endsection
 
 @section('js')
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			const mobileInput = document.getElementById("mobile_number");
+			const otpBtn = document.getElementById("otp_btn");
+			const otpInputWrapper = document.getElementById("otp_input_wrapper");
+
+			const originalNumber = mobileInput.dataset.original ?? "";
+			const isVerified = {{ Auth::check() ? (Auth::user()->is_verified ? 'true' : 'false') : 'false' }};
+
+			// Hide both fields initially
+			otpBtn.style.display = "none";
+			otpInputWrapper.style.display = "none";
+
+			function showOtpFields() {
+				otpBtn.style.display = "inline-block";
+				otpInputWrapper.style.display = "block";
+			}
+
+			function hideOtpFields() {
+				otpBtn.style.display = "none";
+				otpInputWrapper.style.display = "none";
+			}
+
+			// ---- CASE A: User NOT verified → ALWAYS show OTP ----
+			if (!isVerified) {
+				showOtpFields();
+				return; // don't run change detection
+			}
+
+			// ---- CASE B: User IS verified → show only when number changes ----
+			mobileInput.addEventListener("input", function () {
+				const current = mobileInput.value.trim();
+
+				// If unchanged or incomplete → hide
+				if (current === originalNumber || current.length < 10) {
+					hideOtpFields();
+					return;
+				}
+
+				// If changed and 10 digits → show
+				if (current.length === 10) {
+					showOtpFields();
+				}
+			});
+		});
+	</script>
+
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 	<script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
@@ -529,10 +542,10 @@
 					const div = document.createElement('div');
 					div.style.position = 'relative';
 					div.innerHTML = `
-													<img src="${e.target.result}" class="rounded border" width="100" height="100">
-													<button type="button" class="btn btn-sm btn-danger" style="position:absolute;top:0;right:0;"
-														onclick="removeImage(${index})">&times;</button>
-												`;
+																								<img src="${e.target.result}" class="rounded border" width="100" height="100">
+																								<button type="button" class="btn btn-sm btn-danger" style="position:absolute;top:0;right:0;"
+																									onclick="removeImage(${index})">&times;</button>
+																							`;
 					container.appendChild(div);
 				};
 				reader.readAsDataURL(file);
@@ -1033,93 +1046,110 @@
 			var email = $('#email').val();
 			var mobile_number = $('#mobile_number').val();
 			var contact_otp = $('#contact_otp').val();
-			var state_id = $('#state_id').val();
-			var register_page_city_id = $('#register_page_city_id').val();
-			var file = $('#file').val();
-			const isVerified = @json(Auth::check() ? Auth::user()->is_verified : false);
-
-			if (title == '') {
-				$('#title').focus();
-				toastr.warning('Title field must be required.')
-				return false;
-			}
-			if (price == '') {
-				$('#price').focus();
-				toastr.warning('Price field must be required.')
-				return false;
-			}
-
+			var state_id = $('#state').val();
+			var register_page_city_id = $('#city').val();
 			var category = $('#category_id').val();
-			var status = $('#status').val();
-			if (category == '') {
-				$('#category_id').focus();
-				toastr.warning('Property Available For field must be required.')
-				return false;
-			}
-			if (status == '') {
-				$('#status').focus();
-				toastr.warning('Status field must be required.')
-				return false;
-			}
+			const isVerified = @json(Auth::check() ? Auth::user()->is_verified : false);
+			const originalNumber = $('#mobile_number').data('original') || "";
 
-			if (description == '') {
-				$('#description').focus();
-				toastr.warning('Description field must be required.')
-				return false;
-			}
-			if (address == '') {
-				$('#address').focus();
-				toastr.warning('Address field must be required.')
-				return false;
-			}
-			if (location_id == '') {
-				$('#location_id').focus();
-				toastr.warning('Location id field must be required.')
-				return false;
-			}
-			if (sub_location_id == '') {
-				$('#sub_location_id').focus();
-				toastr.warning('Sub Location id field must be required.')
-				return false;
-			}
-			if (file == '') {
-				$('#file').focus();
-				toastr.warning('Photos field must be required.')
-				return false;
-			}
-			var ownertype = $("input[name=owner_type]").val();
-			if (!ownertype) {
-				toastr.warning('Qwnership type field must be required.')
-				return false;
-			}
-
-			if (firstname == '') {
-				$('#firstname').focus();
-				toastr.warning('First name field must be required.')
-				return false;
-			}
-			if (lastname == '') {
-				$('#lastname').focus();
-				toastr.warning('Last name field must be required.')
-				return false;
-			}
-			if (email == '') {
-				$('#email').focus();
-				toastr.warning('Email field must be required.')
-				return false;
-			}
-			if (mobile_number == '') {
-				$('#mobile_number').focus();
-				toastr.warning('Mobile Number field must be required.')
-				return false;
-			}
 			if (!isVerified) {
-				if (contact_otp == '') {
+				// User NOT verified → OTP must be validated always
+				if (!contact_otp.trim()) {
 					$('#contact_otp').focus();
 					toastr.warning('OTP field is required for unverified users.');
 					return false;
 				}
+			} else {
+				// Verified user → OTP needed ONLY if number changed
+
+				if (mobile_number != originalNumber) {
+					if (!contact_otp.trim()) {
+						$('#contact_otp').focus();
+						toastr.warning('Since you changed your mobile number, OTP is required.');
+						return false;
+					}
+				}
 			}
+			// -------------------------
+			// BASIC VALIDATIONS
+			// -------------------------
+			if (!title.trim()) {
+				$('#title').focus();
+				toastr.warning('Title field must be required.');
+				return false;
+			}
+
+			if (!price.trim()) {
+				$('#price').focus();
+				toastr.warning('Price field must be required.');
+				return false;
+			}
+
+			if (!category) {
+				$('#category_id').focus();
+				toastr.warning('Property Available For field must be required.');
+				return false;
+			}
+
+			if (!description.trim()) {
+				$('#description').focus();
+				toastr.warning('Description field must be required.');
+				return false;
+			}
+
+			if (!address.trim()) {
+				$('#address').focus();
+				toastr.warning('Address field must be required.');
+				return false;
+			}
+
+			if (!location_id) {
+				$('#location_id').focus();
+				toastr.warning('Location is required.');
+				return false;
+			}
+
+			if (!sub_location_id) {
+				$('#sub_location_id').focus();
+				toastr.warning('Sub-location is required.');
+				return false;
+			}
+
+			// -------------------------
+			// PERSONAL INFORMATION
+			// -------------------------
+			if (!firstname.trim()) {
+				$('#firstname').focus();
+				toastr.warning('First name is required.');
+				return false;
+			}
+			if (!lastname.trim()) {
+				$('#lastname').focus();
+				toastr.warning('Last name is required.');
+				return false;
+			}
+			if (!email.trim()) {
+				$('#email').focus();
+				toastr.warning('Email is required.');
+				return false;
+			}
+			if (!mobile_number.trim()) {
+				$('#mobile_number').focus();
+				toastr.warning('Mobile number is required.');
+				return false;
+			}
+
+			// Validate mobile number length
+			if (mobile_number.length !== 10) {
+				$('#mobile_number').focus();
+				toastr.warning('Enter a valid 10-digit mobile number.');
+				return false;
+			}
+
+			// -------------------------
+			// OTP VALIDATION LOGIC
+			// -------------------------
+
 
 			if (state_id == '') {
 				$('#state_id').focus();
@@ -1131,6 +1161,8 @@
 				toastr.warning('City field must be required.')
 				return false;
 			}
+
+
 			var data = $('#fb-render').formRender('userData');
 			if (!data) {
 				toastr.error('Additional details form must be required, please select another category or contact to admin.');
@@ -1154,14 +1186,21 @@
 					.then(data => {
 						if (data.success) {
 							toastr.success(data.message);
-							// Redirect to preview page after short delay
 							setTimeout(() => {
 								window.location.href = data.redirect_url;
 							}, 1000);
 						} else {
-							toastr.error(data.message || 'Something went wrong.');
+							// Check if validation errors exist
+							if (data.errors) {
+								// Combine all errors into a single string
+								const allErrors = Object.values(data.errors).flat().join('<br>');
+								toastr.error(allErrors);
+							} else {
+								toastr.error(data.message || 'Something went wrong.');
+							}
 						}
 					})
+
 					.catch(err => {
 						console.error(err);
 						toastr.error('Failed to submit property.');

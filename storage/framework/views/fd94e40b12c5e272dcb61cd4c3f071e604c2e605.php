@@ -104,6 +104,123 @@
 		background: #0056b3;
 	}
 </style>
+<style>
+	.bg-gradient-primary {
+		background: linear-gradient(135deg, #e63946, #c1121f) !important;
+	}
+
+	.border-purple {
+		border-color: #9c27b0 !important;
+	}
+
+	.shadow-xl {
+		box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15) !important;
+	}
+
+	.detail-box {
+		transition: all 0.3s ease;
+		min-height: 90px;
+	}
+
+	.detail-box:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+	}
+
+	@media (max-width: 768px) {
+		.display-6 {
+			font-size: 1.8rem !important;
+		}
+
+		.price-box {
+			min-width: 220px;
+			font-size: 1.5rem !important;
+		}
+
+		.property-overview-section .card {
+			border-radius: 16px;
+		}
+	}
+</style>
+<style>
+	.bg-gradient-primary {
+		background: linear-gradient(135deg, #1e40af, #3b82f6) !important;
+	}
+
+	.hover-lift {
+		transition: all 0.35s ease;
+	}
+
+	.hover-lift:hover {
+		transform: translateY(-10px);
+		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+	}
+
+	.icon-box {
+		width: 60px;
+		height: 60px;
+		background: rgba(255, 255, 255, 0.8);
+		border-radius: 16px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+	}
+
+	.fs-12 {
+		font-size: 12px;
+		letter-spacing: 1px;
+	}
+
+	.shadow-xl {
+		box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+	}
+
+	@media (max-width: 768px) {
+		.spec-item {
+			flex-direction: column;
+			text-align: center;
+		}
+
+		.icon-box {
+			margin-bottom: 15px;
+			margin-right: 0 !important;
+		}
+	}
+</style>
+
+<style>
+	.info-item {
+		padding: 10px 0;
+		border-bottom: 1px dashed #dee2e6 !important;
+	}
+
+	.info-label {
+		font-size: 14px;
+		color: #6c757d;
+		margin-bottom: 4px;
+		font-weight: 500;
+	}
+
+	.info-value {
+		font-size: 16px;
+		color: #212529;
+	}
+
+	.info-item:last-child {
+		border-bottom: none;
+	}
+
+	/* Section header ke liye thoda spacing */
+	#additional-info>.row>div>h4 {
+		color: #2c3e50;
+		font-size: 18px;
+		font-weight: 600;
+		border-bottom: 2px solid #f39c12;
+		padding-bottom: 8px;
+		margin-bottom: 20px;
+	}
+</style>
 <?php $__env->startSection('content'); ?>
 	<section class="breadcrumb-section">
 		<div class="container">
@@ -125,180 +242,204 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-12">
-					<div class="card property-widgets">
-						<div class="property-main-top">
-							<div class="property-top">
-								<div class="row">
-									<div class="col-sm-7">
-										<h3 class="property-title">
-											<?php echo e($property_detail->title); ?>
+					<!-- PREMIUM PROPERTY OVERVIEW SECTION - 2025 DESIGN -->
+					<div class="property-overview-section mb-5">
+						<div class="card border-0 shadow-lg overflow-hidden"
+							style="border-radius: 10px; background: linear-gradient(145deg, #ffffff, #f8f9ff);">
 
-											<?php if($property_detail->verified_tag === 'Yes'): ?>
-												<span class="badge bg-success ms-2">
-													<i class="bi bi-patch-check-fill"></i> Verified
-												</span>
-											<?php endif; ?>
-										</h3>
-										<div class="loc-id-detail">
-											<ul>
-												<li>
-													<i class="fas fa-map-marker-alt"></i>
-													<?php echo e($property_detail->getCity ? $property_detail->getCity->name : ''); ?><?php echo e($property_detail->getState ? ', ' . $property_detail->getState->name : ''); ?>
-
-												</li>
-											</ul>
-										</div>
-									</div>
-									<div class="col-sm-5">
-										<div class="price-detail">
-											<h3><i class="fas fa-rupee-sign"></i> <span class="property_price">
-													<?php echo e(isset($property_detail->price) ? \App\Helpers\Helper::formatIndianPrice($property_detail->price) : ''); ?>
-
-												</span> </h3>
-											<span id="price-negotiable"></span>
-										</div>
-									</div>
+							<!-- Top Hero Area with Background Image Overlay -->
+							<div class="position-relative">
+								<div
+									style="height: 300px; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.5)), 
+							url('<?php echo e(isset($property_detail->PropertyGallery[0]) ? asset($property_detail->PropertyGallery[0]->image_path) : asset('default-property.jpg')); ?>') center/cover no-repeat;">
 								</div>
-							</div>
-							<hr />
-							<div class="property-featured-details">
-								<div class="row">
-									<div class="col-sm-4">
-										<div class="property-main-img">
-											<img src="<?php echo e(isset($property_detail->PropertyGallery[0]) ? url('/') . '/' . $property_detail->PropertyGallery[0]->image_path : ''); ?>"
-												class="img-fluid">
-										</div>
-									</div>
-									<div class="col-sm-8">
-										<div class="property-featured-det">
-											<div class="row">
-												<!-- Category -->
-												<?php if($property_detail->Category): ?>
-													<div class="col-sm-6 col-md-6 col-xs-6">
-														<div class="detail-field-label">Property Available For</div>
-														<div class="detail-field-value">
-															<?php echo e($property_detail->Category->category_name); ?>
 
-														</div>
+								<!-- Floating Content Card on Top of Image -->
+								<div class="position-absolute bottom-0 start-0 end-0 p-4 p-md-5"
+									style="transform: translateY(50%);">
+									<div class="container">
+										<div class="bg-white rounded-4 shadow-xl p-4 p-lg-5"
+											style="border: 1px solid #e0e6ff;">
+											<div class="row align-items-center g-4">
+
+												<!-- Title + Location + Verified -->
+												<div class="col-lg-8">
+													<div class="d-flex align-items-center gap-3 mb-3">
+														<h1 class="display-6 fw-bold mb-0 text-dark">
+															<?php echo e($property_detail->title); ?>
+
+														</h1>
+														<?php if($property_detail->verified_tag === 'Yes'): ?>
+															<span
+																class="badge bg-success fs-6 px-4 py-2 rounded-pill shadow-sm">
+																<i class="fas fa-check-circle me-1"></i> Verified
+															</span>
+														<?php endif; ?>
 													</div>
-												<?php endif; ?>
-												<!-- Sub Category -->
-												<?php if($property_detail->SubCategory): ?>
-													<div class="col-sm-6 col-md-6 col-xs-6">
-														<div class="detail-field-label">Category</div>
-														<div class="detail-field-value">
-															<?php echo e($property_detail->SubCategory->sub_category_name); ?>
 
+													<div class="d-flex align-items-center gap-4 text-muted fs-5">
+														<div class="d-flex align-items-center gap-2">
+															<i class="fas fa-map-marker-alt text-danger"></i>
+															<span class="fw-600">
+																<?php echo e($property_detail->getCity?->name ?? ''); ?>,
+																<?php echo e($property_detail->getState?->name ?? ''); ?>
+
+																<?php if($property_detail->Location): ?>
+																	• <?php echo e($property_detail->Location->location); ?>
+
+																<?php endif; ?>
+															</span>
 														</div>
-													</div>
-												<?php endif; ?>
-												<!-- Sub Sub Category -->
-												<?php if($property_detail->SubSubCategory): ?>
-													<div class="col-sm-6 col-md-6 col-xs-6">
-														<div class="detail-field-label">Property Type</div>
-														<div class="detail-field-value">
-															<?php echo e($property_detail->SubSubCategory->sub_sub_category_name); ?>
+														<div class="d-flex align-items-center gap-2">
+															<i class="fas fa-eye text-primary"></i>
+															<span><?php echo e(number_format($property_detail->total_views)); ?>
 
+																Views</span>
 														</div>
-													</div>
-												<?php endif; ?>
-												<!-- State -->
-												<div class="col-sm-6 col-md-6 col-xs-6">
-													<div class="detail-field-label">State</div>
-													<div class="detail-field-value">
-														<?php echo e($property_detail->getState ? $property_detail->getState->name : 'N/A'); ?>
-
 													</div>
 												</div>
-												<!-- City -->
-												<div class="col-sm-6 col-md-6 col-xs-6">
-													<div class="detail-field-label">City</div>
-													<div class="detail-field-value">
-														<?php echo e($property_detail->getCity ? $property_detail->getCity->name : 'N/A'); ?>
 
-													</div>
-												</div>
-												<!-- Location -->
-												<?php if($property_detail->Location): ?>
-													<div class="col-sm-6 col-md-6 col-xs-6">
-														<div class="detail-field-label">Location</div>
-														<div class="detail-field-value">
-															<?php echo e($property_detail->Location->location); ?>
+												<!-- Price Section -->
+												<div class="col-lg-4 text-lg-end">
+													<div class="price-box bg-gradient-primary text-white p-4 rounded-3 shadow-lg d-inline-block"
+														style="background: linear-gradient(135deg, #e63946, #c1121f); min-width: 280px;">
+														<div class="fs-1 fw-bold mb-1">
+															₹
+															<?php echo e(isset($property_detail->price) ? \App\Helpers\Helper::formatIndianPrice($property_detail->price) : 'Call for Price'); ?>
 
 														</div>
-													</div>
-												<?php endif; ?>
-												<!-- Sub Location -->
-												<?php if($property_detail->sub_location_id): ?>
-													<div class="col-sm-6 col-md-6 col-xs-6">
-														<div class="detail-field-label">Sub Location</div>
-														<div class="detail-field-value">
-															<?php echo e(\App\SubLocations::find($property_detail->sub_location_id)->sub_location_name ?? 'N/A'); ?>
-
-														</div>
-													</div>
-												<?php endif; ?>
-												
-												<?php if($property_user): ?>
-													<div class="col-sm-6 col-md-6 col-xs-6">
-														<div class="detail-field-label">Posted By</div>
-														<div class="detail-field-value">
-															<?php echo e($property_user->firstname); ?>
-
-															<?php echo e($property_user->lastname); ?>
-
-															(<?php echo e(ucfirst($property_user->role ?? 'User')); ?>)
-														</div>
-													</div>
-												<?php endif; ?>
-												
-												<div class="col-sm-6 col-md-6 col-xs-6">
-													<div class="detail-field-label">Published Date</div>
-													<div class="detail-field-value">
-														<?php echo e($property_detail->published_date ?? 'Not Published'); ?>
-
-													</div>
-												</div>
-												<!-- Total Views -->
-												<div class="col-sm-6 col-md-6 col-xs-6">
-													<div class="detail-field-label">Total Views</div>
-													<div class="detail-field-value">
-														<?php echo e(number_format($property_detail->total_views)); ?>
-
+														<div id="price-negotiable" class="fs-5 fw-bold text-warning"></div>
 													</div>
 												</div>
 											</div>
 										</div>
+									</div>
+								</div>
+							</div>
 
-										<div class="property-featured-btn">
-											<ul>
-												<li>
-													<button type="button" class="btn btn-outline"
-														onclick="claim('<?php echo e($property_detail->id); ?>')">
-														Claim Listing
-													</button>
-												</li>
-												<li>
-													<button type="button" class="btn btn-outline" data-toggle="modal"
-														data-target="#feedback-complaint">
-														Feedback / Complaint
-													</button>
-												</li>
-												<li>
-													<button id="wishlistButton"
-														class="btn btn-outline purchase-wishlist-btn"
-														data-submission="<?php echo e($property_detail->id); ?>">
-														<?php echo $isInWishlist ? '❤️ Added to Wishlist' : '♡ Add to Wishlist'; ?>
+							<!-- Bottom Details Section -->
+							<div class="pt-5 px-4 px-lg-5 pb-4" style="margin-top: 120px;">
+								<div class="row g-4">
 
-													</button>
-												</li>
-											</ul>
+									<!-- Left: Main Image -->
+									<div class="col-md-4">
+										<div class="position-relative rounded-4 overflow-hidden shadow-lg">
+											<img src="<?php echo e(isset($property_detail->PropertyGallery[0]) ? asset($property_detail->PropertyGallery[0]->image_path) : asset('default.jpg')); ?>"
+												class="img-fluid w-100" style="height: 320px; object-fit: cover;"
+												alt="Property">
+											<div class="position-absolute top-0 end-0 m-3">
+												<span class="badge bg-dark px-3 py-2 fs-6">
+													<i class="fas fa-camera"></i>
+													<?php echo e(count($property_detail->PropertyGallery)); ?> Photos
+												</span>
+											</div>
+										</div>
+									</div>
+
+									<!-- Right: Key Details Grid -->
+									<div class="col-md-8">
+										<div class="row g-4">
+											<?php if($property_detail->Category): ?>
+												<div class="col-6 col-lg-4">
+													<div
+														class="detail-box text-center p-3 rounded-3 bg-light border-start border-primary border-5">
+														<div class="text-muted small fw-600">Available For</div>
+														<div class="fw-bold text-dark fs-5">
+															<?php echo e($property_detail->Category->category_name); ?></div>
+													</div>
+												</div>
+											<?php endif; ?>
+
+											<?php if($property_detail->SubSubCategory): ?>
+												<div class="col-6 col-lg-4">
+													<div
+														class="detail-box text-center p-3 rounded-3 bg-light border-start border-success border-5">
+														<div class="text-muted small fw-600">Property Type</div>
+														<div class="fw-bold text-dark fs-5">
+															<?php echo e($property_detail->SubSubCategory->sub_sub_category_name); ?></div>
+													</div>
+												</div>
+											<?php endif; ?>
+
+											<?php if($property_user): ?>
+												<div class="col-6 col-lg-4">
+													<div
+														class="detail-box text-center p-3 rounded-3 bg-light border-start border-warning border-5">
+														<div class="text-muted small fw-600">Posted By</div>
+														<div class="fw-bold text-dark fs-5">
+															<?php echo e($property_user->firstname); ?>
+
+															<?php echo e(Str::limit($property_user->lastname, 1, '.')); ?>
+
+															<small
+																class="text-success">(<?php echo e(ucfirst($property_user->role ?? 'User')); ?>)</small>
+														</div>
+													</div>
+												</div>
+											<?php endif; ?>
+
+											<div class="col-6 col-lg-4">
+												<div
+													class="detail-box text-center p-3 rounded-3 bg-light border-start border-info border-5">
+													<div class="text-muted small fw-600">Published</div>
+													<div class="fw-bold text-dark fs-5">
+														<?php echo e(\Carbon\Carbon::parse($property_detail->created_at)->format('d M, Y')); ?>
+
+													</div>
+												</div>
+											</div>
+
+											<?php if($property_detail->Location): ?>
+												<div class="col-6 col-lg-4">
+													<div
+														class="detail-box text-center p-3 rounded-3 bg-light border-start border-purple border-5">
+														<div class="text-muted small fw-600">Locality</div>
+														<div class="fw-bold text-dark fs-5">
+															<?php echo e($property_detail->Location->location); ?></div>
+													</div>
+												</div>
+											<?php endif; ?>
+
+											<div class="col-6 col-lg-4">
+												<div
+													class="detail-box text-center p-3 rounded-3 bg-light border-start border-danger border-5">
+													<div class="text-muted small fw-600">Property ID</div>
+													<div class="fw-bold text-dark fs-5">#<?php echo e($property_detail->id); ?></div>
+												</div>
+											</div>
+										</div>
+
+										<!-- Action Buttons -->
+										<div class="mt-4 pt-3 border-top">
+											<div
+												class="d-flex flex-wrap gap-3 justify-content-center justify-content-md-start">
+												<button type="button"
+													class="btn btn-outline-primary btn-lg px-4 rounded-pill shadow-sm"
+													onclick="claim('<?php echo e($property_detail->id); ?>')">
+													<i class="fas fa-shield-alt"></i> Claim This Listing
+												</button>
+												<button type="button"
+													class="btn btn-outline-warning btn-lg px-4 rounded-pill shadow-sm"
+													data-bs-toggle="modal" data-bs-target="#feedback-complaint">
+													<i class="fas fa-phone"></i> Contact Now
+												</button>
+												<button id="wishlistButton"
+													class="btn btn-outline-danger btn-lg px-4 rounded-pill shadow-sm"
+													data-submission="<?php echo e($property_detail->id); ?>">
+													<?php echo $isInWishlist
+		? '<i class="fas fa-heart"></i> Added to Wishlist'
+		: '<i class="far fa-heart"></i> Add to Wishlist'; ?>
+
+												</button>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+
+
 				</div>
 			</div>
 
@@ -395,80 +536,138 @@
 							<h3>Property Additional Details</h3>
 						</div>
 
-						<div class="property-additional-details">
-							<div class="row">
-								<!-- Price Label -->
-								<?php if($property_detail->price_label): ?>
-									<div class="col-sm-6 col-md-6 mb-3">
-										<div class="detail-field-label">Price Label</div>
-										<div class="detail-field-value">
-											<?php echo e($property_detail->getPriceLabels($property_detail->price_label) ?? 'N/A'); ?>
+						<!-- ULTRA PREMIUM ADDITIONAL DETAILS - 2025 DESIGN -->
+						<div class="additional-details-section mb-5">
+							<div class="bg-white rounded-4  overflow-hidden border border-light">
+								<div class="px-5 py-4 bg-gradient-primary text-white">
+									<h3 class="mb-0 fs-4 fw-bold">
+										<i class="fas fa-sliders-h me-3"></i> Key Property Specifications
+									</h3>
+								</div>
 
-											<?php if($property_detail->price_label_second): ?>
-												<div class="mt-2">
-													<strong><?php echo e(optional($property_detail->getPriceLabelObj())->second_input_label ?? 'Date'); ?>:</strong>
-													<span><?php echo e($property_detail->price_label_second); ?></span>
+								<div class="p-4 p-lg-5">
+									<div class="row g-4">
+
+										<!-- Price Label -->
+										<?php if($property_detail->price_label): ?>
+											<div class="col-md-6 col-lg-6">
+												<div
+													class="spec-item d-flex align-items-center p-4 rounded-3 bg-light border-start border-danger border-5 shadow-sm hover-lift">
+													<div class="icon-box me-4">
+														<i class="fas fa-rupee-sign text-danger fs-2"></i>
+													</div>
+													<div class="flex-grow-1">
+														<small class="text-muted fw-600 text-uppercase fs-12">Price Type</small>
+														<h5 class="mb-1 fw-bold text-dark fs-4">
+															<?php echo e($property_detail->getPriceLabels($property_detail->price_label) ?? 'N/A'); ?>
+
+														</h5>
+														<?php if($property_detail->price_label_second): ?>
+															<small class="text-success fw-600">
+																<?php echo e(optional($property_detail->getPriceLabelObj())->second_input_label ?? 'Valid Till'); ?>:
+																<strong><?php echo e($property_detail->price_label_second); ?></strong>
+															</small>
+														<?php endif; ?>
+													</div>
 												</div>
-											<?php endif; ?>
-										</div>
-									</div>
-								<?php endif; ?>
+											</div>
+										<?php endif; ?>
 
-								<!-- Property Status -->
-								<?php if($property_detail->property_status): ?>
-									<div class="col-sm-6 col-md-6 mb-3">
-										<div class="detail-field-label">Property Status</div>
-										<div class="detail-field-value">
-											<?php echo e($property_detail->getPropertyStatuses($property_detail->property_status) ?? 'N/A'); ?>
+										<!-- Property Status -->
+										<?php if($property_detail->property_status): ?>
+											<div class="col-md-6 col-lg-6">
+												<div
+													class="spec-item d-flex align-items-center p-4 rounded-3 bg-light border-start border-warning border-5 shadow-sm hover-lift">
+													<div class="icon-box me-4">
+														<i class="fas fa-tasks text-warning fs-2"></i>
+													</div>
+													<div class="flex-grow-1">
+														<small class="text-muted fw-600 text-uppercase fs-12">Construction
+															Status</small>
+														<h5 class="mb-1 fw-bold text-dark fs-4">
+															<?php echo e($property_detail->getPropertyStatuses($property_detail->property_status) ?? 'N/A'); ?>
 
-											<?php if($property_detail->property_status_second): ?>
-												<div class="mt-2">
-													<strong><?php echo e(optional($property_detail->getPropertyStatusObj())->second_input_label ?? 'Date'); ?>:</strong>
-													<span><?php echo e($property_detail->property_status_second); ?></span>
+														</h5>
+														<?php if($property_detail->property_status_second): ?>
+															<small class="text-primary fw-600">
+																<?php echo e(optional($property_detail->getPropertyStatusObj())->second_input_label ?? 'Possession By'); ?>:
+																<strong><?php echo e($property_detail->property_status_second); ?></strong>
+															</small>
+														<?php endif; ?>
+													</div>
 												</div>
-											<?php endif; ?>
-										</div>
-									</div>
-								<?php endif; ?>
+											</div>
+										<?php endif; ?>
 
-								<!-- Registration Status -->
-								<?php if($property_detail->registration_status): ?>
-									<div class="col-sm-6 col-md-6 mb-3">
-										<div class="detail-field-label">Registration Status</div>
-										<div class="detail-field-value">
-											<?php echo e($property_detail->getRegistrationStatuses($property_detail->registration_status) ?? 'N/A'); ?>
+										<!-- Registration Status -->
+										<?php if($property_detail->registration_status): ?>
+											<div class="col-md-6 col-lg-6">
+												<div
+													class="spec-item d-flex align-items-center p-4 rounded-3 bg-light border-start border-success border-5 shadow-sm hover-lift">
+													<div class="icon-box me-4">
+														<i class="fas fa-file-alt text-success fs-2"></i>
+													</div>
+													<div class="flex-grow-1">
+														<small class="text-muted fw-600 text-uppercase fs-12">Legal
+															Status</small>
+														<h5 class="mb-1 fw-bold text-dark fs-4">
+															<?php echo e($property_detail->getRegistrationStatuses($property_detail->registration_status) ?? 'N/A'); ?>
 
-											<?php if($property_detail->registration_status_second): ?>
-												<div class="mt-2">
-													<strong><?php echo e(optional($property_detail->getRegistrationStatusObj())->second_input_label ?? 'Date'); ?>:</strong>
-													<span><?php echo e($property_detail->registration_status_second); ?></span>
+														</h5>
+														<?php if($property_detail->registration_status_second): ?>
+															<small class="text-success fw-600">
+																<?php echo e(optional($property_detail->getRegistrationStatusObj())->second_input_label ?? 'Registered On'); ?>:
+																<strong><?php echo e($property_detail->registration_status_second); ?></strong>
+															</small>
+														<?php endif; ?>
+													</div>
 												</div>
-											<?php endif; ?>
-										</div>
-									</div>
-								<?php endif; ?>
+											</div>
+										<?php endif; ?>
 
-								<!-- Furnishing Status -->
-								<?php if($property_detail->furnishing_status): ?>
-									<div class="col-sm-6 col-md-6 mb-3">
-										<div class="detail-field-label">Furnishing Status</div>
-										<div class="detail-field-value">
-											<?php echo e($property_detail->getFurnishingStatuses($property_detail->furnishing_status) ?? 'N/A'); ?>
+										<!-- Furnishing Status -->
+										<?php if($property_detail->furnishing_status): ?>
+											<div class="col-md-6 col-lg-6">
+												<div
+													class="spec-item d-flex align-items-center p-4 rounded-3 bg-light border-start border-info border-5 shadow-sm hover-lift">
+													<div class="icon-box me-4">
+														<i class="fas fa-chair text-info fs-2"></i>
+													</div>
+													<div class="flex-grow-1">
+														<small class="text-muted fw-600 text-uppercase fs-12">Furnishing</small>
+														<h5 class="mb-1 fw-bold text-dark fs-4">
+															<?php echo e($property_detail->getFurnishingStatuses($property_detail->furnishing_status) ?? 'N/A'); ?>
 
-											<?php if($property_detail->furnishing_status_second): ?>
-												<div class="mt-2">
-													<strong><?php echo e(optional($property_detail->getFurnishingStatusObj())->second_input_label ?? 'Date'); ?>:</strong>
-													<span><?php echo e($property_detail->furnishing_status_second); ?></span>
+														</h5>
+														<?php if($property_detail->furnishing_status_second): ?>
+															<small class="text-info fw-600">
+																<?php echo e(optional($property_detail->getFurnishingStatusObj())->second_input_label ?? 'Completed By'); ?>:
+																<strong><?php echo e($property_detail->furnishing_status_second); ?></strong>
+															</small>
+														<?php endif; ?>
+													</div>
 												</div>
-											<?php endif; ?>
-										</div>
+											</div>
+										<?php endif; ?>
+
+										<!-- No Data Fallback -->
+										<?php if(!$property_detail->price_label && !$property_detail->property_status && !$property_detail->registration_status && !$property_detail->furnishing_status && !$property_detail->additional_info ): ?>
+											<div class="col-12 text-center py-5">
+												<i class="fas fa-info-circle text-primary fs-1 mb-3"></i>
+												<p class="text-muted fs-5">Additional specifications: No additional
+													specifications available</p>
+											</div>
+										<?php endif; ?>
+
+										<!-- Original form-rendered additional info -->
+										<div id="additional-info"></div>
 									</div>
-								<?php endif; ?>
+								</div>
 							</div>
 						</div>
 
-						<!-- Original form-rendered additional info -->
-						<div id="additional-info"></div>
+
+
 					</div>
 
 				</div>
@@ -540,7 +739,7 @@
 									$section = $property_user->profileSection;
 									$logo = isset($section->logo)
 										? asset('storage/' . $section->logo)
-										: $property_user->avatar;
+										: asset('storage/' . $property_user->avatar);
 								?>
 								<img src="<?php echo e($logo); ?>" alt="Agent" class="agent-avatar">
 								<span class="newdesign-verified-seal"><i class="fas fa-check-circle"></i>
@@ -903,7 +1102,7 @@
 			// Property has saved lat/lng; use those
 			createMap(<?php echo e($property_detail->latitude); ?>, <?php echo e($property_detail->longitude); ?>);
 		<?php else: ?>
-																																																																																			if (navigator.geolocation) {
+																																																																																					if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function (pos) {
 					createMap(pos.coords.latitude, pos.coords.longitude);
 				}, function () {
@@ -984,8 +1183,9 @@
 				num = parseFloat(num);
 				if (isNaN(num)) return num;
 
-				return num.toLocaleString('en-IN');
+				return '₹ ' + num.toLocaleString('en-IN');
 			}
+
 			// Helper function to strip HTML tags from labels
 			function stripHtml(html) {
 				var tmp = document.createElement("DIV");
@@ -1011,7 +1211,7 @@
 						"super area": "super area unit",
 						"plot area": "plot area unit",
 						"from": "from unit",
-						"to" : "to unit"
+						"to": "to unit"
 					};
 
 					var tempUnitValues = {};
@@ -1032,7 +1232,7 @@
 					json_data.forEach(function (field) {
 						if (field.type === 'header' || field.type === 'paragraph') {
 							if (field.label) {
-								outputHTML += '<div class="col-sm-12 mb-3"><h4 style="color: #333; font-size: 18px; font-weight: 600; margin-bottom: 10px; border-bottom: 2px solid #e38e32; padding-bottom: 8px;">' + stripHtml(field.label) + '</h4></div>';
+								outputHTML += '<div class="col-sm-12 mb-2 mt-4"><h4 style="color: #2c8c56; font-size: 24px; font-weight: 700; margin-bottom: 10px; border-bottom: 2px solid #e38e32; padding-bottom: 8px;">' + stripHtml(field.label) + '</h4></div>';
 							}
 							return;
 						}
@@ -1047,17 +1247,17 @@
 							});
 
 							if (hasValue) {
-								if (field.type === 'radio-group' || field.type === 'select') {
+								if (field.type === 'radio-group') {
+									// single selection
 									var selectedValue = field.userData[0];
 									if (field.values) {
 										var selectedOption = field.values.find(function (v) {
 											return v.value === selectedValue || v.label === selectedValue;
 										});
-
 										if (selectedOption) {
-											// Check if label is like "--Select--" (case-insensitive) or value is empty
+											// ignore "--Select--"
 											if (!selectedOption.value || selectedOption.label.trim().toLowerCase() === '--select--') {
-												value = "N/A"; // or '' if you want empty
+												value = "N/A";
 											} else {
 												value = selectedOption.label;
 											}
@@ -1065,11 +1265,27 @@
 											value = selectedValue || "N/A";
 										}
 									}
+								} else if (field.type === 'select' && field.multiple) {
+									// handle multiple selection
+									value = field.userData.map(function (u) {
+										var option = field.values.find(v => v.value === u || v.label === u);
+										return option ? option.label : u;
+									}).join(", ");
+								} else if (field.type === 'select') {
+									// single select
+									var selectedValue = field.userData[0];
+									if (field.values) {
+										var selectedOption = field.values.find(function (v) {
+											return v.value === selectedValue || v.label === selectedValue;
+										});
+										value = selectedOption ? selectedOption.label : selectedValue || "N/A";
+									}
 								} else if (field.type === 'checkbox-group') {
 									value = field.userData.join(", ");
 								} else {
 									value = field.userData.join(", ");
 								}
+
 							}
 						}
 
@@ -1092,16 +1308,18 @@
 						if (key === "price negotiable") {
 							priceNegotiableValue = value;
 						}
-
 						// Format expected price display
-						if (key === "expected price") {
+						if (key === "expected price" || key === "booking/token amount") {
 							value = formatIndianPriceJS(value);
 						}
 
-						outputHTML += '<div class="col-sm-6 col-md-6 mb-3">';
-						outputHTML += '  <div class="detail-field-label">' + label + '</div>';
-						outputHTML += '  <div class="detail-field-value">' + value + '</div>';
-						outputHTML += '</div>';
+						outputHTML += `
+	<div class="col-sm-6 ">
+		<div class="info-item">
+			<div class="info-label">${label}</div>
+			<div class="info-value fw-bold text-dark">${value}</div>
+		</div>
+	</div>`;
 					});
 
 					outputHTML += '</div>';

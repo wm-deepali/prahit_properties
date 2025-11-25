@@ -62,6 +62,7 @@
 					</div>
 				</div>
 			</div>
+
 			<div class="row justify-content-center">
 				<div class="col-md-8 col-sm-12">
 					<div class="contact-form">
@@ -74,113 +75,134 @@
 										<div class="help-block with-errors" id="alert-name"></div>
 									</div>
 								</div>
+
 								<div class="col-lg-6 col-sm-6">
 									<div class="form-group">
 										<input type="email" name="email" id="email" class="form-control" placeholder="Email" onclick="removeAlert('alert-email')">
 										<div class="help-block with-errors" id="alert-email"></div>
 									</div>
 								</div>
+
 								<div class="col-lg-6 col-sm-6">
 									<div class="form-group">
 										<input type="text" name="phone_number" id="phone_number" class="form-control" placeholder="Phone" onclick="removeAlert('alert-phone_number')">
 										<div class="help-block with-errors" id="alert-phone_number"></div>
 									</div>
 								</div>
+
 								<div class="col-lg-6 col-sm-6">
 									<div class="form-group">
 										<input type="text" name="msg_subject" id="msg_subject" class="form-control" placeholder="Your Subject" onclick="removeAlert('alert-subject')">
 										<div class="help-block with-errors" id="alert-subject"></div>
 									</div>
 								</div>
+
 								<div class="col-lg-12 col-md-12">
 									<div class="form-group">
 										<textarea name="message" class="form-control" id="message" cols="30" rows="8" placeholder="Your Message" onclick="removeAlert('alert-message')"></textarea>
 										<div class="help-block with-errors" id="alert-message"></div>
 									</div>
 								</div>
+
 								<div class="col-lg-12 col-md-12">
 									<div class="form-group">
 										<label>
-											<input type="checkbox"> I Accept <a href="#">Terms &amp; Conditions</a> And <a href="privacy-policy.php">Privacy Policy.</a>
+											<input type="checkbox" id="terms"> I Accept 
+											<a href="#">Terms & Conditions</a> And 
+											<a href="/privacy-policy">Privacy Policy.</a>
 										</label>
+										<div class="help-block with-errors" id="alert-terms"></div>
 									</div>
 								</div>
+
 								<div class="col-lg-12 col-md-12 text-center">
 									<button type="button" class="btn btn-sendmsg" onclick="sendQuery()">Send Message</button>
 								</div>
+
 							</div>
 						</form>
 					</div>
 				</div>
 			</div>
+
 		</div>
 	</div>
-	
+
 	<div class="contact-three-part">
 		<iframe src="<?php echo e($map_link->description); ?>" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
 	</div>
 </section>
 
 <?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('js'); ?>
 <script type="text/javascript">
-	function sendQuery() {
-		var name = $('#name').val();
-		var email = $('#email').val();
-		var phone_number = $('#phone_number').val();
-		var msg_subject = $('#msg_subject').val();
-		var message = $('#message').val();
-		if(name == '') {
-			document.getElementById('alert-name').innerHTML = 'Name field must be required.';
-			document.getElementById('alert-name').style.color = 'red';
-			return false;
-		}
-		if(email == '') {
-			document.getElementById('alert-email').innerHTML = 'Email field must be required.';
-			document.getElementById('alert-email').style.color = 'red';
-			return false;
-		}
-		if(!this.validateEmail(email)) {
-			document.getElementById('alert-email').innerHTML = 'Invalid email formate, please enter correctly.';
-			document.getElementById('alert-email').style.color = 'red';
-			return false;
-		}
-		if(phone_number == '') {
-			document.getElementById('alert-phone_number').innerHTML = 'Mobile Number field must be required.';
-			document.getElementById('alert-phone_number').style.color = 'red';
-			return false;
-		}
-		if(!this.validatePhone(phone_number)) {
-			document.getElementById('alert-phone_number').innerHTML = 'Invalid mobile number formate, please enter correctly.';
-			document.getElementById('alert-phone_number').style.color = 'red';
-			return false;
-		}
-		if(msg_subject == '') {
-			document.getElementById('alert-subject').innerHTML = 'Subject field must be required.';
-			document.getElementById('alert-subject').style.color = 'red';
-			return false;
-		}
-		if(message == '') {
-			document.getElementById('alert-message').innerHTML = 'Message field must be required.';
-			document.getElementById('alert-message').style.color = 'red';
-			return false;
-		}
-		document.getElementById("send-query").submit();
+
+	function validateEmail(email) {
+		var emailRegex = /^([a-zA-Z0-9_\.\-])+@(([a-zA-Z0-9\-])+.)+([a-zA-Z0-9]{2,4})+$/;
+		return emailRegex.test(email);
 	}
 
-	function validateEmail(email) { //Validates the email address
-	    var emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-	    return emailRegex.test(email);
-	}
-
-	function validatePhone(phone) { //Validates the phone number
-	    var phoneRegex = /^(\+91-|\+91|0)?\d{10}$/; // Change this regex based on requirement
-	    return phoneRegex.test(phone);
+	function validatePhone(phone) {
+		var phoneRegex = /^(\+91-|\+91|0)?\d{10}$/;
+		return phoneRegex.test(phone);
 	}
 
 	function removeAlert(id) {
 		document.getElementById(id).innerHTML = '';
 	}
+
+	function sendQuery() {
+
+		let name = $('#name').val().trim();
+		let email = $('#email').val().trim();
+		let phone = $('#phone_number').val().trim();
+		let subject = $('#msg_subject').val().trim();
+		let message = $('#message').val().trim();
+		let terms = document.getElementById('terms').checked;
+
+		if(name === '') {
+			$('#alert-name').text('Name field is required.').css('color','red');
+			return false;
+		}
+
+		if(email === '') {
+			$('#alert-email').text('Email field is required.').css('color','red');
+			return false;
+		}
+		if(!validateEmail(email)) {
+			$('#alert-email').text('Invalid email format.').css('color','red');
+			return false;
+		}
+
+		if(phone === '') {
+			$('#alert-phone_number').text('Mobile number is required.').css('color','red');
+			return false;
+		}
+		if(!validatePhone(phone)) {
+			$('#alert-phone_number').text('Invalid mobile number.').css('color','red');
+			return false;
+		}
+
+		if(subject === '') {
+			$('#alert-subject').text('Subject is required.').css('color','red');
+			return false;
+		}
+
+		if(message === '') {
+			$('#alert-message').text('Message is required.').css('color','red');
+			return false;
+		}
+
+		if(!terms) {
+			$('#alert-terms').text('You must accept Terms & Conditions.').css('color','red');
+			return false;
+		}
+
+		document.getElementById("send-query").submit();
+	}
+
 </script>
 <?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layouts.front.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/contact_us.blade.php ENDPATH**/ ?>

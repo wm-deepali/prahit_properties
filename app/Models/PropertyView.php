@@ -8,12 +8,12 @@ class PropertyView extends Model
 {
     protected $fillable = ['property_id', 'user_id', 'ip_address'];
 
-    public function Property()
+    public function property()
     {
         return $this->belongsTo(Properties::class, 'property_id');
     }
 
-    public function User()
+    public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }

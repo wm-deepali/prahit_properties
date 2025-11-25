@@ -25,8 +25,8 @@ class PricingController extends Controller
     {
         $packageType = $request->query('type', 'property');  // default to property
         $packages = Package::where('is_active', true)
-        ->where('package_type', $packageType)
-        ->orderBy('price', 'asc')->get();
+            ->where('package_type', $packageType)
+            ->orderBy('price', 'asc')->get();
 
         return view('front.user.pricing', compact('packages', 'packageType'));
     }
@@ -195,6 +195,15 @@ class PricingController extends Controller
                 $query->where('package_type', $type);
             })
             ->get();
+
+        foreach ($currentSubscriptions as $sub) {
+            // Property Subscription Usage
+            if ($sub->package->package_type === 'property') {
+                $sub->used_listings = $user->getProperties()
+                    ->where('created_at', '>=', $sub->start_date)
+                    ->count();
+            }
+        }
 
         $availablePackages = Package::where('package_type', $type)->where('price', '>', $currentSubscriptions->first()?->package?->price ?? 0)->get();
 
@@ -374,8 +383,8 @@ class PricingController extends Controller
                 'invoice_date' => Carbon::now(),
                 'amount' => $package->price,
                 'currency' => 'INR',
-                'tax_amount' => round($package->price * 0.18, 2),
-                'total_amount' => round($package->price * 1.18, 2),
+                'tax_amount' => 0,
+                'total_amount' => $package->price,
                 'billing_name' => $user->name,
                 'billing_email' => $user->email,
                 'billing_phone' => $user->phone ?? '',
