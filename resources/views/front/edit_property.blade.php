@@ -53,6 +53,11 @@
 										<select class="text-control populate_subcategories" name="sub_category_id"
 											onchange="fetch_subsubcategories(this.value, fetch_form_type);">
 											<option value="">Select Category</option>
+											@foreach($sub_categories as $k => $v)
+												<option value="{{$v->id}}" {{$property->sub_category_id == $v->id ? "selected" : ""}}>
+													{{$v->sub_category_name}}
+												</option>
+											@endforeach
 										</select>
 									</div>
 									<div class="form-group col-sm-4">
@@ -60,6 +65,11 @@
 										<select class="text-control populate_subsubcategories" name="sub_sub_category_id"
 											id="sub_sub_category_id" onchange="fetch_form_type();">
 											<option value="">Select Property Type</option>
+											@foreach($sub_sub_categories as $k => $v)
+												<option value="{{$v->id}}" {{$property->sub_sub_category_id == $v->id ? "selected" : ""}}>
+													{{$v->sub_sub_category_name}}
+												</option>
+											@endforeach
 										</select>
 									</div>
 								</div>
@@ -454,6 +464,17 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 	<script type="text/javascript">
+
+	$(function () {
+    fetch_form_type();
+
+    @if(!empty($property->SubSubCategory))
+        console.log('here');
+        toggleSubSubCategoryFields(@json($property->SubSubCategory));
+    @endif
+});
+
+
 		let selectedFiles = []; // new files user selects
 		const maxPhotos = {{ $photos_per_listing ?? 10 }}; // from backend (limit)
 		const existingPhotos = {{ $property_images->count() }}; // current photos already uploaded
@@ -488,11 +509,11 @@
 					const div = document.createElement('div');
 					div.classList.add('position-relative', 'm-1');
 					div.innerHTML = `
-									<img src="${e.target.result}" class="rounded border" width="100" height="100">
-									<button type="button" class="btn btn-sm btn-danger" 
-										style="position:absolute;top:0;right:0;" 
-										onclick="removeImage(${index})">&times;</button>
-								`;
+															<img src="${e.target.result}" class="rounded border" width="100" height="100">
+															<button type="button" class="btn btn-sm btn-danger" 
+																style="position:absolute;top:0;right:0;" 
+																onclick="removeImage(${index})">&times;</button>
+														`;
 					container.appendChild(div);
 				};
 				reader.readAsDataURL(file);
@@ -509,11 +530,11 @@
 		@else
 			// Construct address string from state, city, location
 			let address = '';
-			  @if(!empty($property->location)) address += '{{ $property->location->location }}'; @endif
+															  @if(!empty($property->location)) address += '{{ $property->location->location }}'; @endif
 			@if(!empty($property->city)) address += ', {{ $property->city->name }}'; @endif
 			@if(!empty($property->state)) address += ', {{ $property->state->name }}'; @endif
 
-			  if (address) {
+															  if (address) {
 				fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
 					.then(res => res.json())
 					.then(data => {
@@ -556,25 +577,6 @@
 				document.getElementById('longitude').value = e.latlng.lng;
 			});
 		}
-
-		$(function () {
-			$(".populate_categories,  .populate_locations").change();
-
-			$(".add_formtype").empty().append(
-				`<center class='m0-auto'> Please select category </center>`
-			);
-
-			fetch_subcategories('{{$property->category_id}}', function () {
-				$(".populate_subcategories").val('{{$property->sub_category_id}}');
-				fetch_form_type();
-				fetch_subsubcategories('{{$property->sub_category_id}}', function () {
-					$(".populate_subsubcategories").val('{{$property->sub_sub_category_id}}');
-					fetch_form_type();
-				});
-			});
-
-
-		});
 
 		//-------------------- Get city By state --------------------//
 		$('#state').on('change', function () {
@@ -1053,8 +1055,8 @@
 					formData.append('is_visitor', true);
 				@endguest
 
-																												// console.log(obj)
-																												if (jQuery.isEmptyObject(obj)) {
+																																		// console.log(obj)
+																																		if (jQuery.isEmptyObject(obj)) {
 					returnIfInvalid();
 				}
 
@@ -1073,7 +1075,7 @@
 							@auth
 								request.setRequestHeader('auth-token', '{{Auth::user()->auth_token}}');
 							@endauth
-																															},
+																																					},
 						success: function (response) {
 							// var response = JSON.parse(response);
 							if (response.responseCode === 200) {
@@ -1084,7 +1086,7 @@
 									// window.location.href = "{{route('admin.properties.index')}}";
 									//          	}, 1000);
 								@endguest
-																																} else if (response.responseCode === 400) {
+																																						} else if (response.responseCode === 400) {
 								toastr.error(response.message)
 							} else {
 								toastr.error('An error occured')

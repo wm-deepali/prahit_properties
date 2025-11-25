@@ -7,7 +7,7 @@
     <div class="col-md-8">
       <div class="card-body">
         <h5 class="card-title property-title">
-          <a href="<?php echo e(route('property_detail', ['title' => $v->slug])); ?>"><?php echo e($v->title); ?></a>
+          <a href="<?php echo e(route('property_detail', ['id' => $v->id, 'slug' => $v->slug])); ?>"><?php echo e($v->title); ?></a>
         </h5>
 
         <p class="card-text"><strong>Price:</strong> <i class="fas fa-rupee-sign"></i>
@@ -28,7 +28,7 @@
               </a>
             </li>
             <li class="list-inline-item">
-              <a href="<?php echo e(route('property_detail', ['title' => $v->slug])); ?>" class="btn btn-sm btn-outline-info"
+              <a href="<?php echo e(route('property_detail', ['id' => $v->id, 'slug' => $v->slug])); ?>" class="btn btn-sm btn-outline-info"
                 title="View Property">
                 <i class="fas fa-eye"></i>
               </a>

@@ -106,7 +106,7 @@ class BusinessListingController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'membership_type' => 'required|in:Free,Paid',
+            // 'membership_type' => 'required|in:Free,Paid',
             'verified_status' => 'required|in:Verified,Unverified',
             'category_id' => 'required|exists:web_directory_categories,id',
             'sub_category_ids' => 'required|array',
@@ -165,7 +165,7 @@ class BusinessListingController extends Controller
         try {
             $business = new BusinessListing();
             $business->fill($request->only([
-                'membership_type',
+                // 'membership_type',
                 'verified_status',
                 'category_id',
                 'business_name',
@@ -351,7 +351,7 @@ class BusinessListingController extends Controller
 
         // dd('here',$request->all());
         $validator = Validator::make($request->all(), [
-            'membership_type' => 'required|in:Free,Paid',
+            // 'membership_type' => 'required|in:Free,Paid',
             'verified_status' => 'required|in:Verified,Unverified',
             'category_id' => 'required|exists:web_directory_categories,id',
             'sub_category_ids' => 'required|array',
@@ -410,7 +410,7 @@ class BusinessListingController extends Controller
 
         try {
             $business->fill($request->only([
-                'membership_type',
+                // 'membership_type',
                 'verified_status',
                 'category_id',
                 'business_name',

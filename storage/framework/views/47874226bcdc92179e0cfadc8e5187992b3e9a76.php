@@ -54,6 +54,12 @@
 										<select class="text-control populate_subcategories" name="sub_category_id"
 											onchange="fetch_subsubcategories(this.value, fetch_form_type);">
 											<option value="">Select Category</option>
+											<?php $__currentLoopData = $sub_categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+												<option value="<?php echo e($v->id); ?>" <?php echo e($property->sub_category_id == $v->id ? "selected" : ""); ?>>
+													<?php echo e($v->sub_category_name); ?>
+
+												</option>
+											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 										</select>
 									</div>
 									<div class="form-group col-sm-4">
@@ -61,6 +67,12 @@
 										<select class="text-control populate_subsubcategories" name="sub_sub_category_id"
 											id="sub_sub_category_id" onchange="fetch_form_type();">
 											<option value="">Select Property Type</option>
+											<?php $__currentLoopData = $sub_sub_categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+												<option value="<?php echo e($v->id); ?>" <?php echo e($property->sub_sub_category_id == $v->id ? "selected" : ""); ?>>
+													<?php echo e($v->sub_sub_category_name); ?>
+
+												</option>
+											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 										</select>
 									</div>
 								</div>
@@ -468,6 +480,17 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 	<script type="text/javascript">
+
+	$(function () {
+    fetch_form_type();
+
+    <?php if(!empty($property->SubSubCategory)): ?>
+        console.log('here');
+        toggleSubSubCategoryFields(<?php echo json_encode($property->SubSubCategory, 15, 512) ?>);
+    <?php endif; ?>
+});
+
+
 		let selectedFiles = []; // new files user selects
 		const maxPhotos = <?php echo e($photos_per_listing ?? 10); ?>; // from backend (limit)
 		const existingPhotos = <?php echo e($property_images->count()); ?>; // current photos already uploaded
@@ -502,11 +525,11 @@
 					const div = document.createElement('div');
 					div.classList.add('position-relative', 'm-1');
 					div.innerHTML = `
-								<img src="${e.target.result}" class="rounded border" width="100" height="100">
-								<button type="button" class="btn btn-sm btn-danger" 
-									style="position:absolute;top:0;right:0;" 
-									onclick="removeImage(${index})">&times;</button>
-							`;
+															<img src="${e.target.result}" class="rounded border" width="100" height="100">
+															<button type="button" class="btn btn-sm btn-danger" 
+																style="position:absolute;top:0;right:0;" 
+																onclick="removeImage(${index})">&times;</button>
+														`;
 					container.appendChild(div);
 				};
 				reader.readAsDataURL(file);
@@ -519,19 +542,31 @@
 		}
 
 		<?php if(!empty($property->latitude) && !empty($property->longitude)): ?>
-
-			// Initialize map with property coordinates
 			createMap(<?php echo e($property->latitude); ?>, <?php echo e($property->longitude); ?>);
 		<?php else: ?>
-																									// Otherwise use browser geolocation or default
-																									if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(function (pos) {
-					createMap(pos.coords.latitude, pos.coords.longitude);
-				}, function () {
-					createMap(28.6139, 77.2090); // fallback Delhi
-				});
+			// Construct address string from state, city, location
+			let address = '';
+															  <?php if(!empty($property->location)): ?> address += '<?php echo e($property->location->location); ?>'; <?php endif; ?>
+			<?php if(!empty($property->city)): ?> address += ', <?php echo e($property->city->name); ?>'; <?php endif; ?>
+			<?php if(!empty($property->state)): ?> address += ', <?php echo e($property->state->name); ?>'; <?php endif; ?>
+
+															  if (address) {
+				fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+					.then(res => res.json())
+					.then(data => {
+						if (data.length > 0) {
+							let lat = data[0].lat;
+							let lng = data[0].lon;
+							createMap(lat, lng);
+						} else {
+							// fallback if geocoding fails
+							createMap(28.6139, 77.2090); // Delhi
+						}
+					}).catch(() => {
+						createMap(28.6139, 77.2090);
+					});
 			} else {
-				createMap(28.6139, 77.2090);
+				createMap(28.6139, 77.2090); // fallback
 			}
 		<?php endif; ?>
 
@@ -558,25 +593,6 @@
 				document.getElementById('longitude').value = e.latlng.lng;
 			});
 		}
-
-		$(function () {
-			$(".populate_categories,  .populate_locations").change();
-
-			$(".add_formtype").empty().append(
-				`<center class='m0-auto'> Please select category </center>`
-			);
-
-			fetch_subcategories('<?php echo e($property->category_id); ?>', function () {
-				$(".populate_subcategories").val('<?php echo e($property->sub_category_id); ?>');
-				fetch_form_type();
-				fetch_subsubcategories('<?php echo e($property->sub_category_id); ?>', function () {
-					$(".populate_subsubcategories").val('<?php echo e($property->sub_sub_category_id); ?>');
-					fetch_form_type();
-				});
-			});
-
-
-		});
 
 		//-------------------- Get city By state --------------------//
 		$('#state').on('change', function () {
@@ -1055,8 +1071,8 @@
 					formData.append('is_visitor', true);
 				<?php endif; ?>
 
-																											// console.log(obj)
-																											if (jQuery.isEmptyObject(obj)) {
+																																		// console.log(obj)
+																																		if (jQuery.isEmptyObject(obj)) {
 					returnIfInvalid();
 				}
 
@@ -1075,7 +1091,7 @@
 							<?php if(auth()->guard()->check()): ?>
 								request.setRequestHeader('auth-token', '<?php echo e(Auth::user()->auth_token); ?>');
 							<?php endif; ?>
-																														},
+																																					},
 						success: function (response) {
 							// var response = JSON.parse(response);
 							if (response.responseCode === 200) {
@@ -1086,7 +1102,7 @@
 									// window.location.href = "<?php echo e(route('admin.properties.index')); ?>";
 									//          	}, 1000);
 								<?php endif; ?>
-																															} else if (response.responseCode === 400) {
+																																						} else if (response.responseCode === 400) {
 								toastr.error(response.message)
 							} else {
 								toastr.error('An error occured')

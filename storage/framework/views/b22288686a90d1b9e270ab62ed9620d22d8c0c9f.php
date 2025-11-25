@@ -139,7 +139,7 @@
             <?php if($packageType === 'service'): ?>
               <tr>
                 <td>Business Listing</td>
-                <td><?php echo e($package->business_listing ? 'Yes' : 'No'); ?></td>
+                <td><?php echo e($package->business_listing ?? '-'); ?></td>
               </tr>
               <tr>
                 <td>Total Services You Can List</td>
@@ -147,11 +147,11 @@
               </tr>
               <tr>
                 <td>Profile Page with Contact Form</td>
-                <td><?php echo e($package->profile_page_with_contact ? 'Yes' : 'No'); ?></td>
+                <td><?php echo e($package->profile_page_with_contact ?? '-'); ?></td>
               </tr>
               <tr>
                 <td>Business Logo & Banner</td>
-                <td><?php echo e($package->business_logo_banner ? 'Yes' : 'No'); ?></td>
+                <td><?php echo e($package->business_logo_banner ?? '-'); ?></td>
               </tr>
               <tr>
                 <td>Appear in Local Search Results</td>
@@ -159,11 +159,11 @@
               </tr>
               <tr>
                 <td>Verified Badge</td>
-                <td><?php echo e($package->verified_badge ? 'Yes' : 'No'); ?></td>
+                <td><?php echo e($package->verified_badge ?? '-'); ?></td>
               </tr>
               <tr>
                 <td>Premium Badge</td>
-                <td><?php echo e($package->premium_badge ? 'Yes' : 'No'); ?></td>
+                <td><?php echo e($package->premium_badge ?? '-'); ?></td>
               </tr>
               <tr>
                 <td>Image Upload</td>
@@ -171,7 +171,7 @@
               </tr>
               <tr>
                 <td>Video Upload</td>
-                <td><?php echo e($package->video_upload_service ? 'Yes' : 'No'); ?></td>
+                <td><?php echo e($package->video_upload_service ?? "-"); ?></td>
               </tr>
               <tr>
                 <td>Lead Enquiries</td>
@@ -183,7 +183,7 @@
               </tr>
               <tr>
                 <td>Featured in “Top Service Providers”</td>
-                <td><?php echo e($package->featured_in_top_provider ? 'Yes' : 'No'); ?></td>
+                <td><?php echo e($package->featured_in_top_provider ?? '-'); ?></td>
               </tr>
               <tr>
                 <td>Customer Support</td>
@@ -191,7 +191,7 @@
               </tr>
               <tr>
                 <td>Lead Alerts via SMS/Email</td>
-                <td><?php echo e($package->lead_alerts ? 'Yes' : 'No'); ?></td>
+                <td><?php echo e($package->lead_alerts ?? '-'); ?></td>
               </tr>
             <?php else: ?>
               <tr>
@@ -204,7 +204,7 @@
               </tr>
               <tr>
                 <td>Video Upload</td>
-                <td><?php echo e($package->video_upload ? 'Yes' : 'No'); ?></td>
+                <td><?php echo e($package->video_upload); ?></td>
               </tr>
               <tr>
                 <td>Response Rate</td>

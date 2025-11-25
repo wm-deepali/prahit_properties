@@ -50,7 +50,6 @@ use App\Models\Faq;
 use App\Models\FaqCategory;
 use App\Models\Wishlist;
 use App\Models\PropertyView;
-use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\ValidationException;
 
@@ -262,21 +261,21 @@ class HomeController extends AppController
 		}
 
 		if ($request->filled('search')) {
-    $search = trim($request->search);
+			$search = trim($request->search);
 
-    $query->where(function ($q) use ($search) {
-        // Search only in more relevant columns to improve speed and relevance
-        $q->where('title', 'like', "%{$search}%")
-          ->orWhere('description', 'like', "%{$search}%")
-          ->orWhere('address', 'like', "%{$search}%")
-          ->orWhereHas('Category', function ($cat) use ($search) {
-              $cat->where('category_name', 'like', "%{$search}%");
-          })
-          ->orWhereHas('getCity', function ($city) use ($search) {
-              $city->where('name', 'like', "%{$search}%");
-          });
-    });
-}
+			$query->where(function ($q) use ($search) {
+				// Search only in more relevant columns to improve speed and relevance
+				$q->where('title', 'like', "%{$search}%")
+					->orWhere('description', 'like', "%{$search}%")
+					->orWhere('address', 'like', "%{$search}%")
+					->orWhereHas('Category', function ($cat) use ($search) {
+						$cat->where('category_name', 'like', "%{$search}%");
+					})
+					->orWhereHas('getCity', function ($city) use ($search) {
+						$city->where('name', 'like', "%{$search}%");
+					});
+			});
+		}
 
 
 		if ($request->filled('city')) {
@@ -663,11 +662,15 @@ class HomeController extends AppController
 
 		// ✅ Check allowed number of listings
 		$allowedListings = (int) $package->number_of_listing;
-		$userListingCount = $user->getProperties()->count();
+
+		// Count properties created after the active subscription started
+		$userListingCount = $user->getProperties()
+			->where('created_at', '>=', $activeSubscription->start_date)
+			->count();
 
 		if ($allowedListings > 0 && $userListingCount >= $allowedListings) {
 			return redirect()->to(url("/user/pricing?type=property&redirect_url={$redirectUrl}"))
-				->with('error', 'You have reached the maximum number of property listings allowed in your plan.');
+				->with('error', 'You have reached the maximum number of property listings allowed in your current subscription.');
 		}
 
 		// ✅ Additional package limits
@@ -1093,20 +1096,20 @@ class HomeController extends AppController
 	}
 
 
-
 	public function editPropertyView($id)
 	{
-		$property = Properties::findOrFail($id);
+		// 🔹 Load only required columns for property
+		$property = Properties::with('SubSubCategory')->findOrFail($id);
 
-		// 🧩 Get logged-in user
+		// 🔹 Logged-in user
 		$user = auth()->user();
 
-		// 🧩 Get user’s active subscription (with its package)
+		// 🔹 Active subscription with package (limited columns)
 		$activeSubscription = $user->activeSubscription()
-			->with('package')
+			->with(['package:id,photos_per_listing,video_upload'])
 			->first();
 
-		// Default limits
+		// 🔹 Default limits
 		$photos_per_listing = 0;
 		$video_upload = 'no';
 
@@ -1115,34 +1118,89 @@ class HomeController extends AppController
 			$video_upload = $activeSubscription->package->video_upload ?? 'no';
 		}
 
-		// 🧩 Load property-related data
-		$category = Category::all();
-		$states = State::where('country_id', 101)->get();
-		$cities = City::where('state_id', $property->state_id)->get();
-		$locations = Locations::where('city_id', $property->city_id)->get();
-		$sub_locations = SubLocations::whereIn('location_id', explode(',', $property->location_id))->get();
-		$property_images = PropertyGallery::where('property_id', $id)->get();
-		$subcategories = SubCategory::where('category_id', $property->category_id)->get();
-		$amenities = Amenity::where('status', 'Yes')->get();
-		$form_type = FormTypes::with('FormTypesFields', 'FormTypesFields.SubFeatures')->where('id', 1)->get();
+		// 🔹 Masters that rarely change → cache them
+		$category = Cache::remember('categories_all', 3600, function () {
+			return Category::select('id', 'category_name')->get();
+		});
 
-		// 🧩 Active masters
-		$price_labels = PriceLabel::where('status', 'active')->get();
-		$property_statuses = PropertyStatus::where('status', 'active')->get();
-		$registration_statuses = RegistrationStatus::where('status', 'active')->get();
-		$furnishing_statuses = FurnishingStatus::where('status', 'active')->get();
+		$states = Cache::remember('states_country_101', 3600, function () {
+			return State::where('country_id', 101)
+				->select('id', 'name')
+				->get();
+		});
 
-		// ✅ Return view with all data, including upload limits
+		$amenities = Cache::remember('amenities_active', 3600, function () {
+			return Amenity::where('status', 'Yes')
+				->select('id', 'name', 'icon')
+				->get();
+		});
+
+		$price_labels = Cache::remember('price_labels_active', 3600, function () {
+			return PriceLabel::where('status', 'active')
+				->select('id', 'name', 'input_format', 'second_input_label')
+				->get();
+		});
+
+		$property_statuses = Cache::remember('property_statuses_active', 3600, function () {
+			return PropertyStatus::where('status', 'active')
+				->select('id', 'name', 'input_format', 'second_input_label')
+				->get();
+		});
+
+		$registration_statuses = Cache::remember('registration_statuses_active', 3600, function () {
+			return RegistrationStatus::where('status', 'active')
+				->select('id', 'name', 'input_format', 'second_input_label')
+				->get();
+		});
+
+		$furnishing_statuses = Cache::remember('furnishing_statuses_active', 3600, function () {
+			return FurnishingStatus::where('status', 'active')
+				->select('id', 'name', 'input_format', 'second_input_label')
+				->get();
+		});
+
+		// 🔹 Dependent lists (per-property)
+		$cities = City::where('state_id', $property->state_id)
+			->select('id', 'name')
+			->get();
+
+		$locations = Locations::where('city_id', $property->city_id)
+			->select('id', 'location')
+			->get();
+
+		// If location_id is CSV in DB, keep your explode; if single id, remove explode/whereIn.
+		$locationIds = is_string($property->location_id)
+			? explode(',', $property->location_id)
+			: (array) $property->location_id;
+
+		$sub_locations = SubLocations::whereIn('location_id', $locationIds)
+			->select('id', 'sub_location_name', 'location_id')
+			->get();
+
+		// 🔹 Property gallery (only required columns)
+		$property_images = PropertyGallery::where('property_id', $id)
+			->select('id', 'image_path')
+			->get();
+
+		$sub_categories = SubCategory::where('category_id', $property->category_id)
+			->select('id', 'sub_category_name')
+			->get();
+
+		$sub_sub_categories = SubSubCategory::where('sub_category_id', $property->sub_category_id)
+			->select('id', 'sub_sub_category_name', )
+			->get();
+
+		// ✅ Return view
 		return view('front.edit_property', compact(
 			'category',
-			'form_type',
+			'sub_categories',
+			'sub_sub_categories',
 			'states',
 			'cities',
 			'locations',
 			'sub_locations',
 			'property',
 			'property_images',
-			'subcategories',
 			'amenities',
 			'price_labels',
 			'property_statuses',
@@ -1152,6 +1210,7 @@ class HomeController extends AppController
 			'video_upload'
 		));
 	}
+
 
 	public function userPreviewPropertyView($id)
 	{
