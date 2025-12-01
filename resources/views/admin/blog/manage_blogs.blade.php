@@ -51,7 +51,7 @@ Manage Blogs
                     @if(isset($blogs) && count($blogs) > 0)
                       @foreach($blogs as $k => $v)
                         <tr id="{{$v->id}}">
-                          <td>{{$k+1}}</td>
+                          <td>{{$k + 1}}</td>
                           <td><img src="{{ asset('storage') }}/{{ $v->image }}" style="height: 60px;"></td>
                           <td>{{$v->getBlogCategory->name}}</td>
                           <td>{{$v->heading}}</td>
@@ -164,132 +164,134 @@ Manage Blogs
 
 @section('js')
 
-<script type="text/javascript">
+  <script type="text/javascript">
 
-  $(".btn-delete").on('click', function(e) {
-      e.preventDefault();
-      var id = $("#delete_category #id").val();
-      document.getElementById('new_loader').style.display = 'block';
-      $(".btn-delete").attr('disabled', true);
-      var route = "{{route('admin.deleteBlog', ['id' => ':id'])}}";
-      var route = route.replace(':id', id);
+    $(".btn-delete").on('click', function(e) {
+        e.preventDefault();
+        var id = $("#delete_category #id").val();
+        document.getElementById('new_loader').style.display = 'block';
+        $(".btn-delete").attr('disabled', true);
+        var route = "{{route('admin.deleteBlog', ['id' => ':id'])}}";
+        var route = route.replace(':id', id);
+        $.ajax({
+          url: route,
+          method: "DELETE",
+          data: $("#delete_category").serialize(),
+          success: function(response) {
+            var response = JSON.parse(response);
+            if(response.status === 200) {
+              toastr.success(response.message)
+              $("#delete-category").modal('hide');
+              delete_row(id);
+            } else if (response.status === 400) {
+              toastr.error(response.message)
+            }
+          },
+          error: function(response) {
+              toastr.error('An error occured.')
+          },
+          complete: function() {
+            document.getElementById('new_loader').style.display = 'none';
+            $(".btn-delete").attr('disabled', false);
+          }
+        })
+    });
+
+  function fetchData(id){
+      var route = "{{route('admin.blogInfo', ':id')}}";
+      var route = route.replace(":id", id);
       $.ajax({
         url: route,
-        method: "DELETE",
-        data: $("#delete_category").serialize(),
-        success: function(response) {
-          var response = JSON.parse(response);
-          if(response.status === 200) {
-            toastr.success(response.message)
-            $("#delete-category").modal('hide');
-            delete_row(id);
-          } else if (response.status === 400) {
-            toastr.error(response.message)
-          }
-        },
-        error: function(response) {
-            toastr.error('An error occured.')
-        },
-        complete: function() {
-          document.getElementById('new_loader').style.display = 'none';
-          $(".btn-delete").attr('disabled', false);
-        }
-      })
-  });
-
-function fetchData(id){
-    var route = "{{route('admin.blogInfo', ':id')}}";
-    var route = route.replace(":id", id);
-    $.ajax({
-      url: route,
-      method: "GET",
-      beforeSend: function(argument) {
-        $(".loading").css('display', 'block');
-      },
-      success: function(response) {
-        var response = JSON.parse(response);
-        if(response.status === 200) {
-          document.getElementById('view-description').innerHTML = response.data.picked.description;
-          $("#view-reasons").modal('show');
-        } else if (response.status === 400) {
-          toastr.error(response.message)
-        }
-        $(".loading").css('display', 'none');
-      },
-      error: function(response) {
-        toastr.error('An error occured');
-        $(".loading").css('display', 'none');
-      }
-    });
-}
-
-function changeStatus(id) {
-    swal({
-        title: "Are you sure?",
-        text: "Chnage Status Of This Blog.",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    })
-    .then((willDelete) => {
-      if (willDelete) {
-          
-          $.ajax({
-            url: '{{ route('admin.blogChangeStatus') }}',
-            method: "POST",
-            data: {
-              "_token": "{{ csrf_token() }}",
-              'id'    : id
-            },
-            beforeSend:function() {
-              $(".loading").css('display', 'block');
-            },
-            success: function(response) {
-              swal('', response, 'success');
-              setTimeout(function() {
-                location.reload();
-              }, 1000);
-            },
-            error: function(response) {
-              $(".loading").css('display', 'none');
-              swal('', response, 'error');
-            },
-            complete: function() {
-              $(".loading").css('display', 'none');
-            }
-          })
-      }
-    });
-    
-  }
-
-  function updateFeatureBlog(id) {
-      $.ajax({
-        url: '{{ route('admin.updateFeatureBlog') }}',
-        method: "POST",
-        data: {
-          "_token": "{{ csrf_token() }}",
-          'id'    : id
-        },
-        beforeSend:function() {
+        method: "GET",
+        beforeSend: function(argument) {
           $(".loading").css('display', 'block');
         },
         success: function(response) {
-          swal('', response, 'success');
-          setTimeout(function() {
-            location.reload();
-          }, 1000);
+          var response = JSON.parse(response);
+          if(response.status === 200) {
+            document.getElementById('view-description').innerHTML = response.data.picked.description;
+            $("#view-reasons").modal('show');
+          } else if (response.status === 400) {
+            toastr.error(response.message)
+          }
+          $(".loading").css('display', 'none');
         },
         error: function(response) {
-          $(".loading").css('display', 'none');
-          swal('', response, 'error');
-        },
-        complete: function() {
+          toastr.error('An error occured');
           $(".loading").css('display', 'none');
         }
-      })
+      });
   }
 
-</script>
+  function changeStatus(id) {
+      swal.fire({
+          title: "Are you sure?",
+          text: "Chnage Status Of This Blog.",
+          icon: "warning",
+          showCancelButton: true,
+        confirmButtonText: "Yes, change it",
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+            $.ajax({
+              url: '{{ route('admin.blogChangeStatus') }}',
+              method: "POST",
+              data: {
+                "_token": "{{ csrf_token() }}",
+                'id'    : id
+              },
+              beforeSend:function() {
+                $(".loading").css('display', 'block');
+              },
+              success: function(response) {
+                swal('', response, 'success');
+                setTimeout(function() {
+                  location.reload();
+                }, 1000);
+              },
+              error: function(response) {
+                $(".loading").css('display', 'none');
+                swal('', response, 'error');
+              },
+              complete: function() {
+                $(".loading").css('display', 'none');
+              }
+            })
+        }
+      });
+
+    }
+
+    function updateFeatureBlog(id) {
+        $.ajax({
+          url: '{{ route('admin.updateFeatureBlog') }}',
+          method: "POST",
+          data: {
+            "_token": "{{ csrf_token() }}",
+            'id'    : id
+          },
+          beforeSend:function() {
+            $(".loading").css('display', 'block');
+          },
+          success: function(response) {
+            swal('', response, 'success');
+            setTimeout(function() {
+              location.reload();
+            }, 1000);
+          },
+          error: function(response) {
+            $(".loading").css('display', 'none');
+            swal('', response, 'error');
+          },
+          complete: function() {
+            $(".loading").css('display', 'none');
+          }
+        })
+    }
+
+  </script>
 
 @endsection

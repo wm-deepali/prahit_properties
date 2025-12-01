@@ -300,7 +300,7 @@
                                                         {{\App\Helpers\Helper::formatIndianPrice($value->price)}}
                                                     </p>
                                                     <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                                                " class="btn btn-primary btn-sm">View Details</a>
+                                                                " class="btn btn-primary btn-sm">View Details</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -484,61 +484,66 @@
 
 
         function deleteProperty(id) {
-            swal({
+            swal.fire({
                 title: "Are you sure?",
                 text: "Delete this Property",
                 icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        $.ajax({
-                            method: 'post',
-                            url: "{{ route('property.delete') }}",
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                                'id': id
-                            },
-                            success: function (data) {
-                                toastr.success(data);
-                                setTimeout(function () {
-                                    location.reload();
-                                }, 2000);
-                            }
-                        });
-                    }
-                });
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it",
+                cancelButtonText: "Cancel",
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        method: 'post',
+                        url: "{{ route('property.delete') }}",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            'id': id
+                        },
+                        success: function (data) {
+                            toastr.success(data);
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        }
+                    });
+                }
+            });
         }
 
         function deleteBusiness(id) {
-            swal({
+            Swal.fire({
                 title: "Are you sure?",
                 text: "Delete this Business Listing",
                 icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        $.ajax({
-                            method: 'DELETE',
-                            url: "{{ url('user/services/delete') }}/" + id,
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                                "_method": "DELETE"
-                            },
-                            success: function (data) {
-                                toastr.success(data.message || 'Deleted successfully');
-                                // Remove deleted card from DOM
-                                $('#business-' + id).remove();
-                            },
-                            error: function (err) {
-                                toastr.error(err.responseJSON?.message || 'Something went wrong');
-                            }
-                        });
-                    }
-                });
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it",
+                cancelButtonText: "Cancel",
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        method: 'DELETE',
+                        url: "{{ url('user/services/delete') }}/" + id,
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "_method": "DELETE"
+                        },
+                        success: function (data) {
+                            toastr.success(data.message || 'Deleted successfully');
+                            // Remove deleted card from DOM
+                            $('#business-' + id).remove();
+                        },
+                        error: function (err) {
+                            toastr.error(err.responseJSON?.message || 'Something went wrong');
+                        }
+                    });
+                }
+            });
         }
     </script>
 

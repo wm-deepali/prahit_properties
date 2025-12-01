@@ -253,24 +253,39 @@ class UserController extends AppController
 
 	public function update_password(Request $request)
 	{
-		$request->validate(
-			[
-				"password" => "required",
-				"new_password" => "required|same:confirm_new_password",
-				"confirm_new_password" => "required"
-			]
-		);
+		$request->validate([
+			"password" => "required",
+			"new_password" => "required|same:confirm_new_password",
+			"confirm_new_password" => "required"
+		]);
+
 		if (\Hash::check($request->password, \Auth::user()->password)) {
-			\Auth::user()->fill([
+			\Auth::user()->update([
 				'password' => \Hash::make($request->new_password)
-			])->save();
+			]);
+
+			if ($request->ajax()) {
+				return response()->json([
+					'status' => true,
+					'message' => 'Password updated successfully.'
+				]);
+			}
+
 			$request->session()->flash('success', 'Password changed');
-			return redirect()->back()->with('alert-success', 'Password Updated Successful.');
+			return redirect()->back()->with('alert-success', 'Password Updated Successfully.');
 		} else {
+			if ($request->ajax()) {
+				return response()->json([
+					'status' => false,
+					'message' => 'Old password does not match our records.'
+				], 422); // 422: validation error
+			}
+
 			$request->session()->flash('error', 'Password does not match');
-			return redirect()->back()->with('alert-warning', 'Old Password Does Not Matched Our Record, Please Try Again Later.');
+			return redirect()->back()->with('alert-warning', 'Old Password Does Not Match Our Record, Please Try Again Later.');
 		}
 	}
+
 
 	public function upload_avatar(Request $request)
 	{

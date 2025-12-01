@@ -262,42 +262,43 @@
     }
 
     function changeStatus(id) {
-      swal({
+      swal.fire({
         title: "Are you sure?",
         text: "Chnage Status Of This Amenity.",
         icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-        .then((willDelete) => {
-          if (willDelete) {
-
-            $.ajax({
-              url: '{{ route('admin.chnageStatusAmenities') }}',
-              method: "POST",
-              data: {
-                "_token": "{{ csrf_token() }}",
-                'id': id
-              },
-              beforeSend: function () {
-                $(".loading").css('display', 'block');
-              },
-              success: function (response) {
-                swal('', response, 'success');
-                setTimeout(function () {
-                  location.reload();
-                }, 1000);
-              },
-              error: function (response) {
-                $(".loading").css('display', 'none');
-                swal('', response, 'error');
-              },
-              complete: function () {
-                $(".loading").css('display', 'none');
-              }
-            })
-          }
-        });
+        showCancelButton: true,
+        confirmButtonText: "Yes, change it",
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: '{{ route('admin.chnageStatusAmenities') }}',
+            method: "POST",
+            data: {
+              "_token": "{{ csrf_token() }}",
+              'id': id
+            },
+            beforeSend: function () {
+              $(".loading").css('display', 'block');
+            },
+            success: function (response) {
+              swal('', response, 'success');
+              setTimeout(function () {
+                location.reload();
+              }, 1000);
+            },
+            error: function (response) {
+              $(".loading").css('display', 'none');
+              swal('', response, 'error');
+            },
+            complete: function () {
+              $(".loading").css('display', 'none');
+            }
+          })
+        }
+      });
 
     }
 

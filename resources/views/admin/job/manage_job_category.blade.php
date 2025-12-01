@@ -1,234 +1,248 @@
 @extends('layouts.app')
 
 @section('title')
-Manage Job Category
+  Manage Job Category
 @endsection
 
 @section('content')
 
-<section class="breadcrumb-section">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12 col-xs-12">
-        <div class="content-header">
-          <div class="loading">
-            <img src="{{url('/images/loading.gif')}}" alt="Loading.." class="loading" />
+  <section class="breadcrumb-section">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 col-xs-12">
+          <div class="content-header">
+            <div class="loading">
+              <img src="{{url('/images/loading.gif')}}" alt="Loading.." class="loading" />
+            </div>
+            <h3 class="content-header-title">Master</h3>
+            <button class="btn btn-primary btn-save" data-target="#add-category" data-toggle="modal"><i
+                class="fas fa-plus"></i> Add Category</button>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Dashboard</a></li>
+              <li class="breadcrumb-item">Job</li>
+              <li class="breadcrumb-item active">Manage Job Category</li>
+            </ol>
           </div>
-          <h3 class="content-header-title">Master</h3>
-          <button class="btn btn-primary btn-save" data-target="#add-category" data-toggle="modal"><i class="fas fa-plus"></i> Add Category</button>
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Dashboard</a></li>
-            <li class="breadcrumb-item">Job</li>
-            <li class="breadcrumb-item active">Manage Job Category</li>
-          </ol>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="content-main-body">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="card">
-          <div class="card-body">
-            <div class="card-block">
-              <div class="table-responsive">
-                <table class="table table-bordered table-fitems">
-                  <thead>
-                    <tr>
-                      <th>Sr. No.</th>
-                      <th>Category</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @if(isset($categories) && count($categories) > 0)
-                      @foreach($categories as $k => $v)
-                        <tr id="{{$v->id}}">
-                          <td>{{$k+1}}</td>
-                          <td>{{$v->name}}</td>
-                          <td>
-                            @if($v->status == "Yes")
-                              Active
-                            @else 
-                              Inactive
-                            @endif
-                          </td>
-                          <td><ul class="action">
-                              @if($v->status == 'Yes')
-                                <li><a style="cursor: pointer;" onclick="changeStatus('{{ $v->id }}')"><i class="fa fa-ban" aria-hidden="true"></i></a></li>
-                              @else
-                                <li><a style="cursor: pointer;" onclick="changeStatus('{{ $v->id }}')"><i class="fa fa-check" aria-hidden="true"></i></a></li>
-                              @endif
-                              <li><a href="#" onclick="fetchData({{$v->id}});"><i class="fas fa-pencil-alt"></i></a></li>
-                              <!-- <li><a href="#"><i class="fas fa-times"></i></a></li> -->
-                              <li><a href="#" data-toggle="modal" data-target="#delete-category" onclick="$('#delete_category #id').val({{$v->id}})"><i class="fas fa-trash"></i></a></li>
-                            </ul></td>
-                        </tr>
-                      @endforeach
-                    @else 
+  <section class="content-main-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-block">
+                <div class="table-responsive">
+                  <table class="table table-bordered table-fitems">
+                    <thead>
                       <tr>
-                        <td colspan="5"> No records found </td>
-                      </tr> 
-                    @endif
-                  </tbody>
-                </table>
+                        <th>Sr. No.</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @if(isset($categories) && count($categories) > 0)
+                        @foreach($categories as $k => $v)
+                          <tr id="{{$v->id}}">
+                            <td>{{$k + 1}}</td>
+                            <td>{{$v->name}}</td>
+                            <td>
+                              @if($v->status == "Yes")
+                                Active
+                              @else
+                                Inactive
+                              @endif
+                            </td>
+                            <td>
+                              <ul class="action">
+                                @if($v->status == 'Yes')
+                                  <li><a style="cursor: pointer;" onclick="changeStatus('{{ $v->id }}')"><i class="fa fa-ban"
+                                        aria-hidden="true"></i></a></li>
+                                @else
+                                  <li><a style="cursor: pointer;" onclick="changeStatus('{{ $v->id }}')"><i class="fa fa-check"
+                                        aria-hidden="true"></i></a></li>
+                                @endif
+                                <li><a href="#" onclick="fetchData({{$v->id}});"><i class="fas fa-pencil-alt"></i></a></li>
+                                <!-- <li><a href="#"><i class="fas fa-times"></i></a></li> -->
+                                <li><a href="#" data-toggle="modal" data-target="#delete-category"
+                                    onclick="$('#delete_category #id').val({{$v->id}})"><i class="fas fa-trash"></i></a></li>
+                              </ul>
+                            </td>
+                          </tr>
+                        @endforeach
+                      @else
+                        <tr>
+                          <td colspan="5"> No records found </td>
+                        </tr>
+                      @endif
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<div class="modal" id="add-category">
-  <div class="modal-dialog">
-    <div class="modal-content"> 
+  <div class="modal" id="add-category">
+    <div class="modal-dialog">
+      <div class="modal-content">
 
-      <center>
-            <img src="{{url('/images/loading.gif')}}" alt="Loading.." class="loading" />
-      </center>
+        <center>
+          <img src="{{url('/images/loading.gif')}}" alt="Loading.." class="loading" />
+        </center>
 
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Add Category</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      
-      <!-- Modal body -->
-      <div class="modal-body">
-        <form method="post" action="{{ route('admin.storeJobCategories') }}">
-          @csrf
-          <div class="form-group row">
-            <div class="col-sm-12">
-              <label class="label-control">Category</label>
-              <input type="text" class="text-control" name="category_name" placeholder="Enter Category Name" onchange="populate_slug('add_category_slug', this);" required />
-            </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-sm-12">
-              <label class="label-control">Meta Title</label>
-              <input type="text" class="text-control" name="category_meta_title" placeholder="Enter Meta Title" required />
-            </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-sm-12">
-              <label class="label-control">Meta Description</label>
-              <textarea class="text-control" rows="2" cols="3" name="category_meta_description" placeholder="Enter Meta Description" required /></textarea>
-            </div>
-        <div class="col-sm-12">
-              <label class="label-control">Meta Keywords</label>
-              <textarea class="text-control" rows="3" cols="3" name="category_keywords" placeholder="Enter Meta Keywords" required /></textarea>
-            </div>
-          </div>
-        
-          <div class="form-action row">
-            <div class="col-sm-12 text-center">
-              <button class="btn btn-primary btn-add" type="submit">Add Category</button>
-            </div>
-          </div>
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Add Category</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
 
-          <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form method="post" action="{{ route('admin.storeJobCategories') }}">
+            @csrf
+            <div class="form-group row">
+              <div class="col-sm-12">
+                <label class="label-control">Category</label>
+                <input type="text" class="text-control" name="category_name" placeholder="Enter Category Name"
+                  onchange="populate_slug('add_category_slug', this);" required />
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-12">
+                <label class="label-control">Meta Title</label>
+                <input type="text" class="text-control" name="category_meta_title" placeholder="Enter Meta Title"
+                  required />
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-12">
+                <label class="label-control">Meta Description</label>
+                <textarea class="text-control" rows="2" cols="3" name="category_meta_description"
+                  placeholder="Enter Meta Description" required /></textarea>
+              </div>
+              <div class="col-sm-12">
+                <label class="label-control">Meta Keywords</label>
+                <textarea class="text-control" rows="3" cols="3" name="category_keywords"
+                  placeholder="Enter Meta Keywords" required /></textarea>
+              </div>
+            </div>
 
-<div class="modal update_category_modal" id="update-category">
-  <div class="modal-dialog">
-    <div class="modal-content"> 
+            <div class="form-action row">
+              <div class="col-sm-12 text-center">
+                <button class="btn btn-primary btn-add" type="submit">Add Category</button>
+              </div>
+            </div>
 
-      <center>
-            <img src="{{url('/images/loading.gif')}}" alt="Loading.." class="loading" />
-      </center>
-      
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Update Category</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      
-      <!-- Modal body -->
-      <div class="modal-body">
-        <form method="post" action="{{ route('admin.updateJobCategories') }}">
-          <div class="form-group row">
-            <div class="col-sm-12">
-              <label class="label-control">Category</label>
-              <input type="text" class="text-control" placeholder="Enter Category Name" id="category_name" name="category_name" required />
-            </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-sm-12">
-              <label class="label-control">Meta Title</label>
-              <input type="text" class="text-control" placeholder="Enter Meta Title" id="category_meta_title" name="category_meta_title" required />
-            </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-sm-12">
-              <label class="label-control">Meta Description</label>
-              <textarea class="text-control" rows="2" cols="3" placeholder="Enter Meta Description" id="category_meta_description" name="category_meta_description" required /></textarea>
-            </div>
-        <div class="col-sm-12">
-              <label class="label-control">Meta Keywords</label>
-              <textarea class="text-control" rows="3" cols="3" placeholder="Enter Meta Keywords" id="category_keywords" name="category_keywords" required /></textarea>
-            </div>
-          </div>
-        
-          <div class="form-action row">
-            <div class="col-sm-12 text-center">
-              <button class="btn btn-primary btn-update" type="submit">Update Category</button>
-            </div>
-          </div>
-
-          <input type="hidden" id="category_id" name="category_id" value="" />
-          <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-
-        </form>
+            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
+  <div class="modal update_category_modal" id="update-category">
+    <div class="modal-dialog">
+      <div class="modal-content">
 
-<div class="modal" id="delete-category" class="delete-category">
-  <div class="modal-dialog">
-    <div class="modal-content"> 
+        <center>
+          <img src="{{url('/images/loading.gif')}}" alt="Loading.." class="loading" />
+        </center>
 
-      <center>
-            <img src="{{url('/images/loading.gif')}}" alt="Loading.." class="loading" />
-      </center>
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Update Category</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
 
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Delete Category</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      
-      <!-- Modal body -->
-      <div class="modal-body">
-        <form id="delete_category" name="delete_category">
-          <div class="form-group row">
-            <center> Are you sure you want to delete this? </center>
-          </div>      
-
-          <div class="form-action row">
-            <div class="col-sm-12 text-center">
-              <button class="btn btn-primary btn-delete" type="submit">Delete</button>
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form method="post" action="{{ route('admin.updateJobCategories') }}">
+            <div class="form-group row">
+              <div class="col-sm-12">
+                <label class="label-control">Category</label>
+                <input type="text" class="text-control" placeholder="Enter Category Name" id="category_name"
+                  name="category_name" required />
+              </div>
             </div>
-          </div>  
+            <div class="form-group row">
+              <div class="col-sm-12">
+                <label class="label-control">Meta Title</label>
+                <input type="text" class="text-control" placeholder="Enter Meta Title" id="category_meta_title"
+                  name="category_meta_title" required />
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-12">
+                <label class="label-control">Meta Description</label>
+                <textarea class="text-control" rows="2" cols="3" placeholder="Enter Meta Description"
+                  id="category_meta_description" name="category_meta_description" required /></textarea>
+              </div>
+              <div class="col-sm-12">
+                <label class="label-control">Meta Keywords</label>
+                <textarea class="text-control" rows="3" cols="3" placeholder="Enter Meta Keywords" id="category_keywords"
+                  name="category_keywords" required /></textarea>
+              </div>
+            </div>
 
-          <input type="hidden" name="id" id="id" />
-          {{ csrf_field() }}
-        </form>
+            <div class="form-action row">
+              <div class="col-sm-12 text-center">
+                <button class="btn btn-primary btn-update" type="submit">Update Category</button>
+              </div>
+            </div>
+
+            <input type="hidden" id="category_id" name="category_id" value="" />
+            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
+
+
+  <div class="modal" id="delete-category" class="delete-category">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <center>
+          <img src="{{url('/images/loading.gif')}}" alt="Loading.." class="loading" />
+        </center>
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Delete Category</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form id="delete_category" name="delete_category">
+            <div class="form-group row">
+              <center> Are you sure you want to delete this? </center>
+            </div>
+
+            <div class="form-action row">
+              <div class="col-sm-12 text-center">
+                <button class="btn btn-primary btn-delete" type="submit">Delete</button>
+              </div>
+            </div>
+
+            <input type="hidden" name="id" id="id" />
+            {{ csrf_field() }}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 @endsection
@@ -237,59 +251,59 @@ Manage Job Category
 
 @section('js')
 
-<script type="text/javascript">
-$(function() {
-    jQuery.validator.addMethod("restrict_special_chars", function(value, element) {
-        if(value.length == 0 && value == "") {
+  <script type="text/javascript">
+    $(function () {
+      jQuery.validator.addMethod("restrict_special_chars", function (value, element) {
+        if (value.length == 0 && value == "") {
           return true;
         }
         if (/[a-zA-Z0-9-]$/.test(value)) {
-            return true;  // FAIL validation when REGEX matches
+          return true;  // FAIL validation when REGEX matches
         } else {
-            return false;   // PASS validation otherwise
+          return false;   // PASS validation otherwise
         };
-    }, 'Special characters not allowed. Please try again.');
+      }, 'Special characters not allowed. Please try again.');
 
 
-    $("#update_category").validate({
-      rules:{
-        category_slug:{
-          restrict_special_chars: true
-        }
-      },
-      submitHandler:function() {
-        $.ajax({
-          url: "{{route('admin.category.update', ['category' => 1])}}",
-          method: "PATCH",
-          data: $("#update_category").serialize(),
-          beforeSend:function() {
-            $(".btn-update").attr('disabled', true);
-            document.getElementById('new_loader').style.display = 'block';
-          },
-          success: function(response) {
-            var response = JSON.parse(response);
-            if(response.status === 200) {
-              toastr.success(response.message)
-              reloadPage();
-            } else if (response.status === 400) {
-              toastr.error(response.message)
-            }
-          },
-          error: function(response) {
-            console.log(response)
-          },
-          complete: function() {
-            $(".update_category_modal").modal('hide');
-            $(".btn-update").attr('disabled', false);
-            document.getElementById('new_loader').style.display = 'none';
+      $("#update_category").validate({
+        rules: {
+          category_slug: {
+            restrict_special_chars: true
           }
-        })
-      }
+        },
+        submitHandler: function () {
+          $.ajax({
+            url: "{{route('admin.category.update', ['category' => 1])}}",
+            method: "PATCH",
+            data: $("#update_category").serialize(),
+            beforeSend: function () {
+              $(".btn-update").attr('disabled', true);
+              document.getElementById('new_loader').style.display = 'block';
+            },
+            success: function (response) {
+              var response = JSON.parse(response);
+              if (response.status === 200) {
+                toastr.success(response.message)
+                reloadPage();
+              } else if (response.status === 400) {
+                toastr.error(response.message)
+              }
+            },
+            error: function (response) {
+              console.log(response)
+            },
+            complete: function () {
+              $(".update_category_modal").modal('hide');
+              $(".btn-update").attr('disabled', false);
+              document.getElementById('new_loader').style.display = 'none';
+            }
+          })
+        }
+      });
     });
-});
 
 
-  $(".btn-delete").on('click', function(e) {
+    $(".btn-delete").on('click', function (e) {
       e.preventDefault();
       var id = $("#delete_category #id").val();
       document.getElementById('new_loader').style.display = 'block';
@@ -300,9 +314,9 @@ $(function() {
         url: route,
         method: "DELETE",
         data: $("#delete_category").serialize(),
-        success: function(response) {
+        success: function (response) {
           var response = JSON.parse(response);
-          if(response.status === 200) {
+          if (response.status === 200) {
             toastr.success(response.message)
             $("#delete-category").modal('hide');
             delete_row(id);
@@ -310,88 +324,90 @@ $(function() {
             toastr.error(response.message)
           }
         },
-        error: function(response) {
-            toastr.error('An error occured.')
+        error: function (response) {
+          toastr.error('An error occured.')
         },
-        complete: function() {
+        complete: function () {
           document.getElementById('new_loader').style.display = 'none';
           $(".btn-delete").attr('disabled', false);
         }
       })
-  });
+    });
 
-function fetchData(id){
+    function fetchData(id) {
 
-  var route = "{{route('admin.getCategoryInfo', ':id')}}";
-  var route = route.replace(":id", id);
+      var route = "{{route('admin.getCategoryInfo', ':id')}}";
+      var route = route.replace(":id", id);
 
-        $.ajax({
-          url: route,
-          method: "GET",
-          beforeSend: function(argument) {
-            $(".loading").css('display', 'block');
-          },
-          success: function(response) {
-            var response = JSON.parse(response);
-            if(response.status === 200) {
-              $(".update_category_modal #category_id").val(response.data.picked.id)
-              $(".update_category_modal #category_name").val(response.data.picked.name)
-              $(".update_category_modal #category_meta_title").val(response.data.picked.meta_title)
-              $(".update_category_modal #category_meta_description").val(response.data.picked.meta_description)
-              $(".update_category_modal #category_keywords").val(response.data.picked.meta_keywords)
-              $(".update_category_modal").modal('show');
-            } else if (response.status === 400) {
-              toastr.error(response.message)
-            }
-            $(".loading").css('display', 'none');
-          },
-          error: function(response) {
-            toastr.error('An error occured');
-            $(".loading").css('display', 'none');
+      $.ajax({
+        url: route,
+        method: "GET",
+        beforeSend: function (argument) {
+          $(".loading").css('display', 'block');
+        },
+        success: function (response) {
+          var response = JSON.parse(response);
+          if (response.status === 200) {
+            $(".update_category_modal #category_id").val(response.data.picked.id)
+            $(".update_category_modal #category_name").val(response.data.picked.name)
+            $(".update_category_modal #category_meta_title").val(response.data.picked.meta_title)
+            $(".update_category_modal #category_meta_description").val(response.data.picked.meta_description)
+            $(".update_category_modal #category_keywords").val(response.data.picked.meta_keywords)
+            $(".update_category_modal").modal('show');
+          } else if (response.status === 400) {
+            toastr.error(response.message)
           }
-        });
-}
+          $(".loading").css('display', 'none');
+        },
+        error: function (response) {
+          toastr.error('An error occured');
+          $(".loading").css('display', 'none');
+        }
+      });
+    }
 
-function changeStatus(id) {
-    swal({
+    function changeStatus(id) {
+      swal.fire({
         title: "Are you sure?",
         text: "Chnage Status Of This Category.",
         icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    })
-    .then((willDelete) => {
-      if (willDelete) {
-          
+        showCancelButton: true,
+        confirmButtonText: "Yes, change it",
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+
           $.ajax({
             url: '{{ route('admin.changeStatusJobCategories') }}',
             method: "POST",
             data: {
               "_token": "{{ csrf_token() }}",
-              'id'    : id
+              'id': id
             },
-            beforeSend:function() {
+            beforeSend: function () {
               $(".loading").css('display', 'block');
             },
-            success: function(response) {
+            success: function (response) {
               swal('', response, 'success');
-              setTimeout(function() {
+              setTimeout(function () {
                 location.reload();
               }, 1000);
             },
-            error: function(response) {
+            error: function (response) {
               $(".loading").css('display', 'none');
               swal('', response, 'error');
             },
-            complete: function() {
+            complete: function () {
               $(".loading").css('display', 'none');
             }
           })
-      }
-    });
-    
-  }
+        }
+      });
 
-</script>
+    }
+
+  </script>
 
 @endsection

@@ -635,6 +635,13 @@
         style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;">
         <i class="fas fa-pencil-alt me-1"></i> Post Property <span class="badge bg-warning text-dark ms-1">Free</span>
       </a>
+       <a href="javascript:void(0);" class="btn  fw-semibold px-3 py-1 rounded-3"
+        style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;" <?php if(Auth::check()): ?>
+          onclick="window.location.href='<?php echo e(route('create_business_listing')); ?>'" <?php else: ?>
+          onclick=" openSigninModal('business-listing/create')" <?php endif; ?>>
+          <i class="fas fa-briefcase me-1"></i> Post Services
+          <span class="badge bg-warning text-dark ms-1">Free</span>
+        </a>
     </div>
 
 
@@ -730,7 +737,7 @@
         </div>
 
         <div class="post-property-card">
-          <h3>Search Properties
+          <h3 onclick="window.location='<?php echo e(route('listing.list')); ?>'">Search Properties
             <br><span>Sell/ Rent faster with Bhawan Bhoomi</span>
           </h3>
           <img src="<?php echo e(asset('images/assets.png')); ?>" alt="">
@@ -766,7 +773,7 @@
         </div>
 
         <div class="post-property-card">
-          <h3>For Support
+          <h3 onclick="window.location='<?php echo e(route('front.contactUs')); ?>'">For Support
             <br><span>Email, Contact number and WhatsApp Number</span>
           </h3>
           <img src="<?php echo e(asset('images/technical-support.png')); ?>" alt="">
@@ -861,20 +868,20 @@
                 <div class="modal-body">
                   <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Your Name" required>
+                    <input type="text" class="form-control" name="name" placeholder="Your Name" required>
                   </div>
                   <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                    <input type="email" class="form-control" name="email" placeholder="Your Email" required>
                   </div>
                   <div class="mb-3">
                     <label for="mobile_number" class="form-label">Mobile Number</label>
-                    <input type="text" class="form-control" name="mobile_number" id="mobile_number"
+                    <input type="text" class="form-control" name="mobile_number"
                       placeholder="Your Mobile Number" required>
                   </div>
                   <div class="mb-3">
                     <label for="message" class="form-label">Message / Query</label>
-                    <textarea class="form-control" name="message" id="message" rows="3"
+                    <textarea class="form-control" name="message" rows="3"
                       placeholder="Optional"></textarea>
                   </div>
                 </div>
@@ -903,7 +910,7 @@
                 </li>
                 <li><a class="dropdown-item" href="/user/recent-viewed-properties">Recently Viewed</a></li>
                 <li>
-                  <a class="dropdown-item" href="/user/sent-inquries">Contacted Properties</a>
+                  <a class="dropdown-item"href="/user/sent-inquries">Contacted Properties</a>
                 </li>
                 <li>
                   <hr class="dropdown-divider">
@@ -3321,7 +3328,7 @@
         </a>
 
 
-        <a class="bottom-item" data-key="shortlist" href="#">
+        <a class="bottom-item" data-key="shortlist" href="<?php echo e(route('front.contactUs')); ?>">
           <span class="bottom-icon">
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 21s-7-4.5-9-8a5 5 0 019-6 5 5 0 019 6c-2 3.5-9 8-9 8z" />

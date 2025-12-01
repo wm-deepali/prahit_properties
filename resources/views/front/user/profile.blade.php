@@ -208,14 +208,48 @@
 				}
 			});
 
-			// Security form validation
-			$("#security_form").validate({
-				rules: {
-					new_password: "required",
-					confirm_new_password: {
-						equalTo: "#new_password"
+			// AJAX for Security Form
+			$("#security_form").submit(function (e) {
+				e.preventDefault(); // prevent default form submission
+
+				var form = $(this);
+				var url = form.attr('action');
+				var formData = form.serialize(); // collect form data
+
+				$.ajax({
+					url: url,
+					type: 'POST',
+					data: formData,
+					beforeSend: function () {
+						$(".btn-submit").attr('disabled', true);
+					},
+					success: function (response) {
+						if (response.status === true) {
+							swal("Success", response.message ?? "Password updated successfully!", "success");
+							form[0].reset(); // reset form fields
+						} else {
+							swal("Error", response.message ?? "Something went wrong!", "error");
+						}
+					},
+					error: function (xhr) {
+						// Show exact validation errors
+						var res = xhr.responseJSON;
+						if (res && res.errors) {
+							let messages = [];
+							for (let field in res.errors) {
+								messages.push(res.errors[field].join(', '));
+							}
+							swal("Validation Error", messages.join("\n"), "error");
+						} else if (res && res.message) {
+							swal("Error", res.message, "error");
+						} else {
+							swal("Error", "Something went wrong while updating password.", "error");
+						}
+					},
+					complete: function () {
+						$(".btn-submit").attr('disabled', false);
 					}
-				}
+				});
 			});
 		});
 

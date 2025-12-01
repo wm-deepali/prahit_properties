@@ -1,10 +1,10 @@
-@extends('layouts.app')
 
-@section('title')
+
+<?php $__env->startSection('title'); ?>
   Manage Client Reels
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
   <section class="breadcrumb-section">
     <div class="container-fluid">
@@ -12,14 +12,14 @@
         <div class="col-md-12 col-xs-12">
           <div class="content-header">
             <div class="loading">
-              <img src="{{ url('/images/loading.gif') }}" alt="Loading.." class="loading" />
+              <img src="<?php echo e(url('/images/loading.gif')); ?>" alt="Loading.." class="loading" />
             </div>
             <h3 class="content-header-title">Master</h3>
             <a href="javascript:void(0)" id="add-reel">
               <button class="btn btn-primary btn-save"><i class="fas fa-plus"></i> Add Reel</button>
             </a>
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+              <li class="breadcrumb-item"><a href="<?php echo e(route('admin.dashboard')); ?>">Dashboard</a></li>
               <li class="breadcrumb-item">Client Reels</li>
               <li class="breadcrumb-item active">Manage Client Reels</li>
             </ol>
@@ -51,45 +51,45 @@
                       </tr>
                     </thead>
                     <tbody>
-                      @foreach ($reels as $reel)
+                      <?php $__currentLoopData = $reels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $reel): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                          <td>{{ $loop->iteration }}</td>
+                          <td><?php echo e($loop->iteration); ?></td>
                           <td>
-                            @if($reel->author_image)
-                              <img src="{{ asset('storage/' . $reel->author_image) }}" alt="Author Image"
+                            <?php if($reel->author_image): ?>
+                              <img src="<?php echo e(asset('storage/' . $reel->author_image)); ?>" alt="Author Image"
                                 style="height: 60px; width:60px; object-fit: cover; border-radius: 50%;">
-                            @else
+                            <?php else: ?>
                               <span class="text-muted">No Image</span>
-                            @endif
+                            <?php endif; ?>
                           </td>
-                          <td>{{ $reel->author_name }}</td>
-                          <td>{{ $reel->designation ?? '-' }}</td>
-                          <td>{{ ucfirst($reel->reel_type) }}</td>
+                          <td><?php echo e($reel->author_name); ?></td>
+                          <td><?php echo e($reel->designation ?? '-'); ?></td>
+                          <td><?php echo e(ucfirst($reel->reel_type)); ?></td>
                           <td>
-                            @if($reel->reel_type === 'youtube' && $reel->youtube_url)
-                              <a href="{{ $reel->youtube_url }}" target="_blank">YouTube Link</a>
-                            @elseif($reel->reel_type === 'facebook' && $reel->facebook_url)
-                              <a href="{{ $reel->facebook_url }}" target="_blank">Facebook Link</a>
-                            @elseif($reel->reel_type === 'upload' && $reel->video_file)
+                            <?php if($reel->reel_type === 'youtube' && $reel->youtube_url): ?>
+                              <a href="<?php echo e($reel->youtube_url); ?>" target="_blank">YouTube Link</a>
+                            <?php elseif($reel->reel_type === 'facebook' && $reel->facebook_url): ?>
+                              <a href="<?php echo e($reel->facebook_url); ?>" target="_blank">Facebook Link</a>
+                            <?php elseif($reel->reel_type === 'upload' && $reel->video_file): ?>
                               <video width="120" controls>
-                                <source src="{{ asset('storage/' . $reel->video_file) }}" type="video/mp4">
+                                <source src="<?php echo e(asset('storage/' . $reel->video_file)); ?>" type="video/mp4">
                                 Your browser does not support the video tag.
                               </video>
-                            @else
+                            <?php else: ?>
                               <span class="text-muted">N/A</span>
-                            @endif
+                            <?php endif; ?>
                           </td>
-                          <td>{{ $reel->created_at->format('d M Y, h:i A') }}</td>
+                          <td><?php echo e($reel->created_at->format('d M Y, h:i A')); ?></td>
                           <td>
                             <ul class="action">
                               <li>
                                 <a href="javascript:void(0)" class="btn btn-primary btn-sm edit-reel"
-                                  data-id="{{ $reel->id }}">
+                                  data-id="<?php echo e($reel->id); ?>">
                                   <i class="fas fa-pencil-alt"></i>
                                 </a>
                               </li>
                               <li>
-                                <a href="javascript:void(0)" onclick="deleteReel({{ $reel->id }})"
+                                <a href="javascript:void(0)" onclick="deleteReel(<?php echo e($reel->id); ?>)"
                                   class="btn btn-danger btn-sm">
                                   <i class="fa fa-trash"></i>
                                 </a>
@@ -97,7 +97,7 @@
                             </ul>
                           </td>
                         </tr>
-                      @endforeach
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                   </table>
                 </div>
@@ -109,19 +109,19 @@
     </div>
   </section>
 
-  {{-- Modal --}}
+  
   <div class="modal fade" id="reel-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('js')
+<?php $__env->startSection('js'); ?>
 
   <script>
 
     $(document).ready(function () {
       // Open Add Modal
       $(document).on('click', '#add-reel', function () {
-        $.get("{{ route('admin.client-reels.create') }}", function (result) {
+        $.get("<?php echo e(route('admin.client-reels.create')); ?>", function (result) {
           if (result.success) {
             $('#reel-modal').html(result.html).modal('show');
           }
@@ -131,7 +131,7 @@
       // Open Edit Modal
       $(document).on('click', '.edit-reel', function () {
         let id = $(this).data('id');
-        $.get(`{{ url('admin/client-reels') }}/${id}/edit`, function (result) {
+        $.get(`<?php echo e(url('admin/client-reels')); ?>/${id}/edit`, function (result) {
           if (result.success) {
             $('#reel-modal').html(result.html).modal('show');
           }
@@ -152,7 +152,7 @@
         let formData = new FormData($('#reel-form')[0]);
 
         $.ajax({
-          url: '{{ route("admin.client-reels.store") }}',
+          url: '<?php echo e(route("admin.client-reels.store")); ?>',
           type: 'POST',
           data: formData,
           contentType: false,
@@ -234,10 +234,10 @@
         }).then((result) => {
           if (result.isConfirmed) {
             $.ajax({
-              url: `{{ url('admin/client-reels') }}/${id}`,
+              url: `<?php echo e(url('admin/client-reels')); ?>/${id}`,
               type: 'DELETE',
                data: {
-              "_token": "{{ csrf_token() }}",
+              "_token": "<?php echo e(csrf_token()); ?>",
             },
               success: function (res) {
                 if (res.success) {
@@ -253,4 +253,5 @@
       }
     });
   </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/admin/client_reels/index.blade.php ENDPATH**/ ?>
