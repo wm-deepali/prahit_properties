@@ -247,7 +247,8 @@
                         <td>{{ $listing->total_views ?? 0 }}</td>
                         <td>{{ $listing->total_enquiries ?? 0 }}</td>
                         <td>{{ $listing->user ? $listing->user->firstname : 'Admin' }}
-                          {{ $listing->user ? $listing->user->lastname : '-' }}</td>
+                          {{ $listing->user ? $listing->user->lastname : '-' }}
+                        </td>
                         <td>
                           @if($listing->status == 'Active')
                             <span class="badge badge-success">Active</span>
@@ -256,9 +257,10 @@
                           @endif
                         </td>
                         <td>
-<a href="{{ route('admin.business-listing.edit', $listing->id) }}" class="btn btn-info btn-sm text-white">
-  <i class="fas fa-edit"></i> Edit
-</a>
+                          <a href="{{ route('admin.business-listing.edit', $listing->id) }}"
+                            class="btn btn-info btn-sm text-white">
+                            <i class="fas fa-edit"></i> Edit
+                          </a>
                           <button class="btn btn-danger btn-sm" onclick="deleteBusiness({{ $listing->id }})">Delete</button>
                         </td>
                       </tr>
@@ -687,35 +689,37 @@
 
 
     function delete_record(id) {
-      swal({
+      swal.fire({
         title: "Are you sure?",
         text: "Delete this Property",
         icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-        .then((willDelete) => {
-          if (willDelete) {
-            $.ajax({
-              method: 'post',
-              url: "{{ route('property.delete') }}",
-              data: {
-                "_token": "{{ csrf_token() }}",
-                'id': id
-              },
-              success: function (data) {
-                toastr.success(data);
-                setTimeout(function () {
-                  location.reload();
-                }, 2000);
-              }
-            });
-          }
-        });
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it",
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            method: 'post',
+            url: "{{ route('property.delete') }}",
+            data: {
+              "_token": "{{ csrf_token() }}",
+              'id': id
+            },
+            success: function (data) {
+              toastr.success(data);
+              setTimeout(function () {
+                location.reload();
+              }, 2000);
+            }
+          });
+        }
+      });
     }
 
     function changeStatus(id) {
-      swal({
+      swal.fire({
         title: "Are you sure?",
         text: "Change Status This Property.",
         icon: "warning",
@@ -753,7 +757,7 @@
     }
 
     function approveProperty(id) {
-      swal({
+      swal.fire({
         title: "Are you sure?",
         text: "Approved This Property.",
         icon: "warning",
@@ -889,60 +893,60 @@
               document.getElementById('property-link').style.display = 'none';
               document.getElementById('property-images').style.display = 'none';
               $('#property-title').append(`<h3 class="con-dtitle" style="margin-top:15px;">Property Title</h3>
-                          <div class="row">
-                          <div class="col-sm-10">
-                          <input type="text" name="title" id="title" class="form-control" value="${response.data.Property.title}" readonly>
-                          </div>
-                          <div class="col-sm-2">
-                          <input type="checkbox" id="title-check" class="form-control">
-                          </div>
-                          </div>`);
+                            <div class="row">
+                            <div class="col-sm-10">
+                            <input type="text" name="title" id="title" class="form-control" value="${response.data.Property.title}" readonly>
+                            </div>
+                            <div class="col-sm-2">
+                            <input type="checkbox" id="title-check" class="form-control">
+                            </div>
+                            </div>`);
               $('#property-id').append(`<h3 class="con-dtitle" style="margin-top:15px;">Property Id</h3>
-                          <div class="row">
-                          <div class="col-sm-10">
-                          <input type="text" name="listing_id" id="listing_id" class="form-control" value="${response.data.Property.listing_id}" readonly>
-                          </div>
-                          <div class="col-sm-2">
-                          <input type="checkbox" id="listing-check" class="form-control">
-                          </div>
-                          </div>`);
+                            <div class="row">
+                            <div class="col-sm-10">
+                            <input type="text" name="listing_id" id="listing_id" class="form-control" value="${response.data.Property.listing_id}" readonly>
+                            </div>
+                            <div class="col-sm-2">
+                            <input type="checkbox" id="listing-check" class="form-control">
+                            </div>
+                            </div>`);
             } else {
               document.getElementById('property-title').style.display = 'block';
               document.getElementById('property-id').style.display = 'block';
               document.getElementById('property-link').style.display = 'block';
               document.getElementById('property-images').style.display = 'block';
               $('#property-title').append(`<h3 class="con-dtitle" style="margin-top:15px;">Property Title</h3>
-                          <div class="row">
-                          <div class="col-sm-10">
-                          <input type="text" name="title" id="title" class="form-control" value="${response.data.Property.title}" readonly>
-                          </div>
-                          <div class="col-sm-2">
-                          <input type="checkbox" id="title-check" class="form-control">
-                          </div>
-                          </div>`);
+                            <div class="row">
+                            <div class="col-sm-10">
+                            <input type="text" name="title" id="title" class="form-control" value="${response.data.Property.title}" readonly>
+                            </div>
+                            <div class="col-sm-2">
+                            <input type="checkbox" id="title-check" class="form-control">
+                            </div>
+                            </div>`);
               $('#property-id').append(`<h3 class="con-dtitle" style="margin-top:15px;">Property Id</h3>
-                          <div class="row">
-                          <div class="col-sm-10">
-                          <input type="text" name="listing_id" id="listing_id" class="form-control" value="${response.data.Property.listing_id}" readonly>
-                          </div>
-                          <div class="col-sm-2">
-                          <input type="checkbox" id="listing-check" class="form-control">
-                          </div>
-                          </div>`);
+                            <div class="row">
+                            <div class="col-sm-10">
+                            <input type="text" name="listing_id" id="listing_id" class="form-control" value="${response.data.Property.listing_id}" readonly>
+                            </div>
+                            <div class="col-sm-2">
+                            <input type="checkbox" id="listing-check" class="form-control">
+                            </div>
+                            </div>`);
               $('#property-link').append(`<h3 class="con-dtitle" style="margin-top:15px;">Property Page Link</h3>
-                          <div class="row">
-                          <div class="col-sm-10">
-                          <input type="text" name="page-link" id="page-link" class="form-control" value="{{ url('') }}/property/${response.data.Property.slug}" readonly>
-                          </div>
-                          <div class="col-sm-2">
-                          <input type="checkbox" id="link-check" class="form-control">
-                          </div>
-                          </div>`);
+                            <div class="row">
+                            <div class="col-sm-10">
+                            <input type="text" name="page-link" id="page-link" class="form-control" value="{{ url('') }}/property/${response.data.Property.slug}" readonly>
+                            </div>
+                            <div class="col-sm-2">
+                            <input type="checkbox" id="link-check" class="form-control">
+                            </div>
+                            </div>`);
               $.each(response.data.Property.property_gallery, function (key, image) {
                 $("#render-images").append(`<div class="col-sm-3">
-                            <img src="{{config('app.url')}}/public/${image.image_path}" style="height:50px;" /><br>
-                            <input type="checkbox" name="document" value="{{config('app.url')}}/public/${image.image_path}" />
-                            </div>`);
+                              <img src="{{config('app.url')}}/public/${image.image_path}" style="height:50px;" /><br>
+                              <input type="checkbox" name="document" value="{{config('app.url')}}/public/${image.image_path}" />
+                              </div>`);
               });
 
             }
@@ -1113,9 +1117,9 @@
       }
     }
 
-  
+
     function deleteBusiness(id) {
-      swal({
+      swal.fire({
         title: "Are you sure?",
         text: "Delete this business listing?",
         icon: "warning",

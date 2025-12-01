@@ -365,59 +365,75 @@
         setActiveAndCollapse();
     });
 
-    // Email and mobile verification functions
     function verifyEmail() {
-        swal({
+        swal.fire({
             title: "Are you sure?",
             text: "Verify This Email.",
             icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        }).then(willDelete => {
-            if (willDelete) {
+            showCancelButton: true,
+            confirmButtonText: "Yes, verify",
+            cancelButtonText: "Cancel",
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        }).then((result) => {
+
+            if (result.isConfirmed) {
                 $(".loading_2").show();
                 $(".btn-delete").attr('disabled', true);
+
                 $.ajax({
                     url: '{{ url('user/verify/email') }}',
                     method: "GET",
-                    success: response => {
+                    success: (response) => {
                         toastr.success(response);
                         $('#email-verify').modal('show');
                     },
-                    error: () => toastr.error('An error occurred.'),
+                    error: () => {
+                        toastr.error('An error occurred.');
+                    },
                     complete: () => {
                         $(".loading_2").hide();
                         $(".btn-delete").attr('disabled', false);
                     }
                 });
             }
+
         });
     }
     function verifyMobileNumber() {
-        swal({
+        swal.fire({
             title: "Are you sure?",
             text: "Verify This Mobile Number.",
             icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        }).then(willDelete => {
-            if (willDelete) {
+            showCancelButton: true,
+            confirmButtonText: "Yes, verify",
+            cancelButtonText: "Cancel",
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        }).then((result) => {
+
+            if (result.isConfirmed) {
                 $(".loading_2").show();
                 $(".btn-delete").attr('disabled', true);
+
                 $.ajax({
                     url: '{{ url('user/verify/mobile') }}',
                     method: "GET",
-                    success: response => {
+                    success: (response) => {
                         toastr.success(response);
                         $('#mob-verify').modal('show');
                     },
-                    error: () => toastr.error('An error occurred.'),
+                    error: () => {
+                        toastr.error('An error occurred.');
+                    },
                     complete: () => {
                         $(".loading_2").hide();
                         $(".btn-delete").attr('disabled', false);
                     }
                 });
             }
+
         });
     }
+
 </script>

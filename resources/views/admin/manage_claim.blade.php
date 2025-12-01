@@ -325,41 +325,43 @@
     }
 
     function assignClaim(id) {
-      swal({
+      swal.fire({
         title: "Are you sure?",
         text: "Assign Clain This User.",
         icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-        .then((willDelete) => {
-          if (willDelete) {
-            $(".loading_2").css('display', 'block');
-            $(".btn-delete").attr('disabled', true);
-            $.ajax({
-              url: '{{ url('master/assign/claim') }}',
-              method: "POST",
-              data: {
-                "_token": "{{ csrf_token() }}",
-                'id': id,
-                'type': 'mobile'
-              },
-              success: function (response) {
-                toastr.success(response)
-                reloadPage();
-              },
-              error: function (response) {
-                toastr.error('An error occured.')
-              },
-              complete: function () {
-                $(".loading_2").css('display', 'none');
-                $(".btn-delete").attr('disabled', false);
-              }
-            })
+        showCancelButton: true,
+        confirmButtonText: "Yes, assign it",
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then((result) => {
+        if (result.isConfirmed) { 
+        $(".loading_2").css('display', 'block');
+        $(".btn-delete").attr('disabled', true);
+        $.ajax({
+          url: '{{ url('master/assign/claim') }}',
+          method: "POST",
+          data: {
+            "_token": "{{ csrf_token() }}",
+            'id': id,
+            'type': 'mobile'
+          },
+          success: function (response) {
+            toastr.success(response)
+            reloadPage();
+          },
+          error: function (response) {
+            toastr.error('An error occured.')
+          },
+          complete: function () {
+            $(".loading_2").css('display', 'none');
+            $(".btn-delete").attr('disabled', false);
           }
-        });
+        })
+      }
+          });
 
-    }
+      }
 
   </script>
 

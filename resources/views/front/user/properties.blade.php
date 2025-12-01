@@ -173,32 +173,41 @@
     </div>
   </section>
   <script type="text/javascript">
+
     function deleteProperty(id) {
-      swal({
+      Swal.fire({
         title: "Are you sure?",
         text: "Delete this Property",
         icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-        .then((willDelete) => {
-          if (willDelete) {
-            $.ajax({
-              method: 'post',
-              url: "{{ route('property.delete') }}",
-              data: {
-                "_token": "{{ csrf_token() }}",
-                'id': id
-              },
-              success: function (data) {
-                toastr.success(data);
-                setTimeout(function () {
-                  location.reload();
-                }, 2000);
-              }
-            });
-          }
-        });
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it",
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            method: 'POST',
+            url: "{{ route('property.delete') }}",
+            data: {
+              "_token": "{{ csrf_token() }}",
+              'id': id
+            },
+            success: function (data) {
+              toastr.success(data.message || 'Deleted successfully');
+              // Optionally remove the deleted element from DOM instead of reload
+              // $('#property-' + id).remove();
+              setTimeout(function () {
+                location.reload();
+              }, 2000);
+            },
+            error: function (err) {
+              toastr.error(err.responseJSON?.message || 'Something went wrong');
+            }
+          });
+        }
+      });
     }
+
   </script>
 @endsection

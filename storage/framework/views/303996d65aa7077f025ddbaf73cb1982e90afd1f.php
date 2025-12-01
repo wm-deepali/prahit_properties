@@ -325,7 +325,7 @@
     }
 
     function assignClaim(id) {
-      swal({
+      swal.fire({
         title: "Are you sure?",
         text: "Assign Clain This User.",
         icon: "warning",

@@ -629,7 +629,8 @@
         </a>
       </div>
 
-      <a href="{{ route('create_property') }}" class="btn  fw-semibold px-3 py-1 rounded-3"
+      <a href="javascript:void(0);" @if(Auth::check()) onclick="window.location.href='{{ route('create_property') }}'"
+      @else onclick=" openSigninModal('post-property')" @endif class="btn  fw-semibold px-3 py-1 rounded-3"
         style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;">
         <i class="fas fa-pencil-alt me-1"></i> Post Property <span class="badge bg-warning text-dark ms-1">Free</span>
       </a>
@@ -1264,7 +1265,9 @@
                     <h4 class="tab-titles">Services</h4>
                     <div class="d-flex flex-column">
                       <!--<a href="{{ route('create_property') }}">Post Property</a> -->
-                      <a href="#">Post Property</a>
+                      <a href="javascript:void(0);" @if(Auth::check())
+                      onclick="window.location.href='{{ route('create_property') }}'" @else
+                        onclick=" openSigninModal('post-property')" @endif>Post Property</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Join BB Prime</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
@@ -1298,7 +1301,9 @@
                     <h4 class="tab-titles">Services</h4>
                     <div class="d-flex flex-column">
                       <!-- <a href="{{ route('create_property') }}">Post Property</a> -->
-                      <a href="#">Post Property</a>
+                      <a href="javascript:void(0);" @if(Auth::check())
+                      onclick="window.location.href='{{ route('create_property') }}'" @else
+                        onclick=" openSigninModal('post-property')" @endif>Post Property</a>
                       <a href="#">Join BB Prime</a>
                       <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
                         @unless(auth()->check()) onclick="openSigninModal()" @endunless>
@@ -1330,7 +1335,9 @@
                     <h4 class="tab-titles">Services</h4>
                     <div class="d-flex flex-column">
                       <!--<a href="{{ route('create_property') }}">Post Property</a> -->
-                      <a href="#">Post Property</a>
+                      <a href="javascript:void(0);" @if(Auth::check())
+                      onclick="window.location.href='{{ route('create_property') }}'" @else
+                        onclick=" openSigninModal('post-property')" @endif>Post Property</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Join BB Prime</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
@@ -3033,7 +3040,7 @@
                         <select class="text-control" name="state_id"
                           onchange="loadCities(this.value, 'register_modal_city_id');" required>
                           @php
-                            $states = \App\State::all();
+                            $states = \App\State::where('country_id', 101)->get();
                           @endphp
                           @if(count($states) < 1)
                             <option value="">No records found</option>
@@ -3267,7 +3274,6 @@
         <span class="bottom-badge"><a href="/user/my-wishlist"
             class="text-decoration-none text-inherit">Wishlist</a></span>
       </a>
-
       @auth
         <a class="bottom-item" style="margin-top:33px;" data-key="sell" href="{{ route('create_property') }}">
       @else
@@ -3755,12 +3761,25 @@
   // floating plus button click
   document.getElementById('bottomPlusBtn').addEventListener('click', () => {
     const btn = document.getElementById('bottomPlusBtn');
-    btn.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-4px)' }, { transform: 'translateY(0)' }],
-      { duration: 220, easing: 'ease-out' });
 
-    // Redirect to create_property route
-    window.location.href = "{{ route('create_property') }}";
-  });
+    // Animate button
+    btn.animate(
+      [
+        { transform: 'translateY(0)' },
+        { transform: 'translateY(-4px)' },
+        { transform: 'translateY(0)' }
+      ],
+      { duration: 220, easing: 'ease-out' }
+    );
+
+    // Redirect or open modal depending on auth
+    @if(Auth::check())
+      window.location.href = "{{ route('create_property') }}";
+    @else
+      openSigninModal('post-property');
+    @endif
+});
+
 
 </script>
 
@@ -4039,10 +4058,20 @@
           }
         },
         error: function (xhr, status, error) {
-          var response = JSON.parse(xhr.responseText);
-          response.responseCode === 400 ? toastr.error(response.message) : toastr.error('An error occured');
+          let response = xhr.responseJSON;
+
+          if (response && response.errors) {
+            // Show first validation error
+            $.each(response.errors, function (key, val) {
+              toastr.error(val[0]);
+            });
+          } else {
+            toastr.error('An error occurred');
+          }
+
           $('#register').modal('hide');
         },
+
         complete: function () {
           $(".modal_loading").css('display', 'none');
           $(".btn-send").attr('disabled', false);

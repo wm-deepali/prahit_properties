@@ -402,8 +402,10 @@
 								<div class="row">
 									<div class="form-group col-sm-12">
 										<label class="label-control">Email</label>
-										<input type="email" class="text-control email" placeholder="Enter Email" id="email"
-											name="email" value="{{ Auth::user()->email ?? old('email') }}" required />
+										<input type="email" class="form-control" name="email" id="email"
+											placeholder="Your Email"
+											value="{{ Auth::check() ? Auth::user()->email : old('email') }}" required>
+
 									</div>
 								</div>
 
@@ -542,10 +544,10 @@
 					const div = document.createElement('div');
 					div.style.position = 'relative';
 					div.innerHTML = `
-																								<img src="${e.target.result}" class="rounded border" width="100" height="100">
-																								<button type="button" class="btn btn-sm btn-danger" style="position:absolute;top:0;right:0;"
-																									onclick="removeImage(${index})">&times;</button>
-																							`;
+																										<img src="${e.target.result}" class="rounded border" width="100" height="100">
+																										<button type="button" class="btn btn-sm btn-danger" style="position:absolute;top:0;right:0;"
+																											onclick="removeImage(${index})">&times;</button>
+																									`;
 					container.appendChild(div);
 				};
 				reader.readAsDataURL(file);
@@ -1128,23 +1130,29 @@
 				toastr.warning('Last name is required.');
 				return false;
 			}
-			if (!email.trim()) {
-				$('#email').focus();
-				toastr.warning('Email is required.');
-				return false;
-			}
-			if (!mobile_number.trim()) {
-				$('#mobile_number').focus();
-				toastr.warning('Mobile number is required.');
-				return false;
-			}
 
-			// Validate mobile number length
-			if (mobile_number.length !== 10) {
-				$('#mobile_number').focus();
-				toastr.warning('Enter a valid 10-digit mobile number.');
-				return false;
+			const isLoggedIn = @json(Auth::check());
+
+			if (!isLoggedIn) {
+				if (email == '') {
+					$('#email').focus();
+					toastr.warning('Email is required.');
+					return false;
+				}
+				if (mobile_number == '') {
+					$('#mobile_number').focus();
+					toastr.warning('Mobile number is required.');
+					return false;
+				}
+				// Validate mobile number length
+				if (mobile_number.length !== 10) {
+					$('#mobile_number').focus();
+					toastr.warning('Enter a valid 10-digit mobile number.');
+					return false;
+				}
 			}
+		
+
 
 			// -------------------------
 			// OTP VALIDATION LOGIC

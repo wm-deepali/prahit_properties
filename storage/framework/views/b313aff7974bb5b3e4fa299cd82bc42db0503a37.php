@@ -314,7 +314,7 @@
     }
 
     function deleteUser(id) {
-      swal({
+      swal.fire({
         title: "Are you sure?",
         text: "Delete This User.",
         icon: "warning",

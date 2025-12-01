@@ -303,7 +303,7 @@
     <script type="text/javascript">
 
         function changeStatus(id) {
-            swal({
+            swal.fire({
                 title: "Are you sure?",
                 text: "Change status of this user",
                 icon: "warning",
@@ -347,7 +347,7 @@
         }
 
         function deleteUser(id) {
-            swal({
+            swal.fire({
                 title: "Are you sure?",
                 text: "Delete This User.",
                 icon: "warning",
@@ -388,7 +388,7 @@
         }
 
         function verifyEmail(id) {
-            swal({
+            swal.fire({
                 title: "Are you sure?",
                 text: "Verify This Email.",
                 icon: "warning",
@@ -425,7 +425,7 @@
         }
 
         function verifyMobileNumber(id) {
-            swal({
+            swal.fire({
                 title: "Are you sure?",
                 text: "Verify This Mobile Number.",
                 icon: "warning",

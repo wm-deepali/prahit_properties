@@ -95,9 +95,10 @@
               </ul>
               <div class="tab-content" id="pills-tabContent">
 
-        
+
                 {{-- PUBLISHED --}}
-                <div class="tab-pane fade show active" id="prop-published" role="tabpanel" aria-labelledby="prop-published-tab">
+                <div class="tab-pane fade show active" id="prop-published" role="tabpanel"
+                  aria-labelledby="prop-published-tab">
                   <div class="row">
                     <div class="col-sm-12">
                       @if(count($published) > 0)
@@ -135,35 +136,43 @@
     </div>
   </section>
   <script type="text/javascript">
-function deleteBusiness(id) {
-    swal({
+    function deleteBusiness(id) {
+      swal.fire({
         title: "Are you sure?",
-        text: "Delete this Business Listing",
+        text: "Delete this Business Listing?",
         icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    })
-    .then((willDelete) => {
-        if (willDelete) {
-            $.ajax({
-                method: 'DELETE',
-                url: "{{ url('user/services/delete') }}/" + id,
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    "_method": "DELETE"
-                },
-                success: function (data) {
-                    toastr.success(data.message || 'Deleted successfully');
-                    // Remove deleted card from DOM
-                    $('#business-' + id).remove();
-                },
-                error: function (err) {
-                    toastr.error(err.responseJSON?.message || 'Something went wrong');
-                }
-            });
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete",
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false, // Prevent accidental delete
+        allowEscapeKey: false
+      }).then((result) => {
+
+        if (result.isConfirmed) {
+
+          $.ajax({
+            method: 'DELETE',
+            url: "{{ url('user/services/delete') }}/" + id,
+            data: {
+              "_token": "{{ csrf_token() }}",
+              "_method": "DELETE"
+            },
+            success: function (data) {
+              toastr.success(data.message || 'Deleted successfully');
+
+              // Remove card from DOM
+              $('#business-' + id).remove();
+            },
+            error: function (err) {
+              toastr.error(err.responseJSON?.message || 'Something went wrong');
+            }
+          });
+
         }
-    });
-}
-</script>
+
+      });
+    }
+
+  </script>
 
 @endsection

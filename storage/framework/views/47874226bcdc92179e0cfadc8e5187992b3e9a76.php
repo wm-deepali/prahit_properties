@@ -396,9 +396,28 @@
 												</video>
 												<br>
 											<?php endif; ?>
-											<input type="file" name="property_video" accept="video/*" class="form-control">
+											<input type="file" class="form-control" name="property_video" accept="video/*"
+												id="property_video_input">
+											<small class="text-muted">You can upload one property video (optional). Max size:
+												20MB</small>
+											<div id="video_error" class="text-danger mt-1"></div>
 										</div>
 									</div>
+									<script>
+										document.getElementById('property_video_input').addEventListener('change', function (e) {
+											const file = e.target.files[0];
+											const maxSizeMB = 20; // 20MB
+											const maxSizeBytes = maxSizeMB * 1024 * 1024;
+											const errorDiv = document.getElementById('video_error');
+
+											if (file && file.size > maxSizeBytes) {
+												errorDiv.textContent = `Video size exceeds ${maxSizeMB}MB. Please select a smaller file.`;
+												e.target.value = ''; // Clear the input
+											} else {
+												errorDiv.textContent = '';
+											}
+										});
+									</script>
 								<?php endif; ?>
 
 								<h4 class="form-section-h">Property Additional Information</h4>
@@ -545,7 +564,7 @@
 				console.log('here');
 				toggleSubSubCategoryFields(<?php echo json_encode($property->SubSubCategory, 15, 512) ?>);
 			<?php endif; ?>
-					});
+								});
 
 
 		let selectedFiles = []; // new files user selects
@@ -582,11 +601,11 @@
 					const div = document.createElement('div');
 					div.classList.add('position-relative', 'm-1');
 					div.innerHTML = `
-																				<img src="${e.target.result}" class="rounded border" width="100" height="100">
-																				<button type="button" class="btn btn-sm btn-danger" 
-																					style="position:absolute;top:0;right:0;" 
-																					onclick="removeImage(${index})">&times;</button>
-																			`;
+																							<img src="${e.target.result}" class="rounded border" width="100" height="100">
+																							<button type="button" class="btn btn-sm btn-danger" 
+																								style="position:absolute;top:0;right:0;" 
+																								onclick="removeImage(${index})">&times;</button>
+																						`;
 					container.appendChild(div);
 				};
 				reader.readAsDataURL(file);
@@ -603,11 +622,11 @@
 		<?php else: ?>
 			// Construct address string from state, city, location
 			let address = '';
-																									  <?php if(!empty($property->location)): ?> address += '<?php echo e($property->location->location); ?>'; <?php endif; ?>
+																															  <?php if(!empty($property->location)): ?> address += '<?php echo e($property->location->location); ?>'; <?php endif; ?>
 			<?php if(!empty($property->city)): ?> address += ', <?php echo e($property->city->name); ?>'; <?php endif; ?>
 			<?php if(!empty($property->state)): ?> address += ', <?php echo e($property->state->name); ?>'; <?php endif; ?>
 
-																									  if (address) {
+																															  if (address) {
 				fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
 					.then(res => res.json())
 					.then(data => {
@@ -1128,8 +1147,8 @@
 					formData.append('is_visitor', true);
 				<?php endif; ?>
 
-																																							// console.log(obj)
-																																							if (jQuery.isEmptyObject(obj)) {
+																																										// console.log(obj)
+																																										if (jQuery.isEmptyObject(obj)) {
 					returnIfInvalid();
 				}
 
@@ -1148,7 +1167,7 @@
 							<?php if(auth()->guard()->check()): ?>
 								request.setRequestHeader('auth-token', '<?php echo e(Auth::user()->auth_token); ?>');
 							<?php endif; ?>
-																																										},
+																																													},
 						success: function (response) {
 							// var response = JSON.parse(response);
 							if (response.responseCode === 200) {
@@ -1159,7 +1178,7 @@
 									// window.location.href = "<?php echo e(route('admin.properties.index')); ?>";
 									//          	}, 1000);
 								<?php endif; ?>
-																																											} else if (response.responseCode === 400) {
+																																														} else if (response.responseCode === 400) {
 								toastr.error(response.message)
 							} else {
 								toastr.error('An error occured')
@@ -1318,7 +1337,14 @@
 							window.location.href = response.redirect_url;
 						}, 1000);
 					} else {
-						toastr.error(response.message || 'Something went wrong.');
+						// Check if validation errors exist
+						if (response.errors) {
+							// Combine all errors into a single string
+							const allErrors = Object.values(response.errors).flat().join('<br>');
+							toastr.error(allErrors);
+						} else {
+							toastr.error(response.message || 'Something went wrong.');
+						}
 					}
 				})
 				.catch(err => toastr.error('Server error!'));

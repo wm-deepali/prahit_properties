@@ -285,16 +285,18 @@ $(function() {
 
 
   function changeStatus(id) {
-    swal({
+       Swal.fire({
         title: "Are you sure?",
         text: "Delete This State.",
         icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    })
-    .then((willDelete) => {
-      if (willDelete) {
-          
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it",
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+  
           $.ajax({
             url: '{{ route('admin.deleteState') }}',
             method: "POST",

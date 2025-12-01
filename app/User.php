@@ -105,7 +105,7 @@ class User extends Authenticatable
         return $this->hasOne(\App\Models\Subscription::class, 'user_id')
             ->where('is_active', 1)
             ->whereHas('package', function ($q) {
-                $q->where('package_type', 'business');
+                $q->where('package_type', 'service');
             })
             ->latest();
     }

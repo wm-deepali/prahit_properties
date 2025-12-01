@@ -2025,22 +2025,22 @@ class PropertiesController extends AppController
 	public function manageClaimsDatatable(Request $request)
 	{
 		if ($request->ajax()) {
-			$datas = ClaimListing::orderBy('id', 'DESC')->get();
+			$datas = ClaimListing::whereHas('user')->orderBy('id', 'DESC')->get();
 			return Datatables::of($datas)
-				->addIndexColumn()
-				->addColumn('property_id', function ($row) {
-					$picked = Properties::find($row->property_id);
-					if ($picked) {
-						$listing_id = '<a href="#" onclick="fetchPropertyDetails(' . $picked->id . ')" name="View Property">' . $picked->listing_id . '</a>';
-						return $listing_id;
-
-					} else {
+			->addIndexColumn()
+			->addColumn('property_id', function ($row) {
+				$picked = Properties::find($row->property_id);
+				if ($picked) {
+					$listing_id = '<a href="#" onclick="fetchPropertyDetails(' . $picked->id . ')" name="View Property">' . $picked->listing_id . '</a>';
+					return $listing_id;
+					
+				} else {
 						return 'N/A';
 					}
 				})
 				->addColumn('posted_by', function ($row) {
 					$p = Properties::find($row->property_id);
-					$u = User::find($p->user_id);
+					$u = User::find($p->user_id ?? 0);
 					if ($u) {
 						return $u->role;
 					} else {
@@ -2048,7 +2048,7 @@ class PropertiesController extends AppController
 					}
 				})
 				->addColumn('claim_by', function ($row) {
-					$u = User::find($row->user_id);
+					$u = User::find($row->user_id ?? 0);
 					if ($u) {
 						$name = ucfirst($u->firstname . ' ' . $u->lastname);
 						$mobile = $u->mobile_number ?? 'N/A';
