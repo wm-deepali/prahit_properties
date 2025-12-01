@@ -183,6 +183,10 @@
                                     <a class="dropdown-item" href="<?php echo e(route('admin.manageComplaints')); ?>">
                                         Complaints
                                     </a>
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.callbackRequests')); ?>">
+                                        Callback Requests
+                                    </a>
+
                                 </div>
                             </li>
 
@@ -280,6 +284,7 @@
                                     <a class="dropdown-item" href="<?php echo e(route('admin.manageJobTechnologies')); ?>">Manage
                                         Technologies</a>
                                     <a class="dropdown-item" href="<?php echo e(route('admin.manageJobs')); ?>">Manage Jobs</a>
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.jobRequests')); ?>">Job Requests</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">

@@ -825,20 +825,64 @@
             <li>
               <div class="dropdown-item-text">
                 <h6 class="mb-1 text-start">CONTACT US</h6>
-
                 <hr>
-                <a href="" class=" mb-2 w-100 text-start"
-                  style="font-size: 16px;margin-bottom:15px;text-decoration:none; ">
-                  <span style="font-size: 11px; ">Work Hours | 9:30 AM to 6:30 PM</span><br>
+
+                <!-- Clickable phone number -->
+                <a href="tel:+919451591515" class="d-block mb-2 text-start text-decoration-none"
+                  style="font-size: 16px;">
+                  <span style="font-size: 11px;">Work Hours | 9:30 AM to 6:30 PM</span><br>
                   <i class="fas fa-phone-alt me-2"></i> +91 9451591515
                 </a>
                 <hr>
-                <button class="btn btn-outline-secondary btn-sm w-100" style="font-size: 14px;">
+
+                <!-- Request a Callback button -->
+                <button class="btn btn-outline-secondary btn-sm w-100" style="font-size: 14px;" data-bs-toggle="modal"
+                  data-bs-target="#callbackModal">
                   <i class="fas fa-phone-alt me-2"></i> Request A Callback
                 </button>
+
               </div>
             </li>
           </ul>
+        </div>
+
+        <!-- Callback Modal -->
+        <div class="modal fade" id="callbackModal" tabindex="-1" aria-labelledby="callbackModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form action="<?php echo e(route('requestCallback')); ?>" method="POST">
+                <?php echo csrf_field(); ?>
+                <div class="modal-header">
+                  <h5 class="modal-title" id="callbackModalLabel">Request A Callback</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Your Name" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="mobile_number" class="form-label">Mobile Number</label>
+                    <input type="text" class="form-control" name="mobile_number" id="mobile_number"
+                      placeholder="Your Mobile Number" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="message" class="form-label">Message / Query</label>
+                    <textarea class="form-control" name="message" id="message" rows="3"
+                      placeholder="Optional"></textarea>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary w-100">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
 
 
@@ -973,7 +1017,7 @@
                     <h4 class="tab-titles">Properties</h4>
                     <div class="d-flex flex-column">
                       <?php $__currentLoopData = $sellResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => $subSubcat->id])); ?>">
+                        <a href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_sub_category_id' => $subSubcat->id])); ?>">
                           <?php echo e($subSubcat->sub_sub_category_name); ?>
 
                         </a>
@@ -991,7 +1035,7 @@
                     <div class="d-flex flex-column">
                       <?php $__currentLoopData = $sellBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <a
-                          href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => 34], $budget['query']))); ?>"><?php echo e($budget['label']); ?></a>
+                          href="<?php echo e(route('listing.list', array_merge(['type' => 'buy', 'sub_category_id' => 34], $budget['query']))); ?>"><?php echo e($budget['label']); ?></a>
 
                         <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
 
@@ -1001,28 +1045,31 @@
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Popular Choices</h4>
                     <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'user_role' => 'owner'])); ?>">Owner
-                        Properties</a>
-                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'status' => 'verified'])); ?>">Verified
+                      <a
+                        href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'user_role' => 'owner'])); ?>">Owner
                         Properties</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move'])); ?>">Ready
+                        href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'status' => 'verified'])); ?>">Verified
+                        Properties</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
+                      <a
+                        href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'property_status' => 'Ready to Move'])); ?>">Ready
                         to
                         Move</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon'])); ?>">Possession
+                        href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'property_status' => 'Possession Soon'])); ?>">Possession
                         Soon</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Immediate Available</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])); ?>">Full
+                        href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])); ?>">Full
                         Furnished</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch'])); ?>">New
+                      <a
+                        href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'sort' => 'new-launch'])); ?>">New
                         Launch</a>
                     </div>
                   </div>
@@ -1038,7 +1085,7 @@
                     <h4 class="tab-titles">Properties</h4>
                     <div class="d-flex flex-column">
                       <?php $__currentLoopData = $sellCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => $subSubcat->id])); ?>">
+                        <a href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_sub_category_id' => $subSubcat->id])); ?>">
                           <?php echo e($subSubcat->sub_sub_category_name); ?>
 
                         </a>
@@ -1055,7 +1102,7 @@
                     <div class="d-flex flex-column">
                       <?php $__currentLoopData = $sellBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <a
-                          href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => 35], $budget['query']))); ?>"><?php echo e($budget['label']); ?></a>
+                          href="<?php echo e(route('listing.list', array_merge(['type' => 'buy', 'sub_category_id' => 35], $budget['query']))); ?>"><?php echo e($budget['label']); ?></a>
 
                         <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
 
@@ -1066,28 +1113,31 @@
                     <h4 class="tab-titles">Popular Choices</h4>
 
                     <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'user_role' => 'owner'])); ?>">Owner
-                        Properties</a>
-                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'status' => 'verified'])); ?>">Verified
+                      <a
+                        href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 35, 'user_role' => 'owner'])); ?>">Owner
                         Properties</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Ready to Move'])); ?>">Ready
+                        href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 35, 'status' => 'verified'])); ?>">Verified
+                        Properties</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
+                      <a
+                        href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 35, 'property_status' => 'Ready to Move'])); ?>">Ready
                         to
                         Move</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Possession Soon'])); ?>">Possession
+                        href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 35, 'property_status' => 'Possession Soon'])); ?>">Possession
                         Soon</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Immediate Available</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])); ?>">Fully
+                        href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])); ?>">Fully
                         Furnished</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'sort' => 'new-launch'])); ?>">New
+                      <a
+                        href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 35, 'sort' => 'new-launch'])); ?>">New
                         Launch</a>
                     </div>
                   </div>
@@ -1102,11 +1152,14 @@
                   <div class="tab-content-section">
                     <h4 class="tab-titles">New Launch</h4>
                     <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 34])); ?>">Residential Projects</a>
+                      <a href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34])); ?>">Residential
+                        Projects</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 35])); ?>">Commercial Projects</a>
+                      <a href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 35])); ?>">Commercial
+                        Projects</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
-                      <a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => '18,25,27'])); ?>">Land & Plots</a>
+                      <a href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_sub_category_id' => '18,25,27'])); ?>">Land
+                        & Plots</a>
                     </div>
                   </div>
                   <div class="tab-content-section">
@@ -1114,7 +1167,7 @@
                     <div class="d-flex flex-column">
                       <?php $__currentLoopData = $sellBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <a
-                          href="<?php echo e(route('listing.list', array_merge(['category_id' => 22], $budget['query']))); ?>"><?php echo e($budget['label']); ?></a>
+                          href="<?php echo e(route('listing.list', array_merge(['type' => 'buy', 'category_id' => 22], $budget['query']))); ?>"><?php echo e($budget['label']); ?></a>
                         <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
@@ -1123,20 +1176,21 @@
                     <h4 class="tab-titles">Popular Choices</h4>
 
                     <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch'])); ?>">New
+                      <a
+                        href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'sort' => 'new-launch'])); ?>">New
                         Launch</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Under Construction'])); ?>">Under
+                        href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'property_status' => 'Under Construction'])); ?>">Under
                         Construction</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move'])); ?>">Ready
+                        href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'property_status' => 'Ready to Move'])); ?>">Ready
                         to
                         Move</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon'])); ?>">Possession
+                        href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'property_status' => 'Possession Soon'])); ?>">Possession
                         Soon</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">OC Received</a>
@@ -1363,7 +1417,8 @@
                     <h4 class="tab-titles">Properties</h4>
                     <div class="d-flex flex-column">
                       <?php $__currentLoopData = $rentResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => $subSubcat->id])); ?>">
+                        <a
+                          href="<?php echo e(route('listing.list', ['type' => 'rental', 'sub_sub_category_id' => $subSubcat->id])); ?>">
                           <?php echo e($subSubcat->sub_sub_category_name); ?>
 
                         </a>
@@ -1376,7 +1431,7 @@
                     <div class="d-flex flex-column">
                       <?php $__currentLoopData = $rentBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <a
-                          href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => 38], $budget['query']))); ?>"><?php echo e($budget['label']); ?></a>
+                          href="<?php echo e(route('listing.list', array_merge(['type' => 'rental', 'sub_category_id' => 38], $budget['query']))); ?>"><?php echo e($budget['label']); ?></a>
                         <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
@@ -1384,21 +1439,23 @@
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Popular Choise</h4>
                     <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 38, 'user_role' => 'owner'])); ?>">Owner
-                        Properties</a>
-                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 38, 'status' => 'verified'])); ?>">Verified
+                      <a
+                        href="<?php echo e(route('listing.list', ['type' => 'rental', 'sub_category_id' => 38, 'user_role' => 'owner'])); ?>">Owner
                         Properties</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 38, 'property_status' => 'Ready to Move'])); ?>">Ready
+                        href="<?php echo e(route('listing.list', ['type' => 'rental', 'sub_category_id' => 38, 'status' => 'verified'])); ?>">Verified
+                        Properties</a>
+                      <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
+                      <a
+                        href="<?php echo e(route('listing.list', ['type' => 'rental', 'sub_category_id' => 38, 'property_status' => 'Ready to Move'])); ?>">Ready
                         to
                         Move</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Immediate Available</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
-                        href="<?php echo e(route('listing.list', ['sub_category_id' => 38, 'furnishing_status' => 'Full Furnished'])); ?>">Full
+                        href="<?php echo e(route('listing.list', ['type' => 'rental', 'sub_category_id' => 38, 'furnishing_status' => 'Full Furnished'])); ?>">Full
                         Furnished</a>
                     </div>
                   </div>
@@ -1413,7 +1470,8 @@
                     <h4 class="tab-titles">Properties</h4>
                     <div class="d-flex flex-column">
                       <?php $__currentLoopData = $rentCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => $subSubcat->id])); ?>">
+                        <a
+                          href="<?php echo e(route('listing.list', ['type' => 'rental', 'sub_sub_category_id' => $subSubcat->id])); ?>">
                           <?php echo e($subSubcat->sub_sub_category_name); ?>
 
                         </a>
@@ -1427,7 +1485,8 @@
 
                     <div class="d-flex flex-column">
                       <?php $__currentLoopData = $rentBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => 37], $budget['query']))); ?>">
+                        <a
+                          href="<?php echo e(route('listing.list', array_merge(['type' => 'rental', 'sub_category_id' => 37], $budget['query']))); ?>">
                           <?php echo e($budget['label']); ?>
 
                         </a>
@@ -1439,10 +1498,12 @@
                   <div class="tab-content-section">
                     <h4 class="tab-titles">Popular Choise</h4>
                     <div class="d-flex flex-column">
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 37, 'user_role' => 'owner'])); ?>">Owner
+                      <a
+                        href="<?php echo e(route('listing.list', ['type' => 'rental', 'sub_category_id' => 37, 'user_role' => 'owner'])); ?>">Owner
                         Properties</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
-                      <a href="<?php echo e(route('listing.list', ['sub_category_id' => 37, 'status' => 'verified'])); ?>">Verified
+                      <a
+                        href="<?php echo e(route('listing.list', ['type' => 'rental', 'sub_category_id' => 37, 'status' => 'verified'])); ?>">Verified
                         Properties</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a
@@ -1710,7 +1771,8 @@
                         <h5><i class="fas fa-building"></i> Properties</h5>
                         <ul class="list-unstyled">
                           <?php $__currentLoopData = $sellResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <li><a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => $subSubcat->id])); ?>">
+                            <li><a
+                                href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_sub_category_id' => $subSubcat->id])); ?>">
                                 <?php echo e($subSubcat->sub_sub_category_name); ?></a></li>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
@@ -1720,7 +1782,7 @@
                         <ul class="list-unstyled">
                           <?php $__currentLoopData = $sellBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <li><a
-                                href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => 34], $budget['query']))); ?>">
+                                href="<?php echo e(route('listing.list', array_merge(['type' => 'buy', 'sub_category_id' => 34], $budget['query']))); ?>">
                                 <?php echo e($budget['label']); ?></a></li>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
@@ -1729,23 +1791,23 @@
                         <h5><i class="fas fa-star"></i> Popular Choices</h5>
                         <ul class="list-unstyled">
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'user_role' => 'owner'])); ?>">Owner
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'user_role' => 'owner'])); ?>">Owner
                               Properties</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'status' => 'verified'])); ?>">Verified
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'status' => 'verified'])); ?>">Verified
                               Properties</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move'])); ?>">Ready
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'property_status' => 'Ready to Move'])); ?>">Ready
                               to Move</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon'])); ?>">Possession
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'property_status' => 'Possession Soon'])); ?>">Possession
                               Soon</a></li>
                           <li><a href="#">Immediate Available</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])); ?>">Fully
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])); ?>">Fully
                               Furnished</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch'])); ?>">New
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'sort' => 'new-launch'])); ?>">New
                               Launch</a></li>
                         </ul>
                       </div>
@@ -1769,7 +1831,8 @@
                         <h5><i class="fas fa-store"></i> Properties</h5>
                         <ul class="list-unstyled">
                           <?php $__currentLoopData = $sellCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <li><a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => $subSubcat->id])); ?>">
+                            <li><a
+                                href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_sub_category_id' => $subSubcat->id])); ?>">
                                 <?php echo e($subSubcat->sub_sub_category_name); ?></a></li>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
@@ -1779,7 +1842,7 @@
                         <ul class="list-unstyled">
                           <?php $__currentLoopData = $sellBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <li><a
-                                href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => 35], $budget['query']))); ?>">
+                                href="<?php echo e(route('listing.list', array_merge(['type' => 'buy', 'sub_category_id' => 35], $budget['query']))); ?>">
                                 <?php echo e($budget['label']); ?></a></li>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
@@ -1788,23 +1851,23 @@
                         <h5><i class="fas fa-star"></i> Popular Choices</h5>
                         <ul class="list-unstyled">
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'user_role' => 'owner'])); ?>">Owner
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 35, 'user_role' => 'owner'])); ?>">Owner
                               Properties</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'status' => 'verified'])); ?>">Verified
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 35, 'status' => 'verified'])); ?>">Verified
                               Properties</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Ready to Move'])); ?>">Ready
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 35, 'property_status' => 'Ready to Move'])); ?>">Ready
                               to Move</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'property_status' => 'Possession Soon'])); ?>">Possession
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 35, 'property_status' => 'Possession Soon'])); ?>">Possession
                               Soon</a></li>
                           <li><a href="#">Immediate Available</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])); ?>">Fully
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'furnishing_status' => 'Full Furnished'])); ?>">Fully
                               Furnished</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 35, 'sort' => 'new-launch'])); ?>">New
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 35, 'sort' => 'new-launch'])); ?>">New
                               Launch</a></li>
                         </ul>
                       </div>
@@ -2816,8 +2879,7 @@
                         <label class="label-control">Password</label>
                         <input type="password" class="text-control" placeholder="Enter Password" id="password"
                           name="password" required />
-                        <a href="#" data-target="#forgot-password" data-toggle="modal" data-dismiss="modal"
-                          class="forgotpass">Forgot Password ?</a>
+                        <a href="#" class="forgotpass">Forgot Password ?</a>
                       </div>
                     </div>
                     <div class="form-group row">
@@ -2825,8 +2887,7 @@
                         <label class="label-control">OTP</label>
                         <input type="number" class="text-control" placeholder="Enter OTP" id="otp" name="otp"
                           required />
-                        <a href="#" data-target="#forgot-password" data-toggle="modal" data-dismiss="modal"
-                          class="forgotpass">Forgot Password ?</a>
+                        <a href="#" class="forgotpass">Forgot Password ?</a>
                       </div>
                     </div>
                     <div class="form-group row">
@@ -2876,7 +2937,7 @@
     aria-hidden="true">
     <div class="modal-dialog w-450" role="document">
       <div class="modal-content">
-        <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
 
@@ -3097,7 +3158,7 @@
     aria-hidden="true">
     <div class="modal-dialog w-450" role="document">
       <div class="modal-content">
-        <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
 
@@ -3149,7 +3210,7 @@
     aria-hidden="true">
     <div class="modal-dialog w-450" role="document">
       <div class="modal-content">
-        <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
 
@@ -3492,50 +3553,44 @@
           </div>
           <div class="col-sm-6">
             <div class="foo-right">
+
+              <?php
+                // Get main categories for Rent/Sell or "Real Estate" type
+                $rentEstateSubs = App\SubSubCategory::where('category_id', 21)->get();
+                $sellEstateSubs = App\SubSubCategory::where('category_id', 22)->get();
+              ?>
+
               <div class="foo-left-inner">
-                <h3>Real Estate in India </h3>
+                <h3>Real Estate For Rent</h3>
                 <ul>
-                  <li><a href="#">Property in Navi Mumbai</a>
-                  </li>
-                  <li><a href="#">Property in Banglore</a>
-                  </li>
-                  <li><a href="#">Property in Mumbai</a>
-                  </li>
-                  <li><a href="#">Property in Lucknow</a>
-                  </li>
-                  <li><a href="#">Property in Oberoi</a>
-                  </li>
-                  <li><a href="#">Property in Orissa</a>
-                  </li>
-                  <li><a href="#">Property in Surat</a>
-                  </li>
-                  <li><a href="#">Property in Chandigarh</a>
-                  </li>
+                  <?php $__currentLoopData = $rentEstateSubs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <li>
+                      <a href="<?php echo e(route('listing.list', ['type' => 'rental', 'sub_sub_category_id' => $sub->id])); ?>">
+                        <?php echo e($sub->sub_sub_category_name); ?>
+
+                      </a>
+                    </li>
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
               </div>
+
               <div class="foo-left-inner">
-                <h3>New Projects in India </h3>
+                <h3>Real Estate For Sell</h3>
                 <ul>
-                  <li><a href="#">New Projects in Navi Mumbai</a>
-                  </li>
-                  <li><a href="#">New Projects in Banglore</a>
-                  </li>
-                  <li><a href="#">New Projects in Mumbai</a>
-                  </li>
-                  <li><a href="#">New Projects in Lucknow</a>
-                  </li>
-                  <li><a href="#">New Projects in Oberoi</a>
-                  </li>
-                  <li><a href="#">New Projects in Orissa</a>
-                  </li>
-                  <li><a href="#">New Projects in Surat</a>
-                  </li>
-                  <li><a href="#">New Projects in Chandigarh</a>
-                  </li>
+                  <?php $__currentLoopData = $sellEstateSubs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <li>
+                      <a href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_sub_category_id' => $sub->id])); ?>">
+                        <?php echo e($sub->sub_sub_category_name); ?>
+
+                      </a>
+                    </li>
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
               </div>
+
             </div>
           </div>
+
           <div class="col-sm-12">
             <hr />
             <p class="disclaimer-p">Disclaimer: <?php echo e($footer_content->description); ?></p>
@@ -3572,6 +3627,14 @@
     }
     $('#signin').modal('show');
   }
+
+  $('.forgotpass').on('click', function (e) {
+    e.preventDefault();
+    $('#signin').modal('hide');
+    setTimeout(function () {
+      $('#forgot-password').modal('show');
+    }, 300);
+  });
 
   $('.create-account').on('click', function (e) {
     e.preventDefault();
@@ -3893,14 +3956,14 @@
           console.log(response);
           // toastr.success('abc')
           // var response = JSON.parse(response);
-          if (response.responseCode === 200) {
+          if (response.status == true) {
             $("#forgot_password_form #email").val('');
             toastr.success(response.message)
             $(".modal").modal('hide');
             $("#forgototp").modal('show');
-            $("#verify_otp_password .user_id").val(response.data.User.id);
+            $("#verify_otp_password .user_id").val(response.data.id);
             // reloadPage();
-          } else if (response.responseCode === 400) {
+          } else if (response.status == false) {
             toastr.error(response.message)
             $("#forgot_password_form #email").val('');
           }
@@ -3941,11 +4004,11 @@
           // console.log(response);
           // toastr.success('abc')
           // var response = JSON.parse(response);
-          if (response.responseCode === 200) {
+          if (response.status == true) {
             toastr.success(response.message)
             $(".modal").modal('hide');
             // reloadPage();
-          } else if (response.responseCode === 400) {
+          } else if (response.status == false) {
             toastr.error(response.message)
             $("#verify_otp_password").trigger('reset');
           }
@@ -4043,7 +4106,7 @@
           $(".modal_loading").css('display', 'block');
         },
         success: function (response) {
-          console.log(response,response.status == true);
+          console.log(response, response.status == true);
           // toastr.success('abc')
           // var response = JSON.parse(response);
           if (response.status == true) {

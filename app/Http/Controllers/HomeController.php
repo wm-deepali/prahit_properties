@@ -118,6 +118,26 @@ class HomeController extends AppController
 		}
 	}
 
+	public function requestCallback(Request $request)
+	{
+		$request->validate([
+			'name' => 'required|max:150',
+			'email' => 'required|email|max:200',
+			'mobile_number' => 'required|digits:10',
+			'message' => 'nullable|max:500',
+		]);
+
+		\App\Models\CallbackRequest::create([
+			'name' => $request->name,
+			'email' => $request->email,
+			'mobile_number' => $request->mobile_number,
+			'message' => $request->message,
+		]);
+
+		return redirect()->back()->with('success', 'Your request has been submitted. We will call you soon!');
+	}
+
+
 	public function list(Request $request)
 	{
 		$query = Properties::query();
@@ -569,9 +589,6 @@ class HomeController extends AppController
 			abort(404, 'User not found.');
 		}
 
-		// Fetch Profile Section Data
-		$profileSection = \App\Models\ProfileSection::where('user_id', $user->id)->first();
-
 		// Property counts
 		$totalProperties = Properties::where('user_id', $user->id)->count();
 		$sellCount = Properties::where('user_id', $user->id)->where('category_id', 22)->count();
@@ -585,7 +602,7 @@ class HomeController extends AppController
 			->latest()
 			->get();
 
-		// 🟢 Other Agents/Builders (exclude current user)
+		// Other Agents/Builders (exclude current user)
 		$otherUsers = User::whereIn('role', ['agent', 'builder'])
 			->where('id', "!=", $user->id)
 			->whereHas('profileSection')
@@ -593,17 +610,34 @@ class HomeController extends AppController
 			->take(3)
 			->get();
 
-		return view('front.profile-page', compact(
-			'user',
-			'slug',
-			'profileSection',
-			'totalProperties',
-			'sellCount',
-			'rentCount',
-			'pgHostelCount',
-			'properties',
-			'otherUsers'
-		));
+		if (in_array($user->role, ['agent', 'builder'])) {
+			// Fetch Profile Section Data only for agents/builders
+			$profileSection = \App\Models\ProfileSection::where('user_id', $user->id)->first();
+
+			return view('front.profile-page', compact(
+				'user',
+				'slug',
+				'profileSection',
+				'totalProperties',
+				'sellCount',
+				'rentCount',
+				'pgHostelCount',
+				'properties',
+				'otherUsers'
+			));
+		} else {
+			// For other users, same data but without profile section
+			return view('front.owner-profile', compact(
+				'user',
+				'slug',
+				'totalProperties',
+				'sellCount',
+				'rentCount',
+				'pgHostelCount',
+				'properties',
+				'otherUsers'
+			));
+		}
 	}
 
 

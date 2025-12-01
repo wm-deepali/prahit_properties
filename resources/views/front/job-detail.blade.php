@@ -61,9 +61,9 @@
 					<button class="btn btn-applyjob" data-target="#applyjob" data-toggle="modal" type="button">Apply For this Job</button>
 				</div>
 				
-				<div class="share-job">
+				<!-- <div class="share-job">
 					<h3 class="h-heading">Share this Job</h3>
-				</div>
+				</div> -->
 				
 				<div class="similar-job">
 					<h3 class="h-heading">Similar Jobs</h3>

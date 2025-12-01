@@ -216,7 +216,7 @@ $(document).ready(function() {
         var status = btn.data('status');
 
         $.ajax({
-            url: '/admin/business-listing/toggle-status/' + id, // Custom POST route
+            url: '{{ route("admin.business-listing.toggleStatus", ":id") }}'.replace(':id', id), // Custom POST route
             method: "POST",
             data: {
                 is_published: status,

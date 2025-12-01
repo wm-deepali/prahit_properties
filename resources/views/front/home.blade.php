@@ -357,7 +357,7 @@
         </div>
 
         <input type="text" placeholder="Search by Project, Locality, or Builder" class="newupdateSearchInput">
-        <button id='location-detect'class="newupdateSearchIcon"><i class="fa-solid fa-location-crosshairs"></i></button>
+        <button id='location-detect' class="newupdateSearchIcon"><i class="fa-solid fa-location-crosshairs"></i></button>
         <button class="newupdateSearchBtn">Search</button>
 
 
@@ -588,11 +588,11 @@
           </select>
 
           <!-- <select class="newupdateDropdown" id="sub_sub_category_id"  multiple>
-                                                          <option value="">Property Type</option>
-                                                          @foreach ($exclusiveFilters['types'] as $type)
-                                                            <option value="{{ $type->id }}">{{ $type->sub_sub_category_name }}</option>
-                                                          @endforeach
-                                                        </select> -->
+                                                                    <option value="">Property Type</option>
+                                                                    @foreach ($exclusiveFilters['types'] as $type)
+                                                                      <option value="{{ $type->id }}">{{ $type->sub_sub_category_name }}</option>
+                                                                    @endforeach
+                                                                  </select> -->
 
           <select class="newupdateDropdown" id="budget">
             <option value="">Budget</option>
@@ -764,7 +764,7 @@
                         <div class="newdesign-project-main shadow-sm">
                           <div class="newdesign-image-proj position-relative">
                             <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                            ">
+                                                                    ">
                               <img
                                 src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
                                 alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -776,7 +776,7 @@
                           <div class="newdesign-info-proj p-3">
                             <div class="d-flex justify-content-between align-items-start">
                               <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                            ">{{$value->title}}</a>
+                                                                    ">{{$value->title}}</a>
                               </h5>
 
                             </div>
@@ -785,7 +785,11 @@
                               <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
                                 style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
                               <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                              <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                              <p class="share-now m-0">
+                                <i class="fa-solid fa-share-nodes" style="font-size:18px; cursor:pointer;"
+                                  onclick="shareProperty('{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}', '{{ $value->title }}')"></i>
+                              </p>
+
 
                             </div>
 
@@ -796,7 +800,7 @@
                                 <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
                                 {{ $value->getState->name }}
                               </p>
-                              <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                              <p class="m-0 small"><i class="fa-solid fa-eye"></i> {{ $value->total_views ?? 0 }}</p>
                             </div>
 
                             <div class="horizontal-line"></div>
@@ -816,7 +820,8 @@
                             <div class="d-flex justify-content-between">
                               <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
                                 {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
-                              <button class="btn btn-sm btn-primary">Contact Now</button>
+                              <button class="btn btn-sm btn-primary" onclick="contactOwner({{ $value->id }})">Contact
+                                Now</button>
                             </div>
                           </div>
                         </div>
@@ -856,7 +861,7 @@
               <!--<a href="#">-->
               <div class="newdesign-image-proj">
                 <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-              ">
+                                  ">
                   <img
                     src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;'}}"
                     class="img-fluid" alt="Property 1">
@@ -868,7 +873,7 @@
               <div class="newdesign-info-proj">
                 <div class="d-flex justify-content-between">
                   <h4 class="newdesign-proj-name"> <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-              ">{{$value->title}}</a></h4>
+                                  ">{{$value->title}}</a></h4>
                   <!--<span class="newdesign-proj-category">Villa</span>-->
                 </div>
                 <hr class="" style="margin-bottom:10px; margin-top:10px;">
@@ -876,7 +881,11 @@
                   <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
                     style=" height:30px;">Villa</p>
                   <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                  <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                  <p class="share-now m-0">
+                    <i class="fa-solid fa-share-nodes" style="font-size:18px; cursor:pointer;"
+                      onclick="shareProperty('{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}', '{{ $value->title }}')"></i>
+                  </p>
+
 
                 </div>
                 <div class="horizontal-line mt-2 mb-2"></div>
@@ -938,7 +947,7 @@
                     <div class="newdesign-project-main shadow-sm">
                       <div class="newdesign-image-proj position-relative">
                         <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                    ">
+                                        ">
                           <img
                             src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -950,7 +959,7 @@
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
                           <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                    ">{{$value->title}}</a>
+                                        ">{{$value->title}}</a>
                           </h5>
 
                         </div>
@@ -959,7 +968,11 @@
                           <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
                             style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
                           <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                          <p class="share-now m-0">
+                            <i class="fa-solid fa-share-nodes" style="font-size:18px; cursor:pointer;"
+                              onclick="shareProperty('{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}', '{{ $value->title }}')"></i>
+                          </p>
+
 
                         </div>
 
@@ -970,7 +983,7 @@
                             <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
                             {{ $value->getState->name }}
                           </p>
-                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> {{ $value->total_views ?? 0 }}</p>
                         </div>
 
                         <div class="horizontal-line"></div>
@@ -990,7 +1003,8 @@
                         <div class="d-flex justify-content-between">
                           <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
                             {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
-                          <button class="btn btn-sm btn-primary">Contact Now</button>
+                          <button class="btn btn-sm btn-primary" onclick="contactOwner({{ $value->id }})">Contact
+                            Now</button>
                         </div>
                       </div>
                     </div>
@@ -1067,7 +1081,7 @@
                         @endphp
 
                         <button class="category-name-btn">{{ $shortCat }}</button>
-                        <p class="m-0"><i class="fa-solid fa-eye"></i> 197</p>
+                        <p class="m-0"><i class="fa-solid fa-eye"></i> {{ $value->total_views ?? 0 }}</p>
                       </div>
                       <div class="horizontal-line"></div>
                       <div class="d-flex justify-content-between align-items-center p-2">
@@ -1090,7 +1104,7 @@
                           <p class="m-0" style="font-size:14px;"><strong>Member
                               Since:</strong><br>{{ optional($list->created_at)->format('d M Y') }}</p>
                         </div>
-                        <button class="btn btn-sm btn-primary">Contact Now</button>
+                        <button class="btn btn-sm btn-primary" onclick="contactOwner({{ $value->id }})">Contact Now</button>
                         <!--<button class="btn btn-sm btn-secondary">Views</button>-->
 
                         <!--<button class="btn btn-sm btn-info">Share Now</button>-->
@@ -1146,7 +1160,7 @@
                     <div class="newdesign-project-main shadow-sm">
                       <div class="newdesign-image-proj position-relative">
                         <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                    ">
+                                        ">
                           <img
                             src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1158,7 +1172,7 @@
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
                           <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                    ">{{$value->title}}</a>
+                                        ">{{$value->title}}</a>
                           </h5>
 
                         </div>
@@ -1167,7 +1181,11 @@
                           <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
                             style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
                           <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                          <p class="share-now m-0">
+                            <i class="fa-solid fa-share-nodes" style="font-size:18px; cursor:pointer;"
+                              onclick="shareProperty('{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}', '{{ $value->title }}')"></i>
+                          </p>
+
 
                         </div>
 
@@ -1178,7 +1196,7 @@
                             <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
                             {{ $value->getState->name }}
                           </p>
-                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> {{ $value->total_views ?? 0 }}</p>
                         </div>
 
                         <div class="horizontal-line"></div>
@@ -1198,7 +1216,8 @@
                         <div class="d-flex justify-content-between">
                           <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
                             {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
-                          <button class="btn btn-sm btn-primary">Contact Now</button>
+                          <button class="btn btn-sm btn-primary" onclick="contactOwner({{ $value->id }})">Contact
+                            Now</button>
                         </div>
                       </div>
                     </div>
@@ -1249,7 +1268,7 @@
                     <div class="newdesign-project-main shadow-sm">
                       <div class="newdesign-image-proj position-relative">
                         <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                    ">
+                                        ">
                           <img
                             src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1261,7 +1280,7 @@
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
                           <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                    ">{{$value->title}}</a>
+                                        ">{{$value->title}}</a>
                           </h5>
 
                         </div>
@@ -1270,7 +1289,11 @@
                           <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
                             style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
                           <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                          <p class="share-now m-0">
+                            <i class="fa-solid fa-share-nodes" style="font-size:18px; cursor:pointer;"
+                              onclick="shareProperty('{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}', '{{ $value->title }}')"></i>
+                          </p>
+
 
                         </div>
 
@@ -1281,7 +1304,7 @@
                             <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
                             {{ $value->getState->name }}
                           </p>
-                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> {{ $value->total_views ?? 0 }}</p>
                         </div>
 
                         <div class="horizontal-line"></div>
@@ -1301,7 +1324,8 @@
                         <div class="d-flex justify-content-between">
                           <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
                             {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
-                          <button class="btn btn-sm btn-primary">Contact Now</button>
+                          <button class="btn btn-sm btn-primary" onclick="contactOwner({{ $value->id }})">Contact
+                            Now</button>
                         </div>
                       </div>
                     </div>
@@ -1353,7 +1377,7 @@
                     <div class="newdesign-project-main shadow-sm">
                       <div class="newdesign-image-proj position-relative">
                         <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                    ">
+                                        ">
                           <img
                             src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1365,7 +1389,7 @@
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
                           <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                    ">{{$value->title}}</a>
+                                        ">{{$value->title}}</a>
                           </h5>
 
                         </div>
@@ -1374,7 +1398,11 @@
                           <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
                             style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
                           <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                          <p class="share-now m-0">
+                            <i class="fa-solid fa-share-nodes" style="font-size:18px; cursor:pointer;"
+                              onclick="shareProperty('{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}', '{{ $value->title }}')"></i>
+                          </p>
+
 
                         </div>
 
@@ -1385,7 +1413,7 @@
                             <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
                             {{ $value->getState->name }}
                           </p>
-                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> {{ $value->total_views ?? 0 }}</p>
                         </div>
 
                         <div class="horizontal-line"></div>
@@ -1405,7 +1433,8 @@
                         <div class="d-flex justify-content-between">
                           <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
                             {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
-                          <button class="btn btn-sm btn-primary">Contact Now</button>
+                          <button class="btn btn-sm btn-primary" onclick="contactOwner({{ $value->id }})">Contact
+                            Now</button>
                         </div>
                       </div>
                     </div>
@@ -1514,7 +1543,11 @@
                             <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
                               style=" height:30px;">{{ $value->SubSubCategory->sub_sub_category_name ?? 'Commercial' }}</p>
                             <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                            <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                            <p class="share-now m-0">
+                              <i class="fa-solid fa-share-nodes" style="font-size:18px; cursor:pointer;"
+                                onclick="shareProperty('{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}', '{{ $value->title }}')"></i>
+                            </p>
+
 
                           </div>
                           <div class="horizontal-line mt-2 mb-2"></div>
@@ -1632,7 +1665,7 @@
                       <div class="newdesign-project-main shadow-sm">
                         <div class="newdesign-image-proj position-relative">
                           <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                        ">
+                                                      ">
                             <img
                               src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
                               alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1644,7 +1677,7 @@
                         <div class="newdesign-info-proj p-3">
                           <div class="d-flex justify-content-between align-items-start">
                             <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                        ">{{$value->title}}</a>
+                                                      ">{{$value->title}}</a>
                             </h5>
 
                           </div>
@@ -1653,7 +1686,11 @@
                             <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
                               style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
                             <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                            <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                            <p class="share-now m-0">
+                              <i class="fa-solid fa-share-nodes" style="font-size:18px; cursor:pointer;"
+                                onclick="shareProperty('{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}', '{{ $value->title }}')"></i>
+                            </p>
+
 
                           </div>
 
@@ -1664,7 +1701,7 @@
                               <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
                               {{ $value->getState->name }}
                             </p>
-                            <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                            <p class="m-0 small"><i class="fa-solid fa-eye"></i> {{ $value->total_views ?? 0 }}</p>
                           </div>
 
                           <div class="horizontal-line"></div>
@@ -1684,7 +1721,8 @@
                           <div class="d-flex justify-content-between">
                             <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
                               {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
+                            <button class="btn btn-sm btn-primary" onclick="contactOwner({{ $value->id }})">Contact
+                              Now</button>
                           </div>
                         </div>
                       </div>
@@ -1741,7 +1779,7 @@
                     <div class="newdesign-project-main shadow-sm">
                       <div class="newdesign-image-proj position-relative">
                         <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                    ">
+                                        ">
                           <img
                             src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1753,7 +1791,7 @@
                       <div class="newdesign-info-proj p-3">
                         <div class="d-flex justify-content-between align-items-start">
                           <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                    ">{{$value->title}}</a>
+                                        ">{{$value->title}}</a>
                           </h5>
 
                         </div>
@@ -1762,7 +1800,11 @@
                           <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
                             style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
                           <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                          <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                          <p class="share-now m-0">
+                            <i class="fa-solid fa-share-nodes" style="font-size:18px; cursor:pointer;"
+                              onclick="shareProperty('{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}', '{{ $value->title }}')"></i>
+                          </p>
+
 
                         </div>
 
@@ -1773,7 +1815,7 @@
                             <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
                             {{ $value->getState->name }}
                           </p>
-                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                          <p class="m-0 small"><i class="fa-solid fa-eye"></i> {{ $value->total_views ?? 0 }}</p>
                         </div>
 
                         <div class="horizontal-line"></div>
@@ -1791,7 +1833,8 @@
                         <div class="d-flex justify-content-between">
                           <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
                             {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
-                          <button class="btn btn-sm btn-primary">Contact Now</button>
+                          <button class="btn btn-sm btn-primary" onclick="contactOwner({{ $value->id }})">Contact
+                            Now</button>
                         </div>
                       </div>
                     </div>
@@ -1831,7 +1874,7 @@
                       <div class="newdesign-project-main shadow-sm">
                         <div class="newdesign-image-proj position-relative">
                           <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                        ">
+                                                      ">
                             <img
                               src="{{isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'}}"
                               alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1843,7 +1886,7 @@
                         <div class="newdesign-info-proj p-3">
                           <div class="d-flex justify-content-between align-items-start">
                             <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                        ">{{$value->title}}</a>
+                                                      ">{{$value->title}}</a>
                             </h5>
 
                           </div>
@@ -1852,7 +1895,11 @@
                             <p class="badge bg-primary-subtle text-primary m-0 d-flex justify-content-center align-items-center"
                               style=" height:30px;">{{ $value->getCategoryHierarchyName() }}</p>
                             <!--<p class="m-0" style="font-size:14px;"><strong>Publish:</strong> 26 Aug 2023</p>-->
-                            <p class="share-now m-0"><i class="fa-solid fa-share-nodes" style="font-size:18px;"></i></p>
+                            <p class="share-now m-0">
+                              <i class="fa-solid fa-share-nodes" style="font-size:18px; cursor:pointer;"
+                                onclick="shareProperty('{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}', '{{ $value->title }}')"></i>
+                            </p>
+
 
                           </div>
 
@@ -1863,7 +1910,7 @@
                               <i class="fa-solid fa-location-dot"></i>{{ $value->getCity->name }} ,
                               {{ $value->getState->name }}
                             </p>
-                            <p class="m-0 small"><i class="fa-solid fa-eye"></i> 197</p>
+                            <p class="m-0 small"><i class="fa-solid fa-eye"></i> {{ $value->total_views ?? 0 }}</p>
                           </div>
 
                           <div class="horizontal-line"></div>
@@ -1883,7 +1930,8 @@
                           <div class="d-flex justify-content-between">
                             <h6 class="fw-bold text-dark mt-2"><i class="fas fa-rupee-sign"></i>
                               {{\App\Helpers\Helper::formatIndianPrice($value->price)}}</h6>
-                            <button class="btn btn-sm btn-primary">Contact Now</button>
+                            <button class="btn btn-sm btn-primary" onclick="contactOwner({{ $value->id }})">Contact
+                              Now</button>
                           </div>
                         </div>
                       </div>
@@ -2059,6 +2107,70 @@
 <input type="hidden" id="latitude" name="latitude">
 <input type="hidden" id="longitude" name="longitude">
 
+<!-- Contact Business Modal -->
+<div class="modal fade" id="contactOwnerModal" tabindex="-1" aria-labelledby="contactBusinessLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-3">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="contactBusinessLabel">Contact Business</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <form id="contactOwnerForm">
+          @csrf
+          <input type="hidden" id="property_id" name="property_id">
+
+          <!-- Step 1 -->
+          <div class="step1">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" id="name" name="name"
+                value="{{ auth()->user()->firstname ?? '' }}" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email"
+                value="{{ auth()->user()->email ?? '' }}">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Mobile No.</label>
+              <input type="text" class="form-control" id="mobile_number" name="mobile_number"
+                value="{{ auth()->user()->mobile_number ?? '' }}" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Interested In</label>
+              <select class="form-control" name="interested_in" id='interested_in' required>
+                <option value=""> Select </option>
+                <option value="1">Site Visit</option>
+                <option value="2">Immediate Purchase</option>
+                <option value="3">Home Loan</option>
+              </select>
+            </div>
+
+            <button type="button" id="sendEnquiryBtn" class="btn btn-warning w-100">
+              Send Enquiry <i class="fas fa-paper-plane ms-1"></i>
+            </button>
+          </div>
+
+          <!-- Step 2: OTP Verification -->
+          <div class="step2" style="display:none;">
+            <div class="mb-3 text-center">
+              <p class="fw-bold mb-2">Enter OTP sent to your mobile number</p>
+              <input type="text" id="otp" class="form-control text-center" maxlength="4" placeholder="Enter 4-digit OTP"
+                required>
+            </div>
+            <button type="button" id="verifyOtpBtn" class="btn btn-success w-100">Verify & Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 @section('js')
 
 
@@ -2128,9 +2240,6 @@
     detectLocation();
 
   </script>
-
-
-
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       let currentActiveTab = 'buy'; // Default active tab
@@ -2215,227 +2324,227 @@
         switch (tabType) {
           case 'buy':
             mobileFilterContent.innerHTML = `
-                                        <!-- Property Category -->
-                                        <div class="filter-item border-bottom py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Property Category</h6>
-                                            <select class="form-select sub_category_items" id="mobile_sub_category_id">
-                                                <option value="">Select Category</option>
-                                                @foreach ($buyFilters['categories'] as $cat)
-                                                  <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-
-                                        <!-- Property Type -->
-                                        <div class="filter-item border-bottom py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Property Type</h6>
-                                            <div class="property-type-checkboxes" style="max-height:150px; padding-left:10px; overflow-y:auto;">
-                                                @foreach($buyFilters['types'] as $type)
-                                                  <div class="form-check" data-category="{{ $type->sub_category_id }}">
-                                                      <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
-                                                             name="mobile_sub_sub_category_ids[]"
-                                                             id="mobile_subsub_{{ $type->id }}" value="{{ $type->id }}">
-                                                      <label class="form-check-label" for="mobile_subsub_{{ $type->id }}">
-                                                          {{ $type->sub_sub_category_name }}
-                                                      </label>
+                                                  <!-- Property Category -->
+                                                  <div class="filter-item border-bottom py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Property Category</h6>
+                                                      <select class="form-select sub_category_items" id="mobile_sub_category_id">
+                                                          <option value="">Select Category</option>
+                                                          @foreach ($buyFilters['categories'] as $cat)
+                                                            <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
+                                                          @endforeach
+                                                      </select>
                                                   </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
 
-                                        <!-- Budget -->
-                                        <div class="filter-item border-bottom py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Budget</h6>
-                                            <select class="form-select" id="mobile_budget">
-                                                <option value="">Select Budget</option>
-                                                @foreach ($buyFilters['budgets'] as $budget)
-                                                  <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                                  <!-- Property Type -->
+                                                  <div class="filter-item border-bottom py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Property Type</h6>
+                                                      <div class="property-type-checkboxes" style="max-height:150px; padding-left:10px; overflow-y:auto;">
+                                                          @foreach($buyFilters['types'] as $type)
+                                                            <div class="form-check" data-category="{{ $type->sub_category_id }}">
+                                                                <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
+                                                                       name="mobile_sub_sub_category_ids[]"
+                                                                       id="mobile_subsub_{{ $type->id }}" value="{{ $type->id }}">
+                                                                <label class="form-check-label" for="mobile_subsub_{{ $type->id }}">
+                                                                    {{ $type->sub_sub_category_name }}
+                                                                </label>
+                                                            </div>
+                                                          @endforeach
+                                                      </div>
+                                                  </div>
 
-                                        <!-- Posted By -->
-                                        <div class="filter-item py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Posted By</h6>
-                                            <select class="form-select" id="mobile_user_role">
-                                                <option value="">Select</option>
-                                                @foreach ($buyFilters['posted_by'] as $poster)
-                                                  <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    `;
+                                                  <!-- Budget -->
+                                                  <div class="filter-item border-bottom py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Budget</h6>
+                                                      <select class="form-select" id="mobile_budget">
+                                                          <option value="">Select Budget</option>
+                                                          @foreach ($buyFilters['budgets'] as $budget)
+                                                            <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                                          @endforeach
+                                                      </select>
+                                                  </div>
+
+                                                  <!-- Posted By -->
+                                                  <div class="filter-item py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Posted By</h6>
+                                                      <select class="form-select" id="mobile_user_role">
+                                                          <option value="">Select</option>
+                                                          @foreach ($buyFilters['posted_by'] as $poster)
+                                                            <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                                          @endforeach
+                                                      </select>
+                                                  </div>
+                                              `;
             break;
 
           case 'rental':
             mobileFilterContent.innerHTML = `
-                                        <!-- Property Category -->
-                                        <div class="filter-item border-bottom py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Property Category</h6>
-                                            <select class="form-select sub_category_items" id="mobile_sub_category_id">
-                                                <option value="">Select Category</option>
-                                                @foreach ($rentalFilters['categories'] as $cat)
-                                                  <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-
-                                        <!-- Property Type -->
-                                        <div class="filter-item border-bottom py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Property Type</h6>
-                                            <div class="property-type-checkboxes" style="max-height:150px;padding-left:10px; overflow-y:auto;">
-                                                @foreach($rentalFilters['types'] as $v)
-                                                  <div class="form-check" data-category="{{ $v->sub_category_id }}">
-                                                      <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
-                                                             name="mobile_sub_sub_category_ids[]"
-                                                             id="mobile_subsub_{{ $v->id }}" value="{{ $v->id }}">
-                                                      <label class="form-check-label" for="mobile_subsub_{{ $v->id }}">
-                                                          {{ $v->sub_sub_category_name }}
-                                                      </label>
+                                                  <!-- Property Category -->
+                                                  <div class="filter-item border-bottom py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Property Category</h6>
+                                                      <select class="form-select sub_category_items" id="mobile_sub_category_id">
+                                                          <option value="">Select Category</option>
+                                                          @foreach ($rentalFilters['categories'] as $cat)
+                                                            <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
+                                                          @endforeach
+                                                      </select>
                                                   </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
 
-                                        <!-- Budget -->
-                                        <div class="filter-item border-bottom py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Budget</h6>
-                                            <select class="form-select" id="mobile_budget">
-                                                <option value="">Select Budget</option>
-                                                @foreach ($rentalFilters['budgets'] as $budget)
-                                                  <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                                  <!-- Property Type -->
+                                                  <div class="filter-item border-bottom py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Property Type</h6>
+                                                      <div class="property-type-checkboxes" style="max-height:150px;padding-left:10px; overflow-y:auto;">
+                                                          @foreach($rentalFilters['types'] as $v)
+                                                            <div class="form-check" data-category="{{ $v->sub_category_id }}">
+                                                                <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
+                                                                       name="mobile_sub_sub_category_ids[]"
+                                                                       id="mobile_subsub_{{ $v->id }}" value="{{ $v->id }}">
+                                                                <label class="form-check-label" for="mobile_subsub_{{ $v->id }}">
+                                                                    {{ $v->sub_sub_category_name }}
+                                                                </label>
+                                                            </div>
+                                                          @endforeach
+                                                      </div>
+                                                  </div>
 
-                                        <!-- Posted By -->
-                                        <div class="filter-item py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Posted By</h6>
-                                            <select class="form-select" id="mobile_user_role">
-                                                <option value="">Select</option>
-                                                @foreach ($rentalFilters['posted_by'] as $poster)
-                                                  <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    `;
+                                                  <!-- Budget -->
+                                                  <div class="filter-item border-bottom py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Budget</h6>
+                                                      <select class="form-select" id="mobile_budget">
+                                                          <option value="">Select Budget</option>
+                                                          @foreach ($rentalFilters['budgets'] as $budget)
+                                                            <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                                          @endforeach
+                                                      </select>
+                                                  </div>
+
+                                                  <!-- Posted By -->
+                                                  <div class="filter-item py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Posted By</h6>
+                                                      <select class="form-select" id="mobile_user_role">
+                                                          <option value="">Select</option>
+                                                          @foreach ($rentalFilters['posted_by'] as $poster)
+                                                            <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                                          @endforeach
+                                                      </select>
+                                                  </div>
+                                              `;
             break;
 
           case 'pg-hostels':
             mobileFilterContent.innerHTML = `
-                                        <!-- Budget -->
-                                        <div class="filter-item border-bottom py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Budget</h6>
-                                            <select class="form-select" id="mobile_budget">
-                                                <option value="">Select Budget</option>
-                                                @foreach ($pgFilters['budgets'] as $budget)
-                                                  <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                                  <!-- Budget -->
+                                                  <div class="filter-item border-bottom py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Budget</h6>
+                                                      <select class="form-select" id="mobile_budget">
+                                                          <option value="">Select Budget</option>
+                                                          @foreach ($pgFilters['budgets'] as $budget)
+                                                            <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                                          @endforeach
+                                                      </select>
+                                                  </div>
 
-                                        <!-- Available For -->
-                                        <div class="filter-item border-bottom py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Available For</h6>
-                                            <select class="form-select" id="mobile_pg_availavle_for">
-                                                <option value="">Select</option>
-                                                @foreach ($pgFilters['available_for'] as $option)
-                                                  <option value="{{ strtolower($option) }}">{{ $option }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                                  <!-- Available For -->
+                                                  <div class="filter-item border-bottom py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Available For</h6>
+                                                      <select class="form-select" id="mobile_pg_availavle_for">
+                                                          <option value="">Select</option>
+                                                          @foreach ($pgFilters['available_for'] as $option)
+                                                            <option value="{{ strtolower($option) }}">{{ $option }}</option>
+                                                          @endforeach
+                                                      </select>
+                                                  </div>
 
-                                        <!-- Posted By -->
-                                        <div class="filter-item py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Posted By</h6>
-                                            <select class="form-select" id="mobile_user_role">
-                                                <option value="">Select</option>
-                                                @foreach ($pgFilters['posted_by'] as $poster)
-                                                  <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    `;
+                                                  <!-- Posted By -->
+                                                  <div class="filter-item py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Posted By</h6>
+                                                      <select class="form-select" id="mobile_user_role">
+                                                          <option value="">Select</option>
+                                                          @foreach ($pgFilters['posted_by'] as $poster)
+                                                            <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                                          @endforeach
+                                                      </select>
+                                                  </div>
+                                              `;
             break;
 
           case 'exculsive-launch':
             mobileFilterContent.innerHTML = `
-                                        <!-- Sub Category -->
-                                        <div class="filter-item border-bottom py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Sub Category</h6>
-                                            <select class="form-select sub_category_items" id="mobile_sub_category_id">
-                                                <option value="">Select Category</option>
-                                                @foreach ($exclusiveFilters['categories'] as $cat)
-                                                  <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                                  <!-- Sub Category -->
+                                                  <div class="filter-item border-bottom py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Sub Category</h6>
+                                                      <select class="form-select sub_category_items" id="mobile_sub_category_id">
+                                                          <option value="">Select Category</option>
+                                                          @foreach ($exclusiveFilters['categories'] as $cat)
+                                                            <option value="{{ $cat->id }}">{{ $cat->sub_category_name }}</option>
+                                                          @endforeach
+                                                      </select>
+                                                  </div>
 
-                                        <!-- Budget -->
-                                        <div class="filter-item border-bottom py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Budget</h6>
-                                            <select class="form-select" id="mobile_budget">
-                                                <option value="">Select Budget</option>
-                                                @foreach ($exclusiveFilters['budgets'] as $budget)
-                                                  <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                                  <!-- Budget -->
+                                                  <div class="filter-item border-bottom py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Budget</h6>
+                                                      <select class="form-select" id="mobile_budget">
+                                                          <option value="">Select Budget</option>
+                                                          @foreach ($exclusiveFilters['budgets'] as $budget)
+                                                            <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                                          @endforeach
+                                                      </select>
+                                                  </div>
 
-                                        <!-- Posted By -->
-                                        <div class="filter-item py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Posted By</h6>
-                                            <select class="form-select" id="mobile_user_role">
-                                                <option value="">Select</option>
-                                                @foreach ($exclusiveFilters['posted_by'] as $poster)
-                                                  <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    `;
+                                                  <!-- Posted By -->
+                                                  <div class="filter-item py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Posted By</h6>
+                                                      <select class="form-select" id="mobile_user_role">
+                                                          <option value="">Select</option>
+                                                          @foreach ($exclusiveFilters['posted_by'] as $poster)
+                                                            <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                                          @endforeach
+                                                      </select>
+                                                  </div>
+                                              `;
             break;
 
           case 'plot-land':
             mobileFilterContent.innerHTML = `
-                                        <!-- Property Type -->
-                                        <div class="filter-item border-bottom py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Property Type</h6>
-                                            <div class="property-type-checkboxes" style="max-height:150px;padding-left:10px; overflow-y:auto;">
-                                                @foreach($plotFilters['types'] as $v)
-                                                  <div class="form-check">
-                                                      <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
-                                                             name="mobile_sub_sub_category_ids[]"
-                                                             id="mobile_subsub_{{ $v->id }}" value="{{ $v->id }}">
-                                                      <label class="form-check-label" for="mobile_subsub_{{ $v->id }}">
-                                                          {{ $v->sub_sub_category_name }}
-                                                      </label>
+                                                  <!-- Property Type -->
+                                                  <div class="filter-item border-bottom py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Property Type</h6>
+                                                      <div class="property-type-checkboxes" style="max-height:150px;padding-left:10px; overflow-y:auto;">
+                                                          @foreach($plotFilters['types'] as $v)
+                                                            <div class="form-check">
+                                                                <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
+                                                                       name="mobile_sub_sub_category_ids[]"
+                                                                       id="mobile_subsub_{{ $v->id }}" value="{{ $v->id }}">
+                                                                <label class="form-check-label" for="mobile_subsub_{{ $v->id }}">
+                                                                    {{ $v->sub_sub_category_name }}
+                                                                </label>
+                                                            </div>
+                                                          @endforeach
+                                                      </div>
                                                   </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
 
-                                        <!-- Budget -->
-                                        <div class="filter-item border-bottom py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Budget</h6>
-                                            <select class="form-select" id="mobile_budget">
-                                                <option value="">Select Budget</option>
-                                                @foreach ($plotFilters['budgets'] as $budget)
-                                                  <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                                  <!-- Budget -->
+                                                  <div class="filter-item border-bottom py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Budget</h6>
+                                                      <select class="form-select" id="mobile_budget">
+                                                          <option value="">Select Budget</option>
+                                                          @foreach ($plotFilters['budgets'] as $budget)
+                                                            <option value="{{ $budget['query'] }}">{{ $budget['label'] }}</option>
+                                                          @endforeach
+                                                      </select>
+                                                  </div>
 
-                                        <!-- Posted By -->
-                                        <div class="filter-item py-2 mb-3">
-                                            <h6 class="fw-semibold mb-2">Posted By</h6>
-                                            <select class="form-select" id="mobile_user_role">
-                                                <option value="">Select</option>
-                                                @foreach ($plotFilters['posted_by'] as $poster)
-                                                  <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    `;
+                                                  <!-- Posted By -->
+                                                  <div class="filter-item py-2 mb-3">
+                                                      <h6 class="fw-semibold mb-2">Posted By</h6>
+                                                      <select class="form-select" id="mobile_user_role">
+                                                          <option value="">Select</option>
+                                                          @foreach ($plotFilters['posted_by'] as $poster)
+                                                            <option value="{{ strtolower($poster) }}">{{ $poster }}</option>
+                                                          @endforeach
+                                                      </select>
+                                                  </div>
+                                              `;
             break;
         }
 
@@ -2694,46 +2803,46 @@
       });
     });
 
-     // Search button click
-  document.getElementById('location-detect').addEventListener('click', function () {
-  const activeType = document.querySelector('.newupdateTab.active').getAttribute('data-type') ?? 'buy';
+    // Search button click
+    document.getElementById('location-detect').addEventListener('click', function () {
+      const activeType = document.querySelector('.newupdateTab.active').getAttribute('data-type') ?? 'buy';
 
-  const location = document.querySelector('.newupdateSearchBar select').value;
-  const searchQuery = document.querySelector('.newupdateSearchInput').value;
+      const location = document.querySelector('.newupdateSearchBar select').value;
+      const searchQuery = document.querySelector('.newupdateSearchInput').value;
 
-  const activeFilters = document.querySelector(`.newupdateFilters[data-type="${activeType}"]`);
-  const selects = activeFilters.querySelectorAll('select');
+      const activeFilters = document.querySelector(`.newupdateFilters[data-type="${activeType}"]`);
+      const selects = activeFilters.querySelectorAll('select');
 
-  let params = new URLSearchParams();
-  params.append('type', activeType);
-  if (location) params.append('city', location);
-  if (searchQuery) params.append('search', searchQuery);
+      let params = new URLSearchParams();
+      params.append('type', activeType);
+      if (location) params.append('city', location);
+      if (searchQuery) params.append('search', searchQuery);
 
-  // Loop through all select dropdowns
-  selects.forEach(select => {
-    if (select.value) {
-      params.append(select.id, select.value);
-    }
-  });
+      // Loop through all select dropdowns
+      selects.forEach(select => {
+        if (select.value) {
+          params.append(select.id, select.value);
+        }
+      });
 
-  // Collect all checked property type checkboxes
-  const checkedBoxes = activeFilters.querySelectorAll('.sub-sub-checkbox:checked');
-  if (checkedBoxes.length > 0) {
-    const values = Array.from(checkedBoxes).map(cb => cb.value);
-    params.append('sub_sub_category_id', values.join(',')); // comma-separated list
-  }
+      // Collect all checked property type checkboxes
+      const checkedBoxes = activeFilters.querySelectorAll('.sub-sub-checkbox:checked');
+      if (checkedBoxes.length > 0) {
+        const values = Array.from(checkedBoxes).map(cb => cb.value);
+        params.append('sub_sub_category_id', values.join(',')); // comma-separated list
+      }
 
-  // Add latitude and longitude from hidden inputs
-  const lat = document.getElementById('latitude').value;
-  const lng = document.getElementById('longitude').value;
-  if (lat && lng) {
-    params.append('latitude', lat);
-    params.append('longitude', lng);
-  }
+      // Add latitude and longitude from hidden inputs
+      const lat = document.getElementById('latitude').value;
+      const lng = document.getElementById('longitude').value;
+      if (lat && lng) {
+        params.append('latitude', lat);
+        params.append('longitude', lng);
+      }
 
-  // Redirect to backend route with all filters
-  window.location.href = "{{ route('listing.list') }}" + "?" + params.toString();
-});
+      // Redirect to backend route with all filters
+      window.location.href = "{{ route('listing.list') }}" + "?" + params.toString();
+    });
 
 
     // Show default buy filters
@@ -2841,5 +2950,128 @@
       document.getElementById("noCityFound").style.display = anyMatch ? "none" : "block";
     });
   </script>
+  <script>
+    function shareProperty(url, title) {
+      if (navigator.share) {
+        navigator.share({
+          title: title,
+          url: url
+        }).then(() => {
+          console.log('Shared successfully');
+        }).catch((error) => {
+          console.log('Error sharing:', error);
+        });
+      } else {
+        alert('Your browser does not support the share feature. Copy the link: ' + url);
+      }
+    }
+    const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+    function contactOwner(propertyId) {
+      document.getElementById('property_id').value = propertyId;
+      document.getElementById('interested_in').value = '';
+      document.querySelector('.step1').style.display = 'block';
+      document.querySelector('.step2').style.display = 'none';
 
+      $('#contactOwnerModal').modal('show');
+
+    }
+    // Step 1: Send enquiry (or trigger OTP for guests)
+    document.getElementById('sendEnquiryBtn').addEventListener('click', function (e) {
+      e.preventDefault();
+
+      let formData = new FormData(document.getElementById('contactOwnerForm'));
+
+      // ✅ If logged in → directly submit enquiry
+      if (isAuthenticated) {
+        submitEnquiry(formData);
+        return;
+      }
+
+      // 🚀 Guest user → send OTP first
+      fetch("{{ route('agent.send-otp') }}", {
+        method: "POST",
+        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+        body: formData
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            Swal.fire({
+              icon: 'info',
+              title: 'OTP Sent!',
+              text: 'We have sent a 4-digit OTP to your mobile number.',
+              confirmButtonColor: '#ffc107'
+            });
+
+            document.querySelector('.step1').style.display = 'none';
+            document.querySelector('.step2').style.display = 'block';
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: data.message || 'Failed to send OTP. Try again.',
+            });
+          }
+        })
+        .catch(() => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Unable to send OTP. Please try again later.',
+          });
+        });
+    });
+
+    // Step 2: Verify OTP (guests only)
+    document.getElementById('verifyOtpBtn').addEventListener('click', function (e) {
+      e.preventDefault();
+
+      let formData = new FormData(document.getElementById('contactOwnerForm'));
+      formData.append('otp', document.getElementById('otp').value);
+
+      submitEnquiry(formData);
+    });
+
+    // ✅ Common function for submitting final enquiry
+    function submitEnquiry(formData) {
+      fetch("{{ route('enquery.agent_enquiry') }}", {
+        method: "POST",
+        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+        body: formData
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log('Response from server:', data);
+
+          if (data.success === true || data.success === "true") {
+            $('#contactOwnerModal').modal('hide');
+
+            document.getElementById('contactOwnerForm').reset();
+            document.querySelector('.step1').style.display = 'block';
+            document.querySelector('.step2').style.display = 'none';
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Enquiry Sent!',
+              text: 'Your enquiry has been sent successfully!',
+              confirmButtonColor: '#ffc107'
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Invalid OTP',
+              text: data.message || 'Please enter the correct OTP.',
+            });
+          }
+        })
+        .catch(() => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error sending enquiry. Please try again later.',
+          });
+        });
+    }
+
+  </script>
 @endsection

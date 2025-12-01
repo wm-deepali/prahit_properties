@@ -222,6 +222,7 @@ class AuthController extends BaseApiController
 			// --- Case 2: Forgot Password / OTP for Reset ---
 			else {
 				// Validate OTP
+				// dd('here');
 				$otpRecord = Otp::where(['otp' => $request->otp, 'user_id' => $user->id])->first();
 
 				if (!$otpRecord) {
@@ -263,35 +264,56 @@ class AuthController extends BaseApiController
 
 	public function forgotPassword(Request $request)
 	{
-		$rules = [
+		// Validate input
+		$request->validate([
 			'mobile_number' => 'required'
-		];
-		$this->checkValidate($request, $rules);
+		]);
 
 		try {
+			// Find user by mobile number
 			$user = User::where('mobile_number', $request->mobile_number)->first();
-			// if(!empty($user) && ($user->is_verified == "0")) {
+
 			if (empty($user)) {
-				$this->_sendErrorResponse(400, 'Mobile number not registered');
-				// } else if ($user->is_verified == "0") {
-				// 	$this->_sendErrorResponse(400, 'Please verify your account to continue.');
-			} else {
-				// return $user;
-				// $sendOtp = $this->_sendOTP($user);
-				$user->otp = rand(1000, 4999);
-				$user->save();
-				$sendOtp = ['success' => 1];
-				// return $sendOtp;
-				if ($sendOtp['success']) {
-					$this->_sendResponse(['User' => $user], 'OTP Generated successfully');
-				} else {
-					$this->_sendResponse(400, 'Oops! OTP could not be sent.');
-				}
+				return response()->json([
+					'status' => 400,
+					'message' => 'Mobile number not registered'
+				], 400);
 			}
+
+			$otp = rand(1000, 4999);
+
+			Otp::updateOrCreate(
+				['user_id' => $user->id],
+				[
+					'otp' => $otp,
+				]
+			);
+
+			// Send OTP
+			$message = "{$otp} is the One Time Password(OTP) to verify your MOB number at Web Mingo, This OTP is Usable only once and is valid for 10 min,PLS DO NOT SHARE THE OTP WITH ANYONE";
+			$sendOtp = \App\Helpers\Helper::sendOtp($request->mobile_number, $message);
+
+			if ($sendOtp) {
+				return response()->json([
+					'status' => true,
+					'message' => 'OTP generated successfully and sent on your registered email & mobile number.',
+					'data' => $user
+				], 200);
+			} else {
+				return response()->json([
+					'status' => false,
+					'message' => 'OTP could not be sent.'
+				], 400);
+			}
+
 		} catch (\Exception $e) {
-			$this->_sendErrorResponse(500, $e->getMessage());
+			return response()->json([
+				'status' => 500,
+				'message' => 'Something went wrong: ' . $e->getMessage()
+			], 500);
 		}
 	}
+
 
 	public function resetPassword(Request $request)
 	{

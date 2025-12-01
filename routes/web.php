@@ -4,7 +4,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\BusinessListingController;
 use App\Http\Controllers\User\PricingController;
 use App\Http\Controllers\User\UserController;
-use App\Http\Controllers\Admin\BusinessListingReviewController;
+use App\Http\Controllers\Admin\CallbackRequestController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,6 +39,7 @@ Route::get('property/{id}/{slug}', 'HomeController@property_detail')->name('prop
 Route::get('search/', 'HomeController@search_property')->name('search_property');
 Route::get('search/grid/', 'HomeController@searchPropertyGrid')->name('grid.search_property');
 Route::get('/{city?}', 'HomeController@home')->name('home');
+Route::post('/request-callback', 'HomeController@requestCallback')->name('requestCallback');
 Route::post('front/create-property', 'HomeController@createProperty')->name('create.property');
 
 // Content Page Routes
@@ -273,6 +274,11 @@ Route::group(['middleware' => ['auth', 'admin.check']], function () {
 	Route::get('get/complaint/data/{id}', 'Admin\EnquiriesController@getComplaintData')->name('admin.getComplaintData');
 	Route::post('reply/complaint/query', 'Admin\EnquiriesController@replyComplaintQuery')->name('admin.replyComplaintQuery');
 
+	// Callback Requests Routes
+    Route::get('/master/callback-requests', [CallbackRequestController::class, 'index'])->name('admin.callbackRequests');
+    Route::delete('/master/callback-requests/{id}', [CallbackRequestController::class, 'destroy'])->name('admin.callbackRequests.delete');
+
+
 	// Carrier With Us Routes
 	Route::get('manage/career-with-us', 'Admin\ContentController@manageCarrerWithUs')->name('admin.manageCarrerWithUs');
 	Route::post('update/career-with-us', 'Admin\ContentController@updateCareerWithUsContent')->name('admin.updateCareerWithUsContent');
@@ -302,6 +308,10 @@ Route::group(['middleware' => ['auth', 'admin.check']], function () {
 	Route::get('edit/job/{id}', 'Admin\JobController@editJob')->name('admin.editJob');
 	Route::post('update/job', 'Admin\JobController@updateJob')->name('admin.updateJob');
 	Route::get('delete/job/{id}', 'Admin\JobController@deleteJob')->name('admin.deleteJob');
+
+	Route::get('manage/job-requests', 'Admin\JobController@jobRequests')->name('admin.jobRequests');
+	Route::post('manage/job-requests/delete', 'Admin\JobController@deleteJobRequest')->name('admin.deleteJobRequest');
+
 
 	// Manage Blog Category Routes
 	Route::get('manage/blog/categories', 'Admin\BlogController@manageBlogCategories')->name('admin.manageBlogCategories');
