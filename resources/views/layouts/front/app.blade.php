@@ -634,13 +634,13 @@
         style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;">
         <i class="fas fa-pencil-alt me-1"></i> Post Property <span class="badge bg-warning text-dark ms-1">Free</span>
       </a>
-       <a href="javascript:void(0);" class="btn  fw-semibold px-3 py-1 rounded-3"
+      <a href="javascript:void(0);" class="btn  fw-semibold px-3 py-1 rounded-3"
         style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;" @if(Auth::check())
-          onclick="window.location.href='{{ route('create_business_listing') }}'" @else
-          onclick=" openSigninModal('business-listing/create')" @endif>
-          <i class="fas fa-briefcase me-1"></i> Post Services
-          <span class="badge bg-warning text-dark ms-1">Free</span>
-        </a>
+        onclick="window.location.href='{{ route('create_business_listing') }}'" @else
+        onclick=" openSigninModal('business-listing/create')" @endif>
+        <i class="fas fa-briefcase me-1"></i> Post Services
+        <span class="badge bg-warning text-dark ms-1">Free</span>
+      </a>
     </div>
 
 
@@ -874,13 +874,12 @@
                   </div>
                   <div class="mb-3">
                     <label for="mobile_number" class="form-label">Mobile Number</label>
-                    <input type="text" class="form-control" name="mobile_number"
-                      placeholder="Your Mobile Number" required>
+                    <input type="text" class="form-control" name="mobile_number" placeholder="Your Mobile Number"
+                      required>
                   </div>
                   <div class="mb-3">
                     <label for="message" class="form-label">Message / Query</label>
-                    <textarea class="form-control" name="message" rows="3"
-                      placeholder="Optional"></textarea>
+                    <textarea class="form-control" name="message" rows="3" placeholder="Optional"></textarea>
                   </div>
                 </div>
                 <div class="modal-footer">
@@ -907,7 +906,7 @@
                 </li>
                 <li><a class="dropdown-item" href="/user/recent-viewed-properties">Recently Viewed</a></li>
                 <li>
-                  <a class="dropdown-item"href="/user/sent-inquries">Contacted Properties</a>
+                  <a class="dropdown-item" href="/user/sent-inquries">Contacted Properties</a>
                 </li>
                 <li>
                   <hr class="dropdown-divider">
@@ -3381,71 +3380,48 @@
 
         <!-- Sidebar Menu -->
         <nav class="mobile-sidebar">
-          <ul class="list-unstyled">
+          <ul class="list-unstyled" id="mobileSidebarMenu">
             <li class="mb-2">
-              <a href="{{url('user/dashboard')}}"
-                class="d-flex justify-content-between align-items-center sidebar-link active">
+              <a href="{{ url('user/dashboard') }}" class="d-flex justify-content-between align-items-center sidebar-link"
+                id="dashboardLink">
                 <span><i class="fas fa-home me-2 text-primary"></i> Dashboard</span>
               </a>
             </li>
 
-            <!-- Setting Menu -->
+            <!-- Settings Menu -->
             <li class="mb-2">
               <a class="d-flex justify-content-between align-items-center sidebar-link collapsed"
-                data-bs-toggle="collapse" href="#settingMenu" role="button" aria-expanded="false"
-                aria-controls="settingMenu">
-                <span><i class="fas fa-cog me-2 text-warning"></i> Setting</span>
+                data-bs-toggle="collapse" href="#mobileSettingMenu" role="button" aria-expanded="false"
+                aria-controls="mobileSettingMenu">
+                <span><i class="fas fa-cog me-2 text-warning"></i> Settings</span>
                 <i class="fas fa-chevron-down small"></i>
               </a>
-              <div class="collapse submenu" id="settingMenu">
-                <ul class="list-unstyled ps-3">
-                  <li><a href="{{url('user/profile')}}" class="submenu-link">Profile</a></li>
-                  <li><a href="{{url('user/change-password')}}" class="submenu-link">Change Password</a></li>
-                  <li><a href="{{url('user/my-activities')}}" class="submenu-link">My Activities</a></li>
+              <div class="collapse submenu" id="mobileSettingMenu">
+                <ul class="list-unstyled ps-3" id="mobileSettingLinks">
+                  <li><a href="{{ url('user/profile?tab=profile') }}" class="submenu-link">Profile</a></li>
+                  <li><a href="{{ url('user/profile?tab=security') }}" class="submenu-link">Change Password</a></li>
+                  <li><a href="{{ url('user/my-activities') }}" class="submenu-link">My Activities</a></li>
+                  @if(in_array(Auth::user()->role, ['agent', 'builder']))
+                    <li><a href="{{ url('user/profile-section') }}" class="submenu-link">Profile Section</a></li>
+                  @endif
                 </ul>
               </div>
             </li>
 
-            <!-- Property Menu -->
-            <li class="mb-2">
-              <a class="d-flex justify-content-between align-items-center sidebar-link collapsed"
-                data-bs-toggle="collapse" href="#propertyMenu" role="button" aria-expanded="false"
-                aria-controls="propertyMenu">
-                <span><i class="fas fa-building me-2 text-success"></i> Property</span>
-                <i class="fas fa-chevron-down small"></i>
-              </a>
-              <div class="collapse submenu" id="propertyMenu">
-                <ul class="list-unstyled ps-3">
-                  <li><a href="{{url('user/properties')}}" class="submenu-link">My Properties</a></li>
-                  <li><a href="{{url('user/all-inquries')}}" class="submenu-link">All Inquiries</a></li>
-                  <li><a href="{{url('user/my-wishlist')}}" class="submenu-link">My Wishlist</a></li>
-                </ul>
-              </div>
-            </li>
+            <!-- Dynamic Property/Service Menu will go here -->
+            <div id="mobileDynamicMenu"></div>
 
-            <!-- Price & Subscriptions Menu -->
-            <li class="mb-2">
-              <a class="d-flex justify-content-between align-items-center sidebar-link collapsed"
-                data-bs-toggle="collapse" href="#priceMenu" role="button" aria-expanded="false" aria-controls="priceMenu">
-                <span><i class="fas fa-tags me-2 text-info"></i> Price & Subscriptions</span>
-                <i class="fas fa-chevron-down small"></i>
-              </a>
-              <div class="collapse submenu" id="priceMenu">
-                <ul class="list-unstyled ps-3">
-                  <li><a href="{{url('user/current-subscriptions')}}" class="submenu-link">Current Subscriptions</a></li>
-                  <li><a href="{{url('user/payments-invoice')}}" class="submenu-link">Payments & Invoice</a></li>
-                  <li><a href="{{url('user/pricing')}}" class="submenu-link">Pricing</a></li>
-                </ul>
-              </div>
-            </li>
+            <!-- Dynamic Pricing & Subscription Menu will go here -->
+            <div id="mobileDynamicPricingMenu"></div>
 
             <!-- Logout -->
             <li class="mt-3" style="width:100%;">
               <a href="#" class="d-flex justify-content-between align-items-center sidebar-link text-danger"
-                onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="width:100%;">
+                onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();"
+                style="width:100%;">
                 <div><i class="fas fa-sign-out-alt me-2"></i> Logout</div>
               </a>
-              <form id="logout-form" action="{{ url('user/logout') }}" method="POST" style="display: none;">
+              <form id="logout-form-mobile" action="{{ url('user/logout') }}" method="POST" style="display: none;">
                 {{ csrf_field() }}
               </form>
             </li>
@@ -3467,12 +3443,6 @@
         </div>
       @endauth
     </div>
-
-
-
-
-
-
   </div>
 
   <footer>
@@ -3593,8 +3563,85 @@
 @include('layouts.front.app_js')
 
 <script>
+  // Mobile Sidebar dynamic menu
+  let mobileUserType = new URLSearchParams(window.location.search).get('type') || localStorage.getItem('user_type') || 'property';
+  if (new URLSearchParams(window.location.search).get('type')) {
+    localStorage.setItem('user_type', mobileUserType);
+  }
 
+  function renderMobileSidebar(userType) {
+    const sectionLabel = userType === 'service' ? 'Business' : 'Property';
+    const queryParam = userType === 'service' ? '?type=service' : '';
 
+    // Dynamic Property / Service Menu
+    const dynamicMenuHtml = `
+          <li class="mb-2">
+            <a class="d-flex justify-content-between align-items-center sidebar-link collapsed"
+               data-bs-toggle="collapse" href="#mobile${sectionLabel}Menu" role="button" aria-expanded="false"
+               aria-controls="mobile${sectionLabel}Menu">
+              <span><i class="${userType === 'service' ? 'fas fa-briefcase me-2 text-success' : 'fas fa-building me-2 text-success'}"></i> ${sectionLabel}</span>
+              <i class="fas fa-chevron-down small"></i>
+            </a>
+            <div class="collapse submenu" id="mobile${sectionLabel}Menu">
+              <ul class="list-unstyled ps-3">
+                ${userType === 'service' ? `
+                  <li><a href="/user/services" class="submenu-link">My Business Listing</a></li>
+                  <li><a href="/user/all-services-inquiries" class="submenu-link">Received Business Inquiries</a></li>
+                  <li><a href="/user/sent-services-inquiries" class="submenu-link">Sent Business Inquiries</a></li>
+                  <li><a href="/user/my-service-wishlist" class="submenu-link">My Business Wishlist</a></li>
+                  <li><a href="/user/business-listing-reviews" class="submenu-link">Business Listing Reviews</a></li>
+                ` : `
+                  <li><a href="/user/properties" class="submenu-link">My Properties</a></li>
+                  <li><a href="/user/all-inquries" class="submenu-link">Received Inquiries</a></li>
+                  <li><a href="/user/sent-inquries" class="submenu-link">Sent Inquiries</a></li>
+                  <li><a href="/user/my-wishlist" class="submenu-link">My Wishlist</a></li>
+                  <li><a href="/user/recent-viewed-properties" class="submenu-link">Recently Viewed</a></li>
+                `}
+              </ul>
+            </div>
+          </li>
+        `;
+
+    // Dynamic Pricing Menu
+    const pricingMenuHtml = `
+          <li class="mb-2">
+            <a class="d-flex justify-content-between align-items-center sidebar-link collapsed"
+               data-bs-toggle="collapse" href="#mobilePriceMenu" role="button" aria-expanded="false"
+               aria-controls="mobilePriceMenu">
+              <span><i class="fas fa-tags me-2 text-info"></i> Pricing & Subscriptions</span>
+              <i class="fas fa-chevron-down small"></i>
+            </a>
+            <div class="collapse submenu" id="mobilePriceMenu">
+              <ul class="list-unstyled ps-3">
+                <li><a href="/user/current-subscriptions${queryParam}" class="submenu-link">Current Subscriptions</a></li>
+                <li><a href="/user/payments-invoice${queryParam}" class="submenu-link">Payments & Invoice</a></li>
+                <li><a href="/user/pricing${queryParam}" class="submenu-link">Pricing</a></li>
+              </ul>
+            </div>
+          </li>
+        `;
+
+    document.getElementById('mobileDynamicMenu').innerHTML = dynamicMenuHtml;
+    document.getElementById('mobileDynamicPricingMenu').innerHTML = pricingMenuHtml;
+
+    // Highlight active links
+    const links = document.querySelectorAll('.mobile-sidebar a');
+    const currentPath = window.location.pathname + window.location.search;
+    links.forEach(link => {
+      if (link.getAttribute('href') && currentPath.startsWith(link.getAttribute('href'))) {
+        link.classList.add('active');
+        const collapseDiv = link.closest('.collapse');
+        if (collapseDiv) collapseDiv.classList.add('show');
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    renderMobileSidebar(mobileUserType);
+  });
+</script>
+
+<script>
   let postLoginRedirect = null;
 
   function openSigninModal(redirectUrl = null) {
@@ -3755,7 +3802,6 @@
 
 </script>
 
-
 <script>
   // switch active class
   document.querySelectorAll('.bottom-item').forEach(item => {
@@ -3884,6 +3930,7 @@
   //     });
   //   });
 </script>
+
 <script type="text/javascript">
   $(".modal_loading").css('display', 'none');
 
@@ -4272,6 +4319,7 @@
   }
 
 </script>
+
 @include('layouts.app_js')
 @if(session('success'))
   <script type="text/javascript">
