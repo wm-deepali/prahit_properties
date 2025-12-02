@@ -1143,12 +1143,12 @@
 			const isLoggedIn = <?php echo json_encode(Auth::check(), 15, 512) ?>;
 
 			if (!isLoggedIn) {
-				if (!email.trim()) {
+				if (email == '') {
 					$('#email').focus();
 					toastr.warning('Email is required.');
 					return false;
 				}
-				if (!mobile_number.trim()) {
+				if (mobile_number == '') {
 					$('#mobile_number').focus();
 					toastr.warning('Mobile number is required.');
 					return false;

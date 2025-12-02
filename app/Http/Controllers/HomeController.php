@@ -979,12 +979,10 @@ class HomeController extends AppController
 		// ---------------------------------------------------
 		$loggedUser = auth()->user();
 		$isVerified = $loggedUser ? $loggedUser->is_verified : false;
-
 		$mobileChanged = $loggedUser && $request->mobile_number != $loggedUser->mobile_number;
 
 		// OTP required when user is unverified OR mobile changed
 		if (!$isVerified || $mobileChanged) {
-
 			if (empty($request->otp)) {
 				return response()->json([
 					'success' => false,
@@ -1010,22 +1008,18 @@ class HomeController extends AppController
 			$otp_check->delete();
 		}
 
-
-		// ---------------------------------------------------
-		// 2️⃣ USER SHOULD NOT BE CREATED OR MODIFIED
-		// Save owner info inside the property only
-		// ---------------------------------------------------
-
-		$user_id = $loggedUser ? $loggedUser->id : null;
-
 		// ---------------------------------------------------
 		// 3️⃣ CREATE PROPERTY
 		// ---------------------------------------------------
 
+		$user_id = $loggedUser ? $loggedUser->id : null;
 		$count = Properties::count();
 		$unique_id = 'PP-' . str_pad($count, 4, '0', STR_PAD_LEFT);
 		$slug = str_replace('/', '-', str_replace(' ', '-', $request->title));
 
+		// ----------------------------------------------------------
+		//  LOCATION
+		// ----------------------------------------------------------
 		$locationId = $request->location_id;
 		if ($locationId === 'other') {
 			$customLocationName = trim($request->custom_location_input);
@@ -1046,19 +1040,58 @@ class HomeController extends AppController
 			}
 		}
 
-		$request->merge(['location_id' => $locationId]);
+		// ----------------------------------------------------------
+		//  SUB LOCATIONS
+		// ----------------------------------------------------------
+		$submittedSubLocations = $request->input('sub_location_id', []);
+		$resolvedSubLocationIds = [];
+
+		if (!empty($submittedSubLocations)) {
+			foreach ($submittedSubLocations as $value) {
+
+				$value = trim($value ?? '');
+
+				if ($value === '')
+					continue;
+
+				if (ctype_digit($value)) {
+					$existing = SubLocations::find((int) $value);
+					if ($existing)
+						$resolvedSubLocationIds[] = $existing->id;
+				} else {
+					$name = ucwords(strtolower($value));
+					$dup = SubLocations::where('location_id', $locationId)
+						->where('sub_location_name', $name)
+						->first();
+
+					if ($dup) {
+						$resolvedSubLocationIds[] = $dup->id;
+					} else {
+						$newSub = SubLocations::create([
+							'location_id' => $locationId,
+							'sub_location_name' => $name,
+						]);
+						$resolvedSubLocationIds[] = $newSub->id;
+					}
+				}
+			}
+		}
+
+		$normalizedSubLocationId = !empty($resolvedSubLocationIds)
+			? implode(',', $resolvedSubLocationIds)
+			: null;
+
 
 		// ✅ Convert checkbox arrays
 		$price_label = $request->has('price_label') ? implode(',', (array) $request->price_label) : null;
 		$property_status = $request->has('property_status') ? implode(',', (array) $request->property_status) : null;
 		$registration_status = $request->has('registration_status') ? implode(',', (array) $request->registration_status) : null;
 		$furnishing_status = $request->has('furnishing_status') ? implode(',', (array) $request->furnishing_status) : null;
+		$amenities = $request->has('amenity') ? implode(',', (array) $request->amenity) : null;
 
 		// ✅ Create property
 		$property = Properties::create([
 			'user_id' => $user_id,
-
-			// Property details
 			'title' => $request->title,
 			'listing_id' => $unique_id,
 			'slug' => $slug,
@@ -1078,7 +1111,9 @@ class HomeController extends AppController
 			'address' => $request->address,
 			'state_id' => $request->state,
 			'city_id' => $request->city,
-			'location_id' => $request->location_id,
+			'location_id' => $locationId,
+			'sub_location_id' => $normalizedSubLocationId,
+			'amenities' => $amenities,
 			'latitude' => $request->latitude,
 			'longitude' => $request->longitude,
 			'additional_info' => $request->form_json,

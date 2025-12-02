@@ -162,11 +162,8 @@
                                     <a class="dropdown-item" href="<?php echo e(route('admin.manage-enquiries.index')); ?>">
                                         Property Enquiries
                                     </a>
-                                    <a class="dropdown-item" href="<?php echo e(url('master/property/feedback')); ?>">
-                                        Property Feedbacks
-                                    </a>
-                                    <a class="dropdown-item" href="<?php echo e(route('admin.manage-complaints.index')); ?>">
-                                        Property Complaints
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.manage-feedback')); ?>">
+                                        Property Feedbacks & Complaints
                                     </a>
                                     <a class="dropdown-item" href="<?php echo e(route('admin.directory-enquiries.index')); ?>">
                                         Directory Enquiries

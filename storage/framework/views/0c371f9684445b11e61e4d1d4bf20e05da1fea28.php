@@ -20,7 +20,7 @@
               <li class="breadcrumb-item active">View Property Feedback</li>
             </ol>
             <!--       <button type="button" class="btn btn-primary btn-save mr-3" data-toggle="collapse" data-target="#showFilter" aria-expanded="false" aria-controls="showFilter"><i class="fas fa-sort-amount-down-alt"></i> Show Filters</button>
-     -->
+       -->
           </div>
         </div>
       </div>
@@ -205,43 +205,45 @@
     }
 
     function changeStatus(id) {
-      swal({
+      swal.fire({
         title: "Are you sure?",
         text: "Chnage Status Of This Feedback.",
         icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-        .then((willDelete) => {
-          if (willDelete) {
-            $(".loading_2").css('display', 'block');
-            $(".btn-delete").attr('disabled', true);
-            $.ajax({
-              url: '<?php echo e(url('master/change-status/feedback')); ?>',
-              method: "POST",
-              data: {
-                "_token": "<?php echo e(csrf_token()); ?>",
-                'id': id
-              },
-              success: function (response) {
-                var response = JSON.parse(response);
-                if (response.status === 200) {
-                  toastr.success(response.message)
-                  reloadPage();
-                } else if (response.status === 500) {
-                  toastr.error(response.message)
-                }
-              },
-              error: function (response) {
-                toastr.error('An error occured.')
-              },
-              complete: function () {
-                $(".loading_2").css('display', 'none');
-                $(".btn-delete").attr('disabled', false);
+        showCancelButton: true,
+        confirmButtonText: "Yes, change it",
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $(".loading_2").css('display', 'block');
+          $(".btn-delete").attr('disabled', true);
+          $.ajax({
+            url: '<?php echo e(url('master/change-status/feedback')); ?>',
+            method: "POST",
+            data: {
+              "_token": "<?php echo e(csrf_token()); ?>",
+              'id': id
+            },
+            success: function (response) {
+              var response = JSON.parse(response);
+              if (response.status === 200) {
+                toastr.success(response.message)
+                reloadPage();
+              } else if (response.status === 500) {
+                toastr.error(response.message)
               }
-            })
-          }
-        });
+            },
+            error: function (response) {
+              toastr.error('An error occured.')
+            },
+            complete: function () {
+              $(".loading_2").css('display', 'none');
+              $(".btn-delete").attr('disabled', false);
+            }
+          })
+        }
+      });
 
     }
 

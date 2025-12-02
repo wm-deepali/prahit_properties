@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\BusinessListingController;
 use App\Http\Controllers\User\PricingController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Admin\CallbackRequestController;
+use App\Http\Controllers\Admin\FeedbackController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -162,19 +163,30 @@ Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'admin.check'], '
 		Route::resource('email-integration', 'EmailIntegrationController');
 
 		Route::resource('manage-enquiries', 'EnquiriesController');
-		Route::resource('manage-complaints', 'FeedbackController');
 		Route::resource('manage-ads', 'Ads\AdsManagementController');
 		Route::resource('manage-audience', 'Ads\AudienceController');
 		Route::resource('directory-enquiries', 'DirectoryEnquiryController');
 		Route::resource('agent-profile-reviews', 'ReviewController');
 		Route::resource('business-listing-reviews', 'BusinessListingReviewController');
-		;
 
-		Route::group(['as' => 'complaints.'], function () {
-			Route::get('apply_filters', 'FeedbackController@apply_filters')->name('apply_filters');
-		});
+		// Feedback Page (all 3 tabs)
+		Route::get('admin/manage-feedback', [FeedbackController::class, 'manageAll'])
+			->name('manage-feedback');
+		// Complaints (AJAX)
+		Route::get('admin/manage-feedback/complaints', [FeedbackController::class, 'ajaxComplaints'])
+			->name('manage-feedback.complaints');
+		// Feedbacks (AJAX)
+		Route::get('admin/manage-feedback/feedbacks', [FeedbackController::class, 'ajaxFeedbacks'])
+			->name('manage-feedback.feedbacks');
+		// Agent Not Reachable (AJAX)
+		Route::get('admin/manage-feedback/agent', [FeedbackController::class, 'ajaxAgent'])
+			->name('manage-feedback.agent');
 
-		// Route::resource('manage-complaints','FeedbackController');
+		Route::post('admin/change-status/feedback', [FeedbackController::class, 'changeStatusPropertyFeedbacks'])
+			->name('changeStatusPropertyFeedbacks');
+
+		Route::post('admin/manage-feedback/delete', [FeedbackController::class, 'deleteFeedback'])
+			->name('manage-feedback.delete');
 
 	});
 });
@@ -275,8 +287,8 @@ Route::group(['middleware' => ['auth', 'admin.check']], function () {
 	Route::post('reply/complaint/query', 'Admin\EnquiriesController@replyComplaintQuery')->name('admin.replyComplaintQuery');
 
 	// Callback Requests Routes
-    Route::get('/master/callback-requests', [CallbackRequestController::class, 'index'])->name('admin.callbackRequests');
-    Route::delete('/master/callback-requests/{id}', [CallbackRequestController::class, 'destroy'])->name('admin.callbackRequests.delete');
+	Route::get('/master/callback-requests', [CallbackRequestController::class, 'index'])->name('admin.callbackRequests');
+	Route::delete('/master/callback-requests/{id}', [CallbackRequestController::class, 'destroy'])->name('admin.callbackRequests.delete');
 
 
 	// Carrier With Us Routes
@@ -419,13 +431,7 @@ Route::group(['middleware' => ['auth', 'admin.check']], function () {
 	// Manage Featured Status
 	Route::post('property/featured/status', 'Admin\PropertiesController@manageFeaturedStatus')->name('admin.manageFeaturedStatus');
 	Route::post('property/Verified/status', 'Admin\PropertiesController@manageVerifiedStatus')->name('admin.manageVerifiedStatus');
-
-	// Property Feedback
-	Route::get('master/property/feedback', 'Admin\FeedbackController@propertyFeedbacks')->name('admin.propertyFeedbacks');
-	Route::post('master/change-status/feedback', 'Admin\FeedbackController@changeStatusPropertyFeedbacks')->name('admin.changeStatusPropertyFeedbacks');
-
 	// CLaim Routes
-
 	Route::get('master/manage/claims', 'Admin\PropertiesController@manageClaims')->name('admin.manageClaims');
 	Route::get('master/manage/claims/datatable', 'Admin\PropertiesController@manageClaimsDatatable')->name('admin.manageClaimsDatatable');
 	Route::post('master/assign/claim', 'Admin\PropertiesController@assignPropertyClaim')->name('admin.assignPropertyClaim');

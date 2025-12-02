@@ -14,131 +14,147 @@ use Illuminate\Support\Facades\Session;
 class FeedbackController extends AppController
 {
 
-	public function index(Request $request)
+	public function manageAll()
 	{
 		$category = Category::latest()->get();
 		$location = Locations::all();
+
+		return view('admin.feedback.index', compact('category', 'location'));
+	}
+
+	public function ajaxComplaints(Request $request)
+	{
 		if ($request->ajax()) {
-			// $complaint_types = ComplaintTypes::all();
-			$feedback = Feedback::has('Property')->with('Property')->where(['is_complaint' => "1"])->latest()->get();
 
-			foreach ($feedback as $key => $value) {
-				// $value->verified = "Yes";
+			$feedback = Feedback::has('Property')
+				->with('Property')
+				->where('is_complaint', "1")
+				->latest()
+				->get();
+
+			foreach ($feedback as $value) {
+
 				$explode = explode(',', $value->complaint_type);
+				$value->complaint = "";
 
-				$value->complaint;
-				foreach ($explode as $key1 => $value1) {
-					$complaint_type = ComplaintTypes::find($value1, ['complaint_type']);
-					if (isset($value->complaint)) {
-						$value->complaint .= ", ";
+				foreach ($explode as $cid) {
+					$ctype = ComplaintTypes::find($cid);
+					if ($ctype) {
+						$value->complaint .= ($value->complaint ? ', ' : '') . $ctype->complaint_type;
 					}
-					$value->complaint .= $complaint_type->complaint_type;
 				}
 
-				if (isset($value->Property)) {
+				if ($value->Property) {
 					$value->property_id = $value->Property->id;
 					$value->property_title = $value->Property->title;
 				}
 			}
-			return \Yajra\DataTables\DataTables::of($feedback)
-				->addColumn('property_title', function ($feedback) {
-					$picked = Properties::find($feedback->property_id);
-					if ($picked) {
-						$listing_id = '<a href="#" onclick="fetchPropertyDetails(' . $picked->id . ')" name="View Property">' . $picked->listing_id . '</a>';
-						return $listing_id;
 
-					} else {
-						return 'N/A';
-					}
+			return DataTables::of($feedback)
+				->addColumn('property_title', function ($f) {
+					return '<a href="#" onclick="fetchPropertyDetails(' . $f->property_id . ')">' . $f->Property->listing_id . '</a>';
 				})
-				->addColumn('feedback', function ($feedback) {
-					return $feedback->feedback;
+				->addColumn('feedback', fn($f) => $f->feedback)
+				->addColumn('user_details', function ($f) {
+					return "Mobile: {$f->mobile_number}<br>Email: {$f->email}";
 				})
-				->addColumn('user_details', function ($feedback) {
-					$mobile = $feedback->mobile_number ?? 'N/A';
-					$email = $feedback->email ?? 'N/A';
-					return "Mobile: $mobile <br> Email: $email";
+				->addColumn('action', function ($f) {
+					$statusIcon = $f->status == 'Inactive' ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>';
+					$statusBtn = '<a class="btn btn-primary btn-sm" onclick="changeStatus(' . $f->id . ')">' . $statusIcon . '</a>';
+					$deleteBtn = '<a class="btn btn-danger btn-sm" onclick="deleteFeedback(' . $f->id . ')"><i class="fa fa-trash"></i></a>';
+
+					return $statusBtn . ' ' . $deleteBtn;
 				})
-				->addColumn('action', function ($feedback) {
-					if ($feedback->status == 'Inactive') {
-						return '<a class="edit btn btn-primary btn-sm" onclick="changeStatus(' . $feedback->id . ')">
-                                <i class="fa fa-check" aria-hidden="true"></i>
-                            </a>';
-					} else {
-						return '<a class="edit btn btn-primary btn-sm" onclick="changeStatus(' . $feedback->id . ')">
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </a>';
-					}
-				})
-				->rawColumns(['property_title', 'feedback', 'action', 'user_details'])
+				->rawColumns(['property_title', 'feedback', 'user_details', 'action'])
 				->make(true);
 		}
-		return view('admin.feedback.index', compact('category', 'location'));
-
 	}
 
-	public function propertyFeedbacks(Request $request)
+	public function ajaxFeedbacks(Request $request)
 	{
-		$category = Category::latest()->get();
-		$location = Locations::all();
-
 		if ($request->ajax()) {
+
 			$feedback = Feedback::has('Property')
 				->with('Property')
 				->where('is_feedback', "1")
 				->latest()
 				->get();
 
-			foreach ($feedback as $key => $value) {
-				if (isset($value->Property)) {
+			foreach ($feedback as $value) {
+				if ($value->Property) {
 					$value->property_id = $value->Property->id;
 					$value->property_title = $value->Property->title;
 				}
 			}
 
-			return \Yajra\DataTables\DataTables::of($feedback)
-				->addColumn('property_title', function ($feedback) {
-					$picked = Properties::find($feedback->property_id);
-					if ($picked) {
-						$listing_id = '<a href="#" onclick="fetchPropertyDetails(' . $picked->id . ')" name="View Property">' . $picked->listing_id . '</a>';
-						return $listing_id;
+			return DataTables::of($feedback)
+				->addColumn('property_title', function ($f) {
+					return '<a href="#" onclick="fetchPropertyDetails(' . $f->property_id . ')">' . $f->Property->listing_id . '</a>';
+				})
+				->addColumn('feedback', fn($f) => $f->feedback)
+				->addColumn('user_details', function ($f) {
+					return "Mobile: {$f->mobile_number}<br>Email: {$f->email}";
+				})
+				->addColumn('action', function ($f) {
+					$statusIcon = $f->status == 'Inactive' ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>';
+					$statusBtn = '<a class="btn btn-primary btn-sm" onclick="changeStatus(' . $f->id . ')">' . $statusIcon . '</a>';
+					$deleteBtn = '<a class="btn btn-danger btn-sm" onclick="deleteFeedback(' . $f->id . ')"><i class="fa fa-trash"></i></a>';
 
-					} else {
-						return 'N/A';
-					}
-				})
-				->addColumn('feedback', function ($feedback) {
-					return $feedback->feedback;
-				})
-				->addColumn('user_details', function ($feedback) {
-					$mobile = $feedback->mobile_number ?? 'N/A';
-					$email = $feedback->email ?? 'N/A';
-					return "Mobile: $mobile <br> Email: $email";
-				})
-				->addColumn('action', function ($feedback) {
-					if ($feedback->status == 'Inactive') {
-						return '<a class="edit btn btn-primary btn-sm" onclick="changeStatus(' . $feedback->id . ')">
-                                <i class="fa fa-check" aria-hidden="true"></i>
-                            </a>';
-					} else {
-						return '<a class="edit btn btn-primary btn-sm" onclick="changeStatus(' . $feedback->id . ')">
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </a>';
-					}
+					return $statusBtn . ' ' . $deleteBtn;
 				})
 				->rawColumns(['property_title', 'feedback', 'user_details', 'action'])
 				->make(true);
 		}
-
-		return view('admin.feedback.feedback', compact('category', 'location'));
 	}
 
-
-	public function show($id)
+	public function ajaxAgent(Request $request)
 	{
-		$feedback = Feedback::findOrFail($id);
-		$this->JsonResponse(200, 'Feedback found succesfully', ['Feedback' => $feedback]);
+		if ($request->ajax()) {
+
+			$feedback = Feedback::has('Property')
+				->with('Property')
+				->where('is_agent_not_reachable', "1")
+				->latest()
+				->get();
+
+			foreach ($feedback as $value) {
+
+				$explode = explode(',', $value->agent_not_reachable_type);
+				$value->agent_issue = "";
+
+				foreach ($explode as $cid) {
+					$ctype = ComplaintTypes::find($cid);
+					if ($ctype) {
+						$value->agent_issue .= ($value->agent_issue ? ', ' : '') . $ctype->complaint_type;
+					}
+				}
+
+				if ($value->Property) {
+					$value->property_id = $value->Property->id;
+					$value->property_title = $value->Property->title;
+				}
+			}
+
+			return DataTables::of($feedback)
+				->addColumn('property_title', function ($f) {
+					return '<a href="#" onclick="fetchPropertyDetails(' . $f->property_id . ')">' . $f->Property->listing_id . '</a>';
+				})
+				->addColumn('agent_issue', fn($f) => $f->agent_issue)
+				->addColumn('user_details', function ($f) {
+					return "Mobile: {$f->mobile_number}<br>Email: {$f->email}";
+				})
+				->addColumn('action', function ($f) {
+					$statusIcon = $f->status == 'Inactive' ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>';
+					$statusBtn = '<a class="btn btn-primary btn-sm" onclick="changeStatus(' . $f->id . ')">' . $statusIcon . '</a>';
+					$deleteBtn = '<a class="btn btn-danger btn-sm" onclick="deleteFeedback(' . $f->id . ')"><i class="fa fa-trash"></i></a>';
+
+					return $statusBtn . ' ' . $deleteBtn;
+				})
+				->rawColumns(['property_title', 'agent_issue', 'user_details', 'action'])
+				->make(true);
+		}
 	}
+
 
 	public function changeStatusPropertyFeedbacks(Request $request)
 	{
@@ -156,69 +172,22 @@ class FeedbackController extends AppController
 		}
 	}
 
-	public function apply_filters(Request $request)
+	public function deleteFeedback(Request $request)
 	{
 		try {
+			$feedback = Feedback::findOrFail($request->id);
+			$feedback->delete();
 
-			$get_values = $_GET;
+			return response()->json([
+				'status' => 200,
+				'message' => 'Feedback deleted successfully.'
+			]);
 
-			$filters = [];
-			foreach ($get_values as $key => $value) {
-				if (strpos($key, "filter_") !== false) {
-					$new_key = str_replace('filter_', '', $key);
-					if (strpos($new_key, 'properties') !== false) {
-						$new_key = str_replace('properties_', 'properties.', $new_key);
-					} else if (strpos($new_key, 'category_') !== false) {
-						$new_key = str_replace('category_', 'category.', $new_key);
-					}
-					$filters[$new_key] = $value;
-				}
-			}
-
-			// $properties = Properties::with('Category','Category.Subcategory','Location')->latest()->where($filters)->get();
-
-			$feedback = Feedback::with('Property', 'Property.Category')->where(['properties.category_id' => '1', 'is_complaint' => "1"])->get();
-
-			if ($request->ajax()) {
-				foreach ($feedback as $key => $value) {
-					// $value->verified = "Yes";
-					$explode = explode(',', $value->complaint_type);
-
-					$value->complaint;
-					foreach ($explode as $key1 => $value1) {
-						if (isset($value1)) {
-							$complaint_type = ComplaintTypes::find($value1, ['complaint_type']);
-							if (isset($value->complaint)) {
-								$value->complaint .= ", ";
-							}
-							$value->complaint .= $complaint_type->complaint_type;
-						}
-					}
-
-					if (isset($value->Property)) {
-						$value->property_id = $value->Property->id;
-						$value->property_title = $value->Property->title;
-					}
-				}
-
-				return DataTables::of($feedback)
-					->addColumn('property_title', function ($feedback) {
-						$property_title = '<a href="#" onclick="fetchPropertyDetails(' . $feedback->property_id . ')" name="edit">' . $feedback->property_title . '</a>';
-						return $property_title;
-					})
-					->addColumn('feedback', function ($feedback) {
-						$feedback = '<a href="#" onclick="fetchFeedback(' . $feedback->id . ')">View Experience</a>';
-						return $feedback;
-					})
-					// ->addColumn('action', function($feedback){
-					//     $button = '<a name="edit" class="edit btn btn-primary btn-sm" href="properties/'.base64_encode($feedback->id).'/edit">Delete</a>';
-					//     return $button;
-					// })
-					->rawColumns(['property_title', 'feedback', 'action'])
-					->make(true);
-			}
 		} catch (\Exception $e) {
-			$this->JsonResponse(500, $e->getMessage());
+			return response()->json([
+				'status' => 500,
+				'message' => $e->getMessage()
+			]);
 		}
 	}
 
@@ -326,7 +295,6 @@ class FeedbackController extends AppController
 
 		return response()->json(['success' => false, 'message' => 'Invalid OTP.']);
 	}
-
 
 }
 
