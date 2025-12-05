@@ -1773,9 +1773,9 @@
                         .then(html => {
                             listingsContainer.innerHTML = html;
                             history.pushState(null, '', `${window.location.pathname}?${params.toString()}`);
-                               // Close offcanvas on mobile
-    const closeBtn = document.querySelector('#offcanvasExample [data-bs-dismiss="offcanvas"]');
-if (closeBtn) closeBtn.click();
+                            // Close offcanvas on mobile
+                            const closeBtn = document.querySelector('#offcanvasExample [data-bs-dismiss="offcanvas"]');
+                            if (closeBtn) closeBtn.click();
                         })
                         .catch(console.error);
                 });

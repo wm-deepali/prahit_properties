@@ -101,7 +101,7 @@ class UserController extends Controller
 			}
 
 			// Delete related properties
-			$user->properties()->delete();
+			$user->getProperties()->delete();
 
 			// Delete the user
 			$user->delete();

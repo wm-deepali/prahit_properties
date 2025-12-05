@@ -782,7 +782,6 @@
     </div>
   </div>
 
-
   <header class="main-header py-2 shadow-sm bg-white desktop-view">
     <div class="container d-flex align-items-center justify-content-between">
 
@@ -945,17 +944,13 @@
     </div>
   </header>
 
-
-
-
-
   <?php
     use App\Helpers\Helper;
     $sellSubs = Helper::getSubSubcategoriesByCategoryName('Sell');
     $sellResidentil = $sellSubs['residential'];
     $sellCommercial = $sellSubs['commercial'];
 
-    $rentSubs = Helper::getSubSubcategoriesByCategoryName('Sell');
+    $rentSubs = Helper::getSubSubcategoriesByCategoryName('Rent');
     $rentResidentil = $rentSubs['residential'];
     $rentCommercial = $rentSubs['commercial'];
 
@@ -1009,7 +1004,8 @@
                     <h4 class="tab-titles">Properties</h4>
                     <div class="d-flex flex-column">
                       <?php $__currentLoopData = $sellResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_sub_category_id' => $subSubcat->id])); ?>">
+                        <a
+                          href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => $subSubcat->sub_category_id, 'sub_sub_category_id' => $subSubcat->id])); ?>">
                           <?php echo e($subSubcat->sub_sub_category_name); ?>
 
                         </a>
@@ -1077,7 +1073,8 @@
                     <h4 class="tab-titles">Properties</h4>
                     <div class="d-flex flex-column">
                       <?php $__currentLoopData = $sellCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_sub_category_id' => $subSubcat->id])); ?>">
+                        <a
+                          href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => $subSubcat->sub_category_id, 'sub_sub_category_id' => $subSubcat->id])); ?>">
                           <?php echo e($subSubcat->sub_sub_category_name); ?>
 
                         </a>
@@ -1413,7 +1410,7 @@
                     <div class="d-flex flex-column">
                       <?php $__currentLoopData = $rentResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <a
-                          href="<?php echo e(route('listing.list', ['type' => 'rental', 'sub_sub_category_id' => $subSubcat->id])); ?>">
+                          href="<?php echo e(route('listing.list', ['type' => 'rental', 'sub_category_id' => $subSubcat->sub_category_id, 'sub_sub_category_id' => $subSubcat->id])); ?>">
                           <?php echo e($subSubcat->sub_sub_category_name); ?>
 
                         </a>
@@ -1466,7 +1463,7 @@
                     <div class="d-flex flex-column">
                       <?php $__currentLoopData = $rentCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <a
-                          href="<?php echo e(route('listing.list', ['type' => 'rental', 'sub_sub_category_id' => $subSubcat->id])); ?>">
+                          href="<?php echo e(route('listing.list', ['type' => 'rental', 'sub_category_id' => $subSubcat->sub_category_id, 'sub_sub_category_id' => $subSubcat->id])); ?>">
                           <?php echo e($subSubcat->sub_sub_category_name); ?>
 
                         </a>
@@ -1767,7 +1764,7 @@
                         <ul class="list-unstyled">
                           <?php $__currentLoopData = $sellResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <li><a
-                                href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_sub_category_id' => $subSubcat->id])); ?>">
+                                href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => $subSubcat->sub_category_id, 'sub_sub_category_id' => $subSubcat->id])); ?>">
                                 <?php echo e($subSubcat->sub_sub_category_name); ?></a></li>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
@@ -1827,7 +1824,7 @@
                         <ul class="list-unstyled">
                           <?php $__currentLoopData = $sellCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <li><a
-                                href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_sub_category_id' => $subSubcat->id])); ?>">
+                                href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => $subSubcat->sub_category_id, 'sub_sub_category_id' => $subSubcat->id])); ?>">
                                 <?php echo e($subSubcat->sub_sub_category_name); ?></a></li>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
@@ -1885,11 +1882,17 @@
                       <div class="sub-sub-section section-properties">
                         <h5><i class="fas fa-city"></i> New Launch</h5>
                         <ul class="list-unstyled">
-                          <li><a href="<?php echo e(route('listing.list', ['sub_category_id' => 34])); ?>">Residential Projects</a>
+                          <li><a
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34])); ?>">Residential
+                              Projects</a>
                           </li>
-                          <li><a href="<?php echo e(route('listing.list', ['sub_category_id' => 35])); ?>">Commercial Projects</a>
+                          <li><a
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 35])); ?>">Commercial
+                              Projects</a>
                           </li>
-                          <li><a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => '18,25,27'])); ?>">Land &
+                          <li><a
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_sub_category_id' => '18,25,27'])); ?>">Land
+                              &
                               Plots</a></li>
                         </ul>
                       </div>
@@ -1898,7 +1901,7 @@
                         <ul class="list-unstyled">
                           <?php $__currentLoopData = $sellBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <li><a
-                                href="<?php echo e(route('listing.list', array_merge(['category_id' => 22], $budget['query']))); ?>">
+                                href="<?php echo e(route('listing.list', array_merge(['type' => 'buy', 'category_id' => 22], $budget['query']))); ?>">
                                 <?php echo e($budget['label']); ?></a></li>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
@@ -1907,16 +1910,16 @@
                         <h5><i class="fas fa-star"></i> Popular Choices</h5>
                         <ul class="list-unstyled">
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'sort' => 'new-launch'])); ?>">New
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'sort' => 'new-launch'])); ?>">New
                               Launch</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Under Construction'])); ?>">Under
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'property_status' => 'Under Construction'])); ?>">Under
                               Construction</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Ready to Move'])); ?>">Ready
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'property_status' => 'Ready to Move'])); ?>">Ready
                               to Move</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 34, 'property_status' => 'Possession Soon'])); ?>">Possession
+                              href="<?php echo e(route('listing.list', ['type' => 'buy', 'sub_category_id' => 34, 'property_status' => 'Possession Soon'])); ?>">Possession
                               Soon</a></li>
                           <li><a href="#">OC Received</a></li>
                           <li><a href="#">RERA Registered</a></li>
@@ -2196,7 +2199,8 @@
                         <h5><i class="fas fa-building"></i> Properties</h5>
                         <ul class="list-unstyled">
                           <?php $__currentLoopData = $rentResidentil; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <li><a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => $subSubcat->id])); ?>">
+                            <li><a
+                                href="<?php echo e(route('listing.list', ['type' => 'rental', 'sub_category_id' => $subSubcat->sub_category_id, 'sub_sub_category_id' => $subSubcat->id])); ?>">
                                 <?php echo e($subSubcat->sub_sub_category_name); ?></a></li>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
@@ -2206,7 +2210,7 @@
                         <ul class="list-unstyled">
                           <?php $__currentLoopData = $rentBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <li><a
-                                href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => 38], $budget['query']))); ?>">
+                                href="<?php echo e(route('listing.list', array_merge(['type' => 'rental','sub_category_id' => 38], $budget['query']))); ?>">
                                 <?php echo e($budget['label']); ?></a></li>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
@@ -2215,18 +2219,18 @@
                         <h5><i class="fas fa-star"></i> Popular Choices</h5>
                         <ul class="list-unstyled">
                           <li> <a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 38, 'user_role' => 'owner'])); ?>">Owner
+                              href="<?php echo e(route('listing.list', ['type' => 'rental','sub_category_id' => 38, 'user_role' => 'owner'])); ?>">Owner
                               Properties</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 38, 'status' => 'verified'])); ?>">Verified
+                              href="<?php echo e(route('listing.list', ['type' => 'rental','sub_category_id' => 38, 'status' => 'verified'])); ?>">Verified
                               Properties</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 38, 'property_status' => 'Ready to Move'])); ?>">Ready
+                              href="<?php echo e(route('listing.list', ['type' => 'rental','sub_category_id' => 38, 'property_status' => 'Ready to Move'])); ?>">Ready
                               to
                               Move</a></li>
                           <li><a href="#">Immediate Available</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 38, 'furnishing_status' => 'Full Furnished'])); ?>">Full
+                              href="<?php echo e(route('listing.list', ['type' => 'rental','sub_category_id' => 38, 'furnishing_status' => 'Full Furnished'])); ?>">Full
                               Furnished</a></li>
                         </ul>
                       </div>
@@ -2250,7 +2254,8 @@
                         <h5><i class="fas fa-store"></i> Properties</h5>
                         <ul class="list-unstyled">
                           <?php $__currentLoopData = $rentCommercial; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subSubcat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <li><a href="<?php echo e(route('listing.list', ['sub_sub_category_id' => $subSubcat->id])); ?>">
+                            <li><a
+                                href="<?php echo e(route('listing.list', ['type' => 'rental', 'sub_category_id' => $subSubcat->sub_category_id, 'sub_sub_category_id' => $subSubcat->id])); ?>">
                                 <?php echo e($subSubcat->sub_sub_category_name); ?></a></li>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
@@ -2260,7 +2265,7 @@
                         <ul class="list-unstyled">
                           <?php $__currentLoopData = $rentBudgets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <li><a
-                                href="<?php echo e(route('listing.list', array_merge(['sub_category_id' => 37], $budget['query']))); ?>">
+                                href="<?php echo e(route('listing.list', array_merge(['type' => 'rental','sub_category_id' => 37], $budget['query']))); ?>">
                                 <?php echo e($budget['label']); ?></a></li>
                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
@@ -2269,18 +2274,18 @@
                         <h5><i class="fas fa-star"></i> Popular Choices</h5>
                         <ul class="list-unstyled">
                           <li> <a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 37, 'user_role' => 'owner'])); ?>">Owner
+                              href="<?php echo e(route('listing.list', ['type' => 'rental','sub_category_id' => 37, 'user_role' => 'owner'])); ?>">Owner
                               Properties</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 37, 'status' => 'verified'])); ?>">Verified
+                              href="<?php echo e(route('listing.list', ['type' => 'rental','sub_category_id' => 37, 'status' => 'verified'])); ?>">Verified
                               Properties</a></li>
                           <li><a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 37, 'property_status' => 'Ready to Move'])); ?>">Ready
+                              href="<?php echo e(route('listing.list', ['type' => 'rental','sub_category_id' => 37, 'property_status' => 'Ready to Move'])); ?>">Ready
                               to
                               Move</a></li>
                           <li><a href="#">Immediate Available</a></li>
                           <li> <a
-                              href="<?php echo e(route('listing.list', ['sub_category_id' => 37, 'furnishing_status' => 'Full Furnished'])); ?>">Full
+                              href="<?php echo e(route('listing.list', ['type' => 'rental','sub_category_id' => 37, 'furnishing_status' => 'Full Furnished'])); ?>">Full
                               Furnished</a></li>
                         </ul>
                       </div>
@@ -2579,7 +2584,6 @@
 
   <?php echo $__env->yieldContent('content'); ?>
 
-
   <div class="modal fade custom-modal" id="contact-agent" tabindex="-1" role="dialog" aria-labelledby="register"
     aria-hidden="true">
     <div class="modal-dialog w-450" role="document">
@@ -2799,467 +2803,6 @@
     </div>
   </div>
 
-  <div class="modal fade custom-modal" id="signin" tabindex="-1" role="dialog" aria-labelledby="signin"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-
-        <div class="top-design">
-          <img src="<?php echo e(asset('')); ?>images/top-designs.png" class="img-fluid">
-        </div>
-        <div class="modal-body">
-          <div class="modal-main">
-            <div class="row align-items-center">
-              <div class="col-lg-6 mobile-sign">
-                <div class="custom-mode-l"
-                  style="position: relative; height: 100%; min-height: 400px; background-image: url('https://img.freepik.com/free-photo/construction-concept-with-engineering-tools_1150-17809.jpg'); background-size: cover; background-position: center; border-radius: 10px; overflow: hidden;display: flex;align-items: center; justify-content: center;">
-                  <div
-                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;">
-                  </div>
-                  <div
-                    style="position: relative; z-index: 2; height: 100%; display: flex; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;">
-                    <div>
-                      <a href="#">
-                        <h3 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 15px; color: #fff;">
-                          Bhawan Bhoomi</h3>
-                      </a>
-                      <!--<img src="<?php echo e(asset('')); ?>images/house.png" class="img-fluid" style="max-width: 150px; margin-bottom: 15px;">-->
-                      <p style="font-size: 1.2rem; line-height: 1.6; color: #f0f0f0;">Bhawan Bhoomi Help you in finding
-                        the Best property<br />across India<br />Experience a joyful journey</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="row login-heads">
-                  <div class="col-sm-12">
-                    <h3 class="heads-login">Login</h3>
-                    <span class="allrequired">All field are required</span>
-                  </div>
-                </div>
-                <!--<center class="modal_loading">-->
-                <!--    <img src="<?php echo e(asset('images/loading.gif')); ?>" alt="Loading.." class="loading" style="height: 30px;" />-->
-                <!--</center>-->
-                <div class="modal-form">
-                  <div class="google-signin">
-                    <img src="<?php echo e(asset('images/google.png')); ?>" style="height: 20px;" />
-                    <p>Signin with Google</p>
-
-                  </div>
-                  <div class="devide-or">
-                    <div class="horz-line"> </div>
-                    <h4>OR</h4>
-                    <div class="horz-line"> </div>
-
-                  </div>
-                  <form id="login_form" name="login_form">
-                    <div class="form-group row">
-                      <div class="col-sm-12">
-                        <label class="label-control">Email / Mobile No.</label>
-                        <input type="text" class="text-control" placeholder="Enter Email / Mobile No." name="email"
-                          id="login-email" required />
-                        <span class="loginwotp" id="login-type-otp"><a style="cursor: pointer;"
-                            onclick="loginType('otp')">Login with OTP</a></span>
-                        <span class="loginwotp" id="login-type-password"><a style="cursor: pointer;"
-                            onclick="loginType('password')">Login with Password</a></span>
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <div class="col-sm-12" id="view-password">
-                        <label class="label-control">Password</label>
-                        <input type="password" class="text-control" placeholder="Enter Password" id="password"
-                          name="password" required />
-                        <a href="#" class="forgotpass">Forgot Password ?</a>
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <div class="col-sm-12" id="view-otp">
-                        <label class="label-control">OTP</label>
-                        <input type="number" class="text-control" placeholder="Enter OTP" id="otp" name="otp"
-                          required />
-                        <a href="#" class="forgotpass">Forgot Password ?</a>
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <div class="col-sm-12 text-center" id="check-login">
-                        <button type="submit" class="btn btn-send w-100">Login <i
-                            class="fas fa-chevron-circle-right"></i></button>
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <div class="col-sm-12 text-center" id="check-otp">
-                        <button type="button" class="btn btn-send w-100" onclick="sendLoginOtp()">Send OTP <i
-                            class="fas fa-chevron-circle-right"></i></button>
-                      </div>
-                    </div>
-                    <?php echo csrf_field(); ?>
-                  </form>
-                  <!--<div class="form-group row">-->
-                  <!--    <div class="col-sm-12">-->
-                  <!--        <span class="or-span">OR</span>-->
-                  <!--    </div>-->
-                  <!--    <div class="col-sm-6 mt-2">-->
-                  <!--        <a href="<?php echo e(url('login')); ?>/facebook">-->
-                  <!--            <img src="<?php echo e(asset('')); ?>images/loginwithfb.png" class="img-fluid">-->
-                  <!--        </a>-->
-                  <!--    </div>-->
-                  <!--    <div class="col-sm-6 mt-2">-->
-                  <!--        <a href="<?php echo e(url('login')); ?>/google">-->
-                  <!--            <img src="<?php echo e(asset('')); ?>images/loginwithg.png" class="img-fluid">-->
-                  <!--        </a>-->
-                  <!--    </div>-->
-                  <!--</div>-->
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-foo text-center">
-          <p>Don't have account? <a href="#" class="create-account">Create an Account</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="modal fade custom-modal" id="forgot-password" tabindex="-1" role="dialog" aria-labelledby="signin"
-    aria-hidden="true">
-    <div class="modal-dialog w-450" role="document">
-      <div class="modal-content">
-        <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-
-        <div class="top-design">
-          <img src="<?php echo e(asset('images/top-designs.png')); ?>" class="img-fluid">
-        </div>
-        <div class="modal-body">
-          <div class="modal-main">
-            <center class="modal_loading">
-              <img src="<?php echo e(asset('images/loading.gif')); ?>" alt="Loading.." class="modal_loading" />
-            </center>
-            <div class="row login-heads">
-              <div class="col-sm-12">
-                <h3 class="heads-login">Reset Your Password</h3>
-                <span class="allrequired">All field are required</span>
-              </div>
-            </div>
-            <div class="modal-form">
-              <form id="forgot_password_form" name="forgot_password_form">
-                <div class="form-group row">
-                  <div class="col-sm-12">
-                    <label class="label-control">Registered Mobile No.</label>
-                    <input type="number" class="text-control" placeholder="Enter Registered Mobile No."
-                      name="mobile_number" required />
-                  </div>
-                </div>
-
-                <div class="form-group row">
-                  <div class="col-sm-12 text-center">
-                    <button type="submit" class="btn btn-send w-100">Proceed to OTP <i
-                        class="fas fa-chevron-circle-right"></i></button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div class="modal-foo text-center">
-          <p>New User? <a href="#" data-target="#register" data-toggle="modal" data-dismiss="modal">Register
-              Now</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade custom-modal" id="register" tabindex="-1" role="dialog" aria-labelledby="register"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-
-        <div class="top-design">
-          <img src="<?php echo e(asset('')); ?>images/top-designs.png" class="img-fluid">
-        </div>
-        <div class="modal-body">
-          <div class="modal-main">
-            <div class="row align-items-center">
-              <div class="col-lg-6 mobile-sign">
-                <div class="custom-mode-l">
-                  <a href="#">
-                    <h3>Bhawan Bhoomi</h3>
-                  </a>
-
-
-
-                  <img src="<?php echo e(asset('')); ?>images/house.png" class="img-fluid">
-
-                  <p>Find the best matches for you<br /> Make the most of high seller
-                    scores<br />Experience a joyful journey</p>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="row login-heads">
-                  <div class="col-sm-12">
-                    <h3 class="heads-login">Register Now</h3>
-                    <span class="allrequired">All field are required</span>
-                  </div>
-                </div>
-                <div class="modal-form">
-                  <form id="register_form" name="register_form">
-                    <div class="form-group row">
-                      <div class="col-sm-12">
-                        <label class="label-control">Ownership Type</label>
-                        <ul class="ownertype">
-                          <li><label><input type="radio" checked name="owner_type" value="1">
-                              Owner</label></li>
-                          <li><label><input type="radio" name="owner_type" value="2">
-                              Builder</label></li>
-                          <li><label><input type="radio" name="owner_type" value="3">
-                              Agent</label></li>
-                          <li><label><input type="radio" name="owner_type" value="4">
-                              Service Provider</label></li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <div class="col-sm-6">
-                        <label class="label-control">First Name</label>
-                        <input type="text" class="text-control" placeholder="First Name" name="firstname" required />
-                      </div>
-                      <div class="col-sm-6">
-                        <label class="label-control">Last Name</label>
-                        <input type="text" class="text-control" placeholder="Last Name" name="lastname" required />
-                      </div>
-                    </div>
-
-                    <div class="form-group row">
-                      <div class="col-sm-6">
-                        <label class="label-control">Email</label>
-                        <input type="text" class="text-control" placeholder="Enter Email" name="email" required />
-                      </div>
-                      <div class="col-sm-6">
-                        <label class="label-control">Mobile No.</label>
-                        <input type="number" class="text-control" placeholder="Enter Mobile No." name="mobile_number"
-                          required />
-                      </div>
-                    </div>
-
-                    <div class="form-group row">
-                      <div class="col-sm-6">
-                        <label class="label-control">State</label>
-                        <select class="text-control" name="state_id"
-                          onchange="loadCities(this.value, 'register_modal_city_id');" required>
-                          <?php
-                            $states = \App\State::where('country_id', 101)->get();
-                          ?>
-                          <?php if(count($states) < 1): ?>
-                            <option value="">No records found</option>
-                          <?php else: ?>
-                            <?php $__currentLoopData = $states; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                              <option value="<?php echo e($v->id); ?>"><?php echo e($v->name); ?></option>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                          <?php endif; ?>
-                        </select>
-                      </div>
-                      <div class="col-sm-6">
-                        <label class="label-control">City</label>
-                        <select class="text-control" id="register_modal_city_id" name="city_id" required>
-                          <option value="">Select City</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class="form-group row">
-                      <div class="col-sm-6">
-                        <label class="label-control">Password</label>
-                        <input type="password" class="text-control" placeholder="Enter Password" id="reg_password"
-                          name="password" required />
-                      </div>
-                      <div class="col-sm-6">
-                        <label class="label-control">Confirm Password</label>
-                        <input type="password" class="text-control" placeholder="Re-enter Password"
-                          name="confirm_password" required />
-                      </div>
-                    </div>
-
-                    <div class="form-group row">
-                      <div class="col-sm-12 text-center">
-                        <button type="submit" class="btn btn-send w-100">Proceed to OTP <i
-                            class="fas fa-chevron-circle-right"></i></button>
-                      </div>
-                    </div>
-
-                    <?php echo csrf_field(); ?>
-                  </form>
-
-                  <div class="form-group row">
-                    <!--<div class="col-sm-12">-->
-                    <!--  <span class="or-span">Create Account Using</span>-->
-                    <!--</div>-->
-                    <div class="devide-or">
-                      <div class="horz-line"> </div>
-                      <h4>OR</h4>
-                      <div class="horz-line"> </div>
-
-                    </div>
-                    <div class="google-signin">
-                      <img src="<?php echo e(asset('images/google.png')); ?>" style="height: 20px;" />
-                      <p>Signin with Google</p>
-
-                    </div>
-
-                    <!--<div class="col-sm-6 mt-2">-->
-                    <!--  <a style="cursor: pointer;" onclick="faceBookSignup()">-->
-                    <!--    <img src="<?php echo e(asset('')); ?>images/loginwithfb.png" class="img-fluid">-->
-                    <!--  </a>-->
-
-
-                    <!--</div>-->
-
-                    <!--<div class="col-sm-6 mt-2">-->
-                    <!--  <a style="cursor: pointer;" onclick="googleSignup()">-->
-                    <!--    <img src="<?php echo e(asset('')); ?>images/loginwithg.png" class="img-fluid">-->
-                    <!--  </a>-->
-
-
-                    <!--</div>-->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-foo text-center">
-          <p>Already Registered? <a href="#" data-target="#signin" data-toggle="modal" data-dismiss="modal">Login
-              Now</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="modal fade custom-modal" id="otpModal" tabindex="-1" role="dialog" aria-labelledby="register"
-    aria-hidden="true">
-    <div class="modal-dialog w-450" role="document">
-      <div class="modal-content">
-        <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-
-        <div class="top-design">
-          <img src="<?php echo e(asset('images/top-designs.png')); ?>" class="img-fluid">
-        </div>
-        <div class="modal-body">
-          <div class="modal-main">
-            <center class="modal_loading">
-              <img src="<?php echo e(asset('images/loading.gif')); ?>" alt="Loading.." class="modal_loading" />
-            </center>
-            <form id="otp_form" name="otp_form">
-              <div class="row login-heads">
-                <div class="col-sm-12">
-                  <h3 class="heads-login">OTP Verification</h3>
-                  <span class="allrequired">All field are required</span>
-                </div>
-              </div>
-              <div class="modal-form">
-                <div class="form-group row">
-                  <div class="col-sm-12">
-                    <label class="label-control">Enter OTP</label>
-                    <input type="number" class="text-control" placeholder="Enter OTP" id="otp" name="otp" required />
-                  </div>
-                </div>
-
-                <input type="hidden" class="user_id" name="user_id" />
-
-                <div class="form-group row">
-                  <div class="col-sm-12 text-center">
-                    <button type="submit" class="btn btn-send w-100">Proceed to OTP <i
-                        class="fas fa-chevron-circle-right"></i></button>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div class="modal-foo text-center">
-          <p>Not Received? <a href="#" data-target="#signin" data-toggle="modal" data-dismiss="modal">Resend
-              OTP</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade custom-modal" id="forgototp" tabindex="-1" role="dialog" aria-labelledby="register"
-    aria-hidden="true">
-    <div class="modal-dialog w-450" role="document">
-      <div class="modal-content">
-        <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-
-        <div class="top-design">
-          <img src="<?php echo e(asset('images/top-designs.png')); ?>" class="img-fluid">
-        </div>
-        <div class="modal-body">
-          <div class="modal-main">
-            <form id="verify_otp_password" name="verify_otp_password">
-              <div class="row login-heads">
-                <div class="col-sm-12">
-                  <h3 class="heads-login">OTP Verification</h3>
-                  <span class="allrequired">All field are required</span>
-                </div>
-              </div>
-              <div class="modal-form">
-                <div class="form-group row">
-                  <div class="col-sm-6">
-                    <label class="label-control">Enter OTP</label>
-                    <input type="number" class="text-control" placeholder="Enter OTP" name="otp" required />
-                  </div>
-                </div>
-
-                <div class="form-group row">
-                  <div class="col-sm-6">
-                    <label class="label-control">New Password</label>
-                    <input type="password" class="text-control" placeholder="Enter New Password" id="new_password"
-                      name="new_password" required />
-                  </div>
-                  <div class="col-sm-6">
-                    <label class="label-control">Re-Enter Password</label>
-                    <input type="password" class="text-control" placeholder="Re-enter Password"
-                      name="confirm_new_password" id="confirm_new_password" required />
-                  </div>
-                </div>
-
-                <input type="hidden" name="user_id" class="user_id" />
-
-                <div class="form-group row">
-                  <div class="col-sm-12 text-center">
-                    <button type="submit" class="btn btn-send w-100">Reset Password <i
-                        class="fas fa-chevron-circle-right"></i></button>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div class="modal-foo text-center">
-          <p>Not Received? <a href="#" data-target="#signin" data-toggle="modal" data-dismiss="modal">Resend
-              OTP</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div id="render-cities-modal"></div>
   <div class="bottom-wrap" role="navigation" aria-label="Bottom menu">
@@ -3952,179 +3495,6 @@
 <script type="text/javascript">
   $(".modal_loading").css('display', 'none');
 
-  $("#login_form").validate({
-    submitHandler: function () {
-      $.ajax({
-        url: "<?php echo e(route('login_ajax')); ?>",
-        method: "POST",
-        data: $("#login_form").serialize(),
-        beforeSend: function () {
-          $(".btn-send").attr('disabled', true);
-          $(".modal_loading").css('display', 'block');
-        },
-        success: function (response) {
-          // console.log(response);
-          // toastr.success('abc')
-          // var response = JSON.parse(response);
-          if (response.status === 200) {
-            toastr.success(response.message)
-            // $(".modal").modal('hide');
-            if (postLoginRedirect) {
-              window.location.href = postLoginRedirect;
-              postLoginRedirect = null;
-            } else {
-              window.location.href = '/user/dashboard';  // default redirect
-            }
-
-
-          } else if (response.status === 400) {
-            toastr.error(response.message)
-            $("#login_form #password").val('');
-          }
-        },
-        error: function (response) {
-          toastr.error('An error occured')
-        },
-        complete: function () {
-          $(".modal_loading").css('display', 'none');
-          $(".btn-send").attr('disabled', false);
-          // $("form").trigger('reset');
-        }
-      })
-    }
-  });
-
-
-  $("#forgot_password_form").validate({
-    submitHandler: function () {
-      $.ajax({
-        url: "<?php echo e(config('app.api_url') . '/forgot-password'); ?>",
-        method: "POST",
-        data: $("#forgot_password_form").serialize(),
-        beforeSend: function () {
-          console.log($("#forgot_password_form").serialize());
-          $(".btn-send").attr('disabled', true);
-          $(".modal_loading").css('display', 'block');
-        },
-        success: function (response) {
-          console.log(response);
-          // toastr.success('abc')
-          // var response = JSON.parse(response);
-          if (response.status == true) {
-            $("#forgot_password_form #email").val('');
-            toastr.success(response.message)
-            $(".modal").modal('hide');
-            $("#forgototp").modal('show');
-            $("#verify_otp_password .user_id").val(response.data.id);
-            // reloadPage();
-          } else if (response.status == false) {
-            toastr.error(response.message)
-            $("#forgot_password_form #email").val('');
-          }
-        },
-        error: function (xhr, status, error) {
-          var response = JSON.parse(xhr.responseText);
-          response.responseCode === 400 ? toastr.error(response.message) : toastr.error('An error occured');
-        },
-        complete: function () {
-          $(".modal_loading").css('display', 'none');
-          $(".btn-send").attr('disabled', false);
-          $("form").trigger('reset');
-        }
-      })
-    }
-  });
-
-
-  $("#verify_otp_password").validate({
-    rules: {
-      new_password: {
-        minlength: 8
-      },
-      confirm_new_password: {
-        equalTo: "#new_password"
-      }
-    },
-    submitHandler: function () {
-      $.ajax({
-        url: "<?php echo e(config('app.api_url') . '/verify-otp'); ?>",
-        method: "POST",
-        data: $("#verify_otp_password").serialize(),
-        beforeSend: function () {
-          $(".btn-send").attr('disabled', true);
-          $(".modal_loading").css('display', 'block');
-        },
-        success: function (response) {
-          // console.log(response);
-          // toastr.success('abc')
-          // var response = JSON.parse(response);
-          if (response.status == true) {
-            toastr.success(response.message)
-            $(".modal").modal('hide');
-            // reloadPage();
-          } else if (response.status == false) {
-            toastr.error(response.message)
-            $("#verify_otp_password").trigger('reset');
-          }
-        },
-        error: function (xhr, status, error) {
-          var response = JSON.parse(xhr.responseText);
-          response.responseCode === 400 ? toastr.error(response.message) : toastr.error('An error occured');
-        },
-        complete: function () {
-          $(".modal_loading").css('display', 'none');
-          $(".btn-send").attr('disabled', false);
-          $("form").trigger('reset');
-        }
-      })
-    }
-  });
-
-
-
-
-
-  function loadCities(state_id, element_id) {
-    // if(empty(state_id)) return true;
-
-    var route = "<?php echo e(config('app.api_url')); ?>/cities_states/" + state_id;
-    $.ajax({
-      url: route,
-      method: "GET",
-      beforeSend: function () {
-        $(".loading_3").css('display', 'block');
-        $(".btn-postproperty").attr('disabled', true);
-      },
-      success: function (response) {
-        // console.log(response);
-        // var response = JSON.parse(response);
-        if (response.status == true) {
-          var cities = response.data.Cities;
-          console.log(cities);
-          if (cities.length > 0) {
-            $(`#${element_id}`).empty();
-            $.each(cities, function (x, y) {
-              $(`#${element_id}`).append(
-                `<option value=${y.id}>${y.name}</option>`
-              );
-            });
-          } else {
-            $(`#${element_id}`).append(
-              `<option value=''>No records found</option>`
-            );
-          }
-        }
-      },
-      error: function () {
-        toastr.error('An error occured')
-      },
-      complete: function () {
-        $(".loading_3").css('display', 'none');
-        $(".btn-postproperty").attr('disabled', false);
-      }
-    });
-
-  }
 
   function viewMoreCities() {
     $(".loading").css('display', 'none');
@@ -4140,77 +3510,6 @@
         setTimeout(function () {
           $('#location-list').modal('show');
         }, 1000);
-      },
-      error: function (response) {
-        $(".modal_loading").css('display', 'none');
-        swal('', response, 'error');
-      },
-      complete: function () {
-        $(".modal_loading").css('display', 'none');
-      }
-    })
-  }
-
-  document.getElementById('view-otp').style.display = 'none';
-  document.getElementById('login-type-password').style.display = 'none';
-  document.getElementById('check-otp').style.display = 'none';
-
-  function faceBookSignup() {
-    var getSelectedValue = document.querySelector('input[name="owner_type"]:checked');
-    if (getSelectedValue != null) {
-      window.location.href = '<?php echo e(url('signup')); ?>/facebook?role=' + getSelectedValue.value;
-    }
-  }
-
-  function googleSignup() {
-    var getSelectedValue = document.querySelector('input[name="owner_type"]:checked');
-    if (getSelectedValue != null) {
-      window.location.href = '<?php echo e(url('signup')); ?>/google?role=' + getSelectedValue.value;
-    }
-  }
-
-  function loginType(type) {
-    if (type == 'otp') {
-      document.getElementById('view-otp').style.display = 'block';
-      document.getElementById('login-type-otp').style.display = 'none';
-      document.getElementById('view-password').style.display = 'none';
-      document.getElementById('login-type-password').style.display = 'block';
-      document.getElementById('check-otp').style.display = 'block';
-      document.getElementById('check-login').style.display = 'none';
-    } else {
-      document.getElementById('view-otp').style.display = 'none';
-      document.getElementById('login-type-otp').style.display = 'block';
-      document.getElementById('view-password').style.display = 'block';
-      document.getElementById('login-type-password').style.display = 'none';
-      document.getElementById('check-otp').style.display = 'none';
-      document.getElementById('check-login').style.display = 'block';
-    }
-  }
-
-  function sendLoginOtp() {
-    var email = $('#login-email').val();
-    if (email == '') {
-      swal('', 'Email or mobile number field must be required', 'warning');
-      return false;
-    }
-    $.ajax({
-      url: '<?php echo e(url('login/send/otp')); ?>',
-      method: "POST",
-      data: {
-        '_token': '<?php echo e(csrf_token()); ?>',
-        'email': email
-      },
-      beforeSend: function () {
-        $(".modal_loading").css('display', 'block');
-      },
-      success: function (data) {
-        if (data.status == 200) {
-          swal('', data.msg, 'success');
-        } else {
-          swal('', data.msg, 'warning');
-        }
-        document.getElementById('check-login').style.display = 'block';
-        document.getElementById('check-otp').style.display = 'none';
       },
       error: function (response) {
         $(".modal_loading").css('display', 'none');

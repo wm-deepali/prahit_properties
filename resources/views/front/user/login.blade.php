@@ -178,6 +178,13 @@
             }
         }
 
+        function googleSignup() {
+            var getSelectedValue = document.querySelector('input[name="owner_type"]:checked');
+            if (getSelectedValue != null) {
+                window.location.href = '{{ url('signup') }}?role=' + getSelectedValue.value;
+            }
+        }
+
         function sendLoginOtp() {
             var email = $('#login-email').val();
             if (email === '') {
