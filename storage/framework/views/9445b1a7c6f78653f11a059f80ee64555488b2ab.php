@@ -73,6 +73,7 @@
             border-radius: 5px;
             border: none;
             font-size: 16px;
+            cursor: pointer;
         }
     </style>
 
@@ -124,7 +125,7 @@
                     <div id="view-password" class="mt-3">
                         <label>Password</label>
                         <input type="password" name="password" id="password" class="text-control" required>
-                        <a href="#" class="forgotpass">Forgot Password?</a>
+                        <a href="<?php echo e(route('forgot.password')); ?>">Forgot Password?</a>
                     </div>
 
                     <!-- OTP -->
@@ -212,13 +213,11 @@
                     data: $("#login_form").serialize(),
                     beforeSend: function () {
                         $(".btn-send").attr('disabled', true);
-                        $(".modal_loading").css('display', 'block');
                     },
                     success: function (response) {
                         if (response.status === 200) {
                             toastr.success(response.message);
 
-                            // Use the redirect URL passed from backend
                             let redirectAfterLogin = "<?php echo e($redirectUrl); ?>";
                             if (postLoginRedirect) {
                                 window.location.href = postLoginRedirect;
@@ -232,16 +231,16 @@
                             toastr.error(response.message)
                             $("#login_form #password").val('');
                         }
-                    }
+                    },  // ← this comma was missing 👈
 
-                        error: function (response) {
-                        toastr.error('An error occured')
+                    error: function (xhr) {
+                        var response = JSON.parse(xhr.responseText);
+                        response.message ? toastr.error(response.message) : toastr.error('An error occured')
                     },
                     complete: function () {
-                        $(".modal_loading").css('display', 'none');
                         $(".btn-send").attr('disabled', false);
-                        // $("form").trigger('reset');
                     }
+
                 })
             }
         });

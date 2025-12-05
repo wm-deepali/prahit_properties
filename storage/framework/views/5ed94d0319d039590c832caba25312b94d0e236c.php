@@ -630,15 +630,14 @@
         </a>
       </div>
 
-      <a href="javascript:void(0);" <?php if(Auth::check()): ?> onclick="window.location.href='<?php echo e(route('create_property')); ?>'"
-      <?php else: ?> onclick=" openSigninModal('post-property')" <?php endif; ?> class="btn  fw-semibold px-3 py-1 rounded-3"
+      <a href="<?php echo e(Auth::check() ? route('create_property') : route('user.login', ['redirect' => url('post-property')])); ?>"
+        class="btn  fw-semibold px-3 py-1 rounded-3"
         style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;">
         <i class="fas fa-pencil-alt me-1"></i> Post Property <span class="badge bg-warning text-dark ms-1">Free</span>
       </a>
-      <a href="javascript:void(0);" class="btn desktop-menu  fw-semibold px-3 py-1 rounded-3"
-        style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;" <?php if(Auth::check()): ?>
-        onclick="window.location.href='<?php echo e(route('create_business_listing')); ?>'" <?php else: ?>
-        onclick=" openSigninModal('business-listing/create')" <?php endif; ?>>
+      <a href="<?php echo e(Auth::check() ? route('create_business_listing') : route('user.login', ['redirect' => url('business-listing/create')])); ?>"
+        class="btn desktop-menu  fw-semibold px-3 py-1 rounded-3"
+        style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;">
         <i class="fas fa-briefcase me-1"></i> Post Services
         <span class="badge bg-warning text-dark ms-1">Free</span>
       </a>
@@ -691,20 +690,20 @@
               <div class=" profile-content">
                 <h4 class="m-0">Welcome</h4>
                 <h6 class="m-0">Guest Name</h6>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#signin">
+                <a href="<?php echo e(route('user.login')); ?>">
                   <p class="m-0">Manage Profile</p>
                 </a>
               </div>
             </div>
 
-            <a href="#" class="btn btn-outline-dark fw-semibold" data-bs-toggle="modal" data-bs-target="#signin">
+            <a href="<?php echo e(route('user.login')); ?>" class="btn btn-outline-dark fw-semibold">
               <i class="far fa-user me-1"></i> Login / Signup
             </a>
           <?php endif; ?>
         </div>
 
-        <div class="post-property-card" <?php if(!Auth::check()): ?> onclick="openSigninModal()" style="cursor:pointer;" <?php else: ?>
-        onclick="window.location='<?php echo e(route('create_property')); ?>'" <?php endif; ?>>
+        <div class="post-property-card" <?php if(!Auth::check()): ?> onclick="window.location='<?php echo e(route('user.login')); ?>'"
+        style="cursor:pointer;" <?php else: ?> onclick="window.location='<?php echo e(route('create_property')); ?>'" <?php endif; ?>>
           <h3>
             Post Property
             <br><span>Sell/ Rent faster with Bhawan Bhoomi</span>
@@ -712,7 +711,7 @@
           <img src="<?php echo e(asset('images/house1.png')); ?>" alt="">
         </div>
 
-        <div class="post-property-card" <?php if(!Auth::check()): ?> onclick="openSigninModal()" style="cursor:pointer;" <?php else: ?>
+        <div class="post-property-card" <?php if(!Auth::check()): ?> onclick="window.location='<?php echo e(route('user.login')); ?>'" <?php else: ?>
         onclick="window.location='<?php echo e(route('directory.list')); ?>'" <?php endif; ?>>
           <h3>
             Web Directory
@@ -806,18 +805,15 @@
         </div>
 
         <!-- 🏗️ Post Property -->
-        <a href="javascript:void(0);" class="btn text-white fw-semibold px-3 py-1 rounded-3"
-          style="background:#e38e32; height:38px;" <?php if(Auth::check()): ?>
-          onclick="window.location.href='<?php echo e(route('create_property')); ?>'" <?php else: ?>
-          onclick=" openSigninModal('post-property')" <?php endif; ?>>
+        <a href="<?php echo e(Auth::check() ? route('create_property') : route('user.login', ['redirect' => url('post-property')])); ?>"
+          class="btn text-white fw-semibold px-3 py-1 rounded-3" style="background:#e38e32; height:38px;">
           <i class="fas fa-pencil-alt me-1"></i> Post Property <span class="badge bg-warning text-dark ms-1">Free</span>
         </a>
 
 
-        <a href="javascript:void(0);" class="btn fw-semibold px-3 py-1 rounded-3"
-          style="background:#fff; height:38px; border:1px solid #343a40; font-size:1rem;" <?php if(Auth::check()): ?>
-          onclick="window.location.href='<?php echo e(route('create_business_listing')); ?>'" <?php else: ?>
-          onclick=" openSigninModal('business-listing/create')" <?php endif; ?>>
+        <a href="<?php echo e(Auth::check() ? route('create_business_listing') : route('user.login', ['redirect' => url('business-listing/create')])); ?>"
+          class="btn fw-semibold px-3 py-1 rounded-3"
+          style="background:#fff; height:38px; border:1px solid #343a40; font-size:1rem;">
           <i class="fas fa-briefcase me-1"></i> Post Services
           <span class="badge bg-warning text-dark ms-1">Free</span>
         </a>
@@ -932,7 +928,7 @@
                     <?php echo e(csrf_field()); ?>
 
                   </form>
-                 
+
                 </li>
               </ul>
             </div>
@@ -940,8 +936,7 @@
 
         <?php endif; ?>
         <?php if(auth()->guard()->guest()): ?>
-          <a href="#" onclick="openSigninModal()" class="btn btn-outline-dark fw-semibold" data-bs-toggle="modal"
-            data-bs-target="#signin">
+          <a href="<?php echo e(route('user.login')); ?>" class="btn btn-outline-dark fw-semibold">
             <i class="far fa-user me-1"></i> Login / Signup
           </a>
         <?php endif; ?>
@@ -1269,14 +1264,13 @@
                     <h4 class="tab-titles">Services</h4>
                     <div class="d-flex flex-column">
                       <!--<a href="<?php echo e(route('create_property')); ?>">Post Property</a> -->
-                      <a href="javascript:void(0);" <?php if(Auth::check()): ?>
-                      onclick="window.location.href='<?php echo e(route('create_property')); ?>'" <?php else: ?>
-                        onclick=" openSigninModal('post-property')" <?php endif; ?>>Post Property</a>
+                      <a
+                        href="<?php echo e(Auth::check() ? route('create_property') : route('user.login', ['redirect' => url('post-property')])); ?>">Post
+                        Property</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Join BB Prime</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
-                      <a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
-                        <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
+                      <a href="<?php echo e(auth()->check() ? route('user.dashboard') : route('user.login')); ?>">
                         Dashboard
                       </a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
@@ -1305,12 +1299,11 @@
                     <h4 class="tab-titles">Services</h4>
                     <div class="d-flex flex-column">
                       <!-- <a href="<?php echo e(route('create_property')); ?>">Post Property</a> -->
-                      <a href="javascript:void(0);" <?php if(Auth::check()): ?>
-                      onclick="window.location.href='<?php echo e(route('create_property')); ?>'" <?php else: ?>
-                        onclick=" openSigninModal('post-property')" <?php endif; ?>>Post Property</a>
+                      <a
+                        href="<?php echo e(Auth::check() ? route('create_property') : route('user.login', ['redirect' => url('post-property')])); ?>">Post
+                        Property</a>
                       <a href="#">Join BB Prime</a>
-                      <a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
-                        <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
+                      <a href="<?php echo e(auth()->check() ? route('user.dashboard') : route('user.login')); ?>">
                         Dashboard
                       </a>
 
@@ -1339,9 +1332,9 @@
                     <h4 class="tab-titles">Services</h4>
                     <div class="d-flex flex-column">
                       <!--<a href="<?php echo e(route('create_property')); ?>">Post Property</a> -->
-                      <a href="javascript:void(0);" <?php if(Auth::check()): ?>
-                      onclick="window.location.href='<?php echo e(route('create_property')); ?>'" <?php else: ?>
-                        onclick=" openSigninModal('post-property')" <?php endif; ?>>Post Property</a>
+                      <a
+                        href="<?php echo e(Auth::check() ? route('create_property') : route('user.login', ['redirect' => url('post-property')])); ?>">Post
+                        Property</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Join BB Prime</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
@@ -1373,8 +1366,7 @@
                     <div class="d-flex flex-column">
                       <a href="#">List Your Service</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
-                      <a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
-                        <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
+                      <a href="<?php echo e(auth()->check() ? route('user.dashboard') : route('user.login')); ?>">
                         Dashboard
                       </a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
@@ -2027,8 +2019,7 @@
                         <ul class="list-unstyled">
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
-                          <li> <a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
-                              <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
+                          <li> <a href="<?php echo e(auth()->check() ? route('user.dashboard') : route('user.login')); ?>">
                               Dashboard
                             </a></li>
                           <li><a href="#">Enquiries</a></li>
@@ -2068,8 +2059,7 @@
                         <ul class="list-unstyled">
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
-                          <li> <a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
-                              <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
+                          <li> <a href="<?php echo e(auth()->check() ? route('user.dashboard') : route('user.login')); ?>">
                               Dashboard
                             </a></li>
                           <li><a href="#">Enquiries</a></li>
@@ -2109,8 +2099,7 @@
                         <ul class="list-unstyled">
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
-                          <li> <a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
-                              <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
+                          <li> <a href="<?php echo e(auth()->check() ? route('user.dashboard') : route('user.login')); ?>">
                               Dashboard
                             </a></li>
                           <li><a href="#">Enquiries</a></li>
@@ -2149,8 +2138,7 @@
                         <h5><i class="fas fa-list"></i> Start Selling</h5>
                         <ul class="list-unstyled">
                           <li><a href="#">List Your Service</a></li>
-                          <li> <a href="<?php echo e(auth()->check() ? route('user.dashboard') : 'javascript:void(0)'); ?>"
-                              <?php if (! (auth()->check())): ?> onclick="openSigninModal()" <?php endif; ?>>
+                          <li> <a href="<?php echo e(auth()->check() ? route('user.dashboard') : route('user.login')); ?>">
                               Dashboard
                             </a></li>
                           <li><a href="#">Check Enquiries</a></li>
@@ -3317,8 +3305,7 @@
       <?php if(auth()->guard()->check()): ?>
         <a class="bottom-item" style="margin-top:33px;" data-key="sell" href="<?php echo e(route('create_property')); ?>">
       <?php else: ?>
-          <a class="bottom-item" style="margin-top:33px;" data-key="sell" href="#"
-            onclick="event.preventDefault(); openSigninModal();">
+          <a class="bottom-item" style="margin-top:33px;" data-key="sell" href="<?php echo e(route('user.login')); ?>">
         <?php endif; ?>
           <!--<span class="bottom-icon">-->
           <!--  <svg viewBox="0 0 24 24" fill="currentColor">-->
@@ -3342,7 +3329,7 @@
         <?php if(auth()->guard()->check()): ?>
           <a class="bottom-item" data-key="profile" data-bs-toggle="offcanvas" href="#offcanvasExample2" role="button">
         <?php else: ?>
-            <a class="bottom-item" data-key="profile" href="#" onclick="event.preventDefault(); openSigninModal();">
+            <a class="bottom-item" data-key="profile" href="<?php echo e(route('user.login')); ?>">
           <?php endif; ?>
             <span class="bottom-icon">
               <svg viewBox="0 0 24 24" fill="currentColor">
@@ -3681,14 +3668,6 @@
 </script>
 
 <script>
-  let postLoginRedirect = null;
-
-  function openSigninModal(redirectUrl = null) {
-    if (redirectUrl) {
-      postLoginRedirect = redirectUrl;
-    }
-    $('#signin').modal('show');
-  }
 
   $('.forgotpass').on('click', function (e) {
     e.preventDefault();
@@ -3868,7 +3847,7 @@
     <?php if(Auth::check()): ?>
       window.location.href = "<?php echo e(route('create_property')); ?>";
     <?php else: ?>
-      openSigninModal('post-property');
+      window.location.href = "<?php echo e(route('user.login', ['redirect' => url('post-property')])); ?>"
     <?php endif; ?>
 });
 
@@ -4102,48 +4081,6 @@
   });
 
 
-
-  $("#otp_form").validate({
-    submitHandler: function () {
-      $.ajax({
-        url: "<?php echo e(config('app.api_url') . '/verify-otp'); ?>",
-        method: "POST",
-        data: {
-          "_token": $('input[name="_token"]').val(),
-          "otp": $("#otp_form #otp").val(),
-          "user_id": $("#otp_form .user_id").val(),
-          "is_register": true
-        },
-        beforeSend: function () {
-          $(".btn-send").attr('disabled', true);
-          $(".modal_loading").css('display', 'block');
-        },
-        success: function (response) {
-          console.log(response, response.status == true);
-          // toastr.success('abc')
-          // var response = JSON.parse(response);
-          if (response.status == true) {
-            toastr.success(response.message)
-            $(".modal").modal('hide');
-            openSigninModal();
-            // window.user_id = response.data.User.id;
-            // console.log(response.data.User.id);
-          } else if (response.responseCode === 400) {
-            toastr.error(response.message)
-            $("#otp_form").trigger('reset');
-          }
-        },
-        error: function (xhr) {
-          var response = JSON.parse(xhr.responseText);
-          response.responseCode === 400 ? toastr.error(response.message) : toastr.error('An error occured')
-        },
-        complete: function () {
-          $(".modal_loading").css('display', 'none');
-          $(".btn-send").attr('disabled', false);
-        }
-      })
-    }
-  });
 
 
 

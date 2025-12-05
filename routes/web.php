@@ -31,7 +31,16 @@ Route::get('/listing-list', 'HomeController@list')->name('listing.list');
 Route::get('/directory-list', 'HomeController@directoryList')->name('directory.list');
 Route::get('login', 'AuthController@login');
 Route::post('login', 'AuthController@login');
+
+Route::get('/user/login', 'User\UserController@userLoginPage')->name('user.login');
 Route::post('login_ajax', 'User\UserController@login_ajax')->name('login_ajax');
+Route::get('/user/register', [UserController::class, 'showRegisterPage'])->name('user.register');
+Route::get('/user/otp', [UserController::class, 'showOtpPage'])->name('user.otp');
+Route::post('user/register', 'User\UserController@register')->name('register_ajax');
+Route::post('user/verify-otp', 'User\UserController@verifyOTP')->name('verify_otp_ajax');
+Route::get('/forgot-password', [UserController::class, 'forgotPassword'])->name('forgot.password');
+Route::post('/forgot-password/send-otp', [UserController::class, 'sendForgotOtp'])->name('forgot.password.sendOtp');
+
 Route::post('forgot-password', 'AppController@forgot_password')->name('forgot_password');
 Route::post('send-otp', 'AppController@visitor_otp')->name('send_otp');
 

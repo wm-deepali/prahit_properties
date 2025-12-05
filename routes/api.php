@@ -27,9 +27,6 @@ Route::group(['namespace' => 'Api'], function () {
 
 	// auth 
 	Route::post('login', 'AuthController@login');
-	Route::post('register', 'AuthController@register');
-	Route::post('verify-otp', 'AuthController@verifyOTP');
-	Route::post('forgot-password', 'AuthController@forgotPassword');
 	Route::post('reset-password', 'AuthController@resetPassword');
 
 	// authenticated

@@ -629,15 +629,14 @@
         </a>
       </div>
 
-      <a href="javascript:void(0);" @if(Auth::check()) onclick="window.location.href='{{ route('create_property') }}'"
-      @else onclick=" openSigninModal('post-property')" @endif class="btn  fw-semibold px-3 py-1 rounded-3"
+      <a href="{{ Auth::check() ? route('create_property') : route('user.login', ['redirect' => url('post-property')]) }}"
+        class="btn  fw-semibold px-3 py-1 rounded-3"
         style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;">
         <i class="fas fa-pencil-alt me-1"></i> Post Property <span class="badge bg-warning text-dark ms-1">Free</span>
       </a>
-      <a href="javascript:void(0);" class="btn desktop-menu  fw-semibold px-3 py-1 rounded-3"
-        style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;" @if(Auth::check())
-        onclick="window.location.href='{{ route('create_business_listing') }}'" @else
-        onclick=" openSigninModal('business-listing/create')" @endif>
+      <a href="{{ Auth::check() ? route('create_business_listing') : route('user.login', ['redirect' => url('business-listing/create')]) }}"
+        class="btn desktop-menu  fw-semibold px-3 py-1 rounded-3"
+        style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;">
         <i class="fas fa-briefcase me-1"></i> Post Services
         <span class="badge bg-warning text-dark ms-1">Free</span>
       </a>
@@ -690,20 +689,20 @@
               <div class=" profile-content">
                 <h4 class="m-0">Welcome</h4>
                 <h6 class="m-0">Guest Name</h6>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#signin">
+                <a href="{{ route('user.login') }}">
                   <p class="m-0">Manage Profile</p>
                 </a>
               </div>
             </div>
 
-            <a href="#" class="btn btn-outline-dark fw-semibold" data-bs-toggle="modal" data-bs-target="#signin">
+            <a href="{{ route('user.login') }}" class="btn btn-outline-dark fw-semibold">
               <i class="far fa-user me-1"></i> Login / Signup
             </a>
           @endguest
         </div>
 
-        <div class="post-property-card" @if(!Auth::check()) onclick="openSigninModal()" style="cursor:pointer;" @else
-        onclick="window.location='{{ route('create_property') }}'" @endif>
+        <div class="post-property-card" @if(!Auth::check()) onclick="window.location='{{ route('user.login') }}'"
+        style="cursor:pointer;" @else onclick="window.location='{{ route('create_property') }}'" @endif>
           <h3>
             Post Property
             <br><span>Sell/ Rent faster with Bhawan Bhoomi</span>
@@ -711,7 +710,7 @@
           <img src="{{ asset('images/house1.png') }}" alt="">
         </div>
 
-        <div class="post-property-card" @if(!Auth::check()) onclick="openSigninModal()" style="cursor:pointer;" @else
+        <div class="post-property-card" @if(!Auth::check()) onclick="window.location='{{ route('user.login') }}'" @else
         onclick="window.location='{{ route('directory.list') }}'" @endif>
           <h3>
             Web Directory
@@ -804,18 +803,15 @@
         </div>
 
         <!-- 🏗️ Post Property -->
-        <a href="javascript:void(0);" class="btn text-white fw-semibold px-3 py-1 rounded-3"
-          style="background:#e38e32; height:38px;" @if(Auth::check())
-          onclick="window.location.href='{{ route('create_property') }}'" @else
-          onclick=" openSigninModal('post-property')" @endif>
+        <a href="{{ Auth::check() ? route('create_property') : route('user.login', ['redirect' => url('post-property')]) }}"
+          class="btn text-white fw-semibold px-3 py-1 rounded-3" style="background:#e38e32; height:38px;">
           <i class="fas fa-pencil-alt me-1"></i> Post Property <span class="badge bg-warning text-dark ms-1">Free</span>
         </a>
 
 
-        <a href="javascript:void(0);" class="btn fw-semibold px-3 py-1 rounded-3"
-          style="background:#fff; height:38px; border:1px solid #343a40; font-size:1rem;" @if(Auth::check())
-          onclick="window.location.href='{{ route('create_business_listing') }}'" @else
-          onclick=" openSigninModal('business-listing/create')" @endif>
+        <a href="{{ Auth::check() ? route('create_business_listing') : route('user.login', ['redirect' => url('business-listing/create')]) }}"
+          class="btn fw-semibold px-3 py-1 rounded-3"
+          style="background:#fff; height:38px; border:1px solid #343a40; font-size:1rem;">
           <i class="fas fa-briefcase me-1"></i> Post Services
           <span class="badge bg-warning text-dark ms-1">Free</span>
         </a>
@@ -922,10 +918,13 @@
                 <li>
 
                   <a class="dropdown-item text-danger" href="#"
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit()" ;>Logout</a>
-                  <form id=" logout-form" action="{{ url('user/logout') }}" method="POST" style="display: none;">
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    Logout
+                  </a>
+                  <form id="logout-form" action="{{ url('user/logout') }}" method="POST" style="display: none;">
                     {{ csrf_field() }}
                   </form>
+
                 </li>
               </ul>
             </div>
@@ -933,8 +932,7 @@
 
         @endauth
         @guest
-          <a href="#" onclick="openSigninModal()" class="btn btn-outline-dark fw-semibold" data-bs-toggle="modal"
-            data-bs-target="#signin">
+          <a href="{{ route('user.login') }}" class="btn btn-outline-dark fw-semibold">
             <i class="far fa-user me-1"></i> Login / Signup
           </a>
         @endguest
@@ -1258,14 +1256,13 @@
                     <h4 class="tab-titles">Services</h4>
                     <div class="d-flex flex-column">
                       <!--<a href="{{ route('create_property') }}">Post Property</a> -->
-                      <a href="javascript:void(0);" @if(Auth::check())
-                      onclick="window.location.href='{{ route('create_property') }}'" @else
-                        onclick=" openSigninModal('post-property')" @endif>Post Property</a>
+                      <a
+                        href="{{ Auth::check() ? route('create_property') : route('user.login', ['redirect' => url('post-property')]) }}">Post
+                        Property</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Join BB Prime</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
-                      <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
-                        @unless(auth()->check()) onclick="openSigninModal()" @endunless>
+                      <a href="{{ auth()->check() ? route('user.dashboard') : route('user.login')}}">
                         Dashboard
                       </a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
@@ -1294,12 +1291,11 @@
                     <h4 class="tab-titles">Services</h4>
                     <div class="d-flex flex-column">
                       <!-- <a href="{{ route('create_property') }}">Post Property</a> -->
-                      <a href="javascript:void(0);" @if(Auth::check())
-                      onclick="window.location.href='{{ route('create_property') }}'" @else
-                        onclick=" openSigninModal('post-property')" @endif>Post Property</a>
+                      <a
+                        href="{{ Auth::check() ? route('create_property') : route('user.login', ['redirect' => url('post-property')]) }}">Post
+                        Property</a>
                       <a href="#">Join BB Prime</a>
-                      <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
-                        @unless(auth()->check()) onclick="openSigninModal()" @endunless>
+                      <a href="{{ auth()->check() ? route('user.dashboard') : route('user.login') }}">
                         Dashboard
                       </a>
 
@@ -1328,9 +1324,9 @@
                     <h4 class="tab-titles">Services</h4>
                     <div class="d-flex flex-column">
                       <!--<a href="{{ route('create_property') }}">Post Property</a> -->
-                      <a href="javascript:void(0);" @if(Auth::check())
-                      onclick="window.location.href='{{ route('create_property') }}'" @else
-                        onclick=" openSigninModal('post-property')" @endif>Post Property</a>
+                      <a
+                        href="{{ Auth::check() ? route('create_property') : route('user.login', ['redirect' => url('post-property')]) }}">Post
+                        Property</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
                       <a href="#">Join BB Prime</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
@@ -1362,8 +1358,7 @@
                     <div class="d-flex flex-column">
                       <a href="#">List Your Service</a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
-                      <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
-                        @unless(auth()->check()) onclick="openSigninModal()" @endunless>
+                      <a href="{{ auth()->check() ? route('user.dashboard') : route('user.login') }}">
                         Dashboard
                       </a>
                       <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
@@ -2004,8 +1999,7 @@
                         <ul class="list-unstyled">
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
-                          <li> <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
-                              @unless(auth()->check()) onclick="openSigninModal()" @endunless>
+                          <li> <a href="{{ auth()->check() ? route('user.dashboard') : route('user.login') }}">
                               Dashboard
                             </a></li>
                           <li><a href="#">Enquiries</a></li>
@@ -2045,8 +2039,7 @@
                         <ul class="list-unstyled">
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
-                          <li> <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
-                              @unless(auth()->check()) onclick="openSigninModal()" @endunless>
+                          <li> <a href="{{ auth()->check() ? route('user.dashboard') : route('user.login')  }}">
                               Dashboard
                             </a></li>
                           <li><a href="#">Enquiries</a></li>
@@ -2086,8 +2079,7 @@
                         <ul class="list-unstyled">
                           <li><a href="#">Post Property</a></li>
                           <li><a href="#">Join BB Prime</a></li>
-                          <li> <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
-                              @unless(auth()->check()) onclick="openSigninModal()" @endunless>
+                          <li> <a href="{{ auth()->check() ? route('user.dashboard') : route('user.login') }}">
                               Dashboard
                             </a></li>
                           <li><a href="#">Enquiries</a></li>
@@ -2126,8 +2118,7 @@
                         <h5><i class="fas fa-list"></i> Start Selling</h5>
                         <ul class="list-unstyled">
                           <li><a href="#">List Your Service</a></li>
-                          <li> <a href="{{ auth()->check() ? route('user.dashboard') : 'javascript:void(0)' }}"
-                              @unless(auth()->check()) onclick="openSigninModal()" @endunless>
+                          <li> <a href="{{ auth()->check() ? route('user.dashboard') : route('user.login')  }}">
                               Dashboard
                             </a></li>
                           <li><a href="#">Check Enquiries</a></li>
@@ -2458,7 +2449,8 @@
                               <ul class="list-unstyled">
                                 @foreach($properties->take($showLimit) as $property)
                                   <li>
-                                    <a href="{{ route('property_detail', ['id' => $property->id, 'slug' => $property->slug]) }}">
+                                    <a
+                                      href="{{ route('property_detail', ['id' => $property->id, 'slug' => $property->slug]) }}">
                                       {{ $property->title }}
                                     </a>
                                   </li>
@@ -2467,7 +2459,8 @@
                                 @if($properties->count() > $showLimit)
                                   @foreach($properties->slice($showLimit) as $property)
                                     <li class="more-properties-exclusive-{{ $subCat->id }}" style="display:none;">
-                                      <a href="{{ route('property_detail', ['id' => $property->id, 'slug' => $property->slug]) }}">
+                                      <a
+                                        href="{{ route('property_detail', ['id' => $property->id, 'slug' => $property->slug]) }}">
                                         {{ $property->title }}
                                       </a>
                                     </li>
@@ -3257,7 +3250,7 @@
         <span class="bottom-badge">Home</span>
       </a>
 
-<a class="bottom-item bottom-active" data-key="home" href="/user/my-wishlist">
+      <a class="bottom-item bottom-active" data-key="home" href="/user/my-wishlist">
 
         <span class="bottom-icon">
           <svg viewBox="0 0 24 24" fill="currentColor">
@@ -3280,8 +3273,7 @@
       @auth
         <a class="bottom-item" style="margin-top:33px;" data-key="sell" href="{{ route('create_property') }}">
       @else
-          <a class="bottom-item" style="margin-top:33px;" data-key="sell" href="#"
-            onclick="event.preventDefault(); openSigninModal();">
+          <a class="bottom-item" style="margin-top:33px;" data-key="sell" href="{{ route('user.login') }}">
         @endauth
           <!--<span class="bottom-icon">-->
           <!--  <svg viewBox="0 0 24 24" fill="currentColor">-->
@@ -3305,7 +3297,7 @@
         @auth
           <a class="bottom-item" data-key="profile" data-bs-toggle="offcanvas" href="#offcanvasExample2" role="button">
         @else
-            <a class="bottom-item" data-key="profile" href="#" onclick="event.preventDefault(); openSigninModal();">
+            <a class="bottom-item" data-key="profile" href="{{ route('user.login') }}">
           @endauth
             <span class="bottom-icon">
               <svg viewBox="0 0 24 24" fill="currentColor">
@@ -3639,14 +3631,6 @@
 </script>
 
 <script>
-  let postLoginRedirect = null;
-
-  function openSigninModal(redirectUrl = null) {
-    if (redirectUrl) {
-      postLoginRedirect = redirectUrl;
-    }
-    $('#signin').modal('show');
-  }
 
   $('.forgotpass').on('click', function (e) {
     e.preventDefault();
@@ -3826,7 +3810,7 @@
     @if(Auth::check())
       window.location.href = "{{ route('create_property') }}";
     @else
-      openSigninModal('post-property');
+      window.location.href = "{{ route('user.login', ['redirect' => url('post-property')]) }}"
     @endif
 });
 
@@ -4059,121 +4043,7 @@
     }
   });
 
-  $("#register_form").validate({
-    rules: {
-      password: {
-        required: true,
-        minlength: 8
-      },
-      confirm_password: {
-        required: true,
-        equalTo: "#reg_password",
-        minlength: 8
-      },
-      mobile_number: {
-        minlength: 10,
-        maxlength: 10,
-        required: true,
-        digits: true
-      }
 
-    },
-
-    submitHandler: function () {
-      $.ajax({
-        url: "{{config('app.api_url') . '/register'}}",
-        method: "POST",
-        data: $("#register_form").serialize(),
-        beforeSend: function () {
-          $(".btn-send").attr('disabled', true);
-          $(".modal_loading").css('display', 'block');
-          $('#register').modal('hide');
-        },
-        success: function (response) {
-          // toastr.success('abc')
-          // var response = JSON.parse(response);
-          if (response.status == true) {
-            console.log(response.data.id);
-            // toastr.success(response.message)
-            $('#otp_form .user_id').val(response.data.id);
-            $('#register').modal('hide');
-            setTimeout(function () {
-              $('#otpModal').modal('show');
-            }, 300);
-
-
-          } else if (response.responseCode === 400) {
-            toastr.error(response.message)
-            $('#register').modal('hide');
-            $("#register_form").trigger('reset');
-          }
-        },
-        error: function (xhr, status, error) {
-          let response = xhr.responseJSON;
-
-          if (response && response.errors) {
-            // Show first validation error
-            $.each(response.errors, function (key, val) {
-              toastr.error(val[0]);
-            });
-          } else {
-            toastr.error('An error occurred');
-          }
-
-          $('#register').modal('hide');
-        },
-
-        complete: function () {
-          $(".modal_loading").css('display', 'none');
-          $(".btn-send").attr('disabled', false);
-          // $("form").trigger('reset');
-        }
-      })
-    }
-  });
-
-
-  $("#otp_form").validate({
-    submitHandler: function () {
-      $.ajax({
-        url: "{{config('app.api_url') . '/verify-otp'}}",
-        method: "POST",
-        data: {
-          "_token": $('input[name="_token"]').val(),
-          "otp": $("#otp_form #otp").val(),
-          "user_id": $("#otp_form .user_id").val(),
-          "is_register": true
-        },
-        beforeSend: function () {
-          $(".btn-send").attr('disabled', true);
-          $(".modal_loading").css('display', 'block');
-        },
-        success: function (response) {
-          console.log(response, response.status == true);
-          // toastr.success('abc')
-          // var response = JSON.parse(response);
-          if (response.status == true) {
-            toastr.success(response.message)
-            $(".modal").modal('hide');
-            openSigninModal();
-            // window.user_id = response.data.User.id;
-            // console.log(response.data.User.id);
-          } else if (response.responseCode === 400) {
-            toastr.error(response.message)
-            $("#otp_form").trigger('reset');
-          }
-        },
-        error: function (xhr) {
-          var response = JSON.parse(xhr.responseText);
-          response.responseCode === 400 ? toastr.error(response.message) : toastr.error('An error occured')
-        },
-        complete: function () {
-          $(".modal_loading").css('display', 'none');
-          $(".btn-send").attr('disabled', false);
-        }
-      })
-    }
-  });
 
 
 

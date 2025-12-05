@@ -19,6 +19,9 @@ use Hash;
 use Auth;
 use App\Models\UserLoginHistory;
 use App\Models\ProfileSection;
+use App\EmailTemplate;
+use Illuminate\Support\Str;
+
 class UserController extends AppController
 {
 	use GlobalTrait;
@@ -29,6 +32,18 @@ class UserController extends AppController
 	 **
 	 **/
 
+	public function userLoginPage(Request $request)
+	{
+		// If authenticated and role is not admin, redirect to dashboard
+		if (auth()->check() && auth()->user()->role !== 'admin') {
+			return redirect()->route('user.dashboard');
+		}
+
+		// Get redirect URL from query string, if any
+		$redirectUrl = $request->query('redirect', route('user.dashboard'));
+
+		return view('front.user.login', compact('redirectUrl'));
+	}
 
 	public function login_ajax(Request $request)
 	{
@@ -85,6 +100,303 @@ class UserController extends AppController
 				$this->logUserLogin(null, $request, false);
 				return response()->json(['status' => 500, 'error' => $e->getMessage()]);
 			}
+		}
+	}
+
+	public function showRegisterPage()
+	{
+		if (auth()->check() && auth()->user()->role != 'admin') {
+			return redirect()->route('user.dashboard');
+		}
+		return view('front.user.register');
+	}
+
+	public function showOtpPage(Request $request)
+	{
+		if (auth()->check() && auth()->user()->role != 'admin') {
+			return redirect()->route('user.dashboard');
+		}
+
+		if (!$request->has('user_id')) {
+			return redirect()->route('user.register');
+		}
+
+		return view('front.user.otp');
+	}
+
+
+	public function register(Request $request)
+	{
+		$rules = [
+			'firstname' => "required",
+			'lastname' => 'required',
+			'email' => 'required|unique:users',
+			'mobile_number' => 'required|min:10|unique:users',
+			'state_id' => 'required|numeric',
+			'city_id' => 'required|numeric',
+			'password' => 'required|min:8',
+			'confirm_password' => 'required|same:password|min:8'
+		];
+
+		$this->checkValidate($request, $rules);
+
+		try {
+			if ($request->owner_type == 1) {
+				$request['role'] = 'owner';
+			} else if ($request->owner_type == 2) {
+				$request['role'] = 'builder';
+			} else if ($request->owner_type == 3) {
+				$request['role'] = 'agent';
+			} else if ($request->owner_type == 4) {
+				$request['role'] = 'service_provider';
+			}
+
+			$show_pass = $request->password;
+			$request['name'] = "$request->firstname $request->lastname";
+			$request['password'] = Hash::make($request->password);
+			$request['auth_token'] = $this->_generateToken();
+			$otp = rand(1000, 4999);
+			$request['otp'] = $otp;
+
+			// Check if email already exists
+			$picked = User::where('email', $request->email)->first();
+			if ($picked) {
+				return response()->json([
+					'status' => false,
+					'message' => 'Email already exists in our record.'
+				], 400);
+			}
+
+			$user = User::create($request->all());
+
+			if ($user->exists()) {
+				// Create or update OTP record in `otps` table
+				Otp::updateOrCreate(
+					['user_id' => $user->id],
+					[
+						'otp' => $otp,
+					]
+				);
+
+				// Send OTP
+				$message = "{$otp} is the One Time Password(OTP) to verify your MOB number at Web Mingo, This OTP is Usable only once and is valid for 10 min,PLS DO NOT SHARE THE OTP WITH ANYONE";
+				$sendOtp = \App\Helpers\Helper::sendOtp($request->mobile_number, $message);
+
+				// Email templates
+				$emailtemplate = EmailTemplate::find(1);
+				$emailOTPtemplate = EmailTemplate::find(4);
+
+				// Welcome email
+				$ordertemplate = $emailtemplate->template;
+				$replacetemplate = [
+					'#NAME' => $user->firstname . ' ' . $user->lastname,
+					'#EMAIL' => $user->email,
+					'#PASSWORD' => $show_pass,
+				];
+				foreach ($replacetemplate as $key => $val) {
+					$ordertemplate = str_replace($key, $val, $ordertemplate);
+				}
+				$finaltemplate = $ordertemplate;
+
+				// OTP email
+				$otp_template = $emailOTPtemplate->template;
+				$replaceOTPtemplate = [
+					'#NAME' => $user->firstname . ' ' . $user->lastname,
+					'#OTP' => $otp
+				];
+				foreach ($replaceOTPtemplate as $key => $val) {
+					$otp_template = str_replace($key, $val, $otp_template);
+				}
+				$finalotptemplate = $otp_template;
+
+				// Send notifications
+				// $user->notify(new WelcomeEmailNotification($finaltemplate, $emailtemplate->subject, $emailtemplate->image));
+				// $user->notify(new SendOtpEmailNotification($finalotptemplate, $emailOTPtemplate->subject, $emailOTPtemplate->image));
+
+				if ($sendOtp) {
+					return response()->json([
+						'status' => true,
+						'message' => 'OTP generated successfully and sent on your registered email & mobile number.',
+						'data' => $user
+					], 200);
+				} else {
+					return response()->json([
+						'status' => false,
+						'message' => 'OTP could not be sent.'
+					], 400);
+				}
+			} else {
+				return response()->json([
+					'status' => false,
+					'message' => 'An error occurred while creating the user.'
+				], 400);
+			}
+
+		} catch (\Exception $e) {
+			return response()->json([
+				'status' => false,
+				'message' => $e->getMessage()
+			], 500);
+		}
+	}
+
+	protected function _generateToken()
+	{
+		return Str::random(64) . '_' . time();
+	}
+
+	public function verifyOTP(Request $request)
+	{
+		$rules = [
+			'otp' => 'required|numeric',
+			'user_id' => 'required'
+		];
+
+		$this->checkValidate($request, $rules);
+
+		try {
+			$user = User::find($request->user_id);
+
+			if (!$user) {
+				return response()->json([
+					'status' => false,
+					'message' => 'User not found.'
+				], 404);
+			}
+
+			// --- Case 1: OTP Verification during Registration ---
+			if ($request->is_register) {
+				if ($user->is_verified == "1") {
+					return response()->json([
+						'status' => false,
+						'message' => 'OTP is already verified.'
+					], 400);
+				}
+
+				// Find OTP record
+				$otpRecord = Otp::where(['otp' => $request->otp, 'user_id' => $user->id])->first();
+
+				if (!$otpRecord) {
+					return response()->json([
+						'status' => false,
+						'message' => "Invalid or expired OTP."
+					], 400);
+				}
+
+				// Update user verification status
+				$user->is_verified = "1";
+				$user->otp = null; // optional: clear otp field if stored in users table
+				$user->save();
+
+				// Delete OTP record
+				$otpRecord->delete();
+
+				// 🔥 Auto login user after OTP
+				Auth::login($user);
+
+				return response()->json([
+					'status' => true,
+					'message' => 'OTP verified successfully.',
+					'data' => $user
+				], 200);
+			}
+
+			// --- Case 2: Forgot Password / OTP for Reset ---
+			else {
+				// Validate OTP
+				// dd('here');
+				$otpRecord = Otp::where(['otp' => $request->otp, 'user_id' => $user->id])->first();
+
+				if (!$otpRecord) {
+					return response()->json([
+						'status' => false,
+						'message' => 'Invalid or expired OTP.'
+					], 400);
+				}
+
+				if (empty($request->new_password)) {
+					return response()->json([
+						'status' => false,
+						'message' => 'New password is required.'
+					], 400);
+				}
+
+				// Update password
+				$user->password = Hash::make($request->new_password);
+				$user->otp = null; // optional
+				$user->save();
+
+				// Delete OTP record
+				$otpRecord->delete();
+
+				return response()->json([
+					'status' => true,
+					'message' => 'Password updated successfully.',
+					'data' => $user
+				], 200);
+			}
+		} catch (\Exception $e) {
+			return response()->json([
+				'status' => false,
+				'message' => $e->getMessage()
+			], 500);
+		}
+	}
+
+	public function forgotPassword()
+	{
+		return view('front.user.forgot-password');
+	}
+
+	public function sendForgotOtp(Request $request)
+	{
+		// Validate input
+		$request->validate([
+			'mobile_number' => 'required'
+		]);
+
+		try {
+			// Find user by mobile number
+			$user = User::where('mobile_number', $request->mobile_number)->first();
+
+			if (empty($user)) {
+				return response()->json([
+					'status' => 400,
+					'message' => 'Mobile number not registered'
+				], 400);
+			}
+
+			$otp = rand(1000, 4999);
+
+			Otp::updateOrCreate(
+				['user_id' => $user->id],
+				[
+					'otp' => $otp,
+				]
+			);
+
+			// Send OTP
+			$message = "{$otp} is the One Time Password(OTP) to verify your MOB number at Web Mingo, This OTP is Usable only once and is valid for 10 min,PLS DO NOT SHARE THE OTP WITH ANYONE";
+			$sendOtp = \App\Helpers\Helper::sendOtp($request->mobile_number, $message);
+
+			if ($sendOtp) {
+				return response()->json([
+					'status' => true,
+					'message' => 'OTP generated successfully and sent on your registered email & mobile number.',
+					'user_id' => $user->id
+				], 200);
+			} else {
+				return response()->json([
+					'status' => false,
+					'message' => 'OTP could not be sent.'
+				], 400);
+			}
+
+		} catch (\Exception $e) {
+			return response()->json([
+				'status' => 500,
+				'message' => 'Something went wrong: ' . $e->getMessage()
+			], 500);
 		}
 	}
 
