@@ -166,6 +166,7 @@ class HomeController extends AppController
 			if ($category) {
 				$subcategories = $category->Subcategory()->get();
 				$propertyTypes = \App\SubSubCategory::whereIn('sub_category_id', $subcategories->pluck('id'))->get();
+				$query->where('category_id', $category->id);
 			}
 		}
 
@@ -256,15 +257,20 @@ class HomeController extends AppController
 
 		if ($request->boolean('verified_property')) {
 			$query->where(function ($q) {
-				// Case 1: properties.verified = yes
+				// Case 1: property itself is verified
 				$q->where('verified', 'yes')
-
-					// Case 2: verified_tag = yes from subscription package
-					->orWhereHas('getUser.activePropertySubscription.package', function ($q2) {
-						$q2->where('verified_tag', 'Yes');
+					// Case 2 & 3: owner is admin OR owner has active subscription with verified_tag = 'Yes'
+					->orWhereHas('getUser', function ($qUser) {
+						$qUser->where('role', 'admin') // owner is admin
+							->orWhereHas('activePropertySubscription', function ($qSub) {
+								$qSub->whereHas('package', function ($qPkg) {
+									$qPkg->where('verified_tag', 'Yes');
+								});
+							});
 					});
 			});
 		}
+
 
 		// Only show properties that have at least one gallery image or a featured image
 		if ($request->boolean('with_photos')) {
@@ -326,25 +332,6 @@ class HomeController extends AppController
 			}
 		}
 
-		// Sorting
-		if ($request->filled('sort')) {
-			switch ($request->sort) {
-				case 'new-launch':
-					$query->orderBy('published_date', 'desc');
-					break;
-				case 'price-low-high':
-					$query->orderBy('price', 'asc');
-					break;
-				case 'price-high-low':
-					$query->orderBy('price', 'desc');
-					break;
-				default:
-					$query->latest();
-			}
-		} else {
-			$query->latest(); // default order
-		}
-
 		// Area filters (Carpet Area / Super Area)
 		if ($request->filled('min_area') || $request->filled('max_area')) {
 			$minArea = $request->min_area ?: 0;
@@ -385,6 +372,7 @@ class HomeController extends AppController
 		}
 
 		$sort = $request->get('sort', ''); // default empty
+		
 
 		switch ($sort) {
 			case 'price-low':

@@ -413,8 +413,7 @@
 												<button type="button"
 													class="btn btn-outline-warning btn-lg px-4 rounded-pill shadow-sm"
 													data-bs-toggle="modal" data-bs-target="#feedback-complaint">
-													<i class="fas fa-phone"></i> Contact Now
-												</button>
+													<i class="fas fa-phone"></i> Feedback & Complaint												</button>
 												<button id="wishlistButton"
 													class="btn btn-outline-danger btn-lg px-4 rounded-pill shadow-sm"
 													data-submission="{{ $property_detail->id }}">
@@ -664,7 +663,7 @@
 					<div class="card property-widgets">
 						<div class="property-title">
 							<h3>
-								Contact
+								Contact Now 
 							</h3>
 						</div>
 						<div class="property-contact">
@@ -724,7 +723,7 @@
 						<div class="agent-card mb-3 border">
 							<div class="newdesign-image-agent">
 								@php
-									$section = $property_user->profileSection;
+									$section = isset($property_user->profileSection);
 									$logo = isset($section->logo)
 										? asset('storage/' . $section->logo)
 										: asset('storage/' . $property_user->avatar);

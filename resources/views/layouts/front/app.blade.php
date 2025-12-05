@@ -634,7 +634,7 @@
         style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;">
         <i class="fas fa-pencil-alt me-1"></i> Post Property <span class="badge bg-warning text-dark ms-1">Free</span>
       </a>
-      <a href="javascript:void(0);" class="btn  fw-semibold px-3 py-1 rounded-3"
+      <a href="javascript:void(0);" class="btn desktop-menu  fw-semibold px-3 py-1 rounded-3"
         style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;" @if(Auth::check())
         onclick="window.location.href='{{ route('create_business_listing') }}'" @else
         onclick=" openSigninModal('business-listing/create')" @endif>
@@ -939,19 +939,6 @@
           </a>
         @endguest
 
-      </div>
-    </div>
-
-    <!-- 🌐 Mobile Menu -->
-    <div class="d-lg-none bg-light py-2 border-top">
-      <div class="container">
-        <div class="d-flex justify-content-around">
-          <a href="#" class="text-dark small">Buyers</a>
-          <a href="#" class="text-dark small">Sellers</a>
-          <a href="#" class="text-dark small">Owners</a>
-          <a href="#" class="text-dark small">Agents</a>
-          <a href="#" class="text-dark small">Builders</a>
-        </div>
       </div>
     </div>
   </header>
@@ -1649,7 +1636,7 @@
                           @endphp
 
                           @forelse($properties as $property)
-                            <a href="{{ route('property.show', $property->id) }}">
+                            <a href="{{ route('property_detail', ['id' => $property->id, 'slug' => $property->slug]) }}">
                               {{ $property->title }}
                             </a>
                             <div style="width: 100%; height: 1px; background: #e6e6e6; margin: 3px 0;"></div>
@@ -2471,7 +2458,7 @@
                               <ul class="list-unstyled">
                                 @foreach($properties->take($showLimit) as $property)
                                   <li>
-                                    <a href="{{ route('property.show', $property->id) }}">
+                                    <a href="{{ route('property_detail', ['id' => $property->id, 'slug' => $property->slug]) }}">
                                       {{ $property->title }}
                                     </a>
                                   </li>
@@ -2480,7 +2467,7 @@
                                 @if($properties->count() > $showLimit)
                                   @foreach($properties->slice($showLimit) as $property)
                                     <li class="more-properties-exclusive-{{ $subCat->id }}" style="display:none;">
-                                      <a href="{{ route('property.show', $property->id) }}">
+                                      <a href="{{ route('property_detail', ['id' => $property->id, 'slug' => $property->slug]) }}">
                                         {{ $property->title }}
                                       </a>
                                     </li>
@@ -3270,16 +3257,26 @@
         <span class="bottom-badge">Home</span>
       </a>
 
+<a class="bottom-item bottom-active" data-key="home" href="/user/my-wishlist">
 
-      <a class="bottom-item" data-key="insights" href="#">
         <span class="bottom-icon">
           <svg viewBox="0 0 24 24" fill="currentColor">
             <path d="M5 3h2v16H5zM11 8h2v11h-2zM17 13h2v6h-2z" />
           </svg>
         </span>
-        <span class="bottom-badge"><a href="/user/my-wishlist"
-            class="text-decoration-none text-inherit">Wishlist</a></span>
+        <span class="bottom-badge">Wishlist</span>
       </a>
+
+      <!--<a class="bottom-item" data-key="insights" href="#">-->
+      <!--  <span class="bottom-icon">-->
+      <!--    <svg viewBox="0 0 24 24" fill="currentColor">-->
+      <!--      <path d="M5 3h2v16H5zM11 8h2v11h-2zM17 13h2v6h-2z" />-->
+      <!--    </svg>-->
+      <!--  </span>-->
+      <!--  <span class="bottom-badge">-->
+      <!--      <a href="/user/my-wishlist"-->
+      <!--      class="text-decoration-none text-inherit">Wishlist</a></span>-->
+      <!--</a>-->
       @auth
         <a class="bottom-item" style="margin-top:33px;" data-key="sell" href="{{ route('create_property') }}">
       @else

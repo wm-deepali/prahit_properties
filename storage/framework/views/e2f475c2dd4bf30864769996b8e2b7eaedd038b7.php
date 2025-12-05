@@ -27,7 +27,7 @@
                             </button>
 
                             <button class="action-btn share-btn" data-id="<?php echo e($property->id); ?>"
-                                data-name="<?php echo e($property->title); ?>" title="Share">
+                                data-slug="<?php echo e($property->slug); ?>" data-id="<?php echo e($property->id); ?>" title="Share">
                                 <i class="fas fa-share"></i>
                             </button>
 
@@ -70,7 +70,7 @@
                     </div>
                     <div class="listing-buttons">
                         <button class="contact-btn" onclick="contactOwner(<?php echo e($property->id); ?>)">Contact Owner</button>
-                        <button class="society-btn">Ask Society Name</button>
+                        <!-- <button class="society-btn">Ask Society Name</button> -->
                     </div>
                 </div>
             </div>

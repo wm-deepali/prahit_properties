@@ -744,11 +744,17 @@
     <section style="background:#f9f9f9;">
         <div class="top-search-section">
             <div class="d-flex align-item-center justify-content-center gap-3">
-                <div class="search-container">
+                <div class="search-container position-relative">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" class="search-input" placeholder="Search Anything" value="<?php echo e(request('search')); ?>">
-                    <i class="fas fa-microphone mic-icon"></i>
+                    <input type="text" class="search-input ps-5" placeholder="Search Anything"
+                        value="<?php echo e(request('search')); ?>" name="search">
+                    <!-- Clear button - hidden by default -->
+                    <button type="button" class="clear-search-btn position-absolute top-50 end-0 translate-middle-y me-4"
+                        style="display: none; border: none; background: none; color: #999; font-size: 18px;">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
+
                 <div class="filter-buttons">
                     <span class="filter-label">Search By</span>
                     <button type="button" class="filter-btn" data-filter="price_negotiable">Price Negotiable</button>
@@ -1524,6 +1530,7 @@
     <script>
 
         document.addEventListener('DOMContentLoaded', () => {
+
             // Select elements
             const locationContainerMobile = document.getElementById('locationsContainerMobile');
             const locationButtonsMobile = Array.from(locationContainerMobile.querySelectorAll('.location-btn'));
@@ -1584,7 +1591,7 @@
                     updateSortUI(selectedSort);
 
                     // Fetch filtered listings via AJAX
-                    const listingsContainer = document.getElementById('listings_container');
+                    const listingsContainer = document.getElementById('listings-container');
                     fetch(window.location.pathname + '?' + params.toString(), {
                         headers: { 'X-Requested-With': 'XMLHttpRequest' }
                     })
@@ -1758,14 +1765,17 @@
                     else params.delete('search');
 
                     // Fetch filtered listings via AJAX
-                    const listingsContainer = document.getElementById('listings_container');
+                    const listingsContainer = document.getElementById('listings-container');
                     fetch(window.location.pathname + '?' + params.toString(), {
                         headers: { 'X-Requested-With': 'XMLHttpRequest' }
                     })
                         .then(response => response.text())
                         .then(html => {
-                            if (listingsContainer) listingsContainer.innerHTML = html;
-                            history.pushState(null, '', window.location.pathname + '?' + params.toString());
+                            listingsContainer.innerHTML = html;
+                            history.pushState(null, '', `${window.location.pathname}?${params.toString()}`);
+                               // Close offcanvas on mobile
+    const closeBtn = document.querySelector('#offcanvasExample [data-bs-dismiss="offcanvas"]');
+if (closeBtn) closeBtn.click();
                         })
                         .catch(console.error);
                 });
@@ -1794,6 +1804,51 @@
             const listingsContainer = document.getElementById('listings-container');
             const params = new URLSearchParams(window.location.search);
             const searchInput = document.querySelector('.search-input');
+            const clearBtn = document.querySelector('.clear-search-btn');
+
+            let debounceTimer = null;
+
+            // Toggle clear button visibility
+            function toggleClearBtn() {
+                if (searchInput.value.trim()) {
+                    clearBtn.style.display = 'block';
+                } else {
+                    clearBtn.style.display = 'none';
+                }
+            }
+
+            searchInput.addEventListener('input', toggleClearBtn);
+
+            // Clear search functionality
+            clearBtn.addEventListener('click', function () {
+                searchInput.value = '';
+                toggleClearBtn();
+                params.delete('search');
+                updateFiltersAjax();
+            });
+
+            // Initial check
+            toggleClearBtn();
+
+            // Debounced Search (run after user stops typing)
+            searchInput.addEventListener('keyup', function (e) {
+                clearTimeout(debounceTimer);
+
+                // Don't trigger debounce on Enter (Enter handled separately)
+                if (e.key === "Enter") return;
+
+                debounceTimer = setTimeout(function () {
+                    updateFiltersAjax();
+                }, 500); // Adjust delay (ms)
+            });
+
+            // Enter key — run instantly
+            searchInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    clearTimeout(debounceTimer);
+                    updateFiltersAjax();
+                }
+            });
 
             // ----- Initialize Sub Category Buttons -----
             const subCategoryIds = params.get('sub_category_id');
@@ -2114,15 +2169,17 @@
                 });
             });
 
-            // 📤 Share button
             $(document).on('click', '.share-btn', function () {
-                const name = $(this).data('name');
-                const shareUrl = "<?php echo e(url('/property')); ?>/" + name;
+                const id = $(this).data('id');
+                const slug = $(this).data('slug');
+                const encodedTitle = encodeURIComponent(slug);
+
+                const shareUrl = "<?php echo e(url('/property')); ?>/" + id + '/' + encodedTitle;
 
                 if (navigator.share) {
                     navigator.share({
-                        title: name,
-                        text: `Check out ${name} on our property!`,
+                        title: slug,
+                        text: `Check out ${slug} on our property!`,
                         url: shareUrl
                     }).catch(() => { });
                 } else {
@@ -2130,6 +2187,7 @@
                     Swal.fire('Link Copied!', 'URL copied to clipboard.', 'success');
                 }
             });
+
 
             // ⋯ More button → View details
             $(document).on('click', '.more-btn', function () {

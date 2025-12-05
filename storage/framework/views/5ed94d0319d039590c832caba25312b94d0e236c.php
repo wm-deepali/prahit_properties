@@ -635,7 +635,7 @@
         style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;">
         <i class="fas fa-pencil-alt me-1"></i> Post Property <span class="badge bg-warning text-dark ms-1">Free</span>
       </a>
-      <a href="javascript:void(0);" class="btn  fw-semibold px-3 py-1 rounded-3"
+      <a href="javascript:void(0);" class="btn desktop-menu  fw-semibold px-3 py-1 rounded-3"
         style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;" <?php if(Auth::check()): ?>
         onclick="window.location.href='<?php echo e(route('create_business_listing')); ?>'" <?php else: ?>
         onclick=" openSigninModal('business-listing/create')" <?php endif; ?>>
@@ -925,11 +925,14 @@
                 <li>
 
                   <a class="dropdown-item text-danger" href="#"
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit()" ;>Logout</a>
-                  <form id=" logout-form" action="<?php echo e(url('user/logout')); ?>" method="POST" style="display: none;">
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    Logout
+                  </a>
+                  <form id="logout-form" action="<?php echo e(url('user/logout')); ?>" method="POST" style="display: none;">
                     <?php echo e(csrf_field()); ?>
 
                   </form>
+                 
                 </li>
               </ul>
             </div>
@@ -943,19 +946,6 @@
           </a>
         <?php endif; ?>
 
-      </div>
-    </div>
-
-    <!-- 🌐 Mobile Menu -->
-    <div class="d-lg-none bg-light py-2 border-top">
-      <div class="container">
-        <div class="d-flex justify-content-around">
-          <a href="#" class="text-dark small">Buyers</a>
-          <a href="#" class="text-dark small">Sellers</a>
-          <a href="#" class="text-dark small">Owners</a>
-          <a href="#" class="text-dark small">Agents</a>
-          <a href="#" class="text-dark small">Builders</a>
-        </div>
       </div>
     </div>
   </header>
@@ -1665,7 +1655,7 @@
                           ?>
 
                           <?php $__empty_1 = true; $__currentLoopData = $properties; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $property): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                            <a href="<?php echo e(route('property.show', $property->id)); ?>">
+                            <a href="<?php echo e(route('property_detail', ['id' => $property->id, 'slug' => $property->slug])); ?>">
                               <?php echo e($property->title); ?>
 
                             </a>
@@ -2497,7 +2487,8 @@
                               <ul class="list-unstyled">
                                 <?php $__currentLoopData = $properties->take($showLimit); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $property): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                   <li>
-                                    <a href="<?php echo e(route('property.show', $property->id)); ?>">
+                                    <a
+                                      href="<?php echo e(route('property_detail', ['id' => $property->id, 'slug' => $property->slug])); ?>">
                                       <?php echo e($property->title); ?>
 
                                     </a>
@@ -2507,7 +2498,8 @@
                                 <?php if($properties->count() > $showLimit): ?>
                                   <?php $__currentLoopData = $properties->slice($showLimit); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $property): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <li class="more-properties-exclusive-<?php echo e($subCat->id); ?>" style="display:none;">
-                                      <a href="<?php echo e(route('property.show', $property->id)); ?>">
+                                      <a
+                                        href="<?php echo e(route('property_detail', ['id' => $property->id, 'slug' => $property->slug])); ?>">
                                         <?php echo e($property->title); ?>
 
                                       </a>
@@ -3302,16 +3294,26 @@
         <span class="bottom-badge">Home</span>
       </a>
 
+      <a class="bottom-item bottom-active" data-key="home" href="/user/my-wishlist">
 
-      <a class="bottom-item" data-key="insights" href="#">
         <span class="bottom-icon">
           <svg viewBox="0 0 24 24" fill="currentColor">
             <path d="M5 3h2v16H5zM11 8h2v11h-2zM17 13h2v6h-2z" />
           </svg>
         </span>
-        <span class="bottom-badge"><a href="/user/my-wishlist"
-            class="text-decoration-none text-inherit">Wishlist</a></span>
+        <span class="bottom-badge">Wishlist</span>
       </a>
+
+      <!--<a class="bottom-item" data-key="insights" href="#">-->
+      <!--  <span class="bottom-icon">-->
+      <!--    <svg viewBox="0 0 24 24" fill="currentColor">-->
+      <!--      <path d="M5 3h2v16H5zM11 8h2v11h-2zM17 13h2v6h-2z" />-->
+      <!--    </svg>-->
+      <!--  </span>-->
+      <!--  <span class="bottom-badge">-->
+      <!--      <a href="/user/my-wishlist"-->
+      <!--      class="text-decoration-none text-inherit">Wishlist</a></span>-->
+      <!--</a>-->
       <?php if(auth()->guard()->check()): ?>
         <a class="bottom-item" style="margin-top:33px;" data-key="sell" href="<?php echo e(route('create_property')); ?>">
       <?php else: ?>
@@ -3364,184 +3366,104 @@
 
     <div class="offcanvas-body" style="background:#f9f9f9; text-align:left; padding:20px;">
       <?php if(auth()->guard()->check()): ?>
-          <div class="profile-section mb-3">
-            <div class="profile-image">
-              <div class="pro-user">
-                <?php
-                  $avatar = "";
+        <div class="profile-section mb-3">
+          <div class="profile-image">
+            <div class="pro-user">
+              <?php
+                $avatar = "";
 
-                  if (!empty(Auth::user()->avatar) && file_exists(public_path(Auth::user()->avatar))) {
-                    $avatar = url(Auth::user()->avatar);
-                  } else {
-                    $avatar = 'https://static.99acres.com/universalhp/img/ProfileIcon.shared.png';
-                  }
-                ?>
+                if (!empty(Auth::user()->avatar) && file_exists(public_path(Auth::user()->avatar))) {
+                  $avatar = url(Auth::user()->avatar);
+                } else {
+                  $avatar = 'https://static.99acres.com/universalhp/img/ProfileIcon.shared.png';
+                }
+              ?>
 
-                <img src="<?php echo e($avatar); ?>" alt="Profile Picture" id="change_avatar" class="img-fluid">
-                <form id="avatar-form" name="avatar-form" enctype="multipart/form-data">
-                  <div class="p-image">
-                    <i class="fas fa-pencil-alt upload-button" id="buttonid"></i>
-                    <input class="file-upload" type="file" id="fileid" name="avatar_file" accept="image/*"
-                      onchange="previewImage(this)" style="display: none;">
-                  </div>
-                </form>
-              </div>
-            </div>
-            <div class="user-info d-flex flex-column">
-              <p style="font-weight:600;"><?php echo e(Auth::user()->firstname); ?> <?php echo e(Auth::user()->lastname); ?></p>
-              <p><?php echo e(Auth::user()->email); ?>
-
-                <?php if(Auth::user()->is_verified == 1): ?>
-                  <a class="verify-btn-s"><i class="fa fa-check-circle"></i></a>
-                <?php else: ?>
-                  <a style="cursor: pointer;" onclick="verifyEmail()" class="verify-btn-s">
-                    <img src="<?php echo e(asset('images')); ?>/verify.png" alt="verified" width="15px;">
-                  </a>
-                <?php endif; ?>
-              </p>
-              <p><?php echo e(Auth::user()->mobile_number); ?>
-
-                <?php if(Auth::user()->mobile_verified == 1): ?>
-                  <a class="verify-btn-s"><i class="fa fa-check-circle"></i></a>
-                <?php else: ?>
-                  <a style="cursor: pointer;" onclick="verifyMobileNumber()" class="verify-btn-s">
-                    <img src="<?php echo e(asset('images')); ?>/verify.png" width="15px;" alt="verified">
-                  </a>
-                <?php endif; ?>
-              </p>
+              <img src="<?php echo e($avatar); ?>" alt="Profile Picture" id="change_avatar" class="img-fluid">
+              <form id="avatar-form" name="avatar-form" enctype="multipart/form-data">
+                <div class="p-image">
+                  <i class="fas fa-pencil-alt upload-button" id="buttonid"></i>
+                  <input class="file-upload" type="file" id="fileid" name="avatar_file" accept="image/*"
+                    onchange="previewImage(this)" style="display: none;">
+                </div>
+              </form>
             </div>
           </div>
+          <div class="user-info d-flex flex-column">
+            <p style="font-weight:600;"><?php echo e(Auth::user()->firstname); ?> <?php echo e(Auth::user()->lastname); ?></p>
+            <p><?php echo e(Auth::user()->email); ?>
 
-          <!-- Sidebar Menu -->
-          <nav class="mobile-sidebar">
-            <ul class="list-unstyled" id="mobileSidebarMenu">
-              <li class="mb-2">
-                <a href="<?php echo e(url('user/dashboard')); ?>" class="d-flex justify-content-between align-items-center sidebar-link"
-                  id="dashboardLink">
-                  <span><i class="fas fa-home me-2 text-primary"></i> Dashboard</span>
+              <?php if(Auth::user()->is_verified == 1): ?>
+                <a class="verify-btn-s"><i class="fa fa-check-circle"></i></a>
+              <?php else: ?>
+                <a style="cursor: pointer;" onclick="verifyEmail()" class="verify-btn-s">
+                  <img src="<?php echo e(asset('images')); ?>/verify.png" alt="verified" width="15px;">
                 </a>
-              </li>
+              <?php endif; ?>
+            </p>
+            <p><?php echo e(Auth::user()->mobile_number); ?>
 
-              <!-- Settings Menu -->
-              <li class="mb-2">
-                <a class="d-flex justify-content-between align-items-center sidebar-link collapsed"
-                  data-bs-toggle="collapse" href="#mobileSettingMenu" role="button" aria-expanded="false"
-                  aria-controls="mobileSettingMenu">
-                  <span><i class="fas fa-cog me-2 text-warning"></i> Settings</span>
-                  <i class="fas fa-chevron-down small"></i>
+              <?php if(Auth::user()->mobile_verified == 1): ?>
+                <a class="verify-btn-s"><i class="fa fa-check-circle"></i></a>
+              <?php else: ?>
+                <a style="cursor: pointer;" onclick="verifyMobileNumber()" class="verify-btn-s">
+                  <img src="<?php echo e(asset('images')); ?>/verify.png" width="15px;" alt="verified">
                 </a>
-                <div class="collapse submenu" id="mobileSettingMenu">
-                  <ul class="list-unstyled ps-3" id="mobileSettingLinks">
-                    <li><a href="<?php echo e(url('user/profile?tab=profile')); ?>" class="submenu-link">Profile</a></li>
-                    <li><a href="<?php echo e(url('user/profile?tab=security')); ?>" class="submenu-link">Change Password</a></li>
-                    <li><a href="<?php echo e(url('user/my-activities')); ?>" class="submenu-link">My Activities</a></li>
-                    <?php if(in_array(Auth::user()->role, ['agent', 'builder'])): ?>
-                      <li><a href="<?php echo e(url('user/profile-section')); ?>" class="submenu-link">Profile Section</a></li>
-                    <?php endif; ?>
-                  </ul>
-                </div>
-              </li>
+              <?php endif; ?>
+            </p>
+          </div>
+        </div>
 
-              <!-- Dynamic Property/Service Menu will go here -->
-              <div id="mobileDynamicMenu"></div>
+        <!-- Sidebar Menu -->
+        <nav class="mobile-sidebar">
+          <ul class="list-unstyled" id="mobileSidebarMenu">
+            <li class="mb-2">
+              <a href="<?php echo e(url('user/dashboard')); ?>" class="d-flex justify-content-between align-items-center sidebar-link"
+                id="dashboardLink">
+                <span><i class="fas fa-home me-2 text-primary"></i> Dashboard</span>
+              </a>
+            </li>
 
-              <!-- Dynamic Pricing & Subscription Menu will go here -->
-              <div id="mobileDynamicPricingMenu"></div>
+            <!-- Settings Menu -->
+            <li class="mb-2">
+              <a class="d-flex justify-content-between align-items-center sidebar-link collapsed"
+                data-bs-toggle="collapse" href="#mobileSettingMenu" role="button" aria-expanded="false"
+                aria-controls="mobileSettingMenu">
+                <span><i class="fas fa-cog me-2 text-warning"></i> Settings</span>
+                <i class="fas fa-chevron-down small"></i>
+              </a>
+              <div class="collapse submenu" id="mobileSettingMenu">
+                <ul class="list-unstyled ps-3" id="mobileSettingLinks">
+                  <li><a href="<?php echo e(url('user/profile?tab=profile')); ?>" class="submenu-link">Profile</a></li>
+                  <li><a href="<?php echo e(url('user/profile?tab=security')); ?>" class="submenu-link">Change Password</a></li>
+                  <li><a href="<?php echo e(url('user/my-activities')); ?>" class="submenu-link">My Activities</a></li>
+                  <?php if(in_array(Auth::user()->role, ['agent', 'builder'])): ?>
+                    <li><a href="<?php echo e(url('user/profile-section')); ?>" class="submenu-link">Profile Section</a></li>
+                  <?php endif; ?>
+                </ul>
+              </div>
+            </li>
 
-              <!-- Logout -->
-              <li class="mt-3" style="width:100%;">
-                <a href="#" class="d-flex justify-content-between align-items-center sidebar-link text-danger"
-                  onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();"
-                  style="width:100%;">
-                  <div><i class="fas fa-sign-out-alt me-2"></i> Logout</div>
-                </a>
-                <form id="logout-form-mobile" action="<?php echo e(url('user/logout')); ?>" method="POST" style="display: none;">
-                  <?php echo e(csrf_field()); ?>
+            <!-- Dynamic Property/Service Menu will go here -->
+            <div id="mobileDynamicMenu"></div>
 
-                </form>
-              </li>
-            </ul>
-          </nav>
+            <!-- Dynamic Pricing & Subscription Menu will go here -->
+            <div id="mobileDynamicPricingMenu"></div>
 
-          <script>
-            // Mobile Sidebar dynamic menu
-            let mobileUserType = new URLSearchParams(window.location.search).get('type') || localStorage.getItem('user_type') || 'property';
-            if (new URLSearchParams(window.location.search).get('type')) {
-              localStorage.setItem('user_type', mobileUserType);
-            }
+            <!-- Logout -->
+            <li class="mt-3" style="width:100%;">
+              <a href="#" class="d-flex justify-content-between align-items-center sidebar-link text-danger"
+                onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();"
+                style="width:100%;">
+                <div><i class="fas fa-sign-out-alt me-2"></i> Logout</div>
+              </a>
+              <form id="logout-form-mobile" action="<?php echo e(url('user/logout')); ?>" method="POST" style="display: none;">
+                <?php echo e(csrf_field()); ?>
 
-            function renderMobileSidebar(userType) {
-              const sectionLabel = userType === 'service' ? 'Business' : 'Property';
-              const queryParam = userType === 'service' ? '?type=service' : '';
-
-              // Dynamic Property / Service Menu
-              const dynamicMenuHtml = `
-          <li class="mb-2">
-            <a class="d-flex justify-content-between align-items-center sidebar-link collapsed"
-               data-bs-toggle="collapse" href="#mobile${sectionLabel}Menu" role="button" aria-expanded="false"
-               aria-controls="mobile${sectionLabel}Menu">
-              <span><i class="${userType === 'service' ? 'fas fa-briefcase me-2 text-success' : 'fas fa-building me-2 text-success'}"></i> ${sectionLabel}</span>
-              <i class="fas fa-chevron-down small"></i>
-            </a>
-            <div class="collapse submenu" id="mobile${sectionLabel}Menu">
-              <ul class="list-unstyled ps-3">
-                ${userType === 'service' ? `
-                  <li><a href="/user/services" class="submenu-link">My Business Listing</a></li>
-                  <li><a href="/user/all-services-inquiries" class="submenu-link">Received Business Inquiries</a></li>
-                  <li><a href="/user/sent-services-inquiries" class="submenu-link">Sent Business Inquiries</a></li>
-                  <li><a href="/user/my-service-wishlist" class="submenu-link">My Business Wishlist</a></li>
-                  <li><a href="/user/business-listing-reviews" class="submenu-link">Business Listing Reviews</a></li>
-                ` : `
-                  <li><a href="/user/properties" class="submenu-link">My Properties</a></li>
-                  <li><a href="/user/all-inquries" class="submenu-link">Received Inquiries</a></li>
-                  <li><a href="/user/sent-inquries" class="submenu-link">Sent Inquiries</a></li>
-                  <li><a href="/user/my-wishlist" class="submenu-link">My Wishlist</a></li>
-                  <li><a href="/user/recent-viewed-properties" class="submenu-link">Recently Viewed</a></li>
-                `}
-              </ul>
-            </div>
-          </li>
-        `;
-
-              // Dynamic Pricing Menu
-              const pricingMenuHtml = `
-          <li class="mb-2">
-            <a class="d-flex justify-content-between align-items-center sidebar-link collapsed"
-               data-bs-toggle="collapse" href="#mobilePriceMenu" role="button" aria-expanded="false"
-               aria-controls="mobilePriceMenu">
-              <span><i class="fas fa-tags me-2 text-info"></i> Pricing & Subscriptions</span>
-              <i class="fas fa-chevron-down small"></i>
-            </a>
-            <div class="collapse submenu" id="mobilePriceMenu">
-              <ul class="list-unstyled ps-3">
-                <li><a href="/user/current-subscriptions${queryParam}" class="submenu-link">Current Subscriptions</a></li>
-                <li><a href="/user/payments-invoice${queryParam}" class="submenu-link">Payments & Invoice</a></li>
-                <li><a href="/user/pricing${queryParam}" class="submenu-link">Pricing</a></li>
-              </ul>
-            </div>
-          </li>
-        `;
-
-              document.getElementById('mobileDynamicMenu').innerHTML = dynamicMenuHtml;
-              document.getElementById('mobileDynamicPricingMenu').innerHTML = pricingMenuHtml;
-
-              // Highlight active links
-              const links = document.querySelectorAll('.mobile-sidebar a');
-              const currentPath = window.location.pathname + window.location.search;
-              links.forEach(link => {
-                if (link.getAttribute('href') && currentPath.startsWith(link.getAttribute('href'))) {
-                  link.classList.add('active');
-                  const collapseDiv = link.closest('.collapse');
-                  if (collapseDiv) collapseDiv.classList.add('show');
-                }
-              });
-            }
-
-            document.addEventListener('DOMContentLoaded', function () {
-              renderMobileSidebar(mobileUserType);
-            });
-          </script>
-
+              </form>
+            </li>
+          </ul>
+        </nav>
       <?php else: ?>
         <!-- Guest View - Show Login Prompt -->
         <div class="text-center py-5">
@@ -3680,8 +3602,85 @@
 <?php echo $__env->make('layouts.front.app_js', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 <script>
+  // Mobile Sidebar dynamic menu
+  let mobileUserType = new URLSearchParams(window.location.search).get('type') || localStorage.getItem('user_type') || 'property';
+  if (new URLSearchParams(window.location.search).get('type')) {
+    localStorage.setItem('user_type', mobileUserType);
+  }
 
+  function renderMobileSidebar(userType) {
+    const sectionLabel = userType === 'service' ? 'Business' : 'Property';
+    const queryParam = userType === 'service' ? '?type=service' : '';
 
+    // Dynamic Property / Service Menu
+    const dynamicMenuHtml = `
+          <li class="mb-2">
+            <a class="d-flex justify-content-between align-items-center sidebar-link collapsed"
+               data-bs-toggle="collapse" href="#mobile${sectionLabel}Menu" role="button" aria-expanded="false"
+               aria-controls="mobile${sectionLabel}Menu">
+              <span><i class="${userType === 'service' ? 'fas fa-briefcase me-2 text-success' : 'fas fa-building me-2 text-success'}"></i> ${sectionLabel}</span>
+              <i class="fas fa-chevron-down small"></i>
+            </a>
+            <div class="collapse submenu" id="mobile${sectionLabel}Menu">
+              <ul class="list-unstyled ps-3">
+                ${userType === 'service' ? `
+                  <li><a href="/user/services" class="submenu-link">My Business Listing</a></li>
+                  <li><a href="/user/all-services-inquiries" class="submenu-link">Received Business Inquiries</a></li>
+                  <li><a href="/user/sent-services-inquiries" class="submenu-link">Sent Business Inquiries</a></li>
+                  <li><a href="/user/my-service-wishlist" class="submenu-link">My Business Wishlist</a></li>
+                  <li><a href="/user/business-listing-reviews" class="submenu-link">Business Listing Reviews</a></li>
+                ` : `
+                  <li><a href="/user/properties" class="submenu-link">My Properties</a></li>
+                  <li><a href="/user/all-inquries" class="submenu-link">Received Inquiries</a></li>
+                  <li><a href="/user/sent-inquries" class="submenu-link">Sent Inquiries</a></li>
+                  <li><a href="/user/my-wishlist" class="submenu-link">My Wishlist</a></li>
+                  <li><a href="/user/recent-viewed-properties" class="submenu-link">Recently Viewed</a></li>
+                `}
+              </ul>
+            </div>
+          </li>
+        `;
+
+    // Dynamic Pricing Menu
+    const pricingMenuHtml = `
+          <li class="mb-2">
+            <a class="d-flex justify-content-between align-items-center sidebar-link collapsed"
+               data-bs-toggle="collapse" href="#mobilePriceMenu" role="button" aria-expanded="false"
+               aria-controls="mobilePriceMenu">
+              <span><i class="fas fa-tags me-2 text-info"></i> Pricing & Subscriptions</span>
+              <i class="fas fa-chevron-down small"></i>
+            </a>
+            <div class="collapse submenu" id="mobilePriceMenu">
+              <ul class="list-unstyled ps-3">
+                <li><a href="/user/current-subscriptions${queryParam}" class="submenu-link">Current Subscriptions</a></li>
+                <li><a href="/user/payments-invoice${queryParam}" class="submenu-link">Payments & Invoice</a></li>
+                <li><a href="/user/pricing${queryParam}" class="submenu-link">Pricing</a></li>
+              </ul>
+            </div>
+          </li>
+        `;
+
+    document.getElementById('mobileDynamicMenu').innerHTML = dynamicMenuHtml;
+    document.getElementById('mobileDynamicPricingMenu').innerHTML = pricingMenuHtml;
+
+    // Highlight active links
+    const links = document.querySelectorAll('.mobile-sidebar a');
+    const currentPath = window.location.pathname + window.location.search;
+    links.forEach(link => {
+      if (link.getAttribute('href') && currentPath.startsWith(link.getAttribute('href'))) {
+        link.classList.add('active');
+        const collapseDiv = link.closest('.collapse');
+        if (collapseDiv) collapseDiv.classList.add('show');
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    renderMobileSidebar(mobileUserType);
+  });
+</script>
+
+<script>
   let postLoginRedirect = null;
 
   function openSigninModal(redirectUrl = null) {
@@ -3842,7 +3841,6 @@
 
 </script>
 
-
 <script>
   // switch active class
   document.querySelectorAll('.bottom-item').forEach(item => {
@@ -3971,6 +3969,7 @@
   //     });
   //   });
 </script>
+
 <script type="text/javascript">
   $(".modal_loading").css('display', 'none');
 
@@ -4102,78 +4101,6 @@
     }
   });
 
-  $("#register_form").validate({
-    rules: {
-      password: {
-        required: true,
-        minlength: 8
-      },
-      confirm_password: {
-        required: true,
-        equalTo: "#reg_password",
-        minlength: 8
-      },
-      mobile_number: {
-        minlength: 10,
-        maxlength: 10,
-        required: true,
-        digits: true
-      }
-
-    },
-
-    submitHandler: function () {
-      $.ajax({
-        url: "<?php echo e(config('app.api_url') . '/register'); ?>",
-        method: "POST",
-        data: $("#register_form").serialize(),
-        beforeSend: function () {
-          $(".btn-send").attr('disabled', true);
-          $(".modal_loading").css('display', 'block');
-          $('#register').modal('hide');
-        },
-        success: function (response) {
-          // toastr.success('abc')
-          // var response = JSON.parse(response);
-          if (response.status == true) {
-            console.log(response.data.id);
-            // toastr.success(response.message)
-            $('#otp_form .user_id').val(response.data.id);
-            $('#register').modal('hide');
-            setTimeout(function () {
-              $('#otpModal').modal('show');
-            }, 300);
-
-
-          } else if (response.responseCode === 400) {
-            toastr.error(response.message)
-            $('#register').modal('hide');
-            $("#register_form").trigger('reset');
-          }
-        },
-        error: function (xhr, status, error) {
-          let response = xhr.responseJSON;
-
-          if (response && response.errors) {
-            // Show first validation error
-            $.each(response.errors, function (key, val) {
-              toastr.error(val[0]);
-            });
-          } else {
-            toastr.error('An error occurred');
-          }
-
-          $('#register').modal('hide');
-        },
-
-        complete: function () {
-          $(".modal_loading").css('display', 'none');
-          $(".btn-send").attr('disabled', false);
-          // $("form").trigger('reset');
-        }
-      })
-    }
-  });
 
 
   $("#otp_form").validate({
@@ -4359,6 +4286,7 @@
   }
 
 </script>
+
 <?php echo $__env->make('layouts.app_js', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <?php if(session('success')): ?>
   <script type="text/javascript">
