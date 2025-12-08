@@ -125,6 +125,55 @@ class UserController extends AppController
 	}
 
 
+	public function sendLoginOtp(Request $request)
+	{
+		$check_input_type = $this->checkValidLoginType($request->email);
+
+		if ($check_input_type == 'email') {
+			$picked = User::where('email', $request->email)->first();
+		} else {
+			$picked = User::where('mobile_number', $request->email)->first();
+		}
+
+		if (!$picked) {
+			return response()->json([
+				'status' => 500,
+				'msg' => 'User does not exist with this email or mobile number'
+			]);
+		}
+
+		// Generate OTP
+		$otp = rand(1000, 9999);
+
+		// 🔥 Avoid multiple OTP rows — delete old OTP
+		Otp::where('user_id', $picked->id)->delete();
+
+		Otp::create([
+			'otp' => $otp,
+			'user_id' => $picked->id
+		]);
+
+		// Send OTP
+		if ($check_input_type == 'email') {
+			$emailOTPtemplate = EmailTemplate::where('id', 4)->first();
+			$replaceOTPtemplate = [
+				'#NAME' => $picked->firstname . ' ' . $picked->lastname,
+				'#OTP' => $otp
+			];
+			$this->__sendEmail($picked, $emailOTPtemplate->template, $emailOTPtemplate->subject, $emailOTPtemplate->image, $replaceOTPtemplate);
+		} else {
+			$message = "{$otp} is the One Time Password(OTP) to verify your MOB number at Web Mingo, This OTP is Usable only once and is valid for 10 min,PLS DO NOT SHARE THE OTP WITH ANYONE";
+			\App\Helpers\Helper::sendOtp($request->email, $message);
+		}
+
+		return response()->json([
+			'status' => 200,
+			'msg' => 'OTP Successfully sent to registered Email / Mobile.'
+		]);
+	}
+
+
+
 	public function register(Request $request)
 	{
 		$rules = [
@@ -604,7 +653,7 @@ class UserController extends AppController
 		// Validate request
 		$request->validate([
 			'user_id' => 'required|exists:users,id',
-			'avatar_file' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048'
+			'avatar_file' => 'required|mimes:jpg,jpeg,png,webp,avif,gif,bmp|max:4096'
 		]);
 
 		try {
@@ -718,9 +767,10 @@ class UserController extends AppController
 	{
 		$user = auth()->user();
 
-		// Get last 20 viewed properties
+		// Get last 20 viewed properties which still exist in database
 		$recentViews = \App\Models\PropertyView::with('property')
 			->where('user_id', $user->id)
+			->whereHas('property') // <-- ensure property relation exists
 			->orderBy('created_at', 'DESC')
 			->limit(20)
 			->get()
@@ -728,7 +778,6 @@ class UserController extends AppController
 
 		return view('front.user.recent-viewed-properties', compact('recentViews'));
 	}
-
 
 	public function sentEnquiries()
 	{

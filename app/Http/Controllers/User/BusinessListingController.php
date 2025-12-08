@@ -41,6 +41,14 @@ class BusinessListingController extends Controller
     public function create()
     {
         $user = auth()->user();
+        $userId = $user->id;
+
+        // Check if user already has a business listing
+        $existingBusiness = BusinessListing::where('user_id', $userId)->first();
+
+        if ($existingBusiness) {
+            return redirect()->to(route('user.services.edit', $existingBusiness->id) . '#services-container');
+        }
 
         // 🧩 Load user's active subscription with its package
         $activeBusinessSubscription = $user->activeBusinessSubscription()
@@ -107,7 +115,7 @@ class BusinessListingController extends Controller
 
         $validator = Validator::make($request->all(), [
             // 'membership_type' => 'required|in:Free,Paid',
-            'verified_status' => 'required|in:Verified,Unverified',
+            // 'verified_status' => 'required|in:Verified,Unverified',
             'category_id' => 'required|exists:web_directory_categories,id',
             'sub_category_ids' => 'required|array',
             'sub_category_ids.*' => 'exists:web_directory_sub_categories,id',
@@ -122,7 +130,7 @@ class BusinessListingController extends Controller
             'email' => 'nullable|email|max:255',
             'mobile_number' => 'nullable|string|max:20',
             'whatsapp_number' => 'nullable|string|max:20',
-            'website' => 'nullable|url|max:255',
+            'website' => ["nullable", "max:255", "regex:/^((https?):\/\/)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/.*)?$/"],
             'established_year' => 'nullable|digits:4',
             'introduction' => 'nullable|string',
             'detail' => 'nullable|string',
@@ -163,10 +171,21 @@ class BusinessListingController extends Controller
         }
 
         try {
+
+            // Auto add https:// if user enters website without protocol
+            if ($request->website) {
+                $website = $request->website;
+                if (!preg_match("~^(http|https)://~", $website)) {
+                    $website = "https://" . $website;
+                }
+                $request->merge(['website' => $website]);
+            }
+
+
             $business = new BusinessListing();
             $business->fill($request->only([
                 // 'membership_type',
-                'verified_status',
+                // 'verified_status',
                 'category_id',
                 'business_name',
                 'email',
@@ -344,7 +363,6 @@ class BusinessListingController extends Controller
     }
 
 
-
     public function update(Request $request, $id)
     {
         $business = BusinessListing::with(['services', 'portfolio', 'workingHours'])->findOrFail($id);
@@ -352,7 +370,7 @@ class BusinessListingController extends Controller
         // dd('here',$request->all());
         $validator = Validator::make($request->all(), [
             // 'membership_type' => 'required|in:Free,Paid',
-            'verified_status' => 'required|in:Verified,Unverified',
+            // 'verified_status' => 'required|in:Verified,Unverified',
             'category_id' => 'required|exists:web_directory_categories,id',
             'sub_category_ids' => 'required|array',
             'sub_category_ids.*' => 'exists:web_directory_sub_categories,id',
@@ -366,7 +384,7 @@ class BusinessListingController extends Controller
             'email' => 'nullable|email|max:255',
             'mobile_number' => 'nullable|string|max:20',
             'whatsapp_number' => 'nullable|string|max:20',
-            'website' => 'nullable|url|max:255',
+            'website' => ["nullable", "max:255", "regex:/^((https?):\/\/)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/.*)?$/"],
             'established_year' => 'nullable|digits:4',
             'introduction' => 'nullable|string',
             'detail' => 'nullable|string',
@@ -409,9 +427,19 @@ class BusinessListingController extends Controller
         }
 
         try {
+
+            // Auto add https:// if user enters website without protocol
+            if ($request->website) {
+                $website = $request->website;
+                if (!preg_match("~^(http|https)://~", $website)) {
+                    $website = "https://" . $website;
+                }
+                $request->merge(['website' => $website]);
+            }
+
             $business->fill($request->only([
                 // 'membership_type',
-                'verified_status',
+                // 'verified_status',
                 'category_id',
                 'business_name',
                 'email',
@@ -571,7 +599,6 @@ class BusinessListingController extends Controller
             return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
         }
     }
-
 
     public function destroy($id)
     {

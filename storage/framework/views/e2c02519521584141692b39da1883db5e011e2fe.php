@@ -122,6 +122,14 @@
     .toggle-switch input:checked+.slider::before {
         transform: translateX(30px);
     }
+      @media (max-width: 576px) {
+        .desktop-menu{
+            display:none !important;
+        }
+        .head-tit{
+            margin:0;
+        }
+    }
 </style>
 
 <?php $__env->startSection('content'); ?>
@@ -303,7 +311,7 @@
                                                     </p>
                                                     <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                                                " class="btn btn-primary btn-sm">View Details</a>
+                                                                        " class="btn btn-primary btn-sm">View Details</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -362,8 +370,8 @@
                                                     <tr>
                                                         <th>Business Name</th>
                                                         <th>Category</th>
-                                                        <th>Membership</th>
-                                                        <th>Verified</th>
+                                                        <th>Subcategory</th>
+                                                        <th>Established</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -372,8 +380,10 @@
                                                         <tr>
                                                             <td><?php echo e($business->business_name); ?></td>
                                                             <td><?php echo e($business->category->category_name ?? ''); ?></td>
-                                                            <td><?php echo e($business->membership_type); ?></td>
-                                                            <td><?php echo e($business->verified_status); ?></td>
+                                                            <td><?php echo e($business->subCategories->pluck('sub_category_name')->implode(', ')); ?>
+
+                                                            </td>
+                                                            <td><?php echo e($business->established_year); ?></td>
                                                             <td>
                                                                 <a href="<?php echo e(route('user.services.edit', $business->id)); ?>"
                                                                     class="btn btn-sm btn-outline-primary">Edit</a>

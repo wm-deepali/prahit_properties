@@ -1,4 +1,5 @@
 @extends('layouts.front.app')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 @section('title')
     <title>Post Business Listing</title>
@@ -66,14 +67,14 @@
                                         <option value="Paid">Paid</option>
                                     </select>
                                 </div> -->
-                                <div class="col-md-4">
-                                    <label>Verified Status</label>
-                                    <select name="verified_status" class="form-control" required>
-                                        <option value="Verified">Verified</option>
-                                        <option value="Unverified">Unverified</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
+                                <!--<div class="col-md-4">-->
+                                <!--    <label>Verified Status</label>-->
+                                <!--    <select name="verified_status" class="form-control" required>-->
+                                <!--        <option value="Verified">Verified</option>-->
+                                <!--        <option value="Unverified">Unverified</option>-->
+                                <!--    </select>-->
+                                <!--</div>-->
+                                <div class="col-md-6">
                                     <label>Category</label>
                                     <select name="category_id" id="category_id" class="form-control" required>
                                         <option value="">Select Category</option>
@@ -82,7 +83,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label>Sub Category</label>
                                     <select name="sub_category_ids[]" id="sub_category_ids"
                                         class="form-control select2-multiple" multiple required></select>
@@ -150,7 +151,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label>Website</label>
-                                    <input type="url" name="website" class="form-control">
+                                    <input type="text" name="website" class="form-control">
                                 </div>
                                 <div class="col-md-4">
                                     <label>Established Year</label>
@@ -211,7 +212,7 @@
                                 </div>
                             </div>
 
-                           {{-- ✅ Show Logo & Banner only if package allows --}}
+                           {{-- âœ… Show Logo & Banner only if package allows --}}
 @if( $business_logo_banner === 'Yes')
     <div class="row mb-3">
         <div class="col-md-6">
@@ -385,7 +386,7 @@
 
            // Add More services dynamically with limit
 var serviceIndex = 1;
-var serviceLimit = {{ $total_services ?? 5 }}; // 👈 dynamic from backend
+var serviceLimit = {{ $total_services ?? 5 }}; // ðŸ‘ˆ dynamic from backend
 
 $(document).on('click', '.add-service', function () {
     var totalServices = $('#services-container .service-row').length;
@@ -445,11 +446,11 @@ $(document).on('click', '.remove-service', function () {
                         $select.empty();
 
                         if (subcategories.length > 0) {
-                            // ✅ Add Select and Select All options first
+                            // âœ… Add Select and Select All options first
                             $select.append(`<option value="">Select Category</option>`);
                             $select.append(`<option value="all">Select All</option>`);
 
-                            // ✅ Append fetched subcategories
+                            // âœ… Append fetched subcategories
                             $.each(subcategories, function (x, y) {
                                 $select.append(
                                     `<option value="${y.id}">${y.sub_category_name}</option>`
@@ -571,7 +572,7 @@ $(document).on('click', '.remove-service', function () {
 
 // Add More portfolio dynamically with limit
 var portfolioIndex = 1;
-var portfolioLimit = {{ $image_upload_limit ?? 5 }}; // 👈 dynamic from backend
+var portfolioLimit = {{ $image_upload_limit ?? 5 }}; // ðŸ‘ˆ dynamic from backend
 
 $(document).on('click', '.add-portfolio', function () {
     var totalPortfolio = $('#portfolio-container .portfolio-row').length;

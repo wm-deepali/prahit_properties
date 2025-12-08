@@ -66,14 +66,14 @@
                                         <option value="Paid">Paid</option>
                                     </select>
                                 </div> -->
-                                <div class="col-md-4">
+                                <!-- <div class="col-md-4">
                                     <label>Verified Status</label>
                                     <select name="verified_status" class="form-control" required>
                                         <option value="Verified">Verified</option>
                                         <option value="Unverified">Unverified</option>
                                     </select>
-                                </div>
-                                <div class="col-md-4">
+                                </div> -->
+                                <div class="col-md-6">
                                     <label>Category</label>
                                     <select name="category_id" id="category_id" class="form-control" required>
                                         <option value="">Select Category</option>
@@ -82,7 +82,7 @@
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label>Sub Category</label>
                                     <select name="sub_category_ids[]" id="sub_category_ids"
                                         class="form-control select2-multiple" multiple required></select>
@@ -150,7 +150,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label>Website</label>
-                                    <input type="url" name="website" class="form-control">
+                                    <input type="text" name="website" class="form-control">
                                 </div>
                                 <div class="col-md-4">
                                     <label>Established Year</label>

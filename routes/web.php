@@ -40,6 +40,8 @@ Route::post('user/register', 'User\UserController@register')->name('register_aja
 Route::post('user/verify-otp', 'User\UserController@verifyOTP')->name('verify_otp_ajax');
 Route::get('/forgot-password', [UserController::class, 'forgotPassword'])->name('forgot.password');
 Route::post('/forgot-password/send-otp', [UserController::class, 'sendForgotOtp'])->name('forgot.password.sendOtp');
+// Send Login OTP
+Route::post('login/send/otp', 'User\UserController@sendLoginOtp')->name('user.send-login-otp');
 
 Route::post('forgot-password', 'AppController@forgot_password')->name('forgot_password');
 Route::post('send-otp', 'AppController@visitor_otp')->name('send_otp');
@@ -556,9 +558,6 @@ Route::get('get/sub-sub-categories/{sub_category_id}', 'HomeController@getSubSub
 
 // Without Login Common Routes
 Route::post('category/related-form', 'Admin\CustomFormController@categoryRelatedForm')->name('category.related-form');
-
-// Send Login OTP
-Route::post('login/send/otp', 'HomeController@sendLoginOtp')->name('user.send-login-otp');
 
 // Claim Listing Routes
 Route::post('property/claim/{id}', 'Admin\PropertiesController@claim_listing')->name('admin.apply.claim');

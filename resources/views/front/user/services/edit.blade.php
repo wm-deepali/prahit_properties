@@ -122,14 +122,14 @@
                                             </select>
                                         </div>
 
-                                        <div class="form-group col-md-3">
+                                        <!-- <div class="form-group col-md-3">
                                             <label>Verified Status</label>
                                             <select name="verified_status" class="form-control" required>
                                                 <option value="Verified" {{ $business->verified_status == 'Verified' ? 'selected' : '' }}>Verified</option>
                                                 <option value="Unverified" {{ $business->verified_status == 'Unverified' ? 'selected' : '' }}>Unverified
                                                 </option>
                                             </select>
-                                        </div>
+                                        </div> -->
 
                                         <div class="form-group col-md-3">
                                             <label>Category</label>
@@ -232,7 +232,7 @@
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label>Website</label>
-                                            <input type="url" name="website" class="form-control"
+                                            <input type="text" name="website" class="form-control"
                                                 value="{{ $business->website }}">
                                         </div>
                                         <div class="form-group col-md-4">

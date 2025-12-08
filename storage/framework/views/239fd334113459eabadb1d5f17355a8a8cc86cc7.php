@@ -368,8 +368,17 @@
 
       <div class="newupdateSearchBarmobile" data-type="buy">
         <input type="text" placeholder="Search by Project, Locality, or Builder" class="newupdateSearchInput">
-        <button class="newupdateSearchIcon mobile-view" data-bs-toggle="offcanvas" href="#offcanvasExample"
-          role="button"><img src="<?php echo e(asset('images/filter (1).png')); ?>" alt="" style="width:30px; ">
+        <div class="searchmobilebutton">
+
+
+          <!--<button class="newupdateSearchIcon mobile-view" data-bs-toggle="offcanvas" href="#offcanvasExample"-->
+          <!--  role="button"><h3 class="m-0">Filters</h3>-->
+          <!--  </button>-->
+          <button class="newupdateSearchIcon mobile-view newupdateSearchBtnfilter" data-bs-toggle="offcanvas"
+            href="#offcanvasExample" role="button">Filters</button>
+          <button class="newupdateSearchBtn">Search</button>
+        </div>
+
       </div>
 
 
@@ -593,11 +602,11 @@
           </select>
 
           <!-- <select class="newupdateDropdown" id="sub_sub_category_id"  multiple>
-                                                                    <option value="">Property Type</option>
-                                                                    <?php $__currentLoopData = $exclusiveFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                                      <option value="<?php echo e($type->id); ?>"><?php echo e($type->sub_sub_category_name); ?></option>
-                                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                                  </select> -->
+                                                                      <option value="">Property Type</option>
+                                                                      <?php $__currentLoopData = $exclusiveFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                        <option value="<?php echo e($type->id); ?>"><?php echo e($type->sub_sub_category_name); ?></option>
+                                                                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                    </select> -->
 
           <select class="newupdateDropdown" id="budget">
             <option value="">Budget</option>
@@ -771,7 +780,7 @@
                           <div class="newdesign-image-proj position-relative">
                             <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                                                    ">
+                                                                            ">
                               <img
                                 src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'); ?>"
                                 alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -784,7 +793,7 @@
                             <div class="d-flex justify-content-between align-items-start">
                               <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                                                    "><?php echo e($value->title); ?></a>
+                                                                            "><?php echo e($value->title); ?></a>
                               </h5>
 
                             </div>
@@ -874,7 +883,7 @@
               <div class="newdesign-image-proj">
                 <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                  ">
+                                      ">
                   <img
                     src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://static.squareyards.com/resources/images/mumbai/project-image/west-center-meridian-courts-project-project-large-image1-6167.jpg?aio=w-578;h-316;crop;'); ?>"
                     class="img-fluid" alt="Property 1">
@@ -887,7 +896,7 @@
                 <div class="d-flex justify-content-between">
                   <h4 class="newdesign-proj-name"> <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                  "><?php echo e($value->title); ?></a></h4>
+                                      "><?php echo e($value->title); ?></a></h4>
                   <!--<span class="newdesign-proj-category">Villa</span>-->
                 </div>
                 <hr class="" style="margin-bottom:10px; margin-top:10px;">
@@ -964,7 +973,7 @@
                       <div class="newdesign-image-proj position-relative">
                         <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                        ">
+                                            ">
                           <img
                             src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'); ?>"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -977,7 +986,7 @@
                         <div class="d-flex justify-content-between align-items-start">
                           <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                        "><?php echo e($value->title); ?></a>
+                                            "><?php echo e($value->title); ?></a>
                           </h5>
 
                         </div>
@@ -1082,7 +1091,10 @@
                           <img src="<?php echo e(asset('images/verify.png')); ?>" alt="verified">
                         <?php endif; ?>
 
-                        <p class="share-now"><i class="fa-solid fa-share-nodes"></i></p>
+                        <p class="share-now"
+                          onclick="shareBusiness('<?php echo e(route('business.details', ['id' => $list->id, 'slug' => $list->slug])); ?>', '<?php echo e($list->business_name); ?>')">
+                          <i class="fa-solid fa-share-nodes"></i>
+                        </p>
                       </div>
                     </div>
 
@@ -1103,7 +1115,7 @@
                         ?>
 
                         <button class="category-name-btn"><?php echo e($shortCat); ?></button>
-                        <p class="m-0"><i class="fa-solid fa-eye"></i> <?php echo e($value->total_views ?? 0); ?></p>
+                        <p class="m-0"><i class="fa-solid fa-eye"></i> <?php echo e($list->total_views ?? 0); ?></p>
                       </div>
                       <div class="horizontal-line"></div>
                       <div class="d-flex justify-content-between align-items-center p-2">
@@ -1184,7 +1196,7 @@
                       <div class="newdesign-image-proj position-relative">
                         <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                        ">
+                                            ">
                           <img
                             src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'); ?>"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1197,7 +1209,7 @@
                         <div class="d-flex justify-content-between align-items-start">
                           <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                        "><?php echo e($value->title); ?></a>
+                                            "><?php echo e($value->title); ?></a>
                           </h5>
 
                         </div>
@@ -1298,7 +1310,7 @@
                       <div class="newdesign-image-proj position-relative">
                         <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                        ">
+                                            ">
                           <img
                             src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'); ?>"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1311,7 +1323,7 @@
                         <div class="d-flex justify-content-between align-items-start">
                           <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                        "><?php echo e($value->title); ?></a>
+                                            "><?php echo e($value->title); ?></a>
                           </h5>
 
                         </div>
@@ -1414,7 +1426,7 @@
                       <div class="newdesign-image-proj position-relative">
                         <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                        ">
+                                            ">
                           <img
                             src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'); ?>"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1427,7 +1439,7 @@
                         <div class="d-flex justify-content-between align-items-start">
                           <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                        "><?php echo e($value->title); ?></a>
+                                            "><?php echo e($value->title); ?></a>
                           </h5>
 
                         </div>
@@ -1713,7 +1725,7 @@
                         <div class="newdesign-image-proj position-relative">
                           <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                                      ">
+                                                            ">
                             <img
                               src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'); ?>"
                               alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1726,7 +1738,7 @@
                           <div class="d-flex justify-content-between align-items-start">
                             <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                                      "><?php echo e($value->title); ?></a>
+                                                            "><?php echo e($value->title); ?></a>
                             </h5>
 
                           </div>
@@ -1832,7 +1844,7 @@
                       <div class="newdesign-image-proj position-relative">
                         <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                        ">
+                                            ">
                           <img
                             src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'); ?>"
                             alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1845,7 +1857,7 @@
                         <div class="d-flex justify-content-between align-items-start">
                           <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                        "><?php echo e($value->title); ?></a>
+                                            "><?php echo e($value->title); ?></a>
                           </h5>
 
                         </div>
@@ -1933,7 +1945,7 @@
                         <div class="newdesign-image-proj position-relative">
                           <a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                                      ">
+                                                            ">
                             <img
                               src="<?php echo e(isset($value->PropertyGallery[0]->image_path) ? asset('') . $value->PropertyGallery[0]->image_path : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'); ?>"
                               alt="Office 1" class="img-fluid rounded-top" style="cursor: pointer;">
@@ -1946,7 +1958,7 @@
                           <div class="d-flex justify-content-between align-items-start">
                             <h5 class="fw-semibold mb-1" style="font-size:18px;cursor: pointer;"><a href="<?php echo e(route('property_detail', ['id' => $value->id, 'slug' => $value->slug])); ?>
 
-                                                      "><?php echo e($value->title); ?></a>
+                                                            "><?php echo e($value->title); ?></a>
                             </h5>
 
                           </div>
@@ -2240,6 +2252,25 @@
 
 <?php $__env->startSection('js'); ?>
 
+  <script>
+    function shareBusiness(url, title) {
+      if (navigator.share) {
+        // Mobile Share API available
+        navigator.share({
+          title: title,
+          text: "Check out this business on our directory",
+          url: url
+        }).catch(() => { });
+      } else {
+        // If device does not support share, copy link
+        navigator.clipboard.writeText(url).then(() => {
+          alert("Link copied to clipboard!");
+        }).catch(() => {
+          alert("Unable to copy link!");
+        });
+      }
+    }
+  </script>
 
   <script>
     function detectLocation() {
@@ -2280,22 +2311,22 @@
         document.getElementById('latitude').value = lat;
         document.getElementById('longitude').value = lng;
 
-        const citySelect = document.querySelector('.newupdateSearchBar select');
-        if (citySelect && city) {
-          let found = false;
-          for (let option of citySelect.options) {
-            if (option.text.toLowerCase() === city.toLowerCase()) {
-              option.selected = true;
-              found = true;
-              break;
-            }
-          }
-          if (!found) {
-            const newOption = new Option(city, city);
-            citySelect.add(newOption, 0);
-            newOption.selected = true;
-          }
-        }
+        // const citySelect = document.querySelector('.newupdateSearchBar select');
+        // if (citySelect && city) {
+        //   let found = false;
+        //   for (let option of citySelect.options) {
+        //     if (option.text.toLowerCase() === city.toLowerCase()) {
+        //       option.selected = true;
+        //       found = true;
+        //       break;
+        //     }
+        //   }
+        //   if (!found) {
+        //     const newOption = new Option(city, city);
+        //     citySelect.add(newOption, 0);
+        //     newOption.selected = true;
+        //   }
+        // }
 
         console.log('IP-based location:', city, lat, lng);
       } catch (err) {
@@ -2391,230 +2422,230 @@
         switch (tabType) {
           case 'buy':
             mobileFilterContent.innerHTML = `
-                                                  <!-- Property Category -->
-                                                  <div class="filter-item border-bottom py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Property Category</h6>
-                                                      <select class="form-select sub_category_items" id="mobile_sub_category_id">
-                                                          <option value="">Select Category</option>
-                                                          <?php $__currentLoopData = $buyFilters['categories']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e($cat->id); ?>"><?php echo e($cat->sub_category_name); ?></option>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </select>
-                                                  </div>
+                                                    <!-- Property Category -->
+                                                    <div class="filter-item border-bottom py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Property Category</h6>
+                                                        <select class="form-select sub_category_items" id="mobile_sub_category_id">
+                                                            <option value="">Select Category</option>
+                                                            <?php $__currentLoopData = $buyFilters['categories']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <option value="<?php echo e($cat->id); ?>"><?php echo e($cat->sub_category_name); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                    </div>
 
-                                                  <!-- Property Type -->
-                                                  <div class="filter-item border-bottom py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Property Type</h6>
-                                                      <div class="property-type-checkboxes" style="max-height:150px; padding-left:10px; overflow-y:auto;">
-                                                          <?php $__currentLoopData = $buyFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <div class="form-check" data-category="<?php echo e($type->sub_category_id); ?>">
-                                                                <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
-                                                                       name="mobile_sub_sub_category_ids[]"
-                                                                       id="mobile_subsub_<?php echo e($type->id); ?>" value="<?php echo e($type->id); ?>">
-                                                                <label class="form-check-label" for="mobile_subsub_<?php echo e($type->id); ?>">
-                                                                    <?php echo e($type->sub_sub_category_name); ?>
+                                                    <!-- Property Type -->
+                                                    <div class="filter-item border-bottom py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Property Type</h6>
+                                                        <div class="property-type-checkboxes" style="max-height:150px; padding-left:10px; overflow-y:auto;">
+                                                            <?php $__currentLoopData = $buyFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <div class="form-check" data-category="<?php echo e($type->sub_category_id); ?>">
+                                                                  <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
+                                                                         name="mobile_sub_sub_category_ids[]"
+                                                                         id="mobile_subsub_<?php echo e($type->id); ?>" value="<?php echo e($type->id); ?>">
+                                                                  <label class="form-check-label" for="mobile_subsub_<?php echo e($type->id); ?>">
+                                                                      <?php echo e($type->sub_sub_category_name); ?>
 
-                                                                </label>
-                                                            </div>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </div>
-                                                  </div>
+                                                                  </label>
+                                                              </div>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </div>
+                                                    </div>
 
-                                                  <!-- Budget -->
-                                                  <div class="filter-item border-bottom py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Budget</h6>
-                                                      <select class="form-select" id="mobile_budget">
-                                                          <option value="">Select Budget</option>
-                                                          <?php $__currentLoopData = $buyFilters['budgets']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e($budget['query']); ?>"><?php echo e($budget['label']); ?></option>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </select>
-                                                  </div>
+                                                    <!-- Budget -->
+                                                    <div class="filter-item border-bottom py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Budget</h6>
+                                                        <select class="form-select" id="mobile_budget">
+                                                            <option value="">Select Budget</option>
+                                                            <?php $__currentLoopData = $buyFilters['budgets']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <option value="<?php echo e($budget['query']); ?>"><?php echo e($budget['label']); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                    </div>
 
-                                                  <!-- Posted By -->
-                                                  <div class="filter-item py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Posted By</h6>
-                                                      <select class="form-select" id="mobile_user_role">
-                                                          <option value="">Select</option>
-                                                          <?php $__currentLoopData = $buyFilters['posted_by']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e(strtolower($poster)); ?>"><?php echo e($poster); ?></option>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </select>
-                                                  </div>
-                                              `;
+                                                    <!-- Posted By -->
+                                                    <div class="filter-item py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Posted By</h6>
+                                                        <select class="form-select" id="mobile_user_role">
+                                                            <option value="">Select</option>
+                                                            <?php $__currentLoopData = $buyFilters['posted_by']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <option value="<?php echo e(strtolower($poster)); ?>"><?php echo e($poster); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                    </div>
+                                                `;
             break;
 
           case 'rental':
             mobileFilterContent.innerHTML = `
-                                                  <!-- Property Category -->
-                                                  <div class="filter-item border-bottom py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Property Category</h6>
-                                                      <select class="form-select sub_category_items" id="mobile_sub_category_id">
-                                                          <option value="">Select Category</option>
-                                                          <?php $__currentLoopData = $rentalFilters['categories']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e($cat->id); ?>"><?php echo e($cat->sub_category_name); ?></option>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </select>
-                                                  </div>
+                                                    <!-- Property Category -->
+                                                    <div class="filter-item border-bottom py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Property Category</h6>
+                                                        <select class="form-select sub_category_items" id="mobile_sub_category_id">
+                                                            <option value="">Select Category</option>
+                                                            <?php $__currentLoopData = $rentalFilters['categories']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <option value="<?php echo e($cat->id); ?>"><?php echo e($cat->sub_category_name); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                    </div>
 
-                                                  <!-- Property Type -->
-                                                  <div class="filter-item border-bottom py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Property Type</h6>
-                                                      <div class="property-type-checkboxes" style="max-height:150px;padding-left:10px; overflow-y:auto;">
-                                                          <?php $__currentLoopData = $rentalFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <div class="form-check" data-category="<?php echo e($v->sub_category_id); ?>">
-                                                                <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
-                                                                       name="mobile_sub_sub_category_ids[]"
-                                                                       id="mobile_subsub_<?php echo e($v->id); ?>" value="<?php echo e($v->id); ?>">
-                                                                <label class="form-check-label" for="mobile_subsub_<?php echo e($v->id); ?>">
-                                                                    <?php echo e($v->sub_sub_category_name); ?>
+                                                    <!-- Property Type -->
+                                                    <div class="filter-item border-bottom py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Property Type</h6>
+                                                        <div class="property-type-checkboxes" style="max-height:150px;padding-left:10px; overflow-y:auto;">
+                                                            <?php $__currentLoopData = $rentalFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <div class="form-check" data-category="<?php echo e($v->sub_category_id); ?>">
+                                                                  <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
+                                                                         name="mobile_sub_sub_category_ids[]"
+                                                                         id="mobile_subsub_<?php echo e($v->id); ?>" value="<?php echo e($v->id); ?>">
+                                                                  <label class="form-check-label" for="mobile_subsub_<?php echo e($v->id); ?>">
+                                                                      <?php echo e($v->sub_sub_category_name); ?>
 
-                                                                </label>
-                                                            </div>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </div>
-                                                  </div>
+                                                                  </label>
+                                                              </div>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </div>
+                                                    </div>
 
-                                                  <!-- Budget -->
-                                                  <div class="filter-item border-bottom py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Budget</h6>
-                                                      <select class="form-select" id="mobile_budget">
-                                                          <option value="">Select Budget</option>
-                                                          <?php $__currentLoopData = $rentalFilters['budgets']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e($budget['query']); ?>"><?php echo e($budget['label']); ?></option>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </select>
-                                                  </div>
+                                                    <!-- Budget -->
+                                                    <div class="filter-item border-bottom py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Budget</h6>
+                                                        <select class="form-select" id="mobile_budget">
+                                                            <option value="">Select Budget</option>
+                                                            <?php $__currentLoopData = $rentalFilters['budgets']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <option value="<?php echo e($budget['query']); ?>"><?php echo e($budget['label']); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                    </div>
 
-                                                  <!-- Posted By -->
-                                                  <div class="filter-item py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Posted By</h6>
-                                                      <select class="form-select" id="mobile_user_role">
-                                                          <option value="">Select</option>
-                                                          <?php $__currentLoopData = $rentalFilters['posted_by']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e(strtolower($poster)); ?>"><?php echo e($poster); ?></option>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </select>
-                                                  </div>
-                                              `;
+                                                    <!-- Posted By -->
+                                                    <div class="filter-item py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Posted By</h6>
+                                                        <select class="form-select" id="mobile_user_role">
+                                                            <option value="">Select</option>
+                                                            <?php $__currentLoopData = $rentalFilters['posted_by']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <option value="<?php echo e(strtolower($poster)); ?>"><?php echo e($poster); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                    </div>
+                                                `;
             break;
 
           case 'pg-hostels':
             mobileFilterContent.innerHTML = `
-                                                  <!-- Budget -->
-                                                  <div class="filter-item border-bottom py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Budget</h6>
-                                                      <select class="form-select" id="mobile_budget">
-                                                          <option value="">Select Budget</option>
-                                                          <?php $__currentLoopData = $pgFilters['budgets']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e($budget['query']); ?>"><?php echo e($budget['label']); ?></option>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </select>
-                                                  </div>
+                                                    <!-- Budget -->
+                                                    <div class="filter-item border-bottom py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Budget</h6>
+                                                        <select class="form-select" id="mobile_budget">
+                                                            <option value="">Select Budget</option>
+                                                            <?php $__currentLoopData = $pgFilters['budgets']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <option value="<?php echo e($budget['query']); ?>"><?php echo e($budget['label']); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                    </div>
 
-                                                  <!-- Available For -->
-                                                  <div class="filter-item border-bottom py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Available For</h6>
-                                                      <select class="form-select" id="mobile_pg_availavle_for">
-                                                          <option value="">Select</option>
-                                                          <?php $__currentLoopData = $pgFilters['available_for']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $option): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e(strtolower($option)); ?>"><?php echo e($option); ?></option>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </select>
-                                                  </div>
+                                                    <!-- Available For -->
+                                                    <div class="filter-item border-bottom py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Available For</h6>
+                                                        <select class="form-select" id="mobile_pg_availavle_for">
+                                                            <option value="">Select</option>
+                                                            <?php $__currentLoopData = $pgFilters['available_for']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $option): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <option value="<?php echo e(strtolower($option)); ?>"><?php echo e($option); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                    </div>
 
-                                                  <!-- Posted By -->
-                                                  <div class="filter-item py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Posted By</h6>
-                                                      <select class="form-select" id="mobile_user_role">
-                                                          <option value="">Select</option>
-                                                          <?php $__currentLoopData = $pgFilters['posted_by']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e(strtolower($poster)); ?>"><?php echo e($poster); ?></option>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </select>
-                                                  </div>
-                                              `;
+                                                    <!-- Posted By -->
+                                                    <div class="filter-item py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Posted By</h6>
+                                                        <select class="form-select" id="mobile_user_role">
+                                                            <option value="">Select</option>
+                                                            <?php $__currentLoopData = $pgFilters['posted_by']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <option value="<?php echo e(strtolower($poster)); ?>"><?php echo e($poster); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                    </div>
+                                                `;
             break;
 
           case 'exculsive-launch':
             mobileFilterContent.innerHTML = `
-                                                  <!-- Sub Category -->
-                                                  <div class="filter-item border-bottom py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Sub Category</h6>
-                                                      <select class="form-select sub_category_items" id="mobile_sub_category_id">
-                                                          <option value="">Select Category</option>
-                                                          <?php $__currentLoopData = $exclusiveFilters['categories']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e($cat->id); ?>"><?php echo e($cat->sub_category_name); ?></option>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </select>
-                                                  </div>
+                                                    <!-- Sub Category -->
+                                                    <div class="filter-item border-bottom py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Sub Category</h6>
+                                                        <select class="form-select sub_category_items" id="mobile_sub_category_id">
+                                                            <option value="">Select Category</option>
+                                                            <?php $__currentLoopData = $exclusiveFilters['categories']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <option value="<?php echo e($cat->id); ?>"><?php echo e($cat->sub_category_name); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                    </div>
 
-                                                  <!-- Budget -->
-                                                  <div class="filter-item border-bottom py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Budget</h6>
-                                                      <select class="form-select" id="mobile_budget">
-                                                          <option value="">Select Budget</option>
-                                                          <?php $__currentLoopData = $exclusiveFilters['budgets']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e($budget['query']); ?>"><?php echo e($budget['label']); ?></option>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </select>
-                                                  </div>
+                                                    <!-- Budget -->
+                                                    <div class="filter-item border-bottom py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Budget</h6>
+                                                        <select class="form-select" id="mobile_budget">
+                                                            <option value="">Select Budget</option>
+                                                            <?php $__currentLoopData = $exclusiveFilters['budgets']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <option value="<?php echo e($budget['query']); ?>"><?php echo e($budget['label']); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                    </div>
 
-                                                  <!-- Posted By -->
-                                                  <div class="filter-item py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Posted By</h6>
-                                                      <select class="form-select" id="mobile_user_role">
-                                                          <option value="">Select</option>
-                                                          <?php $__currentLoopData = $exclusiveFilters['posted_by']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e(strtolower($poster)); ?>"><?php echo e($poster); ?></option>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </select>
-                                                  </div>
-                                              `;
+                                                    <!-- Posted By -->
+                                                    <div class="filter-item py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Posted By</h6>
+                                                        <select class="form-select" id="mobile_user_role">
+                                                            <option value="">Select</option>
+                                                            <?php $__currentLoopData = $exclusiveFilters['posted_by']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <option value="<?php echo e(strtolower($poster)); ?>"><?php echo e($poster); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                    </div>
+                                                `;
             break;
 
           case 'plot-land':
             mobileFilterContent.innerHTML = `
-                                                  <!-- Property Type -->
-                                                  <div class="filter-item border-bottom py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Property Type</h6>
-                                                      <div class="property-type-checkboxes" style="max-height:150px;padding-left:10px; overflow-y:auto;">
-                                                          <?php $__currentLoopData = $plotFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <div class="form-check">
-                                                                <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
-                                                                       name="mobile_sub_sub_category_ids[]"
-                                                                       id="mobile_subsub_<?php echo e($v->id); ?>" value="<?php echo e($v->id); ?>">
-                                                                <label class="form-check-label" for="mobile_subsub_<?php echo e($v->id); ?>">
-                                                                    <?php echo e($v->sub_sub_category_name); ?>
+                                                    <!-- Property Type -->
+                                                    <div class="filter-item border-bottom py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Property Type</h6>
+                                                        <div class="property-type-checkboxes" style="max-height:150px;padding-left:10px; overflow-y:auto;">
+                                                            <?php $__currentLoopData = $plotFilters['types']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <div class="form-check">
+                                                                  <input class="form-check-input mobile-sub-sub-checkbox" type="checkbox" 
+                                                                         name="mobile_sub_sub_category_ids[]"
+                                                                         id="mobile_subsub_<?php echo e($v->id); ?>" value="<?php echo e($v->id); ?>">
+                                                                  <label class="form-check-label" for="mobile_subsub_<?php echo e($v->id); ?>">
+                                                                      <?php echo e($v->sub_sub_category_name); ?>
 
-                                                                </label>
-                                                            </div>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </div>
-                                                  </div>
+                                                                  </label>
+                                                              </div>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </div>
+                                                    </div>
 
-                                                  <!-- Budget -->
-                                                  <div class="filter-item border-bottom py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Budget</h6>
-                                                      <select class="form-select" id="mobile_budget">
-                                                          <option value="">Select Budget</option>
-                                                          <?php $__currentLoopData = $plotFilters['budgets']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e($budget['query']); ?>"><?php echo e($budget['label']); ?></option>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </select>
-                                                  </div>
+                                                    <!-- Budget -->
+                                                    <div class="filter-item border-bottom py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Budget</h6>
+                                                        <select class="form-select" id="mobile_budget">
+                                                            <option value="">Select Budget</option>
+                                                            <?php $__currentLoopData = $plotFilters['budgets']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $budget): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <option value="<?php echo e($budget['query']); ?>"><?php echo e($budget['label']); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                    </div>
 
-                                                  <!-- Posted By -->
-                                                  <div class="filter-item py-2 mb-3">
-                                                      <h6 class="fw-semibold mb-2">Posted By</h6>
-                                                      <select class="form-select" id="mobile_user_role">
-                                                          <option value="">Select</option>
-                                                          <?php $__currentLoopData = $plotFilters['posted_by']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e(strtolower($poster)); ?>"><?php echo e($poster); ?></option>
-                                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                      </select>
-                                                  </div>
-                                              `;
+                                                    <!-- Posted By -->
+                                                    <div class="filter-item py-2 mb-3">
+                                                        <h6 class="fw-semibold mb-2">Posted By</h6>
+                                                        <select class="form-select" id="mobile_user_role">
+                                                            <option value="">Select</option>
+                                                            <?php $__currentLoopData = $plotFilters['posted_by']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $poster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                              <option value="<?php echo e(strtolower($poster)); ?>"><?php echo e($poster); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                    </div>
+                                                `;
             break;
         }
 

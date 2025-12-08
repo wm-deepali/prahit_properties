@@ -173,6 +173,7 @@ class Helper
     {
         // Get all active business listings and eager load user + subscription + package
         $listings = BusinessListing::where('Status', 'Active')
+            ->where('is_published', true)
             ->with(['user.activeBusinessSubscription.package']) // eager load user subscription and package
             ->get();
 

@@ -1,5 +1,5 @@
 
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <?php $__env->startSection('content'); ?>
 
     <style>
@@ -95,19 +95,19 @@
                 <small>All fields are required</small>
 
                 <!-- Google Login -->
-                <div class="google-signin my-3">
-                    <img src="<?php echo e(asset('images/google.png')); ?>" height="22">
-                    <p class="m-0">Sign in with Google</p>
-                </div>
+                <!--<div class="google-signin my-3">-->
+                <!--    <img src="<?php echo e(asset('images/google.png')); ?>" height="22">-->
+                <!--    <p class="m-0">Sign in with Google</p>-->
+                <!--</div>-->
 
-                <div class="devide-or d-flex align-items-center my-3">
-                    <div class="flex-grow-1 border-top"></div>
-                    <div class="px-2">OR</div>
-                    <div class="flex-grow-1 border-top"></div>
-                </div>
+                <!--<div class="devide-or d-flex align-items-center my-3">-->
+                <!--    <div class="flex-grow-1 border-top"></div>-->
+                <!--    <div class="px-2">OR</div>-->
+                <!--    <div class="flex-grow-1 border-top"></div>-->
+                <!--</div>-->
 
                 <!-- LOGIN FORM -->
-                <form id="login_form">
+                <form id="login_form" class="my-3">
 
                     <?php echo csrf_field(); ?>
 
@@ -147,7 +147,7 @@
                 </form>
 
                 <div class="text-center mt-3">
-                    <p>Don't have an account? <a href="#">Create Account</a></p>
+                    <p>Don't have an account? <a href="<?php echo e(route('user.register')); ?>">Create Account</a></p>
                 </div>
 
             </div>
@@ -162,8 +162,8 @@
             if (type === "otp") {
                 $('#view-password').hide();
                 $('#check-login').hide();
-                $('#view-otp').show();
-                $('#check-otp').show();
+                $('#view-otp').hide();        // hide otp input at first
+                $('#check-otp').show();       // show SEND OTP button only
 
                 $('#login-type-otp').hide();
                 $('#login-type-password').show();
@@ -193,14 +193,24 @@
                     email: email
                 },
                 beforeSend: function () {
-                    // loader if you want
+                    $(".btn-send").attr('disabled', true);
                 },
                 success: function (data) {
                     if (data.status == 200) {
                         Swal.fire('', data.msg, 'success');
+
+                        // After OTP sent → show OTP input + Login button
+                        $('#view-otp').show();
+                        $('#check-login').show();
+
+                        // hide Send OTP button
+                        $('#check-otp').hide();
                     } else {
                         Swal.fire('', data.msg, 'warning');
                     }
+                },
+                complete: function () {
+                    $(".btn-send").attr('disabled', false);
                 }
             });
         }
@@ -219,10 +229,7 @@
                             toastr.success(response.message);
 
                             let redirectAfterLogin = "<?php echo e($redirectUrl); ?>";
-                            if (postLoginRedirect) {
-                                window.location.href = postLoginRedirect;
-                                postLoginRedirect = null;
-                            } else if (redirectAfterLogin) {
+                            if (redirectAfterLogin) {
                                 window.location.href = redirectAfterLogin;
                             } else {
                                 window.location.href = '/user/dashboard';

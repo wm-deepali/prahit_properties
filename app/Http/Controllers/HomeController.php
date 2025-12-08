@@ -233,7 +233,7 @@ class HomeController extends AppController
 				// IDs sent from front-end
 				$query->whereIn('property_status', $statuses);
 			} else {
-				// Names sent from front-end
+			// Names sent from front-end
 				$statusIds = PropertyStatus::whereIn('name', $statuses)->pluck('id');
 				$query->whereIn('property_status', $statusIds);
 			}
@@ -1960,42 +1960,6 @@ class HomeController extends AppController
 	{
 		$subSubCategories = SubSubCategory::where('sub_category_id', $id)->get();
 		return response()->json(['subsubcategories' => $subSubCategories]);
-	}
-
-	public function sendLoginOtp(Request $request)
-	{
-		$check_input_type = $this->checkValidLoginType($request->email);
-		if ($check_input_type == 'email') {
-			$picked = User::where('email', $request->email)->first();
-		} else if ($check_input_type == 'mobile') {
-			$picked = User::where('mobile_number', $request->email)->first();
-		}
-		if (!$picked) {
-			$data['status'] = 500;
-			$data['data'] = null;
-			$data['msg'] = 'User not exist, for this email or mobile number';
-			return $data;
-		}
-		$otp = rand(100000, 999999);
-		Otp::create(
-			[
-				'otp' => $otp,
-				'user_id' => $picked->id
-			]
-		);
-		$emailOTPtemplate = EmailTemplate::where('id', 4)->first();
-		$replaceOTPtemplate = array(
-			'#NAME' => $picked->firstname . ' ' . $picked->lastname,
-			'#OTP' => $otp
-		);
-		$this->__sendEmail($picked, $emailOTPtemplate->template, $emailOTPtemplate->subject, $emailOTPtemplate->image, $replaceOTPtemplate);
-		// Send SMS
-		$message = "Your one time password is  " . $otp . " %0aThank You.,%0aWeb Mingo IT Solutions Pvt. Ltd.%0aVisit: https://www.webmingo.in%0aWhatsApp: 7499366724";
-		$this->sendGlobalSMS($picked->mobile_number, $message);
-		$data['status'] = 200;
-		$data['data'] = null;
-		$data['msg'] = 'OTP Successfully Send On User Email & Mobile Number.';
-		return $data;
 	}
 
 	public function userVerifyEmail()

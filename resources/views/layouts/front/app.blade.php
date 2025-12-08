@@ -625,21 +625,59 @@
         <h3 class="m-0 d-flex align-items-center" data-bs-toggle="offcanvas" href="#offcanvasExample1" role="button"><i
             class="fa-solid fa-bars" style="font-size: 22px;"></i></h3>
         <a class="navbar-brand me-3" href="{{ url('/') }}">
-          <img src="{{ asset('images/logoicon.png') }}" alt="Logo" style="height:40px;">
+          <img src="{{ asset('images/logoicon.png') }}" alt="Logo" style="height:30px;">
         </a>
       </div>
 
-      <a href="{{ Auth::check() ? route('create_property') : route('user.login', ['redirect' => url('post-property')]) }}"
-        class="btn  fw-semibold px-3 py-1 rounded-3"
-        style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;">
-        <i class="fas fa-pencil-alt me-1"></i> Post Property <span class="badge bg-warning text-dark ms-1">Free</span>
-      </a>
-      <a href="{{ Auth::check() ? route('create_business_listing') : route('user.login', ['redirect' => url('business-listing/create')]) }}"
-        class="btn desktop-menu  fw-semibold px-3 py-1 rounded-3"
-        style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;">
-        <i class="fas fa-briefcase me-1"></i> Post Services
-        <span class="badge bg-warning text-dark ms-1">Free</span>
-      </a>
+      @auth
+          @if(in_array(\Auth::user()->role, ['owner', 'agent', 'builder', 'user', 'service_provider']))
+
+
+            <div class="dropdown custom-dropdown user-dropdown">
+              <a href="#" class="btn btn-outline-dark fw-semibold" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="far fa-user-circle fs-4 me-1" style="font-size:18px;"></i>
+                {{Auth::user()->firstname}} {{Auth::user()->lastname}}
+              </a>
+              <ul class="dropdown-menu" style="left:-100px;">
+                <li>
+                  <a class="dropdown-item" href="/user/my-wishlist">Shortlisted</a>
+                </li>
+                <li><a class="dropdown-item" href="/user/recent-viewed-properties">Recently Viewed</a></li>
+                <li>
+                  <a class="dropdown-item" href="/user/sent-inquries">Contacted Properties</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li>
+                  <a href="{{url('user/dashboard')}}" class="dropdown-item btn w-100 text-center">
+                    My Dashboard
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li>
+
+                  <a class="dropdown-item text-danger" href="#"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    Logout
+                  </a>
+                  <form id="logout-form" action="{{ url('user/logout') }}" method="POST" style="display: none;">
+                    {{ csrf_field() }}
+                  </form>
+
+                </li>
+              </ul>
+            </div>
+          @endif
+
+        @endauth
+        @guest
+          <a href="{{ route('user.login') }}" class="btn btn-outline-dark fw-semibold">
+            <i class="far fa-user me-1"></i> Login 
+          </a>
+        @endguest
     </div>
 
 
@@ -654,20 +692,17 @@
         <div class="togle-menu-profile">
           @auth
             <div class="d-flex gap-3 align-items-center">
-              @php
-                $avatar = "";
+             @php
+                $avatar = "https://static.99acres.com/universalhp/img/ProfileIcon.shared.png";
 
                 if (Auth::check()) {
-                  // User is logged in
-                  if (!empty(Auth::user()->avatar) && file_exists(public_path(Auth::user()->avatar))) {
-                    $avatar = url(Auth::user()->avatar);
-                  } else {
-                    $avatar = 'https://static.99acres.com/universalhp/img/ProfileIcon.shared.png';
-                  }
-                } else {
-                  // User is not logged in - show default avatar
-                  $avatar = 'https://static.99acres.com/universalhp/img/ProfileIcon.shared.png';
+                  $avatar = Auth::user()->avatar ?? '';
+                  if ($avatar && Storage::disk('public')->exists($avatar)) {
+                    // If file exists in storage
+                    $avatar = asset('storage/' . $avatar);
+                  } 
                 }
+
               @endphp
 
               <img src="{{ $avatar }}" alt="">
@@ -765,7 +800,7 @@
           <div class="rec-act" style="width:100%;overflow:hidden;border-radius: 7px;">
             <h2 class="m-0"><i class="fa-solid fa-phone-volume"></i></h2>
             <p class="m-0">
-              <a class="text-decoration-none text-inherit" href="/user/sent-inquiries">Contacted</a>
+              <a class="text-decoration-none text-inherit" href="/user/sent-inquries">Contacted</a>
             </p>
           </div>
         </div>
@@ -1668,44 +1703,111 @@
   </div>
 
   <!-- mobile view header -->
-  <div class="bb-top-menu-header mobile-menu">
-    <nav class="bb-nav">
+  
+  <div class="new-mobile-menu mobile-menu">
+      
+      <div class="d-flex justify-content-between align-items-center p-2">
+     
+
+      <a href="{{ Auth::check() ? route('create_property') : route('user.login', ['redirect' => url('post-property')]) }}"
+        class="btn  fw-semibold px-2 py-1 rounded-3"
+        style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;">
+        <i class="fas fa-pencil-alt me-1"></i> Post Property 
+      </a>
+      <a href="{{ Auth::check() ? route('create_business_listing') : route('user.login', ['redirect' => url('business-listing/create')]) }}"
+        class="btn  fw-semibold px-2 py-1 rounded-3"
+        style="background:#fff; height:33px;border:1px solid #f9f9f9;font-size:13px;">
+        <i class="fas fa-briefcase me-1"></i> Post Services
+        <!--<span class="badge bg-warning text-dark ms-1">Free</span>-->
+      </a>
+       <div class="d-flex align-items-center gap-2">
+        <h3 class="m-0 d-flex align-items-center" data-bs-toggle="offcanvas" href="#offcanvasExamplenew" role="button"><i
+            class="fa-solid fa-list" style="font-size: 22px;"></i></h3>
+        
+      </div>
+      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExamplenew" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasExampleLabel"></h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body" style="background:#f9f9f9;">
+      <div class="toggle-menu-mobile">
+        
+ <nav class="bb-nav">
       <ul class="bb-nav-list">
         <li class="bb-nav-item">
           <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
-            aria-controls="offcanvasWithBothOptions" class="bb-nav-link">Buyers</a>
+            aria-controls="offcanvasWithBothOptions" class="bb-nav-link"><i class="fa-solid fa-shop"></i> Buyers</a>
         </li>
-        <li class="bb-nav-item">
-          <div class="ver-line"></div>
-        </li>
-        <li class="bb-nav-item">
-          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
-            aria-controls="offcanvasWithBothOptions" class="bb-nav-link">Sellers</a>
-        </li>
-        <li class="bb-nav-item">
-          <div class="ver-line"></div>
-        </li>
+        <div class="horizon"></div>
+        
         <li class="bb-nav-item">
           <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
-            aria-controls="offcanvasWithBothOptions" class="bb-nav-link">Rent</a>
+            aria-controls="offcanvasWithBothOptions" class="bb-nav-link"><i class="fa-brands fa-sellcast"></i> Sellers</a>
         </li>
-        <li class="bb-nav-item">
-          <div class="ver-line"></div>
-        </li>
+        <div class="horizon"></div>
         <li class="bb-nav-item">
           <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
-            aria-controls="offcanvasWithBothOptions" class="bb-nav-link">Directory & Services</a>
+            aria-controls="offcanvasWithBothOptions" class="bb-nav-link"><i class="fa-brands fa-renren"></i> Rent</a>
         </li>
-        <li class="bb-nav-item">
-          <div class="ver-line"></div>
-        </li>
+       <div class="horizon"></div>
         <li class="bb-nav-item">
           <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
-            aria-controls="offcanvasWithBothOptions" class="bb-nav-link">Exclusive Launch</a>
+            aria-controls="offcanvasWithBothOptions" class="bb-nav-link"> <i class="fa-solid fa-book-atlas"></i> Directory & Services</a>
+        </li>
+        <div class="horizon"></div>
+        <li class="bb-nav-item">
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
+            aria-controls="offcanvasWithBothOptions" class="bb-nav-link"><i class="fa-solid fa-rocket"></i> Exclusive Launch</a>
         </li>
       </ul>
     </nav>
+        
+
+      </div>
+    </div>
   </div>
+    </div>
+  </div>
+  
+  <!--<div class="bb-top-menu-header mobile-menu">-->
+  <!--  <nav class="bb-nav">-->
+  <!--    <ul class="bb-nav-list">-->
+  <!--      <li class="bb-nav-item">-->
+  <!--        <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"-->
+  <!--          aria-controls="offcanvasWithBothOptions" class="bb-nav-link">Buyers</a>-->
+  <!--      </li>-->
+  <!--      <li class="bb-nav-item">-->
+  <!--        <div class="ver-line"></div>-->
+  <!--      </li>-->
+  <!--      <li class="bb-nav-item">-->
+  <!--        <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"-->
+  <!--          aria-controls="offcanvasWithBothOptions" class="bb-nav-link">Sellers</a>-->
+  <!--      </li>-->
+  <!--      <li class="bb-nav-item">-->
+  <!--        <div class="ver-line"></div>-->
+  <!--      </li>-->
+  <!--      <li class="bb-nav-item">-->
+  <!--        <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"-->
+  <!--          aria-controls="offcanvasWithBothOptions" class="bb-nav-link">Rent</a>-->
+  <!--      </li>-->
+  <!--      <li class="bb-nav-item">-->
+  <!--        <div class="ver-line"></div>-->
+  <!--      </li>-->
+  <!--      <li class="bb-nav-item">-->
+  <!--        <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"-->
+  <!--          aria-controls="offcanvasWithBothOptions" class="bb-nav-link">Directory & Services</a>-->
+  <!--      </li>-->
+  <!--      <li class="bb-nav-item">-->
+  <!--        <div class="ver-line"></div>-->
+  <!--      </li>-->
+  <!--      <li class="bb-nav-item">-->
+  <!--        <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"-->
+  <!--          aria-controls="offcanvasWithBothOptions" class="bb-nav-link">Exclusive Launch</a>-->
+  <!--      </li>-->
+  <!--    </ul>-->
+  <!--  </nav>-->
+  <!--</div>-->
 
   <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions"
     aria-labelledby="offcanvasWithBothOptionsLabel">
@@ -2867,14 +2969,17 @@
         <div class="profile-section mb-3">
           <div class="profile-image">
             <div class="pro-user">
-              @php
-                $avatar = "";
+             @php
+                $avatar = "https://static.99acres.com/universalhp/img/ProfileIcon.shared.png";
 
-                if (!empty(Auth::user()->avatar) && file_exists(public_path(Auth::user()->avatar))) {
-                  $avatar = url(Auth::user()->avatar);
-                } else {
-                  $avatar = 'https://static.99acres.com/universalhp/img/ProfileIcon.shared.png';
+                if (Auth::check()) {
+                  $avatar = Auth::user()->avatar ?? '';
+                  if ($avatar && Storage::disk('public')->exists($avatar)) {
+                    // If file exists in storage
+                    $avatar = asset('storage/' . $avatar);
+                  }
                 }
+
               @endphp
 
               <img src="{{$avatar}}" alt="Profile Picture" id="change_avatar" class="img-fluid">

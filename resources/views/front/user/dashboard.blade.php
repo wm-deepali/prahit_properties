@@ -124,6 +124,14 @@
     .toggle-switch input:checked+.slider::before {
         transform: translateX(30px);
     }
+      @media (max-width: 576px) {
+        .desktop-menu{
+            display:none !important;
+        }
+        .head-tit{
+            margin:0;
+        }
+    }
 </style>
 
 @section('content')
@@ -300,7 +308,7 @@
                                                         {{\App\Helpers\Helper::formatIndianPrice($value->price)}}
                                                     </p>
                                                     <a href="{{ route('property_detail', ['id' => $value->id, 'slug' => $value->slug]) }}
-                                                                " class="btn btn-primary btn-sm">View Details</a>
+                                                                        " class="btn btn-primary btn-sm">View Details</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -359,8 +367,8 @@
                                                     <tr>
                                                         <th>Business Name</th>
                                                         <th>Category</th>
-                                                        <th>Membership</th>
-                                                        <th>Verified</th>
+                                                        <th>Subcategory</th>
+                                                        <th>Established</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -369,8 +377,9 @@
                                                         <tr>
                                                             <td>{{ $business->business_name }}</td>
                                                             <td>{{ $business->category->category_name ?? '' }}</td>
-                                                            <td>{{ $business->membership_type }}</td>
-                                                            <td>{{ $business->verified_status }}</td>
+                                                            <td>{{ $business->subCategories->pluck('sub_category_name')->implode(', ') }}
+                                                            </td>
+                                                            <td>{{ $business->established_year }}</td>
                                                             <td>
                                                                 <a href="{{ route('user.services.edit', $business->id) }}"
                                                                     class="btn btn-sm btn-outline-primary">Edit</a>
