@@ -255,7 +255,7 @@
 								</div>
 
 								<!-- Floating Content Card on Top of Image -->
-								<div class="position-absolute bottom-0 start-0 end-0 p-4 p-md-5"
+								<div class="position-absolute bottom-0 start-0 end-0 p-2 p-md-5"
 									style="transform: translateY(50%);">
 									<div class="container">
 										<div class="bg-white rounded-4 shadow-xl p-4 p-lg-5"
@@ -264,7 +264,7 @@
 
 												<!-- Title + Location + Verified -->
 												<div class="col-lg-8">
-													<div class="d-flex align-items-center gap-3 mb-3">
+													<div class="property-title gap-3 mb-3">
 														<h1 class="display-6 fw-bold mb-0 text-dark">
 															{{ $property_detail->title }}
 														</h1>
@@ -276,7 +276,7 @@
 														@endif
 													</div>
 
-													<div class="d-flex align-items-center gap-4 text-muted fs-5">
+													<div class="property-title gap-4 text-muted fs-5">
 														<div class="d-flex align-items-center gap-2">
 															<i class="fas fa-map-marker-alt text-danger"></i>
 															<span class="fw-600">
@@ -298,7 +298,7 @@
 												<!-- Price Section -->
 												<div class="col-lg-4 text-lg-end">
 													<div class="price-box bg-gradient-primary text-white p-4 rounded-3 shadow-lg d-inline-block"
-														style="background: linear-gradient(135deg, #e63946, #c1121f); min-width: 280px;">
+														style="background: linear-gradient(135deg, #e63946, #c1121f); ">
 														<div class="fs-1 fw-bold mb-1">
 															₹
 															{{ isset($property_detail->price) ? \App\Helpers\Helper::formatIndianPrice($property_detail->price) : 'Call for Price' }}
@@ -317,7 +317,7 @@
 								<div class="row g-4">
 
 									<!-- Left: Main Image -->
-									<div class="col-md-4">
+									<div class="col-md-4 gallery-img-section">
 										<div class="position-relative rounded-4 overflow-hidden shadow-lg">
 											<img src="{{ isset($property_detail->PropertyGallery[0]) ? asset($property_detail->PropertyGallery[0]->image_path) : asset('default.jpg') }}"
 												class="img-fluid w-100" style="height: 320px; object-fit: cover;"
@@ -335,7 +335,7 @@
 									<div class="col-md-8">
 										<div class="row g-4">
 											@if($property_detail->Category)
-												<div class="col-6 col-lg-4">
+												<div class="col-12 col-lg-4">
 													<div
 														class="detail-box text-center p-3 rounded-3 bg-light border-start border-primary border-5">
 														<div class="text-muted small fw-600">Available For</div>
@@ -346,7 +346,7 @@
 											@endif
 
 											@if($property_detail->SubSubCategory)
-												<div class="col-6 col-lg-4">
+												<div class="col-12 col-lg-4">
 													<div
 														class="detail-box text-center p-3 rounded-3 bg-light border-start border-success border-5">
 														<div class="text-muted small fw-600">Property Type</div>
@@ -357,7 +357,7 @@
 											@endif
 
 											@if($property_user)
-												<div class="col-6 col-lg-4">
+												<div class="col-12 col-lg-4">
 													<div
 														class="detail-box text-center p-3 rounded-3 bg-light border-start border-warning border-5">
 														<div class="text-muted small fw-600">Posted By</div>
@@ -371,7 +371,7 @@
 												</div>
 											@endif
 
-											<div class="col-6 col-lg-4">
+											<div class="col-12 col-lg-4">
 												<div
 													class="detail-box text-center p-3 rounded-3 bg-light border-start border-info border-5">
 													<div class="text-muted small fw-600">Published</div>
@@ -382,7 +382,7 @@
 											</div>
 
 											@if($property_detail->Location)
-												<div class="col-6 col-lg-4">
+												<div class="col-12 col-lg-4">
 													<div
 														class="detail-box text-center p-3 rounded-3 bg-light border-start border-purple border-5">
 														<div class="text-muted small fw-600">Locality</div>
@@ -392,7 +392,7 @@
 												</div>
 											@endif
 
-											<div class="col-6 col-lg-4">
+											<div class="col-12 col-lg-4">
 												<div
 													class="detail-box text-center p-3 rounded-3 bg-light border-start border-danger border-5">
 													<div class="text-muted small fw-600">Property ID</div>

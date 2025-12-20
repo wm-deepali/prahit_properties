@@ -270,44 +270,46 @@
         title: "Are you sure?",
         text: "Change status of this user.",
         icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-        .then((willDelete) => {
-          if (willDelete) {
-            document.getElementById('new_loader').style.display = 'block';
-            $(".btn-delete").attr('disabled', true);
-            $.ajax({
-              url: '<?php echo e(url('master/user/change-status')); ?>',
-              method: "POST",
-              data: {
-                "_token": "<?php echo e(csrf_token()); ?>",
-                'id': id
-              },
-              success: function (response) {
-                var response = JSON.parse(response);
-                if (response.status === 200) {
-                  toastr.success(response.message)
-                  $("#delete-owners").modal('hide');
-                  reloadPage();
-                } else if (response.status === 500) {
-                  toastr.error(response.message)
-                }
-                document.getElementById('new_loader').style.display = 'none';
-              },
-              error: function (response) {
-                toastr.error('An error occured.');
-                document.getElementById('new_loader').style.display = 'none';
-              },
-              complete: function () {
-                document.getElementById('new_loader').style.display = 'none';
-                $(".btn-delete").attr('disabled', false);
-              }
-            })
+        showCancelButton: true,
+        confirmButtonText: "Yes, change it",
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then((result) => {
+        if (result.isConfirmed) { 
+        document.getElementById('new_loader').style.display = 'block';
+        $(".btn-delete").attr('disabled', true);
+        $.ajax({
+          url: '<?php echo e(url('master/user/change-status')); ?>',
+          method: "POST",
+          data: {
+            "_token": "<?php echo e(csrf_token()); ?>",
+            'id': id
+          },
+          success: function (response) {
+            var response = JSON.parse(response);
+            if (response.status === 200) {
+              toastr.success(response.message)
+              $("#delete-owners").modal('hide');
+              reloadPage();
+            } else if (response.status === 500) {
+              toastr.error(response.message)
+            }
+            document.getElementById('new_loader').style.display = 'none';
+          },
+          error: function (response) {
+            toastr.error('An error occured.');
+            document.getElementById('new_loader').style.display = 'none';
+          },
+          complete: function () {
+            document.getElementById('new_loader').style.display = 'none';
+            $(".btn-delete").attr('disabled', false);
           }
-        });
+        })
+      }
+          });
 
-    }
+      }
 
     function deleteUser(id) {
       swal.fire({
@@ -315,115 +317,119 @@
         text: "Delete This User.",
         icon: "warning",
         showCancelButton: true,
-        allowOutsideClick: false, // 👈 THIS FIXES YOUR ISSUE
+        confirmButtonText: "Yes, Delete",
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false, // 👈 prevents accidental close
         allowEscapeKey: false
-      })
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $(".loading_2").css('display', 'block');
+          $(".btn-delete").attr('disabled', true);
 
-        .then((willDelete) => {
-          if (willDelete) {
-            $(".loading_2").css('display', 'block');
-            $(".btn-delete").attr('disabled', true);
-            $.ajax({
-              url: '<?php echo e(url('master/user/delete')); ?>',
-              method: "POST",
-              data: {
-                "_token": "<?php echo e(csrf_token()); ?>",
-                'id': id
-              },
-              success: function (response) {
-                var response = JSON.parse(response);
-                if (response.status === 200) {
-                  toastr.success(response.message)
-                  reloadPage();
-                } else if (response.status === 500) {
-                  toastr.error(response.message)
-                }
-              },
-              error: function (response) {
-                toastr.error('An error occured.')
-              },
-              complete: function () {
-                $(".loading_2").css('display', 'none');
-                $(".btn-delete").attr('disabled', false);
+          $.ajax({
+            url: '<?php echo e(url('master/user/delete')); ?>',
+            method: "POST",
+            data: {
+              "_token": "<?php echo e(csrf_token()); ?>",
+              'id': id
+            },
+            success: function (response) {
+              var response = JSON.parse(response);
+              if (response.status === 200) {
+                toastr.success(response.message);
+                reloadPage();
+              } else {
+                toastr.error(response.message);
               }
-            })
-          }
-        });
-
+            },
+            error: function (response) {
+              toastr.error('An error occured.');
+            },
+            complete: function () {
+              $(".loading_2").css('display', 'none');
+              $(".btn-delete").attr('disabled', false);
+            }
+          });
+        }
+      });
     }
-
     function verifyEmail(id) {
       swal.fire({
         title: "Are you sure?",
-        text: "Verify This Email.",
+        text: "Verify this email.",
         icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-        .then((willDelete) => {
-          if (willDelete) {
-            $(".loading_2").css('display', 'block');
-            $(".btn-delete").attr('disabled', true);
-            $.ajax({
-              url: '<?php echo e(url('verify/email/and/mobile')); ?>',
-              method: "POST",
-              data: {
-                "_token": "<?php echo e(csrf_token()); ?>",
-                'id': id,
-                'type': "email"
-              },
-              success: function (response) {
-                toastr.success(response)
-                reloadPage();
-              },
-              error: function (response) {
-                toastr.error('An error occured.')
-              },
-              complete: function () {
-                $(".loading_2").css('display', 'none');
-                $(".btn-delete").attr('disabled', false);
-              }
-            })
-          }
-        });
+        showCancelButton: true,
+        confirmButtonText: "Yes, verify",
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then((result) => {
 
+        if (result.isConfirmed) {
+          $(".loading_2").css('display', 'block');
+          $(".btn-delete").attr('disabled', true);
+
+          $.ajax({
+            url: '<?php echo e(url('verify/email/and/mobile')); ?>',
+            method: "POST",
+            data: {
+              "_token": "<?php echo e(csrf_token()); ?>",
+              id: id,
+              type: "email"
+            },
+            success: function (response) {
+              toastr.success(response);
+              reloadPage();
+            },
+            error: function () {
+              toastr.error('An error occured.');
+            },
+            complete: function () {
+              $(".loading_2").css('display', 'none');
+              $(".btn-delete").attr('disabled', false);
+            }
+          });
+        }
+      });
     }
-
     function verifyMobileNumber(id) {
       swal.fire({
         title: "Are you sure?",
-        text: "Verify This Mobile Number.",
+        text: "Verify this mobile number.",
         icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-        .then((willDelete) => {
-          if (willDelete) {
-            $(".loading_2").css('display', 'block');
-            $(".btn-delete").attr('disabled', true);
-            $.ajax({
-              url: '<?php echo e(url('verify/email/and/mobile')); ?>',
-              method: "POST",
-              data: {
-                "_token": "<?php echo e(csrf_token()); ?>",
-                'id': id,
-                'type': 'mobile'
-              },
-              success: function (response) {
-                toastr.success(response)
-                reloadPage();
-              },
-              error: function (response) {
-                toastr.error('An error occured.')
-              },
-              complete: function () {
-                $(".loading_2").css('display', 'none');
-                $(".btn-delete").attr('disabled', false);
-              }
-            })
-          }
-        });
+        showCancelButton: true,
+        confirmButtonText: "Yes, verify",
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then((result) => {
 
+        if (result.isConfirmed) {
+          $(".loading_2").css('display', 'block');
+          $(".btn-delete").attr('disabled', true);
+
+          $.ajax({
+            url: '<?php echo e(url('verify/email/and/mobile')); ?>',
+            method: "POST",
+            data: {
+              "_token": "<?php echo e(csrf_token()); ?>",
+              id: id,
+              type: "mobile"
+            },
+            success: function (response) {
+              toastr.success(response);
+              reloadPage();
+            },
+            error: function () {
+              toastr.error('An error occured.');
+            },
+            complete: function () {
+              $(".loading_2").css('display', 'none');
+              $(".btn-delete").attr('disabled', false);
+            }
+          });
+        }
+      });
     }
 
   </script>

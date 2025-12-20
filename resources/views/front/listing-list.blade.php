@@ -1557,6 +1557,14 @@
 
 
             const sortButtons = document.querySelectorAll('#offcanvasBottom .sort-btn');
+            const offcanvasEl = document.getElementById('offcanvasBottom');
+
+            offcanvasEl.addEventListener('hidden.bs.offcanvas', () => {
+                document.querySelectorAll('.offcanvas-backdrop').forEach(b => b.remove());
+                document.body.classList.remove('offcanvas-backdrop');
+                document.body.style.overflow = ''; // restore scroll
+            });
+
             let currentSort = new URLSearchParams(window.location.search).get('sort') || '';
 
             function updateSortUI(selectedValue) {
@@ -1588,12 +1596,21 @@
                         .then(html => {
                             if (listingsContainer) listingsContainer.innerHTML = html;
                             history.pushState(null, '', window.location.pathname + '?' + params.toString());
+                            // Close offcanvas on mobile
+                            const closeBtn = document.querySelector('#offcanvasBottom [data-bs-dismiss="offcanvas"]');
+                            if (closeBtn) closeBtn.click();
                         })
                         .catch(console.error);
                 });
             });
 
             const offcanvas = document.getElementById('offcanvasExample');
+
+            offcanvas.addEventListener('hidden.bs.offcanvas', () => {
+                document.querySelectorAll('.offcanvas-backdrop').forEach(b => b.remove());
+                document.body.classList.remove('offcanvas-backdrop');
+                document.body.style.overflow = ''; // restore scroll
+            });
 
             function restoreFilters() {
                 const params = new URLSearchParams(window.location.search);

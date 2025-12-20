@@ -93,7 +93,6 @@ class UserController extends Controller
 	public function deleteUserCommon(Request $request)
 	{
 		try {
-
 			$user = User::find($request->id);
 
 			if (!$user) {
@@ -103,14 +102,24 @@ class UserController extends Controller
 			// Delete related properties
 			$user->getProperties()->delete();
 
+			// Delete business listing
+			$user->businessListing()->delete();
+
+			// Delete profile section
+			$user->profileSection()->delete();
+
+			// Delete active subscriptions (property + business)
+			$user->activePropertySubscription()->delete();
+			$user->activeBusinessSubscription()->delete();
+
 			// Delete the user
 			$user->delete();
 
-			return $this->JsonResponse(200, 'User & related properties deleted successfully');
-
+			return $this->JsonResponse(200, 'User & related data deleted successfully');
 		} catch (\Exception $e) {
 			return $this->JsonResponse(500, $e->getMessage());
 		}
 	}
+
 
 }
