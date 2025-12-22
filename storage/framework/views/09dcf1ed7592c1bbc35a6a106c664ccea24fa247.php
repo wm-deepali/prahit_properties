@@ -153,88 +153,92 @@
     });
 
     function deleteForm(id) {
-      swal({
+      swal.fire({
         title: "Are you sure?",
         text: "Delete This Form.",
         icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-        .then((willDelete) => {
-          if (willDelete) {
-            document.getElementById('new_loader').style.display = 'block';
-            $(".btn-delete").attr('disabled', true);
-            $.ajax({
-              url: '<?php echo e(url('master/custom/form/delete')); ?>',
-              method: "POST",
-              data: {
-                "_token": "<?php echo e(csrf_token()); ?>",
-                'id': id
-              },
-              success: function (response) {
-                var response = JSON.parse(response);
-                if (response.status === 200) {
-                  toastr.success(response.message)
-                  reloadPage();
-                } else if (response.status === 500) {
-                  toastr.error(response.message)
-                }
-                document.getElementById('new_loader').style.display = 'none';
-              },
-              error: function (response) {
-                toastr.error('An error occured.');
-                document.getElementById('new_loader').style.display = 'none';
-              },
-              complete: function () {
-                document.getElementById('new_loader').style.display = 'none';
-                $(".btn-delete").attr('disabled', false);
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it",
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById('new_loader').style.display = 'block';
+          $(".btn-delete").attr('disabled', true);
+          $.ajax({
+            url: '<?php echo e(url('master/custom/form/delete')); ?>',
+            method: "POST",
+            data: {
+              "_token": "<?php echo e(csrf_token()); ?>",
+              'id': id
+            },
+            success: function (response) {
+              var response = JSON.parse(response);
+              if (response.status === 200) {
+                toastr.success(response.message)
+                reloadPage();
+              } else if (response.status === 500) {
+                toastr.error(response.message)
               }
-            })
-          }
-        });
+              document.getElementById('new_loader').style.display = 'none';
+            },
+            error: function (response) {
+              toastr.error('An error occured.');
+              document.getElementById('new_loader').style.display = 'none';
+            },
+            complete: function () {
+              document.getElementById('new_loader').style.display = 'none';
+              $(".btn-delete").attr('disabled', false);
+            }
+          })
+        }
+      });
 
     }
 
     function changeStatus(id) {
-      swal({
+      swal.fire({
         title: "Are you sure?",
         text: "Change Status This Form.",
         icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-        .then((willDelete) => {
-          if (willDelete) {
-            document.getElementById('new_loader').style.display = 'block';
-            $(".btn-delete").attr('disabled', true);
-            $.ajax({
-              url: '<?php echo e(url('master/custom/form/change-status')); ?>',
-              method: "POST",
-              data: {
-                "_token": "<?php echo e(csrf_token()); ?>",
-                'id': id
-              },
-              success: function (response) {
-                var response = JSON.parse(response);
-                if (response.status === 200) {
-                  toastr.success(response.message)
-                  reloadPage();
-                } else if (response.status === 500) {
-                  toastr.error(response.message)
-                }
-                document.getElementById('new_loader').style.display = 'none';
-              },
-              error: function (response) {
-                toastr.error('An error occured.');
-                document.getElementById('new_loader').style.display = 'none';
-              },
-              complete: function () {
-                document.getElementById('new_loader').style.display = 'none';
-                $(".btn-delete").attr('disabled', false);
+        showCancelButton: true,
+        confirmButtonText: "Yes, change it",
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById('new_loader').style.display = 'block';
+          $(".btn-delete").attr('disabled', true);
+          $.ajax({
+            url: '<?php echo e(url('master/custom/form/change-status')); ?>',
+            method: "POST",
+            data: {
+              "_token": "<?php echo e(csrf_token()); ?>",
+              'id': id
+            },
+            success: function (response) {
+              var response = JSON.parse(response);
+              if (response.status === 200) {
+                toastr.success(response.message)
+                reloadPage();
+              } else if (response.status === 500) {
+                toastr.error(response.message)
               }
-            })
-          }
-        });
+              document.getElementById('new_loader').style.display = 'none';
+            },
+            error: function (response) {
+              toastr.error('An error occured.');
+              document.getElementById('new_loader').style.display = 'none';
+            },
+            complete: function () {
+              document.getElementById('new_loader').style.display = 'none';
+              $(".btn-delete").attr('disabled', false);
+            }
+          })
+        }
+      });
 
     }
 

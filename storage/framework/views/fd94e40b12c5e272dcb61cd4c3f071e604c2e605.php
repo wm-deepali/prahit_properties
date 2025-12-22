@@ -103,8 +103,7 @@
 	.newdesign-info-agent .view-profile-btn:hover {
 		background: #0056b3;
 	}
-</style>
-<style>
+
 	.bg-gradient-primary {
 		background: linear-gradient(135deg, #e63946, #c1121f) !important;
 	}
@@ -129,7 +128,7 @@
 
 	@media (max-width: 768px) {
 		.display-6 {
-			font-size: 1.8rem !important;
+			font-size: 1.2rem !important;
 		}
 
 		.price-box {
@@ -141,8 +140,7 @@
 			border-radius: 16px;
 		}
 	}
-</style>
-<style>
+
 	.bg-gradient-primary {
 		background: linear-gradient(135deg, #1e40af, #3b82f6) !important;
 	}
@@ -187,9 +185,7 @@
 			margin-right: 0 !important;
 		}
 	}
-</style>
 
-<style>
 	.info-item {
 		padding: 10px 0;
 		border-bottom: 1px dashed #dee2e6 !important;
@@ -221,6 +217,7 @@
 		margin-bottom: 20px;
 	}
 </style>
+
 <?php $__env->startSection('content'); ?>
 	<section class="breadcrumb-section">
 		<div class="container">
@@ -240,6 +237,7 @@
 	</section>
 	<section class="property-detail-section">
 		<div class="container">
+
 			<div class="row">
 				<div class="col-sm-12">
 					<!-- PREMIUM PROPERTY OVERVIEW SECTION - 2025 DESIGN -->
@@ -251,11 +249,11 @@
 							<div class="position-relative">
 								<div
 									style="height: 300px; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.5)), 
-							url('<?php echo e(isset($property_detail->PropertyGallery[0]) ? asset($property_detail->PropertyGallery[0]->image_path) : asset('default-property.jpg')); ?>') center/cover no-repeat;">
+										url('<?php echo e(isset($property_detail->PropertyGallery[0]) ? asset($property_detail->PropertyGallery[0]->image_path) : asset('default-property.jpg')); ?>') center/cover no-repeat;">
 								</div>
 
 								<!-- Floating Content Card on Top of Image -->
-								<div class="position-absolute bottom-0 start-0 end-0 p-4 p-md-5"
+								<div class="position-absolute bottom-0 start-0 end-0 p-2 p-md-5"
 									style="transform: translateY(50%);">
 									<div class="container">
 										<div class="bg-white rounded-4 shadow-xl p-4 p-lg-5"
@@ -264,7 +262,7 @@
 
 												<!-- Title + Location + Verified -->
 												<div class="col-lg-8">
-													<div class="d-flex align-items-center gap-3 mb-3">
+													<div class="property-title gap-3 mb-3">
 														<h1 class="display-6 fw-bold mb-0 text-dark">
 															<?php echo e($property_detail->title); ?>
 
@@ -277,7 +275,7 @@
 														<?php endif; ?>
 													</div>
 
-													<div class="d-flex align-items-center gap-4 text-muted fs-5">
+													<div class="property-title gap-4 text-muted fs-5">
 														<div class="d-flex align-items-center gap-2">
 															<i class="fas fa-map-marker-alt text-danger"></i>
 															<span class="fw-600">
@@ -302,7 +300,7 @@
 												<!-- Price Section -->
 												<div class="col-lg-4 text-lg-end">
 													<div class="price-box bg-gradient-primary text-white p-4 rounded-3 shadow-lg d-inline-block"
-														style="background: linear-gradient(135deg, #e63946, #c1121f); min-width: 280px;">
+														style="background: linear-gradient(135deg, #e63946, #c1121f); ">
 														<div class="fs-1 fw-bold mb-1">
 															₹
 															<?php echo e(isset($property_detail->price) ? \App\Helpers\Helper::formatIndianPrice($property_detail->price) : 'Call for Price'); ?>
@@ -322,7 +320,7 @@
 								<div class="row g-4">
 
 									<!-- Left: Main Image -->
-									<div class="col-md-4">
+									<div class="col-md-4 gallery-img-section">
 										<div class="position-relative rounded-4 overflow-hidden shadow-lg">
 											<img src="<?php echo e(isset($property_detail->PropertyGallery[0]) ? asset($property_detail->PropertyGallery[0]->image_path) : asset('default.jpg')); ?>"
 												class="img-fluid w-100" style="height: 320px; object-fit: cover;"
@@ -336,109 +334,12 @@
 										</div>
 									</div>
 
-									<!-- Right: Key Details Grid -->
-									<div class="col-md-8">
-										<div class="row g-4">
-											<?php if($property_detail->Category): ?>
-												<div class="col-6 col-lg-4">
-													<div
-														class="detail-box text-center p-3 rounded-3 bg-light border-start border-primary border-5">
-														<div class="text-muted small fw-600">Available For</div>
-														<div class="fw-bold text-dark fs-5">
-															<?php echo e($property_detail->Category->category_name); ?></div>
-													</div>
-												</div>
-											<?php endif; ?>
+									<?php echo $__env->make($detailSection, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-											<?php if($property_detail->SubSubCategory): ?>
-												<div class="col-6 col-lg-4">
-													<div
-														class="detail-box text-center p-3 rounded-3 bg-light border-start border-success border-5">
-														<div class="text-muted small fw-600">Property Type</div>
-														<div class="fw-bold text-dark fs-5">
-															<?php echo e($property_detail->SubSubCategory->sub_sub_category_name); ?></div>
-													</div>
-												</div>
-											<?php endif; ?>
-
-											<?php if($property_user): ?>
-												<div class="col-6 col-lg-4">
-													<div
-														class="detail-box text-center p-3 rounded-3 bg-light border-start border-warning border-5">
-														<div class="text-muted small fw-600">Posted By</div>
-														<div class="fw-bold text-dark fs-5">
-															<?php echo e($property_user->firstname); ?>
-
-															<?php echo e(Str::limit($property_user->lastname, 1, '.')); ?>
-
-															<small
-																class="text-success">(<?php echo e(ucfirst($property_user->role ?? 'User')); ?>)</small>
-														</div>
-													</div>
-												</div>
-											<?php endif; ?>
-
-											<div class="col-6 col-lg-4">
-												<div
-													class="detail-box text-center p-3 rounded-3 bg-light border-start border-info border-5">
-													<div class="text-muted small fw-600">Published</div>
-													<div class="fw-bold text-dark fs-5">
-														<?php echo e(\Carbon\Carbon::parse($property_detail->created_at)->format('d M, Y')); ?>
-
-													</div>
-												</div>
-											</div>
-
-											<?php if($property_detail->Location): ?>
-												<div class="col-6 col-lg-4">
-													<div
-														class="detail-box text-center p-3 rounded-3 bg-light border-start border-purple border-5">
-														<div class="text-muted small fw-600">Locality</div>
-														<div class="fw-bold text-dark fs-5">
-															<?php echo e($property_detail->Location->location); ?></div>
-													</div>
-												</div>
-											<?php endif; ?>
-
-											<div class="col-6 col-lg-4">
-												<div
-													class="detail-box text-center p-3 rounded-3 bg-light border-start border-danger border-5">
-													<div class="text-muted small fw-600">Property ID</div>
-													<div class="fw-bold text-dark fs-5">#<?php echo e($property_detail->id); ?></div>
-												</div>
-											</div>
-										</div>
-
-										<!-- Action Buttons -->
-										<div class="mt-4 pt-3 border-top">
-											<div
-												class="d-flex flex-wrap gap-3 justify-content-center justify-content-md-start">
-												<button type="button"
-													class="btn btn-outline-primary btn-lg px-4 rounded-pill shadow-sm"
-													onclick="claim('<?php echo e($property_detail->id); ?>')">
-													<i class="fas fa-shield-alt"></i> Claim This Listing
-												</button>
-												<button type="button"
-													class="btn btn-outline-warning btn-lg px-4 rounded-pill shadow-sm"
-													data-bs-toggle="modal" data-bs-target="#feedback-complaint">
-													<i class="fas fa-phone"></i> Feedback & Complaint												</button>
-												<button id="wishlistButton"
-													class="btn btn-outline-danger btn-lg px-4 rounded-pill shadow-sm"
-													data-submission="<?php echo e($property_detail->id); ?>">
-													<?php echo $isInWishlist
-		? '<i class="fas fa-heart"></i> Added to Wishlist'
-		: '<i class="far fa-heart"></i> Add to Wishlist'; ?>
-
-												</button>
-											</div>
-										</div>
-									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
-
 				</div>
 			</div>
 
@@ -450,7 +351,7 @@
 						</div>
 
 						<div class="property-gallery">
-							<div class="row">
+							<div class="row gap-2">
 
 								
 								<?php $__currentLoopData = $property_detail->PropertyGallery; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -650,7 +551,7 @@
 										<?php endif; ?>
 
 										<!-- No Data Fallback -->
-										<?php if(!$property_detail->price_label && !$property_detail->property_status && !$property_detail->registration_status && !$property_detail->furnishing_status && !$property_detail->additional_info ): ?>
+										<?php if(!$property_detail->price_label && !$property_detail->property_status && !$property_detail->registration_status && !$property_detail->furnishing_status && !$property_detail->additional_info): ?>
 											<div class="col-12 text-center py-5">
 												<i class="fas fa-info-circle text-primary fs-1 mb-3"></i>
 												<p class="text-muted fs-5">Additional specifications: No additional
@@ -675,7 +576,7 @@
 					<div class="card property-widgets">
 						<div class="property-title">
 							<h3>
-								Contact Now 
+								Contact Now
 							</h3>
 						</div>
 						<div class="property-contact">
@@ -1101,7 +1002,7 @@
 			// Property has saved lat/lng; use those
 			createMap(<?php echo e($property_detail->latitude); ?>, <?php echo e($property_detail->longitude); ?>);
 		<?php else: ?>
-																																																																																					if (navigator.geolocation) {
+																																																																																													if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function (pos) {
 					createMap(pos.coords.latitude, pos.coords.longitude);
 				}, function () {
@@ -1313,12 +1214,12 @@
 						}
 
 						outputHTML += `
-	<div class="col-sm-6 ">
-		<div class="info-item">
-			<div class="info-label">${label}</div>
-			<div class="info-value fw-bold text-dark">${value}</div>
-		</div>
-	</div>`;
+					<div class="col-sm-6 ">
+						<div class="info-item">
+							<div class="info-label">${label}</div>
+							<div class="info-value fw-bold text-dark">${value}</div>
+						</div>
+					</div>`;
 					});
 
 					outputHTML += '</div>';
