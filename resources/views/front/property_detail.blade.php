@@ -103,8 +103,7 @@
 	.newdesign-info-agent .view-profile-btn:hover {
 		background: #0056b3;
 	}
-</style>
-<style>
+
 	.bg-gradient-primary {
 		background: linear-gradient(135deg, #e63946, #c1121f) !important;
 	}
@@ -129,7 +128,7 @@
 
 	@media (max-width: 768px) {
 		.display-6 {
-			font-size: 1.8rem !important;
+			font-size: 1.2rem !important;
 		}
 
 		.price-box {
@@ -141,8 +140,7 @@
 			border-radius: 16px;
 		}
 	}
-</style>
-<style>
+
 	.bg-gradient-primary {
 		background: linear-gradient(135deg, #1e40af, #3b82f6) !important;
 	}
@@ -187,9 +185,7 @@
 			margin-right: 0 !important;
 		}
 	}
-</style>
 
-<style>
 	.info-item {
 		padding: 10px 0;
 		border-bottom: 1px dashed #dee2e6 !important;
@@ -221,6 +217,7 @@
 		margin-bottom: 20px;
 	}
 </style>
+
 @section('content')
 	<section class="breadcrumb-section">
 		<div class="container">
@@ -240,6 +237,7 @@
 	</section>
 	<section class="property-detail-section">
 		<div class="container">
+
 			<div class="row">
 				<div class="col-sm-12">
 					<!-- PREMIUM PROPERTY OVERVIEW SECTION - 2025 DESIGN -->
@@ -251,7 +249,7 @@
 							<div class="position-relative">
 								<div
 									style="height: 300px; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.5)), 
-							url('{{ isset($property_detail->PropertyGallery[0]) ? asset($property_detail->PropertyGallery[0]->image_path) : asset('default-property.jpg') }}') center/cover no-repeat;">
+										url('{{ isset($property_detail->PropertyGallery[0]) ? asset($property_detail->PropertyGallery[0]->image_path) : asset('default-property.jpg') }}') center/cover no-repeat;">
 								</div>
 
 								<!-- Floating Content Card on Top of Image -->
@@ -331,106 +329,12 @@
 										</div>
 									</div>
 
-									<!-- Right: Key Details Grid -->
-									<div class="col-md-8">
-										<div class="row g-4">
-											@if($property_detail->Category)
-												<div class="col-12 col-lg-4">
-													<div
-														class="detail-box text-center p-3 rounded-3 bg-light border-start border-primary border-5">
-														<div class="text-muted small fw-600">Available For</div>
-														<div class="fw-bold text-dark fs-5">
-															{{ $property_detail->Category->category_name }}</div>
-													</div>
-												</div>
-											@endif
+									@include($detailSection)
 
-											@if($property_detail->SubSubCategory)
-												<div class="col-12 col-lg-4">
-													<div
-														class="detail-box text-center p-3 rounded-3 bg-light border-start border-success border-5">
-														<div class="text-muted small fw-600">Property Type</div>
-														<div class="fw-bold text-dark fs-5">
-															{{ $property_detail->SubSubCategory->sub_sub_category_name }}</div>
-													</div>
-												</div>
-											@endif
-
-											@if($property_user)
-												<div class="col-12 col-lg-4">
-													<div
-														class="detail-box text-center p-3 rounded-3 bg-light border-start border-warning border-5">
-														<div class="text-muted small fw-600">Posted By</div>
-														<div class="fw-bold text-dark fs-5">
-															{{ $property_user->firstname }}
-															{{ Str::limit($property_user->lastname, 1, '.') }}
-															<small
-																class="text-success">({{ ucfirst($property_user->role ?? 'User') }})</small>
-														</div>
-													</div>
-												</div>
-											@endif
-
-											<div class="col-12 col-lg-4">
-												<div
-													class="detail-box text-center p-3 rounded-3 bg-light border-start border-info border-5">
-													<div class="text-muted small fw-600">Published</div>
-													<div class="fw-bold text-dark fs-5">
-														{{ \Carbon\Carbon::parse($property_detail->created_at)->format('d M, Y') }}
-													</div>
-												</div>
-											</div>
-
-											@if($property_detail->Location)
-												<div class="col-12 col-lg-4">
-													<div
-														class="detail-box text-center p-3 rounded-3 bg-light border-start border-purple border-5">
-														<div class="text-muted small fw-600">Locality</div>
-														<div class="fw-bold text-dark fs-5">
-															{{ $property_detail->Location->location }}</div>
-													</div>
-												</div>
-											@endif
-
-											<div class="col-12 col-lg-4">
-												<div
-													class="detail-box text-center p-3 rounded-3 bg-light border-start border-danger border-5">
-													<div class="text-muted small fw-600">Property ID</div>
-													<div class="fw-bold text-dark fs-5">#{{ $property_detail->id }}</div>
-												</div>
-											</div>
-										</div>
-
-										<!-- Action Buttons -->
-										<div class="mt-4 pt-3 border-top">
-											<div
-												class="d-flex flex-wrap gap-3 justify-content-center justify-content-md-start">
-												<button type="button"
-													class="btn btn-outline-primary btn-lg px-4 rounded-pill shadow-sm"
-													onclick="claim('{{ $property_detail->id }}')">
-													<i class="fas fa-shield-alt"></i> Claim This Listing
-												</button>
-												<button type="button"
-													class="btn btn-outline-warning btn-lg px-4 rounded-pill shadow-sm"
-													data-bs-toggle="modal" data-bs-target="#feedback-complaint">
-													<i class="fas fa-phone"></i> Feedback & Complaint												</button>
-												<button id="wishlistButton"
-													class="btn btn-outline-danger btn-lg px-4 rounded-pill shadow-sm"
-													data-submission="{{ $property_detail->id }}">
-													{!! $isInWishlist
-		? '<i class="fas fa-heart"></i> Added to Wishlist'
-		: '<i class="far fa-heart"></i> Add to Wishlist' 
-									!!}
-												</button>
-											</div>
-										</div>
-									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
-
 				</div>
 			</div>
 
@@ -442,7 +346,7 @@
 						</div>
 
 						<div class="property-gallery">
-							<div class="row">
+							<div class="row gap-2">
 
 								{{-- Show all images --}}
 								@foreach($property_detail->PropertyGallery as $k => $v)
@@ -638,7 +542,7 @@
 										@endif
 
 										<!-- No Data Fallback -->
-										@if(!$property_detail->price_label && !$property_detail->property_status && !$property_detail->registration_status && !$property_detail->furnishing_status && !$property_detail->additional_info )
+										@if(!$property_detail->price_label && !$property_detail->property_status && !$property_detail->registration_status && !$property_detail->furnishing_status && !$property_detail->additional_info)
 											<div class="col-12 text-center py-5">
 												<i class="fas fa-info-circle text-primary fs-1 mb-3"></i>
 												<p class="text-muted fs-5">Additional specifications: No additional
@@ -663,7 +567,7 @@
 					<div class="card property-widgets">
 						<div class="property-title">
 							<h3>
-								Contact Now 
+								Contact Now
 							</h3>
 						</div>
 						<div class="property-contact">
@@ -1084,7 +988,7 @@
 			// Property has saved lat/lng; use those
 			createMap({{ $property_detail->latitude }}, {{ $property_detail->longitude }});
 		@else
-																																																																																					if (navigator.geolocation) {
+																																																																																													if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function (pos) {
 					createMap(pos.coords.latitude, pos.coords.longitude);
 				}, function () {
@@ -1296,12 +1200,12 @@
 						}
 
 						outputHTML += `
-	<div class="col-sm-6 ">
-		<div class="info-item">
-			<div class="info-label">${label}</div>
-			<div class="info-value fw-bold text-dark">${value}</div>
-		</div>
-	</div>`;
+					<div class="col-sm-6 ">
+						<div class="info-item">
+							<div class="info-label">${label}</div>
+							<div class="info-value fw-bold text-dark">${value}</div>
+						</div>
+					</div>`;
 					});
 
 					outputHTML += '</div>';

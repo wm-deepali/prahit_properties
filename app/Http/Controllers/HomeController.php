@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Http;
 use App\Otp;
 use Auth;
 use App\Job;
@@ -40,7 +39,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\AppController;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\Concern\GlobalTrait;
-use App\Notifications\WelcomeEmailNotification;
+use Illuminate\Support\Str;
 use App\Models\PriceLabel;
 use App\Models\PropertyStatus;
 use App\Models\FurnishingStatus;
@@ -137,7 +136,6 @@ class HomeController extends AppController
 		return redirect()->back()->with('success', 'Your request has been submitted. We will call you soon!');
 	}
 
-
 	public function list(Request $request)
 	{
 		$query = Properties::query();
@@ -233,7 +231,7 @@ class HomeController extends AppController
 				// IDs sent from front-end
 				$query->whereIn('property_status', $statuses);
 			} else {
-			// Names sent from front-end
+				// Names sent from front-end
 				$statusIds = PropertyStatus::whereIn('name', $statuses)->pluck('id');
 				$query->whereIn('property_status', $statusIds);
 			}
@@ -372,7 +370,7 @@ class HomeController extends AppController
 		}
 
 		$sort = $request->get('sort', ''); // default empty
-		
+
 
 		switch ($sort) {
 			case 'price-low':
@@ -562,8 +560,6 @@ class HomeController extends AppController
 		return view('front.directory-listing', ['list' => $paginatedList, 'categories' => $categories]);
 	}
 
-
-
 	public function profilePage($slug = null)
 	{
 		// Find user by slug or fallback to logged-in user
@@ -628,7 +624,6 @@ class HomeController extends AppController
 		}
 	}
 
-
 	public function businessDetails($id)
 	{
 		$business = BusinessListing::with([
@@ -654,7 +649,6 @@ class HomeController extends AppController
 
 		return view('front.business-details', compact('business', 'relatedProviders'));
 	}
-
 
 	public function create_property()
 	{
@@ -726,10 +720,8 @@ class HomeController extends AppController
 		));
 	}
 
-
 	public function property_detail($id, $slug)
 	{
-		// Load the property with relationships
 		$property = Properties::with([
 			'Location',
 			'PropertyGallery',
@@ -739,56 +731,87 @@ class HomeController extends AppController
 			'getState',
 			'getCity',
 			'getUser',
-		])->where('slug', $slug)
+			'Category',
+			'SubCategory',
+			'SubSubCategory',
+		])
+			->where('slug', $slug)
 			->where('id', $id)
-			->first();
-
-		// Check if property exists
-		if (!$property) {
-			abort(404, 'Property not found.');
-		}
+			->firstOrFail();
 
 		$property_detail = $property;
-
-		// Get property owner
 		$property_user = User::find($property->user_id);
 
-		// Get amenities if any
-		$amenities = $property_detail->amenities
-			? Amenity::whereIn('id', explode(',', $property_detail->amenities))->get()
+		$amenities = $property->amenities
+			? Amenity::whereIn('id', explode(',', $property->amenities))->get()
 			: collect();
 
-		// 🔥 Correct: Store Recently Viewed Property
+		// recently viewed
 		$user = Auth::user();
 		if ($user) {
 			PropertyView::updateOrCreate(
-				[
-					'user_id' => $user->id,
-					'property_id' => $property->id
-				],
-				[
-					'ip_address' => request()->ip(),
-					'updated_at' => now(), // important for sorting recently viewed
-				]
+				['user_id' => $user->id, 'property_id' => $property->id],
+				['ip_address' => request()->ip(), 'updated_at' => now()]
 			);
 		}
 
-		// Increment views count
 		$property->increment('total_views');
 
-		// Check if property is in user's wishlist
-		$isInWishlist = false;
-		if ($user) {
-			$isInWishlist = Wishlist::where('user_id', $user->id)
-				->where('property_id', $property_detail->id)
-				->exists();
+		$isInWishlist = $user
+			? Wishlist::where('user_id', $user->id)
+				->where('property_id', $property->id)
+				->exists()
+			: false;
+
+		/* 🔑 MAIN LOGIC (USES YOUR MODEL DIRECTLY) */
+		$categorySlug = optional($property->Category)->category_name;
+		$subSubSlug = optional($property->SubSubCategory)->sub_sub_category_name;
+
+		$categorySlug = $categorySlug ? Str::slug($categorySlug) : null;
+		$subSubSlug = $subSubSlug ? Str::slug($subSubSlug) : null;
+
+		$viewKey = $categorySlug . '_' . $subSubSlug;
+		$detailSection = config(
+			'property_detail_sections.' . $viewKey,
+			'front.property_sections.default'
+		);
+
+		$features = [];
+		if ($property_detail->additional_info) {
+			foreach (json_decode($property_detail->additional_info, true) as $field) {
+
+				if (in_array($field['type'], ['header', 'paragraph'])) {
+					continue;
+				}
+
+				if (!empty($field['label']) && !empty($field['userData'])) {
+
+					// 🔹 Clean label
+					$cleanLabel = html_entity_decode($field['label']);
+					$cleanLabel = strip_tags($cleanLabel);
+					$cleanLabel = preg_replace('/\s+/u', ' ', $cleanLabel);
+					$cleanLabel = trim($cleanLabel);
+
+					// 🔹 Handle single vs multiple values
+					if (is_array($field['userData'])) {
+						$features[$cleanLabel] = implode(', ', array_filter($field['userData']));
+					} else {
+						$features[$cleanLabel] = $field['userData'];
+					}
+				}
+
+			}
 		}
+
+		// dd($viewKey, $features);
 
 		return view('front.property_detail', compact(
 			'property_detail',
 			'amenities',
 			'isInWishlist',
-			'property_user'
+			'property_user',
+			'detailSection',
+			'features'
 		));
 	}
 
