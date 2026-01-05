@@ -118,12 +118,12 @@
                     </select>
                   </div>
 
-                  <!--                   <div class="col-sm-3">
+                                    <div class="col-sm-3">
                           <label class="label label-control">Sub Sub Category</label>
                           <select class="text-control populate_sub_sub_categories" name="sub_sub_category">
                             <option value="">Select Sub Sub Cat</option>
                           </select>
-                        </div> -->
+                        </div>
 
                   <div class="col-sm-3">
                     <label class="label label-control">Package</label>
@@ -237,15 +237,7 @@
                     </select>
                   </div>
 
-                  <div class="col-sm-3">
-                    <label class="label label-control">Property Type</label>
-                    <select name="properties.type_id" class="text-control">
-                      <option value="">Select Type</option>
-                      @foreach($property_types as $k => $v)
-                        <option value="{{$v->id}}">{{$v->type}}</option>
-                      @endforeach
-                    </select>
-                  </div>
+                  
 
 
                   <div class="col-sm-3">
@@ -285,7 +277,7 @@
                       <th>Property ID</th>
                       <th>Property Price</th>
                       <th>Owner Type</th>
-                      <th>Listing Type</th>
+                      <!-- <th>Listing Type</th> -->
                       <th>Total Enquiries</th>
                       <th>Added By</th>
                       <th>Status</th>
@@ -451,10 +443,6 @@
               <div class="dealer-content">
                 <div class="row">
                   <div class="col-sm-12">
-                    <label class="content-label">Property Type</label>
-                    <h3 class="content-head p-type"></h3>
-                  </div>
-                  <div class="col-sm-12">
                     <label class="content-label">Title</label>
                     <h3 class="content-head title"></h3>
                   </div>
@@ -470,6 +458,12 @@
                     <label class="content-label">Category</label>
                     <h3 class="content-head subcategory">Commercial</h3>
                   </div>
+
+                    <div class="col-sm-12">
+                    <label class="content-label">Property Type</label>
+                    <h3 class="content-head subsubcategory"></h3>
+                  </div>
+
                 </div>
 
                 <div class="row">
@@ -494,12 +488,7 @@
                     <h3 class="content-head published_date"></h3>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <label class="content-label">Listing Type</label>
-                    <h3 class="content-head listing-type"></h3>
-                  </div>
-                </div>
+              
               </div>
             </div>
           </div>
@@ -627,7 +616,7 @@
           { data: 'listing_id', name: 'listing_id' },
           { data: 'price', name: 'price' },
           { data: 'owner_type', name: 'owner_type' },
-          { data: 'listing_type', name: 'listing_type' },
+          // { data: 'listing_type', name: 'listing_type' },
           { data: 'total_enquiry', name: 'total_enquiry' },
           { data: 'added_by', name: 'added_by' },
           { data: 'status', name: 'status' },
@@ -860,7 +849,7 @@
             ) {
               $(".listing_thumbnail").attr(
                 "src",
-                "{{ config('app.url') }}/public/" + property.property_gallery[0].image_path
+                "{{ config('app.url') }}/" + property.property_gallery[0].image_path
               );
             } else {
               // Optional: fallback image
@@ -875,16 +864,17 @@
             var location = property.location ? property.location.location : "N/A";
             var propertyId = property.listing_id || "N/A";
             var price = property.price ? "₹" + property.price : "N/A";
-            var listingType = property.listing_type || "N/A";
+            // var listingType = property.listing_type || "N/A";
 
             // ✅ Populate modal fields
             $(".title").text(title);
             $(".category").text(category);
             $(".subcategory").text(subcategory);
+            $(".subsubcategory").text(property.sub_sub_category ? property.sub_sub_category.sub_sub_category_name : 'N/A');
             $(".location").text(location);
             $(".property_id").text(propertyId);
             $(".price").text(price);
-            $(".listing-type").text(listingType);
+            // $(".listing-type").text(listingType);
             $(".published_date").text(publish);
 
             $("#property_info").modal("show");
@@ -1016,8 +1006,8 @@
                                               </div>`);
               $.each(response.data.Property.property_gallery, function (key, image) {
                 $("#render-images").append(`<div class="col-sm-3">
-                                                  <img src="{{config('app.url')}}/public/${image.image_path}" style="height:50px;" /><br>
-                                                  <input type="checkbox" name="document" value="{{config('app.url')}}/public/${image.image_path}" />
+                                                  <img src="{{config('app.url')}}/${image.image_path}" style="height:50px;" /><br>
+                                                  <input type="checkbox" name="document" value="{{config('app.url')}}/${image.image_path}" />
                                                 </div>`);
               });
 

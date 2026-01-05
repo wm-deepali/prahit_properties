@@ -319,22 +319,74 @@
 							<div class="pt-5 px-4 px-lg-5 pb-4" style="margin-top: 120px;">
 								<div class="row g-4">
 
+									<?php
+    $defaultImage = $property_detail->PropertyGallery->where('is_default', 1)->first();
+    $mainImage = $defaultImage
+        ? asset($defaultImage->image_path)
+        : ($property_detail->PropertyGallery->first()
+            ? asset($property_detail->PropertyGallery->first()->image_path)
+            : asset('default.jpg'));
+?>
+
 									<!-- Left: Main Image -->
 									<div class="col-md-4 gallery-img-section">
-										<div class="position-relative rounded-4 overflow-hidden shadow-lg">
-											<img src="<?php echo e(isset($property_detail->PropertyGallery[0]) ? asset($property_detail->PropertyGallery[0]->image_path) : asset('default.jpg')); ?>"
-												class="img-fluid w-100" style="height: 320px; object-fit: cover;"
-												alt="Property">
-											<div class="position-absolute top-0 end-0 m-3">
-												<span class="badge bg-dark px-3 py-2 fs-6">
-													<i class="fas fa-camera"></i>
-													<?php echo e(count($property_detail->PropertyGallery)); ?> Photos
-												</span>
-											</div>
-										</div>
-									</div>
+    <div class="position-relative rounded-4 overflow-hidden shadow-lg">
 
-									<?php echo $__env->make($detailSection, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        
+        <a href="<?php echo e($mainImage); ?>" data-lightbox="property-gallery">
+            <img src="<?php echo e($mainImage); ?>"
+                 class="img-fluid w-100"
+                 style="height: 320px; object-fit: cover; cursor:pointer;"
+                 alt="Property">
+        </a>
+
+        
+        <div class="position-absolute top-0 end-0 m-3">
+            <span class="badge bg-dark px-3 py-2 fs-6">
+                <i class="fas fa-camera"></i>
+                <?php echo e($property_detail->PropertyGallery->count()); ?> Photos
+            </span>
+        </div>
+    </div>
+
+    
+    <?php $__currentLoopData = $property_detail->PropertyGallery; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gallery): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <a href="<?php echo e(asset($gallery->image_path)); ?>"
+           data-lightbox="property-gallery"
+           data-title="Property Image"
+           style="display:none;">
+        </a>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+</div>
+
+<div class="col-md-8">
+		<?php echo $__env->make($detailSection, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
+	<!-- Action Buttons -->
+	 <div class="mt-4 pt-3 border-top">
+    <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-md-start">
+
+        
+        <button type="button"
+                class="btn btn-primary btn-lg px-4 rounded-pill shadow-sm"
+                id="scrollToEnquiry">
+            <i class="fas fa-paper-plane"></i> Send Enquiry
+        </button>
+
+        
+        <button id="wishlistButton"
+                class="btn btn-outline-danger btn-lg px-4 rounded-pill shadow-sm"
+                data-submission="<?php echo e($property_detail->id); ?>">
+            <?php echo $isInWishlist
+                ? '<i class="fas fa-heart"></i> Added to Wishlist'
+                : '<i class="far fa-heart"></i> Add to Wishlist'; ?>
+
+        </button>
+
+    </div>
+</div>
+</div>
+								
 
 								</div>
 							</div>
@@ -345,7 +397,47 @@
 
 			<div class="row">
 				<div class="col-sm-8">
+				
+
 					<div class="card property-widgets">
+						<div class="property-title">
+							<h3>Property Details</h3>
+						</div>
+
+						<!-- ULTRA PREMIUM ADDITIONAL DETAILS - 2025 DESIGN -->
+						<div class="additional-details-section mb-5">
+							<div class="bg-white rounded-4  overflow-hidden border border-light">
+								<div class="px-5 py-4 bg-gradient-primary text-white">
+									<h3 class="mb-0 fs-4 fw-bold">
+										<i class="fas fa-sliders-h me-3"></i> Key Property Specifications
+									</h3>
+								</div>
+
+								<div class="p-4 p-lg-5">
+									<div class="row g-4">
+										<!-- No Data Fallback -->
+										<?php if(!$property_detail->additional_info): ?>
+											<div class="col-12 text-center py-5">
+												<i class="fas fa-info-circle text-primary fs-1 mb-3"></i>
+												<p class="text-muted fs-5">Additional specifications: No additional
+													specifications available</p>
+											</div>
+										<?php endif; ?>
+
+										<!-- Original form-rendered additional info -->
+										<div id="additional-info"></div>
+
+										
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+
+					</div>
+
+						<div class="card property-widgets">
 						<div class="property-title">
 							<h3>Property Gallery</h3>
 						</div>
@@ -375,46 +467,11 @@
 							</div>
 						</div>
 					</div>
-
 					
-
-
-
-					<div class="card property-widgets">
-						<div class="property-title">
-							<h3>Property Description</h3>
-						</div>
-						<div class="property-description">
-							<div class="row">
-								<div class="col-sm-12">
-									<p> <?php echo e(isset($property_detail->description) ? $property_detail->description : ''); ?> </p>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="card property-widgets">
-						<div class="property-title">
-							<h3>Property Location</h3>
-						</div>
-						<div class="property-location">
-							<div class="row">
-								<div class="col-sm-12">
-									<div id="propertyMap"
-										style="width:100%; height:400px; border-radius: 8px; margin-bottom: 10px;"></div>
-									<input type="hidden" id="latitude" name="latitude"
-										value="<?php echo e($property_detail->latitude); ?>">
-									<input type="hidden" id="longitude" name="longitude"
-										value="<?php echo e($property_detail->longitude); ?>">
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<?php if(count($amenities) > 0): ?>
+							<?php if(count($amenities) > 0): ?>
 						<div class="card property-widgets">
 							<div class="property-title">
-								<h3>Property Amenities</h3>
+								<h3>Amenities Detail</h3>
 							</div>
 							<div class="property-amenities">
 								<div class="row">
@@ -431,144 +488,68 @@
 						</div>
 					<?php endif; ?>
 
+
 					<div class="card property-widgets">
-						<div class="property-title">
-							<h3>Property Additional Details</h3>
-						</div>
+    <div class="property-title">
+        <h3>Location Detail</h3>
+    </div>
 
-						<!-- ULTRA PREMIUM ADDITIONAL DETAILS - 2025 DESIGN -->
-						<div class="additional-details-section mb-5">
-							<div class="bg-white rounded-4  overflow-hidden border border-light">
-								<div class="px-5 py-4 bg-gradient-primary text-white">
-									<h3 class="mb-0 fs-4 fw-bold">
-										<i class="fas fa-sliders-h me-3"></i> Key Property Specifications
-									</h3>
-								</div>
+    <div class="property-location p-3">
 
-								<div class="p-4 p-lg-5">
-									<div class="row g-4">
+        
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="propertyMap"
+                     style="width:100%; height:400px; border-radius: 12px; margin-bottom: 15px;">
+                </div>
 
-										<!-- Price Label -->
-										<?php if($property_detail->price_label): ?>
-											<div class="col-md-6 col-lg-6">
-												<div
-													class="spec-item d-flex align-items-center p-4 rounded-3 bg-light border-start border-danger border-5 shadow-sm hover-lift">
-													<div class="icon-box me-4">
-														<i class="fas fa-rupee-sign text-danger fs-2"></i>
-													</div>
-													<div class="flex-grow-1">
-														<small class="text-muted fw-600 text-uppercase fs-12">Price Type</small>
-														<h5 class="mb-1 fw-bold text-dark fs-4">
-															<?php echo e($property_detail->getPriceLabels($property_detail->price_label) ?? 'N/A'); ?>
+                <input type="hidden" id="latitude" name="latitude"
+                       value="<?php echo e($property_detail->latitude); ?>">
+                <input type="hidden" id="longitude" name="longitude"
+                       value="<?php echo e($property_detail->longitude); ?>">
+            </div>
+        </div>
 
-														</h5>
-														<?php if($property_detail->price_label_second): ?>
-															<small class="text-success fw-600">
-																<?php echo e(optional($property_detail->getPriceLabelObj())->second_input_label ?? 'Valid Till'); ?>:
-																<strong><?php echo e($property_detail->price_label_second); ?></strong>
-															</small>
-														<?php endif; ?>
-													</div>
-												</div>
-											</div>
-										<?php endif; ?>
+        
+        <div class="mt-3 p-3 bg-light rounded-3">
+            <h6 class="fw-bold mb-2">
+                <i class="fas fa-map-marked-alt text-danger"></i> Address
+            </h6>
 
-										<!-- Property Status -->
-										<?php if($property_detail->property_status): ?>
-											<div class="col-md-6 col-lg-6">
-												<div
-													class="spec-item d-flex align-items-center p-4 rounded-3 bg-light border-start border-warning border-5 shadow-sm hover-lift">
-													<div class="icon-box me-4">
-														<i class="fas fa-tasks text-warning fs-2"></i>
-													</div>
-													<div class="flex-grow-1">
-														<small class="text-muted fw-600 text-uppercase fs-12">Construction
-															Status</small>
-														<h5 class="mb-1 fw-bold text-dark fs-4">
-															<?php echo e($property_detail->getPropertyStatuses($property_detail->property_status) ?? 'N/A'); ?>
+            <p class="mb-1">
+                <?php echo e($property_detail->address); ?>
 
-														</h5>
-														<?php if($property_detail->property_status_second): ?>
-															<small class="text-primary fw-600">
-																<?php echo e(optional($property_detail->getPropertyStatusObj())->second_input_label ?? 'Possession By'); ?>:
-																<strong><?php echo e($property_detail->property_status_second); ?></strong>
-															</small>
-														<?php endif; ?>
-													</div>
-												</div>
-											</div>
-										<?php endif; ?>
+            </p>
 
-										<!-- Registration Status -->
-										<?php if($property_detail->registration_status): ?>
-											<div class="col-md-6 col-lg-6">
-												<div
-													class="spec-item d-flex align-items-center p-4 rounded-3 bg-light border-start border-success border-5 shadow-sm hover-lift">
-													<div class="icon-box me-4">
-														<i class="fas fa-file-alt text-success fs-2"></i>
-													</div>
-													<div class="flex-grow-1">
-														<small class="text-muted fw-600 text-uppercase fs-12">Legal
-															Status</small>
-														<h5 class="mb-1 fw-bold text-dark fs-4">
-															<?php echo e($property_detail->getRegistrationStatuses($property_detail->registration_status) ?? 'N/A'); ?>
+            <?php if($property_detail->landmark): ?>
+                <p class="mb-1 text-muted">
+                    <strong>Landmark:</strong> <?php echo e($property_detail->landmark); ?>
 
-														</h5>
-														<?php if($property_detail->registration_status_second): ?>
-															<small class="text-success fw-600">
-																<?php echo e(optional($property_detail->getRegistrationStatusObj())->second_input_label ?? 'Registered On'); ?>:
-																<strong><?php echo e($property_detail->registration_status_second); ?></strong>
-															</small>
-														<?php endif; ?>
-													</div>
-												</div>
-											</div>
-										<?php endif; ?>
+                </p>
+            <?php endif; ?>
 
-										<!-- Furnishing Status -->
-										<?php if($property_detail->furnishing_status): ?>
-											<div class="col-md-6 col-lg-6">
-												<div
-													class="spec-item d-flex align-items-center p-4 rounded-3 bg-light border-start border-info border-5 shadow-sm hover-lift">
-													<div class="icon-box me-4">
-														<i class="fas fa-chair text-info fs-2"></i>
-													</div>
-													<div class="flex-grow-1">
-														<small class="text-muted fw-600 text-uppercase fs-12">Furnishing</small>
-														<h5 class="mb-1 fw-bold text-dark fs-4">
-															<?php echo e($property_detail->getFurnishingStatuses($property_detail->furnishing_status) ?? 'N/A'); ?>
+            <p class="mb-0 text-muted">
+                <?php echo e($property_detail->getCity?->name); ?>,
+                <?php echo e($property_detail->getState?->name); ?>
 
-														</h5>
-														<?php if($property_detail->furnishing_status_second): ?>
-															<small class="text-info fw-600">
-																<?php echo e(optional($property_detail->getFurnishingStatusObj())->second_input_label ?? 'Completed By'); ?>:
-																<strong><?php echo e($property_detail->furnishing_status_second); ?></strong>
-															</small>
-														<?php endif; ?>
-													</div>
-												</div>
-											</div>
-										<?php endif; ?>
+                – <?php echo e($property_detail->pincode); ?>
 
-										<!-- No Data Fallback -->
-										<?php if(!$property_detail->price_label && !$property_detail->property_status && !$property_detail->registration_status && !$property_detail->furnishing_status && !$property_detail->additional_info): ?>
-											<div class="col-12 text-center py-5">
-												<i class="fas fa-info-circle text-primary fs-1 mb-3"></i>
-												<p class="text-muted fs-5">Additional specifications: No additional
-													specifications available</p>
-											</div>
-										<?php endif; ?>
+            </p>
+        </div>
 
-										<!-- Original form-rendered additional info -->
-										<div id="additional-info"></div>
-									</div>
-								</div>
-							</div>
-						</div>
+        
+        <?php if($property_detail->latitude && $property_detail->longitude): ?>
+            <a href="https://www.google.com/maps?q=<?php echo e($property_detail->latitude); ?>,<?php echo e($property_detail->longitude); ?>"
+               target="_blank"
+               class="btn btn-outline-primary w-100 mt-3 rounded-pill">
+                <i class="fas fa-directions"></i> Get Directions
+            </a>
+        <?php endif; ?>
 
+    
 
-
-					</div>
+    </div>
+</div>
 
 				</div>
 
@@ -576,10 +557,11 @@
 					<div class="card property-widgets">
 						<div class="property-title">
 							<h3>
-								Contact Now
+								Send Enquiry
 							</h3>
 						</div>
-						<div class="property-contact">
+						<div class="property-contact" id="enquiry-section">
+
 							<form id="enquiryForm">
 								<?php echo csrf_field(); ?>
 								<div class="form-group row">
@@ -631,6 +613,30 @@
 							</form>
 						</div>
 					</div>
+
+									
+<div class="card property-widgets mt-3">
+    <div class="property-title">
+        <h3>Report / Ownership</h3>
+    </div>
+
+    <div class="p-3">
+        
+        <button type="button"
+                class="btn btn-outline-primary w-100 mb-2 rounded-pill"
+                onclick="claim('<?php echo e($property_detail->id); ?>')">
+            <i class="fas fa-shield-alt"></i> Claim This Listing
+        </button>
+
+        
+        <button type="button"
+                class="btn btn-outline-warning w-100 rounded-pill"
+                data-bs-toggle="modal"
+                data-bs-target="#feedback-complaint">
+            <i class="fas fa-comment-dots"></i> Feedback / Complaint
+        </button>
+    </div>
+</div>
 
 					<div class="related-agents">
 						<div class="agent-card mb-3 border">
@@ -692,10 +698,10 @@
 					</div>
 
 				</div>
-
 			</div>
 		</div>
 	</section>
+
 	<input type="hidden" id="form-json" value="<?php echo e($property_detail->additional_info); ?>">
 	<!-- Modal -->
 
@@ -871,109 +877,212 @@
 	<script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
 	<script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
 
-	<script>
-		$(document).ready(function () {
-			// Show/hide listing options
-			$('#listingcorrect').change(function () {
-				const val = $(this).val();
-				$('.fakelisting, .notreachable').hide();
-				if (val === '2') $('.fakelisting').show();
-				if (val === '3') $('.notreachable').show();
-			});
+<script type="text/javascript">
 
-			// Send OTP
-			$('#feedbackSendOtp').click(function () {
-				const mobile = $('#feedbackMobile').val().trim();
-				if (!mobile) {
-					Swal.fire('Warning', 'Please enter mobile number', 'warning');
-					return;
-				}
+$(document).ready(function () {
 
-				fetch("<?php echo e(route('feedback.send-otp')); ?>", {
-					method: "POST",
-					headers: { "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>", "Content-Type": "application/json" },
-					body: JSON.stringify({ mobile_number: mobile })
-				})
-					.then(res => res.json())
-					.then(data => {
-						if (data.success) {
-							Swal.fire('OTP Sent', 'OTP sent to your mobile number', 'info');
-							$('#feedbackOtpDiv').show();
-						} else {
-							Swal.fire('Error', data.message || 'Failed to send OTP', 'error');
-						}
-					});
-			});
+    const formData = $('#form-json').val();
+    if (!formData) return;
 
-			// Verify OTP
-			$('#feedbackVerifyOtp').click(function () {
-				const mobile = $('#feedbackMobile').val().trim();
-				const otp = $('#feedbackOtpCode').val().trim();
+    /* =============================
+     * SECTION ORDER
+     * ============================= */
+    const SECTION_ORDER = [
+        'property area detail',
+        'price detail',
+        'building detail',
+        'property info',
+        'furnishing status',
+        'facilities',
+        'other info',
+        'leasing detail'
+    ];
 
-				if (!otp) {
-					Swal.fire('Warning', 'Please enter OTP', 'warning');
-					return;
-				}
+    /* =============================
+     * HELPERS
+     * ============================= */
+    function stripHtml(html) {
+        const d = document.createElement("DIV");
+        d.innerHTML = html;
+        return d.textContent || d.innerText || "";
+    }
 
-				fetch("<?php echo e(route('feedback.verify-otp')); ?>", {
-					method: "POST",
-					headers: { "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>", "Content-Type": "application/json" },
-					body: JSON.stringify({ mobile_number: mobile, otp: otp })
-				})
-					.then(res => res.json())
-					.then(data => {
-						if (data.success) {
-							Swal.fire('Verified', 'OTP verified successfully', 'success');
-							$('#otpVerified').val('1'); // mark OTP as verified
-						} else {
-							Swal.fire('Error', data.message || 'Invalid OTP', 'error');
-						}
-					});
-			});
+    function normalize(label) {
+        return stripHtml(label).toLowerCase().replace(/\s+/g, ' ').trim();
+    }
 
-			$('#feedbackResendOtp').click(function (e) {
-				e.preventDefault();
-				$('#feedbackSendOtp').click();
-			});
+    function formatIndianPrice(num) {
+        const n = parseFloat(num);
+        if (isNaN(n)) return num;
+        return '₹ ' + n.toLocaleString('en-IN');
+    }
 
-			// Feedback Submission
-			$('#feedbackForm').submit(function (e) {
-				e.preventDefault();
-
-				if ($('#otpVerified').val() != '1') {
-					Swal.fire('Warning', 'Please verify your mobile number via OTP', 'warning');
-					return;
-				}
-
-				const form = $(this);
-				const formData = new FormData(this);
-
-				fetch(form.attr('action'), {
-					method: 'POST',
-					headers: { 'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>' },
-					body: formData
-				})
-					.then(res => res.json())
-					.then(data => {
-						if (data.success) {
-							Swal.fire('Success', 'Feedback submitted successfully', 'success');
-							form[0].reset();
-							$('#feedbackOtpDiv').hide();
-							$('#otpVerified').val('0');
-							$('.fakelisting, .notreachable').hide();
-							$('#feedback-complaint').modal('hide');
-						} else {
-							Swal.fire('Error', data.message || 'Failed to submit feedback', 'error');
-						}
-					})
-					.catch(() => Swal.fire('Error', 'Something went wrong', 'error'));
-			});
-		});
-	</script>
+ /* =============================
+ * AREA → UNIT MAP (UPDATED)
+ * ============================= */
+const areaUnitMap = {
+    "land area": "land area unit",
+    "super area": "super area unit",
+    "carpet area": "carpet area unit",
+    "builtup area": "builtup area unit",
+    "built-up area": "built-up area unit",
+    "covered area": "covered area unit",
+    "plot area": "plot area unit",
+    "plot length": "plot length unit",
+    "plot breadth": "plot breadth unit",
+    "width of the road plot facing": "width unit"
+};
 
 
+    let json;
+    try {
+        json = JSON.parse(formData);
+    } catch (e) {
+        $('#additional-info').html('<p class="text-muted">Additional information not available</p>');
+        return;
+    }
 
-	<script type="text/javascript">
+    /* =============================
+     * STORE UNITS
+     * ============================= */
+    const tempUnitValues = {};
+    json.forEach(field => {
+        if (!field.label || !field.userData) return;
+        const key = normalize(field.label);
+
+        Object.entries(areaUnitMap).forEach(([areaKey, unitKey]) => {
+            if (key === unitKey && field.userData[0]) {
+                tempUnitValues[areaKey] = field.userData[0];
+            }
+        });
+    });
+
+    /* =============================
+     * GROUP BY SECTION
+     * ============================= */
+    const sections = {};
+    let currentSection = null;
+    let priceNegotiableValue = null; // ✅ RESTORED
+
+    json.forEach(field => {
+
+        if (field.type === 'header') {
+            currentSection = normalize(field.label);
+            sections[currentSection] = [];
+            return;
+        }
+
+        if (!currentSection || !field.userData || !field.userData.length) return;
+        if (!field.userData.some(v => v && !v.toLowerCase().includes('select'))) return;
+
+        let value = 'N/A';
+
+        if (field.type === 'radio-group' || field.type === 'select') {
+            const selected = field.userData[0];
+            if (field.values) {
+                const opt = field.values.find(v => v.value === selected || v.label === selected);
+                if (opt && !opt.label.toLowerCase().includes('select')) {
+                    value = opt.label;
+                }
+            } else {
+                value = selected;
+            }
+        }
+        else if (field.type === 'checkbox-group') {
+            value = field.userData.join(', ');
+        }
+        else {
+            value = field.userData.join(', ');
+        }
+
+        const label = stripHtml(field.label);
+        const key = normalize(label);
+
+        /* Append unit */
+        if (areaUnitMap[key] && tempUnitValues[key]) {
+            value += ' ' + tempUnitValues[key];
+        }
+
+        /* Skip unit-only rows */
+        if (Object.values(areaUnitMap).includes(key)) return;
+
+        /* Capture Price Negotiable */
+        if (key === 'price negotiable') {
+            priceNegotiableValue = value;
+        }
+
+        /* Format price */
+        if (
+            key.includes('price') ||
+            key.includes('amount') ||
+            key.includes('rent') ||
+            key.includes('charge')
+        ) {
+            value = formatIndianPrice(value);
+        }
+
+        sections[currentSection].push({ label, value });
+    });
+
+    /* =============================
+     * RENDER
+     * ============================= */
+    let html = '<div class="row">';
+
+    SECTION_ORDER.forEach(section => {
+
+        if (!sections[section] || !sections[section].length) return;
+
+        html += `
+            <div class="col-sm-12 mb-2 mt-4">
+                <h4 style="color:#2c8c56;font-size:24px;font-weight:700;
+                margin-bottom:10px;border-bottom:2px solid #e38e32;padding-bottom:8px;">
+                    ${section.replace(/\b\w/g, l => l.toUpperCase())}
+                </h4>
+            </div>
+        `;
+
+        sections[section].forEach(item => {
+            html += `
+                <div class="col-sm-6">
+                    <div class="info-item">
+                        <div class="info-label">${item.label}</div>
+                        <div class="info-value fw-bold text-dark">${item.value}</div>
+                    </div>
+                </div>
+            `;
+        });
+
+        
+        /* ✅ DESCRIPTION AFTER FURNISHING STATUS */
+        if (section === 'furnishing status') {
+            const description = <?php echo json_encode($property_detail->description, 15, 512) ?>;
+            if (description) {
+                html += `
+                    <div class="col-sm-12 mb-2 mt-4">
+                        <h4 style="color:#2c8c56;font-size:24px;font-weight:700;
+                        margin-bottom:10px;border-bottom:2px solid #e38e32;padding-bottom:8px;">
+                            Property Description
+                        </h4>
+                        <div class="bg-light p-4 rounded">
+                            <p class="mb-0">${description}</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+    });
+
+    html += '</div>';
+    $('#additional-info').html(html);
+
+    /* Optional legacy support */
+    if (priceNegotiableValue && priceNegotiableValue.toLowerCase() !== 'no') {
+        $('#price-negotiable').text('Price Negotiable : ' + priceNegotiableValue);
+    }
+
+});
+
 
 		function createMap(lat, lng) {
 			var map = L.map('propertyMap').setView([lat, lng], 16);
@@ -1074,170 +1183,7 @@
 		});
 
 		$(".loading").css('display', 'none');
-
-
-		$(document).ready(function () {
-			var formData = $('#form-json').val();
-
-			function formatIndianPriceJS(num) {
-				num = parseFloat(num);
-				if (isNaN(num)) return num;
-
-				return '₹ ' + num.toLocaleString('en-IN');
-			}
-
-			// Helper function to strip HTML tags from labels
-			function stripHtml(html) {
-				var tmp = document.createElement("DIV");
-				tmp.innerHTML = html;
-				return tmp.textContent || tmp.innerText || "";
-			}
-
-			// Normalize label for matching keys consistently
-			function normalizeLabel(label) {
-				return label.toLowerCase().replace(/\s+/g, ' ').trim();
-			}
-
-			if (formData) {
-				try {
-					var json_data = JSON.parse(formData);
-					var outputHTML = '<div class="row">';
-					var priceNegotiableValue = null;
-
-					// Map for normalized area labels to their unit fields
-					var areaUnitMap = {
-						"built-up area": "built-up area unit",
-						"carpet area": "carpet area unit",
-						"super area": "super area unit",
-						"plot area": "plot area unit",
-						"from": "from unit",
-						"to": "to unit"
-					};
-
-					var tempUnitValues = {};
-
-					// First pass: store units in tempUnitValues
-					json_data.forEach(function (field) {
-						var label = field.label ? stripHtml(field.label) : '';
-						var normalizedLabel = normalizeLabel(label);
-
-						if (Object.values(areaUnitMap).includes(normalizedLabel)) {
-							if (field.userData && field.userData.length > 0) {
-								tempUnitValues[normalizedLabel] = field.userData[0];
-							}
-						}
-					});
-
-					// Second pass: render fields appending unit to area fields
-					json_data.forEach(function (field) {
-						if (field.type === 'header' || field.type === 'paragraph') {
-							if (field.label) {
-								outputHTML += '<div class="col-sm-12 mb-2 mt-4"><h4 style="color: #2c8c56; font-size: 24px; font-weight: 700; margin-bottom: 10px; border-bottom: 2px solid #e38e32; padding-bottom: 8px;">' + stripHtml(field.label) + '</h4></div>';
-							}
-							return;
-						}
-
-						var originalLabel = field.label ? stripHtml(field.label) : 'N/A';
-						var label = originalLabel;
-						var value = 'N/A';
-
-						if (field.userData && field.userData.length > 0) {
-							var hasValue = field.userData.some(function (item) {
-								return item !== '' && item !== null && item !== undefined;
-							});
-
-							if (hasValue) {
-								if (field.type === 'radio-group') {
-									// single selection
-									var selectedValue = field.userData[0];
-									if (field.values) {
-										var selectedOption = field.values.find(function (v) {
-											return v.value === selectedValue || v.label === selectedValue;
-										});
-										if (selectedOption) {
-											// ignore "--Select--"
-											if (!selectedOption.value || selectedOption.label.trim().toLowerCase() === '--select--') {
-												value = "N/A";
-											} else {
-												value = selectedOption.label;
-											}
-										} else {
-											value = selectedValue || "N/A";
-										}
-									}
-								} else if (field.type === 'select' && field.multiple) {
-									// handle multiple selection
-									value = field.userData.map(function (u) {
-										var option = field.values.find(v => v.value === u || v.label === u);
-										return option ? option.label : u;
-									}).join(", ");
-								} else if (field.type === 'select') {
-									// single select
-									var selectedValue = field.userData[0];
-									if (field.values) {
-										var selectedOption = field.values.find(function (v) {
-											return v.value === selectedValue || v.label === selectedValue;
-										});
-										value = selectedOption ? selectedOption.label : selectedValue || "N/A";
-									}
-								} else if (field.type === 'checkbox-group') {
-									value = field.userData.join(", ");
-								} else {
-									value = field.userData.join(", ");
-								}
-
-							}
-						}
-
-						var key = normalizeLabel(label);
-
-						// Append unit for area fields using saved unit value
-						if (areaUnitMap[key]) {
-							var unitKey = areaUnitMap[key];
-							if (tempUnitValues[unitKey]) {
-								value += " " + tempUnitValues[unitKey];
-							}
-						}
-
-						// Skip rendering fields that are the UNIT labels
-						if (Object.values(areaUnitMap).includes(key)) {
-							return; // skip unit fields from output
-						}
-
-						// Handle price negotiable separately
-						if (key === "price negotiable") {
-							priceNegotiableValue = value;
-						}
-						// Format expected price display
-						if (key === "expected price" || key === "booking/token amount") {
-							value = formatIndianPriceJS(value);
-						}
-
-						outputHTML += `
-					<div class="col-sm-6 ">
-						<div class="info-item">
-							<div class="info-label">${label}</div>
-							<div class="info-value fw-bold text-dark">${value}</div>
-						</div>
-					</div>`;
-					});
-
-					outputHTML += '</div>';
-					$('#additional-info').html(outputHTML);
-
-					var finalText = "";
-					if (priceNegotiableValue && priceNegotiableValue.toLowerCase() !== "no") {
-						finalText = "Price Negotiable : " + priceNegotiableValue;
-					}
-					$("#price-negotiable").text(finalText);
-
-				} catch (e) {
-					console.error('Error parsing JSON:', e);
-					$('#additional-info').html('<p style="color: #999;">Additional information not available</p>');
-				}
-			}
-		});
-
+	
 		document.addEventListener("DOMContentLoaded", function () {
 			const enquiryForm = document.querySelector(".property-contact form");
 			const sendEnquiryBtn = document.getElementById("sendEnquiryBtn");
@@ -1363,6 +1309,116 @@
 						});
 					});
 			}
+		});
+
+		document.getElementById('scrollToEnquiry')?.addEventListener('click', function () {
+    const target = document.getElementById('enquiry-section');
+    if (target) {
+        target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+        target.classList.add('shadow-lg');
+        setTimeout(() => target.classList.remove('shadow-lg'), 1200);
+    }
+});
+
+		$(document).ready(function () {
+			// Show/hide listing options
+			$('#listingcorrect').change(function () {
+				const val = $(this).val();
+				$('.fakelisting, .notreachable').hide();
+				if (val === '2') $('.fakelisting').show();
+				if (val === '3') $('.notreachable').show();
+			});
+
+			// Send OTP
+			$('#feedbackSendOtp').click(function () {
+				const mobile = $('#feedbackMobile').val().trim();
+				if (!mobile) {
+					Swal.fire('Warning', 'Please enter mobile number', 'warning');
+					return;
+				}
+
+				fetch("<?php echo e(route('feedback.send-otp')); ?>", {
+					method: "POST",
+					headers: { "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>", "Content-Type": "application/json" },
+					body: JSON.stringify({ mobile_number: mobile })
+				})
+					.then(res => res.json())
+					.then(data => {
+						if (data.success) {
+							Swal.fire('OTP Sent', 'OTP sent to your mobile number', 'info');
+							$('#feedbackOtpDiv').show();
+						} else {
+							Swal.fire('Error', data.message || 'Failed to send OTP', 'error');
+						}
+					});
+			});
+
+			// Verify OTP
+			$('#feedbackVerifyOtp').click(function () {
+				const mobile = $('#feedbackMobile').val().trim();
+				const otp = $('#feedbackOtpCode').val().trim();
+
+				if (!otp) {
+					Swal.fire('Warning', 'Please enter OTP', 'warning');
+					return;
+				}
+
+				fetch("<?php echo e(route('feedback.verify-otp')); ?>", {
+					method: "POST",
+					headers: { "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>", "Content-Type": "application/json" },
+					body: JSON.stringify({ mobile_number: mobile, otp: otp })
+				})
+					.then(res => res.json())
+					.then(data => {
+						if (data.success) {
+							Swal.fire('Verified', 'OTP verified successfully', 'success');
+							$('#otpVerified').val('1'); // mark OTP as verified
+						} else {
+							Swal.fire('Error', data.message || 'Invalid OTP', 'error');
+						}
+					});
+			});
+
+			$('#feedbackResendOtp').click(function (e) {
+				e.preventDefault();
+				$('#feedbackSendOtp').click();
+			});
+
+			// Feedback Submission
+			$('#feedbackForm').submit(function (e) {
+				e.preventDefault();
+
+				if ($('#otpVerified').val() != '1') {
+					Swal.fire('Warning', 'Please verify your mobile number via OTP', 'warning');
+					return;
+				}
+
+				const form = $(this);
+				const formData = new FormData(this);
+
+				fetch(form.attr('action'), {
+					method: 'POST',
+					headers: { 'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>' },
+					body: formData
+				})
+					.then(res => res.json())
+					.then(data => {
+						if (data.success) {
+							Swal.fire('Success', 'Feedback submitted successfully', 'success');
+							form[0].reset();
+							$('#feedbackOtpDiv').hide();
+							$('#otpVerified').val('0');
+							$('.fakelisting, .notreachable').hide();
+							$('#feedback-complaint').modal('hide');
+						} else {
+							Swal.fire('Error', data.message || 'Failed to submit feedback', 'error');
+						}
+					})
+					.catch(() => Swal.fire('Error', 'Something went wrong', 'error'));
+			});
 		});
 	</script>
 

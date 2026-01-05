@@ -221,7 +221,7 @@
                         <th>Property ID</th>
                         <th>Property Price</th>
                         <th>Owner Type</th>
-                        <th>Listing Type</th>
+                        <!-- <th>Listing Type</th> -->
                         <th>Total Enquiries</th>
                         <th>Added By</th>
                         <th>Status</th>
@@ -427,12 +427,7 @@
                     <h3 class="content-head published_date"></h3>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <label class="content-label">Listing Type</label>
-                    <h3 class="content-head listing-type"></h3>
-                  </div>
-                </div>
+               
               </div>
             </div>
           </div>
@@ -559,7 +554,7 @@
           { data: 'listing_id', name: 'listing_id' },
           { data: 'price', name: 'price' },
           { data: 'owner_type', name: 'owner_type' },
-          { data: 'listing_type', name: 'listing_type' },
+          // { data: 'listing_type', name: 'listing_type' },
           { data: 'total_enquiry', name: 'total_enquiry' },
           { data: 'added_by', name: 'added_by' },
           { data: 'status', name: 'status' },
@@ -848,7 +843,7 @@
                 : "N/A";
             var propertyId = property.listing_id || "N/A";
             var price = property.price ? "₹" + property.price : "N/A";
-            var listingType = property.listing_type || "N/A";
+            // var listingType = property.listing_type || "N/A";
 
             // ✅ Update DOM safely
             $(".title").text(title);
@@ -857,7 +852,7 @@
             $(".location").text(location);
             $(".property_id").text(propertyId);
             $(".price").text(price);
-            $(".listing-type").text(listingType);
+            // $(".listing-type").text(listingType);
             $(".published_date").text(publish);
 
             // ✅ Show modal

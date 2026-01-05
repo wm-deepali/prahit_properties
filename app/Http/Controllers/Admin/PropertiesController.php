@@ -1,36 +1,36 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\Http\Controllers\Concern\GlobalTrait;
-use App\Http\Controllers\AppController;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\Request;
-use App\PropertiesFields;
+
+use File;
+use App\City;
+use App\User;
+use App\State;
+use App\Amenity;
+use ZipArchive;
+use DataTables;
+use App\Category;
+use App\Locations;
+use App\FormTypes;
+use App\Properties;
+use App\SubSubCategory;
 use App\PropertyGallery;
 use App\PropertyTypes;
 use App\ClaimListing;
 use App\SubLocations;
 use App\AgentEnquiry;
 use App\SubCategory;
-use App\SubSubCategory;
-use App\Properties;
-use App\Locations;
-use App\FormTypes;
-use App\Category;
-use App\Visitor;
-use ZipArchive;
-use DataTables;
-use App\Amenity;
-use App\State;
-use App\City;
-use App\User;
-use File;
+use App\EmailTemplate;
+use Illuminate\Http\Request;
 use App\Models\PriceLabel;
 use App\Models\PropertyStatus;
 use App\Models\FurnishingStatus;
 use App\Models\RegistrationStatus;
-use App\EmailTemplate;
-use App\Notifications\WelcomeEmailNotification;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Concern\GlobalTrait;
+use App\Http\Controllers\AppController;
+use Illuminate\Support\Str;
 
 class PropertiesController extends AppController
 {
@@ -40,32 +40,28 @@ class PropertiesController extends AppController
 	{
 		$location = Locations::all();
 		$sublocation = SubLocations::all();
-		$property_types = PropertyTypes::all();
-		return view('admin.properties.index', compact('location', 'sublocation', 'property_types'));
+		return view('admin.properties.pending_properties', compact('location', 'sublocation', ));
 	}
 
 	public function manageApprovedProperties()
 	{
 		$location = Locations::all();
 		$sublocation = SubLocations::all();
-		$property_types = PropertyTypes::all();
-		return view('admin.properties.manage_properties', compact('location', 'sublocation', 'property_types'));
+		return view('admin.properties.approved_properties', compact('location', 'sublocation',));
 	}
 
 	public function managePublishedProperties()
 	{
 		$location = Locations::all();
 		$sublocation = SubLocations::all();
-		$property_types = PropertyTypes::all();
-		return view('admin.properties.published_property', compact('location', 'sublocation', 'property_types'));
+		return view('admin.properties.published_property', compact('location', 'sublocation',));
 	}
 
 	public function manageCancelledProperties()
 	{
 		$location = Locations::all();
 		$sublocation = SubLocations::all();
-		$property_types = PropertyTypes::all();
-		return view('admin.properties.cancelled_properties', compact('location', 'sublocation', 'property_types'));
+		return view('admin.properties.cancelled_properties', compact('location', 'sublocation',));
 	}
 
 	public function index(Request $request)
@@ -1055,103 +1051,228 @@ class PropertiesController extends AppController
 		$states = State::where('country_id', 101)->get();
 		$amenities = Amenity::where('status', 'Yes')->get();
 
-		// Get all active Price Labels and Statuses
-		$price_labels = PriceLabel::where('status', 'active')->get();
-		$property_statuses = PropertyStatus::where('status', 'active')->get();
-		$registration_statuses = RegistrationStatus::where('status', 'active')->get();
-		$furnishing_statuses = FurnishingStatus::where('status', 'active')->get();
-
 		return view('admin.properties.create', compact(
 			'category',
 			'locations',
 			'form_type',
 			'states',
 			'amenities',
-			'price_labels',
-			'property_statuses',
-			'registration_statuses',
-			'furnishing_statuses',
 		));
 	}
 
 
 	public function store(Request $request)
 	{
-		// dd($request->all());
-		$rules = [
-			'title' => 'required|unique:properties,title',
-			'price' => "required|numeric",
-			// "email" => "sometimes|required|unique:users,email",
-			"mobile_number" => "required",
-			"otp" => "required"
-		];
-		$isValid = $this->checkValidate($request, $rules);
-		if ($isValid) {
-			$this->JsonResponse(400, $isValid);
+		// -------------------------------------------------
+		// AUTH USER (MANDATORY)
+		// -------------------------------------------------
+		$user = Auth::user();
+
+		if (!$user) {
+			return response()->json([
+				'status' => 'error',
+				'message' => 'Unauthorized access.'
+			], 401);
 		}
 
-		try {
-			if ($request->is_visitor) {
-				$get_otp = Visitor::where(['mobile_number' => $request->mobile_number, 'otp' => $request->otp])->latest()->first();
-				if (isset($get_otp)) {
-					$get_otp->is_verified = "1";
-					$get_otp->save();
-				}
-				if ($request->firstname) {
-					$request['password'] = Hash::make(12345678);
-					$request['auth_token'] = "";
-					$create_user = User::create($request->all());
-				}
+		// -------------------------------------------------
+		// VALIDATION
+		// -------------------------------------------------
+		$validator = Validator::make($request->all(), [
+			'title' => 'required|string|max:200|unique:properties,title',
+			'category_id' => 'required',
+			'sub_category_id' => 'required',
+			'sub_sub_category_id' => 'nullable',
+			'description' => 'required',
+			'address' => 'required',
+			'state' => 'required',
+			'city' => 'required',
+			'location_id' => 'required',
+			'custom_location_input' => 'nullable|string|max:255',
+
+			'sub_location_id' => 'nullable|array',
+			'sub_location_id.*' => 'nullable|string',
+
+			'landmark' => 'nullable|string|max:255',
+			'pincode' => 'nullable|digits:6',
+
+			'gallery_images_file' => 'required|array|min:1',
+			'gallery_images_file.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
+
+			'default_image_index' => 'nullable|integer|min:0',
+
+			'property_video' => 'nullable|mimes:mp4,mov,avi,wmv|max:20480',
+		]);
+
+		if ($validator->fails()) {
+			return response()->json([
+				'status' => 'error',
+				'message' => 'Validation failed',
+				'errors' => $validator->errors()
+			], 422);
+		}
+
+		// -------------------------------------------------
+		// CUSTOM LOCATION HANDLING
+		// -------------------------------------------------
+		$locationId = $request->location_id;
+
+		if ($locationId === 'other') {
+			if (!$request->custom_location_input) {
+				return response()->json([
+					'status' => 'error',
+					'message' => 'Please enter custom location.'
+				], 422);
 			}
 
-			if ($request->has('feature_image_file')) {
-				$feature_image = $this->fileUpload($request, ['uploads/properties/feature_image/' => 'feature_image_file']);
-			}
+			$location = Locations::create([
+				'state_id' => $request->state,
+				'city_id' => $request->city,
+				'location' => ucwords(strtolower($request->custom_location_input)),
+				'status' => 1,
+			]);
 
-			$request['featured_image'] = isset($feature_image) ? $feature_image[0] : '';
+			$locationId = $location->id;
+		}
 
+		// -------------------------------------------------
+		// SUB LOCATIONS (TAGGING SUPPORT)
+		// -------------------------------------------------
+		$subLocationIds = [];
 
-			if ($request->has('price_label')) {
-				$request['price_label'] = implode(',', $request->price_label);
-			}
-			// $request['listing_id'] = uniqid(7);
-			// user data save into database ----
-			$count = Properties::count();
-			$final_digits = str_pad($count, 4, '0', STR_PAD_LEFT);
-			$unique_id = 'PP-' . $final_digits;
-			$request['listing_id'] = $unique_id;
-			$request['state_id'] = $request->state;
-			$request['city_id'] = $request->city;
-			$request['construction_age'] = $request->construction_age;
-			$request['location_id'] = implode(',', $request->location_id);
-			$request['sub_location_name'] = $request->sub_location_name ?? null;
-			$request['amenities'] = $request->has('amenity') ? implode(',', $request->amenity) : null;
-			$listing = Properties::create($request->all());
-			if ($listing->exists()) {
-				$listing_features = json_decode($request->listing_features, true);
-				$propertiesFields = '';
-				foreach ($listing_features as $key => $value) {
-					$propertiesFields = PropertiesFields::create(['property_id' => $listing->id, 'formtype_id' => $request->formtype_id, 'sub_feature_id' => $key, 'feature_value' => $value]);
-				}
+		if ($request->sub_location_id) {
+			foreach ($request->sub_location_id as $value) {
 
-				if ($request->has('gallery_images_file')) {
-					$gallery_images = $this->multipleFileUpload($request, ['uploads/properties/gallery_images/' => 'gallery_images_file']);
-					foreach ($gallery_images as $key => $value) {
-						PropertyGallery::create(['property_id' => $listing->id, 'image_path' => $value]);
+				if (ctype_digit($value)) {
+					$subLocationIds[] = $value;
+				} else {
+					$name = ucwords(strtolower($value));
+					$existing = SubLocations::where([
+						'location_id' => $locationId,
+						'sub_location_name' => $name
+					])->first();
+
+					if ($existing) {
+						$subLocationIds[] = $existing->id;
+					} else {
+						$newSub = SubLocations::create([
+							'location_id' => $locationId,
+							'sub_location_name' => $name,
+						]);
+						$subLocationIds[] = $newSub->id;
 					}
 				}
-
-				if ($propertiesFields) {
-					$this->JsonResponse(200, 'Listing created successfully');
-				}
-
-			} else {
-				$this->JsonResponse(400, 'An error occured.');
 			}
-		} catch (\Exception $e) {
-			$this->JsonResponse(500, $e->getMessage());
 		}
+
+
+		/* ================= EXTRACT PRICE FROM ADDITIONAL INFO ================= */
+
+		$price = null;
+		$price =
+			// Sale price
+			$this->getValueFromAdditionalInfo($request->additional_info, [
+				'Expected Price',
+				'Exclusive Price',
+				'Offer Price',
+				'Starting Price',
+			])
+
+			// Rent (flat / office / shop)
+			?? $this->getValueFromAdditionalInfo($request->additional_info, [
+				'Monthly Rent',
+			])
+
+			// PG / Hostel
+			?? $this->getValueFromAdditionalInfo($request->additional_info, [
+				'Rent Per Bed',
+				'Rent Per Person',
+				'PG Rent',
+			]);
+
+
+		// -------------------------------------------------
+		// CREATE PROPERTY
+		// -------------------------------------------------
+		$property = Properties::create([
+			'user_id' => $user->id,
+			'slug' => Str::slug($request->title),
+			'listing_id' => 'PP-' . strtoupper(Str::random(8)),
+
+			'title' => $request->title,
+			'description' => $request->description,
+
+			'category_id' => $request->category_id,
+			'sub_category_id' => $request->sub_category_id,
+			'sub_sub_category_id' => $request->sub_sub_category_id,
+
+			'address' => $request->address,
+			'state_id' => $request->state,
+			'city_id' => $request->city,
+			'location_id' => $locationId,
+			'sub_location_id' => !empty($subLocationIds) ? implode(',', $subLocationIds) : null,
+
+			'landmark' => $request->landmark,
+			'pincode' => $request->pincode,
+
+			'amenities' => $request->has('amenity')
+				? implode(',', $request->amenity)
+				: null,
+
+			'additional_info' => $request->additional_info,
+
+			'latitude' => $request->latitude,
+			'longitude' => $request->longitude,
+
+			// Owner info
+			'owner_firstname' => $user->firstname,
+			'owner_lastname' => $user->lastname,
+			'owner_email' => $user->email,
+			'owner_mobile' => $user->mobile_number,
+			'price' => $price,
+		]);
+
+		// -------------------------------------------------
+		// PROPERTY VIDEO
+		// -------------------------------------------------
+		if ($request->hasFile('property_video')) {
+			$video = $request->file('property_video');
+			$videoName = uniqid('video_') . '.' . $video->getClientOriginalExtension();
+			$video->move(public_path('uploads/properties/videos'), $videoName);
+
+			$property->property_video = 'uploads/properties/videos/' . $videoName;
+			$property->save();
+		}
+
+		// -------------------------------------------------
+		// GALLERY IMAGES + DEFAULT IMAGE
+		// -------------------------------------------------
+		$defaultIndex = (int) ($request->default_image_index ?? 0);
+
+		foreach ($request->file('gallery_images_file') as $index => $file) {
+
+			$imageName = uniqid('img_') . '.' . $file->getClientOriginalExtension();
+			$file->move(public_path('uploads/properties/gallery_images'), $imageName);
+
+			PropertyGallery::create([
+				'property_id' => $property->id,
+				'image_path' => 'uploads/properties/gallery_images/' . $imageName,
+				'is_default' => $index === $defaultIndex ? 1 : 0,
+			]);
+		}
+
+		// -------------------------------------------------
+		// RESPONSE
+		// -------------------------------------------------
+		return response()->json([
+			'status' => 'success',
+			'message' => 'Property created successfully',
+			'data' => [
+				'listing' => $property
+			]
+		], 200);
 	}
+
 
 	public function edit($id)
 	{
@@ -1165,11 +1286,6 @@ class PropertiesController extends AppController
 		$sub_locations = SubLocations::whereIn('location_id', explode(',', $property->location_id))->get();
 		$amenities = Amenity::where('status', 'Yes')->get();
 
-		// Get all active Price Labels and Statuses
-		$price_labels = PriceLabel::where('status', 'active')->get();
-		$property_statuses = PropertyStatus::where('status', 'active')->get();
-		$registration_statuses = RegistrationStatus::where('status', 'active')->get();
-		$furnishing_statuses = FurnishingStatus::where('status', 'active')->get();
 
 		return view('admin.properties.edit', compact(
 			'property',
@@ -1179,10 +1295,6 @@ class PropertiesController extends AppController
 			'cities',
 			'sub_locations',
 			'amenities',
-			'price_labels',
-			'property_statuses',
-			'registration_statuses',
-			'furnishing_statuses',
 		));
 	}
 
@@ -1197,12 +1309,6 @@ class PropertiesController extends AppController
 		$sub_locations = SubLocations::whereIn('location_id', explode(',', $property->location_id))->get();
 		$amenities = Amenity::where('status', 'Yes')->get();
 
-		// Get all active Price Labels and Statuses
-		$price_labels = PriceLabel::where('status', 'active')->get();
-		$property_statuses = PropertyStatus::where('status', 'active')->get();
-		$registration_statuses = RegistrationStatus::where('status', 'active')->get();
-		$furnishing_statuses = FurnishingStatus::where('status', 'active')->get();
-
 		return view('admin.properties.preview', compact(
 			'property',
 			'category',
@@ -1212,138 +1318,116 @@ class PropertiesController extends AppController
 			'sub_locations',
 			'amenities',
 			'id',
-			'price_labels',
-			'property_statuses',
-			'registration_statuses',
-			'furnishing_statuses'
 		));
 	}
 
 	public function show($id)
 	{
-		$property = Properties::select('*', \DB::raw('DATE_FORMAT(published_date, "%d-%b-%Y") as publish_date'))->with('Category', 'SubCategory', 'Location', 'PropertyGallery', 'PropertyTypes')->findOrFail($id);
+		$property = Properties::select('*', \DB::raw('DATE_FORMAT(published_date, "%d-%b-%Y") as publish_date'))->with('Category', 'SubCategory', 'SubSubCategory', 'Location', 'PropertyGallery', 'PropertyTypes')->findOrFail($id);
 		$this->JsonResponse(200, 'Property found successfully', ['Property' => $property]);
 	}
 
 
 	public function update(Request $request)
 	{
+
 		try {
-			// ✅ Validation
+
+			/* ================= VALIDATION ================= */
 			$request->validate([
 				'id' => 'required|exists:properties,id',
 				'title' => 'required|max:200',
-				// 'type_id' => 'nullable',
-				'price' => 'required|numeric',
-				'price_label.*' => 'nullable',
 				'category_id' => 'required',
-				// 'sub_category_id' => 'required',
-				// 'construction_age' => 'nullable',
 				'description' => 'required',
 				'address' => 'required',
 				'location_id' => 'required',
+
 				'sub_location_id' => 'nullable|array',
 				'sub_location_id.*' => 'nullable|string',
-				"gallery_images_file.*" => 'nullable|mimes:jpg,png,jpeg',
-				"feature_image_file" => 'nullable|mimes:jpg,png,jpeg',
-				"property_video' => 'nullable|mimes:mp4,mov,avi,wmv|max:100000',"
+
+				'gallery_images_file.*' => 'nullable|image|mimes:jpg,jpeg,png,webp',
+
+				'property_video' => 'nullable|mimes:mp4,mov,avi,wmv|max:20480',
 			]);
 
 
-			$properties = Properties::findOrFail($request->id);
+			/* ================= PROPERTY ================= */
+			$property = Properties::findOrFail($request->id);
 
-			// ✅ Multi-value fields
-			$price_label = $request->has('price_label') ? implode(',', (array) $request->price_label) : null;
-			$property_use_for = $request->has('property_use_for') ? implode(',', (array) $request->property_use_for) : null;
-			$amenties_features = $request->has('amenties_features') ? implode(',', (array) $request->amenties_features) : null;
-			$amenities = $request->has('amenity') ? implode(',', (array) $request->amenity) : null;
+			$amenities = $request->has('amenity')
+				? implode(',', (array) $request->amenity)
+				: null;
 
-			// ✅ Handle feature image upload
-			$featured_image = $properties->featured_image;
-			if ($request->hasFile('feature_image_file')) {
-				$feature_image = $this->fileUpload($request, [
-					'uploads/properties/feature_image/' => 'feature_image_file'
-				]);
-				$featured_image = isset($feature_image) ? $feature_image[0] : $featured_image;
-			}
-
-			// Handle custom location if 'other' is selected (single location)
+			/* ================= LOCATION (OTHER) ================= */
 			$locationId = $request->location_id;
 			if ($locationId === 'other') {
-				$customLocationName = trim($request->custom_location_input);
-				if (!empty($customLocationName)) {
-					$customLocationName = ucwords(strtolower($customLocationName));
-					$newLocation = \App\Locations::create([
-						'state_id' => $request->state,
-						'city_id' => $request->city,
-						'location' => $customLocationName,
-						'status' => 1,
-					]);
-					$locationId = $newLocation->id;
-				} else {
+				$name = trim($request->custom_location_input);
+				if (!$name) {
 					return response()->json([
 						'status' => 'error',
-						'message' => 'Please enter the custom location name.',
+						'message' => 'Please enter custom location name'
 					], 422);
 				}
+
+				$newLocation = \App\Locations::create([
+					'state_id' => $request->state,
+					'city_id' => $request->city,
+					'location' => ucwords(strtolower($name)),
+					'status' => 1
+				]);
+				$locationId = $newLocation->id;
 			}
 
-			// Resolve sub locations: accept IDs or names; create new names under selected location
-			$submittedSubLocations = $request->input('sub_location_id', []);
+			/* ================= SUB LOCATIONS ================= */
 			$resolvedSubLocationIds = [];
-			if (!empty($submittedSubLocations)) {
-				$primaryLocationId = $locationId ? (int) $locationId : null;
-				foreach ($submittedSubLocations as $value) {
-					$value = trim(($value ?? ''));
-					if ($value === '') {
-						continue;
-					}
+			if ($request->filled('sub_location_id')) {
+				foreach ($request->sub_location_id as $value) {
+
 					if (ctype_digit($value)) {
-						$existing = \App\SubLocations::find((int) $value);
-						if ($existing) {
-							$resolvedSubLocationIds[] = (int) $existing->id;
-						}
+						$resolvedSubLocationIds[] = $value;
 						continue;
 					}
-					if ($primaryLocationId) {
-						$name = ucwords(strtolower($value));
-						$dup = \App\SubLocations::where([
-							'location_id' => $primaryLocationId,
-							'sub_location_name' => $name
-						])->first();
-						if ($dup) {
-							$resolvedSubLocationIds[] = (int) $dup->id;
-						} else {
-							$newSub = \App\SubLocations::create([
-								'location_id' => $primaryLocationId,
-								'sub_location_name' => $name,
-							]);
-							if ($newSub) {
-								$resolvedSubLocationIds[] = (int) $newSub->id;
-							}
-						}
-					}
+
+					$new = \App\SubLocations::create([
+						'location_id' => $locationId,
+						'sub_location_name' => ucwords(strtolower($value))
+					]);
+					$resolvedSubLocationIds[] = $new->id;
 				}
 			}
 
-			// Persist normalized fields back into request-like variables
-			$normalizedSubLocationId = !empty($resolvedSubLocationIds) ? implode(',', $resolvedSubLocationIds) : null;
 
-			// ✅ Update property
-			$properties->update([
+
+			/* ================= EXTRACT PRICE FROM ADDITIONAL INFO ================= */
+
+			$price = null;
+			$price =
+				// Sale price
+				$this->getValueFromAdditionalInfo($request->additional_info, [
+					'Expected Price',
+					'Exclusive Price',
+					'Offer Price',
+					'Starting Price',
+				])
+
+				// Rent (flat / office / shop)
+				?? $this->getValueFromAdditionalInfo($request->additional_info, [
+					'Monthly Rent',
+				])
+
+				// PG / Hostel
+				?? $this->getValueFromAdditionalInfo($request->additional_info, [
+					'Monthly Rent per bed',
+					'Rent Per Person',
+					'PG Rent',
+					'Rent Per Bed'
+				]);
+
+
+			/* ================= UPDATE PROPERTY ================= */
+			$property->update([
 				'title' => $request->title,
-				'type_id' => $request->type_id,
-				'price' => $request->price,
-				'price_label' => $price_label,
-				'price_label_second' => $request->price_label_second, // new
-				'property_use_for' => $property_use_for,
-				'amenties_features' => $amenties_features,
-				'property_status' => $request->has('property_status') ? implode(',', (array) $request->property_status) : null,
-				'property_status_second' => $request->property_status_second, // new
-				'registration_status' => $request->has('registration_status') ? implode(',', (array) $request->registration_status) : null,
-				'registration_status_second' => $request->registration_status_second, // new
-				'furnishing_status' => $request->has('furnishing_status') ? implode(',', (array) $request->furnishing_status) : null,
-				'furnishing_status_second' => $request->furnishing_status_second, // new
+				'slug' => Str::slug($request->title),
 				'description' => $request->description,
 				'category_id' => $request->category_id,
 				'sub_category_id' => $request->sub_category_id,
@@ -1352,51 +1436,106 @@ class PropertiesController extends AppController
 				'state_id' => $request->state,
 				'city_id' => $request->city,
 				'location_id' => $locationId,
-				'sub_location_id' => $normalizedSubLocationId,
+				'sub_location_id' => $resolvedSubLocationIds
+					? implode(',', $resolvedSubLocationIds)
+					: null,
 				'amenities' => $amenities,
 				'additional_info' => $request->additional_info,
-				'construction_age' => $request->construction_age,
-				'featured_image' => $featured_image,
 				'latitude' => $request->latitude,
 				'longitude' => $request->longitude,
+				'price' => $price,
 			]);
 
-			// ✅ Handle Property Video
+			/* ================= PROPERTY VIDEO ================= */
 			if ($request->hasFile('property_video')) {
-				if ($properties->property_video && file_exists(public_path($properties->property_video))) {
-					@unlink(public_path($properties->property_video));
+				if ($property->property_video && file_exists(public_path($property->property_video))) {
+					@unlink(public_path($property->property_video));
 				}
 
 				$video = $request->file('property_video');
-				$videoName = time() . '_' . preg_replace('/\s+/', '_', $video->getClientOriginalName());
-				$videoPath = 'uploads/properties/videos/';
-				$video->move(public_path($videoPath), $videoName);
+				$name = uniqid('video_') . '.' . $video->getClientOriginalExtension();
+				$path = $video->storeAs('uploads/properties/videos', $name, 'public');
 
-				$properties->property_video = $videoPath . $videoName;
-				$properties->save();
+				$property->property_video = 'storage/' . $path;
+				$property->save();
 			}
 
+			/* ================= RESET DEFAULT IMAGE ================= */
+			PropertyGallery::where('property_id', $property->id)
+				->update(['is_default' => 0]);
 
-			// ✅ Handle gallery images upload
-			if ($request->has('gallery_images_file')) {
-				$gallery_images = $this->multipleFileUpload($request, [
+			/* ================= EXISTING DEFAULT IMAGE ================= */
+			if ($request->filled('default_image_id')) {
+				PropertyGallery::where('id', $request->default_image_id)
+					->where('property_id', $property->id)
+					->update(['is_default' => 1]);
+			}
+
+			/* ================= NEW GALLERY IMAGES ================= */
+			if ($request->hasFile('gallery_images_file')) {
+
+				$uploadedImages = $this->multipleFileUpload($request, [
 					'uploads/properties/gallery_images/' => 'gallery_images_file'
 				]);
-				foreach ($gallery_images as $value) {
+
+				foreach ($uploadedImages as $index => $path) {
+
 					PropertyGallery::create([
-						'property_id' => $properties->id,
-						'image_path' => $value
+						'property_id' => $property->id,
+						'image_path' => $path,
+						'is_default' =>
+							$request->filled('default_image_index')
+							&& $request->default_image_index == $index
+							? 1
+							: 0
 					]);
 				}
 			}
 
-			// ✅ Success response
-			return $this->JsonResponse(200, 'Property updated successfully', [
-				'listing' => $properties
+			/* ================= SUCCESS ================= */
+			return response()->json([
+				'status' => 'success',
+				'message' => 'Property updated successfully',
+				'data' => [
+					'listing' => $property
+				]
 			]);
+
 		} catch (\Exception $e) {
-			return $this->JsonResponse(500, $e->getMessage());
+			return response()->json([
+				'status' => 'error',
+				'message' => $e->getMessage()
+			], 500);
 		}
+	}
+
+
+	private function getValueFromAdditionalInfo($additionalInfoJson, array $labels)
+	{
+		if (!$additionalInfoJson) {
+			return null;
+		}
+
+		$fields = json_decode($additionalInfoJson, true);
+
+		if (!is_array($fields)) {
+			return null;
+		}
+
+		foreach ($fields as $field) {
+
+			if (!isset($field['label'], $field['userData'][0])) {
+				continue;
+			}
+
+			$label = trim(strip_tags($field['label']));
+
+			if (in_array($label, $labels, true)) {
+				return (float) str_replace(',', '', $field['userData'][0]);
+			}
+		}
+
+		return null;
 	}
 
 
@@ -2027,14 +2166,14 @@ class PropertiesController extends AppController
 		if ($request->ajax()) {
 			$datas = ClaimListing::whereHas('user')->orderBy('id', 'DESC')->get();
 			return Datatables::of($datas)
-			->addIndexColumn()
-			->addColumn('property_id', function ($row) {
-				$picked = Properties::find($row->property_id);
-				if ($picked) {
-					$listing_id = '<a href="#" onclick="fetchPropertyDetails(' . $picked->id . ')" name="View Property">' . $picked->listing_id . '</a>';
-					return $listing_id;
-					
-				} else {
+				->addIndexColumn()
+				->addColumn('property_id', function ($row) {
+					$picked = Properties::find($row->property_id);
+					if ($picked) {
+						$listing_id = '<a href="#" onclick="fetchPropertyDetails(' . $picked->id . ')" name="View Property">' . $picked->listing_id . '</a>';
+						return $listing_id;
+
+					} else {
 						return 'N/A';
 					}
 				})

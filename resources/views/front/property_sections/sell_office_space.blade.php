@@ -1,14 +1,13 @@
 <!-- Right: Key Details Grid -->
-<div class="col-md-8">
     <div class="row g-4">
 
         {{-- Project --}}
-        @isset($features['Commercial Complex'])
+        @isset($features['Name of the Society / Project'])
         <div class="col-12 col-lg-3">
             <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-purple border-5">
-                <div class="text-muted small fw-600">Commercial Complex</div>
+                <div class="text-muted small fw-600">Name of the Project</div>
                 <div class="fw-bold text-dark fs-5">
-                    {{ $features['Commercial Complex'] }}
+                    {{ $features['Name of the Society / Project'] }}
                 </div>
             </div>
         </div>
@@ -90,12 +89,12 @@
             </div>
         @endisset
 
-        @isset($features['Units on Floor'])
+        @isset($features['No. of Unit on Floor'])
             <div class="col-12 col-lg-3">
                 <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-purple border-5">
-                    <div class="text-muted small fw-600">Units on Floor</div>
+                    <div class="text-muted small fw-600">No. of Unit on Floor</div>
                     <div class="fw-bold text-dark fs-5">
-                        {{ $features['Units on Floor'] }}
+                        {{ $features['No. of Unit on Floor'] }}
                     </div>
                 </div>
             </div>
@@ -114,32 +113,29 @@
         </div>
         @endif
 
-        @isset($features['Washrooms'])
+        @isset($features['No. of Washrooms'])
         <div class="col-12 col-lg-3">
             <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-success border-5">
                 <div class="text-muted small fw-600">Washrooms</div>
                 <div class="fw-bold text-dark fs-5">
                     <i class="fas fa-restroom"></i>
-                    {{ $features['Washrooms'] }}
+                    {{ $features['No. of Washrooms'] }}
                 </div>
             </div>
         </div>
         @endif
 
 
-        @isset($features['Number of lifts'])
-            @if((int) $features['Number of lifts'] > 0)
+        @isset($features['Lift'])
                 <div class="col-12 col-lg-3">
                     <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-success border-5">
                         <div class="text-muted small fw-600">Lift</div>
                         <div class="fw-bold text-dark fs-5">
                             <i class="fas fa-elevator"></i>
-                            {{ $features['Number of lifts'] }}
-                            Lift{{ $features['Number of lifts'] > 1 ? 's' : '' }}
+                            {{ $features['Lift'] }}
                         </div>
                     </div>
                 </div>
-            @endif
         @endisset
 
 
@@ -155,26 +151,26 @@
             </div>
         @endisset
 
-        @isset($features['Car Parking'])
-            @if((int) $features['Car Parking'] > 0)
+        @isset($features['No. of Car Parkings'])
+            @if((int) $features['No. of Car Parkings'] > 0)
                 <div class="col-12 col-lg-3">
                     <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-success border-5">
                         <div class="text-muted small fw-600">Car Parking</div>
                         <div class="fw-bold text-dark fs-5">
                             <i class="fas fa-car"></i>
-                            {{ $features['Car Parking'] }}
+                            {{ $features['No. of Car Parkings'] }}
                         </div>
                     </div>
                 </div>
             @endif
         @endisset
 
-        @isset($features['Furnished Status'])
+        @isset($features['Furnishing Status'])
         <div class="col-12 col-lg-3">
             <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-purple border-5">
-                <div class="text-muted small fw-600">Furnished Status</div>
+                <div class="text-muted small fw-600">Furnishing Status</div>
                 <div class="fw-bold text-dark fs-5">
-                    {{ $features['Furnished Status'] }}
+                    {{ $features['Furnishing Status'] }}
                 </div>
             </div>
         </div>
@@ -191,23 +187,4 @@
         </div>
         @endisset
     </div>
-    <!-- Action Buttons -->
-    <div class="mt-4 pt-3 border-top">
-        <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-md-start">
-            <button type="button" class="btn btn-outline-primary btn-lg px-4 rounded-pill shadow-sm"
-                onclick="claim('{{ $property_detail->id }}')">
-                <i class="fas fa-shield-alt"></i> Claim This Listing
-            </button>
-            <button type="button" class="btn btn-outline-warning btn-lg px-4 rounded-pill shadow-sm"
-                data-bs-toggle="modal" data-bs-target="#feedback-complaint">
-                <i class="fas fa-phone"></i> Feedback & Complaint </button>
-            <button id="wishlistButton" class="btn btn-outline-danger btn-lg px-4 rounded-pill shadow-sm"
-                data-submission="{{ $property_detail->id }}">
-                {!! $isInWishlist
-    ? '<i class="fas fa-heart"></i> Added to Wishlist'
-    : '<i class="far fa-heart"></i> Add to Wishlist' 
-										!!}
-            </button>
-        </div>
-    </div>
-</div>
+ 

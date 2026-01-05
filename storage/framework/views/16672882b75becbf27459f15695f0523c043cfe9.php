@@ -33,7 +33,7 @@
 					<div class="form-group col-sm-12">
 						<div class="card property-left-widgets">
 							<div class="form-sep">
-								<h3>Preview Property Description &amp; Price</h3>
+								<h3>Preview Property Description</h3>
 
 								<div class="row">
 									<div class="form-group col-sm-4">
@@ -74,151 +74,28 @@
 										</select>
 									</div>
 
-								</div>
-
-								<div class="row">
-									<div class="form-group col-sm-8">
+									<div class="form-group col-sm-12">
 										<label class="label-control">Title </label>
 										<input type="text" class="form-control" name="title"
 											placeholder="Enter Property Name" value="<?php echo e($property->title); ?>" required
 											readonly="" />
 									</div>
 
-									<div class="form-group col-sm-4">
+									<!-- <div class="form-group col-sm-4">
 										<label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
 										<input type="number" class="form-control" name="price" min="0"
 											placeholder="Enter Price" value="<?php echo e($property->price); ?>" required readonly="" />
-									</div>
-								</div>
-								<div class="form-row">
-
-									
-									<?php $col = ($price_labels->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-									<div id="priceLabelField" class="form-group <?php echo e($col); ?>" style="display:none;">
-										<label class="label-control d-flex">Price Label</label>
-										<?php if($price_labels->first()->input_format == 'checkbox'): ?>
-											<?php $__currentLoopData = $price_labels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-												<label>
-													<input type="checkbox" value="<?php echo e($label->id); ?>" disabled <?php echo e(in_array($label->id, explode(',', $property->price_label ?? '')) ? 'checked' : ''); ?>>
-													<?php echo e($label->name); ?>
-
-												</label>
-											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-										<?php else: ?>
-											<input type="text" class="form-control" readonly
-												value="<?php echo e(optional($price_labels->firstWhere('id', $property->price_label))->name); ?>">
-										<?php endif; ?>
-
-										<?php if(!empty($property->price_label_second)): ?>
-											<div class="mt-2">
-												<label>
-													<?php echo e(optional($price_labels->firstWhere('id', $property->price_label))->second_input_label ?? 'Date'); ?>
-
-												</label>
-												<input type="date" class="form-control" readonly
-													value="<?php echo e($property->price_label_second); ?>">
-											</div>
-										<?php endif; ?>
-
-
-									</div>
-
-									
-									<?php $col = ($property_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-									<div id="propertyStatusField" class="form-group <?php echo e($col); ?>" style="display:none;">
-										<label class="label-control">Property Status</label>
-										<?php if($property_statuses->first()->input_format == 'checkbox'): ?>
-											<?php $__currentLoopData = $property_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-												<label>
-													<input type="checkbox" value="<?php echo e($status->id); ?>" disabled <?php echo e(in_array($status->id, explode(',', $property->property_status ?? '')) ? 'checked' : ''); ?>>
-													<?php echo e($status->name); ?>
-
-												</label>
-											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-										<?php else: ?>
-											<input type="text" class="form-control" readonly
-												value="<?php echo e(optional($property_statuses->firstWhere('id', $property->property_status))->name); ?>">
-										<?php endif; ?>
-
-										<?php if(!empty($property->property_status_second)): ?>
-											<div class="mt-2">
-												<label>
-													<?php echo e(optional($property_statuses->firstWhere('id', $property->property_status))->second_input_label ?? 'Date'); ?>
-
-												</label>
-												<input type="date" class="form-control" readonly
-													value="<?php echo e($property->property_status_second); ?>">
-											</div>
-										<?php endif; ?>
-									</div>
-
-									
-									<?php $col = ($registration_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-									<div id="registrationStatusField" class="form-group <?php echo e($col); ?>" style="display:none;">
-										<label class="label-control">Registration Status</label>
-										<?php if($registration_statuses->first()->input_format == 'checkbox'): ?>
-											<?php $__currentLoopData = $registration_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-												<label>
-													<input type="checkbox" value="<?php echo e($status->id); ?>" disabled <?php echo e(in_array($status->id, explode(',', $property->registration_status ?? '')) ? 'checked' : ''); ?>>
-													<?php echo e($status->name); ?>
-
-												</label>
-											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-										<?php else: ?>
-											<input type="text" class="form-control" readonly
-												value="<?php echo e(optional($registration_statuses->firstWhere('id', $property->registration_status))->name); ?>">
-										<?php endif; ?>
-
-										<?php if(!empty($property->registration_status_second)): ?>
-											<div class="mt-2">
-												<label>
-													<?php echo e(optional($registration_statuses->firstWhere('id', $property->registration_status))->second_input_label ?? 'Date'); ?>
-
-												</label>
-												<input type="date" class="form-control" readonly
-													value="<?php echo e($property->registration_status_second); ?>">
-											</div>
-										<?php endif; ?>
-									</div>
-
-									
-									<?php $col = ($furnishing_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-									<div id="furnishingStatusField" class="form-group <?php echo e($col); ?>" style="display:none;">
-										<label class="label-control">Furnishing Status</label>
-										<?php if($furnishing_statuses->first()->input_format == 'checkbox'): ?>
-											<?php $__currentLoopData = $furnishing_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-												<label>
-													<input type="checkbox" value="<?php echo e($status->id); ?>" disabled <?php echo e(in_array($status->id, explode(',', $property->furnishing_status ?? '')) ? 'checked' : ''); ?>>
-													<?php echo e($status->name); ?>
-
-												</label>
-											<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-										<?php else: ?>
-											<input type="text" class="form-control" readonly
-												value="<?php echo e(optional($furnishing_statuses->firstWhere('id', $property->furnishing_status))->name); ?>">
-										<?php endif; ?>
-
-										<?php if(!empty($property->furnishing_status_second)): ?>
-											<div class="mt-2">
-												<label>
-													<?php echo e(optional($furnishing_statuses->firstWhere('id', $property->furnishing_status))->second_input_label ?? 'Date'); ?>
-
-												</label>
-												<input type="date" class="form-control" readonly
-													value="<?php echo e($property->furnishing_status_second); ?>">
-											</div>
-										<?php endif; ?>
-									</div>
-
-								</div>
-
-								<div class="row">
+									</div> -->
+						
 									<div class="form-group col-sm-12">
 										<label class="label-control">Description</label>
 										<textarea class="form-control" rows="2" cols="4" name="description" required
 											readonly=""> <?php echo e($property->description); ?></textarea>
 									</div>
 								</div>
+
+								<div id="fb-render"></div>
+
 
 								<div id="amenitiesField" style="display: none;">
 									<h4 class="form-section-h">Amenities</h4>
@@ -288,6 +165,23 @@
 									</div>
 
 								</div>
+									<div class="row">
+    <div class="form-group col-sm-6">
+        <label class="label-control">Landmark</label>
+        <input type="text"
+               class="form-control"
+               value="<?php echo e($property->landmark); ?>"
+               readonly>
+    </div>
+
+    <div class="form-group col-sm-6">
+        <label class="label-control">Pin Code</label>
+        <input type="text"
+               class="form-control"
+               value="<?php echo e($property->pincode); ?>"
+               readonly>
+    </div>
+</div>
 								<div class="row">
 									<div class="form-group col-sm-12">
 										<label class="label-control">Address </label>
@@ -295,20 +189,37 @@
 											name="address" value="<?php echo e($property->address); ?>" required readonly="" />
 									</div>
 								</div>
+							
+
 
 								<div id="propertyMap" style="width:100%; height:300px;margin-bottom:10px"></div>
 								<input type="hidden" value="<?php echo e($property->latitude); ?>" name="latitude" id="latitude">
 								<input type="hidden" value="<?php echo e($property->longitude); ?>" name="longitude" id="longitude">
 
 								<h3>Uploaded Photos</h3>
-								<div class="form-group dropzone row">
-									<?php $__currentLoopData = $property_images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-										<div class="col-sm-2">
-											<img src="<?php echo e(url('/') . '/' . $v->image_path); ?>" style="height: 100px;"
-												class="img-fluid">
-										</div>
-									<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-								</div>
+
+<div class="row">
+    <?php $__currentLoopData = $property_images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div class="col-sm-2 text-center mb-3">
+
+            <div style="
+                border: <?php echo e($img->is_default ? '2px solid #0d6efd' : '1px solid #ddd'); ?>;
+                padding: 6px;
+                border-radius: 6px;
+            ">
+                <img src="<?php echo e(asset($img->image_path)); ?>"
+                     class="img-fluid rounded"
+                     style="height:100px; object-fit:cover;">
+            </div>
+
+            <?php if($img->is_default): ?>
+                <span class="badge bg-primary mt-1">Default</span>
+            <?php endif; ?>
+
+        </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+</div>
+
 								<?php if(!empty($property->property_video)): ?>
 									<h3 class="mt-4">Property Video</h3>
 									<div class="form-group">
@@ -319,8 +230,7 @@
 									</div>
 								<?php endif; ?>
 
-								<h4 class="form-section-h">Property Additional Information</h4>
-								<div id="fb-render"></div>
+							
 							</div>
 						</div>
 					</div>
@@ -421,31 +331,6 @@
 
 		// This function is called when subsubcategory changes or after loading toggles
 		function toggleSubSubCategoryFields(selectedData) {
-
-			if (selectedData.price_label_toggle == 'yes') {
-				$('#priceLabelField').show();
-			} else {
-				$('#priceLabelField').hide();
-			}
-
-			if (selectedData.property_status_toggle == 'yes') {
-				$('#propertyStatusField').show();
-			} else {
-				$('#propertyStatusField').hide();
-			}
-
-			if (selectedData.registration_status_toggle == 'yes') {
-				$('#registrationStatusField').show();
-			} else {
-				$('#registrationStatusField').hide();
-			}
-
-			if (selectedData.furnishing_status_toggle == 'yes') {
-				$('#furnishingStatusField').show();
-			} else {
-				$('#furnishingStatusField').hide();
-			}
-
 			if (selectedData.amenities_toggle == 'yes') {
 				$('#amenitiesField').show();
 			} else {

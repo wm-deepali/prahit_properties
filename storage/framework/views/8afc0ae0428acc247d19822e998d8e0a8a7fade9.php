@@ -1,14 +1,13 @@
 <!-- Right: Key Details Grid -->
-<div class="col-md-8">
     <div class="row g-4">
 
         
-        <?php if(isset($features['Commercial Complex'])): ?>
-        <div class="col-12 col-lg-4">
+        <?php if(isset($features['Name of the Society / Project'])): ?>
+        <div class="col-12 col-lg-3">
             <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-purple border-5">
-                <div class="text-muted small fw-600">Commercial Complex</div>
+                <div class="text-muted small fw-600">Name of the Project</div>
                 <div class="fw-bold text-dark fs-5">
-                    <?php echo e($features['Commercial Complex']); ?>
+                    <?php echo e($features['Name of the Society / Project']); ?>
 
                 </div>
             </div>
@@ -28,7 +27,7 @@
                     : null;
             ?>
 
-            <div class="col-12 col-lg-4">
+            <div class="col-12 col-lg-3">
                 <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-warning border-5">
                     <div class="text-muted small fw-600">Carpet Area</div>
 
@@ -60,7 +59,7 @@
                     : null;
             ?>
 
-            <div class="col-12 col-lg-4">
+            <div class="col-12 col-lg-3">
                 <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-warning border-5">
                     <div class="text-muted small fw-600">Super Area</div>
 
@@ -82,7 +81,7 @@
 
         
         <?php if(isset($features['Floor No.'])): ?>
-            <div class="col-12 col-lg-4">
+            <div class="col-12 col-lg-3">
                 <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-purple border-5">
                     <div class="text-muted small fw-600">Floor</div>
                     <div class="fw-bold text-dark fs-5">
@@ -96,12 +95,12 @@
             </div>
         <?php endif; ?>
 
-          <?php if(isset($features['Units on Floor'])): ?>
-            <div class="col-12 col-lg-4">
+        <?php if(isset($features['No. of Unit on Floor'])): ?>
+            <div class="col-12 col-lg-3">
                 <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-purple border-5">
-                    <div class="text-muted small fw-600">Units on Floor</div>
+                    <div class="text-muted small fw-600">No. of Unit on Floor</div>
                     <div class="fw-bold text-dark fs-5">
-                        <?php echo e($features['Units on Floor']); ?>
+                        <?php echo e($features['No. of Unit on Floor']); ?>
 
                     </div>
                 </div>
@@ -110,11 +109,11 @@
 
 
         <?php if(isset($features['Pantry Cafeteria'])): ?>
-        <div class="col-12 col-lg-4">
+        <div class="col-12 col-lg-3">
             <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-success border-5">
                 <div class="text-muted small fw-600">Pantry Cafeteria</div>
                 <div class="fw-bold text-dark fs-5">
-                   <i class="fas fa-mug-hot"></i>
+                    <i class="fas fa-mug-hot"></i>
                     <?php echo e($features['Pantry Cafeteria']); ?>
 
                 </div>
@@ -122,13 +121,13 @@
         </div>
         <?php endif; ?>
 
-          <?php if(isset($features['Washrooms'])): ?>
-        <div class="col-12 col-lg-4">
+        <?php if(isset($features['No. of Washrooms'])): ?>
+        <div class="col-12 col-lg-3">
             <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-success border-5">
                 <div class="text-muted small fw-600">Washrooms</div>
                 <div class="fw-bold text-dark fs-5">
                     <i class="fas fa-restroom"></i>
-                    <?php echo e($features['Washrooms']); ?>
+                    <?php echo e($features['No. of Washrooms']); ?>
 
                 </div>
             </div>
@@ -136,26 +135,22 @@
         <?php endif; ?>
 
 
-        <?php if(isset($features['Number of lifts'])): ?>
-            <?php if((int) $features['Number of lifts'] > 0): ?>
-                <div class="col-12 col-lg-4">
+        <?php if(isset($features['Lift'])): ?>
+                <div class="col-12 col-lg-3">
                     <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-success border-5">
                         <div class="text-muted small fw-600">Lift</div>
                         <div class="fw-bold text-dark fs-5">
-                           <i class="fas fa-elevator"></i>
-                            <?php echo e($features['Number of lifts']); ?>
-
-                            Lift<?php echo e($features['Number of lifts'] > 1 ? 's' : ''); ?>
+                            <i class="fas fa-elevator"></i>
+                            <?php echo e($features['Lift']); ?>
 
                         </div>
                     </div>
                 </div>
-            <?php endif; ?>
         <?php endif; ?>
 
 
         <?php if(isset($features['Property Facing'])): ?>
-            <div class="col-12 col-lg-4">
+            <div class="col-12 col-lg-3">
                 <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-warning border-5">
                     <div class="text-muted small fw-600">Facing</div>
                     <div class="fw-bold text-dark fs-5">
@@ -167,14 +162,14 @@
             </div>
         <?php endif; ?>
 
-         <?php if(isset($features['Car Parking'])): ?>
-            <?php if((int) $features['Car Parking'] > 0): ?>
-                <div class="col-12 col-lg-4">
+        <?php if(isset($features['No. of Car Parkings'])): ?>
+            <?php if((int) $features['No. of Car Parkings'] > 0): ?>
+                <div class="col-12 col-lg-3">
                     <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-success border-5">
                         <div class="text-muted small fw-600">Car Parking</div>
                         <div class="fw-bold text-dark fs-5">
                             <i class="fas fa-car"></i>
-                            <?php echo e($features['Car Parking']); ?>
+                            <?php echo e($features['No. of Car Parkings']); ?>
 
                         </div>
                     </div>
@@ -182,38 +177,28 @@
             <?php endif; ?>
         <?php endif; ?>
 
-   
-
-        <?php if($features['Furnished Status']): ?>
-        <div class="col-12 col-lg-4">
+        <?php if(isset($features['Furnishing Status'])): ?>
+        <div class="col-12 col-lg-3">
             <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-purple border-5">
-                <div class="text-muted small fw-600">Furnished Status</div>
+                <div class="text-muted small fw-600">Furnishing Status</div>
                 <div class="fw-bold text-dark fs-5">
-                    <?php echo e($features['Furnished Status']); ?>
+                    <?php echo e($features['Furnishing Status']); ?>
 
                 </div>
             </div>
         </div>
         <?php endif; ?>
 
+        <?php if(isset($features['Suitable for'])): ?>
+        <div class="col-12 col-lg-3">
+            <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-purple border-5">
+                <div class="text-muted small fw-600">Suitable for</div>
+                <div class="fw-bold text-dark fs-5">
+                    <?php echo e($features['Suitable for']); ?>
 
-        <!-- Action Buttons -->
-        <div class="mt-4 pt-3 border-top">
-            <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-md-start">
-                <button type="button" class="btn btn-outline-primary btn-lg px-4 rounded-pill shadow-sm"
-                    onclick="claim('<?php echo e($property_detail->id); ?>')">
-                    <i class="fas fa-shield-alt"></i> Claim This Listing
-                </button>
-                <button type="button" class="btn btn-outline-warning btn-lg px-4 rounded-pill shadow-sm"
-                    data-bs-toggle="modal" data-bs-target="#feedback-complaint">
-                    <i class="fas fa-phone"></i> Feedback & Complaint </button>
-                <button id="wishlistButton" class="btn btn-outline-danger btn-lg px-4 rounded-pill shadow-sm"
-                    data-submission="<?php echo e($property_detail->id); ?>">
-                    <?php echo $isInWishlist
-    ? '<i class="fas fa-heart"></i> Added to Wishlist'
-    : '<i class="far fa-heart"></i> Add to Wishlist'; ?>
-
-                </button>
+                </div>
             </div>
         </div>
-    </div><?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/property_sections/sell_office_space.blade.php ENDPATH**/ ?>
+        <?php endif; ?>
+    </div>
+ <?php /**PATH D:\web-mingo-project\prahit-properties\resources\views/front/property_sections/sell_office_space.blade.php ENDPATH**/ ?>

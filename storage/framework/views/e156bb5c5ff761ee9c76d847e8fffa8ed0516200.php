@@ -47,205 +47,25 @@
                         <option value="">Select Property Type</option>
                       </select>
                     </div>
-                  </div>
 
-                  <div class="form-group-f row">
-                    <div class="col-sm-8">
+                    <div class="col-sm-12">
                       <label class="label-control">Title </label>
                       <input type="text" class="text-control" name="title" placeholder="Enter Property Name"
                         value="<?php echo e($property->title); ?>" required />
                     </div>
-                    <div class="col-sm-4">
-                      <label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
-                      <input type="number" class="text-control" name="price" min="0" placeholder="Enter Price"
-                        value="<?php echo e($property->price); ?>" required />
-                    </div>
-                  </div>
-
-                  <div class="form-row">
-                    
-                    <?php $col = ($price_labels->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-                    <div id="priceLabelField" class="form-group <?php echo e($col); ?>" style="display:none;">
-                      <label class="label-control d-flex">Price Label</label>
-                      <?php if($price_labels->first()->input_format == 'checkbox'): ?>
-                        <?php $__currentLoopData = $price_labels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <label>
-                            <input type="checkbox" name="price_label[]" value="<?php echo e($label->id); ?>" <?php echo e(in_array($label->id, explode(',', $property->price_label ?? '')) ? 'checked' : ''); ?>>
-                            <?php echo e($label->name); ?>
-
-                          </label>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                      <?php else: ?>
-                        <select name="price_label" class="form-control">
-                          <option value="">Select</option>
-                          <?php $__currentLoopData = $price_labels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($label->id); ?>" <?php echo e($property->price_label == $label->id ? 'selected' : ''); ?>>
-                              <?php echo e($label->name); ?>
-
-                            </option>
-                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </select>
-                      <?php endif; ?>
-
-                      <?php if(!empty($property->price_label_second)): ?>
-                        <div class="mt-2">
-                          <label>
-                            <?php echo e(optional($price_labels->firstWhere('id', $property->price_label))->second_input_label ?? 'Date'); ?>
-
-                          </label>
-                          <input type="date" class="form-control" name="price_label_second"
-                            value="<?php echo e($property->price_label_second); ?>">
-                        </div>
-                      <?php endif; ?>
-
-                      
-                      <div class="mt-2" id="price_label_second_container" style="display:none;">
-                        <label id="price_label_second_label" class="label-control"></label>
-                        <input type="date" name="price_label_second" class="form-control"
-                          value="<?php echo e(old('price_label_second')); ?>">
-                      </div>
-
-                    </div>
-
-
-                    
-                    <?php $col = ($property_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-                    <div id="propertyStatusField" class="form-group <?php echo e($col); ?>" style="display:none;">
-                      <label class="label-control">Property Status</label>
-                      <?php if($property_statuses->first()->input_format == 'checkbox'): ?>
-                        <?php $__currentLoopData = $property_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <label>
-                            <input type="checkbox" name="property_status[]" value="<?php echo e($status->id); ?>" <?php echo e(in_array($status->id, explode(',', $property->property_status ?? '')) ? 'checked' : ''); ?>>
-                            <?php echo e($status->name); ?>
-
-                          </label>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                      <?php else: ?>
-                        <select name="property_status" class="form-control">
-                          <option value="">Select</option>
-                          <?php $__currentLoopData = $property_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($status->id); ?>" <?php echo e($property->property_status == $status->id ? 'selected' : ''); ?>>
-                              <?php echo e($status->name); ?>
-
-                            </option>
-                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </select>
-                      <?php endif; ?>
-
-                      <?php if(!empty($property->property_status_second)): ?>
-                        <div class="mt-2">
-                          <label>
-                            <?php echo e(optional($property_statuses->firstWhere('id', $property->property_status))->second_input_label ?? 'Date'); ?>
-
-                          </label>
-                          <input type="date" class="form-control" name="property_status_second"
-                            value="<?php echo e($property->property_status_second); ?>">
-                        </div>
-                      <?php endif; ?>
-
-                      <div class="mt-2" id="property_status_second_container" style="display:none;">
-                        <label id="property_status_second_label" class="label-control"></label>
-                        <input type="date" name="property_status_second" class="form-control"
-                          value="<?php echo e(old('property_status_second')); ?>">
-                      </div>
-
-                    </div>
-
-
-                    
-                    <?php $col = ($registration_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-                    <div id="registrationStatusField" class="form-group <?php echo e($col); ?>" style="display:none;">
-                      <label class="label-control">Registration Status</label>
-                      <?php if($registration_statuses->first()->input_format == 'checkbox'): ?>
-                        <?php $__currentLoopData = $registration_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <label>
-                            <input type="checkbox" name="registration_status[]" value="<?php echo e($status->id); ?>" <?php echo e(in_array($status->id, explode(',', $property->registration_status ?? '')) ? 'checked' : ''); ?>>
-                            <?php echo e($status->name); ?>
-
-                          </label>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                      <?php else: ?>
-                        <select name="registration_status" class="form-control">
-                          <option value="">Select</option>
-                          <?php $__currentLoopData = $registration_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($status->id); ?>" <?php echo e($property->registration_status == $status->id ? 'selected' : ''); ?>><?php echo e($status->name); ?>
-
-                            </option>
-                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </select>
-                      <?php endif; ?>
-
-                      <?php if(!empty($property->registration_status_second)): ?>
-                        <div class="mt-2">
-                          <label>
-                            <?php echo e(optional($registration_statuses->firstWhere('id', $property->registration_status))->second_input_label ?? 'Date'); ?>
-
-                          </label>
-                          <input type="date" class="form-control" name="registration_status_second"
-                            value="<?php echo e($property->registration_status_second); ?>">
-                        </div>
-                      <?php endif; ?>
-
-                      <div class="mt-2" id="registration_status_second_container" style="display:none;">
-                        <label id="registration_status_second_label" class="label-control"></label>
-                        <input type="date" name="registration_status_second" class="form-control"
-                          value="<?php echo e(old('registration_status_second')); ?>">
-                      </div>
-
-                    </div>
-
-
-                    
-                    <?php $col = ($furnishing_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-                    <div id="furnishingStatusField" class="form-group <?php echo e($col); ?>" style="display:none;">
-                      <label class="label-control">Furnishing Status</label>
-                      <?php if($furnishing_statuses->first()->input_format == 'checkbox'): ?>
-                        <?php $__currentLoopData = $furnishing_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <label>
-                            <input type="checkbox" name="furnishing_status[]" value="<?php echo e($status->id); ?>" <?php echo e(in_array($status->id, explode(',', $property->furnishing_status ?? '')) ? 'checked' : ''); ?>>
-                            <?php echo e($status->name); ?>
-
-                          </label>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                      <?php else: ?>
-                        <select name="furnishing_status" class="form-control">
-                          <option value="">Select</option>
-                          <?php $__currentLoopData = $furnishing_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($status->id); ?>" <?php echo e($property->furnishing_status == $status->id ? 'selected' : ''); ?>><?php echo e($status->name); ?>
-
-                            </option>
-                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </select>
-                      <?php endif; ?>
-
-                      <?php if(!empty($property->furnishing_status_second)): ?>
-                        <div class="mt-2">
-                          <label>
-                            <?php echo e(optional($furnishing_statuses->firstWhere('id', $property->furnishing_status))->second_input_label ?? 'Date'); ?>
-
-                          </label>
-                          <input type="date" class="form-control" name="furnishing_status_second"
-                            value="<?php echo e($property->furnishing_status_second); ?>">
-                        </div>
-                      <?php endif; ?>
-
-                      <div class="mt-2" id="furnishing_status_second_container" style="display:none;">
-                        <label id="furnishing_status_second_label" class="label-control"></label>
-                        <input type="date" name="furnishing_status_second" class="form-control"
-                          value="<?php echo e(old('furnishing_status_second')); ?>">
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                  <div class="form-group-f row">
+                
                     <div class="col-sm-12">
                       <label class="label-control">Description</label>
                       <textarea class="text-control" rows="2" cols="4" name="description"
                         required> <?php echo e($property->description); ?></textarea>
                     </div>
                   </div>
+
+              <div id="fb-render"></div>
+              <div class="row">
+                <input type="hidden" name="save_json" id="save_json" value="<?php echo e($property->additional_info); ?>">
+                <input type="hidden" name="additional_info" id="form_json">
+              </div>
 
                   <div id="amenitiesField" style="display:none;">
                     <h4 class="form-section-h">Amenities</h4>
@@ -313,6 +133,29 @@
                       </select>
                     </div>
                   </div>
+
+                  	<div class="form-group-f row">
+    <div class="form-group col-sm-6">
+        <label class="label-control">Landmark</label>
+        <input type="text"
+               class="text-control"
+               name="landmark"
+               value="<?php echo e($property->landmark); ?>"
+               placeholder="Enter nearby landmark">
+    </div>
+
+    <div class="form-group col-sm-6">
+        <label class="label-control">Pin Code</label>
+        <input type="text"
+               class="text-control"
+               name="pincode"
+               value="<?php echo e($property->pincode); ?>"
+               maxlength="6"
+               pattern="[0-9]{6}"
+               placeholder="Enter 6-digit pin code">
+    </div>
+</div>
+
                   <div class="form-group-f row">
                     <div class="col-sm-12">
                       <label class="label-control">Address </label>
@@ -325,29 +168,72 @@
                   <input type="hidden" name="latitude" id="latitude">
                   <input type="hidden" name="longitude" id="longitude">
 
-                  <h3>Uploaded Photos</h3>
-                  <div class="form-group dropzone row">
-                    <?php $__currentLoopData = $property->PropertyGallery; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                      <div class="col-sm-2">
-                        <img src="<?php echo e(url('') . '/' . $v->image_path); ?>" style="height: 100px;" class="img-fluid">
-                        <br>
-                        <center>
-                          <i class="fa fa-trash" aria-hidden="true" style="cursor: pointer;color: red;font-size: 15px;"
-                            onclick="deleteGalleryPhoto('<?php echo e($v->id); ?>')"></i>
-                        </center>
-                      </div>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                  </div>
+                 
+<h3>Property Photos</h3>
 
-                  <h3>Property Photos</h3>
-                  <div class="row">
-                    <div class="form-group col-sm-12 ">
-                      <div class="dropzone">
-                        <input type="file" id="fileInput" multiple accept="image/*">
-                        <div id="previewContainer" class="mt-2 d-flex flex-wrap gap-2"></div>
-                      </div>
-                    </div>
-                  </div>
+<div class="row g-3">
+
+  
+  <?php $__currentLoopData = $property->PropertyGallery; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+    <div class="col-sm-2 text-center">
+
+      <div class="position-relative p-2 rounded"
+           style="border: <?php echo e($img->is_default ? '2px solid #0d6efd' : '1px solid #ddd'); ?>">
+
+        <?php if($img->is_default): ?>
+          <span class="badge bg-primary position-absolute"
+                style="top:4px;left:4px;">Default</span>
+        <?php endif; ?>
+
+        <img src="<?php echo e(asset($img->image_path)); ?>"
+             class="img-fluid rounded"
+             style="height:100px;object-fit:cover;">
+
+      </div>
+
+      <div class="form-check mt-1">
+        <input class="form-check-input existing-default-radio"
+               type="radio"
+               name="default_image_id"
+               value="<?php echo e($img->id); ?>"
+               <?php echo e($img->is_default ? 'checked' : ''); ?>>
+        <label class="form-check-label small">Default</label>
+      </div>
+
+      <i class="fa fa-trash text-danger"
+         style="cursor:pointer;"
+         onclick="deleteGalleryPhoto('<?php echo e($img->id); ?>')"></i>
+
+    </div>
+  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+</div>
+
+<hr>
+
+
+<div class="row mt-3">
+  <div class="col-sm-12">
+
+    <div class="photo-upload-card"
+         style="border:2px dashed #ddd;padding:15px;border-radius:6px;">
+
+      <label class="photo-upload-btn" style="cursor:pointer;">
+        <input type="file" id="fileInput" multiple accept="image/*" hidden>
+        <strong>Click or drag to upload photos</strong>
+      </label>
+
+      <div id="previewContainer"
+           class="d-flex flex-wrap gap-3 mt-3"></div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<input type="hidden" name="default_image_id" id="default_image_id">
+<input type="hidden" name="default_image_index" id="default_image_index">
 
 
 
@@ -366,16 +252,7 @@
                   </div>
 
               </div>
-              <h4 class="form-section-h">Property Additional Information</h4>
-
-              <center class="loading">
-                <img src="<?php echo e(asset('images/loading.gif')); ?>" alt="Loading.." class="loading" />
-              </center>
-              <div id="fb-render"></div>
-              <div class="row">
-                <input type="hidden" name="save_json" id="save_json" value="<?php echo e($property->additional_info); ?>">
-                <input type="hidden" name="additional_info" id="form_json">
-              </div>
+            
               <div class="form-group-f row">
                 <div class="col-sm-12 text-center">
                   <button class="btn btn-primary updateproperty" type="submit">Update Property</button>
@@ -405,44 +282,76 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
   <script type="text/javascript">
 
+let selectedFiles = [];
 
-    let selectedFiles = []; // new files user selects
+document.getElementById('fileInput').addEventListener('change', function (e) {
+  selectedFiles.push(...Array.from(e.target.files));
+  renderPreviews();
+  e.target.value = '';
+});
 
-    document.getElementById('fileInput').addEventListener('change', function (event) {
-      const newFiles = Array.from(event.target.files);
+function renderPreviews() {
+  const container = document.getElementById('previewContainer');
+  container.innerHTML = '';
 
-      selectedFiles.push(...newFiles);
-      renderPreviews();
+  selectedFiles.forEach((file, index) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const div = document.createElement('div');
+      div.className = 'position-relative text-center';
 
-      // reset input so same file can be reselected later
-      event.target.value = '';
-    });
+      div.innerHTML = `
+        <img src="${e.target.result}"
+             class="rounded border"
+             style="height:100px;width:100px;object-fit:cover;">
 
-    function renderPreviews() {
-      const container = document.getElementById('previewContainer');
-      container.innerHTML = '';
+        <div class="form-check mt-1">
+          <input class="form-check-input new-default-radio"
+                 type="radio"
+                 name="new_default_image"
+                 value="${index}">
+          <label class="form-check-label small">Default</label>
+        </div>
 
-      selectedFiles.forEach((file, index) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const div = document.createElement('div');
-          div.classList.add('position-relative', 'm-1');
-          div.innerHTML = `
-                  <img src="${e.target.result}" class="rounded border" width="100" height="100">
-                  <button type="button" class="btn btn-sm btn-danger" 
-                    style="position:absolute;top:0;right:0;" 
-                    onclick="removeImage(${index})">&times;</button>
-                `;
-          container.appendChild(div);
-        };
-        reader.readAsDataURL(file);
-      });
-    }
+        <button type="button"
+                class="btn btn-sm btn-danger"
+                style="position:absolute;top:0;right:0;"
+                onclick="removeImage(${index})">&times;</button>
+      `;
+      container.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+  });
+}
 
-    function removeImage(index) {
-      selectedFiles.splice(index, 1);
-      renderPreviews();
-    }
+function removeImage(index) {
+  selectedFiles.splice(index, 1);
+  renderPreviews();
+}
+
+/* ================= DEFAULT SWITCH LOGIC ================= */
+document.addEventListener('change', function (e) {
+
+  // New image selected as default
+  if (e.target.classList.contains('new-default-radio')) {
+    document.getElementById('default_image_index').value = e.target.value;
+    document.getElementById('default_image_id').value = '';
+
+    document.querySelectorAll('.existing-default-radio')
+      .forEach(r => r.checked = false);
+  }
+
+  // Existing image selected as default
+  if (e.target.classList.contains('existing-default-radio')) {
+    document.getElementById('default_image_id').value = e.target.value;
+    document.getElementById('default_image_index').value = '';
+
+    document.querySelectorAll('.new-default-radio')
+      .forEach(r => r.checked = false);
+  }
+
+});
+    
 
     <?php if(!empty($property->latitude) && !empty($property->longitude)): ?>
       createMap(<?php echo e($property->latitude); ?>, <?php echo e($property->longitude); ?>);
@@ -586,8 +495,8 @@
             $(".updateproperty").attr('disabled', true);
           },
           success: function (response) {
-            var response = JSON.parse(response);
-            if (response.status === 200) {
+            // var response = JSON.parse(response);
+            if (response.status == 'success') {
               toastr.success(response.message);
               var from = $('#from').val();
               if (from == 'preview') {
@@ -704,10 +613,6 @@
       if (!selectedId) {
         // Optionally hide those toggle fields if no sub sub category selected
         toggleSubSubCategoryFields({
-          price_label_toggle: false,
-          property_status_toggle: false,
-          registration_status_toggle: false,
-          furnishing_status_toggle: false,
           amenities_toggle: false,
         });
         return;
@@ -721,19 +626,11 @@
 
       if (selectedData) {
         toggleSubSubCategoryFields({
-          price_label_toggle: selectedData.price_label_toggle,
-          property_status_toggle: selectedData.property_status_toggle,
-          registration_status_toggle: selectedData.registration_status_toggle,
-          furnishing_status_toggle: selectedData.furnishing_status_toggle,
           amenities_toggle: selectedData.amenities_toggle
         });
       } else {
         // No matching sub sub category found, hide fields
         toggleSubSubCategoryFields({
-          price_label_toggle: false,
-          property_status_toggle: false,
-          registration_status_toggle: false,
-          furnishing_status_toggle: false,
           amenities_toggle: false
         });
       }
@@ -743,31 +640,6 @@
 
     // This function is called when subsubcategory changes or after loading toggles
     function toggleSubSubCategoryFields(toggles) {
-
-      if (toggles.price_label_toggle == 'yes') {
-        $('#priceLabelField').show();
-      } else {
-        $('#priceLabelField').hide();
-      }
-
-      if (toggles.property_status_toggle == 'yes') {
-        $('#propertyStatusField').show();
-      } else {
-        $('#propertyStatusField').hide();
-      }
-
-      if (toggles.registration_status_toggle == 'yes') {
-        $('#registrationStatusField').show();
-      } else {
-        $('#registrationStatusField').hide();
-      }
-
-      if (toggles.furnishing_status_toggle == 'yes') {
-        $('#furnishingStatusField').show();
-      } else {
-        $('#furnishingStatusField').hide();
-      }
-
       if (toggles.amenities_toggle == 'yes') {
         $('#amenitiesField').show();
       } else {
@@ -800,22 +672,22 @@
         success: function (response) {
           if (response != 0) {
 
-            if (
-              '<?php echo e($property->category_id); ?>' == response.category_id ||
-              '<?php echo e($property->sub_category_id); ?>' == response.sub_category_id ||
-              '<?php echo e($property->sub_sub_category_id); ?>' == response.sub_sub_category_id
-            ) {
-              document.getElementById('fb-render').innerHTML = '';
-              var formData = $('#save_json').val();
-              var formRenderOptions = { formData };
-              frInstance = $('#fb-render').formRender(formRenderOptions);
+            // if (
+            //   '<?php echo e($property->category_id); ?>' == response.category_id ||
+            //   '<?php echo e($property->sub_category_id); ?>' == response.sub_category_id ||
+            //   '<?php echo e($property->sub_sub_category_id); ?>' == response.sub_sub_category_id
+            // ) {
+            //   document.getElementById('fb-render').innerHTML = '';
+            //   var formData = $('#save_json').val();
+            //   var formRenderOptions = { formData };
+            //   frInstance = $('#fb-render').formRender(formRenderOptions);
 
-            } else {
+            // } else {
               document.getElementById('fb-render').innerHTML = '';
               var formData = response.form_data;
               var formRenderOptions = { formData };
               frInstance = $('#fb-render').formRender(formRenderOptions);
-            }
+            // }
 
           } else {
             document.getElementById('fb-render').innerHTML = '';
@@ -868,51 +740,6 @@
           }
         });
     }
-
-
-    function handleSecondInput(selectId, containerId, checkboxClass) {
-      const select = document.getElementById(selectId);
-      const container = document.getElementById(containerId);
-      const label = container.querySelector('label');
-
-      if (select) {
-        function toggle() {
-          const option = select.selectedOptions[0];
-          const show = option.dataset.secondInput === 'yes';
-          label.textContent = option.dataset.secondLabel || '';
-          container.style.display = show ? 'block' : 'none';
-        }
-        select.addEventListener('change', toggle);
-        toggle(); // initialize
-      }
-
-      if (checkboxClass) {
-        const checkboxes = document.querySelectorAll(checkboxClass);
-        function toggleCheckbox() {
-          let show = false;
-          let lbl = '';
-          checkboxes.forEach(cb => {
-            if (cb.checked && cb.dataset.secondInput === 'yes') {
-              show = true;
-              lbl = cb.dataset.secondLabel;
-            }
-          });
-          label.textContent = lbl;
-          container.style.display = show ? 'block' : 'none';
-        }
-        checkboxes.forEach(cb => cb.addEventListener('change', toggleCheckbox));
-        toggleCheckbox(); // initialize
-      }
-    }
-
-    // Price Label
-    handleSecondInput('price_label', 'price_label_second_container', '.price_checkbox');
-    // Property Status
-    handleSecondInput('property_status', 'property_status_second_container', '.property_checkbox');
-    // Registration Status
-    handleSecondInput('registration_status', 'registration_status_second_container', '.registration_checkbox');
-    // Furnishing Status
-    handleSecondInput('furnishing_status', 'furnishing_status_second_container', '.furnishing_checkbox');
 
     $('#location_id').on('change', function () {
       // toggle new location input

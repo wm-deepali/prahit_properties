@@ -46,13 +46,13 @@ Route::post('login/send/otp', 'User\UserController@sendLoginOtp')->name('user.se
 Route::post('forgot-password', 'AppController@forgot_password')->name('forgot_password');
 Route::post('send-otp', 'AppController@visitor_otp')->name('send_otp');
 
-Route::get('post-property', 'HomeController@create_property')->name('create_property');
+Route::get('post-property', 'PropertyController@create_property')->name('create_property');
+Route::post('front/create-property', 'PropertyController@createProperty')->name('create.property');
 Route::get('property/{id}/{slug}', 'HomeController@property_detail')->name('property_detail');
 Route::get('search/', 'HomeController@search_property')->name('search_property');
 Route::get('search/grid/', 'HomeController@searchPropertyGrid')->name('grid.search_property');
 Route::get('/{city?}', 'HomeController@home')->name('home');
 Route::post('/request-callback', 'HomeController@requestCallback')->name('requestCallback');
-Route::post('front/create-property', 'HomeController@createProperty')->name('create.property');
 
 // Content Page Routes
 Route::get('home/about-us', 'HomeController@aboutUs')->name('front.about');
@@ -492,11 +492,11 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('user/profile-section', 'User\UserController@profileSection')->name('user.profile.section');
 	Route::post('user/profile-section/update', 'User\UserController@updateProfileSection')->name('user.profile.section.update');
 
-	Route::get('update/property/{id}', 'HomeController@editPropertyView')->name('property.editPropertyView');
-	Route::get('user/property/preview/{id}', 'HomeController@userPreviewPropertyView')->name('property.userPreviewPropertyView');
-	Route::post('update/property', 'HomeController@updateProperty')->name('property.updateProperty');
-	Route::post('delete/property/images', 'HomeController@deleteGalleryImages')->name('property.deleteGalleryImages');
-	Route::post('delete/property', 'HomeController@deleteProperty')->name('property.delete');
+	Route::get('user/property/preview/{id}', 'PropertyController@userPreviewPropertyView')->name('property.userPreviewPropertyView');
+	Route::get('update/property/{id}', 'PropertyController@editPropertyView')->name('property.editPropertyView');
+	Route::post('update/property', 'PropertyController@updateProperty')->name('property.updateProperty');
+	Route::post('delete/property/images', 'PropertyController@deleteGalleryImages')->name('property.deleteGalleryImages');
+	Route::post('delete/property', 'PropertyController@deleteProperty')->name('property.delete');
 
 	Route::get('post/property/final/{id}', 'Admin\PropertiesController@postPropertyFinalView')->name('property.postPropertyFinalView');
 	Route::post('post/property/final', 'Admin\PropertiesController@postPropertyFinal')->name('property.postPropertyFinal');

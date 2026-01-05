@@ -33,7 +33,7 @@
 					<div class="form-group col-sm-12">
 						<div class="card property-left-widgets">
 							<div class="form-sep">
-								<h3>Preview Property Description &amp; Price</h3>
+								<h3>Preview Property Description</h3>
 
 								<div class="row">
 									<div class="form-group col-sm-4">
@@ -71,143 +71,28 @@
 										</select>
 									</div>
 
-								</div>
-
-								<div class="row">
-									<div class="form-group col-sm-8">
+									<div class="form-group col-sm-12">
 										<label class="label-control">Title </label>
 										<input type="text" class="form-control" name="title"
 											placeholder="Enter Property Name" value="{{$property->title}}" required
 											readonly="" />
 									</div>
 
-									<div class="form-group col-sm-4">
+									<!-- <div class="form-group col-sm-4">
 										<label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
 										<input type="number" class="form-control" name="price" min="0"
 											placeholder="Enter Price" value="{{$property->price}}" required readonly="" />
-									</div>
-								</div>
-								<div class="form-row">
-
-									{{-- Price Label --}}
-									@php $col = ($price_labels->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-									<div id="priceLabelField" class="form-group {{ $col }}" style="display:none;">
-										<label class="label-control d-flex">Price Label</label>
-										@if($price_labels->first()->input_format == 'checkbox')
-											@foreach($price_labels as $label)
-												<label>
-													<input type="checkbox" value="{{ $label->id }}" disabled {{ in_array($label->id, explode(',', $property->price_label ?? '')) ? 'checked' : '' }}>
-													{{ $label->name }}
-												</label>
-											@endforeach
-										@else
-											<input type="text" class="form-control" readonly
-												value="{{ optional($price_labels->firstWhere('id', $property->price_label))->name }}">
-										@endif
-
-										@if(!empty($property->price_label_second))
-											<div class="mt-2">
-												<label>
-													{{ optional($price_labels->firstWhere('id', $property->price_label))->second_input_label ?? 'Date' }}
-												</label>
-												<input type="date" class="form-control" readonly
-													value="{{ $property->price_label_second }}">
-											</div>
-										@endif
-
-
-									</div>
-
-									{{-- Property Status --}}
-									@php $col = ($property_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-									<div id="propertyStatusField" class="form-group {{ $col }}" style="display:none;">
-										<label class="label-control">Property Status</label>
-										@if($property_statuses->first()->input_format == 'checkbox')
-											@foreach($property_statuses as $status)
-												<label>
-													<input type="checkbox" value="{{ $status->id }}" disabled {{ in_array($status->id, explode(',', $property->property_status ?? '')) ? 'checked' : '' }}>
-													{{ $status->name }}
-												</label>
-											@endforeach
-										@else
-											<input type="text" class="form-control" readonly
-												value="{{ optional($property_statuses->firstWhere('id', $property->property_status))->name }}">
-										@endif
-
-										@if(!empty($property->property_status_second))
-											<div class="mt-2">
-												<label>
-													{{ optional($property_statuses->firstWhere('id', $property->property_status))->second_input_label ?? 'Date' }}
-												</label>
-												<input type="date" class="form-control" readonly
-													value="{{ $property->property_status_second }}">
-											</div>
-										@endif
-									</div>
-
-									{{-- Registration Status --}}
-									@php $col = ($registration_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-									<div id="registrationStatusField" class="form-group {{ $col }}" style="display:none;">
-										<label class="label-control">Registration Status</label>
-										@if($registration_statuses->first()->input_format == 'checkbox')
-											@foreach($registration_statuses as $status)
-												<label>
-													<input type="checkbox" value="{{ $status->id }}" disabled {{ in_array($status->id, explode(',', $property->registration_status ?? '')) ? 'checked' : '' }}>
-													{{ $status->name }}
-												</label>
-											@endforeach
-										@else
-											<input type="text" class="form-control" readonly
-												value="{{ optional($registration_statuses->firstWhere('id', $property->registration_status))->name }}">
-										@endif
-
-										@if(!empty($property->registration_status_second))
-											<div class="mt-2">
-												<label>
-													{{ optional($registration_statuses->firstWhere('id', $property->registration_status))->second_input_label ?? 'Date' }}
-												</label>
-												<input type="date" class="form-control" readonly
-													value="{{ $property->registration_status_second }}">
-											</div>
-										@endif
-									</div>
-
-									{{-- Furnishing Status --}}
-									@php $col = ($furnishing_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-									<div id="furnishingStatusField" class="form-group {{ $col }}" style="display:none;">
-										<label class="label-control">Furnishing Status</label>
-										@if($furnishing_statuses->first()->input_format == 'checkbox')
-											@foreach($furnishing_statuses as $status)
-												<label>
-													<input type="checkbox" value="{{ $status->id }}" disabled {{ in_array($status->id, explode(',', $property->furnishing_status ?? '')) ? 'checked' : '' }}>
-													{{ $status->name }}
-												</label>
-											@endforeach
-										@else
-											<input type="text" class="form-control" readonly
-												value="{{ optional($furnishing_statuses->firstWhere('id', $property->furnishing_status))->name }}">
-										@endif
-
-										@if(!empty($property->furnishing_status_second))
-											<div class="mt-2">
-												<label>
-													{{ optional($furnishing_statuses->firstWhere('id', $property->furnishing_status))->second_input_label ?? 'Date' }}
-												</label>
-												<input type="date" class="form-control" readonly
-													value="{{ $property->furnishing_status_second }}">
-											</div>
-										@endif
-									</div>
-
-								</div>
-
-								<div class="row">
+									</div> -->
+						
 									<div class="form-group col-sm-12">
 										<label class="label-control">Description</label>
 										<textarea class="form-control" rows="2" cols="4" name="description" required
 											readonly=""> {{$property->description}}</textarea>
 									</div>
 								</div>
+
+								<div id="fb-render"></div>
+
 
 								<div id="amenitiesField" style="display: none;">
 									<h4 class="form-section-h">Amenities</h4>
@@ -276,6 +161,23 @@
 									</div>
 
 								</div>
+									<div class="row">
+    <div class="form-group col-sm-6">
+        <label class="label-control">Landmark</label>
+        <input type="text"
+               class="form-control"
+               value="{{ $property->landmark }}"
+               readonly>
+    </div>
+
+    <div class="form-group col-sm-6">
+        <label class="label-control">Pin Code</label>
+        <input type="text"
+               class="form-control"
+               value="{{ $property->pincode }}"
+               readonly>
+    </div>
+</div>
 								<div class="row">
 									<div class="form-group col-sm-12">
 										<label class="label-control">Address </label>
@@ -283,20 +185,37 @@
 											name="address" value="{{ $property->address }}" required readonly="" />
 									</div>
 								</div>
+							
+
 
 								<div id="propertyMap" style="width:100%; height:300px;margin-bottom:10px"></div>
 								<input type="hidden" value="{{ $property->latitude }}" name="latitude" id="latitude">
 								<input type="hidden" value="{{ $property->longitude }}" name="longitude" id="longitude">
 
 								<h3>Uploaded Photos</h3>
-								<div class="form-group dropzone row">
-									@foreach($property_images as $k => $v)
-										<div class="col-sm-2">
-											<img src="{{url('/') . '/' . $v->image_path}}" style="height: 100px;"
-												class="img-fluid">
-										</div>
-									@endforeach
-								</div>
+
+<div class="row">
+    @foreach($property_images as $img)
+        <div class="col-sm-2 text-center mb-3">
+
+            <div style="
+                border: {{ $img->is_default ? '2px solid #0d6efd' : '1px solid #ddd' }};
+                padding: 6px;
+                border-radius: 6px;
+            ">
+                <img src="{{ asset($img->image_path) }}"
+                     class="img-fluid rounded"
+                     style="height:100px; object-fit:cover;">
+            </div>
+
+            @if($img->is_default)
+                <span class="badge bg-primary mt-1">Default</span>
+            @endif
+
+        </div>
+    @endforeach
+</div>
+
 								@if(!empty($property->property_video))
 									<h3 class="mt-4">Property Video</h3>
 									<div class="form-group">
@@ -307,8 +226,7 @@
 									</div>
 								@endif
 
-								<h4 class="form-section-h">Property Additional Information</h4>
-								<div id="fb-render"></div>
+							
 							</div>
 						</div>
 					</div>
@@ -409,31 +327,6 @@
 
 		// This function is called when subsubcategory changes or after loading toggles
 		function toggleSubSubCategoryFields(selectedData) {
-
-			if (selectedData.price_label_toggle == 'yes') {
-				$('#priceLabelField').show();
-			} else {
-				$('#priceLabelField').hide();
-			}
-
-			if (selectedData.property_status_toggle == 'yes') {
-				$('#propertyStatusField').show();
-			} else {
-				$('#propertyStatusField').hide();
-			}
-
-			if (selectedData.registration_status_toggle == 'yes') {
-				$('#registrationStatusField').show();
-			} else {
-				$('#registrationStatusField').hide();
-			}
-
-			if (selectedData.furnishing_status_toggle == 'yes') {
-				$('#furnishingStatusField').show();
-			} else {
-				$('#furnishingStatusField').hide();
-			}
-
 			if (selectedData.amenities_toggle == 'yes') {
 				$('#amenitiesField').show();
 			} else {

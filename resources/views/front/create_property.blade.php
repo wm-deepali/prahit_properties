@@ -1,33 +1,77 @@
 @extends('layouts.front.app')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 @section('title')
 	<title>Post Property</title>
 @endsection
+
 <style>
 	#otp_btn {
 		min-width: 100px;
 		font-size: 13px;
 		font-weight: 600;
 		border-radius: 4px;
-	}
-
-	.input-group .form-control {
-		border-right: 0 !important;
-	}
-
-	.input-group-append .btn {
-		border-radius: 0 4px 4px 0 !important;
-	}
-
-	#otp_btn {
 		display: none;
 	}
 
 	#otp_input_wrapper {
 		display: none;
 	}
+	.photo-upload-card {
+    border: 2px dashed #dcdcdc;
+    padding: 20px;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.photo-upload-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 20px;
+    border-radius: 6px;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+}
+
+.photo-upload-btn i {
+    font-size: 32px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.photo-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+}
+
+.photo-preview-grid .photo-item {
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 6px;
+    background: #fff;
+    text-align: center;
+}
+
+.photo-preview-grid img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.photo-item .remove-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+}
+
 </style>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 @section('content')
 	<section class="breadcrumb-section">
 		<div class="container">
@@ -54,10 +98,10 @@
 					<div class="col-sm-8">
 						<div class="card property-left-widgets">
 							<div class="form-sep">
-								<h3>Property Description &amp; Price</h3>
+								<h3>Property Description</h3>
 
 								{{-- Property Category, Subcategory, Sub Subcategory --}}
-								<div class="row">
+								<div class="row property-description">
 									<div class="form-group col-sm-4">
 										<label class="label-control">Property Available For</label>
 										<select class="text-control populate_categories" name="category_id" id="category_id"
@@ -90,171 +134,29 @@
 										</select>
 									</div>
 
-								</div>
-
-								<div class="row">
-									<div class="form-group col-sm-8">
+						
+									<div class="form-group col-sm-12">
 										<label class="label-control">Property Title</label>
 										<input type="text" class="text-control" placeholder="Title" name="title" id="title"
 											value="{{ old('title') }}" required />
 									</div>
-									<div class="form-group col-sm-4">
+									<!-- <div class="form-group col-sm-4">
 										<label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
 										<input type="number" class="text-control" placeholder="Enter Price" name="price"
 											id="price" value="{{ old('price') }}" required />
-									</div>
-								</div>
+									</div> -->
 
-								{{-- Dynamic Fields based on toggles --}}
-								{{-- Price Label, Property Status, Registration Status, Furnishing Status --}}
-								<div class="form-row">
-									{{-- Price Label --}}
-									@php $col = ($price_labels->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-									<div id="priceLabelField" class="form-group {{ $col }}" style="display:none;">
-										<label class="label-control d-flex">Price Label</label>
-
-										@if($price_labels->first()->input_format == 'checkbox')
-											@foreach($price_labels as $label)
-												<label>
-													<input type="checkbox" class="price_checkbox" value="{{ $label->id }}"
-														data-second-input="{{ $label->second_input }}"
-														data-second-label="{{ $label->second_input_label }}" name="price_label[]" {{ in_array($label->id, old('price_label', [])) ? 'checked' : '' }}>
-													{{ $label->name }}
-												</label>
-											@endforeach
-										@else
-											<select class="form-control" name="price_label" id="price_label">
-												<option value="" selected> -- Select-- </option>
-												@foreach($price_labels as $label)
-													<option value="{{ $label->id }}" data-second-input="{{ $label->second_input }}"
-														data-second-label="{{ $label->second_input_label }}" {{ old('price_label') == $label->id ? 'selected' : '' }}>
-														{{ $label->name }}
-													</option>
-												@endforeach
-											</select>
-										@endif
-
-										{{-- Second Input (Date) --}}
-										<div class="mt-2" id="price_label_second_container" style="display:none;">
-											<label id="price_label_second_label" class="label-control"></label>
-											<input type="date" name="price_label_second" class="form-control"
-												value="{{ old('price_label_second') }}">
-										</div>
-									</div>
-
-									{{-- Property Status --}}
-									@php $col = ($property_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-									<div id="propertyStatusField" class="form-group {{ $col }}" style="display:none;">
-										<label class="label-control">Property Status</label>
-
-										@if($property_statuses->first()->input_format == 'checkbox')
-											@foreach($property_statuses as $status)
-												<label>
-													<input type="checkbox" class="property_checkbox" value="{{ $status->id }}"
-														data-second-input="{{ $status->second_input }}"
-														data-second-label="{{ $status->second_input_label }}"
-														name="property_status[]" {{ in_array($status->id, old('property_status', [])) ? 'checked' : '' }}>
-													{{ $status->name }}
-												</label>
-											@endforeach
-										@else
-											<select class="form-control" name="property_status" id="property_status">
-												<option value="" selected> -- Select-- </option>
-												@foreach($property_statuses as $status)
-													<option value="{{ $status->id }}"
-														data-second-input="{{ $status->second_input }}"
-														data-second-label="{{ $status->second_input_label }}" {{ old('property_status') == $status->id ? 'selected' : '' }}>
-														{{ $status->name }}
-													</option>
-												@endforeach
-											</select>
-										@endif
-
-										<div class="mt-2" id="property_status_second_container" style="display:none;">
-											<label id="property_status_second_label" class="label-control"></label>
-											<input type="date" name="property_status_second" class="form-control"
-												value="{{ old('property_status_second') }}">
-										</div>
-									</div>
-
-									{{-- Registration Status --}}
-									@php $col = ($registration_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-									<div id="registrationStatusField" class="form-group {{ $col }}" style="display:none;">
-										<label class="label-control">Registration Status</label>
-
-										@if($registration_statuses->first()->input_format == 'checkbox')
-											@foreach($registration_statuses as $status)
-												<label>
-													<input type="checkbox" class="registration_checkbox" value="{{ $status->id }}"
-														data-second-input="{{ $status->second_input }}"
-														data-second-label="{{ $status->second_input_label }}"
-														name="registration_status[]" {{ in_array($status->id, old('registration_status', [])) ? 'checked' : '' }}>
-													{{ $status->name }}
-												</label>
-											@endforeach
-										@else
-											<select class="form-control" name="registration_status" id="registration_status">
-												<option value="" selected> -- Select-- </option>
-												@foreach($registration_statuses as $status)
-													<option value="{{ $status->id }}"
-														data-second-input="{{ $status->second_input }}"
-														data-second-label="{{ $status->second_input_label }}" {{ old('registration_status') == $status->id ? 'selected' : '' }}>
-														{{ $status->name }}
-													</option>
-												@endforeach
-											</select>
-										@endif
-
-										<div class="mt-2" id="registration_status_second_container" style="display:none;">
-											<label id="registration_status_second_label" class="label-control"></label>
-											<input type="date" name="registration_status_second" class="form-control"
-												value="{{ old('registration_status_second') }}">
-										</div>
-									</div>
-
-									{{-- Furnishing Status --}}
-									@php $col = ($furnishing_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-									<div id="furnishingStatusField" class="form-group {{ $col }}" style="display:none;">
-										<label class="label-control">Furnishing Status</label>
-
-										@if($furnishing_statuses->first()->input_format == 'checkbox')
-											@foreach($furnishing_statuses as $status)
-												<label>
-													<input type="checkbox" class="furnishing_checkbox" value="{{ $status->id }}"
-														data-second-input="{{ $status->second_input }}"
-														data-second-label="{{ $status->second_input_label }}"
-														name="furnishing_status[]" {{ in_array($status->id, old('furnishing_status', [])) ? 'checked' : '' }}>
-													{{ $status->name }}
-												</label>
-											@endforeach
-										@else
-											<select class="form-control" name="furnishing_status" id="furnishing_status">
-												<option value="" selected> -- Select-- </option>
-												@foreach($furnishing_statuses as $status)
-													<option value="{{ $status->id }}"
-														data-second-input="{{ $status->second_input }}"
-														data-second-label="{{ $status->second_input_label }}" {{ old('furnishing_status') == $status->id ? 'selected' : '' }}>
-														{{ $status->name }}
-													</option>
-												@endforeach
-											</select>
-										@endif
-
-										<div class="mt-2" id="furnishing_status_second_container" style="display:none;">
-											<label id="furnishing_status_second_label" class="label-control"></label>
-											<input type="date" name="furnishing_status_second" class="form-control"
-												value="{{ old('furnishing_status_second') }}">
-										</div>
-									</div>
-								</div>
-
-								<div class="row">
 									<div class="form-group col-sm-12 ">
 										<label class="label-control">Description</label>
 										<textarea class="text-control" rows="2" cols="4" name="description" id="description"
 											required="">{{ old('description') }}</textarea>
 									</div>
 								</div>
+
+							
+
+
+								<div id="fb-render"></div>
 
 								<div id="amenitiesField" style="display: none;">
 									<h4 class="form-section-h">Amenities</h4>
@@ -277,69 +179,131 @@
 									@endif
 								</div>
 
-								<h4 class="form-section-h">Property Location</h4>
-								<div class="row">
-									<div class="form-group col-sm-6">
-										<label class="label-control">State </label>
-										<select class="form-control" name="state" id="state" required="">
-											<option value="">Select State </option>
-											@foreach($states as $state)
-												<option value="{{ $state->id }}">{{ $state->name }}</option>
-											@endforeach
-										</select>
-									</div>
-									<div class="form-group col-sm-6">
-										<label class="label-control">City </label>
-										<select class="form-control" name="city" id="city" required="">
-										</select>
-									</div>
-								</div>
-								<div class="row">
-									<div class="form-group col-sm-6">
-										<label class="label-control">Location </label>
-										<select class="text-control" name="location_id" id="location_id" required>
-											<!-- dynamic options loaded here -->
-										</select>
+<h4 class="form-section-h">Property Location</h4>
 
-										<div id="custom-location-container" style="display:none; margin-top:10px;">
-											<input type="text" class="text-control" name="custom_location_input" accept=""
-												id="custom_location_input" placeholder="Enter new location" />
-										</div>
-									</div>
-									<div class="form-group col-sm-6">
-										<label class="label-control">Sub Location </label>
-										<select class="text-control" name="sub_location_id[]" id="sub_location_id" multiple
-											required>
-											<!-- dynamic options loaded here -->
-										</select>
-									</div>
+<div class="property-location-wrapper">
 
-								</div>
-								<div class="row">
-									<div class="form-group col-sm-12 ">
-										<label class="label-control">Address </label>
-										<input type="text" class="text-control" placeholder="Enter Address" id="address"
-											name="address" value="{{ old('address') }}" required />
-									</div>
-								</div>
+    {{-- State & City --}}
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label class="label-control">State</label>
+            <select class="form-control" name="state" id="state" required>
+                <option value="">Select State</option>
+                @foreach($states as $state)
+                    <option value="{{ $state->id }}">{{ $state->name }}</option>
+                @endforeach
+            </select>
+        </div>
 
+        <div class="form-group col-sm-6">
+            <label class="label-control">City</label>
+            <select class="form-control" name="city" id="city" required></select>
+        </div>
+    </div>
 
-								<div id="propertyMap" style="width:100%; height:300px;margin-bottom:10px"></div>
-								<input type="hidden" name="latitude" id="latitude">
-								<input type="hidden" name="longitude" id="longitude">
+    {{-- Location & Sub Location --}}
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label class="label-control">Location</label>
+            <select class="text-control" name="location_id" id="location_id" required></select>
+
+            <div id="custom-location-container" style="display:none; margin-top:10px;">
+                <input type="text"
+                       class="text-control"
+                       name="custom_location_input"
+                       id="custom_location_input"
+                       placeholder="Enter new location">
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label class="label-control">Sub Location</label>
+            <select class="text-control"
+                    name="sub_location_id[]"
+                    id="sub_location_id"
+                    multiple
+                    required></select>
+        </div>
+    </div>
+
+    {{-- Landmark & Pin Code --}}
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label class="label-control">Landmark</label>
+            <input type="text"
+                   class="text-control"
+                   name="landmark"
+                   id="landmark"
+                   placeholder="Enter nearby landmark"
+                   value="{{ old('landmark') }}">
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label class="label-control">Pin Code</label>
+            <input type="text"
+                   class="text-control"
+                   name="pincode"
+                   id="pincode"
+                   placeholder="Enter 6-digit pin code"
+                   maxlength="6"
+                   pattern="[0-9]{6}"
+                   value="{{ old('pincode') }}">
+        </div>
+    </div>
+
+    {{-- Address --}}
+    <div class="row">
+        <div class="form-group col-sm-12">
+            <label class="label-control">Address</label>
+            <input type="text"
+                   class="text-control"
+                   name="address"
+                   id="address"
+                   placeholder="Enter Address"
+                   value="{{ old('address') }}"
+                   required>
+        </div>
+    </div>
+
+    {{-- Map --}}
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="propertyMap" style="width:100%; height:300px; margin-bottom:10px;"></div>
+            <input type="hidden" name="latitude" id="latitude">
+            <input type="hidden" name="longitude" id="longitude">
+        </div>
+    </div>
+
+</div>
+
 
 
 								<h3>Property Photos</h3>
-								<div class="row">
-									<div class="form-group col-sm-12 ">
-										<div class="dropzone">
-											<input type="file" id="fileInput" multiple accept="image/*">
-											<div id="previewContainer" class="mt-2 d-flex flex-wrap gap-2"></div>
-										</div>
-										<small class="text-muted">Max allowed photos: {{ $photos_per_listing }}</small>
 
-									</div>
-								</div>
+<div class="row">
+    <div class="col-sm-12">
+
+        <div class="photo-upload-card">
+
+            <label class="photo-upload-btn">
+                <input type="file" id="fileInput" multiple accept="image/*" hidden>
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Click to upload photos</span>
+            </label>
+
+            <small class="text-muted d-block mt-1">
+                Max allowed photos: {{ $photos_per_listing }}
+            </small>
+
+            <div id="previewContainer" class="photo-preview-grid mt-3"></div>
+
+        </div>
+
+    </div>
+</div>
+
+<input type="hidden" name="default_image_index" id="default_image_index" value="0">
+
 
 								@if($video_upload === 'Yes')
 									<h3>Property Video</h3>
@@ -370,10 +334,6 @@
 										});
 									</script>
 								@endif
-
-
-								<h4 class="form-section-h">Property Additional Information</h4>
-								<div id="fb-render"></div>
 							</div>
 						</div>
 					</div>
@@ -457,8 +417,19 @@
 @endsection
 
 @section('js')
-	<script>
-		document.addEventListener("DOMContentLoaded", function () {
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
+	<script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+	
+	<script type="text/javascript">
+
+
+document.addEventListener("DOMContentLoaded", function () {
 			const mobileInput = document.getElementById("mobile_number");
 			const otpBtn = document.getElementById("otp_btn");
 			const otpInputWrapper = document.getElementById("otp_input_wrapper");
@@ -502,17 +473,6 @@
 				}
 			});
 		});
-	</script>
-
-
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-	<script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
-	<script src="https://formbuilder.online/assets/js/form-render.min.js"></script>
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-
-	<script type="text/javascript">
 
 		let selectedFiles = []; // store selected files
 		const maxPhotos = {{ $photos_per_listing ?? 0 }};
@@ -535,24 +495,57 @@
 		});
 
 		function renderPreviews() {
-			const container = document.getElementById('previewContainer');
-			container.innerHTML = '';
+    const container = document.getElementById('previewContainer');
+    container.innerHTML = '';
 
-			selectedFiles.forEach((file, index) => {
-				const reader = new FileReader();
-				reader.onload = (e) => {
-					const div = document.createElement('div');
-					div.style.position = 'relative';
-					div.innerHTML = `
-																										<img src="${e.target.result}" class="rounded border" width="100" height="100">
-																										<button type="button" class="btn btn-sm btn-danger" style="position:absolute;top:0;right:0;"
-																											onclick="removeImage(${index})">&times;</button>
-																									`;
-					container.appendChild(div);
-				};
-				reader.readAsDataURL(file);
-			});
-		}
+    selectedFiles.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const div = document.createElement('div');
+            div.className = 'photo-item';
+            div.style.width = '120px';
+
+            div.innerHTML = `
+                <img src="${e.target.result}"
+                     class="rounded mb-1"
+                     width="100"
+                     height="100"
+                     style="object-fit:cover;">
+
+                <div class="form-check">
+                    <input class="form-check-input default-image-radio"
+                           type="radio"
+                           name="default_image_radio"
+                           value="${index}"
+                           ${index === 0 ? 'checked' : ''}>
+                    <label class="form-check-label small">
+                        Default
+                    </label>
+                </div>
+
+               <button type="button"
+        class="btn btn-sm btn-danger remove-btn"
+        onclick="removeImage(${index})">&times;</button>
+
+            `;
+
+            container.appendChild(div);
+
+            // auto set default index
+            document.getElementById('default_image_index').value =
+                document.querySelector('.default-image-radio:checked')?.value || 0;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+document.getElementById('previewContainer')
+    .addEventListener('change', function (e) {
+        if (e.target.classList.contains('default-image-radio')) {
+            document.getElementById('default_image_index').value = e.target.value;
+        }
+    });
+
 
 		function removeImage(index) {
 			selectedFiles.splice(index, 1);
@@ -727,8 +720,8 @@
 
 		function send_otp(element) {
 
-			var email = $(".email").val();
-			var mobile_number = $(".mobile_number").val();
+			var email = $("#email").val();
+			var mobile_number = $("#mobile_number").val();
 			$.ajax({
 				url: "{{config('app.api_url') . '/property/create_visitor_otp'}}",
 				method: "POST",
@@ -871,10 +864,6 @@
 			if (!selectedId) {
 				// Optionally hide those toggle fields if no sub sub category selected
 				toggleSubSubCategoryFields({
-					price_label_toggle: false,
-					property_status_toggle: false,
-					registration_status_toggle: false,
-					furnishing_status_toggle: false,
 					amenities_toggle: false,
 				});
 				return;
@@ -886,19 +875,11 @@
 
 			if (selectedData) {
 				toggleSubSubCategoryFields({
-					price_label_toggle: selectedData.price_label_toggle,
-					property_status_toggle: selectedData.property_status_toggle,
-					registration_status_toggle: selectedData.registration_status_toggle,
-					furnishing_status_toggle: selectedData.furnishing_status_toggle,
 					amenities_toggle: selectedData.amenities_toggle
 				});
 			} else {
 				// No matching sub sub category found, hide fields
 				toggleSubSubCategoryFields({
-					price_label_toggle: false,
-					property_status_toggle: false,
-					registration_status_toggle: false,
-					furnishing_status_toggle: false,
 					amenities_toggle: false
 				});
 			}
@@ -907,33 +888,7 @@
 		});
 
 
-		// This function is called when subsubcategory changes or after loading toggles
 		function toggleSubSubCategoryFields(toggles) {
-
-			if (toggles.price_label_toggle == 'yes') {
-				$('#priceLabelField').show();
-			} else {
-				$('#priceLabelField').hide();
-			}
-
-			if (toggles.property_status_toggle == 'yes') {
-				$('#propertyStatusField').show();
-			} else {
-				$('#propertyStatusField').hide();
-			}
-
-			if (toggles.registration_status_toggle == 'yes') {
-				$('#registrationStatusField').show();
-			} else {
-				$('#registrationStatusField').hide();
-			}
-
-			if (toggles.furnishing_status_toggle == 'yes') {
-				$('#furnishingStatusField').show();
-			} else {
-				$('#furnishingStatusField').hide();
-			}
-
 			if (toggles.amenities_toggle == 'yes') {
 				$('#amenitiesField').show();
 			} else {
@@ -941,51 +896,7 @@
 			}
 
 		}
-
-
-		function handleSecondInput(selectId, containerId, checkboxClass) {
-			const select = document.getElementById(selectId);
-			const container = document.getElementById(containerId);
-			const label = container.querySelector('label');
-
-			if (select) {
-				function toggle() {
-					const option = select.selectedOptions[0];
-					const show = option.dataset.secondInput === 'yes';
-					label.textContent = option.dataset.secondLabel || '';
-					container.style.display = show ? 'block' : 'none';
-				}
-				select.addEventListener('change', toggle);
-				toggle(); // initialize
-			}
-
-			if (checkboxClass) {
-				const checkboxes = document.querySelectorAll(checkboxClass);
-				function toggleCheckbox() {
-					let show = false;
-					let lbl = '';
-					checkboxes.forEach(cb => {
-						if (cb.checked && cb.dataset.secondInput === 'yes') {
-							show = true;
-							lbl = cb.dataset.secondLabel;
-						}
-					});
-					label.textContent = lbl;
-					container.style.display = show ? 'block' : 'none';
-				}
-				checkboxes.forEach(cb => cb.addEventListener('change', toggleCheckbox));
-				toggleCheckbox(); // initialize
-			}
-		}
-
-		// Price Label
-		handleSecondInput('price_label', 'price_label_second_container', '.price_checkbox');
-		// Property Status
-		handleSecondInput('property_status', 'property_status_second_container', '.property_checkbox');
-		// Registration Status
-		handleSecondInput('registration_status', 'registration_status_second_container', '.registration_checkbox');
-		// Furnishing Status
-		handleSecondInput('furnishing_status', 'furnishing_status_second_container', '.furnishing_checkbox');
+		
 
 		$('#location_id').on('change', function () {
 			if ($(this).val() && $(this).val() === 'other') {
@@ -1038,7 +949,6 @@
 
 		function createProperty() {
 			var title = $('#title').val();
-			var price = $('#price').val();
 			var description = $('#description').val();
 			var address = $('#address').val();
 			var location_id = $('#location_id').val();
@@ -1081,11 +991,6 @@
 				return false;
 			}
 
-			if (!price.trim()) {
-				$('#price').focus();
-				toastr.warning('Price field must be required.');
-				return false;
-			}
 
 			if (!category) {
 				$('#category_id').focus();
@@ -1160,12 +1065,12 @@
 
 
 			if (state_id == '') {
-				$('#state_id').focus();
+				$('#state').focus();
 				toastr.warning('State field must be required.')
 				return false;
 			}
 			if (register_page_city_id == '') {
-				$('#register_page_city_id').focus();
+				$('#city').focus();
 				toastr.warning('City field must be required.')
 				return false;
 			}

@@ -1,13 +1,12 @@
 <!-- Right: Key Details Grid -->
-<div class="col-md-8">
     <div class="row g-4">
 
-        @isset($features['Project'])
+        @isset($features['Name of the Society / Project'])
             <div class="col-12 col-lg-3">
                 <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-info border-5">
                     <div class="text-muted small fw-600">Project</div>
                     <div class="fw-bold text-dark fs-5">
-                        <i class="fas fa-compass"></i> {{ $features['Project'] }}
+                        <i class="fas fa-compass"></i> {{ $features['Name of the Society / Project'] }}
                     </div>
                 </div>
             </div>
@@ -35,44 +34,59 @@
             </div>
         @endisset
 
-        @isset($features['Plot Area'])
-            @php
-                $carpetArea = (float) $features['Plot Area'];
-                $unit = $features['Plot Area Unit'] ?? '';
-                $price = isset($property_detail->price)
-                    ? (float) $property_detail->price
-                    : null;
+        @php
+    $plotArea = isset($features['Plot Area']) ? (float) $features['Plot Area'] : null;
+    $plotAreaUnit = $features['Plot Area Unit'] ?? '';
+    $price = isset($property_detail->price) ? (float) $property_detail->price : null;
 
-                $perUnitPrice = ($price && $carpetArea > 0)
-                    ? round($price / $carpetArea)
-                    : null;
-            @endphp
+    $perUnitPrice = ($price && $plotArea && $plotArea > 0)
+        ? round($price / $plotArea)
+        : null;
+@endphp
 
-            <div class="col-12 col-lg-3">
-                <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-primary border-5">
-                    <div class="text-muted small fw-600">Plot Area</div>
-                    <div class="fw-bold text-dark fs-5">
-                        {{ $features['Plot Area'] }} {{ $features['Plot Area Unit'] ?? '' }}
-                    </div>
-                    @if($perUnitPrice)
-                        <div class="text-muted small">
-                            ₹ {{ number_format($perUnitPrice) }} / {{ $unit }}
-                        </div>
-                    @endif
-                </div>
+@if($plotArea && $plotArea > 0)
+    <div class="col-12 col-lg-3">
+        <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-primary border-5">
+            <div class="text-muted small fw-600">Plot Area</div>
+
+            <div class="fw-bold text-dark fs-5">
+                {{ number_format($plotArea) }}
+                {{ $plotAreaUnit }}
             </div>
-        @endisset
 
-        @if(isset($features['Plot Length']) && isset($features['Plot Breadth']))
-            <div class="col-12 col-lg-3">
-                <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-success border-5">
-                    <div class="text-muted small fw-600">Dimensions (L × B)</div>
-                    <div class="fw-bold text-dark fs-5">
-                        {{ $features['Plot Length'] }} × {{ $features['Plot Breadth'] }}
-                    </div>
+            @if($perUnitPrice && $plotAreaUnit)
+                <div class="text-muted small">
+                    ₹ {{ number_format($perUnitPrice) }} / {{ $plotAreaUnit }}
                 </div>
+            @endif
+        </div>
+    </div>
+@endif
+
+      @php
+    $plotLength = isset($features['Plot Length']) ? trim($features['Plot Length']) : null;
+    $plotLengthUnit = $features['Plot Length Unit'] ?? '';
+
+    $plotBreadth = isset($features['Plot Breadth']) ? trim($features['Plot Breadth']) : null;
+    $plotBreadthUnit = $features['Plot Breadth Unit'] ?? '';
+@endphp
+
+@if($plotLength && $plotBreadth)
+    <div class="col-12 col-lg-3">
+        <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-success border-5">
+            <div class="text-muted small fw-600">Dimensions (L × B)</div>
+
+            <div class="fw-bold text-dark fs-5">
+                {{ $plotLength }}
+                @if($plotLengthUnit) {{ $plotLengthUnit }} @endif
+                ×
+                {{ $plotBreadth }}
+                @if($plotBreadthUnit) {{ $plotBreadthUnit }} @endif
             </div>
-        @endif
+        </div>
+    </div>
+@endif
+
 
         @isset($features['No of open sides'])
             <div class="col-12 col-lg-3">
@@ -108,12 +122,12 @@
         @endisset
 
 
-        @isset($features['Boundary Wall made'])
+        @isset($features['Boundary Wall ?'])
             <div class="col-12 col-lg-3">
                 <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-danger border-5">
                     <div class="text-muted small fw-600">Boundary Wall</div>
                     <div class="fw-bold text-dark fs-5">
-                        {{ ucfirst($features['Boundary Wall made']) }}
+                        {{ ucfirst($features['Boundary Wall ?']) }}
                     </div>
                 </div>
             </div>
@@ -125,17 +139,6 @@
                     <div class="text-muted small fw-600">Overlooking</div>
                     <div class="fw-bold text-dark fs-5">
                         {{ $features['Overlooking'] }}
-                    </div>
-                </div>
-            </div>
-        @endisset
-
-        @isset($features['Transaction Type'])
-            <div class="col-12 col-lg-3">
-                <div class="detail-box text-center p-3 rounded-3 bg-light border-start border-warning border-5">
-                    <div class="text-muted small fw-600">Transaction Type</div>
-                    <div class="fw-bold text-dark fs-5">
-                        {{ $features['Transaction Type'] }}
                     </div>
                 </div>
             </div>
@@ -166,23 +169,3 @@
 
     </div>
 
-    <!-- Action Buttons -->
-    <div class="mt-4 pt-3 border-top">
-        <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-md-start">
-            <button type="button" class="btn btn-outline-primary btn-lg px-4 rounded-pill shadow-sm"
-                onclick="claim('{{ $property_detail->id }}')">
-                <i class="fas fa-shield-alt"></i> Claim This Listing
-            </button>
-            <button type="button" class="btn btn-outline-warning btn-lg px-4 rounded-pill shadow-sm"
-                data-bs-toggle="modal" data-bs-target="#feedback-complaint">
-                <i class="fas fa-phone"></i> Feedback & Complaint </button>
-            <button id="wishlistButton" class="btn btn-outline-danger btn-lg px-4 rounded-pill shadow-sm"
-                data-submission="{{ $property_detail->id }}">
-                {!! $isInWishlist
-    ? '<i class="fas fa-heart"></i> Added to Wishlist'
-    : '<i class="far fa-heart"></i> Add to Wishlist' 
-										!!}
-            </button>
-        </div>
-    </div>
-</div>

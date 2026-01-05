@@ -17,7 +17,7 @@
               <div class="card-block">
                 <form class="form-body" id="create_property_form" name="create_property_form"
                   enctype="multipart/form-data">
-                  <h4 class="form-section-h">Property Description &amp; Price</h4>
+                  <h4 class="form-section-h">Property Description</h4>
 
                   <div class="form-group-f row">
                     <div class="col-sm-4">
@@ -49,169 +49,23 @@
                         <option value="">Select Property Type</option>
                       </select>
                     </div>
-                  </div>
 
-                  <div class="form-group-f row">
-                    <div class="col-sm-8">
+                    <div class="col-sm-12">
                       <label class="label-control">Title </label>
                       <input type="text" class="text-control" name="title" placeholder="Enter Property Name" required />
                     </div>
-                    <div class="col-sm-4">
-                      <label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
-                      <input type="number" class="text-control" name="price" min="0" placeholder="Enter Price" required />
-                    </div>
-                  </div>
-
-                  <div class="form-row">
-
-                    
-                    <?php $col = ($price_labels->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-                    <div id="priceLabelField" class="form-group <?php echo e($col); ?>" style="display:none;">
-                      <label class="label-control d-flex">Price Label</label>
-
-                      <?php if($price_labels->first()->input_format == 'checkbox'): ?>
-                        <?php $__currentLoopData = $price_labels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <label>
-                            <input type="checkbox" class="price_checkbox" value="<?php echo e($label->id); ?>"
-                              data-second-input="<?php echo e($label->second_input); ?>"
-                              data-second-label="<?php echo e($label->second_input_label); ?>" name="price_label[]" <?php echo e(in_array($label->id, old('price_label', [])) ? 'checked' : ''); ?>>
-                            <?php echo e($label->name); ?>
-
-                          </label>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                      <?php else: ?>
-                        <select class="form-control" name="price_label" id="price_label">
-                          <option value="" selected> -- Select-- </option>
-                          <?php $__currentLoopData = $price_labels; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($label->id); ?>" data-second-input="<?php echo e($label->second_input); ?>"
-                              data-second-label="<?php echo e($label->second_input_label); ?>" <?php echo e(old('price_label') == $label->id ? 'selected' : ''); ?>>
-                              <?php echo e($label->name); ?>
-
-                            </option>
-                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </select>
-                      <?php endif; ?>
-
-                      
-                      <div class="mt-2" id="price_label_second_container" style="display:none;">
-                        <label id="price_label_second_label" class="label-control"></label>
-                        <input type="date" name="price_label_second" class="form-control"
-                          value="<?php echo e(old('price_label_second')); ?>">
-                      </div>
-                    </div>
-
-                    
-                    <?php $col = ($property_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-                    <div id="propertyStatusField" class="form-group <?php echo e($col); ?>" style="display:none;">
-                      <label class="label-control">Property Status</label>
-
-                      <?php if($property_statuses->first()->input_format == 'checkbox'): ?>
-                        <?php $__currentLoopData = $property_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <label>
-                            <input type="checkbox" class="property_checkbox" value="<?php echo e($status->id); ?>"
-                              data-second-input="<?php echo e($status->second_input); ?>"
-                              data-second-label="<?php echo e($status->second_input_label); ?>" name="property_status[]" <?php echo e(in_array($status->id, old('property_status', [])) ? 'checked' : ''); ?>>
-                            <?php echo e($status->name); ?>
-
-                          </label>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                      <?php else: ?>
-                        <select class="form-control" name="property_status" id="property_status">
-                          <option value="" selected> -- Select-- </option>
-                          <?php $__currentLoopData = $property_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($status->id); ?>" data-second-input="<?php echo e($status->second_input); ?>"
-                              data-second-label="<?php echo e($status->second_input_label); ?>" <?php echo e(old('property_status') == $status->id ? 'selected' : ''); ?>>
-                              <?php echo e($status->name); ?>
-
-                            </option>
-                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </select>
-                      <?php endif; ?>
-
-                      <div class="mt-2" id="property_status_second_container" style="display:none;">
-                        <label id="property_status_second_label" class="label-control"></label>
-                        <input type="date" name="property_status_second" class="form-control"
-                          value="<?php echo e(old('property_status_second')); ?>">
-                      </div>
-                    </div>
-
-                    
-                    <?php $col = ($registration_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-                    <div id="registrationStatusField" class="form-group <?php echo e($col); ?>" style="display:none;">
-                      <label class="label-control">Registration Status</label>
-
-                      <?php if($registration_statuses->first()->input_format == 'checkbox'): ?>
-                        <?php $__currentLoopData = $registration_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <label>
-                            <input type="checkbox" class="registration_checkbox" value="<?php echo e($status->id); ?>"
-                              data-second-input="<?php echo e($status->second_input); ?>"
-                              data-second-label="<?php echo e($status->second_input_label); ?>" name="registration_status[]" <?php echo e(in_array($status->id, old('registration_status', [])) ? 'checked' : ''); ?>>
-                            <?php echo e($status->name); ?>
-
-                          </label>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                      <?php else: ?>
-                        <select class="form-control" name="registration_status" id="registration_status">
-                          <option value="" selected> -- Select-- </option>
-                          <?php $__currentLoopData = $registration_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($status->id); ?>" data-second-input="<?php echo e($status->second_input); ?>"
-                              data-second-label="<?php echo e($status->second_input_label); ?>" <?php echo e(old('registration_status') == $status->id ? 'selected' : ''); ?>>
-                              <?php echo e($status->name); ?>
-
-                            </option>
-                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </select>
-                      <?php endif; ?>
-
-                      <div class="mt-2" id="registration_status_second_container" style="display:none;">
-                        <label id="registration_status_second_label" class="label-control"></label>
-                        <input type="date" name="registration_status_second" class="form-control"
-                          value="<?php echo e(old('registration_status_second')); ?>">
-                      </div>
-                    </div>
-
-                    
-                    <?php $col = ($furnishing_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; ?>
-                    <div id="furnishingStatusField" class="form-group <?php echo e($col); ?>" style="display:none;">
-                      <label class="label-control">Furnishing Status</label>
-
-                      <?php if($furnishing_statuses->first()->input_format == 'checkbox'): ?>
-                        <?php $__currentLoopData = $furnishing_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                          <label>
-                            <input type="checkbox" class="furnishing_checkbox" value="<?php echo e($status->id); ?>"
-                              data-second-input="<?php echo e($status->second_input); ?>"
-                              data-second-label="<?php echo e($status->second_input_label); ?>" name="furnishing_status[]" <?php echo e(in_array($status->id, old('furnishing_status', [])) ? 'checked' : ''); ?>>
-                            <?php echo e($status->name); ?>
-
-                          </label>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                      <?php else: ?>
-                        <select class="form-control" name="furnishing_status" id="furnishing_status">
-                          <option value="" selected> -- Select-- </option>
-                          <?php $__currentLoopData = $furnishing_statuses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($status->id); ?>" data-second-input="<?php echo e($status->second_input); ?>"
-                              data-second-label="<?php echo e($status->second_input_label); ?>" <?php echo e(old('furnishing_status') == $status->id ? 'selected' : ''); ?>>
-                              <?php echo e($status->name); ?>
-
-                            </option>
-                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </select>
-                      <?php endif; ?>
-
-                      <div class="mt-2" id="furnishing_status_second_container" style="display:none;">
-                        <label id="furnishing_status_second_label" class="label-control"></label>
-                        <input type="date" name="furnishing_status_second" class="form-control"
-                          value="<?php echo e(old('furnishing_status_second')); ?>">
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="form-group-f row">
+                   
                     <div class="col-sm-12">
                       <label class="label-control">Description</label>
                       <textarea class="text-control" rows="2" cols="4" name="description" required></textarea>
                     </div>
+
                   </div>
+
+
+                  <div id="fb-render"></div>
+                  <input type="hidden" name="additional_info" id="form_json">
+
 
                   <div id="amenitiesField" style="display: none;">
                     <h4 class="form-section-h">Amenities</h4>
@@ -270,6 +124,30 @@
                     </div>
 
                   </div>
+                    
+    <div class="form-group-f row">
+        <div class="form-group col-sm-6">
+            <label class="label-control">Landmark</label>
+            <input type="text"
+                   class="text-control"
+                   name="landmark"
+                   id="landmark"
+                   placeholder="Enter nearby landmark"
+                   value="<?php echo e(old('landmark')); ?>">
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label class="label-control">Pin Code</label>
+            <input type="text"
+                   class="text-control"
+                   name="pincode"
+                   id="pincode"
+                   placeholder="Enter 6-digit pin code"
+                   maxlength="6"
+                   pattern="[0-9]{6}"
+                   value="<?php echo e(old('pincode')); ?>">
+        </div>
+    </div>
                   <div class="form-group-f row">
                     <div class="col-sm-12">
                       <label class="label-control">Address </label>
@@ -283,15 +161,27 @@
                   <input type="hidden" name="longitude" id="longitude">
 
 
-                  <h3>Property Photos</h3>
-                  <div class="row">
-                    <div class="form-group col-sm-12 ">
-                      <div class="dropzone">
-                        <input type="file" id="fileInput" multiple accept="image/*">
-                        <div id="previewContainer" class="mt-2 d-flex flex-wrap gap-2"></div>
-                      </div>
-                    </div>
-                  </div>
+                 <h3>Property Photos</h3>
+
+<div class="row">
+  <div class="col-sm-12">
+
+    <div class="photo-upload-card" style="border:2px dashed #ddd;padding:15px;border-radius:6px;">
+
+      <label class="photo-upload-btn" style="cursor:pointer;">
+        <input type="file" id="fileInput" multiple accept="image/*" hidden>
+        <strong>Click to upload photos</strong>
+      </label>
+
+      <div id="previewContainer" class="d-flex flex-wrap gap-3 mt-3"></div>
+
+    </div>
+
+  </div>
+</div>
+
+<input type="hidden" name="default_image_index" id="default_image_index" value="0">
+
 
                   <h3>Property Video</h3>
                   <div class="row">
@@ -300,12 +190,6 @@
                       <input type="file" class="form-control" name="property_video" accept="video/*">
                       <small class="text-muted">You can upload one property video (optional).</small>
                     </div>
-                  </div>
-
-                  <h4 class="form-section-h">Property Additional Information</h4>
-                  <div id="fb-render"></div>
-                  <input type="hidden" name="additional_info" id="form_json">
-                  <div class="form-group-f row add_formtype">
                   </div>
 
                   <div class="form-group-f row">
@@ -348,25 +232,51 @@
       event.target.value = '';
     });
 
-    function renderPreviews() {
-      const container = document.getElementById('previewContainer');
-      container.innerHTML = '';
+   function renderPreviews() {
+  const container = document.getElementById('previewContainer');
+  container.innerHTML = '';
 
-      selectedFiles.forEach((file, index) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const div = document.createElement('div');
-          div.style.position = 'relative';
-          div.innerHTML = `
-                            <img src="${e.target.result}" class="rounded border" width="100" height="100">
-                            <button type="button" class="btn btn-sm btn-danger" style="position:absolute;top:0;right:0;"
-                              onclick="removeImage(${index})">&times;</button>
-                          `;
-          container.appendChild(div);
-        };
-        reader.readAsDataURL(file);
-      });
+  selectedFiles.forEach((file, index) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const div = document.createElement('div');
+      div.style.position = 'relative';
+      div.style.textAlign = 'center';
+
+      div.innerHTML = `
+        <img src="${e.target.result}" class="rounded border" width="100" height="100" style="object-fit:cover;">
+
+        <div class="form-check mt-1">
+          <input class="form-check-input default-radio"
+                 type="radio"
+                 name="default_image_radio"
+                 value="${index}"
+                 ${index === 0 ? 'checked' : ''}>
+          <label class="form-check-label small">Default</label>
+        </div>
+
+        <button type="button"
+                class="btn btn-sm btn-danger"
+                style="position:absolute;top:0;right:0;"
+                onclick="removeImage(${index})">&times;</button>
+      `;
+
+      container.appendChild(div);
+
+      // auto-set default
+      document.getElementById('default_image_index').value =
+        document.querySelector('.default-radio:checked')?.value || 0;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById('previewContainer')
+  .addEventListener('change', function (e) {
+    if (e.target.classList.contains('default-radio')) {
+      document.getElementById('default_image_index').value = e.target.value;
     }
+  });
 
     function removeImage(index) {
       selectedFiles.splice(index, 1);
@@ -377,92 +287,88 @@
     // Center at user's current location if available
     let map, marker;
 
-function createMap(lat, lng) {
-  if(!map) {
-    map = L.map('propertyMap').setView([lat, lng], 16);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+    function createMap(lat, lng) {
+      if (!map) {
+        map = L.map('propertyMap').setView([lat, lng], 16);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-    marker = L.marker([lat, lng], { draggable: true }).addTo(map);
-    marker.on('dragend', function (e) {
-      let p = e.target.getLatLng();
-      $('#latitude').val(p.lat);
-      $('#longitude').val(p.lng);
-    });
+        marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+        marker.on('dragend', function (e) {
+          let p = e.target.getLatLng();
+          $('#latitude').val(p.lat);
+          $('#longitude').val(p.lng);
+        });
 
-    map.on('click', function (e) {
-      marker.setLatLng(e.latlng);
-      $('#latitude').val(e.latlng.lat);
-      $('#longitude').val(e.latlng.lng);
-    });
-  } else {
-    map.setView([lat, lng], 16);
-    marker.setLatLng([lat, lng]);
-  }
+        map.on('click', function (e) {
+          marker.setLatLng(e.latlng);
+          $('#latitude').val(e.latlng.lat);
+          $('#longitude').val(e.latlng.lng);
+        });
+      } else {
+        map.setView([lat, lng], 16);
+        marker.setLatLng([lat, lng]);
+      }
 
-  $('#latitude').val(lat);
-  $('#longitude').val(lng);
-}
+      $('#latitude').val(lat);
+      $('#longitude').val(lng);
+    }
 
-function initializePropertyMap() {
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(pos) {
-      createMap(pos.coords.latitude, pos.coords.longitude);
-    }, function() {
+    function initializePropertyMap() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (pos) {
+          createMap(pos.coords.latitude, pos.coords.longitude);
+        }, function () {
+          geocodeSelectedAddress();
+        });
+      } else {
+        geocodeSelectedAddress();
+      }
+    }
+
+    function geocodeSelectedAddress() {
+      let state = $('#state option:selected').text();
+      let city = $('#city option:selected').text();
+      let location = $('#location_id option:selected').text();
+
+      let addressParts = [];
+      if (location && location !== 'Select Location') addressParts.push(location);
+      if (city && city !== 'Select City') addressParts.push(city);
+      if (state && state !== 'Select State') addressParts.push(state);
+
+      let address = addressParts.join(', ');
+
+      if (address) {
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.length > 0) {
+              createMap(data[0].lat, data[0].lon);
+            } else {
+              createMap(28.6139, 77.2090); // fallback: Delhi
+            }
+          }).catch(() => {
+            createMap(28.6139, 77.2090);
+          });
+      } else {
+        createMap(28.6139, 77.2090);
+      }
+    }
+
+    // Call on page load
+    initializePropertyMap();
+
+    // Update map if selects change
+    $('#state, #city, #location_id').on('change', function () {
       geocodeSelectedAddress();
     });
-  } else {
-    geocodeSelectedAddress();
-  }
-}
-
-function geocodeSelectedAddress() {
-  let state = $('#state option:selected').text();
-  let city = $('#city option:selected').text();
-  let location = $('#location_id option:selected').text();
-
-  let addressParts = [];
-  if(location && location !== 'Select Location') addressParts.push(location);
-  if(city && city !== 'Select City') addressParts.push(city);
-  if(state && state !== 'Select State') addressParts.push(state);
-
-  let address = addressParts.join(', ');
-
-  if(address) {
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
-      .then(res => res.json())
-      .then(data => {
-        if(data.length > 0) {
-          createMap(data[0].lat, data[0].lon);
-        } else {
-          createMap(28.6139, 77.2090); // fallback: Delhi
-        }
-      }).catch(() => {
-        createMap(28.6139, 77.2090);
-      });
-  } else {
-    createMap(28.6139, 77.2090);
-  }
-}
-
-// Call on page load
-initializePropertyMap();
-
-// Update map if selects change
-$('#state, #city, #location_id').on('change', function() {
-  geocodeSelectedAddress();
-});
 
 
 
 
     $(function () {
       $(".populate_categories,  .populate_locations").change();
-
-      $(".add_formtype").empty().append(
-        `<center class='m0-auto'> Please select Property Available For or Category </center>`
-      );
 
     });
 
@@ -562,16 +468,16 @@ $('#state, #city, #location_id').on('change', function() {
         });
 
         $.ajax({
-          url: "<?php echo e(config('app.api_url')); ?>/property",
+          url: "<?php echo e(route('admin.properties.store')); ?>",
           method: "POST",
           data: formData,
           cache: false,
           contentType: false,
           processData: false,
-          beforeSend: function (request) {
-            request.setRequestHeader('auth-token', "<?php echo e(Auth::user()->auth_token); ?>");
-            $(".addproperty").attr('disabled', true);
-          },
+        beforeSend: function () {
+    $(".addproperty").attr('disabled', true);
+},
+
           success: function (response) {
             if (response.status == "success") {
               toastr.success(response.message);
@@ -610,7 +516,6 @@ $('#state, #city, #location_id').on('change', function() {
         method: 'get',
         beforeSend: function () {
           $(".addproperty").attr('disabled', true);
-          $(".add_formtype").empty();
           $(".loading").css('display', 'block');
         },
         success: function (response) {
@@ -696,7 +601,6 @@ $('#state, #city, #location_id').on('change', function() {
         },
         beforeSend: function () {
           $(".addproperty").attr('disabled', true);
-          $(".add_formtype").empty();
           $(".loading").css('display', 'block');
         },
         success: function (response) {
@@ -727,10 +631,6 @@ $('#state, #city, #location_id').on('change', function() {
       if (!selectedId) {
         // Optionally hide those toggle fields if no sub sub category selected
         toggleSubSubCategoryFields({
-          price_label_toggle: false,
-          property_status_toggle: false,
-          registration_status_toggle: false,
-          furnishing_status_toggle: false,
           amenities_toggle: false,
         });
         return;
@@ -742,19 +642,11 @@ $('#state, #city, #location_id').on('change', function() {
 
       if (selectedData) {
         toggleSubSubCategoryFields({
-          price_label_toggle: selectedData.price_label_toggle,
-          property_status_toggle: selectedData.property_status_toggle,
-          registration_status_toggle: selectedData.registration_status_toggle,
-          furnishing_status_toggle: selectedData.furnishing_status_toggle,
           amenities_toggle: selectedData.amenities_toggle
         });
       } else {
         // No matching sub sub category found, hide fields
         toggleSubSubCategoryFields({
-          price_label_toggle: false,
-          property_status_toggle: false,
-          registration_status_toggle: false,
-          furnishing_status_toggle: false,
           amenities_toggle: false
         });
       }
@@ -765,31 +657,6 @@ $('#state, #city, #location_id').on('change', function() {
 
     // This function is called when subsubcategory changes or after loading toggles
     function toggleSubSubCategoryFields(toggles) {
-
-      if (toggles.price_label_toggle == 'yes') {
-        $('#priceLabelField').show();
-      } else {
-        $('#priceLabelField').hide();
-      }
-
-      if (toggles.property_status_toggle == 'yes') {
-        $('#propertyStatusField').show();
-      } else {
-        $('#propertyStatusField').hide();
-      }
-
-      if (toggles.registration_status_toggle == 'yes') {
-        $('#registrationStatusField').show();
-      } else {
-        $('#registrationStatusField').hide();
-      }
-
-      if (toggles.furnishing_status_toggle == 'yes') {
-        $('#furnishingStatusField').show();
-      } else {
-        $('#furnishingStatusField').hide();
-      }
-
       if (toggles.amenities_toggle == 'yes') {
         $('#amenitiesField').show();
       } else {
@@ -799,49 +666,6 @@ $('#state, #city, #location_id').on('change', function() {
     }
 
 
-    function handleSecondInput(selectId, containerId, checkboxClass) {
-      const select = document.getElementById(selectId);
-      const container = document.getElementById(containerId);
-      const label = container.querySelector('label');
-
-      if (select) {
-        function toggle() {
-          const option = select.selectedOptions[0];
-          const show = option.dataset.secondInput === 'yes';
-          label.textContent = option.dataset.secondLabel || '';
-          container.style.display = show ? 'block' : 'none';
-        }
-        select.addEventListener('change', toggle);
-        toggle(); // initialize
-      }
-
-      if (checkboxClass) {
-        const checkboxes = document.querySelectorAll(checkboxClass);
-        function toggleCheckbox() {
-          let show = false;
-          let lbl = '';
-          checkboxes.forEach(cb => {
-            if (cb.checked && cb.dataset.secondInput === 'yes') {
-              show = true;
-              lbl = cb.dataset.secondLabel;
-            }
-          });
-          label.textContent = lbl;
-          container.style.display = show ? 'block' : 'none';
-        }
-        checkboxes.forEach(cb => cb.addEventListener('change', toggleCheckbox));
-        toggleCheckbox(); // initialize
-      }
-    }
-
-    // Price Label
-    handleSecondInput('price_label', 'price_label_second_container', '.price_checkbox');
-    // Property Status
-    handleSecondInput('property_status', 'property_status_second_container', '.property_checkbox');
-    // Registration Status
-    handleSecondInput('registration_status', 'registration_status_second_container', '.registration_checkbox');
-    // Furnishing Status
-    handleSecondInput('furnishing_status', 'furnishing_status_second_container', '.furnishing_checkbox');
 
     $('#location_id').on('change', function () {
       if ($(this).val() && $(this).val() === 'other') {

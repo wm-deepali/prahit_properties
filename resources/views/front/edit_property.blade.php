@@ -3,7 +3,62 @@
 @section('title')
 	<title>Edit Property</title>
 @endsection
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+	.photo-upload-card {
+    border: 2px dashed #dcdcdc;
+    padding: 20px;
+    border-radius: 8px;
+    background: #fafafa;
+}
 
+.photo-upload-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 20px;
+    border-radius: 6px;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+}
+
+.photo-upload-btn i {
+    font-size: 32px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.photo-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+}
+
+.photo-preview-grid .photo-item {
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 6px;
+    background: #fff;
+    text-align: center;
+}
+
+.photo-preview-grid img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.photo-item .remove-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+}
+
+</style>
 @section('content')
 
 	<section class="breadcrumb-section">
@@ -34,7 +89,7 @@
 					<div class="col-sm-8">
 						<div class="card property-left-widgets">
 							<div class="form-sep">
-								<h3>Property Description &amp; Price</h3>
+								<h3>Property Descriptions</h3>
 
 								<div class="row">
 									<div class="form-group col-sm-4">
@@ -72,193 +127,21 @@
 											@endforeach
 										</select>
 									</div>
-								</div>
-
-								<div class="row">
-									<div class="col-sm-8">
+								
+									<div class="form-group col-sm-12">
 										<label class="label-control">Title </label>
 										<input type="text" class="text-control" name="title"
 											placeholder="Enter Property Name" value="{{$property->title}}" required />
 									</div>
-									<div class="form-group col-sm-4">
-										<label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
-										<input type="number" class="text-control" name="price" min="0"
-											placeholder="Enter Price" value="{{$property->price}}" required />
-									</div>
-								</div>
-
-								<div class="form-row">
-									{{-- Price Label --}}
-									@php $col = ($price_labels->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-									<div id="priceLabelField" class="form-group {{ $col }}" style="display:none;">
-										<label class="label-control d-flex">Price Label</label>
-										@if($price_labels->first()->input_format == 'checkbox')
-											@foreach($price_labels as $label)
-												<label>
-													<input type="checkbox" name="price_label[]" value="{{ $label->id }}" {{ in_array($label->id, explode(',', $property->price_label ?? '')) ? 'checked' : '' }}>
-													{{ $label->name }}
-												</label>
-											@endforeach
-										@else
-											<select name="price_label" class="form-control">
-												<option value="">Select</option>
-												@foreach($price_labels as $label)
-													<option value="{{ $label->id }}" {{ $property->price_label == $label->id ? 'selected' : '' }}>
-														{{ $label->name }}
-													</option>
-												@endforeach
-											</select>
-										@endif
-
-										@if(!empty($property->price_label_second))
-											<div class="mt-2">
-												<label>
-													{{ optional($price_labels->firstWhere('id', $property->price_label))->second_input_label ?? 'Date' }}
-												</label>
-												<input type="date" class="form-control" name="price_label_second"
-													value="{{ $property->price_label_second }}">
-											</div>
-										@endif
-
-										{{-- Second Input (Date) --}}
-										<div class="mt-2" id="price_label_second_container" style="display:none;">
-											<label id="price_label_second_label" class="label-control"></label>
-											<input type="date" name="price_label_second" class="form-control"
-												value="{{ old('price_label_second') }}">
-										</div>
-
-									</div>
-
-
-									{{-- Property Status --}}
-									@php $col = ($property_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-									<div id="propertyStatusField" class="form-group {{ $col }}" style="display:none;">
-										<label class="label-control">Property Status</label>
-										@if($property_statuses->first()->input_format == 'checkbox')
-											@foreach($property_statuses as $status)
-												<label>
-													<input type="checkbox" name="property_status[]" value="{{ $status->id }}" {{ in_array($status->id, explode(',', $property->property_status ?? '')) ? 'checked' : '' }}>
-													{{ $status->name }}
-												</label>
-											@endforeach
-										@else
-											<select name="property_status" class="form-control">
-												<option value="">Select</option>
-												@foreach($property_statuses as $status)
-													<option value="{{ $status->id }}" {{ $property->property_status == $status->id ? 'selected' : '' }}>
-														{{ $status->name }}
-													</option>
-												@endforeach
-											</select>
-										@endif
-
-										@if(!empty($property->property_status_second))
-											<div class="mt-2">
-												<label>
-													{{ optional($property_statuses->firstWhere('id', $property->property_status))->second_input_label ?? 'Date' }}
-												</label>
-												<input type="date" class="form-control" name="property_status_second"
-													value="{{ $property->property_status_second }}">
-											</div>
-										@endif
-
-										<div class="mt-2" id="property_status_second_container" style="display:none;">
-											<label id="property_status_second_label" class="label-control"></label>
-											<input type="date" name="property_status_second" class="form-control"
-												value="{{ old('property_status_second') }}">
-										</div>
-
-									</div>
-
-
-									{{-- Registration Status --}}
-									@php $col = ($registration_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-									<div id="registrationStatusField" class="form-group {{ $col }}" style="display:none;">
-										<label class="label-control">Registration Status</label>
-										@if($registration_statuses->first()->input_format == 'checkbox')
-											@foreach($registration_statuses as $status)
-												<label>
-													<input type="checkbox" name="registration_status[]" value="{{ $status->id }}" {{ in_array($status->id, explode(',', $property->registration_status ?? '')) ? 'checked' : '' }}>
-													{{ $status->name }}
-												</label>
-											@endforeach
-										@else
-											<select name="registration_status" class="form-control">
-												<option value="">Select</option>
-												@foreach($registration_statuses as $status)
-													<option value="{{ $status->id }}" {{ $property->registration_status == $status->id ? 'selected' : '' }}>{{ $status->name }}
-													</option>
-												@endforeach
-											</select>
-										@endif
-
-										@if(!empty($property->registration_status_second))
-											<div class="mt-2">
-												<label>
-													{{ optional($registration_statuses->firstWhere('id', $property->registration_status))->second_input_label ?? 'Date' }}
-												</label>
-												<input type="date" class="form-control" name="registration_status_second"
-													value="{{ $property->registration_status_second }}">
-											</div>
-										@endif
-
-										<div class="mt-2" id="registration_status_second_container" style="display:none;">
-											<label id="registration_status_second_label" class="label-control"></label>
-											<input type="date" name="registration_status_second" class="form-control"
-												value="{{ old('registration_status_second') }}">
-										</div>
-
-									</div>
-
-
-									{{-- Furnishing Status --}}
-									@php $col = ($furnishing_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-									<div id="furnishingStatusField" class="form-group {{ $col }}" style="display:none;">
-										<label class="label-control">Furnishing Status</label>
-										@if($furnishing_statuses->first()->input_format == 'checkbox')
-											@foreach($furnishing_statuses as $status)
-												<label>
-													<input type="checkbox" name="furnishing_status[]" value="{{ $status->id }}" {{ in_array($status->id, explode(',', $property->furnishing_status ?? '')) ? 'checked' : '' }}>
-													{{ $status->name }}
-												</label>
-											@endforeach
-										@else
-											<select name="furnishing_status" class="form-control">
-												<option value="">Select</option>
-												@foreach($furnishing_statuses as $status)
-													<option value="{{ $status->id }}" {{ $property->furnishing_status == $status->id ? 'selected' : '' }}>{{ $status->name }}
-													</option>
-												@endforeach
-											</select>
-										@endif
-
-										@if(!empty($property->furnishing_status_second))
-											<div class="mt-2">
-												<label>
-													{{ optional($furnishing_statuses->firstWhere('id', $property->furnishing_status))->second_input_label ?? 'Date' }}
-												</label>
-												<input type="date" class="form-control" name="furnishing_status_second"
-													value="{{ $property->furnishing_status_second }}">
-											</div>
-										@endif
-
-										<div class="mt-2" id="furnishing_status_second_container" style="display:none;">
-											<label id="furnishing_status_second_label" class="label-control"></label>
-											<input type="date" name="furnishing_status_second" class="form-control"
-												value="{{ old('furnishing_status_second') }}">
-										</div>
-
-									</div>
-
-								</div>
-
-								<div class="row">
+								
 									<div class="form-group col-sm-12">
 										<label class="label-control">Description</label>
 										<textarea class="text-control" rows="2" cols="4" name="description"
 											required> {{$property->description}}</textarea>
 									</div>
 								</div>
+
+								<div id="fb-render"></div>
 
 								<div id="amenitiesField" style="display:none;">
 									<h4 class="form-section-h">Amenities</h4>
@@ -330,6 +213,28 @@
 									</div>
 								</div>
 								<div class="row">
+    <div class="form-group col-sm-6">
+        <label class="label-control">Landmark</label>
+        <input type="text"
+               class="text-control"
+               name="landmark"
+               value="{{ $property->landmark }}"
+               placeholder="Enter nearby landmark">
+    </div>
+
+    <div class="form-group col-sm-6">
+        <label class="label-control">Pin Code</label>
+        <input type="text"
+               class="text-control"
+               name="pincode"
+               value="{{ $property->pincode }}"
+               maxlength="6"
+               pattern="[0-9]{6}"
+               placeholder="Enter 6-digit pin code">
+    </div>
+</div>
+
+								<div class="row">
 									<div class="form-group col-sm-12">
 										<label class="label-control">Address </label>
 										<input type="text" class="text-control" placeholder="Enter Address" id="address"
@@ -342,32 +247,67 @@
 								<input type="hidden" name="longitude" id="longitude">
 
 								<h3>Uploaded Photos</h3>
-								<div class="form-group dropzone row">
-									@foreach($property_images as $k => $v)
-										<div class="col-sm-2">
-											<img src="{{url('') . '/' . $v->image_path}}" style="height: 100px;"
-												class="img-fluid">
-											<br>
-											<center>
-												<i class="fa fa-trash" aria-hidden="true"
-													style="cursor: pointer;color: red;font-size: 15px;"
-													onclick="deleteGalleryPhoto('{{ $v->id }}')"></i>
-											</center>
-										</div>
-									@endforeach
-								</div>
 
-								<h3>Property Photos</h3>
-								<div class="row">
-									<div class="form-group col-sm-12 ">
-										<div class="dropzone">
-											<input type="file" id="fileInput" multiple accept="image/*">
-											<div id="previewContainer" class="mt-2 d-flex flex-wrap gap-2"></div>
-										</div>
-										<small class="text-muted">Max allowed photos: {{ $photos_per_listing }}</small>
+<div class="row">
+@foreach($property_images as $img)
+    <div class="col-sm-2 text-center mb-3">
 
-									</div>
-								</div>
+        <div style="
+            border: {{ $img->is_default ? '2px solid #0d6efd' : '1px solid #ddd' }};
+            padding: 6px;
+            border-radius: 6px;
+        ">
+            <img src="{{ asset($img->image_path) }}"
+                 class="img-fluid rounded"
+                 style="height:100px; object-fit:cover;">
+        </div>
+
+        <div class="form-check mt-1">
+            <input class="form-check-input"
+                   type="radio"
+                   name="default_image_id"
+                   value="{{ $img->id }}"
+                   {{ $img->is_default ? 'checked' : '' }}>
+            <label class="form-check-label small">Default</label>
+        </div>
+
+        <i class="fa fa-trash text-danger mt-1"
+           style="cursor:pointer;"
+           onclick="deleteGalleryPhoto('{{ $img->id }}')"></i>
+
+    </div>
+@endforeach
+
+</div>
+
+
+							<h3>Property Photos</h3>
+
+<div class="row">
+    <div class="col-sm-12">
+
+        <div class="photo-upload-card">
+
+            {{-- Upload Button --}}
+            <label class="photo-upload-btn">
+                <input type="file" id="fileInput" multiple accept="image/*" hidden>
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Click or drag photos here</span>
+                <small class="text-muted">
+                    JPG / PNG only • Max {{ $photos_per_listing }} photos
+                </small>
+            </label>
+
+            {{-- Preview Grid --}}
+            <div id="previewContainer" class="photo-preview-grid mt-3"></div>
+
+        </div>
+
+    </div>
+</div>
+
+								<input type="hidden" name="default_image_id" id="default_image_id">
+<input type="hidden" name="default_image_index" id="default_image_index">
 
 								@if($video_upload === 'Yes')
 									<h3>Property Video</h3>
@@ -404,8 +344,7 @@
 									</script>
 								@endif
 
-								<h4 class="form-section-h">Property Additional Information</h4>
-								<div id="fb-render"></div>
+								
 							</div>
 						</div>
 					</div>
@@ -574,27 +513,62 @@
 			// reset input so same file can be reselected later
 			event.target.value = '';
 		});
+function renderPreviews() {
+    const container = document.getElementById('previewContainer');
+    container.innerHTML = '';
 
-		function renderPreviews() {
-			const container = document.getElementById('previewContainer');
-			container.innerHTML = '';
+    selectedFiles.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const div = document.createElement('div');
+            div.className = 'text-center position-relative m-2';
 
-			selectedFiles.forEach((file, index) => {
-				const reader = new FileReader();
-				reader.onload = (e) => {
-					const div = document.createElement('div');
-					div.classList.add('position-relative', 'm-1');
-					div.innerHTML = `
-																							<img src="${e.target.result}" class="rounded border" width="100" height="100">
-																							<button type="button" class="btn btn-sm btn-danger" 
-																								style="position:absolute;top:0;right:0;" 
-																								onclick="removeImage(${index})">&times;</button>
-																						`;
-					container.appendChild(div);
-				};
-				reader.readAsDataURL(file);
-			});
-		}
+            div.innerHTML = `
+                <div style="border:1px solid #ddd;padding:6px;border-radius:6px;">
+                    <img src="${e.target.result}"
+                         style="height:100px;width:100px;object-fit:cover;"
+                         class="rounded">
+                </div>
+
+                <div class="form-check mt-1">
+                    <input class="form-check-input new-default-radio"
+                           type="radio"
+                           name="new_default_image"
+                           value="${index}">
+                    <label class="form-check-label small">Default</label>
+                </div>
+
+                <button type="button"
+                        class="btn btn-sm btn-danger"
+                        style="position:absolute;top:0;right:0;"
+                        onclick="removeImage(${index})">&times;</button>
+            `;
+
+            container.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+document.addEventListener('change', function (e) {
+    // If new image default selected
+    if (e.target.classList.contains('new-default-radio')) {
+        document.getElementById('default_image_index').value = e.target.value;
+
+        // 🔥 IMPORTANT: clear existing default selection
+        document.querySelectorAll('input[name="default_image_id"]').forEach(r => r.checked = false);
+        document.getElementById('default_image_id').value = '';
+    }
+
+    // If existing image default selected
+    if (e.target.name === 'default_image_id') {
+        document.getElementById('default_image_id').value = e.target.value;
+
+        // 🔥 IMPORTANT: clear new default index
+        document.getElementById('default_image_index').value = '';
+    }
+});
+
 
 		function removeImage(index) {
 			selectedFiles.splice(index, 1);
@@ -825,10 +799,6 @@
 			if (!selectedId) {
 				// Optionally hide those toggle fields if no sub sub category selected
 				toggleSubSubCategoryFields({
-					price_label_toggle: false,
-					property_status_toggle: false,
-					registration_status_toggle: false,
-					furnishing_status_toggle: false,
 					amenities_toggle: false,
 				});
 				return;
@@ -842,19 +812,11 @@
 
 			if (selectedData) {
 				toggleSubSubCategoryFields({
-					price_label_toggle: selectedData.price_label_toggle,
-					property_status_toggle: selectedData.property_status_toggle,
-					registration_status_toggle: selectedData.registration_status_toggle,
-					furnishing_status_toggle: selectedData.furnishing_status_toggle,
 					amenities_toggle: selectedData.amenities_toggle
 				});
 			} else {
 				// No matching sub sub category found, hide fields
 				toggleSubSubCategoryFields({
-					price_label_toggle: false,
-					property_status_toggle: false,
-					registration_status_toggle: false,
-					furnishing_status_toggle: false,
 					amenities_toggle: false
 				});
 			}
@@ -864,31 +826,6 @@
 
 		// This function is called when subsubcategory changes or after loading toggles
 		function toggleSubSubCategoryFields(toggles) {
-
-			if (toggles.price_label_toggle == 'yes') {
-				$('#priceLabelField').show();
-			} else {
-				$('#priceLabelField').hide();
-			}
-
-			if (toggles.property_status_toggle == 'yes') {
-				$('#propertyStatusField').show();
-			} else {
-				$('#propertyStatusField').hide();
-			}
-
-			if (toggles.registration_status_toggle == 'yes') {
-				$('#registrationStatusField').show();
-			} else {
-				$('#registrationStatusField').hide();
-			}
-
-			if (toggles.furnishing_status_toggle == 'yes') {
-				$('#furnishingStatusField').show();
-			} else {
-				$('#furnishingStatusField').hide();
-			}
-
 			if (toggles.amenities_toggle == 'yes') {
 				$('#amenitiesField').show();
 			} else {
@@ -950,52 +887,6 @@
 				}
 			})
 		}
-
-
-
-		function handleSecondInput(selectId, containerId, checkboxClass) {
-			const select = document.getElementById(selectId);
-			const container = document.getElementById(containerId);
-			const label = container.querySelector('label');
-
-			if (select) {
-				function toggle() {
-					const option = select.selectedOptions[0];
-					const show = option.dataset.secondInput === 'yes';
-					label.textContent = option.dataset.secondLabel || '';
-					container.style.display = show ? 'block' : 'none';
-				}
-				select.addEventListener('change', toggle);
-				toggle(); // initialize
-			}
-
-			if (checkboxClass) {
-				const checkboxes = document.querySelectorAll(checkboxClass);
-				function toggleCheckbox() {
-					let show = false;
-					let lbl = '';
-					checkboxes.forEach(cb => {
-						if (cb.checked && cb.dataset.secondInput === 'yes') {
-							show = true;
-							lbl = cb.dataset.secondLabel;
-						}
-					});
-					label.textContent = lbl;
-					container.style.display = show ? 'block' : 'none';
-				}
-				checkboxes.forEach(cb => cb.addEventListener('change', toggleCheckbox));
-				toggleCheckbox(); // initialize
-			}
-		}
-
-		// Price Label
-		handleSecondInput('price_label', 'price_label_second_container', '.price_checkbox');
-		// Property Status
-		handleSecondInput('property_status', 'property_status_second_container', '.property_checkbox');
-		// Registration Status
-		handleSecondInput('registration_status', 'registration_status_second_container', '.registration_checkbox');
-		// Furnishing Status
-		handleSecondInput('furnishing_status', 'furnishing_status_second_container', '.furnishing_checkbox');
 
 		$('#location_id').on('change', function () {
 			// toggle new location input
@@ -1199,7 +1090,6 @@
 
 			// Basic Field Validations
 			let title = $('#title').val();
-			let price = $('#price').val();
 			let category = $('#category_id').val();
 			let sub_category = $('#sub_category_id').val();
 			let status = $('#status').val();
@@ -1214,11 +1104,7 @@
 				return false;
 			}
 
-			if (price == '') {
-				$('#price').focus();
-				toastr.warning('Price field must be required.');
-				return false;
-			}
+	
 
 			if (category == '') {
 				$('#category_id').focus();

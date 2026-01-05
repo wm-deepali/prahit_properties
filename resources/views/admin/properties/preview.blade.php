@@ -20,7 +20,7 @@
               <div class="card-block">
                 <form class="form-body" id="update_property_form" name="update_property_form"
                   enctype="multipart/form-data">
-                  <h4 class="form-section-h">Preview Property Details</h4>
+                  <h4 class="form-section-h">Preview Property Description</h4>
 
                   <div class="form-group-f row">
                     <div class="col-sm-4">
@@ -49,141 +49,23 @@
                       </select>
                     </div>
 
-                  </div>
-
-                  <div class="form-group-f row">
-                    <div class="col-sm-8">
+                    <div class="col-sm-12">
                       <label class="label-control">Title </label>
                       <input type="text" class="text-control" name="title" placeholder="Enter Property Name"
                         value="{{$property->title}}" required readonly="" />
                     </div>
 
-                    <div class="col-sm-4">
-                      <label class="label-control">Price (<i class="fas fa-rupee-sign"></i>) </label>
-                      <input type="number" class="text-control" name="price" min="0" placeholder="Enter Price"
-                        value="{{$property->price}}" required readonly="" />
-                    </div>
-                  </div>
-
-
-                  <div class="form-row">
-
-                    {{-- Price Label --}}
-                    @php $col = ($price_labels->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-                    <div id="priceLabelField" class="form-group {{ $col }}" style="display:none;">
-                      <label class="label-control d-flex">Price Label</label>
-                      @if($price_labels->first()->input_format == 'checkbox')
-                        @foreach($price_labels as $label)
-                          <label>
-                            <input type="checkbox" value="{{ $label->id }}" disabled {{ in_array($label->id, explode(',', $property->price_label ?? '')) ? 'checked' : '' }}>
-                            {{ $label->name }}
-                          </label>
-                        @endforeach
-                      @else
-                        <input type="text" class="form-control" readonly
-                          value="{{ optional($price_labels->firstWhere('id', $property->price_label))->name }}">
-                      @endif
-
-                      @if(!empty($property->price_label_second))
-                        <div class="mt-2">
-                          <label>
-                            {{ optional($price_labels->firstWhere('id', $property->price_label))->second_input_label ?? 'Date' }}
-                          </label>
-                          <input type="date" class="form-control" readonly value="{{ $property->price_label_second }}">
-                        </div>
-                      @endif
-
-
-                    </div>
-
-                    {{-- Property Status --}}
-                    @php $col = ($property_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-                    <div id="propertyStatusField" class="form-group {{ $col }}" style="display:none;">
-                      <label class="label-control">Property Status</label>
-                      @if($property_statuses->first()->input_format == 'checkbox')
-                        @foreach($property_statuses as $status)
-                          <label>
-                            <input type="checkbox" value="{{ $status->id }}" disabled {{ in_array($status->id, explode(',', $property->property_status ?? '')) ? 'checked' : '' }}>
-                            {{ $status->name }}
-                          </label>
-                        @endforeach
-                      @else
-                        <input type="text" class="form-control" readonly
-                          value="{{ optional($property_statuses->firstWhere('id', $property->property_status))->name }}">
-                      @endif
-
-                      @if(!empty($property->property_status_second))
-                        <div class="mt-2">
-                          <label>
-                            {{ optional($property_statuses->firstWhere('id', $property->property_status))->second_input_label ?? 'Date' }}
-                          </label>
-                          <input type="date" class="form-control" readonly value="{{ $property->property_status_second }}">
-                        </div>
-                      @endif
-                    </div>
-
-                    {{-- Registration Status --}}
-                    @php $col = ($registration_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-                    <div id="registrationStatusField" class="form-group {{ $col }}" style="display:none;">
-                      <label class="label-control">Registration Status</label>
-                      @if($registration_statuses->first()->input_format == 'checkbox')
-                        @foreach($registration_statuses as $status)
-                          <label>
-                            <input type="checkbox" value="{{ $status->id }}" disabled {{ in_array($status->id, explode(',', $property->registration_status ?? '')) ? 'checked' : '' }}>
-                            {{ $status->name }}
-                          </label>
-                        @endforeach
-                      @else
-                        <input type="text" class="form-control" readonly
-                          value="{{ optional($registration_statuses->firstWhere('id', $property->registration_status))->name }}">
-                      @endif
-
-                      @if(!empty($property->registration_status_second))
-                        <div class="mt-2">
-                          <label>
-                            {{ optional($registration_statuses->firstWhere('id', $property->registration_status))->second_input_label ?? 'Date' }}
-                          </label>
-                          <input type="date" class="form-control" readonly
-                            value="{{ $property->registration_status_second }}">
-                        </div>
-                      @endif
-                    </div>
-
-                    {{-- Furnishing Status --}}
-                    @php $col = ($furnishing_statuses->first()->input_format == 'checkbox') ? 'col-12' : 'col-md-4'; @endphp
-                    <div id="furnishingStatusField" class="form-group {{ $col }}" style="display:none;">
-                      <label class="label-control">Furnishing Status</label>
-                      @if($furnishing_statuses->first()->input_format == 'checkbox')
-                        @foreach($furnishing_statuses as $status)
-                          <label>
-                            <input type="checkbox" value="{{ $status->id }}" disabled {{ in_array($status->id, explode(',', $property->furnishing_status ?? '')) ? 'checked' : '' }}>
-                            {{ $status->name }}
-                          </label>
-                        @endforeach
-                      @else
-                        <input type="text" class="form-control" readonly
-                          value="{{ optional($furnishing_statuses->firstWhere('id', $property->furnishing_status))->name }}">
-                      @endif
-
-                      @if(!empty($property->furnishing_status_second))
-                        <div class="mt-2">
-                          <label>
-                            {{ optional($furnishing_statuses->firstWhere('id', $property->furnishing_status))->second_input_label ?? 'Date' }}
-                          </label>
-                          <input type="date" class="form-control" readonly
-                            value="{{ $property->furnishing_status_second }}">
-                        </div>
-                      @endif
-                    </div>
-
-                  </div>
-
-                  <div class="form-group-f row">
+                   
                     <div class="col-sm-12">
                       <label class="label-control">Description</label>
                       <textarea class="text-control" rows="2" cols="4" name="description" required
                         readonly=""> {{$property->description}}</textarea>
                     </div>
+                  </div>
+
+                  <div id="fb-render"></div>
+                  <div class="row">
+                    <input type="hidden" name="save_json" id="save_json" value="{{ $property->additional_info }}">
                   </div>
 
                   <div id="amenitiesField" style="display: none;">
@@ -250,6 +132,23 @@
                     </div>
 
                   </div>
+                  	<div class="form-group-f row">
+    <div class="form-group col-sm-6">
+        <label class="label-control">Landmark</label>
+        <input type="text"
+               class="form-control"
+               value="{{ $property->landmark }}"
+               readonly>
+    </div>
+
+    <div class="form-group col-sm-6">
+        <label class="label-control">Pin Code</label>
+        <input type="text"
+               class="form-control"
+               value="{{ $property->pincode }}"
+               readonly>
+    </div>
+                  </div>
                   <div class="form-group-f row">
                     <div class="col-sm-12">
                       <label class="label-control">Address </label>
@@ -261,34 +160,57 @@
                   <div id="propertyMap" style="width:100%; height:300px;margin-bottom:10px"></div>
                   <input type="hidden" value="{{ $property->latitude }}" name="latitude" id="latitude">
                   <input type="hidden" value="{{ $property->longitude }}" name="longitude" id="longitude">
+                  
 
-                  <div class="row">
-                    <h4 style="border-bottom-style: ridge;">Property Images</h4>
-                  </div>
-                  <div class="row">
-                    @if(count($property->PropertyGallery) > 0)
-                      @foreach($property->PropertyGallery as $value)
-                        <div class="col-sm-3">
-                          <a href="{{ asset('') }}/{{ $value->image_path }}" target="_blank"><img
-                              src="{{ asset('') }}/{{ $value->image_path }}" alt="Property Images" style="height: 200px;"></a>
-                        </div>
-                      @endforeach
-                    @else
-                      <h5 style="color: brown;">No Any Images Found.</h5>
-                    @endif
-                  </div>
-                  <div class="row">
-                    <h4 style="border-bottom-style: ridge;">Property Additional Information</h4>
-                  </div>
-                  <div id="fb-render"></div>
-                  <div class="row">
-                    <input type="hidden" name="save_json" id="save_json" value="{{ $property->additional_info }}">
-                  </div>
+                  <h4 class="form-section-h">Property Photos</h4>
 
-                  <div class="form-group-f row">
+<div class="row g-3">
 
-                  </div>
+  @forelse($property->PropertyGallery as $img)
 
+    <div class="col-sm-3">
+      <div class="position-relative text-center p-2 rounded"
+           style="
+             border: {{ $img->is_default ? '2px solid #0d6efd' : '1px solid #ddd' }};
+             background:#fff;
+           ">
+
+        {{-- Default Badge --}}
+        @if($img->is_default)
+          <span class="badge bg-primary position-absolute"
+                style="top:6px;left:6px;">
+            Default
+          </span>
+        @endif
+
+        <a href="{{ asset($img->image_path) }}" target="_blank">
+          <img src="{{ asset($img->image_path) }}"
+               class="img-fluid rounded"
+               style="height:180px;width:100%;object-fit:cover;">
+        </a>
+
+      </div>
+    </div>
+
+  @empty
+    <div class="col-sm-12">
+      <p class="text-danger">No property images uploaded.</p>
+    </div>
+  @endforelse
+
+</div>
+
+
+	@if(!empty($property->property_video))
+									<h3 class="mt-4">Property Video</h3>
+									<div class="form-group">
+										<video width="320" height="240" controls>
+											<source src="{{ url($property->property_video) }}" type="video/mp4">
+											Your browser does not support the video tag.
+										</video>
+									</div>
+								@endif
+                
                   <div class="form-group-f row">
                     <div class="col-sm-12 text-center">
                       <a href="{{ url('post/property/final') }}/{{ base64_encode($id) }}"><button class="btn btn-primary"
@@ -431,56 +353,6 @@
     });
 
 
-    $("#update_property_form").validate({
-      submitHandler: function (form) {
-        var data = $('#fb-render').formRender('userData');
-        if (!data) {
-          toastr.error('Additional details form must be required, please select another category or contact to admin.');
-          return false;
-        } else {
-          document.getElementById('form_json').value = JSON.stringify(data);
-        }
-        var formData = new FormData(form);
-
-        $.ajax({
-          url: "{{route('admin.properties.update_property')}}",
-          method: "POST",
-          data: formData,
-          datatype: 'json',
-          cache: false,
-          contentType: false,
-          processData: false,
-          beforeSend: function () {
-            $(".updateproperty").attr('disabled', true);
-          },
-          success: function (response) {
-            var response = JSON.parse(response);
-            if (response.status === 200) {
-              toastr.success(response.message)
-              // $("#create_property_form").trigger('reset');
-              //           setTimeout(function() {
-              // window.location.href = "{{route('admin.properties.index')}}";
-              //           }, 1000);
-            } else if (response.status === 400) {
-              toastr.error(response.message)
-            } else {
-              toastr.error('An error occured')
-            }
-          },
-          error: function (response) {
-            toastr.error('An error occured')
-          },
-          complete: function () {
-            $(".updateproperty").attr('disabled', false);
-            console.log(typeof (formData));
-            console.log('formData=>', formData)
-          }
-        })
-
-
-      }
-    });
-
 
     function fetch_subcategories(id, callback) {
       var route = "{{ url('get/sub-categories') }}/" + id
@@ -586,30 +458,6 @@
       var selectedData = cachedSubSubCategories.find(function (subsub) {
         return subsub.id == selectedId;
       });
-
-      if (selectedData.price_label_toggle == 'yes') {
-        $('#priceLabelField').show();
-      } else {
-        $('#priceLabelField').hide();
-      }
-
-      if (selectedData.property_status_toggle == 'yes') {
-        $('#propertyStatusField').show();
-      } else {
-        $('#propertyStatusField').hide();
-      }
-
-      if (selectedData.registration_status_toggle == 'yes') {
-        $('#registrationStatusField').show();
-      } else {
-        $('#registrationStatusField').hide();
-      }
-
-      if (selectedData.furnishing_status_toggle == 'yes') {
-        $('#furnishingStatusField').show();
-      } else {
-        $('#furnishingStatusField').hide();
-      }
 
       if (selectedData.amenities_toggle == 'yes') {
         $('#amenitiesField').show();
